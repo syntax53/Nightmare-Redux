@@ -1,0 +1,42 @@
+function doit()
+{
+	var Swings, EU, tmp;
+	Swing_Calc.Swings_Out1.value="";
+	Swing_Calc.Swings_Out2.value="";
+	Swing_Calc.Swings_Out3.value="";
+	Swing_Calc.Swings_Out4.value="";
+	Swing_Calc.Swings_Out5.value="";
+	Swing_Calc.Swings_Out6.value="";
+	Swing_Calc.Swings_Out7.value="";
+	Swing_Calc.Swings_Out8.value="";
+	Swing_Calc.Swings_Out9.value="";
+	Swing_Calc.Swings_Out10.value="";
+	Swings=(((1+((eval(Swing_Calc.Agility.value)-50)*0.005))*(0.3+(eval(Swing_Calc.Level.value)*((eval(Swing_Calc.Combat.value)+2)*(1/150)))))*(5000/eval(Swing_Calc.Weapon_Speed.value)))*(1+(eval(Swing_Calc.Encumberance.value)*(40/1413)));
+	EU=Math.floor(1000/Swings);
+	if (Swing_Calc.Option[1].checked)
+          EU=Math.floor(EU*(eval(Swing_Calc.Speed.value)/100));
+	if (Swing_Calc.Option[2].checked)
+          EU=Math.floor(EU*(eval(Swing_Calc.Slow.value)/100));
+	if (Swing_Calc.Option2.checked)
+          EU=Math.floor(EU*(1+(eval(Swing_Calc.Under_Str.value)*0.015)));
+	tmp=1000;
+	Swing_Calc.Swings_Out1.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out2.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out3.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out4.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out5.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out6.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out7.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out8.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out9.value=Math.floor(tmp/EU);
+	  tmp=(tmp%EU)+1000;
+	Swing_Calc.Swings_Out10.value=Math.floor(tmp/EU);
+}

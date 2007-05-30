@@ -1,0 +1,126 @@
+00	Normal		None
+--------------------------------------------------------------------
+01	Spell		Para1:	Spell to open
+			Para2:	Type of spell exit
+				0 = Open
+				1 = Closed
+				2 = Passthrough
+				3 = Permanent Open
+				4 = One Time Closed
+			Para3:	Message Block
+			Para4:	Spell to close
+--------------------------------------------------------------------
+02	Key		Para1:	Key required
+			Para2:	Status - always locked (can't modify)
+			Para3:	Picklock difficulty
+			Para4:	Number of 5 minute blocks to stay open
+--------------------------------------------------------------------
+03	Item		Para1:	Item required
+			Para2:	Message on failed passage
+			Para3:	Message on passage
+--------------------------------------------------------------------
+04	Toll		Para1:	Amount in gold which will be charged
+--------------------------------------------------------------------
+05	Action		Para1:	Messages displayed
+--------------------------------------------------------------------
+06	Hidden		Para1:	Type of hidden exit
+				1 = Hidden Passable
+				2 = Hidden Need Search
+				4 = Visible Searched
+				8 = Visible Blocked
+				16 = Blocked - 1 action
+				48 = Blocked - 2 actions
+				112 = Blocked - 3 actions
+				240 = Blocked - 4 actions
+				496 = Blocked - 5 actions
+				1008 = Blocked - 6 actions
+				2032 = Blocked - 7 actions
+				4080 = Blocked - 8 actions
+				8176 = Blocked - 9 actions
+				16368 = Blocked - 10 actions
+				16384 = Hidden Once
+				32768 = Permanent Visible
+			Para2:	If using Blocked for Para1 this has to be the number of actions (use - for not mandatory)
+			Para3:	Message displayed when opened
+			Para4:	Message displayed when looking
+--------------------------------------------------------------------
+07	Door		Para1:	State - always locked (can't modify)
+			Para2:	Chance to picklock/bash
+			Para3:	Number of 5 minute blocks to stay open
+			Para4:	key required
+--------------------------------------------------------------------
+08	Change Map	Para1:	New Map Number
+--------------------------------------------------------------------
+09	Trap		Para1:	Max Damage
+			Para2:	Type of trap
+				0 = Active
+				1 = Inactive
+				2 = Hidden
+				3 = Active mov
+				4 = Inactive mov
+			Para3:	Message on passage
+			Para4:	Message on fail
+--------------------------------------------------------------------
+10	Text		Para1:	Required Text
+			Para2:	Resulting Description
+			Para3:	Exit Description
+--------------------------------------------------------------------
+11	Gate		Para1:	State - always locked (can't modify)
+			Para2:	Chance to picklock/bash
+			Para3:	Number of 5 minute blocks to stay open
+			Para4:	Key required
+--------------------------------------------------------------------
+12	Remote Action	Para1:	Action number
+			Para2:	Direction : Number (still figuring this one out)
+			Para3:	Messages
+			Para4:	Item required
+--------------------------------------------------------------------
+13	Class		Para1:	Class allowed
+			Para2:	Class not allowed
+			Para3:	Message on failure
+--------------------------------------------------------------------
+14	Race		Para1:	Race allowed
+			Para2:	Race not allowed
+			Para3:	Message on failure
+--------------------------------------------------------------------
+15	Level		Para1:	Minimum Level
+			Para2:	Maximum Level
+			Para3:	Message on failure
+--------------------------------------------------------------------
+16	Timed		Para1:	Messages
+			Para2:	Number of 5 minute cycles
+			Para3:	Status (open=0/closed=1)
+--------------------------------------------------------------------
+17	Ticket		Para1:	Item required
+			Para2:	Message on failed passage
+			Para3:	Message on passage
+--------------------------------------------------------------------
+18	User Count	Para1:	Max Users allowed through
+			Para2:	Current count of users
+--------------------------------------------------------------------
+19	Block Guard	None
+--------------------------------------------------------------------
+20	Alignment	Para1:	Minimum alignment required
+			Para2:	Maximum alignment allowed
+--------------------------------------------------------------------
+21	Delay		None
+--------------------------------------------------------------------
+22	Cast		Para1:	Spell before move
+			Para2:	Spell after move
+			Para3:	Message on passage
+			Para4:	Can you look?
+--------------------------------------------------------------------
+23	Ability		Para1:	Ability required
+			Para2:	Minimum value
+			Para3:	Maximum value
+			Para4:	Message on failure
+--------------------------------------------------------------------
+24	Spell Trap	Para1:	Spell number
+			Para2:	Type of trap
+				0 = Active
+				1 = Inactive
+				2 = Hidden
+				3 = Active mov
+				4 = Inactive mov
+			Para3:	Message on passage
+			Para4;	Message on fail

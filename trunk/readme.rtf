@@ -1,0 +1,566 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033\deflangfe1033{\fonttbl{\f0\fswiss\fprq2\fcharset0 Arial;}{\f1\froman\fprq2\fcharset2 Symbol;}{\f2\froman\fprq2\fcharset0 Times New Roman;}}
+{\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\nowidctlpar\b\f0\fs20 **As of v1.6 it is no longer necessary to have two seperate directories for the "N" and "Non-N" versions.\par
+\b0 This installer will install both versions of the nightmare executable to one directory and respective shortcuts will be placed in the start menu.  Datfile path, version, and call letters will have independant settings stored.  All other settings are shared. \b You will need to manually delete your "NMR for vN" folder if you have created one.\par
+\par
+README:\b0\par
+\par
+If you have edited the ability list (ability.mdb) you may want to back it up and move it out.  The installer may overwrite some custom changes you've made, or it may not update them if the file has a later date/version.\par
+\par
+It is recommended that you \b DO NOT\b0  install Nightmare Redux into your Worldgroup Directory as was instructed in the very early versions.  Install it to its default location or one of your choice.  It is also highly recommended that you first start using NMR on fresh, unedited databases.  Older editors that were not meant to edit the newer database format may have caused corruption without notice.  If you are pounded with strange errors and weird characters, you may need to start with a fresh installation of your databases.\par
+\par
+\b If you get a -######## windows installer error:\par
+\pard\nowidctlpar\fi-360\li720\tx720\b0\f1\'b7\tab\f0 Fist make sure you are not trying to install from inside the zip (extract it to your desktop first)\par
+\pard\nowidctlpar\fi-360\li720\f1\'b7\tab\f0 Win9x: http://www.microsoft.com/downloads/details.aspx?FamilyID=cebbacd8-c094-4255-b702-de3bb768148f&DisplayLang=en\par
+\f1\'b7\tab\f0 Win 2k SP4/XP: http://www.microsoft.com/downloads/details.aspx?FamilyID=5FBC5470-B259-4733-A914-A956122E08E8&displaylang=en\par
+\pard\nowidctlpar\b\par
+Things to try if you get missing DLL, component, or file errors:\par
+\b0\i Install Jet 4.0 SP8:\par
+\pard\nowidctlpar\fi-360\li720\tx720\i0\f1\'b7\tab\f0 WinXP: http://www.microsoft.com/downloads/details.aspx?FamilyID=2deddec4-350e-4cd0-a12a-d7f70a153156&DisplayLang=en\par
+\pard\nowidctlpar\fi-360\li720\f1\'b7\tab\f0 Win2k: http://www.microsoft.com/downloads/details.aspx?FamilyID=1e268b39-533e-48b0-b8d7-1781befde1f8&DisplayLang=en\par
+\f1\'b7\tab\f0 Win9x: http://www.microsoft.com/downloads/details.aspx?FamilyID=4335216c-8cdd-4168-a030-46f815d3f5cd&DisplayLang=en\par
+\pard\nowidctlpar\par
+\i Install MDAC 2.8:\par
+\pard\nowidctlpar\fi-360\li720\tx720\i0\f1\'b7\tab\f0 All Windows: http://www.microsoft.com/downloads/details.aspx?FamilyID=6c050fe3-c795-4b7d-b037-185d0506396c&DisplayLang=en\par
+\pard\nowidctlpar\par
+\i Start --> Run --> (run each line separately)\par
+\pard\nowidctlpar\fi-360\li720\tx720\i0\f1\'b7\tab\f0 regsvr32 "c:\\Program Files\\Common Files\\Microsoft Shared\\DAO\\dao360.dll" \par
+\pard\nowidctlpar\fi-360\li720\f1\'b7\tab\f0 regsvr32 "c:\\Program Files\\Common Files\\System\\ado\\msadox.dll"\par
+\f1\'b7\tab\f0 regsvr32 "c:\\Windows\\system32\\COMDLG32.OCX"\par
+\f1\'b7\tab\f0 regsvr32 "c:\\program files\\nightmare redux\\vN\\NMRTaskBar.ocx"\par
+\f1\'b7\tab\f0 regsvr32 "c:\\program files\\nightmare redux\\vO\\NMRTaskBar.ocx"\par
+\pard\nowidctlpar\par
+\b NOTE:\b0  Nightmare Redux requires the MajorMUD\'ae databases, v1.11h or higher.*  Read your license agreement fully before using this software!  The creators of this software are in no way, shape, or form affiliated with the creators of MajorMUD\'ae.\par
+\pard\nowidctlpar\fi-360\li720\b\f1\'b7\tab\f0 NMR v1.X supports v1.11o and later\par
+\pard\nowidctlpar\li360\f1\'b7\tab\f0 NMR v1.Xn is supports v1.11h through v1.11n\b0\par
+\pard\nowidctlpar\par
+\f2\par
+\b\fs24 [Changelog]\par
+\b0\fs20 v1.6.1/n (02/03/2006)\par
+------------------------------------------ \par
+-UP: Added support for v1.11p dat files.\par
+\b\fs24\par
+\b0\fs20 v1.6/n (07/01/2005)\par
+------------------------------------------ \par
+General:\par
+-BUGFIX: \lquote per item\rquote  \lquote only if\rquote  on uni mod for monsters and shops\par
+-NEW: COMPLETE RECORD NUMBER CHANGER\par
+-NEW: monster group/index changer\par
+-NEW: slew of filtering options for monsters, items, and spells!\par
+-NEW: filter by ability, class, record numbers, and fields!\par
+-NEW: tool to fix/verify number of uses on items \par
+-NEW: tool to fix number of item uses on monster drops\par
+-NEW: tool to combine like items on the ground into one slot\par
+-NEW: tool to combine monster experience and experience multiplier\par
+-UP: added a spell range display for monster attacks\par
+-UP: added button on users to calculate the user\rquote s exp\par
+-UP: exp calc will copy to clipboard the selected levels experience\par
+-UP: can now enter -1 to pad/delete buffer rooms on all maps at once\par
+-UP: most windows can now be maximized and will re-open that way\par
+-UP: changed some of the textblock line editor to be more intuitive\par
+-UP: added difficulty column to spell editor record list\par
+-UP: progress bar will now show % completion for all jobs in caption\par
+-UP: saving settings wont reload data files unless necessary\par
+-UP: option on MME export to only export certain databases\par
+-FIX: couldn't enter single room exclusion on MME export\par
+-FIX: importer/exporter will now delete extra textblock parts\par
+-FIX: progress bar progression on some tools\par
+-FIX: pressing alt, shift, control, alt-tab in search boxes\par
+-FIX: canceling on building new monster group/index list\par
+\par
+v1.56/n (07/19/2004)\par
+------------------------------------------ \par
+General:\par
+-NEW: option to add/remove EDITED flag on users\par
+-FIX: selection issue on min damage field on item editor\par
+\par
+v1.55/n (07/17/2004)\par
+------------------------------------------ \par
+General:\par
+-UP: all fields with quick-display boxes will auto-update\par
+-UP: added select-all text functions for almost every textbox\par
+-UP: description fields on all editors will auto trim spaces and auto-advance\par
+-UP: clicking save will now update the text on the row in the record list\par
+-UP: new records will no longer change the name to "New Record ##"\par
+-UP: spanned the record number columns to fit more numbers by default\par
+-UP: quick clear buttons for abilities\par
+-UP: added copy/paste options for monster attacks\par
+-UP: added a clear all button on message editor\par
+-UP: added a clear button on room editor to clear the advanced section\par
+-UP: freed up some memory with the monster group/index array +++\par
+-FIX: ability lookup when typing the ability name on the editors ++\par
+-FIX: 2nd wrist, face, and eye items displaying wrong in record list\par
+-FIX: tab order on all windows ...... again ... uhghh\par
+-FIX: error when inserting buffer rooms with room numbers > 32767\par
+-FIX: crash on room editor when clicking index list when it's minimized\par
+-FIX: no error handling when clicking on certain cells on map/map editor\par
+-FIX: clicking on a selected monster index line would edit the line\par
+\par
+MMUD Explorer:\par
+-NEW: map/room exclusion\par
+-NEW: save different configurations\par
+-NEW: database update link\par
+-UP: better chest and monster greet text handling\par
+-UP: datafile completely changed +\par
+\par
+Textblock Editor:\par
+-UP: line editor: when clicking save it will auto-click "update line"\par
+-UP: line editor: will only prompt for save if something was changed\par
+-UP: line editor: added a splitter bar so you can resize the panes\par
+\par
+Spell Editor:\par
+-UP: moved around spell editor fields again\par
+-UP: spell calculations will now take energy into account\par
+-UP: added boxes to show spell damage vs. X MR for damage spells\par
+\par
+Database Import/Export:\par
+-UP: added display of record names on import log\par
+-UP: monsters in room will not import or export anymore\par
+-UP: importer now cancelable\par
+-FIX: sometimes the last export path wouldn't save\par
+-FIX: progress bars will now accurately count to the end\par
+\par
+Universal Mod:\par
+-UP: added a few options for rooms\par
+-UP: added 'only if markup' for shops\par
+\par
+User Editor:\par
+-UP: can now paste full character stats (str, hlth, lives, cp, etc)\par
+-UP: added boxes to show the room names on user editor for the room trail\par
+-UP: added recognition of "Two Handed" for pasting user items\par
+-UP: clipboard text will automaticly paste into paste window\par
+\par
++ Now users won't be able to import anything more than the record number\par
+and name columns of each of the databases.\par
+++ The ability lookup on the editors now functions like the search boxes.\par
+You can type any part of the ability name and press the right arrow key\par
+to find the next match.  When you tab out or click elsewhere it will fill in\par
+the entire ability name.\par
++++ Only 11 monsters per index number will be listed.  The map may also\par
+load a little slower with the "look up monster regen" turned on as I no\par
+longer store the monster name in the array.  These two elements were\par
+causing a long delay when erasing the array (closing NMR) and creating it.\par
+\par
+v1.5/n (05/17/2004)\par
+------------------------------------------ \par
+-NEW: taskbar for open NMR windows (like the windows taskbar)\par
+-NEW: textblock line editor! --makes editing scripts much easier\par
+-NEW: enhanced the item find to now search users and shops too\par
+-NEW: Find/Find Next for message editor\par
+-NEW: Find/Find Next for bank editor\par
+-NEW: universal modifier now does extensive logging\par
+-NEW: map now marks room spells/shops/exit & death rooms\par
+-NEW: option to only load # & name columns for faster loading\par
+-NEW: gave the action editor a record list\par
+-NEW: tool to set all monster killed times to a specified date\par
+-NEW: extra wrist, face, and eyes slots supported (v1.11p-beta12+ only)\par
+-UP: added different color hi-lighting to the editor icons :)\par
+-UP: importer now has options to import only room items, or visa versa\par
+-UP: NPC list now loads faster, unless btrieve is bogged down ++\par
+-UP: monster NPC list rows can now be double clicked to jump\par
+-UP: added reset class and race restriction buttons on item editor\par
+-UP: added "copy to" buttons on importer/exporter for ranges\par
+-UP: changed the font to terminal on the textblock editor\par
+-UP: got rid of undocking windows since it never worked anyway\par
+-UP: updated the swing calculator\par
+-UP: database export is now cancelable\par
+-UP: mass room editor is now cancelable\par
+-UP: database deleter now cancelable\par
+-UP: most tool operations from the menu are now cancelable\par
+-UP: moved range room delete to database deleter\par
+-UP: added copy/paste to mass room editor and re-arranged options\par
+-UP: resized monster/room/shop editors to fit better on 800x600 resolutions\par
+-UP: updated Nahr's Castle, Feather, and Witchunters in Quest Organizer +\par
+-FIX: inserting record on editor with list would go to last record in list\par
+-FIX: "doesn't have ability" only if option on universal mod\par
+-FIX: closing a room editor copy would load the original room editor\par
+-FIX: room quickjump buttons would fail if room edtor was not loaded\par
+-FIX: shop editor was disabling item lists on some shop types\par
+-NOTE: the copy/paste options on the room editors are indepdendent\par
+from the windows clipboard.\par
+\par
+++ What I've noticed is btrieve will be real slow running through\par
+a database for the first time in awhile, but after that it's real fast.\par
++ Thanks Demosthenes\par
+\par
+v1.47/n (03/23/2004)\par
+------------------------------------------ \par
+-NEW: hotkey (5) on map editor to toggle between new/existing rooms\par
+-NEW: map editor will auto get the room number of existing adjacent room\par
+-NEW: copy/paste options on rooms for "Advanced settings"\par
+-NEW: shops now show bank account/cost info for gangshops\par
+-UP: MMUD Explorer export update\par
+-UP: Updated the tooltip shown for para1 of hidden exits\par
+-FIX: importer could cut off 30th character in name\par
+\par
+v1.461/n (03/06/2004)\par
+------------------------------------------ \par
+-UP: Updated MMUD Explorer export\par
+-UP: MMUD Explorer export won't export buffer rooms\par
+\par
+v1.46/n (03/03/2004)\par
+------------------------------------------ \par
+-NEW: gang editor\par
+-UP: new format for MMUD Explorer exports\par
+-UP: map wont draw rooms that have already been drawn\par
+-UP: quest organizer now supports 2 files; default & custom\par
+-FIX: windows focus issues on map\par
+-FIX: had to save and re-click to see markup change on shops\par
+-FIX: class editor displayed combat wrong in list\par
+-FIX: spell editor wouldn\rquote t filter\par
+-FIX: update file compile wouldn\rquote t quit on error\par
+-FIX: one of the action lines was selecting text incorrectly\par
+\par
+v1.45/n (01/13/2004)\par
+------------------------------------------ \par
+-NOTE: v1.45n (note the 'n') works with v1.11i through v1.11n, v1.45 is for v1.11o+\par
+-NEW: function on user editor to paste items/stats/spells from screen cap\par
+-NEW: revamped map editor to give it more cells and the features of the map\par
+-NEW: all editors with lists now have sortable columns\par
+-NEW: exp calculator tool\par
+-NEW: swing calculator tool\par
+-NEW: tool to create a list of NPC assigned monsters and their rooms\par
+-NEW: tool to restock all shops\par
+-UP: filter option on item and spell editors\par
+-UP: shop editor now shows all items on one page along with the adjusted cost\par
+-UP: all windows have finally had the tab order fixed (fixing that sucked!)\par
+-UP: added on option on map to hide the tooltips\par
+-UP: updated Group/Index and Boss/NPC lists in monster help\par
+-FIX: failed exit creations to new/existing rooms on map won\rquote t change starting room\par
+-FIX: class/race editors were reloading the record lists on close\par
+-FIX: 'no line colors' and 'no color' options on map work now\par
+-FIX: lots of misc. small fixes\par
+\par
+v1.44 (12/19/2003)\par
+------------------------------------------ \par
+-UP: compatible /ONLY/ with v1.11o\par
+\par
+v1.43 (11/26/2003)\par
+------------------------------------------ \par
+-BUGFIX: wasn't exporting/importing monster's death spells\par
+-NEW: class editor now has sortable columns (in the works for the others editors)\par
+-UP: some coding changes to the mmud explorer export, that coming very soon!\par
+-UP: new tool to delete the buffer rooms created by the room pad tool\line -UP: changed map display to have a black background (option to be white)\par
+-UP: added a reset button to the monster editor to reset the kill time\par
+-NOTE: to create mmud explorer data files, you will need this version\par
+\par
+v1.42 (09/12/2003)\par
+------------------------------------------ \par
+-UP: updated the NMR-Quests.txt file for the 5th evil alignment quest (thx Demonic)\par
+-FIX: fixed rooms not connecting on map view for some people who use 120dpi\par
+-FIX: fixed problem with canceling the map builder\par
+-FIX: fixed small problem with the map legend lines showing the wrong color\par
+\par
+v1.4 (09/01/2003)\par
+------------------------------------------ \par
+-NEW: mapping overhaul: more options, more sizes, follow up/down exits, faster\par
+-NEW: can now open multiple copies of the editors\par
+-NEW: create a blank update file (for testing, don\rquote t gotta compile everytime)\par
+-NEW: build monster group/index list, used in map to show monster regen\par
+-NEW: new field discovered in room DB: gang house number\par
+-NEW: chest cash drops fields on item editor (thx Locke Cole)\par
+-NEW: "BS Defense" field for monsters added (thx Tsunami)\par
+-NEW: "Charm Resistance" field for monsters added (thx Tsunami)\par
+-NEW: unknown flag on item editor changed to "robable"\par
+-NEW: option to search for room name/description on room editor\par
+-NEW: utility to pad out rooms on a given map (for shop regen and item sweeps)\par
+-NEW: dat call letter changer for rooms -- changes all the "WCC" references\par
+-NEW: database import now supports range import\par
+-NEW: textblock editor shows how many characters you have left on that block\par
+-NEW: tool to give all users a retrain\par
+-UP: compatible with v1.11n\par
+-UP: can now add/strip/changes abilities in the universal modifier\par
+-UP: added some elements to the universal mod like more "only if's"\par
+-UP: added some quests to the quest organizer\par
+-UP: updated some fields in the ability database (thx Tsunami)\par
+-UP: textblock insert will now copy the textblock you\rquote re on\par
+-UP: updated what the no limited item tool excludes, see general help\par
+-UP: cleaned up some textblock code\par
+-UP: fixed a few of the room parameters\par
+-UP: added the uses field in rooms for items on the ground and hidden\par
+-UP: preview job option on importer\par
+-UP: forms shouldn't reload on insert/delete\par
+-UP: older export files can now be imported, it just skips the missing fields\par
+-UP: cleaned up textfile exporting a little, mainly for users\par
+-FIX: exporter was disabling the wrong controls on load\par
+-FIX: ability names on user editor were locked\par
+-NOTE: older export files wont work completely with this version\par
+-NOTE: all of the added fields above are now exported/imported\par
+-NOTE: big thanks to locke cole recently for working on database stuff with me\par
+\par
+v1.3 (05/12/2003)\par
+------------------------------------------ \par
+-BUGFIX: was reading wrong value in the room DB for a room\rquote s spell\par
+-NEW: export to mmud explorer (still tweaking), MMud Explorer coming soon\par
+-NEW: limited item list creator - scans users, rooms, and shops\par
+-NEW: abilities have quick links to what they refer to (like CastSP X)\par
+-NEW: added a previously viewed list on the textblock editor\par
+-NEW: can now search record number in users/monsters/spells/shops/items\par
+-UP: added 5\super th\nosupersub  good and neutral (& last part of evil) quests to the quest organizer\par
+-UP: data export file now compacts after exporting to decrease the filesize\par
+-UP: shop editor now has quick links for the items sold\par
+-UP: room item search can now be canceled\par
+-UP: main window saves form size and won't maximize all the time\par
+-UP: can undock windows (doesn't work too well tho, you'll see what I mean)\par
+-UP: rewrote pretty much all the code on the ability editor\par
+-UP: lots of code rewrites for things dealing with the ability database\par
+-UP: optimized some loading code in users/monsters/spells/shops/items \par
+-UP: can now enter any part of a user/monster/spell/shop/item in search\par
+-UP: textblock/message/room/action editors will now 'goto' when you press enter\par
+-UP: textblock editor window can now be resized\par
+-UP: fixed some tab orders and made search/goto fields have focus on load\par
+-UP: added "only if <money type>" to universal for monsters\par
+-UP: added more reported required rooms to the room help\par
+-UP: map now auto-hides the unused blocks\par
+-UP: switched the user name and bbs id columns in the user editor\par
+-UP: added a bunch of quicklinks to the items/spells/rooms in the user editor\par
+-UP: when editing an item on a user, position won't go to the first item anymore\par
+-UP: user editor won't auto-save anymore, you must click save (safety measure)\par
+-FIX: user editor was doubling class and race list on copy or delete\par
+\par
+\par
+v1.2 (03/03/2003) \par
+------------------------------------------ \par
+-NEW: option to use all available cpu for import/export/delete/compile/massrm/map \par
+-NEW: "only perform action if" options on the universal modifier \par
+-NEW: a pseudo tool to multiply just boss experience \par
+-NEW: room exit page now updates the parameters according to exit type \par
+-NEW: added the "retain item after uses expire" flag to item editor \par
+-NEW: the user editor user list is now storable by username or bbs name\par
+-NEW: find/find next on textblock editor\par
+-UP: monster attack page now updates the labels according to attack type \par
+-UP: tweaked the update file compiling process to hopefully make it a little faster \par
+-UP: added an unknown flag, and 2 unknown values to the item editor \par
+-UP: room editor now remembers the last room you were on \par
+-UP: sped up the monster/item/shop/spell list creations \par
+-UP: added cost as an option for items in universal mod \par
+-UP: added some info on making backups to the general help \par
+-FIX: fixed some of the forms jumping around when they load \par
+-FIX: monster grp/index list was cut off at the end, split it up to two pages \par
+-FIX: couldn't export to textfiles (thx dxpac) \par
+-NOTE: old export files won\rquote t work with this version\par
+\par
+\par
+v1.1 (02/15/2003)\par
+------------------------------------------ \par
+-UP: rewrote some code in the import and export to make it more efficient\par
+-FIX: class import wasn\rquote t importing abilities (thx PanterraX!)\par
+\par
+\par
+v1.0 (02/14/2003)\par
+------------------------------------------ \par
+-NEW: i decided to 1.0 it, i think everyone is aware it\rquote s really always in \lquote beta\rquote\par
+-NEW: the 5 previous settings are available to choose from in settings\par
+-NEW: tool to search for an item sitting in a room (under tools - rooms)\par
+-UP: compatibility with v1.11m\par
+-UP: wrote a small tutorial about the update file and general editing (noobs, read!)\par
+-UP: updated the group/index list for v1.11m in monster help\par
+-UP: added a monster boss/NPC room list to the monster help\par
+-UP: cleaned up and added some info to the rooms help\par
+-UP: added some quests to the quest organizer, more coming soon\par
+-UP: slightly new format for the quest organizer, can now have 3 tree levels\par
+-UP: user merger now marks changed records with *changed* in the log file\par
+-UP: textblock editor no longer auto-loads the preview window\par
+-NOTE: old NMR-Quests.txt files may not work correctly with this version\par
+\par
+\par
+v0.7.7 BETA (01/27/03)\par
+------------------------------------------ \par
+-NEW: user merge --merge two user databases\par
+-UP: compatibility with v1.11L\par
+-FIX: rooms by range for universal modifier wasn\rquote t working (thx durin)\par
+\par
+\par
+v0.7.6 BETA (01/15/03)\par
+------------------------------------------ \par
+-NEW: tool to strip characters off the end of the textblocks (temporary workaround)\par
+-UP: you can now specify your own file name for exporting (and importing)\par
+-UP: less buttons are disabled on the room editor when using the map editor\par
+-UP: using the add/insert button on the room editor will now insert a "blank" room\par
+-UP: added option to exporter to export using only one field for monster experience\par
+-FIX: adding/inserting a room wasn't clearing current room monsters\par
+-FIX: copying a room description didn't update map editor (thx PanterraX)\par
+\par
+\par
+v0.7.56 BETA (01/06/03)\par
+------------------------------------------ \par
+-FIX: importer had trouble importing items\par
+\par
+\par
+v0.7.55 BETA (01/06/03)\par
+------------------------------------------ \par
+-NEW: compatibility with v1.11k\par
+-UP: updated monster group/index list for v1.11k (in monster help)\par
+\par
+\par
+v0.7.51 BETA (01/04/03)\par
+------------------------------------------ \par
+-NEW: compatibility with v1.11j\par
+-NEW: option in settings to switch between dat file versions\par
+-NEW: exporter now creates an "Info" table, shows the version of NMR and dat files\par
+-NEW: option to import old monsters and "convert" to new exp format (during import)\par
+-NEW: status bar at the bottom -shows call letters, dat file version, and if writing disabled\par
+-UP: monster editor now has exp 'base' and 'multiplier' fields to reflect v1.11j changes\par
+-UP: upon startup, NMR will check to make sure the correct dat file version is selected\par
+-UP: exits in room editor now have clickable buttons to jump to those rooms (thx tsunami)\par
+-UP: 'exp multiplier' and 'exp total' options added to universal modifier for monsters\par
+-FIX: class editor wasn't allowing negative number input into the ability values (thx xetox)\par
+-FIX: running two mass room operations consecutively caused an error (thx dxpac)\par
+\par
+\par
+v0.7.32 BETA (12/24/02)\par
+------------------------------------------ \par
+-FIX: hopefully fixed the rest of the crash-on-exit problems\par
+-FIX: the exporter was checking for existing exported records all the time\par
+\par
+\par
+v0.7.3 BETA (12/18/02)\par
+------------------------------------------ \par
+-UP: you can now cancel the update compiling and map building processes\par
+-UP: update comp., mass room, and import/export/deleter all show accurate progress bars\par
+-UP: implemented some error prevention for races/classes that didn't exist in an installation\par
+-UP: LOTS of work in general on the importer and exporter\par
+-UP: option to add to/update an existing DataExport file instead of creating a new one\par
+-UP: added checks for the importer to strip trailing spaces on text fields\par
+-UP: moved "Charm LvL" to a different column in the DataExport file (it was lost in the mix)\par
+-UP: added option to close all windows to the windows menu\par
+-FIX: fixed some crashing problems on exit\par
+-FIX: fixed some problems with the log file in the mass room editor\par
+-NOTE: old NMR-DataExport.mdb files may not work with this version\par
+\par
+\par
+v0.7.21 BETA (11/24/02)\par
+------------------------------------------ \par
+-NEW: option on file menu to disable database writing\par
+-FIX: keypad movement in the map editor was broken (thx Epro)\par
+-FIX: fixed some possible problems with a file being in the root directory of a drive\par
+-FIX: fixed some problems in the exporter with the status bar panel and its record counts\par
+\par
+\par
+v0.7.2 BETA (11/14/02)\par
+------------------------------------------ \par
+-NEW: universal modifier --perform math functions on many of the fields within the editors\par
+-NEW: added 5 more negate slots to the item editor (thx locke cole)\par
+-UP: tool tips on the map editor will now show instantly (hover mouse over a room)\par
+-UP: tool tips on the map now show a lot of useful information\par
+-UP: in-game AC and DR is calculated and shown on the item editor\par
+-UP: min/max/duration values now calculate as you change them in the spell editor\par
+-UP: as you tab or click through the fields in the room editor it will auto-select it\rquote s contents\par
+-UP: tab order in room editor should be better now\par
+-UP: added get first/last record number buttons to db exporter\par
+-UP: db importer won\rquote t log updated records anymore unless log-all is selected\par
+-UP: lots of code rewrites in general\par
+-FIX: clicking on the starting room in the map crashed everything (thx WarHawk)\par
+-FIX: negate spells in the item\rquote s database weren\rquote t being exported/imported\par
+\par
+\par
+v0.7.1 BETA (11/4/02)\par
+------------------------------------------ \par
+-NEW: map display from the room editor, displays 1680 rooms (thx scorpion for help on this)\par
+-UP: map editor now updates if you make changes in the room editor and hit save\par
+-UP: added a clear button to clear the current room description\par
+-UP: when typing room descriptions it will automatically go to the next line\par
+-UP: MiniMap renamed to "Map Editor"\par
+-FIX: database exporter/importer wasn\rquote t exporting/importing a spell\rquote s level restriction field\par
+\par
+\par
+v0.7.0 BETA (09/29/02)\par
+------------------------------------------ \par
+-NEW: database import!\par
+-NEW: quest organizer -- (props to Demonic for digging through the alignment textblocks)\par
+-NEW: new window menu for selecting/tiling/cascading the open windows\par
+-UP: edit rooms while using MiniMap\par
+-UP: two versions of MiniMap now, a big one and small one\par
+-UP: revamped database exporter, allowing for range export\par
+-UP: added jump buttons next to a lot of the fields, enabling a jump to a record in another editor\par
+-UP: mass room editor now logs errors (and only the critical errors) to a log file\par
+-UP: you can now minimize all of the windows\par
+-UP: missing or locked ability.mdb will no longer cripple program\par
+-UP: rewrote some code in the mass room editor to make it faster and more efficient\par
+-UP: added a Go2 button for the LinkTo field in the textblock editor\par
+-UP: when loading a form, it will now be given focus\par
+-UP: added button to recreate the settings.ini in the settings\par
+-FIX: fixed small bug with the select all/none in the database exporter\par
+\par
+\par
+v0.6.6 BETA (08/20/02)\par
+------------------------------------------ \par
+-NEW: added export to access database in the database exporter\par
+-NEW: added a help for monsters, which is currently just my group to index list\par
+-UP: added a clear all to all of the user editor lists (items, keys, and spells)\par
+-UP: enabled double clicking on an item, key, or spell in the user editor lists to edit it\par
+-UP: revamped the general page in the spell editor, adding many new editing fields (thx atma)\par
+-UP: added all/none selection to the database exporter\par
+-UP: added a 'Jump to Last' option to auto jump to the last item in a list after an insert or delete\par
+-UP: spiffied up the search fields --pressing the right arrow key now searches for the next item\par
+-UP: added ini entries to save minimap settings, minimap position, and database export path\par
+-FIX: fixed the CP field in user editor to allow negative number input (thx bad_hex)\par
+\par
+\par
+v0.6.5 BETA (07/23/02)\par
+------------------------------------------ \par
+-NEW: added a tool to reset all of the monster's last killed time\par
+-NEW: added the time & date stamp of when a monster was last killed to the monster editor\par
+-UP: changed the font on the preview window so it displays the textblocks MUCH better\par
+-FIX: added the "Part#" (formerly StepTo) to the textblocks (big thx to kix on noticing this missing)\par
+-FIX: the missing part# created problems deleting a range of textblocks and misc other things\par
+\par
+\par
+v0.6.4 BETA (07/22/02)\par
+------------------------------------------ \par
+-NEW: added a help for messages (thx MrBlack for some help)\par
+-UP: added range deletion for all dats (via the database deleter)\par
+-UP: reorganized the data of the exported text files\par
+-UP: added column headings to the first line of exported text files so you know what is what\par
+-UP: tweaked the minimap some more, disabled the keypad when typing numbers\par
+-UP: added more message and text block quick-displays to the editors\par
+-UP: added code to write missing .ini settings instead of crashing program\par
+-UP: added more items not to be effected by the no limited tool (see general help)\par
+-FIX: fixed crash when you tried to maximize two help screens (thx kix)\par
+-FIX: fixed problems with a lot of the description fields\par
+-FIX: fixed problems with some of the name fields\par
+\par
+\par
+v0.6.3 BETA (07/18/02)\par
+------------------------------------------ \par
+-UP: spruced up the menu with a few more shortcuts\par
+-UP: added 'select all' and 'select none' to the mass room editor\par
+-UP: added option on the MiniMap to specify the next incremented room number\par
+-UP: added option to auto use that incremented room number\par
+-FIX: fixed problem with the room type and ansi map in the mass room editor (thx dxpac)\par
+-FIX: fixed the messages showing up under the monsters spells/attacks (thx MrBlack)\par
+\par
+\par
+v0.6.2 BETA (07/16/02)\par
+------------------------------------------ \par
+-UP: reconfigured cap on monster HPs, new cap should be 65535 \par
+-FIX: fixed bug with the monster divider (it set the exp to 1!) \par
+-FIX: fixed some bad grammar in the room editor ;-) (thx MrBlack)\par
+\par
+\par
+v0.6.1 BETA (07/16/02) \par
+------------------------------------------ \par
+-NEW: Added functionality to walk around and create rooms via the map editor\par
+-NEW: Added the ability to remove all item level restrictions \par
+-UP: Renamed the 'room range editor' to the 'mass room editor' \par
+-UP: Added the ability to delete a range of rooms in the mass room editor \par
+-FIX: few bug fixes\par
+\par
+\par
+v0.6.0 BETA\par
+------------------------------------------ \par
+-NEW: compatibility with (and only with) the mod9 dat files\par
+-NEW: compile an update file\par
+-NEW: mass room editor\par
+-NEW: user editor\par
+-NEW: bank book editor\par
+-NEW: action editor\par
+-NEW: database export to text files\par
+-NEW: database record deleter\par
+-NEW: divide monster experience\par
+-NEW: edit multiple named dat files (wbb*.dat)\par
+-NEW: help with editing\par
+-NEW: settings menu; auto-compile, dat file locations, etc\par
+-UP: improved error message handling\par
+\par
+}
+ 

@@ -1,0 +1,139 @@
+[Root]
+Most Recent Package=Nightmare Redux Package 1
+
+
+[Package|Nightmare Redux Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\Documents and Settings\syntax\Desktop\Mud Editing\Nightmare Redux\Distribution
+
+[Package|Nightmare Redux Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Nightmare Redux Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Nightmare Redux Package 1|Files Found]
+
+[Package|Nightmare Redux Package 1|Files Released]
+
+[Package|Nightmare Redux Package 1|Missing Dependency Information]
+C:\WINDOWS\system32\exlimiter.ocx=
+C:\Program Files\BtSearch32\TABCTL32.OCX=
+C:\WINDOWS\system32\PALN32.DLL=
+C:\WINDOWS\system32\Wbtrv32.dll=
+
+[Package|Nightmare Redux Package 1|Out-of-Date Dependency Information]
+C:\WINDOWS\system32\scrrun.dll=
+
+[Package|Nightmare Redux Package 1|Files Added]
+
+[Package|Nightmare Redux Package 1|Files Removed]
+
+[Package|Nightmare Redux Package 1|Files In Project]
+C:\Documents and Settings\syntax\Desktop\nightmare.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\Wbtrv32.dll=Yes
+C:\WINDOWS\system32\PALN32.DLL=Yes
+C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll=Yes
+C:\WINDOWS\system32\msjet40.dll=Yes
+C:\WINDOWS\system32\msjter40.dll=Yes
+C:\WINDOWS\system32\msjint40.dll=Yes
+C:\WINDOWS\system32\vbajet32.dll=Yes
+C:\WINDOWS\system32\expsrv.dll=Yes
+C:\WINDOWS\system32\mswstr10.dll=Yes
+C:\WINDOWS\system32\mswdat10.dll=Yes
+C:\WINDOWS\system32\msrd2x40.dll=Yes
+C:\WINDOWS\system32\msrd3x40.dll=Yes
+C:\WINDOWS\system32\msrepl40.dll=Yes
+C:\WINDOWS\system32\msjtes40.dll=Yes
+C:\WINDOWS\system32\VB5DB.DLL=Yes
+C:\WINDOWS\system32\msstdfmt.dll=Yes
+C:\WINDOWS\system32\scrrun.dll=Yes
+C:\WINDOWS\system32\msvcrt.dll=Yes
+C:\Program Files\BtSearch32\TABCTL32.OCX=Yes
+C:\WINDOWS\system32\RICHTX32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+C:\WINDOWS\system32\exlimiter.ocx=Yes
+C:\WINDOWS\system32\MSCOMCTL.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|Nightmare Redux Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Nightmare Redux Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Nightmare Redux Package 1|Install Locations]
+C:\Documents and Settings\syntax\Desktop\nightmare.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\Wbtrv32.dll=$(WinSysPath)
+C:\WINDOWS\system32\PALN32.DLL=$(WinSysPath)
+C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll=$(MSDAOPath)
+C:\WINDOWS\system32\msjet40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\msjter40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\msjint40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\vbajet32.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\expsrv.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\mswstr10.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\mswdat10.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\msrd2x40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\msrd3x40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\msrepl40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\msjtes40.dll=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB5DB.DLL=$(WinSysPath)
+C:\WINDOWS\system32\msstdfmt.dll=$(WinSysPath)
+C:\WINDOWS\system32\scrrun.dll=$(WinSysPath)
+C:\WINDOWS\system32\msvcrt.dll=$(WinSysPathSysFile)
+C:\Program Files\BtSearch32\TABCTL32.OCX=$(WinSysPath)
+C:\WINDOWS\system32\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\exlimiter.ocx=$(WinSysPath)
+C:\WINDOWS\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|Nightmare Redux Package 1|Configure Shared Files]
+Applicable=Yes
+C:\Documents and Settings\syntax\Desktop\nightmare.exe=No
+
+[Package|Nightmare Redux Package 1|Distribution]
+Type=single
+Size=
+Title=Nightmare Redux v0.1 BETA
+
+[Package|Nightmare Redux Package 1|IconGroups]
+Group0=Nightmare Redux
+PrivateGroup0=0
+Parent0=$(Programs)
+
+[Package|Nightmare Redux Package 1|Nightmare Redux]
+Icon1=nightmare.exe
+Title1=Nightmare Redux
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Nightmare Redux Package 1|Package]
+PackageFolder=C:\Documents and Settings\syntax\Desktop\Mud Editing\Nightmare Redux\Distribution
+ProjectFolder=C:\Documents and Settings\syntax\Desktop\Mud Editing\Nightmare Redux
+ServerSideCab=
+File1=C:\Documents and Settings\syntax\Desktop\Mud Editing\Nightmare Redux\Distribution\setup.exe
+File2=C:\Documents and Settings\syntax\Desktop\Mud Editing\Nightmare Redux\Distribution\Setup.Lst
+File3=C:\Documents and Settings\syntax\Desktop\Mud Editing\Nightmare Redux\Distribution\nightmare.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

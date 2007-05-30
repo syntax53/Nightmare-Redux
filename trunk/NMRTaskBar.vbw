@@ -1,0 +1,9 @@
+modDeclares = 132, 132, 607, 542, 
+clsIcon = 22, 22, 498, 432, 
+ctlTaskBar = 66, 66, 690, 533, C, 44, 44, 668, 511, C
+clsTrayIcon = 110, 110, 581, 478, C
+modErrors = 66, 66, 537, 434, 
+clsCOwnMenu = 66, 66, 537, 434, 
+clsMenuItem = 110, 110, 683, 478, C
+clsMenuItems = 66, 66, 639, 434, C
+modFonts = 110, 110, 579, 479, 
