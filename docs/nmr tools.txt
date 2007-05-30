@@ -1,0 +1,58 @@
+NMR Tools Menu Help
+
+
+
+[Databases]
+
+Import: Allows you to import a database you have exported. See Export.
+
+Export: Allows you to export part or all of any database(s) in the game. This function is highly useful when you need to move specific databases (or ranges thereof) between realms and serves as an excellent backup function. It is also a great tool for upgrading versions, or even downgrading as far as version 1.11h. Lets say you have version 1.11i and would like to upgrade to version 1.11m, but have added a substantial amount of new rooms, items and monsters to your realm. With this feature you can export your range of these databases, update majormud to version 1.11m, and then proceed to import all of your databases, thus keeping your realm as it was while getting the most recent version.
+
+Delete: Allows you to delete part or all of any database(s) in the game. Useful to remove ranges in all or any database of your choice.
+
+Export to MMUD Explorer: This function will allow you to export your database for use in the future release of MMud Explorer.
+
+Item
+--Build Limited Item List
+---Allows you to create a limited item list scanning in some or all of the following databases: Users, rooms and shops. You may also save the list for future reference. Very useful for keeping track of your limiteds.
+--No limited items
+---This function will scan your item database for any items limited to 1 or more and change it to 0 (not limited). Use this function if you do not want ANY limited items in your realm.
+--No Level Restrictions
+---This function will scan your item database for any items restricted to any level (Minlvl and Maxlvl) and removes this flag, unrestricting the items.
+
+-Monster
+--Divide All Exp
+---This function will divide all monster experience by a specific amount. (2-20) with a minimum experience of 1 possible. Useful for those who may have multiplied their monster experience more than they wanted to.
+--Multiply All Exp
+---This function will multiply all monster experience by a specific amount. (2-20)
+
+--Multiply Boss Exp (Universal Mod)
+---This function will set up the Universal Modifier to multiply boss exprience.  A boss monster is almost always set to have a game limit of 1 so we use the universal mod to multiply the exp of the monsters with that set. (See Universal Modifier)
+--Reset Last Killed Times
+---Will reset the 'Last Killed' fields in the monster database for ever monster. You should rarely if ever need to do this, but if done it will 'reset' the last kill time on all the monsters in your realm making them regen the next time someone walks into the room. 
+
+-Rooms
+--Find an Item
+---This function searches through every room in the database for an item you specify (by number) and dump a text file of all the rooms it was found in.
+--Mass Room Editor
+---This very useful tool allows you to change ranges of specific fields in the room database and is  more configurable for rooms than the universal modifier. Very useful for fixing area regen problems, or changing the room description of an entire area. Could also be used to remove large ranges from rooms, such as setting every room's light setting to 0.
+
+-Textblocks
+--Strip characters off the end
+---For unknown reasons, sometimes there are strange strings of letters, symbols and numbers at the end of each of your text block entries. This string is usually the same on every record. This function will allow you to remove this string. This is a temporary fix until the cause of this is figured out.
+
+-Users
+--Merge users
+---This specialized function is only for use when 2 or more realms wish to 'merge'. It will combine exports of the user database files from seperate realms. 
+
+-Ability List Editor
+--This editor gives you a list of all the ability flags in the game by number. Useful for looking up abilities and their description. NOTE: Changes made in the ability editor dont actually effect the game. This editor is only used to resolve ability numbers to names when making edits.
+
+-Compile Update File
+--This function will close all open databases and compile a database update file for your realm. This is nessisary to save all of the changes you have made to your realm. When a realm first starts up it does what is called a 'database update'. What this does is compare all of your wcc*.dat files to the ones in the wccupda2.dat file, updating any records that do not match. 
+
+-Quest Organizer
+--This editor is used to organize text blocks pertaining to quests in the game. Normally, to find these blocks one would have to search through the textblock database and find it by hand. This time consuming process has been greatly reduced by the quest organizer by listing common quest text blocks in a tree structure. Making changes to the quest text blocks in the game used to take hours, but now they are a click away sorted by quest.
+
+-Universal Modifier
+--This feature has a variety of functions. You can check any database for any field and perform basic mathmatical functions to the entire database or a range of your choice. You may also limit your result. A very useful tool for making changes to specific fields in an entire database. This editor will add the HP ability to every item that has the stealth ability, or add the picklocks ability to every class with stealth. Another example would be adding 100 light to every room in the database. Smart users will always end up using this editor to save a lot of time and effort. 

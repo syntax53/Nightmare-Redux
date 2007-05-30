@@ -1,0 +1,60 @@
+-= rooms =-
+marks placed items as in game
+marks assigned shops as in game
+marks "PermNPC" monsters as in game
+marks textblocks as in-game that are commands from room
+marks monster group/indexs that are used
+
+-= shops =-
+(lines below only if room scan marked it as assigned)
+marks items sold in shops as in game (if max stock is 0 marks item as sale only from shop)
+
+-= monsters =-
+marks monsters as in game if they fall within indexes from room scan
+(lines below only for monsters that are detected as in game so far)
+marks items that are dropped as in game
+marks greet text textblocks as in game
+marks talk text textblocks as in game
+marks deathspell spells as in game
+
+-= items =-
+(lines below only for items detected as in game so far)
+marks spells that the item teaches (ability 42-LearnSP) as learnable and in game
+marks read text textblocks as in game
+masks spells cast (ability 43-CastSP) by the items as in game
+
+-= spells =-
+(lines below only for spells detected as in game so far)
+marks monsters that are summoned (ability 12-summon) as in game
+marks textblocks (ability 148-textblock) and deathtext textblocks (ability 155-deathtext) as in game
+
+-= textblocks =-
+(lines below only for textblocks detected as in game so far)
+marks spells in game when "learnspell X" is detected
+marks items in game when "giveitem X" is detected
+marks monsters in game when "summon X" is detected
+marks LinkTo'd textblocks as in game
+marks any textblocks executed from textblocks as in game
+
+
+
+
+
+gibbers: 305
+
+platinum greathelm: 1504
+platinum plate gauntlets: 1679
+
+
+
+
+deathtext - 155
+textblock - 148
+
+summon - 12
+
+killspell - 153
+castsp = 43
+endcast = 151
+
+learnsp - 42

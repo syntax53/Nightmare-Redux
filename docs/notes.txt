@@ -1,0 +1,244 @@
+
+---[snip]
+Originally Posted by DeathCow
+ya know what would be handy, if you could just highlight a section on the map and have the mass room editor effect only those rooms
+
+i'll note it-- wouldn't be hard to add a list type of thing to the MRE and then add a button on the map to "add displayed rooms to MRE list."
+---[/snip]
+
+[07:44] darkedgex: HEHEHE, you should update MMUD Explorer to let you pick which monster you're fighting in the BS calculator so it'll take off the DR. :D
+
+chg map
+-add second only if
+-easier putting items on user
+-let list editors collapse more?
+-anything that mme has that would make editing easier
+-show mme output
+-press button to go to next in list? - sets focus back
+
+----
+
+-message/spell/damage/textblock checkers (to check if they work) 
+-quest editor 
+
+----
+
+previous/next actually do previous & next
+
+----
+
+favorites
+
+----
+
+"edited" flags
+
+----
+
+back and forward buttons
+
+----
+
+Or maybe make 1 root directory called "Textblocks" and then have a subdirectory called "Quests" that way we can make other stuff that isn't quest related.
+
+Well, I was thinking something along the lines of a list like all the other types of entries, with something like
+#----|----Msg1-------------------|--Msg2----------------------|--Msg3
+2222 | You hit %s for %d damage! | You slice %s for %d damage! | You cho.
+
+----
+
+
+
+
+
+
+
+
+
+
+
+
+
+With tabNewRooms
+    .Columns.Append "Shop Number", adInteger	==> Shop
+    .Columns.Append "Perm NPC", adInteger	==> NPC
+    .Columns.Append "Room CMDs", adInteger	==> CMD
+    .Columns.Append "Room Spell", adInteger	==> Spell
+
+
+With tabNewClasses
+    .Columns.Append "Min HP", adInteger		==> MinHits
+    .Columns.Append "Max HP", adInteger		==> MaxHits
+    .Columns.Append "EXP %", adInteger		==> ExpTable
+    .Columns.Append "Magic Type", adInteger	==> MageryType
+    .Columns.Append "Magic LVL", adInteger	==> MageryLVL
+    .Columns.Append "Weapon", adInteger		==> WeaponType
+    .Columns.Append "Armour", adInteger		==> ArmourType
+    .Columns.Append "Combat", adInteger		==> CombatLVL
+    
+    For x = 0 To 9
+        .Columns.Append CStr("Ability " & x), adInteger		==> Abil-
+        .Columns.Append CStr("Ability Value " & x), adInteger	==> AbilVal-
+    Next
+    
+
+
+With tabNewRaces
+    .Columns.Append "Min INT", adInteger	==> mINT
+    .Columns.Append "Min WIL", adInteger	==> mWIL
+    .Columns.Append "Min STR", adInteger	==> mSTR
+    .Columns.Append "Min HEA", adInteger	==> mHEA
+    .Columns.Append "Min AGL", adInteger	==> mAGL
+    .Columns.Append "Min CHM", adInteger	==> mCHM
+    .Columns.Append "Max INT", adInteger	==> xINT
+    .Columns.Append "Max WIL", adInteger	==> xWIL
+    .Columns.Append "Max STR", adInteger	==> xSTR
+    .Columns.Append "Max HEA", adInteger	==> xHEA
+    .Columns.Append "Max AGL", adInteger	==> xAGL
+    .Columns.Append "Max CHM", adInteger	==> xCHM
+    .Columns.Append "HP Bonus", adInteger	==> HPPerLVL
+    .Columns.Append "EXP %", adInteger		==> ExpTable
+    .Columns.Append "StartingCP", adInteger	==> BaseCP
+    
+    For x = 0 To 9
+        .Columns.Append CStr("Ability " & x), adInteger		==> Abil-
+        .Columns.Append CStr("Ability Value " & x), adInteger	==> AbilVal-
+    Next
+    
+
+
+
+With tabNewSpells
+    .Columns.Append "Short Name", adVarWChar, 5		==> Short
+    .Columns.Append "Level", adInteger			==> ReqLevel
+    .Columns.Append "Energy", adInteger			==> EnergyCost
+    .Columns.Append "Mana", adInteger			==> ManaCost
+    .Columns.Append "Min", adInteger			==> MinBase
+    .Columns.Append "Max", adInteger			==> MaxBase
+    .Columns.Append "Difficulty", adInteger		==> Diff
+    .Columns.Append "Target", adInteger			==> Targets
+    .Columns.Append "Duration", adInteger		==> Dur
+    .Columns.Append "Attack Type", adInteger		==> AttType
+    .Columns.Append "Magery A", adInteger		==> Magery
+    .Columns.Append "Magery B", adInteger		==> MageryLVL
+    .Columns.Append "Level Cap", adInteger		==> Cap
+    .Columns.Append "LVLS Max Increase", adInteger	==> MaxIncLVLs
+    .Columns.Append "Max Increase", adInteger		==> MaxInc
+    .Columns.Append "LVLS Min Increase", adInteger	==> MinIncLVLs
+    .Columns.Append "Min Increase", adInteger		==> MinInc
+    .Columns.Append "LVLS Dur Increase", adInteger	==> DurIncLVLs
+    .Columns.Append "Dur Increase", adInteger		==> DurInc
+
+    For x = 0 To 9
+        .Columns.Append CStr("Ability " & x), adInteger		==> Abil-
+        .Columns.Append CStr("Ability Value " & x), adInteger	==> AbilVal-
+    Next
+        
+
+
+
+With tabNewMonsters
+    .Columns.Append "Weapon Number", adInteger		==> Weapon
+    .Columns.Append "AC", adInteger			==> ArmourClass
+    .Columns.Append "DR", adInteger			==> DamageResist
+    .Columns.Append "Follow", adInteger			==> Follow%
+    .Columns.Append "MR", adInteger			==> MagicRes
+    .Columns.Append "Experience", adDouble		==> EXP
+    .Columns.Append "Exp Multiplier", adDouble		==> ExpMulti
+    .Columns.Append "Hit Points", adInteger		==> HP
+    .Columns.Append "GreetText", adInteger		==> GreetTXT
+    .Columns.Append "HP Regen", adInteger		==> HPRegen
+    .Columns.Append "Charm LvL", adInteger		==> CharmLVL
+    .Columns.Append "Alignment", adInteger		==> Align
+    .Columns.Append "Regen Time", adInteger		==> RegenTime
+    .Columns.Append "Runic", adInteger			==> R
+    .Columns.Append "Platinum", adInteger		==> P
+    .Columns.Append "Gold", adInteger			==> G
+    .Columns.Append "Silver", adInteger			==> S
+    .Columns.Append "Copper", adInteger			==> C
+    .Columns.Append "Death Spell", adInteger		==> DeathSpell
+    .Columns.Append "Create Spell", adInteger		==> CreateSpell
+
+    For x = 0 To 4
+        .Columns.Append CStr("Attack Type " & x), adInteger		==> AttType-
+        .Columns.Append CStr("Attack Accu/Spell " & x), adInteger	==> AttAcc-
+        .Columns.Append CStr("Attack % " & x), adInteger		==> Att%-
+        .Columns.Append CStr("Attack Min Hit/Cast % " & x), adInteger	==> AttMin-
+        .Columns.Append CStr("Attack Max Hit/Cast LVL " & x), adInteger	==> AttMax-
+        .Columns.Append CStr("Attack Hit Msg " & x), adInteger		==> <take out>
+        .Columns.Append CStr("Attack Dodge Msg " & x), adInteger	==> <take out>
+        .Columns.Append CStr("Attack Miss Msg " & x), adInteger		==> <take out>
+        .Columns.Append CStr("Attack Energy " & x), adInteger		==> AttEnergy-
+        .Columns.Append CStr("Attack Hit Spell " & x), adInteger	==> AttHitSpell-
+        .Columns.Append CStr("Spell Number " & x), adInteger		==> MidSpell-
+        .Columns.Append CStr("Spell Cast % " & x), adInteger		==> MidSpell%-
+        .Columns.Append CStr("Spell Cast LVL " & x), adInteger		==> MidSpellLVL-
+    Next
+    
+    For x = 0 To 9
+        .Columns.Append CStr("Item Number " & x), adInteger		==> DropItem-
+        .Columns.Append CStr("Item Uses " & x), adInteger		==> <take out>
+        .Columns.Append CStr("Item Drop % " & x), adInteger		==> DropItem%-
+    Next
+    
+    For x = 0 To 9
+        .Columns.Append CStr("Ability " & x), adInteger			==> Abil-
+        .Columns.Append CStr("Ability Value " & x), adInteger		==> AbilVal-
+    Next
+    
+
+
+
+With tabNewItems
+    .Columns.Append "Game Limit", adInteger		==> Limit
+    .Columns.Append "Weight", adInteger			==> Encum
+    .Columns.Append "Type", adInteger			==> ItemType
+    .Columns.Append "Uses", adInteger			==> UseCount
+    .Columns.Append "Cost", adInteger			==> Price
+    .Columns.Append "Cost Type", adInteger		==> Currency
+    .Columns.Append "Min Hit", adInteger		==> Min
+    .Columns.Append "Max Hit", adInteger		==> Max
+    .Columns.Append "AC", adInteger			==> ArmourClass
+    .Columns.Append "DR", adInteger			==> DamageResist
+    .Columns.Append "Weapon", adInteger			==> WeaponType
+    .Columns.Append "Armour", adInteger			==> ArmourType
+    .Columns.Append "Worn On", adInteger		==> Worn
+    .Columns.Append "Accuracy", adInteger		==> Accy
+    .Columns.Append "Req Str", adInteger		==> StrReq
+    
+    For x = 0 To 9
+        .Columns.Append ("Class " & x), adInteger	==> ClassRest-
+    Next
+    
+    For x = 0 To 9
+        .Columns.Append ("Race " & x), adInteger	==> RaceRest-
+    Next
+    
+    For x = 0 To 9
+        .Columns.Append ("Negate " & x), adInteger	==> NegateSpell-
+    Next
+
+    For x = 0 To 19
+        .Columns.Append ("Ability " & x), adInteger		==> Abil-
+        .Columns.Append ("Ability Value " & x), adInteger	==> AbilVal-
+    Next
+    
+
+
+
+   
+With tabNewShops
+    .Columns.Append "Type", adInteger		==> ShopType
+    .Columns.Append "Min Lvl", adInteger	==> MinLVL
+    .Columns.Append "Max Lvl", adInteger	==> MaxLVL
+    .Columns.Append "MarkUp", adInteger		==> Markup%
+    .Columns.Append "Class Limit", adInteger	==> ClassRest
+    
+    For x = 0 To 19
+        .Columns.Append CStr("Item " & x), adInteger		==> Item-
+        .Columns.Append CStr("Max " & x), adInteger		==> Max-
+        .Columns.Append CStr("Regen Time " & x), adInteger	==> Time-
+        .Columns.Append CStr("Regen Number" & x), adInteger	==> Amount-
+        .Columns.Append CStr("Regen %" & x), adInteger		==> %-
+    Next
+    

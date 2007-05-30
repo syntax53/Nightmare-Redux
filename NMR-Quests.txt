@@ -1,0 +1,928 @@
+#### 
+# 
+# any line beginning with a ...
+# '#' is ignored
+# '-' is a section from the root
+# '--' is a sub-section of the last section
+# '---' is a sub-section of the last sub-section
+# ' is a comment within the current section/sub-section
+# 
+#
+# Textblock lines must be in the following format:
+#
+# textblock number|part number|link to number|description 
+#
+# example:
+# -Mystic Form Quest
+# 2903|0|0|room 16/2667 cmd text - give <totem name> to kuel
+# --Form of the Crane
+# 2911|0|0|form of the crane spell race check
+# --Form of the Dragon
+# 2910|0|0|form of the dragon spell race check
+#
+#
+# thanks to Demonic and Jackal for supplying some of the Alignment quest info!
+#
+####
+
+
+-Meditate Quest
+177|0|9025|dhelvanen greet text,ask dhelvanen reward
+9025|0|9027|dialog
+9027|0|9023|takes 50 diamonds and gives you magical rune
+9023|0|0|dialog
+177|0|90590|ask dhelvanen return
+9050|0|9046|dialog
+9046|0|0|flag checks and class rewards
+
+-Mystic Forms
+2903|0|0|room 16/2667 cmd text - give <totem name> to kuel
+2903|1|0|room 16/2667 cmd text - give <totem name> to kuel
+2903|2|0|room 16/2667 cmd text - give <totem name> to kuel
+2903|3|0|room 16/2667 cmd text - give <totem name> to kuel
+2903|4|0|room 16/2667 cmd text - give <totem name> to kuel
+--Form of the Crane
+2911|0|0|form of the crane spell race check
+--Form of the Dragon
+2910|0|0|form of the dragon spell race check
+--Form of the Gorilla
+2912|0|0|form of the gorilla spell race check
+--Form of the Monkey
+2913|0|0|form of the monkey spell race check
+--Form of the Viper
+2914|0|0|form of the viper spell race check
+
+-Perfect Stealth Quest
+'master assassin (15/416) death spell summons dying master assassin
+9010|0|9012|ask dying secret
+9012|0|9029|dialog
+9029|0|0|class rewards
+
+-Smash Quest
+85|0|2951|aldreth greet text, ask 'test'
+2951|0|2947|text before class check
+2947|0|2948|class checks (doesn't do anything here except return a message tho)
+2948|0|0|dialog
+85|0|9034|ask 'heads'
+9034|0|2940|text that says taking heads
+2940|0|9048|takes heads and gives quest token - no class checks which is weird
+9048|0|0|dialog
+85|0|2941|ask return
+2941|0|2942|dialog
+2942|0|2949|class check, takes quest token
+2949|0|2950|dialog
+2950|0|0|gives smash ability again for whatever reason
+
+-Sunstone Wristband Quest
+'someone map out the rest of this and i'll include them
+--Master Smith Martok (6/1357)
+1121|0|2628|greet text
+2628|0|2629|ask 'red iron weapon'
+2629|0|0|class checks to give weapons based on classes' weapon type
+--Dao Lord (12/2251)
+2688|0|0|(this is just the last part) dao lords death spell casts another spell which executes this block.  it has the flag checks, exp gain, and giving the item.
+
+
+-Witchunter Quests
+--Magebane (Huge Dwarven WH 2/2566)
+393|0|394|greet cmds
+394|0|0|greet dialog
+395|0|396|ask witchunter
+396|0|397|flag check
+397|0|0|dialog
+398|0|399|ask sword
+399|0|400|flag check
+400|0|0|dialog
+--Medal of Flame
+---Huge Dwarven WH (2/2566)
+395|0|396|ask witchunter
+396|0|4027|flag check
+4027|0|0|dialog
+---Inquisitor Fulgore (15/1101)
+4028|0|4029|greet cmds
+4029|0|0|greet dialog
+4030|0|4038|ask messenger
+4038|0|4033|flag check
+4033|0|0|dialog
+4035|0|0|ask demoness
+4036|0|0|ask order
+4034|0|4041|ask return
+4041|0|4037|flag check
+4037|0|0|dialog
+--Draka's Blade
+---Inquisitor Armandriel (17/2423)
+9331|0|9332|greet cmds
+9332|0|0|greet dialog
+9334|0|0|ask draka
+---Huge Dwarven WH (2/2566)
+395|0|396|ask witchunter
+396|0|9449|flag check
+9439|0|9446|ask draka
+9446|0|9449|flag check
+9449|0|0|dialog
+9450|0|9451|ask visit
+9451|0|9579|flag check
+9579|0|0|dialog
+---Spirit of Draka (17/359)
+9286|0|9287|greet cmds
+9287|0|0|greet dialog
+9288|0|9290|ask armandriel
+9290|0|9455|flag check
+9455|0|0|dialog
+9289|0|9292|ask return
+9292|0|9291|flag check
+9291|0|0|dialog
+
+
+#### GOOD QUEST
+-Good Alignment Quest
+--1st Quest
+---First Part (wounded messenger 1/527) 
+316|0|317|commands given to wounded messenger 
+317|0|0|greet text 
+318|0|325|MISSION command given to wounded messenger 
+325|0|346|flag check 
+346|0|0|dialog text 
+---Second Part (guildmaster 1/546) 
+326|0|327|commands give to guildmaster 
+327|0|0|greet text 
+328|0|0|STRANGERS command given to guildmaster 
+329|0|330|WOUNDED MESSENGER command given to guildmaster 
+330|0|331|flag check 
+331|0|0|dialog that gives approval from guildmaster 
+---Third Part (wounded messenger 1/527) 
+323|0|324|GUILDMASTER command given to wounded messenger 
+324|0|332|flag check 
+332|0|0|dialog text 
+333|0|334|ACCEPT command given to wounded messenger 
+334|0|0|flag check 
+---Fourth Part (chancellor annora 1/1333) 
+335|0|336|commands give to annora 
+336|0|0|greet text 
+337|0|338|LETTER command given to annora 
+338|0|339|flag check 
+339|0|0|dialog text 
+339|1|0|dialog text 
+---Fifth Part (commander markus 2/2518) 
+347|0|348|commands given to markus 
+348|0|0|greet text 
+349|0|350|LETTER command give to markus 
+350|0|351|flag check 
+351|0|0|dialog of box being given 
+---Sixth Part (chancellor annora 1/1333) 
+352|0|353|RETURN command given to annora 
+353|0|354|flag check 
+354|0|0|dialog of finishing quest and gaining exp.
+
+
+--2nd Quest
+---First Part (Chancellor Annora 1/1333)
+335|0|336|Commands given to annora
+336|0|0|Greet text
+518|0|495|MISSIONS command given to annora
+495|0|496|flag check
+496|0|496|dialog text
+496|1|496|dialog text
+---Second Part (Kill Goru-Nezar 3/668)
+---Third Part (Chancellor Annora 1/1333)
+519|0|497|HEAD command given to annora
+497|0|499|flag check
+499|0|0|class specific reward text
+497|0|500|flag check
+500|0|0|class specific reward text
+497|0|501|flag check
+501|0|0|class specific reward text
+497|0|502|flag check
+502|0|0|class specific reward text
+497|0|503|flag check
+503|0|0|class specific reward text
+
+
+--3rd Quest
+---First Part (Chancellor Annora 1/1333)
+335|0|336|commands given to annora
+336|0|0|greet text
+518|0|495|MISSIONS command
+495|0|1095|flag check
+1095|0|0|dialog text
+---Second Part (Dwarf King 6/1387)
+1096|0|1097|commands give to king
+1097|0|0|greet text
+1098|0|1099|BUSINESS command
+1099|0|1100|flag check
+1100|0|0|dialog text
+1102|0|0|ACCEPT command
+---Third Part (Loremaster Thulgraf 6/1382)
+1110|0|1111|commands give to loremaster
+1111|0|0|greet text
+1112|0|1113|PERMISSION command
+1113|0|1117|flag check
+1117|0|0|dialog text
+1118|0|1119|DEMONS command
+1119|0|1120|flag check
+1120|0|0|dialog text
+---Fourth Part (Champion Gudruk 6/1348)
+1103|0|1104|commands give to gudruk
+1104|0|0|greet text
+1105|0|1106|DEMONS command
+1106|0|1107|flag check
+1107|0|0|dialog text
+1108|0|0|MITHRIL command
+---Fifth Part (Master Martok 6/1357)
+1121|0|1122|commands give to martok
+1122|0|0|greet text
+1124|0|0|MITHRIL command
+---Sixth Part (Gnome Enchantress 6/577)
+1230|0|1231|commands give to enchantress
+1231|0|0|greet text
+1232|0|1233|DEMONS command
+1233|0|1234|flag check
+1234|0|0|dialog text
+---Seventh Part (Kill Metallic Monstrosity 6/76)
+---Eighth Part (Master Martok 6/1357)
+1127|0|1128|FORGE command
+1128|0|1129|flag check
+1129|0|0|dialog text
+1129|1|0|dialog text
+1129|2|0|dialog text
+1129|3|0|dialog text
+1129|4|0|dialog text
+1129|5|0|dialog text
+---Ninth Part (Gnome Enchantress 6/577)
+1235|0|1236|DAGGER command
+1236|0|1237|flag check
+1237|0|0|dialog text
+1238|0|1239|ENCHANT command
+1239|0|1240|flag check
+1240|0|0|dialog text
+---Tenth Part (kill the Spectral Knight 6/994)
+---Eleventh Part (kill Gulguthra 6/3108)
+---Twelfth Part (Dwarf King 6/1387)
+1249|0|1250|RETURN command
+1250|0|1251|flag check
+1251|0|0|Dialog showing receipt of chest
+---Thirteenth Part (Annora 1/1333)
+1252|0|1253|SUCCESS command
+1253|0|1254|flag check
+1254|0|0|dialog showing quest complete
+
+--4th Quest
+---First Part (Chancellor Annora 1/1333)
+335|0|336|commands given to annora
+336|0|0|greet text
+518|0|495|MISSIONS command given to annora
+495|0|2844|dialog text
+---Second Part (kill Dark Phoenix 16/2160)
+2896|0|2851|flag check
+2851|0|dialog showing exp gained for quest
+---Third Part (Chancellor Annora 1/1333)
+2853|0|2854|FOE command given to annora
+2854|0|2855|flag check
+2854|1|2855|flag check
+2855|0|0|dialog showing finished quest and getting cloak
+
+--5th Quest
+---First Part (Chancellor Annora 1/1333)
+335|0|336|commands given to annora
+336|0|0|greet text
+518|0|495|missions command
+495|0|9472|flag check
+9472|0|0|dialog
+---Second Part (Pastor Lander 17/2418)
+9501|0|9502|Annora command
+9502|0|9503|flag check
+9503|0|0|dialog
+---Third Part (Justice Darkbane 17/1746)
+9321|0|9521|pastor command
+9521|0|9522|flag check
+9522|0|0|dialog
+---Forth Part (Kill Ozrinom the VL. 17/2243)
+'Tip Coffin
+'Kill Death Mist of Ozrinom
+9518|0|9519|flag check and gives gem - executed by death spell of the "Death Must of Ozrinom"
+9519|0|0|dialog
+---Fourth Part (Pastor Lander 17/2418)
+9617|0|9618|gem command
+9618|0|9619|flag check
+9619|0|0|dialog
+---Fifth Part (Old Hermit 17/1790)
+9347|0|9510|Old Hermit ---> gift
+9510|0|9348|flag check
+9348|0|0|dialog
+---Sixth Part (Kill Monsters)
+'Kill Rotting Beholder - 17/2019
+'Kill Colossal Midnight Dragon - 17/1772
+'Kill Tapestry
+'Kill Dark Mage - 17/1773
+9537|0|9483|exp and flags - executed by dark mage's death spell
+9483|0|0|dialog
+'Kill Zanathus the Lich
+9547|0|0|gives 50 mill exp - executed by Lich's death spell
+---Seventh Part (Chancellor Annora 1/1333)
+9459|0|9460|knowledge command
+9460|0|9461|class checks and awards given
+9460|1|9461|class checks and awards given
+9461|0|0|dialog
+
+#### NEUTRAL QUEST
+
+-Neutral Alignment Quest
+--1st Quest
+---First Part (hooded traveller 1/315)
+355|0|356|commands given to hooded traveller
+356|0|0|greet text
+357|0|358|QUEST command give to traveller
+358|0|359|flag check
+359|0|0|dialog text
+---Second Part (jorah 1/2327)
+172|0|173|commands given to jorah
+173|0|0|greet text
+360|0|361|GAAL command given to jorah
+361|0|362|flag check
+362|0|0|dialog text
+363|0|364|TRANSPORT command given to jorah
+364|0|365|flag check
+365|0|0|dialog text
+---Third Part (grey lord 1/160)
+366|0|367|commands give to grey lord
+367|0|0|greet text
+505|0|506|MISSIONS command given to grey lord
+506|0|507|flag check
+507|0|0|dialog text
+368|0|371|CODE WORD command given to grey lord
+371|0|372|flag check
+372|0|370|dialog text
+370|0|369|TELEPORT command given to grey lord. *not sure how this works, but it gives you MSG #837*
+---Fourth Part (commander markus 2/2518)
+347|0|348|commands given to markus
+348|0|0|greet text
+373|0|374|FESTUS command given to markus
+374|0|375|flag check
+375|0|0|dialog text of getting box
+---Fifth Part (grey lord 1/160)
+376|0|377|BOX command given to grey lord
+377|0|378|flag check
+378|0|0|dialog text
+---Sixth Part (chancellor annora 1/1333)
+379|0|380|FESTUS command given to annora
+380|0|381|flag check
+381|0|0|dialog text
+---Seventh Part (grey lord 1/160)
+382|0|383|RETURN command given to grey lord
+383|0|384|flag check
+384|0|0|dialog text showing finish and gaining exp.
+
+
+--2nd Quest
+---First Part (Grey Lord 1/160)
+366|0|367|commands given to grey lord
+367|0|0|greet text
+505|0|506|MISSIONS command given to grey lord
+506|0|508|flag check
+508|0|0|dialog text
+---Second Part (Kill Beholder)
+---Third Part (Grey Lord 1/160)
+509|0|510|EYE command given to grey lord
+510|0|511|flag check
+511|0|512|class specific reward text
+511|0|513|class specific reward text
+511|0|514|class specific reward text
+511|0|515|class specific reward text
+511|0|516|class specific reward text
+'this is kind of confusing because after the flag check there are actually 2 text blocks used. each one uses the 511 block, then the others are class specific.
+
+
+--3rd Quest
+---First Part (Grey Lord 1/160)
+366|0|367|commands given to grey lord
+367|0|0|greet text
+505|0|506|MISSIONS command
+506|0|1259|flag check
+1259|0|0|dialog text
+---Second Part (Overgrown Shrine 6/3109)
+'PRAY
+1261|0|1262|flag check
+1262|0|0|dialog text
+1262|1|0|dialog text
+1262|2|0|dialog text
+1262|3|0|dialog text
+1262|4|0|dialog text
+---Third Part (Water Spirit 6/1209)
+1263|0|1264|dialog text upon entering
+1264|0|1265|dialog text
+1265|0|1266|flag check
+1266|0|0|dialog of getting ice tear
+---Fourth Part (efreeti 6/1243)
+'kill efreeti 
+1277|0|1278|flag check
+1278|0|0|dialog of getting eternal fire
+---Fifth Part (Gemstone Juggernaut 6/2338)
+'kill gemstone juggernaut
+1279|0|1280|flag check
+1280|0|0|dialog of getting heartstone
+---Sixth Part (Kai Master 6/1566)
+'kill kai master
+1281|0|1282|flag check
+1282|0|0|dialog of getting storm spirit
+---Seventh Part (Overgrown Shrine 6/3109)
+'SUMMON AVATAR
+1261|0|1283|flag check
+1283|0|0|dialog text
+---Eighth Part (Grel Lord 1/160)
+1284|0|1285|REWARD command
+1285|0|1286|flag check
+1286|0|0|dialog showing finished quest
+
+
+--4th Quest
+---First Part (Grey Lord 1/160)
+366|0|367|commands given to grey lord
+367|0|0|greet text
+505|0|506|MISSIONS command given to grey lord
+506|0|2845|flag check
+2845|0|0|dialog text
+2845|1|0|dialog text
+2846|0|2847|THREAT command given to grey lord
+2847|0|2849|dialog text
+2849|0|0|dialog text
+---Second Part (kill Dark Phoenix 16/2160)
+2896|0|2851|flag check
+2851|0|0|dialog showing exp gained for quest
+---Third Part (Grey Lord 1/160)
+2856|0|2857|DESTROYED command given to grey lord
+2857|0|2858|flag check
+2857|1|2858|flag check
+2858|0|0|dialog showing finished quest and getting cloak
+
+
+--5th Quest
+---First Part (Grey Lord 1/160)
+366|0|367|commands given to grey lord
+367|0|0|greet text
+505|0|506|MISSIONS command given to grey lord
+506|0|9486|flag check
+9486|0|0|dialog
+---Second Part (Ancient Gypsy Woman 17/1776)
+9309|0|9310|ask ancient gypsy woman grey lord
+9310|0|9509|flag check
+9509|0|0|dialog
+'need to return webbing to woman
+9602|0|9603|ask ancient gypsy woman webbing
+9603|0|9604|flag check, take item
+9604|0|0|dialog
+9604|1|0|dialog
+---Third Part (Hanging Tree 17/728+)
+'kill hanging tree
+9516|0|9517|death spell of hanging tree -- flag check, give item
+9517|0|0|text for grabbing heart
+---Fourth Part (Ancient Gypsy Woman 17/1776)
+9605|0|9606|ask ancient gypsy woman heart
+9606|0|9607|flag check
+9607|0|0|dialog
+---Fifth Part (Old Hermit 17/1790)
+9345|0|9347|ask old hermit gift
+9347|0|9510|dialog
+9510|0|9348|flag check, take/give item
+9348|0|0|dialog
+'(need to kill rotting beholder to get to old man)
+---Sixth Part (Old Man 17/2020)
+9559|0|9566|ask old man prophecy
+9566|0|9568|flag check/give ability
+9568|0|0|dialog
+9568|1|0|dialog
+9559|0|9570|ask old man portal
+9570|0|9571|text
+9571|0|0|teleports you to Island of bones 
+---Seventh Part (Dark Mage 17/1773)
+'kill dark mage
+9537|0|9483|death spell of dark mage -- flag check, give 175 mill exp bonus
+9483|0|0|dialog
+'at this point it's possible to return to grey lord to get your quest weapon/spell but you could also go on to kill the lich
+---Eigth Part (Zanthus the Lich 17/1773)
+'kill lich
+9547|0|0|death spell connected to text block -- flag check, add 50 mill exp bonus
+---Ninth Part (Grey Lord 1/160)
+366|0|9473|ask grey knowledge
+9473|0|9474|dialog
+9474|0|0|class/flag checks, then rewards
+9474|1|0|class/flag checks, then rewards
+9474|0|9476|class 1 : text block 9476 
+9474|0|9477|class 2 : text block 9477 
+9474|0|9476|class 3 : text block 9476 
+9474|0|9478|class 4 : text block 9478 
+9474|0|0|class 5 : learnspell 1096,1060,1099 
+9474|0|9479|class 6 : text block 9479
+9474|0|9476|class 7 : text block 9476 
+9474|0|9479|class 8 : text block 9479 
+9474|0|9479|class 9 : text block 9479 
+9474|0|9479|class 10: text block 9479 
+9474|0|9479|class 11: text block 9479 
+9474|0|0|class 12: learnspell 1038,1074,1046 
+9474|0|0|class 13: learnspell 1047,1112,1062 
+9474|0|9476|class 14: text block 9476 
+9474|0|9480|class 15: text block 9480 
+'all classes go then to 9475 
+9475|0|0|dialog
+
+
+
+#### EVIL QUEST
+
+-Evil Alignment Quest
+--1st Quest
+---First Part (nasty-looking man 1/392)
+420|0|421|commands given to nasty looking man
+421|1|0|greet text
+422|0|423|ADVENTURE command given to nasty looking man
+423|0|424|flag check
+424|0|0|dialog text
+425|0|426|GOLD command given to nasty looking man
+426|0|427|flag check
+427|0|0|dialog text
+---Second Part (balthazar 2/2577)
+428|0|429|commands given to balthazar
+429|0|0|greet text
+430|0|431|WORK command given to balthazar
+431|0|432|flag check
+432|0|0|dialog text
+433|0|434|ACCEPT command given to balthazar
+434|0|435|flag check
+435|0|0|dialog text
+---Third Part
+'there are no text blocks included in the third step of this quest.
+---Fourth Part (Balthazar 2/2577)
+436|0|437|REWARD command given to balthazar
+437|0|438|flag check
+438|0|0|dialog showing finished quest and gaining exp.
+
+--2nd Quest
+---First Part (Balthazar 2/2577)
+428|0|429|commands given to balthazar
+429|0|0|greet text
+430|0|431|WORK command given to balthazar
+431|0|439|flag check
+439|0|0|dialog text
+---Second Part (kill woodelf lord, collect 10 elf heads)
+---Third Part (Balthazar 2/2577)
+486|0|487|RETURN command given to balthazar
+487|0|488|flag check
+487|1|488|flag check
+487|2|488|flag check
+487|3|488|flag check
+487|4|488|flag check
+488|0|489|class specific reward text
+488|0|490|class specific reward text
+488|0|491|class specific reward text
+488|0|492|class specific reward text
+488|0|493|class specific reward text
+488|0|494|class specific reward text
+
+--3rd Quest
+---First Part (Balthazar 2/2577)
+428|0|429|commands given to balthazar
+429|0|0|greet text
+430|0|431|WORK command given to balthazar
+431|0|1287|flag check
+1287|0|0|dialog text
+---Second Part (Shifty Dwarf 1/723)
+1288|0|1289|commands given to shifty dwarf
+1289|0|0|greet text
+1292|0|0|DUERGAR command given to shifty dwarf
+1290|0|1291|KOBOLD command given to shifty dwarf
+---Third Part (kill kobold king for crown 6/834)
+---Fourth Part (Shifty Dwarf 1/723)
+1290|0|1291|CROWN command given to shifty dwarf
+1291|0|1293|flag check
+1293|0|0|dialog of getting small pouch
+---Fifth Part (Duergar Lord 6/2649)
+1296|0|1297|commands given to lord
+1297|0|0|greet text
+1298|0|1299|BALTHAZAR command given to lord
+1299|0|1300|flag check
+1300|0|0|dialog text
+---Sixth Part (kill giant two headed troll 6/539)
+1302|0|1303|flag check
+1303|0|0|dialog of getting retchweed
+---Seventh Part (harvest mushrooms 6/1102)
+1304|0|1305|flag check
+1305|0|0|dialog of getting mushrooms
+---Eighth Part (Duergar Lord 6/2649)
+1321|0|1301|INGREDIENTS command given to lord
+1301|0|1306|flag check
+1306|0|0|dialog text
+---Ninth Part (kill huge obsidian golem for talisman 6/1889)
+1307|0|0|flag check
+---Tenth Part (Duergar Lord 6/2649)
+1308|0|1309|TRANSPORT command given to lord
+1309|0|1310|flag check
+1310|0|0|dialog text
+---Eleventh Part (kill champion gudruk no room #)
+---Twelfth Part (poison food no room #)
+1313|0|1314|flag check
+1314|0|0|dialog of poisoning food
+---Thirteenth Part (Duergar Lord 6/2649)
+1315|0|1316|RETURN command given to lord
+1316|0|1317|flag check
+1317|0|0|dialog text
+---Fourteenth Part (Balthazar 2/2577)
+1318|0|1319|ALLIANCE command given to balthazar
+1319|0|1320|flag check
+1320|0|0|dialog showing finished quest
+
+--4th Quest
+---First Part (Balthazar 2/2577)
+428|0|429|commands given to balthazar
+429|0|0|greet text
+430|0|431|WORK command given to balthazar
+431|0|2848|flag check
+2848|0|0|dialog text
+---Second Part (kill Dark Phoenix 16/2160)
+2896|0|2851|flag check
+2851|0|0|dialog showing exp gained for quest
+---Third Part (Balthazar 2/2577)
+2859|0|2860|NEWS command given to balthazar
+2860|0|2861|flag check
+2860|1|2861|flag check
+2861|0|0|dialog showing finished quest and getting cloak
+
+--5th Quest
+---First Part (Balthazar 2/2577)
+428|0|429|commands given to balthazar
+429|0|0|greet text
+430|0|431|WORK command
+431|0|9487|flag check
+9487|0|0|dialog text
+9487|1|0|dialog text
+---Second Part (Enigma Lord 17/2586)
+9504|0|9505|commands give to enigma lord
+9505|0|0|greet text
+9505|0|9506|BALTHAZAR command given to enigma lord
+9506|0|9507|dialog text
+9507|0|9508|flag check
+9508|0|0|dialog text
+---Third Part (Pastor Lander 17/2418)
+'kill pastor lander
+'desecrate altar
+---Fourth Part (Enigma Lord 17/2586)
+9505|0|9608|DEED command given to enigma lord
+9608|0|9609|flag check
+9609|0|9610|dialog text
+---Fifth Part (Dreadlord of Blood 17/979)
+'kill dreadlord of blood
+---Sixth Part (Enigma Lord 17/2586)
+9505|0|9611|BRING command given to enigma lord
+9611|0|9612|flag check
+9612|0|9613|dialog text
+---Seventh Part (Ancient Gypsy Woman 17/776)
+'kill ancient gypsy woman
+---Eighth Part (Enigma Lord 17/2586)
+9505|0|9614|RETRIEVE command given to enigma lord
+9614|0|9675|flag check
+9675|0|9616|dialog text
+---Ninth Part (Enigma Lord 17/2586)
+'kill enigma lord
+---Tenth Part (Old Hermit 17/1790)
+9345|0|9346|commands given to old hermit
+9346|0|0|greet text
+9347|0|9510|GIFT command given to old hermit
+9510|0|9348|flag check
+9348|0|0|dialog text of getting key
+---Eleventh Part (Rotting Beholder 17/2019)
+'kill rotting beholder
+---Twelfth Part (Old Man 17/2020)
+9559|0|9560|commands given to old man
+9560|0|0|greet text
+9562|0|9566|PROPHECY command given to old man
+9566|0|9569|flag check
+9569|0|0|dialog text
+9559|0|9564|DARK FOLD command given to old man
+9564|0|0|dialog text
+9559|0|9570|PORTAL command given to old man
+9570|0|0|dialog text
+---Thirteenth Part
+'do the hideous face puzzle (place eye in socket, place tongue in hole)
+---Fourteenth Part
+'kill dark mage
+'kill zanthus the lich (optional)
+---Fifteenth Part (Balthazar 2/2577)
+9488|0|9489|ask bal knowledge
+9489|0|0|class/flag checks and rewards
+9489|0|9491|class 1 : text block 9491 
+9489|0|9492|class 2 : text block 9492 
+9489|0|9491|class 3 : text block 9491 
+9489|0|9493|class 4 : text block 9493 
+9489|0|0|class 5 : learnspell 1061,1102,1081 
+9489|0|9494|class 6 : text block 9494 
+9489|0|9491|class 7 : text block 9491 
+9489|0|9494|class 8 : text block 9494 
+9489|0|9494|class 9 : text block 9494 
+9489|0|9494|class 10: text block 9494 
+9489|0|9494|class 11: text block 9494 
+9489|0|0|class 12: learnspell 1008,1041,1057 
+9489|0|0|class 13: learnspell 1048,1056,1026 
+9489|0|9491|class 14: text block 9491 
+9489|0|9495|class 15: text block 9495
+'all then display block 9490
+9490|0|0|dialog
+
+
+#####  NON CLASS-SPECIFIC QUESTS
+
+-Non Class-Specific Quests
+--Adult Red Dragon Quest
+4702|0|0|room 7/1358 cmd text - touch ruby
+
+--Apparatus Quest
+709|0|0|room 8/951 cmd text - solve puzzle
+858|0|0|room 8/955 cmd text - destroy apparatus
+
+--Bishop Quest
+'Bishop (1/525)
+217|0|0|bishop's greet text
+219|0|0|dialog when asked about chalice
+220|0|4701|dialog when asked return
+4701|0|0|take chalice and give rewards
+
+--Blood Champ Quest
+216|0|0|room 7/1285 cmd text - touch altar
+
+--High Druid Quest
+4703|0|0|room 7/142 cmd text - touch gem
+
+--Ice Sorceress Quest
+4700|0|0|room 10/245 cmd text - sit throne
+
+--Nahr's Castle
+---teleports/portals
+4286|0|0|tele from final nahr's pit & for already-trained chars from ent to 
+spacelord - level filter
+4171|0|4175|tele to first pit
+4172|0|0|tele out of first pit
+4327|0|0|tele for solo trainer, class filtered
+4227|0|0|majestic drag tele
+4120|0|0|hydra tele
+4224|0|0|hydra portal
+4305|0|0|caster nahr portal in
+4301|0|0|caster nahr portal out
+4268|0|0|battle nahr portal
+4285|0|0|tele to final nahr pit
+4289|0|0|portal from spacelord to ent
+---fortress trigger spell
+4173|0|4174|removes quest items from people coming back
+4174|0|4320|random, summons hunter or fires 4320
+4320|0|4175|checks int to fire 4175
+4175|0|4176|random 4176
+4176|0|0|illusion summons
+---meadow trigger spell
+4192|0|4193|removes quest items from people coming back
+4193|0|4321|random, fires 4321
+4321|0|4198|random 4199
+4199|0|0|illusion summons
+---branch check
+4204|0|0|summons azrandimon via roomitems
+---Demon Imp (17/2980)
+4213|0|4214|greet cmds
+4214|0|0|greet dialog
+4215|0|0|ask things
+4216|0|0|ask master
+4222|0|4223|ask return
+4223|0|0|takes items, clear statue/drop void
+---class filters
+4241|0|0|thief filter
+4242|0|0|battle filter
+4243|0|0|magic filter
+---thief path
+---cloaked figures
+4247|0|4251|checks thievery for diamond
+4248|0|4251|checks thievery for moonstone
+4249|0|4251|checks thievery for pearl
+4250|0|4251|checks thievery for marble
+4252|0|0|remote act
+4253|0|0|remote act
+4254|0|0|remote act
+4255|0|0|remote act
+---traps
+4263|0|4264|checks traps for crystal gem
+4265|0|4264|checks traps for crystal gem
+4264|0|0|dmg for fail
+---Old Thief (17/3048)
+4256|0|4257|greet cmds
+4257|0|0|greet dialog
+4258|0|0|ask maybe
+4259|0|0|ask items
+4260|0|4261|ask return
+4261|0|4262|takes items, tele to thief nahr
+4262|0|0|dialog
+---battle path (chessboard)
+4326|0|0|takes chess pieces
+---magic path
+---amber fortress
+4244|0|4269|spellcaster filter, checks casting stat
+4269|0|4270|random 4270
+4270|0|4323|random checks for shards, fire 4323
+4323|0|0|witchunter summons
+4271|0|4275|summon fire shard, checks casting stat
+4272|0|4275|summon light shard, checks casting stat
+4273|0|4275|summon ice shard, checks casting stat
+4274|0|4275|summon earth shard, checks casting stat
+---Prisoner (17/3155)
+4276|0|4277|greet cmds
+4277|0|0|greet dialog
+4278|0|0|ask prison
+4279|0|0|ask shards
+4280|0|4281|ask return
+4281|0|4282|takes items, tele to ore cavern
+---ore cavern
+4297|0|4298|takes shards again for some reason, random 4298
+4298|0|0|repops outcroppings
+4299|0|4324|gather ore checks class, casting stat
+4324|0|0|random to clear outcropping
+4300|0|0|invoke staff
+---Spacelord (12/2381)
+4290|0|4291|greet cmds
+4291|0|0|greet dialog
+4292|0|4293|ask zanthus
+4293|0|4294|flag check for align quests
+4294|0|0|dialog
+4302|0|0|ask timelord
+
+
+--Phoenix Feather Quest
+---Old Man (9/1259)
+1407|0|1408|greet cmds
+1408|0|0|greet dialog
+1409|0|0|ask forgotten
+1410|0|0|ask shadow fist
+1411|0|1412|ask phoenix
+1412|0|4170|level check, flag
+4170|0|0|dialog
+---Dread Mystic (9/930)
+1417|0|0|from death spell, flag check
+---Flesh Golem (9/1007)
+1460|0|0|from death spell, flag check but no update
+---Smuggler Boss (9/223)
+1418|0|0|from death spell, flag check
+---Gnome Alchemist (6/645)
+973|0|974|greet cmds
+974|0|0|greet dialog
+1419|0|1420|ask potion of levitation
+1420|0|0|flag check
+---Gnome Inventor (6/644)
+969|0|970|greet cmds
+970|0|0|greet dialog
+1427|0|1428|ask forks
+1428|0|0|give item, no flag check
+---Haunting Spirit (9/1177)
+1424|0|1425|greet cmds
+1425|0|0|greet dialog
+1426|0|0|ask orfeo
+---Orfeo Talespinner (6/126)
+929|0|930|greet cmds
+930|0|0|greet dialog
+1429|0|0|ask phoenix - does nothing? i may be using older dats here...
+1430|0|1431|ask morukai
+1431|0|1432|flag check
+1432|0|0|dialog
+---Shadow Guard (9/1423)
+1433|0|1434|greet cmds
+1434|0|0|greet dialog
+1435|0|1436|ask orfeo
+1436|0|0|flag check, remote action
+---Morukai (9/1425)
+1437|0|1438|greet cmds
+1438|0|0|greet dialog
+1439|0|1440|ask phoenix
+1440|0|1441|flag check
+1441|0|0|dialog
+1442|0|0|ask barrier
+---White Jelly (9/146)
+1443|0|0|from death spell, flag check
+---Queen Ant (9/717)
+1444|0|0|from death spell, flag check
+---Leo the Quick (9/870)
+1445|0|0|from death spell, flag check
+---Cave Roots (9/500)
+1446|0|0|cmd text flag check
+---Morukai (9/1425)
+1447|0|1448|ask components
+1448|0|1449|flag check
+1449|0|0|dialog
+'little complex here - block 1448 casts spell 614, which gives +0 charm for 
+10 min (i.e. abil 49)
+1451|0|1452|ask return
+1452|0|1453|flag check
+1453|0|0|dialog
+'block 1452 checks for abil 49 from spell 614, will fail if edited spells 
+for charm are on
+---Necromancer (9/1431)
+1454|0|0|from death spell, flag check
+---Morukai (9/1425)
+1455|0|1456|ask information
+1456|0|1457|flag check
+1457|0|0|dialog
+---Hurl Egg (7/1427)
+1458|0|1459|cmd text -- hurl egg
+1459|0|0|dialog
+
+
+#leave this comment at the bottom

@@ -1,0 +1,5 @@
+[History]
+B0=NightmareRedux/frmDatabaseDeleter
+B1=NightmareRedux/frmAction
+B2=NightmareRedux/frmDatabaseExport
+B3=NightmareRedux/frmAction/cmdDelete_Click
