@@ -24,7 +24,7 @@
 # thanks to Demonic and Jackal for supplying some of the Alignment quest info!
 #
 ####
-
+a
 
 -Meditate Quest
 177|0|9025|dhelvanen greet text,ask dhelvanen reward
