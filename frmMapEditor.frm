@@ -6709,6 +6709,11 @@ Roomrec.Platinum = 0
 Roomrec.Gold = 0
 Roomrec.Silver = 0
 Roomrec.Copper = 0
+Roomrec.InvisRunic = 0
+Roomrec.InvisPlatinum = 0
+Roomrec.InvisGold = 0
+Roomrec.InvisSilver = 0
+Roomrec.InvisCopper = 0
 
 For x = 0 To 16
     Roomrec.RoomItems(x) = 0

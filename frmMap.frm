@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmMap 
    AutoRedraw      =   -1  'True
@@ -21085,6 +21085,11 @@ For nCell = 1 To SECorner
     tabRooms.Fields("Gold") = Roomrec.Gold
     tabRooms.Fields("Silver") = Roomrec.Silver
     tabRooms.Fields("Copper") = Roomrec.Copper
+    tabRooms.Fields("InvisRunic") = Roomrec.InvisRunic
+    tabRooms.Fields("InvisPlatinum") = Roomrec.InvisPlatinum
+    tabRooms.Fields("InvisGold") = Roomrec.InvisGold
+    tabRooms.Fields("InvisSilver") = Roomrec.InvisSilver
+    tabRooms.Fields("InvisCopper") = Roomrec.InvisCopper
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("Exit Room") = Roomrec.ExitRoom
     tabRooms.Fields("Attributes") = Roomrec.Attributes
