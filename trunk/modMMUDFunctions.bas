@@ -374,6 +374,11 @@ With tabNewRooms
     .Columns.Append "Gold", adInteger
     .Columns.Append "Silver", adInteger
     .Columns.Append "Copper", adInteger
+    .Columns.Append "InvisRunic", adInteger
+    .Columns.Append "InvisPlatinum", adInteger
+    .Columns.Append "InvisGold", adInteger
+    .Columns.Append "InvisSilver", adInteger
+    .Columns.Append "InvisCopper", adInteger
     .Columns.Append "Attributes", adInteger
     .Columns.Append "Death Room", adInteger
     .Columns.Append "Exit Room", adInteger

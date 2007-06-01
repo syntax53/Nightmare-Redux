@@ -311,8 +311,7 @@ Public Type ItemRecType
     Minhit          As Integer                  '832
     Maxhit          As Integer                  '834
     AC              As Integer                  '836
-    Race(9)         As Integer                  '856 +20
-    unknown11(9)    As Integer                  '876 +20
+    Race(9)         As Long                     '876 +40
     Negate(19)      As Integer                  '916 +40
     Weapon          As Integer                  '918
     Armour          As Integer                  '920
@@ -322,13 +321,13 @@ Public Type ItemRecType
     Gettable        As Byte
     unknown12       As Byte                     '928
     ReqStr          As Integer                  '930
-    unknown13a(4)   As Integer
+    unknown13a(6)   As Integer
     OpenRunic       As Long
     OpenPlatinum    As Long
     OpenGold        As Long
     OpenSilver      As Long
     OpenCopper      As Long
-    unknown13b(14)   As Integer                  '980 +60  '29 -- changes the numbers here 6-19-03
+    unknown13b(12)   As Integer                  '980 +60  '29 -- changes the numbers here 6-19-03
     Speed           As Integer                  '982
     unknown14       As Integer                  '984
     AbilityB(19)    As Integer                  '1024 +40
@@ -347,7 +346,7 @@ Public Type ItemRecType
     'unknown20(1)   As Byte
 End Type
 Const ItemDataBufSize = 1072 '1948 '1072
-Public ItemFldMap(0 To 184) As FieldMap '188
+Public ItemFldMap(0 To 174) As FieldMap '188
 Public Type ItemDatabufType
     buf(1 To ItemDataBufSize) As Byte
 End Type
@@ -436,7 +435,12 @@ Public Type RoomRecType
     Gold                As Long
     Silver              As Long
     Copper              As Long
-    nothing7(4)         As Long             ' -5
+    InvisRunic          As Long
+    InvisPlatinum       As Long
+    InvisGold           As Long
+    InvisSilver         As Long
+    InvisCopper         As Long
+    'nothing7(4)         As Long             ' -5
     MaxRegen            As Long
     MonsterType         As Integer
     unknown69           As Integer
@@ -716,6 +720,7 @@ Public Type ActionRecType
     FloorItemToUser As String * 74
     Nothing11(2) As Integer
     FloorItemToRoom As String * 74
+    Offset As Integer
 End Type
 Const ActionDataBufSize = 1010
 Public ActionFldMap(0 To 43) As FieldMap
@@ -2097,26 +2102,16 @@ Sub AddItemFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2       'minhit
     AddField Map, ctr, FLD_INTEGER, 2       'maxhit
     AddField Map, ctr, FLD_INTEGER, 2       'AC
-    AddField Map, ctr, FLD_INTEGER, 2       'race1
-    AddField Map, ctr, FLD_INTEGER, 2       'race2
-    AddField Map, ctr, FLD_INTEGER, 2       'race3
-    AddField Map, ctr, FLD_INTEGER, 2       'race4
-    AddField Map, ctr, FLD_INTEGER, 2       'race5
-    AddField Map, ctr, FLD_INTEGER, 2       'race6
-    AddField Map, ctr, FLD_INTEGER, 2       'race7
-    AddField Map, ctr, FLD_INTEGER, 2       'race8
-    AddField Map, ctr, FLD_INTEGER, 2       'race9
-    AddField Map, ctr, FLD_INTEGER, 2       'race10
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing1
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing2
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing3
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing4
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing5
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing6
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing7
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing8
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing9
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing10
+    AddField Map, ctr, FLD_INTEGER, 4       'race1
+    AddField Map, ctr, FLD_INTEGER, 4       'race2
+    AddField Map, ctr, FLD_INTEGER, 4       'race3
+    AddField Map, ctr, FLD_INTEGER, 4       'race4
+    AddField Map, ctr, FLD_INTEGER, 4       'race5
+    AddField Map, ctr, FLD_INTEGER, 4       'race6
+    AddField Map, ctr, FLD_INTEGER, 4       'race7
+    AddField Map, ctr, FLD_INTEGER, 4       'race8
+    AddField Map, ctr, FLD_INTEGER, 4       'race9
+    AddField Map, ctr, FLD_INTEGER, 4       'race10
     AddField Map, ctr, FLD_INTEGER, 2       'negate1
     AddField Map, ctr, FLD_INTEGER, 2       'negate2
     AddField Map, ctr, FLD_INTEGER, 2       'negate3
@@ -2150,31 +2145,31 @@ Sub AddItemFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2       '3
     AddField Map, ctr, FLD_INTEGER, 2       '4
     AddField Map, ctr, FLD_INTEGER, 2       '5
+    AddField Map, ctr, FLD_INTEGER, 2       '6
+    AddField Map, ctr, FLD_INTEGER, 2       '7
     AddField Map, ctr, FLD_INTEGER, 4       'runic
     AddField Map, ctr, FLD_INTEGER, 4       'plat
     AddField Map, ctr, FLD_INTEGER, 4       'gold
     AddField Map, ctr, FLD_INTEGER, 4       'silver
     AddField Map, ctr, FLD_INTEGER, 4       'copper
     AddField Map, ctr, FLD_INTEGER, 2       'unknown13b 1
-    AddField Map, ctr, FLD_INTEGER, 2       '2
-    AddField Map, ctr, FLD_INTEGER, 2       '3
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2       '6
-    AddField Map, ctr, FLD_INTEGER, 2       '7
+    AddField Map, ctr, FLD_INTEGER, 2       '4
+    AddField Map, ctr, FLD_INTEGER, 2       '5
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2       '8
+    AddField Map, ctr, FLD_INTEGER, 2       '9
     AddField Map, ctr, FLD_INTEGER, 2       '10
-    AddField Map, ctr, FLD_INTEGER, 2       '11
-    AddField Map, ctr, FLD_INTEGER, 2       '12
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2       '15
+    AddField Map, ctr, FLD_INTEGER, 2       '13
 '    AddField map, ctr, FLD_INTEGER, 2                  -- took out when added cash drops
 '    AddField map, ctr, FLD_INTEGER, 2
+'    AddField map, ctr, FLD_INTEGER, 2       '16
+'    AddField map, ctr, FLD_INTEGER, 2       '17
 '    AddField map, ctr, FLD_INTEGER, 2       '18
-'    AddField map, ctr, FLD_INTEGER, 2       '19
-'    AddField map, ctr, FLD_INTEGER, 2       '20
     AddField Map, ctr, FLD_INTEGER, 2   'speed
     AddField Map, ctr, FLD_INTEGER, 2   'unknown14
     AddField Map, ctr, FLD_INTEGER, 2       'AbilB 1
@@ -2569,11 +2564,11 @@ Sub AddRoomFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 4   'Gold
     AddField Map, ctr, FLD_INTEGER, 4   'Silver
     AddField Map, ctr, FLD_INTEGER, 4   'Copper
-    AddField Map, ctr, FLD_INTEGER, 4   'Nothing7-1
-    AddField Map, ctr, FLD_INTEGER, 4   '2
-    AddField Map, ctr, FLD_INTEGER, 4   '3
-    AddField Map, ctr, FLD_INTEGER, 4   '4
-    AddField Map, ctr, FLD_INTEGER, 4   '5
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisRunic
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisPlat
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisGold
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisSilver
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisCopper
     AddField Map, ctr, FLD_INTEGER, 4   'MaxRegen
     AddField Map, ctr, FLD_INTEGER, 2   'MonsterType
     AddField Map, ctr, FLD_INTEGER, 2   'unknown69

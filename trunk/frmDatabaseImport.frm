@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
 Begin VB.Form frmDatabaseImport 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Importer"
@@ -1596,7 +1596,7 @@ TextblockStructToRow TextblockDataBuf.buf
 If bPreview Then
     ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Update Error: " & nStatus)
     Else
@@ -1703,7 +1703,7 @@ MessageStructToRow Messagedatabuf.buf
 If bPreview Then
     ts.WriteLine ("Message #" & Messagerec.Number & " -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Message #" & Messagerec.Number & " -- Update Error: " & nStatus)
     Else
@@ -1859,7 +1859,7 @@ ItemStructToRow Itemdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -1976,6 +1976,11 @@ not_items:
     Roomrec.Gold = tabRooms.Fields("Gold")
     Roomrec.Silver = tabRooms.Fields("Silver")
     Roomrec.Copper = tabRooms.Fields("Copper")
+    Roomrec.InvisRunic = tabRooms.Fields("InvisRunic")
+    Roomrec.InvisPlatinum = tabRooms.Fields("InvisPlatinum")
+    Roomrec.InvisGold = tabRooms.Fields("InvisGold")
+    Roomrec.InvisSilver = tabRooms.Fields("InvisSilver")
+    Roomrec.InvisCopper = tabRooms.Fields("InvisCopper")
     Roomrec.Spell = tabRooms.Fields("Spell")
     Roomrec.ExitRoom = tabRooms.Fields("Exit Room")
     Roomrec.Attributes = tabRooms.Fields("Attributes")
@@ -2042,7 +2047,7 @@ RoomStructToRow Roomdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2179,7 +2184,7 @@ SpellStructToRow Spelldatabuf.buf
 If bPreview Then
     ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2282,7 +2287,7 @@ ActionStructToRow ActionDatabuf.buf
 If bPreview Then
     ts.WriteLine ("Action: " & RemoveCharacter(Actionrec.Name, " ") & "-- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Action: " & RemoveCharacter(Actionrec.Name, " ") & "-- Update Error: " & nStatus)
     Else
@@ -2401,7 +2406,7 @@ ClassStructToRow Classdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Class #" & Classrec.Number & " [" & ClipNull(Classrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Class #" & Classrec.Number & " [" & ClipNull(Classrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2526,7 +2531,7 @@ RaceStructToRow Racedatabuf.buf
 If bPreview Then
     ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2646,7 +2651,7 @@ ShopStructToRow Shopdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2873,7 +2878,7 @@ MonsterStructToRow Monsterdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(BUPDATE, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(bUpdate, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Update Error: " & nStatus)
     Else

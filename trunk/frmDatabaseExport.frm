@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmDatabaseExport 
    BorderStyle     =   1  'Fixed Single
@@ -2603,7 +2603,7 @@ ts.Write ("Map" & vbTab & "Room" & vbTab & "Name" & vbTab)
 For x = 0 To 6
     ts.Write ("Desc " & x & vbTab)
 Next
-ts.Write ("AnsiMap" & vbTab & "Type" & vbTab & "Shop#" & vbTab & "Gang House #" & vbTab & "Min Index" & vbTab & "Max Index" & vbTab & "Light" & vbTab & "Runic" & vbTab & "Platinum" & vbTab & "Gold" & vbTab & "Silver" & vbTab & "Copper" & vbTab & "Max Regen" & vbTab)
+ts.Write ("AnsiMap" & vbTab & "Type" & vbTab & "Shop#" & vbTab & "Gang House #" & vbTab & "Min Index" & vbTab & "Max Index" & vbTab & "Light" & vbTab & "Runic" & vbTab & "Platinum" & vbTab & "Gold" & vbTab & "Silver" & vbTab & "Copper" & vbTab & "InvisRunic" & vbTab & "InvisPlatinum" & vbTab & "InvisGold" & vbTab & "InvisSilver" & vbTab & "InvisCopper" & vbTab & "Max Regen" & vbTab)
 ts.Write ("Mon Type" & vbTab & "Attributes" & vbTab & "Death Room" & vbTab & "Exit Room" & vbTab & "Command Text" & vbTab & "Delay" & vbTab & "Max Area" & vbTab & "Control Room" & vbTab & "Perm NPC" & vbTab & "Spell" & vbTab)
 For x = 0 To 9
     ts.Write ("Exit " & x & vbTab)
@@ -2655,6 +2655,11 @@ Do While nStatus = 0 And Not bStopExport
     ts.Write (Roomrec.Gold & vbTab)
     ts.Write (Roomrec.Silver & vbTab)
     ts.Write (Roomrec.Copper & vbTab)
+    ts.Write (Roomrec.InvisRunic & vbTab)
+    ts.Write (Roomrec.InvisPlatinum & vbTab)
+    ts.Write (Roomrec.InvisGold & vbTab)
+    ts.Write (Roomrec.InvisSilver & vbTab)
+    ts.Write (Roomrec.InvisCopper & vbTab)
     ts.Write (Roomrec.MaxRegen & vbTab)
     ts.Write (Roomrec.MonsterType & vbTab)
     ts.Write (Roomrec.Attributes & vbTab)
@@ -2785,6 +2790,11 @@ Do While nStatus = 0 And Not bStopExport
     tabRooms.Fields("Gold") = Roomrec.Gold
     tabRooms.Fields("Silver") = Roomrec.Silver
     tabRooms.Fields("Copper") = Roomrec.Copper
+    tabRooms.Fields("InvisRunic") = Roomrec.InvisRunic
+    tabRooms.Fields("InvisPlatinum") = Roomrec.InvisPlatinum
+    tabRooms.Fields("InvisGold") = Roomrec.InvisGold
+    tabRooms.Fields("InvisSilver") = Roomrec.InvisSilver
+    tabRooms.Fields("InvisCopper") = Roomrec.InvisCopper
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("Exit Room") = Roomrec.ExitRoom
     tabRooms.Fields("Attributes") = Roomrec.Attributes

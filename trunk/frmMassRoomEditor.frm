@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmMassRoomEditor 
    BorderStyle     =   1  'Fixed Single
@@ -143,347 +143,457 @@ Begin VB.Form frmMassRoomEditor
          _Version        =   393216
          Style           =   1
          Tabs            =   6
+         Tab             =   2
          TabsPerRow      =   6
          TabHeight       =   520
          TabCaption(0)   =   "General"
          TabPicture(0)   =   "frmMassRoomEditor.frx":08CA
-         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).ControlEnabled=   0   'False
          Tab(0).Control(0)=   "chkDescription"
-         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "frmDescription"
-         Tab(0).Control(1).Enabled=   0   'False
          Tab(0).Control(2)=   "Frame1"
-         Tab(0).Control(2).Enabled=   0   'False
          Tab(0).ControlCount=   3
          TabCaption(1)   =   "Exits"
          TabPicture(1)   =   "frmMassRoomEditor.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "chkExits(9)"
-         Tab(1).Control(1)=   "chkExits(8)"
-         Tab(1).Control(2)=   "chkExits(7)"
-         Tab(1).Control(3)=   "chkExits(6)"
-         Tab(1).Control(4)=   "chkExits(5)"
-         Tab(1).Control(5)=   "chkExits(4)"
-         Tab(1).Control(6)=   "chkExits(3)"
-         Tab(1).Control(7)=   "chkExits(2)"
-         Tab(1).Control(8)=   "chkExits(1)"
-         Tab(1).Control(9)=   "chkExits(0)"
-         Tab(1).Control(10)=   "txtRoomLPara2(0)"
-         Tab(1).Control(11)=   "txtRoomLPara2(1)"
-         Tab(1).Control(12)=   "txtRoomLPara2(2)"
-         Tab(1).Control(13)=   "txtRoomLPara2(3)"
-         Tab(1).Control(14)=   "txtRoomLPara2(4)"
-         Tab(1).Control(15)=   "txtRoomLPara2(5)"
-         Tab(1).Control(16)=   "txtRoomLPara2(6)"
-         Tab(1).Control(17)=   "txtRoomLPara2(7)"
-         Tab(1).Control(18)=   "txtRoomLPara2(8)"
-         Tab(1).Control(19)=   "txtRoomLPara2(9)"
-         Tab(1).Control(20)=   "txtRoomLPara1(0)"
-         Tab(1).Control(21)=   "txtRoomLPara1(1)"
-         Tab(1).Control(22)=   "txtRoomLPara1(2)"
-         Tab(1).Control(23)=   "txtRoomLPara1(3)"
-         Tab(1).Control(24)=   "txtRoomLPara1(4)"
-         Tab(1).Control(25)=   "txtRoomLPara1(5)"
-         Tab(1).Control(26)=   "txtRoomLPara1(6)"
-         Tab(1).Control(27)=   "txtRoomLPara1(7)"
-         Tab(1).Control(28)=   "txtRoomLPara1(8)"
-         Tab(1).Control(29)=   "txtRoomLPara1(9)"
-         Tab(1).Control(30)=   "txtRoomWPara(0)"
-         Tab(1).Control(31)=   "txtRoomWPara(1)"
-         Tab(1).Control(32)=   "txtRoomWPara(2)"
-         Tab(1).Control(33)=   "txtRoomWPara(3)"
-         Tab(1).Control(34)=   "txtRoomWPara(4)"
-         Tab(1).Control(35)=   "txtRoomWPara(5)"
-         Tab(1).Control(36)=   "txtRoomWPara(6)"
-         Tab(1).Control(37)=   "txtRoomWPara(7)"
-         Tab(1).Control(38)=   "txtRoomWPara(8)"
-         Tab(1).Control(39)=   "txtRoomWPara(9)"
-         Tab(1).Control(40)=   "txtRoomPara(9)"
-         Tab(1).Control(41)=   "txtRoomPara(8)"
-         Tab(1).Control(42)=   "txtRoomPara(7)"
-         Tab(1).Control(43)=   "txtRoomPara(6)"
-         Tab(1).Control(44)=   "txtRoomPara(5)"
-         Tab(1).Control(45)=   "txtRoomPara(4)"
-         Tab(1).Control(46)=   "txtRoomPara(3)"
-         Tab(1).Control(47)=   "txtRoomPara(2)"
-         Tab(1).Control(48)=   "txtRoomPara(1)"
-         Tab(1).Control(49)=   "txtRoomPara(0)"
-         Tab(1).Control(50)=   "txtRoomExit(9)"
-         Tab(1).Control(51)=   "txtRoomExit(8)"
-         Tab(1).Control(52)=   "txtRoomExit(7)"
-         Tab(1).Control(53)=   "txtRoomExit(6)"
-         Tab(1).Control(54)=   "txtRoomExit(5)"
-         Tab(1).Control(55)=   "txtRoomExit(4)"
-         Tab(1).Control(56)=   "txtRoomExit(3)"
-         Tab(1).Control(57)=   "txtRoomExit(2)"
-         Tab(1).Control(58)=   "txtRoomExit(1)"
-         Tab(1).Control(59)=   "txtRoomExit(0)"
-         Tab(1).Control(60)=   "cmbRoomType(0)"
-         Tab(1).Control(61)=   "cmbRoomType(1)"
-         Tab(1).Control(62)=   "cmbRoomType(2)"
-         Tab(1).Control(63)=   "cmbRoomType(3)"
-         Tab(1).Control(64)=   "cmbRoomType(4)"
-         Tab(1).Control(65)=   "cmbRoomType(5)"
-         Tab(1).Control(66)=   "cmbRoomType(6)"
-         Tab(1).Control(67)=   "cmbRoomType(7)"
-         Tab(1).Control(68)=   "cmbRoomType(8)"
-         Tab(1).Control(69)=   "cmbRoomType(9)"
-         Tab(1).Control(70)=   "label(19)"
-         Tab(1).Control(71)=   "label(18)"
-         Tab(1).Control(72)=   "label(17)"
-         Tab(1).Control(73)=   "Para1(16)"
-         Tab(1).Control(74)=   "label(14)"
-         Tab(1).Control(75)=   "label(15)"
+         Tab(1).Control(0)=   "label(15)"
+         Tab(1).Control(1)=   "label(14)"
+         Tab(1).Control(2)=   "Para1(16)"
+         Tab(1).Control(3)=   "label(17)"
+         Tab(1).Control(4)=   "label(18)"
+         Tab(1).Control(5)=   "label(19)"
+         Tab(1).Control(6)=   "cmbRoomType(9)"
+         Tab(1).Control(7)=   "cmbRoomType(8)"
+         Tab(1).Control(8)=   "cmbRoomType(7)"
+         Tab(1).Control(9)=   "cmbRoomType(6)"
+         Tab(1).Control(10)=   "cmbRoomType(5)"
+         Tab(1).Control(11)=   "cmbRoomType(4)"
+         Tab(1).Control(12)=   "cmbRoomType(3)"
+         Tab(1).Control(13)=   "cmbRoomType(2)"
+         Tab(1).Control(14)=   "cmbRoomType(1)"
+         Tab(1).Control(15)=   "cmbRoomType(0)"
+         Tab(1).Control(16)=   "txtRoomExit(0)"
+         Tab(1).Control(17)=   "txtRoomExit(1)"
+         Tab(1).Control(18)=   "txtRoomExit(2)"
+         Tab(1).Control(19)=   "txtRoomExit(3)"
+         Tab(1).Control(20)=   "txtRoomExit(4)"
+         Tab(1).Control(21)=   "txtRoomExit(5)"
+         Tab(1).Control(22)=   "txtRoomExit(6)"
+         Tab(1).Control(23)=   "txtRoomExit(7)"
+         Tab(1).Control(24)=   "txtRoomExit(8)"
+         Tab(1).Control(25)=   "txtRoomExit(9)"
+         Tab(1).Control(26)=   "txtRoomPara(0)"
+         Tab(1).Control(27)=   "txtRoomPara(1)"
+         Tab(1).Control(28)=   "txtRoomPara(2)"
+         Tab(1).Control(29)=   "txtRoomPara(3)"
+         Tab(1).Control(30)=   "txtRoomPara(4)"
+         Tab(1).Control(31)=   "txtRoomPara(5)"
+         Tab(1).Control(32)=   "txtRoomPara(6)"
+         Tab(1).Control(33)=   "txtRoomPara(7)"
+         Tab(1).Control(34)=   "txtRoomPara(8)"
+         Tab(1).Control(35)=   "txtRoomPara(9)"
+         Tab(1).Control(36)=   "txtRoomWPara(9)"
+         Tab(1).Control(37)=   "txtRoomWPara(8)"
+         Tab(1).Control(38)=   "txtRoomWPara(7)"
+         Tab(1).Control(39)=   "txtRoomWPara(6)"
+         Tab(1).Control(40)=   "txtRoomWPara(5)"
+         Tab(1).Control(41)=   "txtRoomWPara(4)"
+         Tab(1).Control(42)=   "txtRoomWPara(3)"
+         Tab(1).Control(43)=   "txtRoomWPara(2)"
+         Tab(1).Control(44)=   "txtRoomWPara(1)"
+         Tab(1).Control(45)=   "txtRoomWPara(0)"
+         Tab(1).Control(46)=   "txtRoomLPara1(9)"
+         Tab(1).Control(47)=   "txtRoomLPara1(8)"
+         Tab(1).Control(48)=   "txtRoomLPara1(7)"
+         Tab(1).Control(49)=   "txtRoomLPara1(6)"
+         Tab(1).Control(50)=   "txtRoomLPara1(5)"
+         Tab(1).Control(51)=   "txtRoomLPara1(4)"
+         Tab(1).Control(52)=   "txtRoomLPara1(3)"
+         Tab(1).Control(53)=   "txtRoomLPara1(2)"
+         Tab(1).Control(54)=   "txtRoomLPara1(1)"
+         Tab(1).Control(55)=   "txtRoomLPara1(0)"
+         Tab(1).Control(56)=   "txtRoomLPara2(9)"
+         Tab(1).Control(57)=   "txtRoomLPara2(8)"
+         Tab(1).Control(58)=   "txtRoomLPara2(7)"
+         Tab(1).Control(59)=   "txtRoomLPara2(6)"
+         Tab(1).Control(60)=   "txtRoomLPara2(5)"
+         Tab(1).Control(61)=   "txtRoomLPara2(4)"
+         Tab(1).Control(62)=   "txtRoomLPara2(3)"
+         Tab(1).Control(63)=   "txtRoomLPara2(2)"
+         Tab(1).Control(64)=   "txtRoomLPara2(1)"
+         Tab(1).Control(65)=   "txtRoomLPara2(0)"
+         Tab(1).Control(66)=   "chkExits(0)"
+         Tab(1).Control(67)=   "chkExits(1)"
+         Tab(1).Control(68)=   "chkExits(2)"
+         Tab(1).Control(69)=   "chkExits(3)"
+         Tab(1).Control(70)=   "chkExits(4)"
+         Tab(1).Control(71)=   "chkExits(5)"
+         Tab(1).Control(72)=   "chkExits(6)"
+         Tab(1).Control(73)=   "chkExits(7)"
+         Tab(1).Control(74)=   "chkExits(8)"
+         Tab(1).Control(75)=   "chkExits(9)"
          Tab(1).ControlCount=   76
          TabCaption(2)   =   "Placed Items/Monster"
          TabPicture(2)   =   "frmMassRoomEditor.frx":0902
-         Tab(2).ControlEnabled=   0   'False
-         Tab(2).Control(0)=   "txtPermNPC"
-         Tab(2).Control(1)=   "txtPermNPCName"
+         Tab(2).ControlEnabled=   -1  'True
+         Tab(2).Control(0)=   "frmVisibleCoins"
+         Tab(2).Control(0).Enabled=   0   'False
+         Tab(2).Control(1)=   "chkMonies"
          Tab(2).Control(1).Enabled=   0   'False
-         Tab(2).Control(2)=   "txtCopper"
-         Tab(2).Control(3)=   "txtSilver"
-         Tab(2).Control(4)=   "txtGold"
-         Tab(2).Control(5)=   "txtPlatinum"
-         Tab(2).Control(6)=   "txtRunic"
-         Tab(2).Control(7)=   "txtPlacedItems(9)"
-         Tab(2).Control(8)=   "txtPlacedItems(8)"
-         Tab(2).Control(9)=   "txtPlacedItems(7)"
-         Tab(2).Control(10)=   "txtPlacedItems(6)"
-         Tab(2).Control(11)=   "txtPlacedItems(5)"
-         Tab(2).Control(12)=   "txtPlacedItems(4)"
-         Tab(2).Control(13)=   "txtPlacedItems(3)"
-         Tab(2).Control(14)=   "txtPlacedItems(2)"
+         Tab(2).Control(2)=   "chkPlacedItems"
+         Tab(2).Control(2).Enabled=   0   'False
+         Tab(2).Control(3)=   "ChkPermNPC"
+         Tab(2).Control(3).Enabled=   0   'False
+         Tab(2).Control(4)=   "txtPlacedItemsName(9)"
+         Tab(2).Control(4).Enabled=   0   'False
+         Tab(2).Control(5)=   "txtPlacedItemsName(8)"
+         Tab(2).Control(5).Enabled=   0   'False
+         Tab(2).Control(6)=   "txtPlacedItemsName(7)"
+         Tab(2).Control(6).Enabled=   0   'False
+         Tab(2).Control(7)=   "txtPlacedItemsName(6)"
+         Tab(2).Control(7).Enabled=   0   'False
+         Tab(2).Control(8)=   "txtPlacedItemsName(5)"
+         Tab(2).Control(8).Enabled=   0   'False
+         Tab(2).Control(9)=   "txtPlacedItemsName(4)"
+         Tab(2).Control(9).Enabled=   0   'False
+         Tab(2).Control(10)=   "txtPlacedItemsName(3)"
+         Tab(2).Control(10).Enabled=   0   'False
+         Tab(2).Control(11)=   "txtPlacedItemsName(2)"
+         Tab(2).Control(11).Enabled=   0   'False
+         Tab(2).Control(12)=   "txtPlacedItemsName(1)"
+         Tab(2).Control(12).Enabled=   0   'False
+         Tab(2).Control(13)=   "txtPlacedItemsName(0)"
+         Tab(2).Control(13).Enabled=   0   'False
+         Tab(2).Control(14)=   "txtPlacedItems(0)"
+         Tab(2).Control(14).Enabled=   0   'False
          Tab(2).Control(15)=   "txtPlacedItems(1)"
-         Tab(2).Control(16)=   "txtPlacedItems(0)"
-         Tab(2).Control(17)=   "txtPlacedItemsName(0)"
+         Tab(2).Control(15).Enabled=   0   'False
+         Tab(2).Control(16)=   "txtPlacedItems(2)"
+         Tab(2).Control(16).Enabled=   0   'False
+         Tab(2).Control(17)=   "txtPlacedItems(3)"
          Tab(2).Control(17).Enabled=   0   'False
-         Tab(2).Control(18)=   "txtPlacedItemsName(1)"
+         Tab(2).Control(18)=   "txtPlacedItems(4)"
          Tab(2).Control(18).Enabled=   0   'False
-         Tab(2).Control(19)=   "txtPlacedItemsName(2)"
+         Tab(2).Control(19)=   "txtPlacedItems(5)"
          Tab(2).Control(19).Enabled=   0   'False
-         Tab(2).Control(20)=   "txtPlacedItemsName(3)"
+         Tab(2).Control(20)=   "txtPlacedItems(6)"
          Tab(2).Control(20).Enabled=   0   'False
-         Tab(2).Control(21)=   "txtPlacedItemsName(4)"
+         Tab(2).Control(21)=   "txtPlacedItems(7)"
          Tab(2).Control(21).Enabled=   0   'False
-         Tab(2).Control(22)=   "txtPlacedItemsName(5)"
+         Tab(2).Control(22)=   "txtPlacedItems(8)"
          Tab(2).Control(22).Enabled=   0   'False
-         Tab(2).Control(23)=   "txtPlacedItemsName(6)"
+         Tab(2).Control(23)=   "txtPlacedItems(9)"
          Tab(2).Control(23).Enabled=   0   'False
-         Tab(2).Control(24)=   "txtPlacedItemsName(7)"
+         Tab(2).Control(24)=   "txtPermNPCName"
          Tab(2).Control(24).Enabled=   0   'False
-         Tab(2).Control(25)=   "txtPlacedItemsName(8)"
+         Tab(2).Control(25)=   "txtPermNPC"
          Tab(2).Control(25).Enabled=   0   'False
-         Tab(2).Control(26)=   "txtPlacedItemsName(9)"
+         Tab(2).Control(26)=   "frmHiddenCoins"
          Tab(2).Control(26).Enabled=   0   'False
-         Tab(2).Control(27)=   "ChkPermNPC"
-         Tab(2).Control(28)=   "chkPlacedItems"
-         Tab(2).Control(29)=   "chkMonies"
-         Tab(2).Control(30)=   "label(16)"
-         Tab(2).Control(31)=   "label(27)"
-         Tab(2).Control(32)=   "label(36)"
-         Tab(2).Control(33)=   "label(45)"
-         Tab(2).ControlCount=   34
+         Tab(2).Control(27)=   "chkInvisMonies"
+         Tab(2).Control(27).Enabled=   0   'False
+         Tab(2).ControlCount=   28
          TabCaption(3)   =   "Visible Items"
          TabPicture(3)   =   "frmMassRoomEditor.frx":091E
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "txtVisibleQty(16)"
-         Tab(3).Control(1)=   "txtVisibleQty(15)"
-         Tab(3).Control(2)=   "txtVisibleQty(14)"
-         Tab(3).Control(3)=   "txtVisibleQty(13)"
-         Tab(3).Control(4)=   "txtVisibleQty(12)"
-         Tab(3).Control(5)=   "txtVisibleQty(11)"
-         Tab(3).Control(6)=   "txtVisibleQty(10)"
-         Tab(3).Control(7)=   "txtVisibleQty(9)"
-         Tab(3).Control(8)=   "txtVisibleQty(8)"
-         Tab(3).Control(9)=   "txtVisibleQty(7)"
-         Tab(3).Control(10)=   "txtVisibleQty(6)"
-         Tab(3).Control(11)=   "txtVisibleQty(5)"
-         Tab(3).Control(12)=   "txtVisibleQty(4)"
-         Tab(3).Control(13)=   "txtVisibleQty(3)"
-         Tab(3).Control(14)=   "txtVisibleQty(2)"
-         Tab(3).Control(15)=   "txtVisibleQty(1)"
-         Tab(3).Control(16)=   "txtVisibleQty(0)"
-         Tab(3).Control(17)=   "txtVisibleNumber(10)"
-         Tab(3).Control(18)=   "txtVisibleNumber(16)"
-         Tab(3).Control(19)=   "txtVisibleNumber(15)"
-         Tab(3).Control(20)=   "txtVisibleNumber(14)"
-         Tab(3).Control(21)=   "txtVisibleNumber(13)"
-         Tab(3).Control(22)=   "txtVisibleNumber(12)"
-         Tab(3).Control(23)=   "txtVisibleNumber(11)"
-         Tab(3).Control(24)=   "txtVisibleNumber(0)"
-         Tab(3).Control(25)=   "txtVisibleNumber(1)"
-         Tab(3).Control(26)=   "txtVisibleNumber(2)"
-         Tab(3).Control(27)=   "txtVisibleNumber(3)"
-         Tab(3).Control(28)=   "txtVisibleNumber(4)"
-         Tab(3).Control(29)=   "txtVisibleNumber(5)"
-         Tab(3).Control(30)=   "txtVisibleNumber(6)"
-         Tab(3).Control(31)=   "txtVisibleNumber(7)"
-         Tab(3).Control(32)=   "txtVisibleNumber(8)"
-         Tab(3).Control(33)=   "txtVisibleNumber(9)"
-         Tab(3).Control(34)=   "chkItemsInRoom"
+         Tab(3).Control(0)=   "label(49)"
+         Tab(3).Control(1)=   "Label12"
+         Tab(3).Control(2)=   "txtVisibleUses(0)"
+         Tab(3).Control(3)=   "txtVisibleUses(1)"
+         Tab(3).Control(4)=   "txtVisibleUses(2)"
+         Tab(3).Control(5)=   "txtVisibleUses(3)"
+         Tab(3).Control(6)=   "txtVisibleUses(4)"
+         Tab(3).Control(7)=   "txtVisibleUses(5)"
+         Tab(3).Control(8)=   "txtVisibleUses(6)"
+         Tab(3).Control(9)=   "txtVisibleUses(7)"
+         Tab(3).Control(10)=   "txtVisibleUses(8)"
+         Tab(3).Control(11)=   "txtVisibleUses(9)"
+         Tab(3).Control(12)=   "txtVisibleUses(10)"
+         Tab(3).Control(13)=   "txtVisibleUses(11)"
+         Tab(3).Control(14)=   "txtVisibleUses(12)"
+         Tab(3).Control(15)=   "txtVisibleUses(13)"
+         Tab(3).Control(16)=   "txtVisibleUses(14)"
+         Tab(3).Control(17)=   "txtVisibleUses(15)"
+         Tab(3).Control(18)=   "txtVisibleUses(16)"
+         Tab(3).Control(19)=   "txtVisibleName(0)"
+         Tab(3).Control(19).Enabled=   0   'False
+         Tab(3).Control(20)=   "txtVisibleName(1)"
+         Tab(3).Control(20).Enabled=   0   'False
+         Tab(3).Control(21)=   "txtVisibleName(2)"
+         Tab(3).Control(21).Enabled=   0   'False
+         Tab(3).Control(22)=   "txtVisibleName(3)"
+         Tab(3).Control(22).Enabled=   0   'False
+         Tab(3).Control(23)=   "txtVisibleName(4)"
+         Tab(3).Control(23).Enabled=   0   'False
+         Tab(3).Control(24)=   "txtVisibleName(5)"
+         Tab(3).Control(24).Enabled=   0   'False
+         Tab(3).Control(25)=   "txtVisibleName(6)"
+         Tab(3).Control(25).Enabled=   0   'False
+         Tab(3).Control(26)=   "txtVisibleName(7)"
+         Tab(3).Control(26).Enabled=   0   'False
+         Tab(3).Control(27)=   "txtVisibleName(8)"
+         Tab(3).Control(27).Enabled=   0   'False
+         Tab(3).Control(28)=   "txtVisibleName(9)"
+         Tab(3).Control(28).Enabled=   0   'False
+         Tab(3).Control(29)=   "txtVisibleName(10)"
+         Tab(3).Control(29).Enabled=   0   'False
+         Tab(3).Control(30)=   "txtVisibleName(11)"
+         Tab(3).Control(30).Enabled=   0   'False
+         Tab(3).Control(31)=   "txtVisibleName(12)"
+         Tab(3).Control(31).Enabled=   0   'False
+         Tab(3).Control(32)=   "txtVisibleName(13)"
+         Tab(3).Control(32).Enabled=   0   'False
+         Tab(3).Control(33)=   "txtVisibleName(14)"
+         Tab(3).Control(33).Enabled=   0   'False
+         Tab(3).Control(34)=   "txtVisibleName(15)"
+         Tab(3).Control(34).Enabled=   0   'False
          Tab(3).Control(35)=   "txtVisibleName(16)"
          Tab(3).Control(35).Enabled=   0   'False
-         Tab(3).Control(36)=   "txtVisibleName(15)"
-         Tab(3).Control(36).Enabled=   0   'False
-         Tab(3).Control(37)=   "txtVisibleName(14)"
-         Tab(3).Control(37).Enabled=   0   'False
-         Tab(3).Control(38)=   "txtVisibleName(13)"
-         Tab(3).Control(38).Enabled=   0   'False
-         Tab(3).Control(39)=   "txtVisibleName(12)"
-         Tab(3).Control(39).Enabled=   0   'False
-         Tab(3).Control(40)=   "txtVisibleName(11)"
-         Tab(3).Control(40).Enabled=   0   'False
-         Tab(3).Control(41)=   "txtVisibleName(10)"
-         Tab(3).Control(41).Enabled=   0   'False
-         Tab(3).Control(42)=   "txtVisibleName(9)"
-         Tab(3).Control(42).Enabled=   0   'False
-         Tab(3).Control(43)=   "txtVisibleName(8)"
-         Tab(3).Control(43).Enabled=   0   'False
-         Tab(3).Control(44)=   "txtVisibleName(7)"
-         Tab(3).Control(44).Enabled=   0   'False
-         Tab(3).Control(45)=   "txtVisibleName(6)"
-         Tab(3).Control(45).Enabled=   0   'False
-         Tab(3).Control(46)=   "txtVisibleName(5)"
-         Tab(3).Control(46).Enabled=   0   'False
-         Tab(3).Control(47)=   "txtVisibleName(4)"
-         Tab(3).Control(47).Enabled=   0   'False
-         Tab(3).Control(48)=   "txtVisibleName(3)"
-         Tab(3).Control(48).Enabled=   0   'False
-         Tab(3).Control(49)=   "txtVisibleName(2)"
-         Tab(3).Control(49).Enabled=   0   'False
-         Tab(3).Control(50)=   "txtVisibleName(1)"
-         Tab(3).Control(50).Enabled=   0   'False
-         Tab(3).Control(51)=   "txtVisibleName(0)"
-         Tab(3).Control(51).Enabled=   0   'False
-         Tab(3).Control(52)=   "txtVisibleUses(16)"
-         Tab(3).Control(53)=   "txtVisibleUses(15)"
-         Tab(3).Control(54)=   "txtVisibleUses(14)"
-         Tab(3).Control(55)=   "txtVisibleUses(13)"
-         Tab(3).Control(56)=   "txtVisibleUses(12)"
-         Tab(3).Control(57)=   "txtVisibleUses(11)"
-         Tab(3).Control(58)=   "txtVisibleUses(10)"
-         Tab(3).Control(59)=   "txtVisibleUses(9)"
-         Tab(3).Control(60)=   "txtVisibleUses(8)"
-         Tab(3).Control(61)=   "txtVisibleUses(7)"
-         Tab(3).Control(62)=   "txtVisibleUses(6)"
-         Tab(3).Control(63)=   "txtVisibleUses(5)"
-         Tab(3).Control(64)=   "txtVisibleUses(4)"
-         Tab(3).Control(65)=   "txtVisibleUses(3)"
-         Tab(3).Control(66)=   "txtVisibleUses(2)"
-         Tab(3).Control(67)=   "txtVisibleUses(1)"
-         Tab(3).Control(68)=   "txtVisibleUses(0)"
-         Tab(3).Control(69)=   "Label12"
-         Tab(3).Control(70)=   "label(49)"
+         Tab(3).Control(36)=   "chkItemsInRoom"
+         Tab(3).Control(37)=   "txtVisibleNumber(9)"
+         Tab(3).Control(38)=   "txtVisibleNumber(8)"
+         Tab(3).Control(39)=   "txtVisibleNumber(7)"
+         Tab(3).Control(40)=   "txtVisibleNumber(6)"
+         Tab(3).Control(41)=   "txtVisibleNumber(5)"
+         Tab(3).Control(42)=   "txtVisibleNumber(4)"
+         Tab(3).Control(43)=   "txtVisibleNumber(3)"
+         Tab(3).Control(44)=   "txtVisibleNumber(2)"
+         Tab(3).Control(45)=   "txtVisibleNumber(1)"
+         Tab(3).Control(46)=   "txtVisibleNumber(0)"
+         Tab(3).Control(47)=   "txtVisibleNumber(11)"
+         Tab(3).Control(48)=   "txtVisibleNumber(12)"
+         Tab(3).Control(49)=   "txtVisibleNumber(13)"
+         Tab(3).Control(50)=   "txtVisibleNumber(14)"
+         Tab(3).Control(51)=   "txtVisibleNumber(15)"
+         Tab(3).Control(52)=   "txtVisibleNumber(16)"
+         Tab(3).Control(53)=   "txtVisibleNumber(10)"
+         Tab(3).Control(54)=   "txtVisibleQty(0)"
+         Tab(3).Control(55)=   "txtVisibleQty(1)"
+         Tab(3).Control(56)=   "txtVisibleQty(2)"
+         Tab(3).Control(57)=   "txtVisibleQty(3)"
+         Tab(3).Control(58)=   "txtVisibleQty(4)"
+         Tab(3).Control(59)=   "txtVisibleQty(5)"
+         Tab(3).Control(60)=   "txtVisibleQty(6)"
+         Tab(3).Control(61)=   "txtVisibleQty(7)"
+         Tab(3).Control(62)=   "txtVisibleQty(8)"
+         Tab(3).Control(63)=   "txtVisibleQty(9)"
+         Tab(3).Control(64)=   "txtVisibleQty(10)"
+         Tab(3).Control(65)=   "txtVisibleQty(11)"
+         Tab(3).Control(66)=   "txtVisibleQty(12)"
+         Tab(3).Control(67)=   "txtVisibleQty(13)"
+         Tab(3).Control(68)=   "txtVisibleQty(14)"
+         Tab(3).Control(69)=   "txtVisibleQty(15)"
+         Tab(3).Control(70)=   "txtVisibleQty(16)"
          Tab(3).ControlCount=   71
          TabCaption(4)   =   "Hidden Items"
          TabPicture(4)   =   "frmMassRoomEditor.frx":093A
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "txtHiddenName(14)"
-         Tab(4).Control(0).Enabled=   0   'False
-         Tab(4).Control(1)=   "txtHiddenName(13)"
-         Tab(4).Control(1).Enabled=   0   'False
-         Tab(4).Control(2)=   "txtHiddenName(12)"
-         Tab(4).Control(2).Enabled=   0   'False
-         Tab(4).Control(3)=   "txtHiddenName(11)"
-         Tab(4).Control(3).Enabled=   0   'False
-         Tab(4).Control(4)=   "txtHiddenName(10)"
-         Tab(4).Control(4).Enabled=   0   'False
-         Tab(4).Control(5)=   "txtHiddenName(9)"
-         Tab(4).Control(5).Enabled=   0   'False
-         Tab(4).Control(6)=   "txtHiddenName(8)"
-         Tab(4).Control(6).Enabled=   0   'False
-         Tab(4).Control(7)=   "txtHiddenName(7)"
-         Tab(4).Control(7).Enabled=   0   'False
-         Tab(4).Control(8)=   "txtHiddenName(6)"
-         Tab(4).Control(8).Enabled=   0   'False
-         Tab(4).Control(9)=   "txtHiddenName(5)"
-         Tab(4).Control(9).Enabled=   0   'False
-         Tab(4).Control(10)=   "txtHiddenName(4)"
-         Tab(4).Control(10).Enabled=   0   'False
-         Tab(4).Control(11)=   "txtHiddenName(3)"
-         Tab(4).Control(11).Enabled=   0   'False
-         Tab(4).Control(12)=   "txtHiddenName(2)"
-         Tab(4).Control(12).Enabled=   0   'False
-         Tab(4).Control(13)=   "txtHiddenName(1)"
-         Tab(4).Control(13).Enabled=   0   'False
-         Tab(4).Control(14)=   "txtHiddenName(0)"
-         Tab(4).Control(14).Enabled=   0   'False
-         Tab(4).Control(15)=   "chkHiddenItems"
-         Tab(4).Control(16)=   "txtHiddenNumber(0)"
-         Tab(4).Control(17)=   "txtHiddenNumber(1)"
-         Tab(4).Control(18)=   "txtHiddenNumber(2)"
-         Tab(4).Control(19)=   "txtHiddenNumber(3)"
-         Tab(4).Control(20)=   "txtHiddenNumber(4)"
-         Tab(4).Control(21)=   "txtHiddenNumber(5)"
-         Tab(4).Control(22)=   "txtHiddenNumber(6)"
-         Tab(4).Control(23)=   "txtHiddenNumber(7)"
-         Tab(4).Control(24)=   "txtHiddenNumber(8)"
-         Tab(4).Control(25)=   "txtHiddenNumber(9)"
-         Tab(4).Control(26)=   "txtHiddenNumber(14)"
-         Tab(4).Control(27)=   "txtHiddenNumber(13)"
-         Tab(4).Control(28)=   "txtHiddenNumber(12)"
-         Tab(4).Control(29)=   "txtHiddenNumber(11)"
-         Tab(4).Control(30)=   "txtHiddenNumber(10)"
-         Tab(4).Control(31)=   "txtHiddenQty(0)"
-         Tab(4).Control(32)=   "txtHiddenQty(1)"
-         Tab(4).Control(33)=   "txtHiddenQty(2)"
-         Tab(4).Control(34)=   "txtHiddenQty(3)"
-         Tab(4).Control(35)=   "txtHiddenQty(4)"
-         Tab(4).Control(36)=   "txtHiddenQty(5)"
-         Tab(4).Control(37)=   "txtHiddenQty(6)"
-         Tab(4).Control(38)=   "txtHiddenQty(7)"
-         Tab(4).Control(39)=   "txtHiddenQty(8)"
-         Tab(4).Control(40)=   "txtHiddenQty(9)"
-         Tab(4).Control(41)=   "txtHiddenQty(10)"
-         Tab(4).Control(42)=   "txtHiddenQty(11)"
-         Tab(4).Control(43)=   "txtHiddenQty(12)"
-         Tab(4).Control(44)=   "txtHiddenQty(13)"
-         Tab(4).Control(45)=   "txtHiddenQty(14)"
-         Tab(4).Control(46)=   "txtHiddenUses(14)"
-         Tab(4).Control(47)=   "txtHiddenUses(13)"
-         Tab(4).Control(48)=   "txtHiddenUses(12)"
-         Tab(4).Control(49)=   "txtHiddenUses(11)"
-         Tab(4).Control(50)=   "txtHiddenUses(10)"
-         Tab(4).Control(51)=   "txtHiddenUses(9)"
-         Tab(4).Control(52)=   "txtHiddenUses(8)"
-         Tab(4).Control(53)=   "txtHiddenUses(7)"
-         Tab(4).Control(54)=   "txtHiddenUses(6)"
-         Tab(4).Control(55)=   "txtHiddenUses(5)"
-         Tab(4).Control(56)=   "txtHiddenUses(4)"
-         Tab(4).Control(57)=   "txtHiddenUses(3)"
-         Tab(4).Control(58)=   "txtHiddenUses(2)"
-         Tab(4).Control(59)=   "txtHiddenUses(1)"
-         Tab(4).Control(60)=   "txtHiddenUses(0)"
-         Tab(4).Control(61)=   "Label13"
-         Tab(4).Control(62)=   "Label11"
-         Tab(4).Control(63)=   "label(50)"
+         Tab(4).Control(0)=   "label(50)"
+         Tab(4).Control(1)=   "Label11"
+         Tab(4).Control(2)=   "Label13"
+         Tab(4).Control(3)=   "txtHiddenUses(0)"
+         Tab(4).Control(4)=   "txtHiddenUses(1)"
+         Tab(4).Control(5)=   "txtHiddenUses(2)"
+         Tab(4).Control(6)=   "txtHiddenUses(3)"
+         Tab(4).Control(7)=   "txtHiddenUses(4)"
+         Tab(4).Control(8)=   "txtHiddenUses(5)"
+         Tab(4).Control(9)=   "txtHiddenUses(6)"
+         Tab(4).Control(10)=   "txtHiddenUses(7)"
+         Tab(4).Control(11)=   "txtHiddenUses(8)"
+         Tab(4).Control(12)=   "txtHiddenUses(9)"
+         Tab(4).Control(13)=   "txtHiddenUses(10)"
+         Tab(4).Control(14)=   "txtHiddenUses(11)"
+         Tab(4).Control(15)=   "txtHiddenUses(12)"
+         Tab(4).Control(16)=   "txtHiddenUses(13)"
+         Tab(4).Control(17)=   "txtHiddenUses(14)"
+         Tab(4).Control(18)=   "txtHiddenQty(14)"
+         Tab(4).Control(19)=   "txtHiddenQty(13)"
+         Tab(4).Control(20)=   "txtHiddenQty(12)"
+         Tab(4).Control(21)=   "txtHiddenQty(11)"
+         Tab(4).Control(22)=   "txtHiddenQty(10)"
+         Tab(4).Control(23)=   "txtHiddenQty(9)"
+         Tab(4).Control(24)=   "txtHiddenQty(8)"
+         Tab(4).Control(25)=   "txtHiddenQty(7)"
+         Tab(4).Control(26)=   "txtHiddenQty(6)"
+         Tab(4).Control(27)=   "txtHiddenQty(5)"
+         Tab(4).Control(28)=   "txtHiddenQty(4)"
+         Tab(4).Control(29)=   "txtHiddenQty(3)"
+         Tab(4).Control(30)=   "txtHiddenQty(2)"
+         Tab(4).Control(31)=   "txtHiddenQty(1)"
+         Tab(4).Control(32)=   "txtHiddenQty(0)"
+         Tab(4).Control(33)=   "txtHiddenNumber(10)"
+         Tab(4).Control(34)=   "txtHiddenNumber(11)"
+         Tab(4).Control(35)=   "txtHiddenNumber(12)"
+         Tab(4).Control(36)=   "txtHiddenNumber(13)"
+         Tab(4).Control(37)=   "txtHiddenNumber(14)"
+         Tab(4).Control(38)=   "txtHiddenNumber(9)"
+         Tab(4).Control(39)=   "txtHiddenNumber(8)"
+         Tab(4).Control(40)=   "txtHiddenNumber(7)"
+         Tab(4).Control(41)=   "txtHiddenNumber(6)"
+         Tab(4).Control(42)=   "txtHiddenNumber(5)"
+         Tab(4).Control(43)=   "txtHiddenNumber(4)"
+         Tab(4).Control(44)=   "txtHiddenNumber(3)"
+         Tab(4).Control(45)=   "txtHiddenNumber(2)"
+         Tab(4).Control(46)=   "txtHiddenNumber(1)"
+         Tab(4).Control(47)=   "txtHiddenNumber(0)"
+         Tab(4).Control(48)=   "chkHiddenItems"
+         Tab(4).Control(49)=   "txtHiddenName(0)"
+         Tab(4).Control(49).Enabled=   0   'False
+         Tab(4).Control(50)=   "txtHiddenName(1)"
+         Tab(4).Control(50).Enabled=   0   'False
+         Tab(4).Control(51)=   "txtHiddenName(2)"
+         Tab(4).Control(51).Enabled=   0   'False
+         Tab(4).Control(52)=   "txtHiddenName(3)"
+         Tab(4).Control(52).Enabled=   0   'False
+         Tab(4).Control(53)=   "txtHiddenName(4)"
+         Tab(4).Control(53).Enabled=   0   'False
+         Tab(4).Control(54)=   "txtHiddenName(5)"
+         Tab(4).Control(54).Enabled=   0   'False
+         Tab(4).Control(55)=   "txtHiddenName(6)"
+         Tab(4).Control(55).Enabled=   0   'False
+         Tab(4).Control(56)=   "txtHiddenName(7)"
+         Tab(4).Control(56).Enabled=   0   'False
+         Tab(4).Control(57)=   "txtHiddenName(8)"
+         Tab(4).Control(57).Enabled=   0   'False
+         Tab(4).Control(58)=   "txtHiddenName(9)"
+         Tab(4).Control(58).Enabled=   0   'False
+         Tab(4).Control(59)=   "txtHiddenName(10)"
+         Tab(4).Control(59).Enabled=   0   'False
+         Tab(4).Control(60)=   "txtHiddenName(11)"
+         Tab(4).Control(60).Enabled=   0   'False
+         Tab(4).Control(61)=   "txtHiddenName(12)"
+         Tab(4).Control(61).Enabled=   0   'False
+         Tab(4).Control(62)=   "txtHiddenName(13)"
+         Tab(4).Control(62).Enabled=   0   'False
+         Tab(4).Control(63)=   "txtHiddenName(14)"
+         Tab(4).Control(63).Enabled=   0   'False
          Tab(4).ControlCount=   64
          TabCaption(5)   =   "Other"
          TabPicture(5)   =   "frmMassRoomEditor.frx":0956
          Tab(5).ControlEnabled=   0   'False
-         Tab(5).Control(0)=   "chkCurrentRoomMons"
-         Tab(5).Control(1)=   "txtCurrentRoomMon(1)"
-         Tab(5).Control(2)=   "txtCurrentRoomMon(2)"
-         Tab(5).Control(3)=   "txtCurrentRoomMon(3)"
-         Tab(5).Control(4)=   "txtCurrentRoomMon(4)"
-         Tab(5).Control(5)=   "txtCurrentRoomMon(5)"
-         Tab(5).Control(6)=   "txtCurrentRoomMon(6)"
-         Tab(5).Control(7)=   "txtCurrentRoomMon(7)"
+         Tab(5).Control(0)=   "txtMonNote"
+         Tab(5).Control(1)=   "txtCurrentRoomMon(14)"
+         Tab(5).Control(2)=   "txtCurrentRoomMon(0)"
+         Tab(5).Control(3)=   "txtCurrentRoomMon(13)"
+         Tab(5).Control(4)=   "txtCurrentRoomMon(12)"
+         Tab(5).Control(5)=   "txtCurrentRoomMon(11)"
+         Tab(5).Control(6)=   "txtCurrentRoomMon(10)"
+         Tab(5).Control(7)=   "txtCurrentRoomMon(9)"
          Tab(5).Control(8)=   "txtCurrentRoomMon(8)"
-         Tab(5).Control(9)=   "txtCurrentRoomMon(9)"
-         Tab(5).Control(10)=   "txtCurrentRoomMon(10)"
-         Tab(5).Control(11)=   "txtCurrentRoomMon(11)"
-         Tab(5).Control(12)=   "txtCurrentRoomMon(12)"
-         Tab(5).Control(13)=   "txtCurrentRoomMon(13)"
-         Tab(5).Control(14)=   "txtCurrentRoomMon(0)"
-         Tab(5).Control(15)=   "txtCurrentRoomMon(14)"
-         Tab(5).Control(16)=   "txtMonNote"
+         Tab(5).Control(9)=   "txtCurrentRoomMon(7)"
+         Tab(5).Control(10)=   "txtCurrentRoomMon(6)"
+         Tab(5).Control(11)=   "txtCurrentRoomMon(5)"
+         Tab(5).Control(12)=   "txtCurrentRoomMon(4)"
+         Tab(5).Control(13)=   "txtCurrentRoomMon(3)"
+         Tab(5).Control(14)=   "txtCurrentRoomMon(2)"
+         Tab(5).Control(15)=   "txtCurrentRoomMon(1)"
+         Tab(5).Control(16)=   "chkCurrentRoomMons"
          Tab(5).ControlCount=   17
+         Begin VB.CheckBox chkInvisMonies 
+            Caption         =   "Hidden Coins"
+            Height          =   195
+            Left            =   3720
+            TabIndex        =   344
+            Top             =   3120
+            Width           =   1275
+         End
+         Begin VB.Frame frmHiddenCoins 
+            Caption         =   "      "
+            Height          =   2295
+            Left            =   3480
+            TabIndex        =   333
+            Top             =   3120
+            Width           =   2175
+            Begin VB.TextBox txtInvisRunic 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   338
+               Text            =   "0"
+               Top             =   360
+               Width           =   735
+            End
+            Begin VB.TextBox txtInvisPlatinum 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   337
+               Text            =   "0"
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.TextBox txtInvisSilver 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   336
+               Text            =   "0"
+               Top             =   1440
+               Width           =   735
+            End
+            Begin VB.TextBox txtInvisCopper 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   335
+               Text            =   "0"
+               Top             =   1800
+               Width           =   735
+            End
+            Begin VB.TextBox txtInvisGold 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   334
+               Text            =   "0"
+               Top             =   1080
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Caption         =   "Runic"
+               Height          =   255
+               Left            =   240
+               TabIndex        =   343
+               Top             =   360
+               Width           =   735
+            End
+            Begin VB.Label Label7 
+               Caption         =   "Platinum"
+               Height          =   255
+               Left            =   240
+               TabIndex        =   342
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.Label Label6 
+               Caption         =   "Gold"
+               Height          =   255
+               Left            =   240
+               TabIndex        =   341
+               Top             =   1080
+               Width           =   855
+            End
+            Begin VB.Label Label9 
+               Caption         =   "Silver"
+               Height          =   255
+               Left            =   240
+               TabIndex        =   340
+               Top             =   1440
+               Width           =   855
+            End
+            Begin VB.Label Label10 
+               Caption         =   "Copper"
+               Height          =   255
+               Left            =   240
+               TabIndex        =   339
+               Top             =   1800
+               Width           =   855
+            End
+         End
          Begin VB.Frame Frame1 
             Caption         =   "Advanced"
             Height          =   3135
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   29
             Top             =   3300
             Width           =   6015
@@ -998,7 +1108,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   16
             Left            =   -70575
-            TabIndex        =   223
+            TabIndex        =   218
             Text            =   "0"
             Top             =   5940
             Width           =   555
@@ -1008,7 +1118,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   15
             Left            =   -70575
-            TabIndex        =   222
+            TabIndex        =   217
             Text            =   "0"
             Top             =   5640
             Width           =   555
@@ -1018,7 +1128,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   14
             Left            =   -70575
-            TabIndex        =   221
+            TabIndex        =   216
             Text            =   "0"
             Top             =   5325
             Width           =   555
@@ -1028,7 +1138,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   13
             Left            =   -70575
-            TabIndex        =   220
+            TabIndex        =   215
             Text            =   "0"
             Top             =   5010
             Width           =   555
@@ -1038,7 +1148,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   12
             Left            =   -70575
-            TabIndex        =   219
+            TabIndex        =   214
             Text            =   "0"
             Top             =   4710
             Width           =   555
@@ -1048,7 +1158,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   11
             Left            =   -70575
-            TabIndex        =   218
+            TabIndex        =   213
             Text            =   "0"
             Top             =   4395
             Width           =   555
@@ -1058,7 +1168,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   10
             Left            =   -70575
-            TabIndex        =   217
+            TabIndex        =   212
             Text            =   "0"
             Top             =   4095
             Width           =   555
@@ -1068,7 +1178,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   9
             Left            =   -70575
-            TabIndex        =   216
+            TabIndex        =   211
             Text            =   "0"
             Top             =   3780
             Width           =   555
@@ -1078,7 +1188,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   8
             Left            =   -70575
-            TabIndex        =   215
+            TabIndex        =   210
             Text            =   "0"
             Top             =   3480
             Width           =   555
@@ -1088,7 +1198,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   7
             Left            =   -70575
-            TabIndex        =   214
+            TabIndex        =   209
             Text            =   "0"
             Top             =   3180
             Width           =   555
@@ -1098,7 +1208,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   6
             Left            =   -70575
-            TabIndex        =   213
+            TabIndex        =   208
             Text            =   "0"
             Top             =   2865
             Width           =   555
@@ -1108,7 +1218,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   5
             Left            =   -70575
-            TabIndex        =   212
+            TabIndex        =   207
             Text            =   "0"
             Top             =   2550
             Width           =   555
@@ -1118,7 +1228,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   4
             Left            =   -70575
-            TabIndex        =   211
+            TabIndex        =   206
             Text            =   "0"
             Top             =   2250
             Width           =   555
@@ -1128,7 +1238,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   3
             Left            =   -70575
-            TabIndex        =   210
+            TabIndex        =   205
             Text            =   "0"
             Top             =   1935
             Width           =   555
@@ -1138,7 +1248,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   2
             Left            =   -70575
-            TabIndex        =   209
+            TabIndex        =   204
             Text            =   "0"
             Top             =   1635
             Width           =   555
@@ -1148,7 +1258,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   1
             Left            =   -70575
-            TabIndex        =   208
+            TabIndex        =   203
             Text            =   "0"
             Top             =   1320
             Width           =   555
@@ -1158,7 +1268,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   0
             Left            =   -70575
-            TabIndex        =   207
+            TabIndex        =   202
             Text            =   "0"
             Top             =   1020
             Width           =   555
@@ -1166,21 +1276,21 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.TextBox txtPermNPC 
             Enabled         =   0   'False
             Height          =   285
-            Left            =   -71835
+            Left            =   165
             MaxLength       =   5
             TabIndex        =   164
             Text            =   "0"
-            Top             =   960
+            Top             =   4320
             Width           =   615
          End
          Begin VB.TextBox txtPermNPCName 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   -71205
+            Left            =   795
             Locked          =   -1  'True
             TabIndex        =   165
             TabStop         =   0   'False
-            Top             =   960
+            Top             =   4320
             Width           =   2295
          End
          Begin VB.TextBox txtRoomLPara2 
@@ -1859,7 +1969,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   10
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   183
+            TabIndex        =   178
             Text            =   "0"
             Top             =   4095
             Width           =   615
@@ -1870,7 +1980,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   16
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   189
+            TabIndex        =   184
             Text            =   "0"
             Top             =   5940
             Width           =   615
@@ -1881,7 +1991,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   15
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   188
+            TabIndex        =   183
             Text            =   "0"
             Top             =   5625
             Width           =   615
@@ -1892,7 +2002,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   14
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   187
+            TabIndex        =   182
             Text            =   "0"
             Top             =   5325
             Width           =   615
@@ -1903,7 +2013,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   13
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   186
+            TabIndex        =   181
             Text            =   "0"
             Top             =   5010
             Width           =   615
@@ -1914,7 +2024,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   12
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   185
+            TabIndex        =   180
             Text            =   "0"
             Top             =   4710
             Width           =   615
@@ -1925,7 +2035,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   11
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   184
+            TabIndex        =   179
             Text            =   "0"
             Top             =   4395
             Width           =   615
@@ -1936,7 +2046,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   0
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   173
+            TabIndex        =   168
             Text            =   "0"
             Top             =   1020
             Width           =   615
@@ -1947,7 +2057,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   1
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   174
+            TabIndex        =   169
             Text            =   "0"
             Top             =   1320
             Width           =   615
@@ -1958,7 +2068,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   2
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   175
+            TabIndex        =   170
             Text            =   "0"
             Top             =   1635
             Width           =   615
@@ -1969,7 +2079,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   3
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   176
+            TabIndex        =   171
             Text            =   "0"
             Top             =   1935
             Width           =   615
@@ -1980,7 +2090,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   4
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   177
+            TabIndex        =   172
             Text            =   "0"
             Top             =   2250
             Width           =   615
@@ -1991,7 +2101,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   5
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   178
+            TabIndex        =   173
             Text            =   "0"
             Top             =   2550
             Width           =   615
@@ -2002,7 +2112,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   6
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   179
+            TabIndex        =   174
             Text            =   "0"
             Top             =   2865
             Width           =   615
@@ -2013,7 +2123,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   7
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   180
+            TabIndex        =   175
             Text            =   "0"
             Top             =   3165
             Width           =   615
@@ -2024,7 +2134,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   8
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   181
+            TabIndex        =   176
             Text            =   "0"
             Top             =   3480
             Width           =   615
@@ -2035,66 +2145,16 @@ Begin VB.Form frmMassRoomEditor
             Index           =   9
             Left            =   -73650
             MaxLength       =   5
-            TabIndex        =   182
+            TabIndex        =   177
             Text            =   "0"
             Top             =   3780
-            Width           =   615
-         End
-         Begin VB.TextBox txtCopper 
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   -73620
-            MaxLength       =   5
-            TabIndex        =   171
-            Text            =   "0"
-            Top             =   5580
-            Width           =   615
-         End
-         Begin VB.TextBox txtSilver 
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   -73620
-            MaxLength       =   5
-            TabIndex        =   170
-            Text            =   "0"
-            Top             =   5280
-            Width           =   615
-         End
-         Begin VB.TextBox txtGold 
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   -73620
-            MaxLength       =   5
-            TabIndex        =   169
-            Text            =   "0"
-            Top             =   4920
-            Width           =   615
-         End
-         Begin VB.TextBox txtPlatinum 
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   -73620
-            MaxLength       =   5
-            TabIndex        =   168
-            Text            =   "0"
-            Top             =   4560
-            Width           =   615
-         End
-         Begin VB.TextBox txtRunic 
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   -73620
-            MaxLength       =   5
-            TabIndex        =   167
-            Text            =   "0"
-            Top             =   4200
             Width           =   615
          End
          Begin VB.Frame frmDescription 
             Caption         =   "Description"
             Enabled         =   0   'False
             Height          =   2895
-            Left            =   360
+            Left            =   -74640
             TabIndex        =   19
             Top             =   360
             Width           =   5775
@@ -2192,7 +2252,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   9
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   152
             Text            =   "0"
@@ -2203,7 +2263,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   8
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   151
             Text            =   "0"
@@ -2214,7 +2274,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   7
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   150
             Text            =   "0"
@@ -2225,7 +2285,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   6
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   149
             Text            =   "0"
@@ -2236,7 +2296,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   5
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   148
             Text            =   "0"
@@ -2247,7 +2307,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   4
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   147
             Text            =   "0"
@@ -2258,7 +2318,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   3
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   146
             Text            =   "0"
@@ -2269,7 +2329,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   2
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   145
             Text            =   "0"
@@ -2280,7 +2340,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   1
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   144
             Text            =   "0"
@@ -2291,7 +2351,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   0
-            Left            =   -74820
+            Left            =   180
             MaxLength       =   5
             TabIndex        =   143
             Text            =   "0"
@@ -2302,7 +2362,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   0
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   153
@@ -2314,7 +2374,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   1
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   154
@@ -2326,7 +2386,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   2
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   155
@@ -2338,7 +2398,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   3
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   156
@@ -2350,7 +2410,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   4
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   157
@@ -2362,7 +2422,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   5
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   158
@@ -2374,7 +2434,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   6
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   159
@@ -2386,7 +2446,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   7
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   160
@@ -2398,7 +2458,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   8
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   161
@@ -2410,7 +2470,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   9
-            Left            =   -74220
+            Left            =   780
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   162
@@ -2421,7 +2481,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox chkDescription 
             Caption         =   "Check1"
             Height          =   195
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   18
             Top             =   420
             Width           =   195
@@ -2430,7 +2490,7 @@ Begin VB.Form frmMassRoomEditor
             Caption         =   "Current Items In Room"
             Height          =   195
             Left            =   -73950
-            TabIndex        =   172
+            TabIndex        =   167
             Top             =   720
             Width           =   2115
          End
@@ -2441,7 +2501,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   240
+            TabIndex        =   235
             TabStop         =   0   'False
             Top             =   5940
             Width           =   1815
@@ -2453,7 +2513,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   239
+            TabIndex        =   234
             TabStop         =   0   'False
             Top             =   5625
             Width           =   1815
@@ -2465,7 +2525,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   238
+            TabIndex        =   233
             TabStop         =   0   'False
             Top             =   5325
             Width           =   1815
@@ -2477,7 +2537,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   237
+            TabIndex        =   232
             TabStop         =   0   'False
             Top             =   5010
             Width           =   1815
@@ -2489,7 +2549,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   236
+            TabIndex        =   231
             TabStop         =   0   'False
             Top             =   4710
             Width           =   1815
@@ -2501,7 +2561,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   235
+            TabIndex        =   230
             TabStop         =   0   'False
             Top             =   4395
             Width           =   1815
@@ -2513,7 +2573,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   234
+            TabIndex        =   229
             TabStop         =   0   'False
             Top             =   4095
             Width           =   1815
@@ -2525,7 +2585,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   233
+            TabIndex        =   228
             TabStop         =   0   'False
             Top             =   3780
             Width           =   1815
@@ -2537,7 +2597,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   232
+            TabIndex        =   227
             TabStop         =   0   'False
             Top             =   3480
             Width           =   1815
@@ -2549,7 +2609,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   231
+            TabIndex        =   226
             TabStop         =   0   'False
             Top             =   3180
             Width           =   1815
@@ -2561,7 +2621,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   230
+            TabIndex        =   225
             TabStop         =   0   'False
             Top             =   2865
             Width           =   1815
@@ -2573,7 +2633,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   229
+            TabIndex        =   224
             TabStop         =   0   'False
             Top             =   2550
             Width           =   1815
@@ -2585,7 +2645,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   228
+            TabIndex        =   223
             TabStop         =   0   'False
             Top             =   2250
             Width           =   1815
@@ -2597,7 +2657,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   227
+            TabIndex        =   222
             TabStop         =   0   'False
             Top             =   1935
             Width           =   1815
@@ -2609,7 +2669,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   226
+            TabIndex        =   221
             TabStop         =   0   'False
             Top             =   1635
             Width           =   1815
@@ -2621,7 +2681,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   225
+            TabIndex        =   220
             TabStop         =   0   'False
             Top             =   1320
             Width           =   1815
@@ -2633,7 +2693,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   224
+            TabIndex        =   219
             TabStop         =   0   'False
             Top             =   1020
             Width           =   1815
@@ -2641,32 +2701,32 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox ChkPermNPC 
             Caption         =   "Permanent NPC"
             Height          =   195
-            Left            =   -71820
+            Left            =   180
             TabIndex        =   163
-            Top             =   720
+            Top             =   4080
             Width           =   1635
          End
          Begin VB.CheckBox chkPlacedItems 
             Caption         =   "Placed Items"
             Height          =   195
-            Left            =   -74820
+            Left            =   180
             TabIndex        =   142
             Top             =   720
             Width           =   1275
          End
          Begin VB.CheckBox chkMonies 
-            Caption         =   "Runic"
+            Caption         =   "Visible Coins"
             Height          =   195
-            Left            =   -74610
+            Left            =   3720
             TabIndex        =   166
-            Top             =   4200
-            Width           =   915
+            Top             =   720
+            Width           =   1275
          End
          Begin VB.CheckBox chkCurrentRoomMons 
             Caption         =   "Current Monsters In Room"
             Height          =   195
             Left            =   -74760
-            TabIndex        =   302
+            TabIndex        =   297
             Top             =   840
             Width           =   3435
          End
@@ -2676,7 +2736,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   1
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   304
+            TabIndex        =   299
             Text            =   "0"
             Top             =   1440
             Width           =   615
@@ -2687,7 +2747,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   2
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   305
+            TabIndex        =   300
             Text            =   "0"
             Top             =   1740
             Width           =   615
@@ -2698,7 +2758,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   3
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   306
+            TabIndex        =   301
             Text            =   "0"
             Top             =   2040
             Width           =   615
@@ -2709,7 +2769,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   4
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   307
+            TabIndex        =   302
             Text            =   "0"
             Top             =   2340
             Width           =   615
@@ -2720,7 +2780,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   5
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   308
+            TabIndex        =   303
             Text            =   "0"
             Top             =   2640
             Width           =   615
@@ -2731,7 +2791,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   6
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   309
+            TabIndex        =   304
             Text            =   "0"
             Top             =   2940
             Width           =   615
@@ -2742,7 +2802,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   7
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   310
+            TabIndex        =   305
             Text            =   "0"
             Top             =   3240
             Width           =   615
@@ -2753,7 +2813,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   8
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   311
+            TabIndex        =   306
             Text            =   "0"
             Top             =   3540
             Width           =   615
@@ -2764,7 +2824,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   9
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   312
+            TabIndex        =   307
             Text            =   "0"
             Top             =   3840
             Width           =   615
@@ -2775,7 +2835,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   10
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   313
+            TabIndex        =   308
             Text            =   "0"
             Top             =   4140
             Width           =   615
@@ -2786,7 +2846,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   11
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   314
+            TabIndex        =   309
             Text            =   "0"
             Top             =   4440
             Width           =   615
@@ -2797,7 +2857,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   12
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   315
+            TabIndex        =   310
             Text            =   "0"
             Top             =   4740
             Width           =   615
@@ -2808,7 +2868,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   13
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   316
+            TabIndex        =   311
             Text            =   "0"
             Top             =   5040
             Width           =   615
@@ -2819,7 +2879,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   0
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   303
+            TabIndex        =   298
             Text            =   "0"
             Top             =   1140
             Width           =   615
@@ -2830,7 +2890,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   14
             Left            =   -74760
             MaxLength       =   5
-            TabIndex        =   317
+            TabIndex        =   312
             Text            =   "0"
             Top             =   5340
             Width           =   615
@@ -2842,7 +2902,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73005
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   271
+            TabIndex        =   266
             TabStop         =   0   'False
             Top             =   5250
             Width           =   1815
@@ -2854,7 +2914,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   270
+            TabIndex        =   265
             TabStop         =   0   'False
             Top             =   4950
             Width           =   1815
@@ -2866,7 +2926,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   269
+            TabIndex        =   264
             TabStop         =   0   'False
             Top             =   4650
             Width           =   1815
@@ -2878,7 +2938,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   268
+            TabIndex        =   263
             TabStop         =   0   'False
             Top             =   4350
             Width           =   1815
@@ -2890,7 +2950,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   267
+            TabIndex        =   262
             TabStop         =   0   'False
             Top             =   4050
             Width           =   1815
@@ -2902,7 +2962,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   266
+            TabIndex        =   261
             TabStop         =   0   'False
             Top             =   3750
             Width           =   1815
@@ -2914,7 +2974,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   265
+            TabIndex        =   260
             TabStop         =   0   'False
             Top             =   3450
             Width           =   1815
@@ -2926,7 +2986,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   264
+            TabIndex        =   259
             TabStop         =   0   'False
             Top             =   3150
             Width           =   1815
@@ -2938,7 +2998,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   263
+            TabIndex        =   258
             TabStop         =   0   'False
             Top             =   2850
             Width           =   1815
@@ -2950,7 +3010,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   262
+            TabIndex        =   257
             TabStop         =   0   'False
             Top             =   2550
             Width           =   1815
@@ -2962,7 +3022,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   261
+            TabIndex        =   256
             TabStop         =   0   'False
             Top             =   2250
             Width           =   1815
@@ -2974,7 +3034,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   260
+            TabIndex        =   255
             TabStop         =   0   'False
             Top             =   1950
             Width           =   1815
@@ -2986,7 +3046,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   259
+            TabIndex        =   254
             TabStop         =   0   'False
             Top             =   1650
             Width           =   1815
@@ -2998,7 +3058,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   258
+            TabIndex        =   253
             TabStop         =   0   'False
             Top             =   1350
             Width           =   1815
@@ -3010,7 +3070,7 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73020
             Locked          =   -1  'True
             MaxLength       =   30
-            TabIndex        =   257
+            TabIndex        =   252
             TabStop         =   0   'False
             Top             =   1050
             Width           =   1815
@@ -3019,7 +3079,7 @@ Begin VB.Form frmMassRoomEditor
             Caption         =   "Hidden Items In Room"
             Height          =   195
             Left            =   -73920
-            TabIndex        =   241
+            TabIndex        =   236
             Top             =   780
             Width           =   2175
          End
@@ -3029,7 +3089,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   0
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   242
+            TabIndex        =   237
             Text            =   "0"
             Top             =   1050
             Width           =   615
@@ -3040,7 +3100,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   1
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   243
+            TabIndex        =   238
             Text            =   "0"
             Top             =   1350
             Width           =   615
@@ -3051,7 +3111,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   2
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   244
+            TabIndex        =   239
             Text            =   "0"
             Top             =   1650
             Width           =   615
@@ -3062,7 +3122,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   3
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   245
+            TabIndex        =   240
             Text            =   "0"
             Top             =   1950
             Width           =   615
@@ -3073,7 +3133,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   4
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   246
+            TabIndex        =   241
             Text            =   "0"
             Top             =   2250
             Width           =   615
@@ -3084,7 +3144,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   5
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   247
+            TabIndex        =   242
             Text            =   "0"
             Top             =   2550
             Width           =   615
@@ -3095,7 +3155,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   6
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   248
+            TabIndex        =   243
             Text            =   "0"
             Top             =   2850
             Width           =   615
@@ -3106,7 +3166,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   7
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   249
+            TabIndex        =   244
             Text            =   "0"
             Top             =   3150
             Width           =   615
@@ -3117,7 +3177,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   8
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   250
+            TabIndex        =   245
             Text            =   "0"
             Top             =   3450
             Width           =   615
@@ -3128,7 +3188,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   9
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   251
+            TabIndex        =   246
             Text            =   "0"
             Top             =   3750
             Width           =   615
@@ -3139,7 +3199,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   14
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   256
+            TabIndex        =   251
             Text            =   "0"
             Top             =   5250
             Width           =   615
@@ -3150,7 +3210,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   13
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   255
+            TabIndex        =   250
             Text            =   "0"
             Top             =   4950
             Width           =   615
@@ -3161,7 +3221,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   12
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   254
+            TabIndex        =   249
             Text            =   "0"
             Top             =   4650
             Width           =   615
@@ -3172,7 +3232,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   11
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   253
+            TabIndex        =   248
             Text            =   "0"
             Top             =   4350
             Width           =   615
@@ -3183,7 +3243,7 @@ Begin VB.Form frmMassRoomEditor
             Index           =   10
             Left            =   -73620
             MaxLength       =   5
-            TabIndex        =   252
+            TabIndex        =   247
             Text            =   "0"
             Top             =   4050
             Width           =   615
@@ -3193,7 +3253,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   0
             Left            =   -70545
-            TabIndex        =   287
+            TabIndex        =   282
             Text            =   "0"
             Top             =   1050
             Width           =   555
@@ -3203,7 +3263,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   1
             Left            =   -70545
-            TabIndex        =   288
+            TabIndex        =   283
             Text            =   "0"
             Top             =   1350
             Width           =   555
@@ -3213,7 +3273,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   2
             Left            =   -70545
-            TabIndex        =   289
+            TabIndex        =   284
             Text            =   "0"
             Top             =   1650
             Width           =   555
@@ -3223,7 +3283,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   3
             Left            =   -70545
-            TabIndex        =   290
+            TabIndex        =   285
             Text            =   "0"
             Top             =   1950
             Width           =   555
@@ -3233,7 +3293,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   4
             Left            =   -70545
-            TabIndex        =   291
+            TabIndex        =   286
             Text            =   "0"
             Top             =   2250
             Width           =   555
@@ -3243,7 +3303,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   5
             Left            =   -70545
-            TabIndex        =   292
+            TabIndex        =   287
             Text            =   "0"
             Top             =   2550
             Width           =   555
@@ -3253,7 +3313,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   6
             Left            =   -70545
-            TabIndex        =   293
+            TabIndex        =   288
             Text            =   "0"
             Top             =   2850
             Width           =   555
@@ -3263,7 +3323,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   7
             Left            =   -70545
-            TabIndex        =   294
+            TabIndex        =   289
             Text            =   "0"
             Top             =   3150
             Width           =   555
@@ -3273,7 +3333,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   8
             Left            =   -70545
-            TabIndex        =   295
+            TabIndex        =   290
             Text            =   "0"
             Top             =   3450
             Width           =   555
@@ -3283,7 +3343,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   9
             Left            =   -70545
-            TabIndex        =   296
+            TabIndex        =   291
             Text            =   "0"
             Top             =   3750
             Width           =   555
@@ -3293,7 +3353,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   10
             Left            =   -70545
-            TabIndex        =   297
+            TabIndex        =   292
             Text            =   "0"
             Top             =   4050
             Width           =   555
@@ -3303,7 +3363,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   11
             Left            =   -70545
-            TabIndex        =   298
+            TabIndex        =   293
             Text            =   "0"
             Top             =   4350
             Width           =   555
@@ -3313,7 +3373,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   12
             Left            =   -70545
-            TabIndex        =   299
+            TabIndex        =   294
             Text            =   "0"
             Top             =   4650
             Width           =   555
@@ -3323,7 +3383,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   13
             Left            =   -70545
-            TabIndex        =   300
+            TabIndex        =   295
             Text            =   "0"
             Top             =   4950
             Width           =   555
@@ -3333,7 +3393,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   14
             Left            =   -70545
-            TabIndex        =   301
+            TabIndex        =   296
             Text            =   "0"
             Top             =   5250
             Width           =   555
@@ -3343,7 +3403,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   16
             Left            =   -71190
-            TabIndex        =   206
+            TabIndex        =   201
             Text            =   "0"
             Top             =   5940
             Width           =   615
@@ -3353,7 +3413,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   15
             Left            =   -71190
-            TabIndex        =   205
+            TabIndex        =   200
             Text            =   "0"
             Top             =   5625
             Width           =   615
@@ -3363,7 +3423,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   14
             Left            =   -71190
-            TabIndex        =   204
+            TabIndex        =   199
             Text            =   "0"
             Top             =   5325
             Width           =   615
@@ -3373,7 +3433,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   13
             Left            =   -71190
-            TabIndex        =   203
+            TabIndex        =   198
             Text            =   "0"
             Top             =   5010
             Width           =   615
@@ -3383,7 +3443,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   12
             Left            =   -71190
-            TabIndex        =   202
+            TabIndex        =   197
             Text            =   "0"
             Top             =   4710
             Width           =   615
@@ -3393,7 +3453,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   11
             Left            =   -71190
-            TabIndex        =   201
+            TabIndex        =   196
             Text            =   "0"
             Top             =   4395
             Width           =   615
@@ -3403,7 +3463,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   10
             Left            =   -71190
-            TabIndex        =   200
+            TabIndex        =   195
             Text            =   "0"
             Top             =   4095
             Width           =   615
@@ -3413,7 +3473,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   9
             Left            =   -71190
-            TabIndex        =   199
+            TabIndex        =   194
             Text            =   "0"
             Top             =   3780
             Width           =   615
@@ -3423,7 +3483,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   8
             Left            =   -71190
-            TabIndex        =   198
+            TabIndex        =   193
             Text            =   "0"
             Top             =   3480
             Width           =   615
@@ -3433,7 +3493,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   7
             Left            =   -71190
-            TabIndex        =   197
+            TabIndex        =   192
             Text            =   "0"
             Top             =   3165
             Width           =   615
@@ -3443,7 +3503,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   6
             Left            =   -71190
-            TabIndex        =   196
+            TabIndex        =   191
             Text            =   "0"
             Top             =   2865
             Width           =   615
@@ -3453,7 +3513,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   5
             Left            =   -71205
-            TabIndex        =   195
+            TabIndex        =   190
             Text            =   "0"
             Top             =   2550
             Width           =   615
@@ -3463,7 +3523,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   4
             Left            =   -71190
-            TabIndex        =   194
+            TabIndex        =   189
             Text            =   "0"
             Top             =   2250
             Width           =   615
@@ -3473,7 +3533,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   3
             Left            =   -71190
-            TabIndex        =   193
+            TabIndex        =   188
             Text            =   "0"
             Top             =   1935
             Width           =   615
@@ -3483,7 +3543,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   2
             Left            =   -71190
-            TabIndex        =   192
+            TabIndex        =   187
             Text            =   "0"
             Top             =   1635
             Width           =   615
@@ -3493,7 +3553,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   1
             Left            =   -71190
-            TabIndex        =   191
+            TabIndex        =   186
             Text            =   "0"
             Top             =   1320
             Width           =   615
@@ -3503,7 +3563,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   0
             Left            =   -71190
-            TabIndex        =   190
+            TabIndex        =   185
             Text            =   "0"
             Top             =   1020
             Width           =   615
@@ -3513,7 +3573,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   14
             Left            =   -71190
-            TabIndex        =   286
+            TabIndex        =   281
             Text            =   "0"
             Top             =   5250
             Width           =   615
@@ -3523,7 +3583,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   13
             Left            =   -71190
-            TabIndex        =   285
+            TabIndex        =   280
             Text            =   "0"
             Top             =   4950
             Width           =   615
@@ -3533,7 +3593,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   12
             Left            =   -71190
-            TabIndex        =   284
+            TabIndex        =   279
             Text            =   "0"
             Top             =   4650
             Width           =   615
@@ -3543,7 +3603,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   11
             Left            =   -71190
-            TabIndex        =   283
+            TabIndex        =   278
             Text            =   "0"
             Top             =   4350
             Width           =   615
@@ -3553,7 +3613,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   10
             Left            =   -71190
-            TabIndex        =   282
+            TabIndex        =   277
             Text            =   "0"
             Top             =   4050
             Width           =   615
@@ -3563,7 +3623,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   9
             Left            =   -71190
-            TabIndex        =   281
+            TabIndex        =   276
             Text            =   "0"
             Top             =   3750
             Width           =   615
@@ -3573,7 +3633,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   8
             Left            =   -71190
-            TabIndex        =   280
+            TabIndex        =   275
             Text            =   "0"
             Top             =   3450
             Width           =   615
@@ -3583,7 +3643,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   7
             Left            =   -71190
-            TabIndex        =   279
+            TabIndex        =   274
             Text            =   "0"
             Top             =   3150
             Width           =   615
@@ -3593,7 +3653,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   6
             Left            =   -71190
-            TabIndex        =   278
+            TabIndex        =   273
             Text            =   "0"
             Top             =   2850
             Width           =   615
@@ -3603,7 +3663,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   5
             Left            =   -71190
-            TabIndex        =   277
+            TabIndex        =   272
             Text            =   "0"
             Top             =   2550
             Width           =   615
@@ -3613,7 +3673,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   4
             Left            =   -71190
-            TabIndex        =   276
+            TabIndex        =   271
             Text            =   "0"
             Top             =   2250
             Width           =   615
@@ -3623,7 +3683,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   3
             Left            =   -71190
-            TabIndex        =   275
+            TabIndex        =   270
             Text            =   "0"
             Top             =   1950
             Width           =   615
@@ -3633,7 +3693,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   2
             Left            =   -71190
-            TabIndex        =   274
+            TabIndex        =   269
             Text            =   "0"
             Top             =   1650
             Width           =   615
@@ -3643,7 +3703,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   1
             Left            =   -71190
-            TabIndex        =   273
+            TabIndex        =   268
             Text            =   "0"
             Top             =   1350
             Width           =   615
@@ -3653,7 +3713,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   285
             Index           =   0
             Left            =   -71190
-            TabIndex        =   272
+            TabIndex        =   267
             Text            =   "0"
             Top             =   1050
             Width           =   615
@@ -3665,10 +3725,113 @@ Begin VB.Form frmMassRoomEditor
             Left            =   -73920
             Locked          =   -1  'True
             MultiLine       =   -1  'True
-            TabIndex        =   318
+            TabIndex        =   313
             Text            =   "frmMassRoomEditor.frx":16EF
             Top             =   1620
             Width           =   4935
+         End
+         Begin VB.Frame frmVisibleCoins 
+            Caption         =   "        "
+            Height          =   2295
+            Left            =   3480
+            TabIndex        =   322
+            Top             =   720
+            Width           =   2175
+            Begin VB.TextBox txtCopper 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   327
+               Text            =   "0"
+               Top             =   1800
+               Width           =   735
+            End
+            Begin VB.TextBox txtSilver 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   326
+               Text            =   "0"
+               Top             =   1440
+               Width           =   735
+            End
+            Begin VB.TextBox txtGold 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   325
+               Text            =   "0"
+               Top             =   1080
+               Width           =   735
+            End
+            Begin VB.TextBox txtPlatinum 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   324
+               Text            =   "0"
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.TextBox txtRunic 
+               Enabled         =   0   'False
+               Height          =   285
+               Left            =   1200
+               TabIndex        =   323
+               Text            =   "0"
+               Top             =   360
+               Width           =   735
+            End
+            Begin VB.Label label 
+               AutoSize        =   -1  'True
+               Caption         =   "Copper"
+               Height          =   195
+               Index           =   40
+               Left            =   240
+               TabIndex        =   332
+               Top             =   1800
+               Width           =   510
+            End
+            Begin VB.Label label 
+               AutoSize        =   -1  'True
+               Caption         =   "Silver"
+               Height          =   195
+               Index           =   39
+               Left            =   240
+               TabIndex        =   331
+               Top             =   1440
+               Width           =   390
+            End
+            Begin VB.Label label 
+               AutoSize        =   -1  'True
+               Caption         =   "Gold"
+               Height          =   195
+               Index           =   38
+               Left            =   240
+               TabIndex        =   330
+               Top             =   1080
+               Width           =   330
+            End
+            Begin VB.Label label 
+               AutoSize        =   -1  'True
+               Caption         =   "Platinum"
+               Height          =   195
+               Index           =   37
+               Left            =   240
+               TabIndex        =   329
+               Top             =   720
+               Width           =   600
+            End
+            Begin VB.Label label 
+               AutoSize        =   -1  'True
+               Caption         =   "Runic"
+               Height          =   195
+               Index           =   44
+               Left            =   240
+               TabIndex        =   328
+               Top             =   360
+               Width           =   420
+            End
          End
          Begin VB.Label label 
             Alignment       =   2  'Center
@@ -3789,7 +3952,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   195
             Index           =   35
             Left            =   -74880
-            TabIndex        =   330
+            TabIndex        =   321
             Top             =   480
             Width           =   2040
          End
@@ -3797,55 +3960,15 @@ Begin VB.Form frmMassRoomEditor
             Caption         =   "Qty - 1"
             Height          =   255
             Left            =   -70560
-            TabIndex        =   329
+            TabIndex        =   320
             Top             =   780
             Width           =   615
-         End
-         Begin VB.Label label 
-            AutoSize        =   -1  'True
-            Caption         =   "Copper"
-            Height          =   195
-            Index           =   16
-            Left            =   -74340
-            TabIndex        =   328
-            Top             =   5640
-            Width           =   510
-         End
-         Begin VB.Label label 
-            AutoSize        =   -1  'True
-            Caption         =   "Silver"
-            Height          =   195
-            Index           =   27
-            Left            =   -74340
-            TabIndex        =   327
-            Top             =   5280
-            Width           =   390
-         End
-         Begin VB.Label label 
-            AutoSize        =   -1  'True
-            Caption         =   "Gold"
-            Height          =   195
-            Index           =   36
-            Left            =   -74340
-            TabIndex        =   326
-            Top             =   4920
-            Width           =   330
-         End
-         Begin VB.Label label 
-            AutoSize        =   -1  'True
-            Caption         =   "Platinum"
-            Height          =   195
-            Index           =   45
-            Left            =   -74340
-            TabIndex        =   325
-            Top             =   4560
-            Width           =   600
          End
          Begin VB.Label Label13 
             Caption         =   "Qty - 1"
             Height          =   255
             Left            =   -70530
-            TabIndex        =   324
+            TabIndex        =   319
             Top             =   810
             Width           =   495
          End
@@ -3853,7 +3976,7 @@ Begin VB.Form frmMassRoomEditor
             Caption         =   "The quantity totals here are the total minus one.  (EX: enter 0 for 1 ... 1 for 2 ... 3 for 4, etc.)"
             Height          =   615
             Left            =   -73605
-            TabIndex        =   323
+            TabIndex        =   318
             Top             =   5670
             Width           =   2895
          End
@@ -3863,7 +3986,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   255
             Index           =   49
             Left            =   -71190
-            TabIndex        =   322
+            TabIndex        =   317
             Top             =   780
             Width           =   615
          End
@@ -3873,7 +3996,7 @@ Begin VB.Form frmMassRoomEditor
             Height          =   255
             Index           =   50
             Left            =   -71190
-            TabIndex        =   321
+            TabIndex        =   316
             Top             =   810
             Width           =   615
          End
@@ -3881,7 +4004,7 @@ Begin VB.Form frmMassRoomEditor
       Begin MSComctlLib.ProgressBar ProgressBar 
          Height          =   255
          Left            =   60
-         TabIndex        =   319
+         TabIndex        =   314
          Top             =   7140
          Visible         =   0   'False
          Width           =   7155
@@ -3958,7 +4081,7 @@ Begin VB.Form frmMassRoomEditor
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   320
+      TabIndex        =   315
       Top             =   7485
       Width           =   7395
       _ExtentX        =   13044
@@ -4148,6 +4271,24 @@ If chkMonies.Value = 1 Then
     txtGold.Enabled = True
     txtSilver.Enabled = True
     txtCopper.Enabled = True
+End If
+
+End Sub
+
+Private Sub chkInvisMonies_Click()
+If chkMonies.Value = 0 Then
+    txtInvisRunic.Enabled = False
+    txtInvisPlatinum.Enabled = False
+    txtInvisGold.Enabled = False
+    txtInvisSilver.Enabled = False
+    txtInvisCopper.Enabled = False
+End If
+If chkInvisMonies.Value = 1 Then
+    txtInvisRunic.Enabled = True
+    txtInvisPlatinum.Enabled = True
+    txtInvisGold.Enabled = True
+    txtInvisSilver.Enabled = True
+    txtInvisCopper.Enabled = True
 End If
 
 End Sub
@@ -4439,7 +4580,13 @@ Do While CurrentRoom <= RoomEnd And bStopProcess = False
         Roomrec.Silver = Val(txtSilver.Text)
         Roomrec.Copper = Val(txtCopper.Text)
     End If
-    
+    If chkInvisMonies.Value = 1 Then
+        Roomrec.InvisRunic = Val(txtInvisRunic.Text)
+        Roomrec.InvisPlatinum = Val(txtInvisPlatinum.Text)
+        Roomrec.InvisGold = Val(txtInvisGold.Text)
+        Roomrec.InvisSilver = Val(txtInvisSilver.Text)
+        Roomrec.InvisCopper = Val(txtInvisCopper.Text)
+    End If
     If chkSpell.Value = 1 Then Roomrec.Spell = Val(txtSpell.Text)
     If chkExitRoom.Value = 1 Then Roomrec.ExitRoom = Val(txtExitRoom.Text)
     If chkAttributes.Value = 1 Then Roomrec.Attributes = Val(txtAttributes.Text)
@@ -4849,6 +4996,31 @@ End Sub
 
 Private Sub txtSilver_GotFocus()
 Call SelectAll(txtSilver)
+
+End Sub
+
+Private Sub txtInvisCopper_GotFocus()
+Call SelectAll(txtInvisCopper)
+
+End Sub
+
+Private Sub txtInvisSilver_GotFocus()
+Call SelectAll(txtInvisSilver)
+
+End Sub
+
+Private Sub txtInvisGold_GotFocus()
+Call SelectAll(txtInvisGold)
+
+End Sub
+
+Private Sub txtInvisPlatinum_GotFocus()
+Call SelectAll(txtInvisPlatinum)
+
+End Sub
+
+Private Sub txtInvisRunic_GotFocus()
+Call SelectAll(txtInvisRunic)
 
 End Sub
 

@@ -321,13 +321,13 @@ Public Type ItemRecType
     Gettable        As Byte
     unknown12       As Byte                     '928
     ReqStr          As Integer                  '930
-    unknown13a(4)   As Integer
+    unknown13a(6)   As Integer
     OpenRunic       As Long
     OpenPlatinum    As Long
     OpenGold        As Long
     OpenSilver      As Long
     OpenCopper      As Long
-    unknown13b(14)   As Integer                  '980 +60  '29 -- changes the numbers here 6-19-03
+    unknown13b(12)   As Integer                  '980 +60  '29 -- changes the numbers here 6-19-03
     Speed           As Integer                  '982
     unknown14       As Integer                  '984
     AbilityB(19)    As Integer                  '1024 +40
@@ -2146,31 +2146,31 @@ Sub AddItemFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2       '3
     AddField Map, ctr, FLD_INTEGER, 2       '4
     AddField Map, ctr, FLD_INTEGER, 2       '5
+    AddField Map, ctr, FLD_INTEGER, 2       '6
+    AddField Map, ctr, FLD_INTEGER, 2       '7
     AddField Map, ctr, FLD_INTEGER, 4       'runic
     AddField Map, ctr, FLD_INTEGER, 4       'plat
     AddField Map, ctr, FLD_INTEGER, 4       'gold
     AddField Map, ctr, FLD_INTEGER, 4       'silver
     AddField Map, ctr, FLD_INTEGER, 4       'copper
     AddField Map, ctr, FLD_INTEGER, 2       'unknown13b 1
-    AddField Map, ctr, FLD_INTEGER, 2       '2
-    AddField Map, ctr, FLD_INTEGER, 2       '3
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2       '6
-    AddField Map, ctr, FLD_INTEGER, 2       '7
+    AddField Map, ctr, FLD_INTEGER, 2       '4
+    AddField Map, ctr, FLD_INTEGER, 2       '5
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2       '8
+    AddField Map, ctr, FLD_INTEGER, 2       '9
     AddField Map, ctr, FLD_INTEGER, 2       '10
-    AddField Map, ctr, FLD_INTEGER, 2       '11
-    AddField Map, ctr, FLD_INTEGER, 2       '12
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2       '15
+    AddField Map, ctr, FLD_INTEGER, 2       '13
 '    AddField map, ctr, FLD_INTEGER, 2                  -- took out when added cash drops
 '    AddField map, ctr, FLD_INTEGER, 2
+'    AddField map, ctr, FLD_INTEGER, 2       '16
+'    AddField map, ctr, FLD_INTEGER, 2       '17
 '    AddField map, ctr, FLD_INTEGER, 2       '18
-'    AddField map, ctr, FLD_INTEGER, 2       '19
-'    AddField map, ctr, FLD_INTEGER, 2       '20
     AddField Map, ctr, FLD_INTEGER, 2   'speed
     AddField Map, ctr, FLD_INTEGER, 2   'unknown14
     AddField Map, ctr, FLD_INTEGER, 2       'AbilB 1
