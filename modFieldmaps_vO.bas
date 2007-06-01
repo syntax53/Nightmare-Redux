@@ -435,7 +435,12 @@ Public Type RoomRecType
     Gold                As Long
     Silver              As Long
     Copper              As Long
-    nothing7(4)         As Long             ' -5
+    InvisRunic          As Long
+    InvisPlatinum       As Long
+    InvisGold           As Long
+    InvisSilver         As Long
+    InvisCopper         As Long
+    'nothing7(4)         As Long             ' -5
     MaxRegen            As Long
     MonsterType         As Integer
     unknown69           As Integer
@@ -2560,11 +2565,11 @@ Sub AddRoomFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 4   'Gold
     AddField Map, ctr, FLD_INTEGER, 4   'Silver
     AddField Map, ctr, FLD_INTEGER, 4   'Copper
-    AddField Map, ctr, FLD_INTEGER, 4   'Nothing7-1
-    AddField Map, ctr, FLD_INTEGER, 4   '2
-    AddField Map, ctr, FLD_INTEGER, 4   '3
-    AddField Map, ctr, FLD_INTEGER, 4   '4
-    AddField Map, ctr, FLD_INTEGER, 4   '5
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisRunic
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisPlat
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisGold
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisSilver
+    AddField Map, ctr, FLD_INTEGER, 4   'InvisCopper
     AddField Map, ctr, FLD_INTEGER, 4   'MaxRegen
     AddField Map, ctr, FLD_INTEGER, 2   'MonsterType
     AddField Map, ctr, FLD_INTEGER, 2   'unknown69
