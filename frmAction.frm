@@ -1,18 +1,27 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
 Begin VB.Form frmAction 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Action Editor"
-   ClientHeight    =   6360
+   ClientHeight    =   6900
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   6225
+   ClientWidth     =   6285
    Icon            =   "frmAction.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   6360
-   ScaleWidth      =   6225
+   ScaleHeight     =   6900
+   ScaleWidth      =   6285
+   Begin VB.TextBox txtOffset 
+      Enabled         =   0   'False
+      Height          =   285
+      Left            =   1680
+      Locked          =   -1  'True
+      TabIndex        =   30
+      Top             =   6540
+      Width           =   975
+   End
    Begin VB.CheckBox chkAutoSave 
       Caption         =   "Auto-Save"
       Height          =   195
@@ -179,6 +188,14 @@ Begin VB.Form frmAction
       Visible         =   0   'False
       Width           =   2055
    End
+   Begin VB.Label Label1 
+      Caption         =   "Offset (Debug)"
+      Height          =   255
+      Left            =   1680
+      TabIndex        =   31
+      Top             =   6300
+      Width           =   1455
+   End
    Begin VB.Label Label11 
       Caption         =   "Floor Item to Room   (EX: %s peed on the %s!)"
       Height          =   255
@@ -295,7 +312,7 @@ If ReadINI("Windows", "ActionMaxed") = "1" Then Me.WindowState = vbMaximized
 End Sub
 
 Private Sub LoadActions()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 
 lvDatabase.ColumnHeaders.clear
@@ -324,13 +341,13 @@ If lvDatabase.ListItems.Count >= 1 Then Call lvDatabase_ItemClick(lvDatabase.Lis
 bLoaded = True
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub AddActionToLV(ByVal sAction As String)
 Dim nStatus As Integer, oLI As ListItem, sGoto As String * 30
-On Error GoTo Error:
+On Error GoTo error:
 
 If Not sAction = Actionrec.Name Then
     sGoto = sAction & Chr(0)
@@ -345,7 +362,7 @@ oLI.Text = Actionrec.Name
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
@@ -382,7 +399,7 @@ End Sub
 
 
 Private Sub DispActionInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 bLoaded = True
 
 RowToStruct row, ActionFldMap, Actionrec, LenB(Actionrec)
@@ -402,8 +419,10 @@ txtInventoryToRoom.Text = Actionrec.InventoryToRoom
 txtFloorItemToUser.Text = Actionrec.FloorItemToUser
 txtFloorItemToRoom.Text = Actionrec.FloorItemToRoom
 
+UpdateOffsetValue
+
 Exit Sub
-Error:
+error:
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
     & "Previous records stats may still be in memory.  Select 'Disable DB Writing'" & vbCrLf _
@@ -412,7 +431,7 @@ End Sub
 
 
 Private Sub SaveAction()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, sGoto As String * 30
 
 sGoto = txtActionCommand.Text & Chr(0)
@@ -438,12 +457,45 @@ Actionrec.InventoryToRoom = RTrim(txtInventoryToRoom.Text) & Chr(0)
 Actionrec.FloorItemToUser = RTrim(txtFloorItemToUser.Text) & Chr(0)
 Actionrec.FloorItemToRoom = RTrim(txtFloorItemToRoom.Text) & Chr(0)
 
+UpdateOffsetValue
+Actionrec.Offset = txtOffset.Text
+
 UpdateActionRecord
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
+
+Private Sub UpdateOffsetValue()
+
+Dim tmpOffset As Byte
+
+tmpOffset = 0
+
+If Len(txtSingleToUser.Text) > 0 Or Len(txtSingleToUser.Text) > 0 Then
+    tmpOffset = tmpOffset + 1
+End If
+If Len(txtUserToUser.Text) > 0 Or Len(txtUserToOtherUser.Text) > 0 Or Len(txtUserToRoom.Text) > 0 Then
+    tmpOffset = tmpOffset + 2
+End If
+If Len(txtMonsterToUser.Text) > 0 Or Len(txtMonsterToRoom.Text) > 0 Then
+    tmpOffset = tmpOffset + 4
+End If
+If Len(txtInventoryToUser.Text) > 0 Or Len(txtInventoryToRoom.Text) > 0 Then
+    tmpOffset = tmpOffset + 8
+End If
+If Len(txtFloorItemToUser.Text) > 0 Or Len(txtFloorItemToRoom.Text) > 0 Then
+    tmpOffset = tmpOffset + 16
+End If
+
+txtOffset.Text = tmpOffset
+
+Exit Sub
+error:
+Call HandleError
+End Sub
+
 Private Sub UpdateActionRecord()
 Dim nStatus As Integer
 
@@ -469,7 +521,7 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Private Sub cmdDelete_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nDelete As Integer, temp As Long, strTemp As String * 30
 
@@ -506,12 +558,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdInsert_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, sGoto As String, oLI As ListItem
 Dim nNewActionName As String
 If bLoaded = True Then SaveAction
@@ -560,7 +612,7 @@ If nNewActionName = "" Then Exit Sub
     End If
     
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
