@@ -311,8 +311,7 @@ Public Type ItemRecType
     Minhit          As Integer                  '832
     Maxhit          As Integer                  '834
     AC              As Integer                  '836
-    Race(9)         As Integer                  '856 +20
-    unknown11(9)    As Integer                  '876 +20
+    Race(9)         As Long                     '876 +40
     Negate(19)      As Integer                  '916 +40
     Weapon          As Integer                  '918
     Armour          As Integer                  '920
@@ -347,7 +346,7 @@ Public Type ItemRecType
     'unknown20(1)   As Byte
 End Type
 Const ItemDataBufSize = 1072 '1948 '1072
-Public ItemFldMap(0 To 184) As FieldMap '188
+Public ItemFldMap(0 To 174) As FieldMap '188
 Public Type ItemDatabufType
     buf(1 To ItemDataBufSize) As Byte
 End Type
@@ -716,9 +715,11 @@ Public Type ActionRecType
     FloorItemToUser As String * 74
     Nothing11(2) As Integer
     FloorItemToRoom As String * 74
+    Nothing12(2) As Integer
+    Offset As Byte
 End Type
 Const ActionDataBufSize = 1010
-Public ActionFldMap(0 To 43) As FieldMap
+Public ActionFldMap(0 To 47) As FieldMap
 Public Type ActionDatabufType
     buf(1 To ActionDataBufSize) As Byte
 End Type
@@ -2097,26 +2098,16 @@ Sub AddItemFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2       'minhit
     AddField Map, ctr, FLD_INTEGER, 2       'maxhit
     AddField Map, ctr, FLD_INTEGER, 2       'AC
-    AddField Map, ctr, FLD_INTEGER, 2       'race1
-    AddField Map, ctr, FLD_INTEGER, 2       'race2
-    AddField Map, ctr, FLD_INTEGER, 2       'race3
-    AddField Map, ctr, FLD_INTEGER, 2       'race4
-    AddField Map, ctr, FLD_INTEGER, 2       'race5
-    AddField Map, ctr, FLD_INTEGER, 2       'race6
-    AddField Map, ctr, FLD_INTEGER, 2       'race7
-    AddField Map, ctr, FLD_INTEGER, 2       'race8
-    AddField Map, ctr, FLD_INTEGER, 2       'race9
-    AddField Map, ctr, FLD_INTEGER, 2       'race10
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing1
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing2
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing3
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing4
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing5
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing6
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing7
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing8
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing9
-    AddField Map, ctr, FLD_INTEGER, 2       'nothing10
+    AddField Map, ctr, FLD_INTEGER, 4       'race1
+    AddField Map, ctr, FLD_INTEGER, 4       'race2
+    AddField Map, ctr, FLD_INTEGER, 4       'race3
+    AddField Map, ctr, FLD_INTEGER, 4       'race4
+    AddField Map, ctr, FLD_INTEGER, 4       'race5
+    AddField Map, ctr, FLD_INTEGER, 4       'race6
+    AddField Map, ctr, FLD_INTEGER, 4       'race7
+    AddField Map, ctr, FLD_INTEGER, 4       'race8
+    AddField Map, ctr, FLD_INTEGER, 4       'race9
+    AddField Map, ctr, FLD_INTEGER, 4       'race10
     AddField Map, ctr, FLD_INTEGER, 2       'negate1
     AddField Map, ctr, FLD_INTEGER, 2       'negate2
     AddField Map, ctr, FLD_INTEGER, 2       'negate3
@@ -2697,6 +2688,10 @@ Sub AddActionFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_STRING, 74   '11
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_BYTE, 1      'Offset
 End Sub
 
 Sub AddField(Map() As FieldMap, ByRef ctr As Integer, dataType As Long, length As Long)
