@@ -19,7 +19,7 @@ v1.6.1/n (02/03/2006)
 v1.6/n (07/01/2005)
 ------------------------------------------ 
 General:
--BUGFIX: ‘per item’ ‘only if’ on uni mod for monsters and shops
+-BUGFIX: 'per item' 'only if' on uni mod for monsters and shops
 -NEW: COMPLETE RECORD NUMBER CHANGER
 -NEW: monster group/index changer
 -NEW: slew of filtering options for monsters, items, and spells!
@@ -29,7 +29,7 @@ General:
 -NEW: tool to combine like items on the ground into one slot
 -NEW: tool to combine monster experience and experience multiplier
 -UP: added a spell range display for monster attacks
--UP: added button on users to calculate the user’s exp
+-UP: added button on users to calculate the user's exp
 -UP: exp calc will copy to clipboard the selected levels experience
 -UP: can now enter -1 to pad/delete buffer rooms on all maps at once
 -UP: most windows can now be maximized and will re-open that way
@@ -183,8 +183,8 @@ v1.46/n (03/03/2004)
 -FIX: windows focus issues on map
 -FIX: had to save and re-click to see markup change on shops
 -FIX: class editor displayed combat wrong in list
--FIX: spell editor wouldn’t filter
--FIX: update file compile wouldn’t quit on error
+-FIX: spell editor wouldn't filter
+-FIX: update file compile wouldn't quit on error
 -FIX: one of the action lines was selecting text incorrectly
 
 v1.45/n (01/13/2004)
@@ -202,7 +202,7 @@ v1.45/n (01/13/2004)
 -UP: all windows have finally had the tab order fixed (fixing that sucked!)
 -UP: added on option on map to hide the tooltips
 -UP: updated Group/Index and Boss/NPC lists in monster help
--FIX: failed exit creations to new/existing rooms on map won’t change starting room
+-FIX: failed exit creations to new/existing rooms on map won't change starting room
 -FIX: class/race editors were reloading the record lists on close
 -FIX: 'no line colors' and 'no color' options on map work now
 -FIX: lots of misc. small fixes
@@ -232,7 +232,7 @@ v1.4 (09/01/2003)
 ------------------------------------------ 
 -NEW: mapping overhaul: more options, more sizes, follow up/down exits, faster
 -NEW: can now open multiple copies of the editors
--NEW: create a blank update file (for testing, don’t gotta compile everytime)
+-NEW: create a blank update file (for testing, don't gotta compile everytime)
 -NEW: build monster group/index list, used in map to show monster regen
 -NEW: new field discovered in room DB: gang house number
 -NEW: chest cash drops fields on item editor (thx Locke Cole)
@@ -250,7 +250,7 @@ v1.4 (09/01/2003)
 -UP: added some elements to the universal mod like more "only if's"
 -UP: added some quests to the quest organizer
 -UP: updated some fields in the ability database (thx Tsunami)
--UP: textblock insert will now copy the textblock you’re on
+-UP: textblock insert will now copy the textblock you're on
 -UP: updated what the no limited item tool excludes, see general help
 -UP: cleaned up some textblock code
 -UP: fixed a few of the room parameters
@@ -267,7 +267,7 @@ v1.4 (09/01/2003)
 
 v1.3 (05/12/2003)
 ------------------------------------------ 
--BUGFIX: was reading wrong value in the room DB for a room’s spell
+-BUGFIX: was reading wrong value in the room DB for a room's spell
 -NEW: export to mmud explorer (still tweaking), MMud Explorer coming soon
 -NEW: limited item list creator - scans users, rooms, and shops
 -NEW: abilities have quick links to what they refer to (like CastSP X)
@@ -315,18 +315,18 @@ v1.2 (03/03/2003)
 -FIX: fixed some of the forms jumping around when they load 
 -FIX: monster grp/index list was cut off at the end, split it up to two pages 
 -FIX: couldn't export to textfiles (thx dxpac) 
--NOTE: old export files won’t work with this version
+-NOTE: old export files won't work with this version
 
 
 v1.1 (02/15/2003)
 ------------------------------------------ 
 -UP: rewrote some code in the import and export to make it more efficient
--FIX: class import wasn’t importing abilities (thx PanterraX!)
+-FIX: class import wasn't importing abilities (thx PanterraX!)
 
 
 v1.0 (02/14/2003)
 ------------------------------------------ 
--NEW: i decided to 1.0 it, i think everyone is aware it’s really always in ‘beta’
+-NEW: i decided to 1.0 it, i think everyone is aware it's really always in 'beta'
 -NEW: the 5 previous settings are available to choose from in settings
 -NEW: tool to search for an item sitting in a room (under tools - rooms)
 -UP: compatibility with v1.11m
@@ -345,7 +345,7 @@ v0.7.7 BETA (01/27/03)
 ------------------------------------------ 
 -NEW: user merge --merge two user databases
 -UP: compatibility with v1.11L
--FIX: rooms by range for universal modifier wasn’t working (thx durin)
+-FIX: rooms by range for universal modifier wasn't working (thx durin)
 
 
 v0.7.6 BETA (01/15/03)
@@ -422,13 +422,13 @@ v0.7.2 BETA (11/14/02)
 -UP: tool tips on the map now show a lot of useful information
 -UP: in-game AC and DR is calculated and shown on the item editor
 -UP: min/max/duration values now calculate as you change them in the spell editor
--UP: as you tab or click through the fields in the room editor it will auto-select it’s contents
+-UP: as you tab or click through the fields in the room editor it will auto-select it's contents
 -UP: tab order in room editor should be better now
 -UP: added get first/last record number buttons to db exporter
--UP: db importer won’t log updated records anymore unless log-all is selected
+-UP: db importer won't log updated records anymore unless log-all is selected
 -UP: lots of code rewrites in general
 -FIX: clicking on the starting room in the map crashed everything (thx WarHawk)
--FIX: negate spells in the item’s database weren’t being exported/imported
+-FIX: negate spells in the item's database weren't being exported/imported
 
 
 v0.7.1 BETA (11/4/02)
@@ -438,7 +438,7 @@ v0.7.1 BETA (11/4/02)
 -UP: added a clear button to clear the current room description
 -UP: when typing room descriptions it will automatically go to the next line
 -UP: MiniMap renamed to "Map Editor"
--FIX: database exporter/importer wasn’t exporting/importing a spell’s level restriction field
+-FIX: database exporter/importer wasn't exporting/importing a spell's level restriction field
 
 
 v0.7.0 BETA (09/29/02)
