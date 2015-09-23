@@ -545,5 +545,3 @@ v0.6.0 BETA
 -NEW: help with editing
 -NEW: settings menu; auto-compile, dat file locations, etc
 -UP: improved error message handling
-
-
