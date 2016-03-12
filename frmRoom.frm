@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmRoom 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Room Editor"
@@ -255,14 +255,15 @@ Begin VB.Form frmRoom
       _Version        =   393216
       Style           =   1
       Tabs            =   6
-      Tab             =   2
       TabsPerRow      =   6
       TabHeight       =   520
       TabCaption(0)   =   "General"
       TabPicture(0)   =   "frmRoom.frx":08CA
-      Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Frame2"
-      Tab(0).Control(1)=   "Frame1"
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).Control(0)=   "Frame1"
+      Tab(0).Control(0).Enabled=   0   'False
+      Tab(0).Control(1)=   "Frame2"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).ControlCount=   2
       TabCaption(1)   =   "Exits"
       TabPicture(1)   =   "frmRoom.frx":08E6
@@ -398,81 +399,55 @@ Begin VB.Form frmRoom
       Tab(1).ControlCount=   128
       TabCaption(2)   =   "Placed Items/Monster"
       TabPicture(2)   =   "frmRoom.frx":0902
-      Tab(2).ControlEnabled=   -1  'True
-      Tab(2).Control(0)=   "label(26)"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "label(20)"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "txtPlacedItemsName(9)"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "txtPlacedItemsName(8)"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "txtPlacedItemsName(7)"
-      Tab(2).Control(4).Enabled=   0   'False
-      Tab(2).Control(5)=   "txtPlacedItemsName(6)"
-      Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "txtPlacedItemsName(5)"
-      Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "txtPlacedItemsName(4)"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "txtPlacedItemsName(3)"
-      Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "txtPlacedItemsName(2)"
-      Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "txtPlacedItemsName(1)"
-      Tab(2).Control(10).Enabled=   0   'False
-      Tab(2).Control(11)=   "txtPlacedItemsName(0)"
-      Tab(2).Control(11).Enabled=   0   'False
-      Tab(2).Control(12)=   "txtPlacedItems(0)"
-      Tab(2).Control(12).Enabled=   0   'False
-      Tab(2).Control(13)=   "txtPlacedItems(1)"
-      Tab(2).Control(13).Enabled=   0   'False
-      Tab(2).Control(14)=   "txtPlacedItems(2)"
+      Tab(2).ControlEnabled=   0   'False
+      Tab(2).Control(0)=   "Frame4"
+      Tab(2).Control(1)=   "Frame3"
+      Tab(2).Control(2)=   "cmdEditPlacedItem(9)"
+      Tab(2).Control(3)=   "cmdEditPlacedItem(8)"
+      Tab(2).Control(4)=   "cmdEditPlacedItem(7)"
+      Tab(2).Control(5)=   "cmdEditPlacedItem(6)"
+      Tab(2).Control(6)=   "cmdEditPlacedItem(5)"
+      Tab(2).Control(7)=   "cmdEditPlacedItem(4)"
+      Tab(2).Control(8)=   "cmdEditPlacedItem(3)"
+      Tab(2).Control(9)=   "cmdEditPlacedItem(2)"
+      Tab(2).Control(10)=   "cmdEditPlacedItem(1)"
+      Tab(2).Control(11)=   "cmdEditPlacedItem(0)"
+      Tab(2).Control(12)=   "cmdEditPermNPC"
+      Tab(2).Control(13)=   "txtPermNPC"
+      Tab(2).Control(14)=   "txtPermNPCName"
       Tab(2).Control(14).Enabled=   0   'False
-      Tab(2).Control(15)=   "txtPlacedItems(3)"
-      Tab(2).Control(15).Enabled=   0   'False
-      Tab(2).Control(16)=   "txtPlacedItems(4)"
-      Tab(2).Control(16).Enabled=   0   'False
-      Tab(2).Control(17)=   "txtPlacedItems(5)"
-      Tab(2).Control(17).Enabled=   0   'False
+      Tab(2).Control(15)=   "txtPlacedItems(9)"
+      Tab(2).Control(16)=   "txtPlacedItems(8)"
+      Tab(2).Control(17)=   "txtPlacedItems(7)"
       Tab(2).Control(18)=   "txtPlacedItems(6)"
-      Tab(2).Control(18).Enabled=   0   'False
-      Tab(2).Control(19)=   "txtPlacedItems(7)"
-      Tab(2).Control(19).Enabled=   0   'False
-      Tab(2).Control(20)=   "txtPlacedItems(8)"
-      Tab(2).Control(20).Enabled=   0   'False
-      Tab(2).Control(21)=   "txtPlacedItems(9)"
-      Tab(2).Control(21).Enabled=   0   'False
-      Tab(2).Control(22)=   "txtPermNPCName"
-      Tab(2).Control(22).Enabled=   0   'False
-      Tab(2).Control(23)=   "txtPermNPC"
-      Tab(2).Control(23).Enabled=   0   'False
-      Tab(2).Control(24)=   "cmdEditPermNPC"
-      Tab(2).Control(24).Enabled=   0   'False
-      Tab(2).Control(25)=   "cmdEditPlacedItem(0)"
+      Tab(2).Control(19)=   "txtPlacedItems(5)"
+      Tab(2).Control(20)=   "txtPlacedItems(4)"
+      Tab(2).Control(21)=   "txtPlacedItems(3)"
+      Tab(2).Control(22)=   "txtPlacedItems(2)"
+      Tab(2).Control(23)=   "txtPlacedItems(1)"
+      Tab(2).Control(24)=   "txtPlacedItems(0)"
+      Tab(2).Control(25)=   "txtPlacedItemsName(0)"
       Tab(2).Control(25).Enabled=   0   'False
-      Tab(2).Control(26)=   "cmdEditPlacedItem(1)"
+      Tab(2).Control(26)=   "txtPlacedItemsName(1)"
       Tab(2).Control(26).Enabled=   0   'False
-      Tab(2).Control(27)=   "cmdEditPlacedItem(2)"
+      Tab(2).Control(27)=   "txtPlacedItemsName(2)"
       Tab(2).Control(27).Enabled=   0   'False
-      Tab(2).Control(28)=   "cmdEditPlacedItem(3)"
+      Tab(2).Control(28)=   "txtPlacedItemsName(3)"
       Tab(2).Control(28).Enabled=   0   'False
-      Tab(2).Control(29)=   "cmdEditPlacedItem(4)"
+      Tab(2).Control(29)=   "txtPlacedItemsName(4)"
       Tab(2).Control(29).Enabled=   0   'False
-      Tab(2).Control(30)=   "cmdEditPlacedItem(5)"
+      Tab(2).Control(30)=   "txtPlacedItemsName(5)"
       Tab(2).Control(30).Enabled=   0   'False
-      Tab(2).Control(31)=   "cmdEditPlacedItem(6)"
+      Tab(2).Control(31)=   "txtPlacedItemsName(6)"
       Tab(2).Control(31).Enabled=   0   'False
-      Tab(2).Control(32)=   "cmdEditPlacedItem(7)"
+      Tab(2).Control(32)=   "txtPlacedItemsName(7)"
       Tab(2).Control(32).Enabled=   0   'False
-      Tab(2).Control(33)=   "cmdEditPlacedItem(8)"
+      Tab(2).Control(33)=   "txtPlacedItemsName(8)"
       Tab(2).Control(33).Enabled=   0   'False
-      Tab(2).Control(34)=   "cmdEditPlacedItem(9)"
+      Tab(2).Control(34)=   "txtPlacedItemsName(9)"
       Tab(2).Control(34).Enabled=   0   'False
-      Tab(2).Control(35)=   "Frame3"
-      Tab(2).Control(35).Enabled=   0   'False
-      Tab(2).Control(36)=   "Frame4"
-      Tab(2).Control(36).Enabled=   0   'False
+      Tab(2).Control(35)=   "label(20)"
+      Tab(2).Control(36)=   "label(26)"
       Tab(2).ControlCount=   37
       TabCaption(3)   =   "Visible Items"
       TabPicture(3)   =   "frmRoom.frx":091E
@@ -708,7 +683,7 @@ Begin VB.Form frmRoom
       Begin VB.Frame Frame4 
          Caption         =   "Visible Coins"
          Height          =   2295
-         Left            =   3720
+         Left            =   -71280
          TabIndex        =   446
          Top             =   600
          Width           =   2175
@@ -801,7 +776,7 @@ Begin VB.Form frmRoom
       Begin VB.Frame Frame3 
          Caption         =   "Hidden Coins"
          Height          =   2295
-         Left            =   3720
+         Left            =   -71280
          TabIndex        =   435
          Top             =   3000
          Width           =   2175
@@ -2504,7 +2479,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   9
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   166
          Top             =   4500
          Width           =   195
@@ -2512,7 +2487,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   8
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   163
          Top             =   4200
          Width           =   195
@@ -2520,7 +2495,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   7
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   160
          Top             =   3900
          Width           =   195
@@ -2528,7 +2503,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   6
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   157
          Top             =   3600
          Width           =   195
@@ -2536,7 +2511,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   5
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   154
          Top             =   3300
          Width           =   195
@@ -2544,7 +2519,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   4
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   151
          Top             =   3000
          Width           =   195
@@ -2552,7 +2527,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   3
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   148
          Top             =   2700
          Width           =   195
@@ -2560,7 +2535,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   2
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   145
          Top             =   2400
          Width           =   195
@@ -2568,7 +2543,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   1
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   142
          Top             =   2100
          Width           =   195
@@ -2576,21 +2551,21 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdEditPlacedItem 
          Height          =   195
          Index           =   0
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   139
          Top             =   1800
          Width           =   195
       End
       Begin VB.CommandButton cmdEditPermNPC 
          Height          =   195
-         Left            =   300
+         Left            =   -74700
          TabIndex        =   136
          Top             =   1020
          Width           =   195
       End
       Begin VB.TextBox txtPermNPC 
          Height          =   285
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   137
          Top             =   960
          Width           =   615
@@ -2598,7 +2573,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPermNPCName 
          BackColor       =   &H8000000F&
          Height          =   285
-         Left            =   1215
+         Left            =   -73785
          Locked          =   -1  'True
          TabIndex        =   138
          TabStop         =   0   'False
@@ -3118,7 +3093,7 @@ Begin VB.Form frmRoom
       Begin VB.Frame Frame2 
          Caption         =   "Description"
          Height          =   2835
-         Left            =   -74820
+         Left            =   180
          TabIndex        =   24
          Top             =   360
          Width           =   5715
@@ -3240,7 +3215,7 @@ Begin VB.Form frmRoom
       Begin VB.Frame Frame1 
          Caption         =   "Advanced"
          Height          =   3075
-         Left            =   -74820
+         Left            =   180
          TabIndex        =   37
          Top             =   3180
          Width           =   5715
@@ -3654,7 +3629,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   9
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   167
          Top             =   4500
          Width           =   615
@@ -3662,7 +3637,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   8
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   164
          Top             =   4200
          Width           =   615
@@ -3670,7 +3645,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   7
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   161
          Top             =   3900
          Width           =   615
@@ -3678,7 +3653,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   6
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   158
          Top             =   3600
          Width           =   615
@@ -3686,7 +3661,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   5
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   155
          Top             =   3300
          Width           =   615
@@ -3694,7 +3669,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   4
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   152
          Top             =   3000
          Width           =   615
@@ -3702,7 +3677,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   3
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   149
          Top             =   2700
          Width           =   615
@@ -3710,7 +3685,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   2
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   146
          Top             =   2400
          Width           =   615
@@ -3718,7 +3693,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   1
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   143
          Top             =   2100
          Width           =   615
@@ -3726,7 +3701,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtPlacedItems 
          Height          =   285
          Index           =   0
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   140
          Top             =   1800
          Width           =   615
@@ -3735,7 +3710,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   0
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   141
@@ -3747,7 +3722,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   1
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   144
@@ -3759,7 +3734,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   2
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   147
@@ -3771,7 +3746,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   3
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   150
@@ -3783,7 +3758,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   4
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   153
@@ -3795,7 +3770,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   5
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   156
@@ -3807,7 +3782,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   6
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   159
@@ -3819,7 +3794,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   7
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   162
@@ -3831,7 +3806,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   8
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   165
@@ -3843,7 +3818,7 @@ Begin VB.Form frmRoom
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   9
-         Left            =   1200
+         Left            =   -73800
          Locked          =   -1  'True
          MaxLength       =   30
          TabIndex        =   168
@@ -4385,7 +4360,7 @@ Begin VB.Form frmRoom
          Caption         =   "Permanent NPC"
          Height          =   195
          Index           =   20
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   204
          Top             =   720
          Width           =   1140
@@ -4554,7 +4529,7 @@ Begin VB.Form frmRoom
          Caption         =   "Placed Items"
          Height          =   195
          Index           =   26
-         Left            =   600
+         Left            =   -74400
          TabIndex        =   169
          Top             =   1560
          Width           =   2835

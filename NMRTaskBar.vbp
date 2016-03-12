@@ -1,5 +1,5 @@
 Type=Control
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#D:\WINDOWS\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Module=modDeclares; NMRTask_modDeclares.bas
 Class=clsIcon; NMRTask_clsIcon.cls
 UserControl=NMRTask_ctlTaskBar.ctl
@@ -22,7 +22,7 @@ CompatibleEXE32="NMRTaskBar.ocx"
 VersionCompatible32="1"
 MajorVer=2
 MinorVer=2
-RevisionVer=24
+RevisionVer=25
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="Modified MDI Taskbar Control by syntax53.  Originally created by Gregg Housh from Planet-Source-Code.com: http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=39059&lngWId=1"
