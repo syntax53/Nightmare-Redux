@@ -10,7 +10,7 @@ Public bINIReadOnly As Boolean
 Private ret As String
 
 Public Function ReadINI(ByVal Section As String, ByVal Key As String, _
-    Optional ByVal sAlternateFile As String) As Variant
+    Optional ByVal sAlternateFile As String, Optional ByVal sDefaultVal As String = "0") As Variant
 Dim retlen As Integer
 On Error GoTo error:
 
@@ -21,7 +21,7 @@ ret = Space$(255)
 retlen = GetPrivateProfileString(Section, Key, "", ret, Len(ret), ByVal sAlternateFile)
 If retlen = 0 Then
     
-    Call WriteINI(Section, Key, 0, ByVal sAlternateFile)
+    Call WriteINI(Section, Key, sDefaultVal, ByVal sAlternateFile)
     
     If UCase(Section) = UCase("Windows") Then
         If UCase(Right(Key, 3)) = UCase("Top") Or UCase(Right(Key, 4)) = UCase("Left") Then _
