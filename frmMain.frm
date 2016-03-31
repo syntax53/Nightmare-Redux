@@ -296,6 +296,9 @@ Begin VB.MDIForm frmMain
          Caption         =   "&Ability List Editor"
          Shortcut        =   {F6}
       End
+      Begin VB.Menu mnuControlRoomList 
+         Caption         =   "Create Control Room List"
+      End
       Begin VB.Menu mnuBuildMonsterIndex 
          Caption         =   "Create Monster/&Index List"
          Shortcut        =   ^D
@@ -688,6 +691,20 @@ End Sub
 Private Sub mnuCompileBlank_Click()
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 Call CompileUpdatefile(True)
+End Sub
+
+Private Sub mnuControlRoomList_Click()
+On Error GoTo error:
+
+If FormIsLoaded("frmRoomControlRoomList") Then
+    frmRoomControlRoomList.SetFocus
+Else
+    frmRoomControlRoomList.Show
+End If
+
+Exit Sub
+error:
+Call HandleError
 End Sub
 
 Private Sub mnuDatabaseIndexChange_Click()
