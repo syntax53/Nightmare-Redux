@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmDatabaseImport 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Importer"
@@ -3112,13 +3112,14 @@ Private Function CheckError() As Boolean
 Dim nYesNo As Integer
 
 CheckError = False
+'Debug.Print Err.Description
 If Err.Number = 3265 Then
     If bSkipMissing = True Then
         CheckError = True
         Exit Function
     End If
     
-    nYesNo = MsgBox("This export file is missing some of the required fields that NMR now handles." _
+    nYesNo = MsgBox("A table in this export file (for " & stsStatusBar.Panels(1).Text & ") is missing some of the required fields that NMR now handles." _
         & vbCrLf & "Do you want to continue importing anyway and import what is there?", vbYesNo + vbQuestion)
     
     If nYesNo = vbYes Then
