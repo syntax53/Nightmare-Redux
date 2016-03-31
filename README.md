@@ -1,22 +1,22 @@
-Nightmare Redux is an editor for the game MajorMUD(r).    
+Nightmare Redux is an editor for the game MajorMUD(r).  
 
-v1.7 (4/??/2016) - (by Syntax)    
-------------------------------------------     
--NEW: ability to mark control rooms on the map in the room editor    
+v1.7 (4/??/2016) - (by Syntax)  
+------------------------------------------  
+-NEW: ability to mark control rooms on the map in the room editor  
 -NEW: tool to view and export said list of control rooms and their references  
 -NEW: complete overhaul of database exporter.  support for multiple ranges of records, ability to save config files, **import record numbers from existing database**  
 -NEW: added cross-referencing of class restrictions on learned spells via scrolls and textblocks for MME.  this will require a new version of MME to support it (coming soon).  
 -NEW: added default rooms to exclude on MME exports (currently only the sysop support chamber).  see additional options button.  
 -UP: excluded rooms on MME export will now be completely excluded and not exported at all.  references from those rooms will also be considered as not in the game. added option added to "hide" user-specified excluded rooms instead to retain previous functionality.  
 -UP: added Wrist(2), Eyes and Face to universal modifier's "only if" options  
--UP: added second set of "only if" options on the universal modifier 
+-UP: added second set of "only if" options on the universal modifier  
 -UP: added text on db importer error to help determine which table was missing fields upon import from old exports  
 -UP: updated about pages and links  
 -UP: installer repackaged and updated to newer version  
  
 
 v1.6.2/n (06/01/2007) - (by Ghaleon)  
-------------------------------------------   
+------------------------------------------  
 -BUGFIX: fixed container coin drop fieldmap locations  
 -BUGFIX: fixed item race restriction fieldmap locations  
 -UP: added hidden coins to rooms  
@@ -24,18 +24,18 @@ v1.6.2/n (06/01/2007) - (by Ghaleon)
 -UP: added offset value to actions so they display correctly in mud  
 
 v1.6.1/n (02/03/2006)  
-------------------------------------------   
+------------------------------------------  
 -UP: Added support for v1.11p dat files.  
 
 v1.6/n (07/01/2005)  
-------------------------------------------   
+------------------------------------------  
 General:  
 -BUGFIX: ‘per item’ ‘only if’ on uni mod for monsters and shops  
 -NEW: COMPLETE RECORD NUMBER CHANGER  
 -NEW: monster group/index changer  
 -NEW: slew of filtering options for monsters, items, and spells!  
 -NEW: filter by ability, class, record numbers, and fields!  
--NEW: tool to fix/verify number of uses on items   
+-NEW: tool to fix/verify number of uses on items  
 -NEW: tool to fix number of item uses on monster drops  
 -NEW: tool to combine like items on the ground into one slot  
 -NEW: tool to combine monster experience and experience multiplier  
@@ -56,13 +56,13 @@ General:
 -FIX: canceling on building new monster group/index list  
 
 v1.56/n (07/19/2004)  
-------------------------------------------   
+------------------------------------------  
 General:  
 -NEW: option to add/remove EDITED flag on users  
 -FIX: selection issue on min damage field on item editor  
 
 v1.55/n (07/17/2004)  
-------------------------------------------   
+------------------------------------------  
 General:  
 -UP: all fields with quick-display boxes will auto-update  
 -UP: added select-all text functions for almost every textbox  
@@ -129,7 +129,7 @@ longer store the monster name in the array.  These two elements were
 causing a long delay when erasing the array (closing NMR) and creating it.  
 
 v1.5/n (05/17/2004)  
-------------------------------------------   
+------------------------------------------  
 -NEW: taskbar for open NMR windows (like the windows taskbar)  
 -NEW: textblock line editor! --makes editing scripts much easier  
 -NEW: enhanced the item find to now search users and shops too  
@@ -171,7 +171,7 @@ a database for the first time in awhile, but after that it's real fast.
 + Thanks Demosthenes  
 
 v1.47/n (03/23/2004)  
-------------------------------------------   
+------------------------------------------  
 -NEW: hotkey (5) on map editor to toggle between new/existing rooms  
 -NEW: map editor will auto get the room number of existing adjacent room  
 -NEW: copy/paste options on rooms for "Advanced settings"  
@@ -181,12 +181,12 @@ v1.47/n (03/23/2004)
 -FIX: importer could cut off 30th character in name  
 
 v1.461/n (03/06/2004)  
-------------------------------------------   
+------------------------------------------  
 -UP: Updated MMUD Explorer export  
 -UP: MMUD Explorer export won't export buffer rooms  
 
 v1.46/n (03/03/2004)  
-------------------------------------------   
+------------------------------------------  
 -NEW: gang editor  
 -UP: new format for MMUD Explorer exports  
 -UP: map wont draw rooms that have already been drawn  
@@ -199,7 +199,7 @@ v1.46/n (03/03/2004)
 -FIX: one of the action lines was selecting text incorrectly  
 
 v1.45/n (01/13/2004)  
-------------------------------------------   
+------------------------------------------  
 -NOTE: v1.45n (note the 'n') works with v1.11i through v1.11n, v1.45 is for v1.11o+  
 -NEW: function on user editor to paste items/stats/spells from screen cap  
 -NEW: revamped map editor to give it more cells and the features of the map  
@@ -219,11 +219,11 @@ v1.45/n (01/13/2004)
 -FIX: lots of misc. small fixes  
 
 v1.44 (12/19/2003)  
-------------------------------------------   
+------------------------------------------  
 -UP: compatible /ONLY/ with v1.11o  
 
 v1.43 (11/26/2003)  
-------------------------------------------   
+------------------------------------------  
 -BUGFIX: wasn't exporting/importing monster's death spells  
 -NEW: class editor now has sortable columns (in the works for the others editors)  
 -UP: some coding changes to the mmud explorer export, that coming very soon!  
@@ -233,14 +233,14 @@ v1.43 (11/26/2003)
 -NOTE: to create mmud explorer data files, you will need this version  
 
 v1.42 (09/12/2003)  
-------------------------------------------   
+------------------------------------------  
 -UP: updated the NMR-Quests.txt file for the 5th evil alignment quest (thx Demonic)  
 -FIX: fixed rooms not connecting on map view for some people who use 120dpi  
 -FIX: fixed problem with canceling the map builder  
 -FIX: fixed small problem with the map legend lines showing the wrong color  
 
 v1.4 (09/01/2003)  
-------------------------------------------   
+------------------------------------------  
 -NEW: mapping overhaul: more options, more sizes, follow up/down exits, faster  
 -NEW: can now open multiple copies of the editors  
 -NEW: create a blank update file (for testing, don’t gotta compile everytime)  
@@ -277,7 +277,7 @@ v1.4 (09/01/2003)
 -NOTE: big thanks to locke cole recently for working on database stuff with me  
 
 v1.3 (05/12/2003)  
-------------------------------------------   
+------------------------------------------  
 -BUGFIX: was reading wrong value in the room DB for a room’s spell  
 -NEW: export to mmud explorer (still tweaking), MMud Explorer coming soon  
 -NEW: limited item list creator - scans users, rooms, and shops  
@@ -292,7 +292,7 @@ v1.3 (05/12/2003)
 -UP: can undock windows (doesn't work too well tho, you'll see what I mean)  
 -UP: rewrote pretty much all the code on the ability editor  
 -UP: lots of code rewrites for things dealing with the ability database  
--UP: optimized some loading code in users/monsters/spells/shops/items   
+-UP: optimized some loading code in users/monsters/spells/shops/items  
 -UP: can now enter any part of a user/monster/spell/shop/item in search  
 -UP: textblock/message/room/action editors will now 'goto' when you press enter  
 -UP: textblock editor window can now be resized  
@@ -307,36 +307,36 @@ v1.3 (05/12/2003)
 -FIX: user editor was doubling class and race list on copy or delete  
 
 
-v1.2 (03/03/2003)   
-------------------------------------------   
--NEW: option to use all available cpu for import/export/delete/compile/massrm/map   
--NEW: "only perform action if" options on the universal modifier   
--NEW: a pseudo tool to multiply just boss experience   
--NEW: room exit page now updates the parameters according to exit type   
--NEW: added the "retain item after uses expire" flag to item editor   
+v1.2 (03/03/2003)  
+------------------------------------------  
+-NEW: option to use all available cpu for import/export/delete/compile/massrm/map  
+-NEW: "only perform action if" options on the universal modifier  
+-NEW: a pseudo tool to multiply just boss experience  
+-NEW: room exit page now updates the parameters according to exit type  
+-NEW: added the "retain item after uses expire" flag to item editor  
 -NEW: the user editor user list is now storable by username or bbs name  
 -NEW: find/find next on textblock editor  
--UP: monster attack page now updates the labels according to attack type   
--UP: tweaked the update file compiling process to hopefully make it a little faster   
--UP: added an unknown flag, and 2 unknown values to the item editor   
--UP: room editor now remembers the last room you were on   
--UP: sped up the monster/item/shop/spell list creations   
--UP: added cost as an option for items in universal mod   
--UP: added some info on making backups to the general help   
--FIX: fixed some of the forms jumping around when they load   
--FIX: monster grp/index list was cut off at the end, split it up to two pages   
--FIX: couldn't export to textfiles (thx dxpac)   
+-UP: monster attack page now updates the labels according to attack type  
+-UP: tweaked the update file compiling process to hopefully make it a little faster  
+-UP: added an unknown flag, and 2 unknown values to the item editor  
+-UP: room editor now remembers the last room you were on  
+-UP: sped up the monster/item/shop/spell list creations  
+-UP: added cost as an option for items in universal mod  
+-UP: added some info on making backups to the general help  
+-FIX: fixed some of the forms jumping around when they load  
+-FIX: monster grp/index list was cut off at the end, split it up to two pages  
+-FIX: couldn't export to textfiles (thx dxpac)  
 -NOTE: old export files won’t work with this version  
 
 
 v1.1 (02/15/2003)  
-------------------------------------------   
+------------------------------------------  
 -UP: rewrote some code in the import and export to make it more efficient  
 -FIX: class import wasn’t importing abilities (thx PanterraX!)  
 
 
 v1.0 (02/14/2003)  
-------------------------------------------   
+------------------------------------------  
 -NEW: i decided to 1.0 it, i think everyone is aware it’s really always in ‘beta’  
 -NEW: the 5 previous settings are available to choose from in settings  
 -NEW: tool to search for an item sitting in a room (under tools - rooms)  
@@ -353,14 +353,14 @@ v1.0 (02/14/2003)
 
 
 v0.7.7 BETA (01/27/03)  
-------------------------------------------   
+------------------------------------------  
 -NEW: user merge --merge two user databases  
 -UP: compatibility with v1.11L  
 -FIX: rooms by range for universal modifier wasn’t working (thx durin)  
 
 
 v0.7.6 BETA (01/15/03)  
-------------------------------------------   
+------------------------------------------  
 -NEW: tool to strip characters off the end of the textblocks (temporary workaround)  
 -UP: you can now specify your own file name for exporting (and importing)  
 -UP: less buttons are disabled on the room editor when using the map editor  
@@ -371,18 +371,18 @@ v0.7.6 BETA (01/15/03)
 
 
 v0.7.56 BETA (01/06/03)  
-------------------------------------------   
+------------------------------------------  
 -FIX: importer had trouble importing items  
 
 
 v0.7.55 BETA (01/06/03)  
-------------------------------------------   
+------------------------------------------  
 -NEW: compatibility with v1.11k  
 -UP: updated monster group/index list for v1.11k (in monster help)  
 
 
 v0.7.51 BETA (01/04/03)  
-------------------------------------------   
+------------------------------------------  
 -NEW: compatibility with v1.11j  
 -NEW: option in settings to switch between dat file versions  
 -NEW: exporter now creates an "Info" table, shows the version of NMR and dat files  
@@ -397,13 +397,13 @@ v0.7.51 BETA (01/04/03)
 
 
 v0.7.32 BETA (12/24/02)  
-------------------------------------------   
+------------------------------------------  
 -FIX: hopefully fixed the rest of the crash-on-exit problems  
 -FIX: the exporter was checking for existing exported records all the time  
 
 
 v0.7.3 BETA (12/18/02)  
-------------------------------------------   
+------------------------------------------  
 -UP: you can now cancel the update compiling and map building processes  
 -UP: update comp., mass room, and import/export/deleter all show accurate progress bars  
 -UP: implemented some error prevention for races/classes that didn't exist in an installation  
@@ -418,7 +418,7 @@ v0.7.3 BETA (12/18/02)
 
 
 v0.7.21 BETA (11/24/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: option on file menu to disable database writing  
 -FIX: keypad movement in the map editor was broken (thx Epro)  
 -FIX: fixed some possible problems with a file being in the root directory of a drive  
@@ -426,7 +426,7 @@ v0.7.21 BETA (11/24/02)
 
 
 v0.7.2 BETA (11/14/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: universal modifier --perform math functions on many of the fields within the editors  
 -NEW: added 5 more negate slots to the item editor (thx locke cole)  
 -UP: tool tips on the map editor will now show instantly (hover mouse over a room)  
@@ -443,7 +443,7 @@ v0.7.2 BETA (11/14/02)
 
 
 v0.7.1 BETA (11/4/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: map display from the room editor, displays 1680 rooms (thx scorpion for help on this)  
 -UP: map editor now updates if you make changes in the room editor and hit save  
 -UP: added a clear button to clear the current room description  
@@ -453,14 +453,14 @@ v0.7.1 BETA (11/4/02)
 
 
 v0.7.0 BETA (09/29/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: database import!  
 -NEW: quest organizer -- (props to Demonic for digging through the alignment textblocks)  
 -NEW: new window menu for selecting/tiling/cascading the open windows  
 -UP: edit rooms while using MiniMap  
 -UP: two versions of MiniMap now, a big one and small one  
 -UP: revamped database exporter, allowing for range export  
--UP: added jump buttons next to a lot of the fields, enabling a jump to a record in another   
+-UP: added jump buttons next to a lot of the fields, enabling a jump to a record in another  
 editor  
 -UP: mass room editor now logs errors (and only the critical errors) to a log file  
 -UP: you can now minimize all of the windows  
@@ -473,35 +473,35 @@ editor
 
 
 v0.6.6 BETA (08/20/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: added export to access database in the database exporter  
 -NEW: added a help for monsters, which is currently just my group to index list  
 -UP: added a clear all to all of the user editor lists (items, keys, and spells)  
 -UP: enabled double clicking on an item, key, or spell in the user editor lists to edit it  
--UP: revamped the general page in the spell editor, adding many new editing fields (thx   
+-UP: revamped the general page in the spell editor, adding many new editing fields (thx  
 atma)  
 -UP: added all/none selection to the database exporter  
--UP: added a 'Jump to Last' option to auto jump to the last item in a list after an insert or   
+-UP: added a 'Jump to Last' option to auto jump to the last item in a list after an insert or  
 delete  
--UP: spiffied up the search fields --pressing the right arrow key now searches for the next   
+-UP: spiffied up the search fields --pressing the right arrow key now searches for the next  
 item  
 -UP: added ini entries to save minimap settings, minimap position, and database export path  
 -FIX: fixed the CP field in user editor to allow negative number input (thx bad_hex)  
 
 
 v0.6.5 BETA (07/23/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: added a tool to reset all of the monster's last killed time  
 -NEW: added the time & date stamp of when a monster was last killed to the monster editor  
 -UP: changed the font on the preview window so it displays the textblocks MUCH better  
--FIX: added the "Part#" (formerly StepTo) to the textblocks (big thx to kix on noticing this   
+-FIX: added the "Part#" (formerly StepTo) to the textblocks (big thx to kix on noticing this  
 missing)  
--FIX: the missing part# created problems deleting a range of textblocks and misc other   
+-FIX: the missing part# created problems deleting a range of textblocks and misc other  
 things  
 
 
 v0.6.4 BETA (07/22/02)  
-------------------------------------------   
+------------------------------------------  
 -NEW: added a help for messages (thx MrBlack for some help)  
 -UP: added range deletion for all dats (via the database deleter)  
 -UP: reorganized the data of the exported text files  
@@ -516,7 +516,7 @@ v0.6.4 BETA (07/22/02)
 
 
 v0.6.3 BETA (07/18/02)  
-------------------------------------------   
+------------------------------------------  
 -UP: spruced up the menu with a few more shortcuts  
 -UP: added 'select all' and 'select none' to the mass room editor  
 -UP: added option on the MiniMap to specify the next incremented room number  
@@ -526,23 +526,23 @@ v0.6.3 BETA (07/18/02)
 
 
 v0.6.2 BETA (07/16/02)  
-------------------------------------------   
--UP: reconfigured cap on monster HPs, new cap should be 65535   
--FIX: fixed bug with the monster divider (it set the exp to 1!)   
+------------------------------------------  
+-UP: reconfigured cap on monster HPs, new cap should be 65535  
+-FIX: fixed bug with the monster divider (it set the exp to 1!)  
 -FIX: fixed some bad grammar in the room editor ;-) (thx MrBlack)  
 
 
-v0.6.1 BETA (07/16/02)   
-------------------------------------------   
+v0.6.1 BETA (07/16/02)  
+------------------------------------------  
 -NEW: Added functionality to walk around and create rooms via the map editor  
--NEW: Added the ability to remove all item level restrictions   
--UP: Renamed the 'room range editor' to the 'mass room editor'   
--UP: Added the ability to delete a range of rooms in the mass room editor   
+-NEW: Added the ability to remove all item level restrictions  
+-UP: Renamed the 'room range editor' to the 'mass room editor'  
+-UP: Added the ability to delete a range of rooms in the mass room editor  
 -FIX: few bug fixes  
 
 
 v0.6.0 BETA  
-------------------------------------------   
+------------------------------------------  
 -NEW: compatibility with (and only with) the mod9 dat files  
 -NEW: compile an update file  
 -NEW: mass room editor  
