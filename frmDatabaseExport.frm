@@ -1,13 +1,13 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmDatabaseExport 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Exporter"
-   ClientHeight    =   4455
+   ClientHeight    =   7230
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   8385
+   ClientWidth     =   12885
    ClipControls    =   0   'False
    BeginProperty Font 
       Name            =   "MS Sans Serif"
@@ -22,8 +22,775 @@ Begin VB.Form frmDatabaseExport
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   4455
-   ScaleWidth      =   8385
+   ScaleHeight     =   7230
+   ScaleWidth      =   12885
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   1
+      Left            =   3240
+      TabIndex        =   51
+      Top             =   1260
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   2
+      Left            =   6060
+      TabIndex        =   52
+      Top             =   1260
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   5
+      Left            =   6060
+      TabIndex        =   53
+      Top             =   2940
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   0
+      Left            =   360
+      TabIndex        =   54
+      Top             =   1260
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   3
+      Left            =   360
+      TabIndex        =   55
+      Top             =   2940
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   4
+      Left            =   3240
+      TabIndex        =   56
+      Top             =   2940
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   6
+      Left            =   360
+      TabIndex        =   57
+      Top             =   4620
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   7
+      Left            =   3240
+      TabIndex        =   58
+      Top             =   4620
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin MSComctlLib.ListView lvList 
+      Height          =   1335
+      Index           =   8
+      Left            =   6060
+      TabIndex        =   50
+      Top             =   4620
+      Width           =   2595
+      _ExtentX        =   4577
+      _ExtentY        =   2355
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      FullRowSelect   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   0
+      NumItems        =   0
+   End
+   Begin VB.Frame fraConfig 
+      Caption         =   "Config File"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   2295
+      Left            =   9060
+      TabIndex        =   46
+      Top             =   60
+      Width           =   3735
+      Begin VB.TextBox txtCustom 
+         Height          =   345
+         Left            =   120
+         MaxLength       =   20
+         TabIndex        =   48
+         Text            =   "Custom Export"
+         Top             =   540
+         Width           =   3495
+      End
+      Begin VB.TextBox txtConfigFile 
+         BackColor       =   &H8000000F&
+         Height          =   795
+         Left            =   120
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         TabIndex        =   47
+         Top             =   900
+         Width           =   3495
+      End
+      Begin VB.CommandButton cmdSelectConfig 
+         Caption         =   "&Load Config ..."
+         Height          =   435
+         Left            =   120
+         TabIndex        =   20
+         Top             =   1740
+         Width           =   1695
+      End
+      Begin VB.CommandButton cmdSaveConfig 
+         Caption         =   "&Save Config ..."
+         Height          =   435
+         Left            =   1920
+         TabIndex        =   21
+         Top             =   1740
+         Width           =   1695
+      End
+      Begin VB.Label Label2 
+         AutoSize        =   -1  'True
+         Caption         =   "Identifier"
+         Height          =   195
+         Index           =   0
+         Left            =   120
+         TabIndex        =   49
+         Top             =   300
+         Width           =   765
+      End
+   End
+   Begin VB.Frame fra1 
+      Caption         =   "What to Export"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   6495
+      Left            =   120
+      TabIndex        =   32
+      Top             =   60
+      Width           =   8775
+      Begin VB.CommandButton cmdClearAll 
+         Caption         =   "Clear All"
+         Height          =   315
+         Left            =   7680
+         TabIndex        =   7
+         Top             =   480
+         Width           =   915
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   8
+         Left            =   7440
+         TabIndex        =   16
+         Top             =   4320
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   7
+         Left            =   4560
+         TabIndex        =   15
+         Top             =   4320
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   6
+         Left            =   1680
+         TabIndex        =   14
+         Top             =   4320
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   5
+         Left            =   7440
+         TabIndex        =   13
+         Top             =   2640
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   4
+         Left            =   4560
+         TabIndex        =   12
+         Top             =   2640
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   3
+         Left            =   1680
+         TabIndex        =   11
+         Top             =   2640
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   2
+         Left            =   7440
+         TabIndex        =   10
+         Top             =   960
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   1
+         Left            =   4560
+         TabIndex        =   9
+         Top             =   960
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExportAll 
+         Caption         =   "Export All"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Index           =   0
+         Left            =   1680
+         TabIndex        =   8
+         Top             =   960
+         Value           =   1  'Checked
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkActions 
+         Caption         =   "Actions (all)"
+         Height          =   255
+         Left            =   720
+         TabIndex        =   17
+         Top             =   6120
+         Width           =   1575
+      End
+      Begin VB.CheckBox chkUsers 
+         Caption         =   "Users (all)"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   3600
+         TabIndex        =   18
+         Top             =   6120
+         Width           =   1395
+      End
+      Begin VB.CheckBox chkBankbooks 
+         Caption         =   "BankBooks (all)"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   6360
+         TabIndex        =   19
+         Top             =   6120
+         Width           =   1695
+      End
+      Begin VB.TextBox txtMap 
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   3060
+         TabIndex        =   1
+         Text            =   "1"
+         Top             =   480
+         Width           =   615
+      End
+      Begin VB.CommandButton cmdClear 
+         Caption         =   "Clear"
+         Height          =   315
+         Left            =   7680
+         TabIndex        =   6
+         Top             =   180
+         Width           =   915
+      End
+      Begin VB.CommandButton cmdRemove 
+         Caption         =   "&Remove"
+         Height          =   495
+         Left            =   6540
+         TabIndex        =   5
+         Top             =   240
+         Width           =   1035
+      End
+      Begin VB.CommandButton cmdAdd 
+         Caption         =   "&Add"
+         Height          =   495
+         Left            =   5580
+         TabIndex        =   4
+         Top             =   240
+         Width           =   855
+      End
+      Begin VB.TextBox txtTo 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   4680
+         TabIndex        =   3
+         Text            =   "1"
+         Top             =   480
+         Width           =   735
+      End
+      Begin VB.TextBox txtFrom 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   3780
+         TabIndex        =   2
+         Text            =   "1"
+         Top             =   480
+         Width           =   735
+      End
+      Begin VB.ComboBox cmbDB 
+         Height          =   315
+         Left            =   240
+         Style           =   2  'Dropdown List
+         TabIndex        =   0
+         Top             =   480
+         Width           =   2595
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   8
+         Left            =   5925
+         Top             =   4545
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   7
+         Left            =   3105
+         Top             =   4545
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   6
+         Left            =   225
+         Top             =   4545
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   5
+         Left            =   5925
+         Top             =   2865
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   4
+         Left            =   3105
+         Top             =   2865
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   3
+         Left            =   225
+         Top             =   2865
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   2
+         Left            =   5925
+         Top             =   1185
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   1
+         Left            =   3105
+         Top             =   1185
+         Width           =   2625
+      End
+      Begin VB.Shape shpOutline 
+         BorderColor     =   &H8000000D&
+         BorderWidth     =   3
+         Height          =   1365
+         Index           =   0
+         Left            =   225
+         Top             =   1185
+         Width           =   2625
+      End
+      Begin VB.Line Line1 
+         X1              =   300
+         X2              =   8520
+         Y1              =   6000
+         Y2              =   6000
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   8
+         Left            =   5940
+         TabIndex        =   45
+         Top             =   4320
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   7
+         Left            =   3120
+         TabIndex        =   44
+         Top             =   4320
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   6
+         Left            =   240
+         TabIndex        =   43
+         Top             =   4320
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   5
+         Left            =   5940
+         TabIndex        =   42
+         Top             =   2640
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   4
+         Left            =   3120
+         TabIndex        =   41
+         Top             =   2640
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   3
+         Left            =   240
+         TabIndex        =   40
+         Top             =   2640
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   2
+         Left            =   5940
+         TabIndex        =   39
+         Top             =   960
+         Width           =   1155
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   1
+         Left            =   3120
+         TabIndex        =   38
+         Top             =   960
+         Width           =   1155
+      End
+      Begin VB.Label lblMap 
+         Caption         =   "Map"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   3060
+         TabIndex        =   37
+         Top             =   240
+         Width           =   495
+      End
+      Begin VB.Line Line2 
+         BorderWidth     =   3
+         X1              =   240
+         X2              =   8580
+         Y1              =   840
+         Y2              =   840
+      End
+      Begin VB.Label lblDB 
+         Caption         =   "Database:"
+         Height          =   255
+         Index           =   0
+         Left            =   240
+         TabIndex        =   36
+         Top             =   960
+         Width           =   1155
+      End
+      Begin VB.Label Label3 
+         Caption         =   "Database:"
+         Height          =   255
+         Left            =   240
+         TabIndex        =   35
+         Top             =   240
+         Width           =   1155
+      End
+      Begin VB.Label Label2 
+         Caption         =   "To"
+         Height          =   255
+         Index           =   1
+         Left            =   4680
+         TabIndex        =   34
+         Top             =   240
+         Width           =   615
+      End
+      Begin VB.Label Label1 
+         Caption         =   "From"
+         Height          =   255
+         Index           =   0
+         Left            =   3780
+         TabIndex        =   33
+         Top             =   240
+         Width           =   615
+      End
+   End
+   Begin VB.CommandButton cmdImportRecordNumbers 
+      Caption         =   "Import Record Numbers from Database..."
+      Height          =   1035
+      Left            =   9720
+      TabIndex        =   22
+      Top             =   2580
+      Width           =   2475
+   End
    Begin VB.Frame fra2 
       Caption         =   "File Format"
       BeginProperty Font 
@@ -35,17 +802,26 @@ Begin VB.Form frmDatabaseExport
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   675
-      Left            =   120
-      TabIndex        =   74
-      Top             =   3060
-      Width           =   5295
+      Height          =   1695
+      Left            =   9060
+      TabIndex        =   29
+      Top             =   3960
+      Width           =   3735
+      Begin VB.CheckBox chkZeroUserInteraction 
+         Caption         =   """Reset"" User Interactable Fields on Export (Cash, Item Uses, Etc)"
+         Height          =   375
+         Left            =   180
+         TabIndex        =   59
+         Top             =   1200
+         Value           =   1  'Checked
+         Width           =   3435
+      End
       Begin VB.CommandButton cmdQ 
          Caption         =   "?"
          Height          =   255
-         Left            =   4920
-         TabIndex        =   67
-         Top             =   270
+         Left            =   2280
+         TabIndex        =   28
+         Top             =   840
          Width           =   210
       End
       Begin VB.CheckBox chkOneExpField 
@@ -60,10 +836,10 @@ Begin VB.Form frmDatabaseExport
             Strikethrough   =   0   'False
          EndProperty
          Height          =   195
-         Left            =   3000
-         TabIndex        =   66
+         Left            =   480
+         TabIndex        =   25
          ToolTipText     =   "This is just for people who need the experience in one field when doing advanced operations outside of NMR."
-         Top             =   300
+         Top             =   900
          Width           =   1815
       End
       Begin VB.OptionButton optAccessDB 
@@ -78,9 +854,9 @@ Begin VB.Form frmDatabaseExport
             Strikethrough   =   0   'False
          EndProperty
          Height          =   195
-         Left            =   1320
-         TabIndex        =   65
-         Top             =   300
+         Left            =   180
+         TabIndex        =   24
+         Top             =   600
          Value           =   -1  'True
          Width           =   1635
       End
@@ -97,7 +873,7 @@ Begin VB.Form frmDatabaseExport
          EndProperty
          Height          =   195
          Left            =   180
-         TabIndex        =   64
+         TabIndex        =   23
          Top             =   300
          Width           =   1035
       End
@@ -106,10 +882,10 @@ Begin VB.Form frmDatabaseExport
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   76
-      Top             =   4200
-      Width           =   8385
-      _ExtentX        =   14790
+      TabIndex        =   31
+      Top             =   6975
+      Width           =   12885
+      _ExtentX        =   22728
       _ExtentY        =   450
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
@@ -118,7 +894,7 @@ Begin VB.Form frmDatabaseExport
          EndProperty
          BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   12171
+            Object.Width           =   20108
          EndProperty
       EndProperty
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -132,1006 +908,37 @@ Begin VB.Form frmDatabaseExport
       EndProperty
    End
    Begin MSComctlLib.ProgressBar ProgressBar 
-      Height          =   255
-      Left            =   60
-      TabIndex        =   75
-      Top             =   3840
+      Height          =   315
+      Left            =   120
+      TabIndex        =   30
+      Top             =   6660
       Visible         =   0   'False
-      Width           =   8235
-      _ExtentX        =   14526
-      _ExtentY        =   450
+      Width           =   12615
+      _ExtentX        =   22251
+      _ExtentY        =   556
       _Version        =   393216
       Appearance      =   1
    End
    Begin VB.CommandButton cmdCancel 
       Cancel          =   -1  'True
       Caption         =   "&Cancel / Close"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   435
-      Left            =   6900
-      TabIndex        =   69
-      Top             =   3240
-      Width           =   1395
+      Height          =   495
+      Left            =   11040
+      TabIndex        =   27
+      Top             =   6000
+      Width           =   1695
    End
    Begin VB.CommandButton cmdGo 
       Caption         =   "&Export"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   435
-      Left            =   5640
-      TabIndex        =   68
-      Top             =   3240
-      Width           =   1095
-   End
-   Begin VB.Frame fra1 
-      Caption         =   "Databases to Export"
-      BeginProperty Font 
-         Name            =   "MS Sans Serif"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   2895
-      Left            =   120
-      TabIndex        =   0
-      Top             =   120
-      Width           =   8175
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         BeginProperty Font 
-            Name            =   "Small Fonts"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Index           =   10
-         Left            =   6840
-         TabIndex        =   6
-         Top             =   420
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         BeginProperty Font 
-            Name            =   "Small Fonts"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Index           =   0
-         Left            =   2880
-         TabIndex        =   5
-         Top             =   420
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   9
-         Left            =   7020
-         TabIndex        =   57
-         Top             =   1380
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   8
-         Left            =   6840
-         TabIndex        =   51
-         Top             =   1020
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   7
-         Left            =   6840
-         TabIndex        =   46
-         Top             =   660
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   6
-         Left            =   2880
-         TabIndex        =   38
-         Top             =   2460
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   5
-         Left            =   2880
-         TabIndex        =   33
-         Top             =   2100
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   4
-         Left            =   2880
-         TabIndex        =   28
-         Top             =   1740
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   3
-         Left            =   2880
-         TabIndex        =   23
-         Top             =   1380
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   2
-         Left            =   2880
-         TabIndex        =   18
-         Top             =   1020
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdCopyTo 
-         Caption         =   ">"
-         Height          =   315
-         Index           =   1
-         Left            =   2880
-         TabIndex        =   13
-         Top             =   660
-         Width           =   195
-      End
-      Begin VB.CommandButton cmdGetLasts 
-         Caption         =   "Get last Record #s"
-         BeginProperty Font 
-            Name            =   "Small Fonts"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   315
-         Left            =   6120
-         TabIndex        =   63
-         Top             =   2370
-         Width           =   1635
-      End
-      Begin VB.CommandButton cmdGetFirsts 
-         Caption         =   "Get first Record #s"
-         BeginProperty Font 
-            Name            =   "Small Fonts"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   315
-         Left            =   6120
-         TabIndex        =   62
-         Top             =   2070
-         Width           =   1635
-      End
-      Begin VB.TextBox txtTextblocksFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   6000
-         TabIndex        =   50
-         Text            =   "0"
-         Top             =   1051
-         Width           =   735
-      End
-      Begin VB.TextBox txtMessagesFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   6000
-         TabIndex        =   45
-         Text            =   "1"
-         Top             =   690
-         Width           =   735
-      End
-      Begin VB.TextBox txtClassesFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   2160
-         TabIndex        =   37
-         Text            =   "1"
-         Top             =   2495
-         Width           =   615
-      End
-      Begin VB.TextBox txtRacesFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   2160
-         TabIndex        =   32
-         Text            =   "1"
-         Top             =   2134
-         Width           =   615
-      End
-      Begin VB.TextBox txtShopsFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   2160
-         TabIndex        =   27
-         Text            =   "1"
-         Top             =   1773
-         Width           =   615
-      End
-      Begin VB.TextBox txtSpellsFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   2160
-         TabIndex        =   22
-         Text            =   "1"
-         Top             =   1412
-         Width           =   615
-      End
-      Begin VB.TextBox txtMonstersFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   2160
-         TabIndex        =   17
-         Text            =   "1"
-         Top             =   1051
-         Width           =   615
-      End
-      Begin VB.TextBox txtItemsFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   2160
-         TabIndex        =   12
-         Text            =   "1"
-         Top             =   690
-         Width           =   615
-      End
-      Begin VB.TextBox txtRoomsFrom 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   6360
-         TabIndex        =   56
-         Text            =   "1"
-         Top             =   1412
-         Width           =   615
-      End
-      Begin VB.TextBox txtRoomsMap 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   6000
-         TabIndex        =   55
-         Text            =   "1"
-         Top             =   1412
-         Width           =   315
-      End
-      Begin VB.CheckBox chkItems 
-         Caption         =   "Items"
-         Height          =   255
-         Left            =   360
-         TabIndex        =   10
-         Top             =   705
-         Width           =   1275
-      End
-      Begin VB.CheckBox chkBankbooks 
-         Caption         =   "BankBooks"
-         Enabled         =   0   'False
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   61
-         Top             =   2515
-         Width           =   1395
-      End
-      Begin VB.CheckBox chkUsers 
-         Caption         =   "Users"
-         Enabled         =   0   'False
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   60
-         Top             =   2153
-         Width           =   1395
-      End
-      Begin VB.CheckBox chkTextblocks 
-         Caption         =   "Textblocks"
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   48
-         Top             =   1067
-         Width           =   1395
-      End
-      Begin VB.CheckBox chkMessages 
-         Caption         =   "Messages"
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   43
-         Top             =   705
-         Width           =   1395
-      End
-      Begin VB.CheckBox chkActions 
-         Caption         =   "Actions"
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   59
-         Top             =   1791
-         Width           =   1395
-      End
-      Begin VB.CheckBox chkRooms 
-         Caption         =   "Rooms"
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   53
-         Top             =   1429
-         Width           =   1395
-      End
-      Begin VB.CheckBox chkClasses 
-         Caption         =   "Classes"
-         Height          =   255
-         Left            =   360
-         TabIndex        =   35
-         Top             =   2515
-         Width           =   1275
-      End
-      Begin VB.CheckBox chkRaces 
-         Caption         =   "Races"
-         Height          =   255
-         Left            =   360
-         TabIndex        =   30
-         Top             =   2153
-         Width           =   1275
-      End
-      Begin VB.CheckBox chkShops 
-         Caption         =   "Shops"
-         Height          =   255
-         Left            =   360
-         TabIndex        =   25
-         Top             =   1791
-         Width           =   1275
-      End
-      Begin VB.CheckBox chkSpells 
-         Caption         =   "Spells"
-         Height          =   255
-         Left            =   360
-         TabIndex        =   20
-         Top             =   1429
-         Width           =   1275
-      End
-      Begin VB.CheckBox chkMonsters 
-         Caption         =   "Monsters"
-         Height          =   255
-         Left            =   360
-         TabIndex        =   15
-         Top             =   1067
-         Width           =   1275
-      End
-      Begin VB.CheckBox chkTextblocksAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   5580
-         TabIndex        =   49
-         Top             =   1080
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkMessagesAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   5580
-         TabIndex        =   44
-         Top             =   720
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkActionsAll 
-         Caption         =   "Check1"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   5580
-         TabIndex        =   71
-         Top             =   1800
-         Value           =   2  'Grayed
-         Width           =   195
-      End
-      Begin VB.CheckBox chkRoomsAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   5580
-         TabIndex        =   54
-         Top             =   1440
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkClassesAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1740
-         TabIndex        =   36
-         Top             =   2545
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkRacesAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1740
-         TabIndex        =   31
-         Top             =   2220
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkShopsAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1740
-         TabIndex        =   26
-         Top             =   1821
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkSpellsAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1740
-         TabIndex        =   21
-         Top             =   1459
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.CheckBox chkMonstersAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1740
-         TabIndex        =   16
-         Top             =   1097
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.TextBox txtTextblocksTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   7140
-         TabIndex        =   52
-         Text            =   "9999"
-         Top             =   1051
-         Width           =   795
-      End
-      Begin VB.TextBox txtMessagesTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   7140
-         TabIndex        =   47
-         Text            =   "9999"
-         Top             =   690
-         Width           =   795
-      End
-      Begin VB.TextBox txtClassesTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3180
-         TabIndex        =   39
-         Text            =   "9999"
-         Top             =   2495
-         Width           =   615
-      End
-      Begin VB.TextBox txtRacesTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3180
-         TabIndex        =   34
-         Text            =   "9999"
-         Top             =   2134
-         Width           =   615
-      End
-      Begin VB.TextBox txtShopsTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3180
-         TabIndex        =   29
-         Text            =   "9999"
-         Top             =   1773
-         Width           =   615
-      End
-      Begin VB.TextBox txtSpellsTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3180
-         TabIndex        =   24
-         Text            =   "9999"
-         Top             =   1412
-         Width           =   615
-      End
-      Begin VB.TextBox txtMonstersTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3180
-         TabIndex        =   19
-         Text            =   "9999"
-         Top             =   1051
-         Width           =   615
-      End
-      Begin VB.CheckBox chkItemsAll 
-         Caption         =   "Check1"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1740
-         TabIndex        =   11
-         Top             =   720
-         Value           =   1  'Checked
-         Width           =   195
-      End
-      Begin VB.TextBox txtItemsTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3180
-         TabIndex        =   14
-         Text            =   "9999"
-         Top             =   690
-         Width           =   615
-      End
-      Begin VB.CheckBox Check1 
-         Caption         =   "Check1"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   5580
-         TabIndex        =   73
-         Top             =   2535
-         Value           =   2  'Grayed
-         Width           =   195
-      End
-      Begin VB.CheckBox Check2 
-         Caption         =   "Check1"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   5580
-         TabIndex        =   72
-         Top             =   2160
-         Value           =   2  'Grayed
-         Width           =   195
-      End
-      Begin VB.TextBox txtRoomsTo 
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   7260
-         TabIndex        =   58
-         Text            =   "9999"
-         Top             =   1412
-         Width           =   675
-      End
-      Begin VB.CommandButton cmdNone 
-         Caption         =   "None"
-         BeginProperty Font 
-            Name            =   "MS Serif"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   780
-         TabIndex        =   4
-         Top             =   360
-         Width           =   495
-      End
-      Begin VB.CommandButton cmdAll 
-         Caption         =   "All"
-         BeginProperty Font 
-            Name            =   "MS Serif"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   300
-         TabIndex        =   3
-         Top             =   360
-         Width           =   495
-      End
-      Begin VB.Label lblAll 
-         Caption         =   "All"
-         Height          =   195
-         Index           =   1
-         Left            =   5580
-         TabIndex        =   40
-         Top             =   420
-         Width           =   375
-      End
-      Begin VB.Label Label20 
-         Alignment       =   2  'Center
-         Caption         =   "To"
-         Height          =   255
-         Left            =   7260
-         TabIndex        =   42
-         Top             =   420
-         Width           =   615
-      End
-      Begin VB.Label Label19 
-         Alignment       =   2  'Center
-         Caption         =   "From"
-         Height          =   255
-         Left            =   6000
-         TabIndex        =   41
-         Top             =   420
-         Width           =   615
-      End
-      Begin VB.Label Label18 
-         Alignment       =   2  'Center
-         Caption         =   "| -------------- range -------------- |"
-         Enabled         =   0   'False
-         Height          =   195
-         Left            =   5460
-         TabIndex        =   2
-         Top             =   195
-         Width           =   2595
-      End
-      Begin VB.Label Label11 
-         Caption         =   "| ------------ range ------------ |"
-         Enabled         =   0   'False
-         Height          =   195
-         Left            =   1620
-         TabIndex        =   1
-         Top             =   195
-         Width           =   2295
-      End
-      Begin VB.Label Label17 
-         Caption         =   "Map"
-         BeginProperty Font 
-            Name            =   "Times New Roman"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   6000
-         TabIndex        =   70
-         Top             =   1680
-         Width           =   315
-      End
-      Begin VB.Label Label16 
-         Alignment       =   2  'Center
-         Caption         =   "From"
-         Height          =   255
-         Left            =   2160
-         TabIndex        =   8
-         Top             =   420
-         Width           =   615
-      End
-      Begin VB.Label Label14 
-         Alignment       =   2  'Center
-         Caption         =   "To"
-         Height          =   255
-         Left            =   3180
-         TabIndex        =   9
-         Top             =   420
-         Width           =   615
-      End
-      Begin VB.Label lblAll 
-         Caption         =   "All"
-         Height          =   195
-         Index           =   0
-         Left            =   1740
-         TabIndex        =   7
-         Top             =   420
-         Width           =   375
-      End
+      Height          =   495
+      Left            =   9060
+      TabIndex        =   26
+      Top             =   6000
+      Width           =   1515
    End
    Begin MSComDlg.CommonDialog CommonDialog1 
-      Left            =   5460
-      Top             =   3180
+      Left            =   10560
+      Top             =   5400
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
@@ -1160,6 +967,7 @@ Dim tabShops As Recordset
 Dim tabRooms As Recordset
 
 Dim bStopExport As Boolean
+Dim bCheckSave As Boolean
 
 Dim nScale As Integer
 Dim nScaleCount As Long
@@ -1179,6 +987,7 @@ Dim UsersTextfile As String
 Dim BankbooksTextfile As String
 Dim TextblocksTextfile As String
 Dim sExportPath As String
+Dim sConfigFile As String
 
 Private Sub SetRange(ByVal MaxValue As Double)
 Dim nNewMax As Integer
@@ -1228,7 +1037,7 @@ Select Case x
     Case 6: txtClassesTo.Text = txtClassesFrom.Text
     Case 7: txtMessagesTo.Text = txtMessagesFrom.Text
     Case 8: txtTextblocksTo.Text = txtTextblocksFrom.Text
-    Case 9: txtRoomsTo.Text = txtRoomsFrom.Text
+    'Case 9: txtRoomsTo.Text = txtRoomsFrom.Text
 End Select
 
 If Index = 0 Or Index = 10 Then
@@ -1239,69 +1048,438 @@ End If
 
 End Sub
 
+Private Sub chkActions_Click()
+bCheckSave = True
+End Sub
+
+Private Sub chkBankbooks_Click()
+bCheckSave = True
+End Sub
+
+Private Sub chkExportAll_Click(Index As Integer)
+bCheckSave = True
+Call UpdateListStuff
+End Sub
+
+Private Sub chkOneExpField_Click()
+bCheckSave = True
+End Sub
+
+Private Sub chkUsers_Click()
+bCheckSave = True
+End Sub
+
+Private Sub cmbDB_Click()
+Dim bEn As Boolean
+
+If cmbDB.ListIndex = 8 Then bEn = True
+lblMap.Enabled = bEn
+txtMap.Enabled = bEn
+Call UpdateListStuff
+End Sub
+
+Private Sub cmdAdd_Click()
+Dim oLI As ListItem
+Dim nFrom As Long, nTo As Long, nMap As Long
+On Error GoTo error:
+
+If cmbDB.ListIndex < 0 Then Exit Sub
+
+nFrom = Val(txtFrom.Text)
+nTo = Val(txtTo.Text)
+nMap = Val(txtMap.Text)
+
+If nTo < 1 Then Exit Sub
+If nFrom < 1 And Not cmbDB.ListIndex = 7 Then Exit Sub
+If nTo < nFrom Then Exit Sub
+If cmbDB.ListIndex = 8 And nMap < 1 Then Exit Sub
+
+Set oLI = lvList(cmbDB.ListIndex).ListItems.add
+If cmbDB.ListIndex = 8 Then
+    oLI.Text = nMap
+    oLI.ListSubItems.add 1, , nFrom
+    oLI.ListSubItems.add 2, , nTo
+Else
+    oLI.Text = nFrom
+    oLI.ListSubItems.add 1, , nTo
+End If
+chkExportAll(cmbDB.ListIndex).Value = 0
+
+Call CombineRanges
+
+bCheckSave = True
+
+out:
+Set oLI = Nothing
+Exit Sub
+error:
+Call HandleError("cmdAdd_Click")
+Resume out:
+End Sub
+
+Private Sub cmdClear_Click()
+If cmbDB.ListIndex < 0 Then Exit Sub
+lvList(cmbDB.ListIndex).ListItems.clear
+bCheckSave = True
+End Sub
+
+Private Sub cmdClearAll_Click()
+Dim nYesNo As Integer, x As Integer
+nYesNo = MsgBox("Clear all lists?", vbQuestion + vbYesNo)
+If nYesNo <> vbYes Then Exit Sub
+For x = 0 To 8
+    lvList(x).ListItems.clear
+    chkExportAll(x).Value = 1
+Next x
+bCheckSave = True
+End Sub
+
+Private Sub cmdImportRecordNumbers_Click()
+On Error GoTo error:
+Dim oLI As ListItem, nTotalRec As Long
+Dim sTemp As String, nYesNo As Integer, catDB As ADOX.Catalog
+Dim fso As FileSystemObject, x As Integer, y As Integer, nTemp As Integer
+Dim nLastMap As Long, nFirstRoom As Long, nLastRoom As Long
+
+Set fso = CreateObject("Scripting.FileSystemObject")
+sExportPath = ReadINI("Options", "ExportPath")
+If Not fso.FolderExists(sExportPath) Then sExportPath = App.Path
+
+sTemp = ReadINI("Options", "ExportFileName")
+If Len(sTemp) < 5 Then sTemp = "NMR-DataExport.mdb"
+
+CommonDialog1.Filter = "MDB Files (*.mdb)|*.mdb"
+CommonDialog1.DialogTitle = "Select Export File"
+CommonDialog1.FileName = sTemp
+CommonDialog1.InitDir = sExportPath
+
+On Error GoTo out:
+CommonDialog1.ShowOpen
+If CommonDialog1.FileName = "" Then GoTo out:
+
+On Error GoTo error:
+sDataSource = CommonDialog1.FileName
+
+If Not LCase(Right(sDataSource, 4)) = ".mdb" Then sDataSource = sDataSource & ".mdb"
+
+sTemp = CommonDialog1.FileTitle
+If Not LCase(Right(sTemp, 4)) = ".mdb" Then sTemp = sTemp & ".mdb"
+
+If Not fso.FileExists(sDataSource) = True Then
+    MsgBox "File not found!", vbExclamation
+    GoTo out:
+End If
+
+Set tabRooms = Nothing
+Set tabItems = Nothing
+Set tabClasses = Nothing
+Set tabRaces = Nothing
+Set tabSpells = Nothing
+Set tabMonsters = Nothing
+Set tabShops = Nothing
+Set tabMessages = Nothing
+Set tabTextblocks = Nothing
+
+Set DB = OpenDatabase(sDataSource)
+Call OpenTables
+
+nTotalRec = 0
+If Not tabRooms Is Nothing Then nTotalRec = nTotalRec + tabRooms.RecordCount
+If Not tabItems Is Nothing Then nTotalRec = nTotalRec + tabItems.RecordCount
+If Not tabClasses Is Nothing Then nTotalRec = nTotalRec + tabClasses.RecordCount
+If Not tabRaces Is Nothing Then nTotalRec = nTotalRec + tabRaces.RecordCount
+If Not tabSpells Is Nothing Then nTotalRec = nTotalRec + tabSpells.RecordCount
+If Not tabMonsters Is Nothing Then nTotalRec = nTotalRec + tabMonsters.RecordCount
+If Not tabShops Is Nothing Then nTotalRec = nTotalRec + tabShops.RecordCount
+If Not tabMessages Is Nothing Then nTotalRec = nTotalRec + tabMessages.RecordCount
+If Not tabTextblocks Is Nothing Then nTotalRec = nTotalRec + tabTextblocks.RecordCount
+
+Call SetRange(nTotalRec)
+ProgressBar.Visible = True
+DoEvents
+
+Call SetRangeFromDB(tabClasses, 0, "pkClasses")
+Call SetRangeFromDB(tabRaces, 1, "pkRaces")
+Call SetRangeFromDB(tabItems, 2, "pkItems")
+Call SetRangeFromDB(tabMessages, 3, "pkMessages")
+Call SetRangeFromDB(tabMonsters, 4, "pkMonsters")
+Call SetRangeFromDB(tabSpells, 5, "pkSpells")
+Call SetRangeFromDB(tabShops, 6, "pkShops")
+Call SetRangeFromDB(tabTextblocks, 7, "idxTextblocks")
+
+For x = 0 To 8
+    If lvList(x).ListItems.Count > 0 Then SortListView lvList(x), 1, ldtNumber, True
+Next x
+
+If tabRooms Is Nothing Then GoTo norooms:
+If tabRooms.RecordCount = 0 Then GoTo norooms:
+
+tabRooms.Index = "idxRooms"
+
+nLastMap = 0
+nFirstRoom = 0
+nLastRoom = 0
+tabRooms.MoveFirst
+Do While tabRooms.EOF = False
+    If nFirstRoom > 0 And nLastMap = tabRooms.Fields("Map Number") _
+        And tabRooms.Fields("Room Number") = (nLastRoom + 1) Then
+        nLastRoom = tabRooms.Fields("Room Number")
+        
+    ElseIf nLastMap > 0 And nLastRoom > 0 And nFirstRoom > 0 Then
+        Set oLI = lvList(8).ListItems.add
+        oLI.Text = nLastMap
+        oLI.ListSubItems.add 1, , nFirstRoom
+        oLI.ListSubItems.add 2, , nLastRoom
+        
+        nLastMap = tabRooms.Fields("Map Number")
+        nFirstRoom = tabRooms.Fields("Room Number")
+        nLastRoom = tabRooms.Fields("Room Number")
+    Else
+        nLastMap = tabRooms.Fields("Map Number")
+        nFirstRoom = tabRooms.Fields("Room Number")
+        nLastRoom = tabRooms.Fields("Room Number")
+    End If
+    tabRooms.MoveNext
+    Call IncreaseProgressBar
+    If Not bUseCPU Then DoEvents
+Loop
+
+If nLastMap > 0 And nLastRoom > 0 And nFirstRoom > 0 Then
+    Set oLI = lvList(8).ListItems.add
+    oLI.Text = nLastMap
+    oLI.ListSubItems.add 1, , nFirstRoom
+    oLI.ListSubItems.add 2, , nLastRoom
+End If
+
+chkExportAll(8).Value = 0
+Call SortListView(lvList(8), 2, ldtNumber, True)
+Call SortListView(lvList(8), 1, ldtNumber, True)
+GoTo out:
+
+norooms:
+
+out:
+On Error Resume Next
+Call CombineRanges
+ProgressBar.Visible = False
+bCheckSave = True
+Call CloseAll(True)
+Set fso = Nothing
+Set catDB = Nothing
+Set DB = Nothing
+Set oLI = Nothing
+Exit Sub
+
+error:
+Call HandleError("cmdImportRecordNumbers_Click")
+Resume out:
+End Sub
+
+Private Sub SetRangeFromDB(ByRef tabTable As Recordset, nIndex As Integer, sIndex As String)
+Dim oLI As ListItem, nFirst As Long, nLast As Long
+On Error GoTo error:
+
+If tabTable Is Nothing Then GoTo zero:
+If tabTable.RecordCount = 0 Then GoTo zero:
+
+tabTable.Index = sIndex
+
+tabTable.MoveFirst
+nFirst = tabTable.Fields("Number")
+nLast = tabTable.Fields("Number")
+Do While Not tabTable.EOF
+    If tabTable.Fields("Number") > nLast + 1 Then
+        Set oLI = lvList(nIndex).ListItems.add
+        oLI.Text = nFirst
+        oLI.ListSubItems.add 1, , nLast
+        
+        nFirst = tabTable.Fields("Number")
+        nLast = tabTable.Fields("Number")
+    Else
+        nLast = tabTable.Fields("Number")
+    End If
+    Call IncreaseProgressBar
+    If Not bUseCPU Then DoEvents
+    tabTable.MoveNext
+Loop
+
+Set oLI = lvList(nIndex).ListItems.add
+oLI.Text = nFirst
+oLI.ListSubItems.add 1, , nLast
+
+chkExportAll(nIndex).Value = 0
+GoTo out:
+
+zero:
+
+out:
+Set oLI = Nothing
+Exit Sub
+error:
+Call HandleError("SetRangeFromDB")
+Resume out:
+End Sub
 Private Sub cmdQ_Click()
 MsgBox "The ""Use 1 field for Mon EXP"" setting is for people who need the Monster 'EXP' and 'EXP Multiplier' fields" _
-    & vbCrLf & "multiplied together in the export for sorting purposes with 3rd party applications."
+    & "multiplied together in the export for sorting purposes with 3rd party applications.", vbInformation
+End Sub
+
+Private Sub cmdRoomAdd_Click()
+Dim oLI As ListItem
+Dim nFrom As Long, nTo As Long, nMap As Long
+On Error GoTo error:
+
+nFrom = Val(txtRoomFrom.Text)
+nTo = Val(txtRoomTo.Text)
+nMap = Val(txtRoomMap.Text)
+
+If nTo < 1 Then Exit Sub
+If nFrom < 1 Then Exit Sub
+If nTo < nFrom Then Exit Sub
+If nMap < 1 Then Exit Sub
+
+Set oLI = lvRooms.ListItems.add
+oLI.Text = nMap
+oLI.ListSubItems.add 1, , nFrom
+oLI.ListSubItems.add 2, , nTo
+
+out:
+Set oLI = Nothing
+Exit Sub
+error:
+Call HandleError("cmdRoomAdd_Click")
+Resume out:
+
+End Sub
+
+Private Sub cmdRoomClear_Click()
+lvRooms.ListItems.clear
+End Sub
+
+Private Sub cmdRoomRemove_Click()
+On Error GoTo error:
+
+If Not lvRooms.SelectedItem Is Nothing Then
+    lvRooms.ListItems.Remove lvRooms.SelectedItem.Index
+End If
+
+out:
+Exit Sub
+error:
+Call HandleError("cmdRoomRemove_Click")
+Resume out:
+End Sub
+
+Private Sub cmdRemove_Click()
+If cmbDB.ListIndex < 0 Then Exit Sub
+If lvList(cmbDB.ListIndex).SelectedItem Is Nothing Then Exit Sub
+lvList(cmbDB.ListIndex).ListItems.Remove lvList(cmbDB.ListIndex).SelectedItem.Index
+bCheckSave = True
+End Sub
+
+Private Sub cmdSaveConfig_Click()
+Call SaveConfig(sConfigFile, True)
+End Sub
+
+Private Sub cmdSelectConfig_Click()
+Dim sTemp As String, nTemp As Integer
+On Error GoTo error:
+
+If bCheckSave Then
+    nTemp = MsgBox("Save current config file first?", vbYesNoCancel + vbQuestion, "Save Export Config?")
+    If nTemp = vbYes Then
+        nTemp = SaveConfig(sConfigFile)
+        If nTemp = -1 Then Exit Sub
+    ElseIf nTemp = vbCancel Then
+        Exit Sub
+    End If
+End If
+
+CommonDialog1.Filter = "INI Files (*.ini)|*.ini"
+CommonDialog1.DialogTitle = "Select Export Configuration File ..."
+CommonDialog1.FileName = sConfigFile
+CommonDialog1.InitDir = sConfigFile
+
+On Error GoTo canceled:
+CommonDialog1.ShowOpen
+If CommonDialog1.FileName = "" Then GoTo canceled:
+
+On Error GoTo error:
+
+sTemp = CommonDialog1.FileName
+If Right(sTemp, 4) <> ".ini" Then sTemp = sTemp & ".ini"
+
+Call LoadConfig(sTemp)
+
+canceled:
+
+out:
+Exit Sub
+error:
+Call HandleError("cmdSelectConfig_Click")
+Resume out:
 End Sub
 
 Private Sub Form_Load()
 On Error Resume Next
 Dim x As Integer
+Dim fso As FileSystemObject
+
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+bCheckSave = False
+
+cmbDB.clear
+cmbDB.AddItem "Classes", 0
+cmbDB.AddItem "Races", 1
+cmbDB.AddItem "Items", 2
+cmbDB.AddItem "Messages", 3
+cmbDB.AddItem "Monsters", 4
+cmbDB.AddItem "Shops", 5
+cmbDB.AddItem "Spells", 6
+cmbDB.AddItem "Textblocks", 7
+cmbDB.AddItem "Rooms", 8
+
+For x = 0 To 8
+    lblDB(x).Caption = cmbDB.List(x) & ":"
+    
+    lvList(x).ColumnHeaders.clear
+    If x = 8 Then
+        lvList(x).ColumnHeaders.add , , "M", 400
+        lvList(x).ColumnHeaders.add , , "From", 800
+        lvList(x).ColumnHeaders.add , , "To", 800
+    Else
+        lvList(x).ColumnHeaders.add , , "From", 1000
+        lvList(x).ColumnHeaders.add , , "To", 1000
+    End If
+Next x
 
 If eDatFileVersion < v111j Then
     chkOneExpField.Value = 1
     chkOneExpField.Enabled = False
 End If
 
-If ReadINI("Options", "ExportFormat") = 1 Then
-    optAccessDB.Value = True
-Else
-    optTextfile.Value = True
-End If
-
-chkMessagesAll.Value = ReadINI("Options", "ExportMessagesAll")
-txtMessagesFrom.Text = ReadINI("Options", "ExportMessagesFrom")
-txtMessagesTo.Text = ReadINI("Options", "ExportMessagesTo")
-chkRoomsAll.Value = ReadINI("Options", "ExportRoomsAll")
-txtRoomsFrom.Text = ReadINI("Options", "ExportRoomsFrom")
-txtRoomsTo.Text = ReadINI("Options", "ExportRoomsTo")
-txtRoomsMap.Text = ReadINI("Options", "ExportRoomsMap")
-chkShopsAll.Value = ReadINI("Options", "ExportShopsAll")
-txtShopsFrom.Text = ReadINI("Options", "ExportShopsFrom")
-txtShopsTo.Text = ReadINI("Options", "ExportShopsTo")
-chkSpellsAll.Value = ReadINI("Options", "ExportSpellsAll")
-txtSpellsFrom.Text = ReadINI("Options", "ExportSpellsFrom")
-txtSpellsTo.Text = ReadINI("Options", "ExportSpellsTo")
-chkItemsAll.Value = ReadINI("Options", "ExportItemsAll")
-txtItemsFrom.Text = ReadINI("Options", "ExportItemsFrom")
-txtItemsTo.Text = ReadINI("Options", "ExportItemsTo")
-chkTextblocksAll.Value = ReadINI("Options", "ExportTextblocksAll")
-txtTextblocksFrom.Text = ReadINI("Options", "ExportTextblocksFrom")
-txtTextblocksTo.Text = ReadINI("Options", "ExportTextblocksTo")
-chkRacesAll.Value = ReadINI("Options", "ExportRacesAll")
-txtRacesFrom.Text = ReadINI("Options", "ExportRacesFrom")
-txtRacesTo.Text = ReadINI("Options", "ExportRacesTo")
-chkClassesAll.Value = ReadINI("Options", "ExportClassesAll")
-txtClassesFrom.Text = ReadINI("Options", "ExportClassesFrom")
-txtClassesTo.Text = ReadINI("Options", "ExportClassesTo")
-chkMonstersAll.Value = ReadINI("Options", "ExportMonstersAll")
-txtMonstersFrom.Text = ReadINI("Options", "ExportMonstersFrom")
-txtMonstersTo.Text = ReadINI("Options", "ExportMonstersTo")
+sConfigFile = ReadINI("Options", "NMR-ExportConfig")
+If Not fso.FileExists(sConfigFile) Then sConfigFile = App.Path & "\NMR-ExportConfig.ini"
 
 Me.Top = ReadINI("Windows", "ExportTop")
 Me.Left = ReadINI("Windows", "ExportLeft")
 
+Call LoadConfig(sConfigFile)
+
 Me.Show
 Me.SetFocus
+
+cmbDB.ListIndex = 0
 cmdCancel.SetFocus
 
+Set fso = Nothing
 End Sub
 
 Private Sub cmdGo_Click()
 Dim objForm As Form
 On Error GoTo error:
-Dim CheckboxArray(1 To 12) As Object
-Dim FilenameArray(1 To 12) As String
+Dim FilenameArray(0 To 11) As String
 Dim sNewPath() As String
 Dim x As Integer, sPath As String, nFilesToExport As Long
 Dim StartTime As Variant, nTotalTime As Double, sTotalTime As String
@@ -1310,20 +1488,6 @@ Dim StartTime As Variant, nTotalTime As Double, sTotalTime As String
 nFilesToExport = 0
 bStopExport = False
 StartTime = Timer
-
-Set CheckboxArray(1) = chkMessages
-Set CheckboxArray(2) = chkItems
-Set CheckboxArray(3) = chkSpells
-Set CheckboxArray(4) = chkClasses
-Set CheckboxArray(5) = chkRaces
-Set CheckboxArray(6) = chkShops
-Set CheckboxArray(7) = chkRooms
-Set CheckboxArray(8) = chkActions
-Set CheckboxArray(9) = chkMonsters
-Set CheckboxArray(10) = chkUsers
-Set CheckboxArray(11) = chkBankbooks
-Set CheckboxArray(12) = chkTextblocks
-
 
 Call SetRange(CalcTotalRecords)
 ProgressBar.Visible = True
@@ -1353,48 +1517,74 @@ UsersTextfile = sExportPath & "\NMR-Users.txt"
 BankbooksTextfile = sExportPath & "\NMR-Bankbooks.txt"
 TextblocksTextfile = sExportPath & "\NMR-Textblocks.txt"
 
-If CheckFirstRecords = False Then GoTo ReEnable:
+'If CheckFirstRecords = False Then GoTo ReEnable:
 
-FilenameArray(1) = MessagesTextfile
+FilenameArray(0) = ClassesTextfile
+FilenameArray(1) = RacesTextfile
 FilenameArray(2) = ItemsTextfile
-FilenameArray(3) = SpellsTextfile
-FilenameArray(4) = ClassesTextfile
-FilenameArray(5) = RacesTextfile
-FilenameArray(6) = ShopsTextfile
-FilenameArray(7) = RoomsTextfile
-FilenameArray(8) = ActionsTextfile
-FilenameArray(9) = MonstersTextfile
+FilenameArray(3) = MessagesTextfile
+FilenameArray(4) = MonstersTextfile
+FilenameArray(5) = ShopsTextfile
+FilenameArray(6) = SpellsTextfile
+FilenameArray(7) = TextblocksTextfile
+FilenameArray(8) = RoomsTextfile
+FilenameArray(9) = ActionsTextfile
 FilenameArray(10) = UsersTextfile
 FilenameArray(11) = BankbooksTextfile
-FilenameArray(12) = TextblocksTextfile
 
 Call HideWindows
 
-For x = 1 To UBound(CheckboxArray())
-    If CheckboxArray(x).Value = 1 Then
-        CreateExportFile (FilenameArray(x))
-    End If
-Next
 DoEvents
 
-For x = 1 To UBound(CheckboxArray())
+For x = 0 To 8
+    If x = 8 Then
+        SortListView lvList(x), 3, ldtNumber, True
+    End If
+    SortListView lvList(x), 2, ldtNumber, True
+    SortListView lvList(x), 1, ldtNumber, True
+    
     If bStopExport Then Exit For
-    If CheckboxArray(x).Value = 1 Then
-        If x = 1 Then Call ExportMessages("textfile")
-        If x = 2 Then Call ExportItems("textfile")
-        If x = 3 Then Call ExportSpells("textfile")
-        If x = 4 Then Call ExportClasses("textfile")
-        If x = 5 Then Call ExportRaces("textfile")
-        If x = 6 Then Call ExportShops("textfile")
-        If x = 7 Then Call ExportRooms("textfile")
-        If x = 8 Then Call ExportActions("textfile")
-        If x = 9 Then Call ExportMonsters("textfile")
-        If x = 10 Then Call ExportUsers
-        If x = 11 Then Call ExportBankbooks
-        If x = 12 Then Call ExportTextblocks("textfile")
+    If chkExportAll(x).Value = 1 Or lvList(x).ListItems.Count > 0 Then
+        Call CreateExportFile(FilenameArray(x))
+        Select Case x
+            Case 0:
+                Call ExportClasses("textfile")
+            Case 1:
+                Call ExportRaces("textfile")
+            Case 2:
+                Call ExportItems("textfile")
+            Case 3:
+                Call ExportMessages("textfile")
+            Case 4:
+                Call ExportMonsters("textfile")
+            Case 5:
+                Call ExportShops("textfile")
+            Case 6:
+                Call ExportSpells("textfile")
+            Case 7:
+                Call ExportTextblocks("textfile")
+            Case 8:
+                Call ExportRooms("textfile")
+        End Select
         DoEvents
     End If
 Next
+If chkActions.Value = 1 And Not bStopExport Then
+    Call CreateExportFile(FilenameArray(9))
+    Call ExportActions("textfile")
+End If
+DoEvents
+
+If chkUsers.Value = 1 And Not bStopExport Then
+    Call CreateExportFile(FilenameArray(10))
+    Call ExportUsers
+End If
+DoEvents
+
+If chkBankbooks.Value = 1 And Not bStopExport Then
+    Call CreateExportFile(FilenameArray(11))
+    Call ExportBankbooks
+End If
 
 If bStopExport Then GoTo ReEnable:
 
@@ -1407,7 +1597,6 @@ sTotalTime = Left(sTotalTime, InStr(1, sTotalTime, ".") + 2)
 MsgBox "Export Complete." & vbCrLf & vbCrLf & "Total time: " & sTotalTime & " minutes.", vbInformation
 
 GoTo ReEnable:
-
 
 CreateAccessDB:
 
@@ -1463,22 +1652,42 @@ If bUpdateExistingADB = True Then
 End If
 DoEvents
 
-For x = 1 To UBound(CheckboxArray())
+For x = 0 To 8
+    If x = 8 Then
+        SortListView lvList(x), 3, ldtNumber, True
+    End If
+    SortListView lvList(x), 2, ldtNumber, True
+    SortListView lvList(x), 1, ldtNumber, True
+    
     If bStopExport Then Exit For
-    If CheckboxArray(x).Value = 1 Then
-        If x = 1 Then Call ExportMessages("Access")
-        If x = 2 Then Call ExportItems("Access")
-        If x = 3 Then Call ExportSpells("Access")
-        If x = 4 Then Call ExportClasses("Access")
-        If x = 5 Then Call ExportRaces("Access")
-        If x = 6 Then Call ExportShops("Access")
-        If x = 7 Then Call ExportRooms("Access")
-        If x = 8 Then Call ExportActions("Access")
-        If x = 9 Then Call ExportMonsters("Access")
-        If x = 12 Then Call ExportTextblocks("Access")
+    If chkExportAll(x).Value = 1 Or lvList(x).ListItems.Count > 0 Then
+        Select Case x
+            Case 0:
+                Call ExportClasses("Access")
+            Case 1:
+                Call ExportRaces("Access")
+            Case 2:
+                'Call ExportItems("Access")
+            Case 3:
+                'Call ExportMessages("Access")
+            Case 4:
+                'Call ExportMonsters("Access")
+            Case 5:
+                'Call ExportShops("Access")
+            Case 6:
+                'Call ExportSpells("Access")
+            Case 7:
+                Call ExportTextblocks("Access")
+            Case 8:
+                'Call ExportRooms("Access")
+        End Select
         DoEvents
     End If
 Next
+If chkActions.Value = 1 And Not bStopExport Then
+    Call ExportActions("Access")
+End If
+DoEvents
 
 Call ExportVersionInfo
 Call CloseAll
@@ -1495,10 +1704,6 @@ MsgBox "Export Complete." & vbCrLf & vbCrLf & "Total time: " & sTotalTime & " mi
 
 ReEnable:
 On Error Resume Next
-
-For x = 1 To 12
-    Set CheckboxArray(x) = Nothing
-Next x
 
 For Each objForm In Forms
     If Not objForm Is Me And Not objForm Is frmMain Then
@@ -1523,7 +1728,7 @@ Me.SetFocus
 Exit Sub
 
 error:
-Call HandleError
+Call HandleError("cmdGo_Click")
 Resume error2:
 
 error2:
@@ -1609,7 +1814,7 @@ Set tabInfo = DB.OpenRecordset("Info")
 
 Exit Sub
 error:
-Call HandleError
+Call HandleError("OpenTables")
 Resume Next
 
 End Sub
@@ -1729,14 +1934,47 @@ End Sub
 
 Private Sub chkRoomsAll_Click()
 If chkRoomsAll.Value = 1 Then
-    txtRoomsFrom.Enabled = False
-    txtRoomsTo.Enabled = False
-    txtRoomsMap.Enabled = False
+    Call RoomRangeEnable(False)
 Else
-    txtRoomsFrom.Enabled = True
-    txtRoomsTo.Enabled = True
-    txtRoomsMap.Enabled = True
+    Call RoomRangeEnable(True)
 End If
+End Sub
+
+Private Sub RoomRangeEnable(ByVal bTrue As Boolean)
+Dim x As Integer
+
+On Error GoTo error:
+
+If bTrue = True Then
+    txtRoomFrom.Enabled = True
+    txtRoomTo.Enabled = True
+    txtRoomMap.Enabled = True
+    cmdRoomAdd.Enabled = True
+    cmdRoomRemove.Enabled = True
+    cmdRoomClear.Enabled = True
+    lvRooms.Enabled = True
+
+    For x = 0 To 2
+        lblRooms(x).Enabled = True
+    Next x
+Else
+    txtRoomFrom.Enabled = False
+    txtRoomTo.Enabled = False
+    txtRoomMap.Enabled = False
+    cmdRoomAdd.Enabled = False
+    cmdRoomRemove.Enabled = False
+    cmdRoomClear.Enabled = False
+    lvRooms.Enabled = False
+    
+    For x = 0 To 2
+        lblRooms(x).Enabled = False
+    Next x
+End If
+
+Exit Sub
+error:
+Call HandleError("RoomRangeEnable")
+
 End Sub
 
 Private Sub chkShopsAll_Click()
@@ -1854,14 +2092,14 @@ Else
     txtTextblocksFrom.Text = TextblockRec.Number
 End If
 
-nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first room record: " & BtrieveErrorCode(nStatus)
-Else
-    RoomRowToStruct Roomdatabuf.buf
-    txtRoomsFrom.Text = Roomrec.RoomNumber
-    txtRoomsMap.Text = Roomrec.MapNumber
-End If
+'nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+'If Not nStatus = 0 Then
+'    MsgBox "Error getting first room record: " & BtrieveErrorCode(nStatus)
+'Else
+'    RoomRowToStruct Roomdatabuf.buf
+'    txtRoomsFrom.Text = Roomrec.RoomNumber
+'    txtRoomsMap.Text = Roomrec.MapNumber
+'End If
 
 'chkMessagesAll.value = 0
 'chkItemsAll.value = 0
@@ -2064,20 +2302,39 @@ End Sub
 
 Private Sub ExportTextblocks(format As String)
 Dim nStatus As Integer, decrypted As String, nLastRec(1) As Long
-Dim fso As FileSystemObject, ts As TextStream, recnum As Long ', x As Integer
+Dim fso As FileSystemObject, ts As TextStream
+Dim nRecNum As Long, nLastRecNum As Long
+Dim nListNum As Integer, nCurrenListItem As Long
 
-If chkTextblocksAll.Value = 0 Then
-    recnum = Val(txtTextblocksFrom.Text)
+nListNum = 7
+
+If chkExportAll(nListNum).Value = 0 Then
+    If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
+    nCurrenListItem = 1
+    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+    
+GotoNextTextblockStart:
     TextblockKey.PartNum = 0
-    TextblockKey.Number = Val(txtTextblocksFrom.Text)
-
-    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+    TextblockKey.Number = nRecNum
+    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        MsgBox "Textblocks: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
-        Exit Sub
+        If nRecNum = nLastRecNum Then
+            If nCurrenListItem = lvList(nListNum).ListItems.Count Then
+                MsgBox "No textblock actually found to export.", vbInformation
+                Exit Sub
+            End If
+            nCurrenListItem = nCurrenListItem + 1
+            
+            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+        Else
+            nRecNum = nRecNum + 1
+        End If
+        GoTo GotoNextTextblockStart:
     End If
 Else
-    recnum = 0
+    nRecNum = 1
     nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Textblocks: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -2088,7 +2345,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
-stsStatusBar.Panels(2).Text = recnum
+stsStatusBar.Panels(2).Text = nRecNum
 
 If format = "Access" Then GoTo Access:
 
@@ -2100,10 +2357,6 @@ Do While nStatus = 0 And Not bStopExport
     decrypted = ""
     TextblockRowToStruct TextblockDataBuf.buf
 
-    If chkTextblocksAll.Value = 0 Then
-        If TextblockRec.Number > Val(txtTextblocksTo.Text) Then GoTo finish
-    End If
-
     ts.Write (TextblockRec.Number & vbTab)
     ts.Write (TextblockRec.PartNum & vbTab)
     ts.Write (TextblockRec.LinkTo & vbTab)
@@ -2112,11 +2365,41 @@ Do While nStatus = 0 And Not bStopExport
     
     ts.WriteLine ("[TBLOCK]" & decrypted & "[/TBLOCK]")
     
-    nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    If chkExportAll(nListNum).Value = 0 Then
+GotoNextTextblock:
+        Call IncreaseProgressBar
+        
+        nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        If nStatus = 0 Then
+            TextblockRowToStruct TextblockDataBuf.buf
+            
+            If TextblockRec.Number > nRecNum Then
+                'next record is not a new partnum
+                If TextblockRec.Number > nLastRecNum Then
+                    'now out of range
+                    If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo finish
+                    nCurrenListItem = nCurrenListItem + 1
+                        
+                    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                    nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+                    
+                    TextblockKey.PartNum = 0
+                    TextblockKey.Number = nRecNum
+                    
+                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+                    If Not nStatus = 0 Then GoTo GotoNextTextblock:
+                Else
+                    nRecNum = nRecNum + 1
+                End If
+            End If
+        End If
+    Else
+        nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
+        Call IncreaseProgressBar
+    End If
     
-    recnum = TextblockRec.Number
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    stsStatusBar.Panels(2).Text = nRecNum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2152,14 +2435,10 @@ part_check:
             End If
         End If
     End If
+    nLastRec(0) = TextblockRec.Number
+    nLastRec(1) = TextblockRec.PartNum
     
-    If chkTextblocksAll.Value = 0 Then
-        If TextblockRec.Number > Val(txtTextblocksTo.Text) Then GoTo FinishedAccess:
-    End If
-    
-    recnum = TextblockRec.Number
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    stsStatusBar.Panels(2).Text = nRecNum
     
     If bUpdateExistingADB = True Then
         If tabTextblocks.RecordCount = 0 Then
@@ -2196,9 +2475,43 @@ part_check:
     
     tabTextblocks.Update
     
-    nLastRec(0) = TextblockRec.Number
-    nLastRec(1) = TextblockRec.PartNum
-    nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    If chkExportAll(nListNum).Value = 0 Then
+        nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        If nStatus = 0 Then
+            TextblockRowToStruct TextblockDataBuf.buf
+            
+            If TextblockRec.Number > nRecNum Then
+                'next record is not a new partnum
+                If TextblockRec.Number > nLastRecNum Then
+                    'now out of range
+GotoNextTextblock_access:
+                    Call IncreaseProgressBar
+                    
+                    If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
+                    nCurrenListItem = nCurrenListItem + 1
+                        
+                    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                    nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+                    
+                    TextblockKey.PartNum = 0
+                    TextblockKey.Number = nRecNum
+                    
+                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+                    If Not nStatus = 0 Then GoTo GotoNextTextblock_access:
+                Else
+                    nRecNum = nRecNum + 1
+                    Call IncreaseProgressBar
+                End If
+            Else
+                'new part
+            End If
+        End If
+    Else
+        nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
+        Call IncreaseProgressBar
+    End If
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2569,20 +2882,41 @@ Set ts = Nothing
 
 End Sub
 Private Sub ExportRooms(format As String)
-Dim nStatus As Integer, recnum As Long, x As Integer
+Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
+Dim nRecNum As Long, nLastRecNum As Long, nMap As Long
+Dim nListNum As Integer, nCurrenListItem As Long
 
-If chkRoomsAll.Value = 0 Then
-    recnum = Val(txtRoomsFrom.Text)
-    RoomKeyStruct.MapNum = Val(txtRoomsMap.Text)
-    RoomKeyStruct.RoomNum = Val(txtRoomsFrom.Text)
+nListNum = 8
+
+If chkExportAll(nListNum).Value = 0 Then
+    If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
+    nCurrenListItem = 1
+    nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+    nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
+    
+GotoNextRoomStart:
+    RoomKeyStruct.MapNum = nMap
+    RoomKeyStruct.RoomNum = nRecNum
     nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        MsgBox "Rooms: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
-        Exit Sub
+        If nRecNum = nLastRecNum Then
+            If nCurrenListItem = lvList(nListNum).ListItems.Count Then
+                MsgBox "No rooms actually found to export.", vbInformation
+                Exit Sub
+            End If
+            nCurrenListItem = nCurrenListItem + 1
+            nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+            nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
+        Else
+            nRecNum = nRecNum + 1
+        End If
+        GoTo GotoNextRoomStart:
     End If
 Else
-    recnum = 1
+    nRecNum = 1
     nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Rooms: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -2593,7 +2927,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
-stsStatusBar.Panels(2).Text = recnum
+stsStatusBar.Panels(2).Text = nRecNum
 
 If format = "Access" Then GoTo Access:
 
@@ -2703,23 +3037,35 @@ Do While nStatus = 0 And Not bStopExport
     
     ts.WriteLine ("")
 
-    If chkRoomsAll.Value = 0 Then
+    If chkExportAll(nListNum).Value = 0 Then
 GotoNextRoom:
         Call IncreaseProgressBar
-        RoomKeyStruct.RoomNum = RoomKeyStruct.RoomNum + 1
-        If RoomKeyStruct.RoomNum > Val(txtRoomsTo.Text) Then GoTo Finished
-        recnum = RoomKeyStruct.RoomNum
+        
+        If nRecNum = nLastRecNum Then
+            If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
+            nCurrenListItem = nCurrenListItem + 1
+            nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+            nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
+        Else
+            nRecNum = nRecNum + 1
+        End If
+        
+        RoomKeyStruct.MapNum = nMap
+        RoomKeyStruct.RoomNum = nRecNum
+        
         nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
         If Not nStatus = 0 Then GoTo GotoNextRoom:
     Else
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-        recnum = recnum + 1
+        nRecNum = nRecNum + 1
         IncreaseProgressBar
     End If
 
-    stsStatusBar.Panels(2).Text = recnum
+    stsStatusBar.Panels(2).Text = nRecNum
     If Not bUseCPU Then DoEvents
 Loop
+
 If Not nStatus = 0 And Not nStatus = 9 Then
     MsgBox "Error exporting Rooms, Btrieve Error: " & BtrieveErrorCode(nStatus, True)
 End If
@@ -2733,24 +3079,13 @@ Set ts = Nothing
 Exit Sub
 
 Access:
-'Dim adoConnect As Database
-'Dim tabRooms As Recordset
-'
-'Set adoConnect = OpenDatabase(sDataSource)
-'Set tabRooms = adoConnect.OpenRecordset("Rooms")
-recnum = 1
 
 tabRooms.Index = "idxRooms"
 Do While nStatus = 0 And Not bStopExport
     
     RowToStruct Roomdatabuf.buf, RoomFldMap, Roomrec, LenB(Roomrec)
-    
-    If chkRoomsAll.Value = 0 Then
-        If Roomrec.RoomNumber > Val(txtRoomsTo.Text) Then GoTo FinishedAccess:
-    End If
-    
-    recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
+
+    stsStatusBar.Panels(2).Text = nRecNum
     
     If bUpdateExistingADB = True Then
         If tabRooms.RecordCount = 0 Then
@@ -2824,16 +3159,28 @@ Do While nStatus = 0 And Not bStopExport
 
     tabRooms.Update
         
-    If chkRoomsAll.Value = 0 Then
+    If chkExportAll(nListNum).Value = 0 Then
 GotoNextRoomAccess:
         Call IncreaseProgressBar
-        RoomKeyStruct.RoomNum = RoomKeyStruct.RoomNum + 1
-        If RoomKeyStruct.RoomNum > Val(txtRoomsTo.Text) Then GoTo FinishedAccess:
-        recnum = RoomKeyStruct.RoomNum
+        
+        If nRecNum = nLastRecNum Then
+            If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess:
+            nCurrenListItem = nCurrenListItem + 1
+            nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+            nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
+        Else
+            nRecNum = nRecNum + 1
+        End If
+        
+        RoomKeyStruct.MapNum = nMap
+        RoomKeyStruct.RoomNum = nRecNum
+        
         nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
         If Not nStatus = 0 Then GoTo GotoNextRoomAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
         Call IncreaseProgressBar
     End If
 
@@ -3157,22 +3504,41 @@ Set ts = Nothing
 
 End Sub
 Private Sub ExportClasses(format As String)
-Dim nStatus As Integer, recnum As Long, x As Integer
+Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
+Dim nRecNum As Long, nLastRecNum As Long
+Dim nListNum As Integer, nCurrenListItem As Long
 
-If chkClassesAll.Value = 0 Then
-    recnum = Val(txtClassesFrom.Text)
-    x = Val(txtClassesFrom.Text)
-    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), x, KEY_BUF_LEN, 0)
+nListNum = 0
+
+If chkExportAll(nListNum).Value = 0 Then
+    If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
+    nCurrenListItem = 1
+    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+    
+GotoNextClassStart:
+    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecNum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        MsgBox "Classes: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
-        Exit Sub
+        If nRecNum = nLastRecNum Then
+            If nCurrenListItem = lvList(nListNum).ListItems.Count Then
+                MsgBox "No class found to export.", vbInformation
+                Exit Sub
+            End If
+            nCurrenListItem = nCurrenListItem + 1
+            
+            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+        Else
+            nRecNum = nRecNum + 1
+        End If
+        GoTo GotoNextClassStart:
     End If
 Else
-    recnum = 1
+    nRecNum = 1
     nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        MsgBox "Classes: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
+        MsgBox "Classs: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
         Exit Sub
     End If
 End If
@@ -3180,7 +3546,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "clas2.dat"
-stsStatusBar.Panels(2).Text = recnum
+stsStatusBar.Panels(2).Text = nRecNum
 
 If format = "Access" Then GoTo Access:
 
@@ -3194,38 +3560,57 @@ ts.WriteLine ("")
     
 Do While nStatus = 0 And Not bStopExport
 
-        RowToStruct Classdatabuf.buf, ClassFldMap, Classrec, LenB(Classrec)
+    RowToStruct Classdatabuf.buf, ClassFldMap, Classrec, LenB(Classrec)
+
+    ts.Write (Classrec.Number & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Classrec.Name, vbNull)) & vbTab)
+    ts.Write (Classrec.MinHp & vbTab)
+    ts.Write ((Classrec.MinHp + Classrec.MaxHP) & vbTab)
+    ts.Write ((Classrec.Exp + 100) & vbTab)
+    ts.Write (Classrec.MagicLvL & vbTab)
+    ts.Write ((Classrec.Combat - 2) & vbTab)
+    ts.Write (Classrec.TitleText & vbTab)
+    ts.Write (Classrec.MagicType & vbTab)
+    ts.Write (Classrec.Weapon & vbTab)
+    ts.Write (Classrec.Armour & vbTab)
+    
+    For x = 0 To 9
+        ts.Write (Classrec.AbilityA(x) & vbTab)
+        ts.Write (Classrec.AbilityB(x) & vbTab)
+    Next x
+
+    ts.WriteLine ("")
+
+    If chkExportAll(nListNum).Value = 0 Then
+GotoNextClass:
+        Call IncreaseProgressBar
         
-    If chkClassesAll.Value = 0 Then
-        If Classrec.Number > Val(txtClassesTo.Text) Then GoTo Finished
-    End If
-
-        ts.Write (Classrec.Number & vbTab)
-        ts.Write (RTrim(RemoveCharacter(Classrec.Name, vbNull)) & vbTab)
-        ts.Write (Classrec.MinHp & vbTab)
-        ts.Write ((Classrec.MinHp + Classrec.MaxHP) & vbTab)
-        ts.Write ((Classrec.Exp + 100) & vbTab)
-        ts.Write (Classrec.MagicLvL & vbTab)
-        ts.Write ((Classrec.Combat - 2) & vbTab)
-        ts.Write (Classrec.TitleText & vbTab)
-        ts.Write (Classrec.MagicType & vbTab)
-        ts.Write (Classrec.Weapon & vbTab)
-        ts.Write (Classrec.Armour & vbTab)
-        
-        For x = 0 To 9
-            ts.Write (Classrec.AbilityA(x) & vbTab)
-            ts.Write (Classrec.AbilityB(x) & vbTab)
-        Next x
-
-        ts.WriteLine ("")
-
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-        
-        recnum = Classrec.Number
-        stsStatusBar.Panels(2).Text = recnum
-        IncreaseProgressBar
-        If Not bUseCPU Then DoEvents
-    Loop
+        If nStatus = 0 Then
+            ClassRowToStruct Classdatabuf.buf
+            
+            If Classrec.Number > nLastRecNum Then
+                If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
+                nCurrenListItem = nCurrenListItem + 1
+                    
+                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+                
+                nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                If Not nStatus = 0 Then GoTo GotoNextClass:
+            Else
+                nRecNum = nRecNum + 1
+            End If
+        End If
+    Else
+        nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
+        Call IncreaseProgressBar
+    End If
+    
+    stsStatusBar.Panels(2).Text = nRecNum
+    If Not bUseCPU Then DoEvents
+Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
     MsgBox "Error exporting Classes, Btrieve Error: " & BtrieveErrorCode(nStatus, True)
 End If
@@ -3250,12 +3635,7 @@ Do While nStatus = 0 And Not bStopExport
     
     RowToStruct Classdatabuf.buf, ClassFldMap, Classrec, LenB(Classrec)
     
-    If chkClassesAll.Value = 0 Then
-        If Classrec.Number > Val(txtClassesTo.Text) Then GoTo FinishedAccess:
-    End If
-    
-    recnum = Classrec.Number
-    stsStatusBar.Panels(2).Text = recnum
+    stsStatusBar.Panels(2).Text = nRecNum
     IncreaseProgressBar
     
     If bUpdateExistingADB = True Then
@@ -3292,8 +3672,34 @@ Do While nStatus = 0 And Not bStopExport
 
     tabClasses.Update
     
-    nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-
+    If chkExportAll(nListNum).Value = 0 Then
+GotoNextClassAccess:
+        Call IncreaseProgressBar
+        
+        nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+        If nStatus = 0 Then
+            ClassRowToStruct Classdatabuf.buf
+            
+            If Classrec.Number > nLastRecNum Then
+                If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
+                nCurrenListItem = nCurrenListItem + 1
+                    
+                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+                
+                nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                If Not nStatus = 0 Then GoTo GotoNextClassAccess:
+            Else
+                nRecNum = nRecNum + 1
+            End If
+        End If
+    Else
+        nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
+        Call IncreaseProgressBar
+    End If
+    
+    stsStatusBar.Panels(2).Text = nRecNum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3306,19 +3712,38 @@ Set ts = Nothing
 
 End Sub
 Private Sub ExportRaces(format As String)
-Dim nStatus As Integer, recnum As Long, x As Integer
+Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
+Dim nRecNum As Long, nLastRecNum As Long
+Dim nListNum As Integer, nCurrenListItem As Long
 
-If chkRacesAll.Value = 0 Then
-    recnum = Val(txtRacesFrom.Text)
-    x = Val(txtRacesFrom.Text)
-    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), x, KEY_BUF_LEN, 0)
+nListNum = 1
+
+If chkExportAll(nListNum).Value = 0 Then
+    If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
+    nCurrenListItem = 1
+    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+    
+GotoNextRaceStart:
+    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecNum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        MsgBox "Races: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
-        Exit Sub
+        If nRecNum = nLastRecNum Then
+            If nCurrenListItem = lvList(nListNum).ListItems.Count Then
+                MsgBox "No race found to export.", vbInformation
+                Exit Sub
+            End If
+            nCurrenListItem = nCurrenListItem + 1
+            
+            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+        Else
+            nRecNum = nRecNum + 1
+        End If
+        GoTo GotoNextRaceStart:
     End If
 Else
-    recnum = 1
+    nRecNum = 1
     nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Races: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -3329,7 +3754,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
-stsStatusBar.Panels(2).Text = recnum
+stsStatusBar.Panels(2).Text = nRecNum
 
 If format = "Access" Then GoTo Access:
 
@@ -3344,11 +3769,8 @@ ts.WriteLine ("")
     
 Do While nStatus = 0 And Not bStopExport
 
-      RowToStruct Racedatabuf.buf, RaceFldMap, Racerec, LenB(Racerec)
-      
-    If chkRacesAll.Value = 0 Then
-        If Racerec.Number > Val(txtRacesTo.Text) Then GoTo Finished
-    End If
+    RowToStruct Racedatabuf.buf, RaceFldMap, Racerec, LenB(Racerec)
+
 
     ts.Write (Racerec.Number & vbTab)
     ts.Write (RTrim(RemoveCharacter(Racerec.Name, vbNull)) & vbTab)
@@ -3374,11 +3796,34 @@ Do While nStatus = 0 And Not bStopExport
 
     ts.WriteLine ("")
 
-    nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+    If chkExportAll(nListNum).Value = 0 Then
+GotoNextRace:
+        Call IncreaseProgressBar
+        
+        nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+        If nStatus = 0 Then
+            RaceRowToStruct Racedatabuf.buf
+            
+            If Racerec.Number > nLastRecNum Then
+                If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
+                nCurrenListItem = nCurrenListItem + 1
+                    
+                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+                
+                nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecNum, KEY_BUF_LEN, 0)
+                If Not nStatus = 0 Then GoTo GotoNextRace:
+            Else
+                nRecNum = nRecNum + 1
+            End If
+        End If
+    Else
+        nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
+        Call IncreaseProgressBar
+    End If
     
-    recnum = Racerec.Number
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    stsStatusBar.Panels(2).Text = nRecNum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3405,12 +3850,7 @@ Do While nStatus = 0 And Not bStopExport
     
     RowToStruct Racedatabuf.buf, RaceFldMap, Racerec, LenB(Racerec)
     
-    If chkRacesAll.Value = 0 Then
-        If Racerec.Number > Val(txtRacesTo.Text) Then GoTo FinishedAccess:
-    End If
-    
-    recnum = Racerec.Number
-    stsStatusBar.Panels(2).Text = recnum
+    stsStatusBar.Panels(2).Text = nRecNum
     IncreaseProgressBar
     
     If bUpdateExistingADB = True Then
@@ -3453,8 +3893,34 @@ Do While nStatus = 0 And Not bStopExport
 
     tabRaces.Update
     
-    nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-
+    If chkExportAll(nListNum).Value = 0 Then
+GotoNextRaceAccess:
+        Call IncreaseProgressBar
+        
+        nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+        If nStatus = 0 Then
+            RaceRowToStruct Racedatabuf.buf
+            
+            If Racerec.Number > nLastRecNum Then
+                If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
+                nCurrenListItem = nCurrenListItem + 1
+                    
+                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+                
+                nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecNum, KEY_BUF_LEN, 0)
+                If Not nStatus = 0 Then GoTo GotoNextRaceAccess:
+            Else
+                nRecNum = nRecNum + 1
+            End If
+        End If
+    Else
+        nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+        nRecNum = nRecNum + 1
+        Call IncreaseProgressBar
+    End If
+    
+    stsStatusBar.Panels(2).Text = nRecNum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4201,48 +4667,27 @@ End Function
 
 
 Private Sub Form_Unload(Cancel As Integer)
-        
+Dim nTemp As Integer
     If cmdGo.Enabled = False Then
         Cancel = 1
         Exit Sub
     End If
     
-    'Call WriteINI("Options", "ExportPath", sExportPath)
-    
-    If optAccessDB.Value = True Then
-        Call WriteINI("Options", "ExportFormat", 1)
-    Else
-        Call WriteINI("Options", "ExportFormat", 0)
+    If bCheckSave Then
+        nTemp = MsgBox("Save current config file first?", vbYesNoCancel + vbQuestion, "Save Config?")
+        If nTemp = vbYes Then
+            nTemp = SaveConfig(sConfigFile)
+            If nTemp = -1 Then
+                Cancel = 1
+                Exit Sub
+            End If
+        ElseIf nTemp = vbCancel Then
+            Cancel = 1
+            Exit Sub
+        End If
     End If
-    
-    Call WriteINI("Options", "ExportRoomsAll", chkRoomsAll.Value)
-    Call WriteINI("Options", "ExportRoomsFrom", Val(txtRoomsFrom.Text))
-    Call WriteINI("Options", "ExportRoomsTo", Val(txtRoomsTo.Text))
-    Call WriteINI("Options", "ExportRoomsMap", Val(txtRoomsMap.Text))
-    Call WriteINI("Options", "ExportItemsAll", chkItemsAll.Value)
-    Call WriteINI("Options", "ExportItemsFrom", Val(txtItemsFrom.Text))
-    Call WriteINI("Options", "ExportItemsTo", Val(txtItemsTo.Text))
-    Call WriteINI("Options", "ExportSpellsAll", chkSpellsAll.Value)
-    Call WriteINI("Options", "ExportSpellsFrom", Val(txtSpellsFrom.Text))
-    Call WriteINI("Options", "ExportSpellsTo", Val(txtSpellsTo.Text))
-    Call WriteINI("Options", "ExportMonstersAll", chkMonstersAll.Value)
-    Call WriteINI("Options", "ExportMonstersFrom", Val(txtMonstersFrom.Text))
-    Call WriteINI("Options", "ExportMonstersTo", Val(txtMonstersTo.Text))
-    Call WriteINI("Options", "ExportShopsAll", chkShopsAll.Value)
-    Call WriteINI("Options", "ExportShopsFrom", Val(txtShopsFrom.Text))
-    Call WriteINI("Options", "ExportShopsTo", Val(txtShopsTo.Text))
-    Call WriteINI("Options", "ExportTextblocksAll", chkTextblocksAll.Value)
-    Call WriteINI("Options", "ExportTextblocksFrom", Val(txtTextblocksFrom.Text))
-    Call WriteINI("Options", "ExportTextblocksTo", Val(txtTextblocksTo.Text))
-    Call WriteINI("Options", "ExportRacesAll", chkRacesAll.Value)
-    Call WriteINI("Options", "ExportRacesFrom", Val(txtRacesFrom.Text))
-    Call WriteINI("Options", "ExportRacesTo", Val(txtRacesTo.Text))
-    Call WriteINI("Options", "ExportClassesAll", chkClassesAll.Value)
-    Call WriteINI("Options", "ExportClassesFrom", Val(txtClassesFrom.Text))
-    Call WriteINI("Options", "ExportClassesTo", Val(txtClassesTo.Text))
-    Call WriteINI("Options", "ExportMessagesAll", chkMessagesAll.Value)
-    Call WriteINI("Options", "ExportMessagesFrom", Val(txtMessagesFrom.Text))
-    Call WriteINI("Options", "ExportMessagesTo", Val(txtMessagesTo.Text))
+
+    Call WriteINI("Options", "NMR-ExportConfig", sConfigFile)
     
     If Not Me.WindowState = vbMinimized Then
         Call WriteINI("Windows", "ExportTop", Me.Top)
@@ -4279,12 +4724,22 @@ Else
 End If
 End Sub
 
+
+Private Sub lvList_Click(Index As Integer)
+cmbDB.ListIndex = Index
+End Sub
+
+Private Sub lvList_ColumnClick(Index As Integer, ByVal ColumnHeader As MSComctlLib.ColumnHeader)
+SortListView lvList(Index), ColumnHeader.Index, ldtNumber, True
+End Sub
+
 Private Sub optAccessDB_Click()
     chkBankbooks.Value = 0
     chkBankbooks.Enabled = False
     chkUsers.Value = 0
     chkUsers.Enabled = False
     If eDatFileVersion >= v111j Then chkOneExpField.Enabled = True
+    bCheckSave = True
 End Sub
 
 Private Sub optTextfile_Click()
@@ -4292,342 +4747,255 @@ Private Sub optTextfile_Click()
     chkUsers.Enabled = True
     chkOneExpField.Enabled = False
     If eDatFileVersion >= v111j Then chkOneExpField.Value = 0
+    bCheckSave = True
 End Sub
-Private Function CheckFirstRecords() As Boolean
-Dim y As Integer, nStatus As Integer, x As Long, YN As Integer
-Dim CheckboxArray(1 To 12) As Object
-
-Set CheckboxArray(1) = chkMessages
-Set CheckboxArray(2) = chkItems
-Set CheckboxArray(3) = chkSpells
-Set CheckboxArray(4) = chkClasses
-Set CheckboxArray(5) = chkRaces
-Set CheckboxArray(6) = chkShops
-Set CheckboxArray(7) = chkRooms
-Set CheckboxArray(8) = chkActions
-Set CheckboxArray(9) = chkMonsters
-Set CheckboxArray(10) = chkUsers
-Set CheckboxArray(11) = chkBankbooks
-Set CheckboxArray(12) = chkTextblocks
-
-CheckFirstRecords = True
-
-For y = 1 To UBound(CheckboxArray())
-    If CheckFirstRecords = False Then Exit For
-    If CheckboxArray(y).Value = 1 Then
-        Select Case y
-            Case 1:
-                If chkMessagesAll.Value = 0 Then
-                    x = Val(txtMessagesFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Messages: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Messages: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 2:
-                If chkItemsAll.Value = 0 Then
-                    x = Val(txtItemsFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Items: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Items: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 3:
-                If chkSpellsAll.Value = 0 Then
-                    x = Val(txtSpellsFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Spells: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Spells: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 4:
-                If chkClassesAll.Value = 0 Then
-                    x = Val(txtClassesFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Classes: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Classes: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 5:
-                If chkRacesAll.Value = 0 Then
-                    x = Val(txtRacesFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Races: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Races: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 6:
-                If chkShopsAll.Value = 0 Then
-                    x = Val(txtShopsFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Shops: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Shops: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 7:
-                If chkRoomsAll.Value = 0 Then
-                    RoomKeyStruct.MapNum = Val(txtRoomsMap.Text)
-                    RoomKeyStruct.RoomNum = Val(txtRoomsFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Rooms: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Rooms: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 8:
-                nStatus = BTRCALL(BGETFIRST, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
-                If Not nStatus = 0 Then
-                    YN = MsgBox("Actions: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                    If YN = 7 Then CheckFirstRecords = False
-                End If
-            Case 9:
-                If chkMonstersAll.Value = 0 Then
-                    x = Val(txtMonstersFrom.Text)
-                    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), x, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Monsters: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Monsters: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-            Case 10:
-                nStatus = BTRCALL(BGETFIRST, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal UserKeyBuffer, KEY_BUF_LEN, 0)
-                If Not nStatus = 0 Then
-                    YN = MsgBox("Users: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                    If YN = 7 Then CheckFirstRecords = False
-                End If
-            Case 11:
-                nStatus = BTRCALL(BGETFIRST, BankPosBlock, BankDatabuf, Len(BankDatabuf), ByVal BankKeyBuffer, KEY_BUF_LEN, 0)
-                If Not nStatus = 0 Then
-                    YN = MsgBox("Bankbooks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                    If YN = 7 Then CheckFirstRecords = False
-                End If
-            Case 12:
-                If chkTextblocksAll.Value = 0 Then
-                    TextblockKey.PartNum = 0
-                    TextblockKey.Number = Val(txtTextblocksFrom.Text)
-                
-                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Textblocks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                Else
-                    nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
-                    If Not nStatus = 0 Then
-                        YN = MsgBox("Textblocks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-                        If YN = 7 Then CheckFirstRecords = False
-                    End If
-                End If
-        End Select
-    End If
-Next y
-
-For y = 1 To UBound(CheckboxArray())
-    Set CheckboxArray(y) = Nothing
-Next
-
-End Function
+'Private Function CheckFirstRecords() As Boolean
+'Dim y As Integer, nStatus As Integer, x As Long, YN As Integer
+'Dim CheckboxArray(1 To 12) As Object
+'
+'Set CheckboxArray(1) = chkMessages
+'Set CheckboxArray(2) = chkItems
+'Set CheckboxArray(3) = chkSpells
+'Set CheckboxArray(4) = chkClasses
+'Set CheckboxArray(5) = chkRaces
+'Set CheckboxArray(6) = chkShops
+'Set CheckboxArray(7) = chkRooms
+'Set CheckboxArray(8) = chkActions
+'Set CheckboxArray(9) = chkMonsters
+'Set CheckboxArray(10) = chkUsers
+'Set CheckboxArray(11) = chkBankbooks
+'Set CheckboxArray(12) = chkTextblocks
+'
+'CheckFirstRecords = True
+'
+'For y = 1 To UBound(CheckboxArray())
+'    If CheckFirstRecords = False Then Exit For
+'    If CheckboxArray(y).Value = 1 Then
+'        Select Case y
+'            Case 1:
+'                If chkMessagesAll.Value = 0 Then
+'                    x = Val(txtMessagesFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Messages: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Messages: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 2:
+'                If chkItemsAll.Value = 0 Then
+'                    x = Val(txtItemsFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Items: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Items: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 3:
+'                If chkSpellsAll.Value = 0 Then
+'                    x = Val(txtSpellsFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Spells: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Spells: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 4:
+'                If chkClassesAll.Value = 0 Then
+'                    x = Val(txtClassesFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Classes: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Classes: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 5:
+'                If chkRacesAll.Value = 0 Then
+'                    x = Val(txtRacesFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Races: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Races: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 6:
+'                If chkShopsAll.Value = 0 Then
+'                    x = Val(txtShopsFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Shops: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Shops: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 7:
+'                If chkRoomsAll.Value = 0 Then
+'                    RoomKeyStruct.MapNum = Val(txtRoomsMap.Text)
+'                    RoomKeyStruct.RoomNum = Val(txtRoomsFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Rooms: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Rooms: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 8:
+'                nStatus = BTRCALL(BGETFIRST, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
+'                If Not nStatus = 0 Then
+'                    YN = MsgBox("Actions: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                    If YN = 7 Then CheckFirstRecords = False
+'                End If
+'            Case 9:
+'                If chkMonstersAll.Value = 0 Then
+'                    x = Val(txtMonstersFrom.Text)
+'                    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), x, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Monsters: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Monsters: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'            Case 10:
+'                nStatus = BTRCALL(BGETFIRST, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal UserKeyBuffer, KEY_BUF_LEN, 0)
+'                If Not nStatus = 0 Then
+'                    YN = MsgBox("Users: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                    If YN = 7 Then CheckFirstRecords = False
+'                End If
+'            Case 11:
+'                nStatus = BTRCALL(BGETFIRST, BankPosBlock, BankDatabuf, Len(BankDatabuf), ByVal BankKeyBuffer, KEY_BUF_LEN, 0)
+'                If Not nStatus = 0 Then
+'                    YN = MsgBox("Bankbooks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                    If YN = 7 Then CheckFirstRecords = False
+'                End If
+'            Case 12:
+'                If chkTextblocksAll.Value = 0 Then
+'                    TextblockKey.PartNum = 0
+'                    TextblockKey.Number = Val(txtTextblocksFrom.Text)
+'
+'                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Textblocks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                Else
+'                    nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+'                    If Not nStatus = 0 Then
+'                        YN = MsgBox("Textblocks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
+'                        If YN = 7 Then CheckFirstRecords = False
+'                    End If
+'                End If
+'        End Select
+'    End If
+'Next y
+'
+'For y = 1 To UBound(CheckboxArray())
+'    Set CheckboxArray(y) = Nothing
+'Next
+'
+'End Function
 Private Function CalcTotalRecords() As Long
 On Error GoTo error:
-Dim nStatus As Integer
+Dim nStatus As Integer, x As Long, y As Integer
 
 CalcTotalRecords = 0
 
-If chkItems.Value = 1 Then
-    If chkItemsAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, ItemPosBlock, DBStatDatabuf, Len(Itemdatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 1800
-        Else
+For x = 0 To 8
+    If chkExportAll(x).Value = 1 Then
+        Select Case x
+            Case 0:
+                nStatus = BTRCALL(BSTAT, ClassPosBlock, DBStatDatabuf, Len(Classdatabuf), 0, KEY_BUF_LEN, 0)
+            Case 1:
+                nStatus = BTRCALL(BSTAT, RacePosBlock, DBStatDatabuf, Len(Racedatabuf), 0, KEY_BUF_LEN, 0)
+            Case 2:
+                nStatus = BTRCALL(BSTAT, ItemPosBlock, DBStatDatabuf, Len(Itemdatabuf), 0, KEY_BUF_LEN, 0)
+            Case 3:
+                nStatus = BTRCALL(BSTAT, MessagePosBlock, DBStatDatabuf, Len(Messagedatabuf), 0, KEY_BUF_LEN, 0)
+            Case 4:
+                nStatus = BTRCALL(BSTAT, MonsterPosBlock, DBStatDatabuf, Len(Monsterdatabuf), 0, KEY_BUF_LEN, 0)
+            Case 5:
+                nStatus = BTRCALL(BSTAT, ShopPosBlock, DBStatDatabuf, Len(Shopdatabuf), 0, KEY_BUF_LEN, 0)
+            Case 6:
+                nStatus = BTRCALL(BSTAT, SpellPosBlock, DBStatDatabuf, Len(Spelldatabuf), 0, KEY_BUF_LEN, 0)
+            Case 7:
+                nStatus = BTRCALL(BSTAT, TextblockPosBlock, DBStatDatabuf, Len(TextblockDataBuf), 0, KEY_BUF_LEN, 0)
+            Case 8:
+                nStatus = BTRCALL(BSTAT, RoomPosBlock, DBStatDatabuf, Len(Roomdatabuf), 0, KEY_BUF_LEN, 0)
+        End Select
+        
+        If nStatus = 0 Then
             DBStatRowToStruct DBStatDatabuf.buf
             CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
         End If
     Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtItemsTo.Text) - Val(txtItemsFrom.Text) + 1
-    End If
-End If
-
-If chkSpells.Value = 1 Then
-    If chkSpellsAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, SpellPosBlock, DBStatDatabuf, Len(Spelldatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 1300
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
+        If lvList(x).ListItems.Count > 0 Then
+            If x = 8 Then
+                For y = 1 To lvList(x).ListItems.Count
+                    CalcTotalRecords = CalcTotalRecords + Val(lvList(x).ListItems(y).ListSubItems(2).Text) - Val(lvList(x).ListItems(y).ListSubItems(1).Text) + 1
+                Next y
+            Else
+                For y = 1 To lvList(x).ListItems.Count
+                    CalcTotalRecords = CalcTotalRecords + Val(lvList(x).ListItems(y).ListSubItems(1).Text) - Val(lvList(x).ListItems(y).Text) + 1
+                Next y
+            End If
         End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtSpellsTo.Text) - Val(txtSpellsFrom.Text) + 1
     End If
-End If
-
-If chkShops.Value = 1 Then
-    If chkShopsAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, ShopPosBlock, DBStatDatabuf, Len(Shopdatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 200
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtShopsTo.Text) - Val(txtShopsFrom.Text) + 1
-    End If
-End If
+Next x
 
 If chkActions.Value = 1 Then
     nStatus = BTRCALL(BSTAT, ActionPosBlock, DBStatDatabuf, Len(ActionDatabuf), 0, KEY_BUF_LEN, 0)
-    If Not nStatus = 0 Then
-        CalcTotalRecords = CalcTotalRecords + 100
-    Else
+    If nStatus = 0 Then
         DBStatRowToStruct DBStatDatabuf.buf
         CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
     End If
 End If
 
-If chkMonsters.Value = 1 Then
-    If chkMonstersAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, MonsterPosBlock, DBStatDatabuf, Len(Monsterdatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 1100
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtMonstersTo.Text) - Val(txtMonstersFrom.Text) + 1
-    End If
-End If
-
-If chkTextblocks.Value = 1 Then
-    If chkTextblocksAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, TextblockPosBlock, DBStatDatabuf, Len(TextblockDataBuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 2600
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtTextblocksTo.Text) - Val(txtTextblocksFrom.Text) + 1
-    End If
-End If
-
-If chkMessages.Value = 1 Then
-    If chkMessagesAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, MessagePosBlock, DBStatDatabuf, Len(Messagedatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 3700
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtMessagesTo.Text) - Val(txtMessagesFrom.Text) + 1
-    End If
-End If
-
-If chkRaces.Value = 1 Then
-    If chkRacesAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, RacePosBlock, DBStatDatabuf, Len(Racedatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 30
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtRacesTo.Text) - Val(txtRacesFrom.Text) + 1
-    End If
-End If
-
-If chkClasses.Value = 1 Then
-    If chkClassesAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, ClassPosBlock, DBStatDatabuf, Len(Classdatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 30
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtClassesTo.Text) - Val(txtClassesFrom.Text) + 1
-    End If
-End If
-
-If chkRooms.Value = 1 Then
-    If chkRoomsAll.Value = 1 Then
-        nStatus = BTRCALL(BSTAT, RoomPosBlock, DBStatDatabuf, Len(Roomdatabuf), 0, KEY_BUF_LEN, 0)
-        If Not nStatus = 0 Then
-            CalcTotalRecords = CalcTotalRecords + 30000
-        Else
-            DBStatRowToStruct DBStatDatabuf.buf
-            CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
-        End If
-    Else
-        CalcTotalRecords = CalcTotalRecords + Val(txtRoomsTo.Text) - Val(txtRoomsFrom.Text) + 1
-    End If
-End If
-
 If chkUsers.Value = 1 Then
     nStatus = BTRCALL(BSTAT, UserPosBlock, DBStatDatabuf, Len(Userdatabuf), 0, KEY_BUF_LEN, 0)
-    If Not nStatus = 0 Then
-        CalcTotalRecords = CalcTotalRecords + 100
-    Else
+    If nStatus = 0 Then
         DBStatRowToStruct DBStatDatabuf.buf
         CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
     End If
@@ -4635,21 +5003,18 @@ End If
 
 If chkBankbooks.Value = 1 Then
     nStatus = BTRCALL(BSTAT, BankPosBlock, DBStatDatabuf, Len(BankDatabuf), 0, KEY_BUF_LEN, 0)
-    If Not nStatus = 0 Then
-        CalcTotalRecords = CalcTotalRecords + 100
-    Else
+    If nStatus = 0 Then
         DBStatRowToStruct DBStatDatabuf.buf
         CalcTotalRecords = CalcTotalRecords + DBStat.nRecords
     End If
 End If
 
 If CalcTotalRecords <= 0 Then CalcTotalRecords = 1
-'If CalcTotalRecords > 32767 Then CalcTotalRecords = 32767
 
 Exit Function
 
 error:
-Call HandleError
+Call HandleError("CalcTotalRecords")
 End Function
 Private Sub IncreaseProgressBar()
 On Error Resume Next
@@ -4677,6 +5042,14 @@ End Sub
 Private Sub txtClassesTo_GotFocus()
 Call SelectAll(txtClassesTo)
 
+End Sub
+
+Private Sub txtCustom_GotFocus()
+Call SelectAll(txtCustom)
+End Sub
+
+Private Sub txtFrom_GotFocus()
+Call SelectAll(txtFrom)
 End Sub
 
 Private Sub txtItemsFrom_GotFocus()
@@ -4762,4 +5135,278 @@ End Sub
 Private Sub txtTextblocksTo_GotFocus()
 Call SelectAll(txtTextblocksTo)
 
+End Sub
+
+Private Sub txtMap_GotFocus()
+Call SelectAll(txtMap)
+End Sub
+
+Private Sub txtTo_GotFocus()
+Call SelectAll(txtTo)
+End Sub
+Private Sub LoadConfig(ByVal sFile As String)
+Dim sLine As String, x As Long, y As Long, oLI As ListItem
+Dim sTemp As String, sArray() As String, fso As FileSystemObject
+On Error GoTo error:
+
+sConfigFile = sFile
+txtConfigFile.Text = sConfigFile
+
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+sExportPath = ReadINI("Settings", "ExportPath", sFile)
+If Not fso.FolderExists(sExportPath) Then sExportPath = App.Path
+
+sLine = ReadINI("Settings", "CustomName", sFile, "Custom Export")
+If Not sLine = "0" Then
+    txtCustom.Text = sLine
+Else
+    txtCustom.Text = "Custom Export"
+End If
+
+For x = 0 To 8
+    lvList(x).ListItems.clear
+    chkExportAll(x).Value = ReadINI("Records_" & x, "List_All", sFile, "1")
+    
+    y = 1
+    sLine = ReadINI("Records_" & x, "List_" & y, sFile)
+    Do While InStr(1, sLine, "/") > 0
+        sArray() = Split(sLine, "/", 3)
+        
+        If UBound(sArray()) >= 1 Then
+            Set oLI = lvList(x).ListItems.add
+            oLI.Text = sArray(0)
+            oLI.ListSubItems.add 1, , sArray(1)
+            If x = 8 And UBound(sArray()) >= 2 Then
+                oLI.ListSubItems.add 2, , sArray(2)
+            End If
+        End If
+        
+        y = y + 1
+        sLine = ReadINI("Records_" & x, "List_" & y, sFile)
+    Loop
+Next x
+
+If ReadINI("Settings", "Format", sFile, "Access") = "Textfiles" Then
+    optTextfile.Value = True
+    Call optTextfile_Click
+    chkActions.Value = ReadINI("Settings", "Actions", sFile, "1")
+    chkUsers.Value = ReadINI("Settings", "Users", sFile, "0")
+    chkBankbooks.Value = ReadINI("Settings", "Bankbooks", sFile, "0")
+Else
+    optAccessDB.Value = True
+    chkOneExpField.Value = ReadINI("Settings", "OneExpField", sFile, "0")
+    Call optAccessDB_Click
+    chkActions.Value = ReadINI("Settings", "Actions", sFile, "1")
+End If
+
+If eDatFileVersion < v111j Then
+    chkOneExpField.Value = 1
+    chkOneExpField.Enabled = False
+End If
+
+Call UpdateListStuff
+bCheckSave = False
+
+out:
+Erase sArray()
+Set oLI = Nothing
+Set fso = Nothing
+Exit Sub
+error:
+Call HandleError("LoadConfig")
+Resume out:
+    
+End Sub
+
+Private Function SaveConfig(ByVal sFile As String, _
+    Optional ByVal bPromptFile As Boolean) As Integer
+Dim sTemp As String, x As Integer, y As Long
+On Error GoTo error:
+
+If bPromptFile Then
+    CommonDialog1.Filter = "INI Files (*.ini)|*.ini"
+    CommonDialog1.DialogTitle = "Select Export Configuration File ..."
+    CommonDialog1.FileName = sConfigFile
+    CommonDialog1.InitDir = sConfigFile
+    
+    On Error GoTo canceled:
+    CommonDialog1.ShowSave
+    If CommonDialog1.FileName = "" Then GoTo canceled:
+    
+    On Error GoTo error:
+    
+    sTemp = CommonDialog1.FileName
+    If Right(sTemp, 4) <> ".ini" Then sTemp = sTemp & ".ini"
+    
+    sFile = sTemp
+End If
+
+sConfigFile = sFile
+txtConfigFile.Text = sConfigFile
+
+Call WriteINI("Settings", "CustomName", txtCustom.Text, sFile)
+Call WriteINI("Settings", "ExportPath", sExportPath, sFile)
+
+If optAccessDB.Value = True Then
+    Call WriteINI("Settings", "Format", "Access", sFile)
+Else
+    Call WriteINI("Settings", "Format", "Textfiles", sFile)
+End If
+
+Call WriteINI("Settings", "Actions", chkActions.Value, sFile)
+Call WriteINI("Settings", "Users", chkUsers.Value, sFile)
+Call WriteINI("Settings", "Bankbooks", chkBankbooks.Value, sFile)
+
+Call WriteINI("Settings", "OneExpField", chkOneExpField.Value, sFile)
+
+For x = 0 To 8
+    If chkExportAll(x).Value = 1 Then
+        Call WriteINI("Records_" & x, "List_All", "1", sFile)
+    Else
+        Call WriteINI("Records_" & x, "List_All", "0", sFile)
+    End If
+    
+    y = 1
+    If lvList(x).ListItems.Count > 0 Then
+        For y = 1 To lvList(x).ListItems.Count
+            sTemp = lvList(x).ListItems(y).Text & "/" & lvList(x).ListItems(y).SubItems(1)
+            If x = 8 Then
+                sTemp = sTemp & "/" & lvList(x).ListItems(y).SubItems(2)
+            End If
+            Call WriteINI("Records_" & x, "List_" & y, sTemp, sFile)
+        Next y
+    End If
+    Call WriteINI("Records_" & x, "List_" & y, "End", sFile)
+Next x
+
+bCheckSave = False
+
+GoTo out:
+
+canceled:
+SaveConfig = -1
+
+out:
+Exit Function
+error:
+Call HandleError("SaveConfig")
+Resume out:
+
+End Function
+
+Private Sub UpdateListStuff()
+Dim x As Integer
+On Error GoTo error:
+
+For x = 0 To 8
+    If chkExportAll(x).Value = 1 Then
+        lvList(x).BackColor = &H80000010
+        If lvList(x).ListItems.Count > 0 Then
+            If Not lvList(x).SelectedItem Is Nothing Then
+                lvList(x).SelectedItem.Selected = False
+                Set lvList(x).SelectedItem = Nothing
+                lvList(x).HideSelection = True
+            End If
+        End If
+    Else
+        lvList(x).BackColor = &H80000005
+    End If
+    
+    If cmbDB.ListIndex = x Then
+        shpOutline(x).BorderColor = &H8000000D
+    Else
+        shpOutline(x).BorderColor = &H8000000F
+    End If
+Next x
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("UpdateListStuff")
+End Sub
+
+Private Sub CombineRanges()
+Dim nRecIndex As Integer, y As Long
+Dim nLastMap As Long, nLastLow As Long, nLastHigh As Long
+On Error GoTo error:
+
+nLastMap = 0
+nLastLow = 0
+nLastHigh = 0
+
+For nRecIndex = 0 To 8
+    If lvList(nRecIndex).ListItems.Count > 0 Then
+        If nRecIndex = 8 Then
+            SortListView lvList(nRecIndex), 3, ldtNumber, True
+        End If
+        SortListView lvList(nRecIndex), 2, ldtNumber, True
+        SortListView lvList(nRecIndex), 1, ldtNumber, True
+        DoEvents
+        
+start_over:
+        For y = 1 To lvList(nRecIndex).ListItems.Count
+            If y = 1 Then
+                If nRecIndex = 8 Then
+                    nLastMap = Val(lvList(nRecIndex).ListItems(y).Text)
+                    nLastLow = Val(lvList(nRecIndex).ListItems(y).ListSubItems(1))
+                    nLastHigh = Val(lvList(nRecIndex).ListItems(y).ListSubItems(2))
+                Else
+                    nLastLow = Val(lvList(nRecIndex).ListItems(y).Text)
+                    nLastHigh = Val(lvList(nRecIndex).ListItems(y).ListSubItems(1))
+                End If
+            Else
+                If nRecIndex = 8 Then
+                    'ROOM
+                    If nLastMap = Val(lvList(nRecIndex).ListItems(y).Text) Then
+                        If Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) >= nLastLow _
+                            And Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) <= nLastHigh Then
+                            
+                            If Val(lvList(nRecIndex).ListItems(y).ListSubItems(2)) >= Val(lvList(nRecIndex).ListItems(y - 1).ListSubItems(2)) Then
+                                lvList(nRecIndex).ListItems(y - 1).ListSubItems(2) = lvList(nRecIndex).ListItems(y).ListSubItems(2)
+                            End If
+                            
+                            lvList(nRecIndex).ListItems.Remove y
+                            bCheckSave = True
+                            GoTo start_over:
+                        Else
+                            nLastLow = Val(lvList(nRecIndex).ListItems(y).ListSubItems(1))
+                            nLastHigh = Val(lvList(nRecIndex).ListItems(y).ListSubItems(2))
+                        End If
+                    Else
+                        nLastMap = Val(lvList(nRecIndex).ListItems(y).Text)
+                        nLastLow = Val(lvList(nRecIndex).ListItems(y).ListSubItems(1))
+                        nLastHigh = Val(lvList(nRecIndex).ListItems(y).ListSubItems(2))
+                    End If
+                    
+                Else
+                    'NON-ROOM
+                    If Val(lvList(nRecIndex).ListItems(y).Text) >= nLastLow _
+                        And Val(lvList(nRecIndex).ListItems(y).Text) <= nLastHigh Then
+                        
+                        If Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) >= Val(lvList(nRecIndex).ListItems(y - 1).ListSubItems(1)) Then
+                            lvList(nRecIndex).ListItems(y - 1).ListSubItems(1) = lvList(nRecIndex).ListItems(y).ListSubItems(1)
+                        End If
+                        
+                        lvList(nRecIndex).ListItems.Remove y
+                        bCheckSave = True
+                        GoTo start_over:
+                    Else
+                        nLastLow = Val(lvList(nRecIndex).ListItems(y).Text)
+                        nLastHigh = Val(lvList(nRecIndex).ListItems(y).ListSubItems(1))
+                    End If
+                    
+                End If
+            End If
+        Next y
+    End If
+Next nRecIndex
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("CombineRanges")
+Resume out:
 End Sub
