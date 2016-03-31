@@ -1,4 +1,4 @@
-Nightmare Redux is an editor for the game MajorMUD(r). 
+Nightmare Redux is an editor for the game MajorMUD(r).
 
 v1.7 (4/??/2016) - (by Syntax)
 ------------------------------------------ 
