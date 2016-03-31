@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmMME_Export 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Export to MMUD Explorer"
@@ -15,144 +15,21 @@ Begin VB.Form frmMME_Export
    MDIChild        =   -1  'True
    ScaleHeight     =   5385
    ScaleWidth      =   5520
-   Begin VB.Frame fraSpecial 
-      Caption         =   "Special Export Options"
-      Height          =   1995
-      Left            =   120
-      TabIndex        =   30
-      Top             =   2040
-      Visible         =   0   'False
-      Width           =   5235
-      Begin VB.CommandButton cmdQ 
-         Caption         =   "Help"
-         Height          =   375
-         Left            =   600
-         TabIndex        =   40
-         Top             =   1140
-         Width           =   795
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Shops"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   7
-         Left            =   3600
-         TabIndex        =   39
-         Top             =   1260
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Export Only ..."
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Index           =   0
-         Left            =   2280
-         TabIndex        =   38
-         Top             =   300
-         Width           =   2355
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Races"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   6
-         Left            =   3600
-         TabIndex        =   37
-         Top             =   960
-         Value           =   1  'Checked
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Classes"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   5
-         Left            =   3600
-         TabIndex        =   36
-         Top             =   660
-         Value           =   1  'Checked
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Rooms"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   4
-         Left            =   2280
-         TabIndex        =   35
-         Top             =   1560
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Spells"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   3
-         Left            =   2280
-         TabIndex        =   34
-         Top             =   1260
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Monsters"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   2
-         Left            =   2280
-         TabIndex        =   33
-         Top             =   960
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkOnly 
-         Caption         =   "Items"
-         Enabled         =   0   'False
-         Height          =   195
-         Index           =   1
-         Left            =   2280
-         TabIndex        =   32
-         Top             =   660
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkLegit 
-         Caption         =   """Legit"" Export"
-         Height          =   255
-         Left            =   240
-         TabIndex        =   31
-         Top             =   360
-         Width           =   1395
-      End
-   End
-   Begin VB.CommandButton cmdSpecialExport 
-      Caption         =   "Special Export"
-      Height          =   435
+   Begin VB.CommandButton cmdAddtlOptions 
+      Caption         =   "Additional Options"
+      Height          =   555
       Left            =   4080
-      TabIndex        =   29
-      Top             =   1500
+      TabIndex        =   28
+      Top             =   1380
       Width           =   1335
    End
    Begin VB.CommandButton cmdNote 
       Caption         =   "ReadMe"
       Height          =   315
       Left            =   2280
-      TabIndex        =   28
+      TabIndex        =   27
       Top             =   4260
       Width           =   975
-   End
-   Begin VB.CheckBox chkExcludeRooms 
-      Caption         =   "Enable"
-      Height          =   195
-      Left            =   300
-      TabIndex        =   27
-      Top             =   2340
-      Width           =   1335
    End
    Begin VB.TextBox txtUpdateURL 
       Height          =   285
@@ -249,7 +126,6 @@ Begin VB.Form frmMME_Export
    End
    Begin VB.Frame fraRooms 
       Caption         =   "Exclude Rooms"
-      Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -264,13 +140,48 @@ Begin VB.Form frmMME_Export
       TabIndex        =   13
       Top             =   2040
       Width           =   5235
+      Begin VB.CommandButton cmdHideHelp 
+         Caption         =   "?"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   1200
+         TabIndex        =   44
+         Top             =   750
+         Width           =   255
+      End
+      Begin VB.CheckBox chkHideExcludedRooms 
+         Caption         =   "Hide Only"
+         Enabled         =   0   'False
+         Height          =   195
+         Left            =   180
+         TabIndex        =   43
+         Top             =   780
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkExcludeRooms 
+         Caption         =   "Enable"
+         Height          =   195
+         Left            =   180
+         TabIndex        =   40
+         Top             =   300
+         Width           =   1335
+      End
       Begin VB.CheckBox chkNoRooms 
-         Caption         =   "No Rooms"
+         Caption         =   "Exclude All"
          Enabled         =   0   'False
          Height          =   195
          Left            =   180
          TabIndex        =   26
-         Top             =   600
+         Top             =   540
          Width           =   1095
       End
       Begin MSComctlLib.ListView lvExludedRooms 
@@ -300,16 +211,16 @@ Begin VB.Form frmMME_Export
          Left            =   900
          TabIndex        =   21
          Text            =   "1"
-         Top             =   1500
+         Top             =   1560
          Width           =   615
       End
       Begin VB.CommandButton cmdRemove 
          Caption         =   "&Remove"
          Enabled         =   0   'False
-         Height          =   315
+         Height          =   435
          Left            =   1680
          TabIndex        =   18
-         Top             =   1380
+         Top             =   1440
          Width           =   855
       End
       Begin VB.CommandButton cmdClear 
@@ -318,16 +229,16 @@ Begin VB.Form frmMME_Export
          Height          =   315
          Left            =   1680
          TabIndex        =   17
-         Top             =   900
+         Top             =   960
          Width           =   855
       End
       Begin VB.CommandButton cmdAdd 
          Caption         =   "&Add -->"
          Enabled         =   0   'False
-         Height          =   315
+         Height          =   555
          Left            =   1680
          TabIndex        =   16
-         Top             =   420
+         Top             =   240
          Width           =   855
       End
       Begin VB.TextBox txtTo 
@@ -336,7 +247,7 @@ Begin VB.Form frmMME_Export
          Left            =   900
          TabIndex        =   15
          Text            =   "2"
-         Top             =   1080
+         Top             =   1200
          Width           =   615
       End
       Begin VB.TextBox txtFrom 
@@ -345,7 +256,7 @@ Begin VB.Form frmMME_Export
          Left            =   180
          TabIndex        =   14
          Text            =   "1"
-         Top             =   1080
+         Top             =   1200
          Width           =   615
       End
       Begin VB.Label lblExRooms 
@@ -364,7 +275,7 @@ Begin VB.Form frmMME_Export
          Index           =   2
          Left            =   180
          TabIndex        =   22
-         Top             =   1500
+         Top             =   1560
          Width           =   615
       End
       Begin VB.Label lblExRooms 
@@ -374,7 +285,7 @@ Begin VB.Form frmMME_Export
          Index           =   1
          Left            =   900
          TabIndex        =   20
-         Top             =   900
+         Top             =   1020
          Width           =   555
       End
       Begin VB.Label lblExRooms 
@@ -384,8 +295,140 @@ Begin VB.Form frmMME_Export
          Index           =   0
          Left            =   180
          TabIndex        =   19
-         Top             =   900
+         Top             =   1020
          Width           =   735
+      End
+   End
+   Begin VB.Frame fraSpecial 
+      Caption         =   "Special Export Options"
+      Height          =   1995
+      Left            =   120
+      TabIndex        =   29
+      Top             =   2040
+      Visible         =   0   'False
+      Width           =   5235
+      Begin VB.CommandButton cmdDefaultExcludeList 
+         Caption         =   "List"
+         Height          =   255
+         Left            =   1680
+         TabIndex        =   42
+         Top             =   960
+         Width           =   795
+      End
+      Begin VB.CheckBox chkExcludeDefault 
+         Caption         =   "Exclude Default ""Not in game"" Rooms"
+         Height          =   495
+         Left            =   240
+         TabIndex        =   41
+         Top             =   660
+         Value           =   1  'Checked
+         Width           =   2175
+      End
+      Begin VB.CommandButton cmdQ 
+         Caption         =   "Help"
+         Height          =   375
+         Left            =   180
+         TabIndex        =   39
+         Top             =   1440
+         Width           =   1095
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Shops"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   7
+         Left            =   4020
+         TabIndex        =   38
+         Top             =   1260
+         Width           =   975
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Export Only ..."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Index           =   0
+         Left            =   2700
+         TabIndex        =   37
+         Top             =   300
+         Width           =   2355
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Races"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   6
+         Left            =   4020
+         TabIndex        =   36
+         Top             =   960
+         Value           =   1  'Checked
+         Width           =   975
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Classes"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   5
+         Left            =   4020
+         TabIndex        =   35
+         Top             =   660
+         Value           =   1  'Checked
+         Width           =   975
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Rooms"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   4
+         Left            =   2700
+         TabIndex        =   34
+         Top             =   1560
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Spells"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   3
+         Left            =   2700
+         TabIndex        =   33
+         Top             =   1260
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Monsters"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   2
+         Left            =   2700
+         TabIndex        =   32
+         Top             =   960
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Items"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   1
+         Left            =   2700
+         TabIndex        =   31
+         Top             =   660
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkLegit 
+         Caption         =   """Legit"" Export"
+         Height          =   255
+         Left            =   240
+         TabIndex        =   30
+         Top             =   360
+         Width           =   1395
       End
    End
    Begin VB.Label Label2 
@@ -536,6 +579,11 @@ Dim MaxValue As Double
 Dim nScaleCount As Integer
 Dim nScale As Integer
 
+Dim nDefaultExcludeMap() As Long
+Dim nDefaultExcludeFrom() As Long
+Dim nDefaultExcludeTo() As Long
+Dim sDefaultExcludeNote() As String
+
 Private Enum MarkType
     Spell = 0
     Item = 1
@@ -546,7 +594,7 @@ End Enum
 Private Sub LoadConfig(ByVal sFile As String)
 Dim sLine As String, x As Long, y As Long, oLI As ListItem
 Dim sTemp As String, sArray() As String, fso As FileSystemObject
-On Error GoTo Error:
+On Error GoTo error:
 
 sConfigFile = sFile
 If Len(sConfigFile) > 40 Then
@@ -578,7 +626,9 @@ sLine = ReadINI("Settings", "UpdateURL", sFile)
 If Not sLine = "0" Then txtUpdateURL.Text = sLine
 
 chkExcludeRooms.Value = ReadINI("Settings", "EnableExcludeRooms", sFile)
+chkHideExcludedRooms.Value = ReadINI("Settings", "HideExcludedRooms", sFile)
 chkLegit.Value = ReadINI("Settings", "Legit", sFile)
+chkExcludeDefault.Value = ReadINI("Settings", "ExcludeDefault", sFile, "1")
 chkNoRooms.Value = ReadINI("Settings", "NoRooms", sFile)
 
 lvExludedRooms.ListItems.clear
@@ -607,7 +657,7 @@ Erase sArray()
 Set oLI = Nothing
 Set fso = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError("LoadConfig")
 Resume out:
     
@@ -615,7 +665,7 @@ End Sub
 Private Function SaveConfig(ByVal sFile As String, _
     Optional ByVal bPromptFile As Boolean) As Integer
 Dim sTemp As String, x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If bPromptFile Then
     CommonDialog1.Filter = "INI Files (*.ini)|*.ini"
@@ -627,7 +677,7 @@ If bPromptFile Then
     CommonDialog1.ShowSave
     If CommonDialog1.FileName = "" Then GoTo canceled:
     
-    On Error GoTo Error:
+    On Error GoTo error:
     
     sTemp = CommonDialog1.FileName
     If Right(sTemp, 4) <> ".ini" Then sTemp = sTemp & ".ini"
@@ -644,9 +694,11 @@ End If
 
 Call WriteINI("Settings", "CustomName", txtCustom.Text, sFile)
 Call WriteINI("Settings", "Legit", chkLegit.Value, sFile)
+Call WriteINI("Settings", "ExcludeDefault", chkExcludeDefault.Value, sFile)
 Call WriteINI("Settings", "DB_Ver", txtDBVersion.Text, sFile)
 Call WriteINI("Settings", "UpdateURL", txtUpdateURL.Text, sFile)
 Call WriteINI("Settings", "EnableExcludeRooms", chkExcludeRooms.Value, sFile)
+Call WriteINI("Settings", "HideExcludedRooms", chkHideExcludedRooms.Value, sFile)
 Call WriteINI("Settings", "ExportPath", sExportPath, sFile)
 Call WriteINI("Settings", "NoRooms", chkNoRooms.Value, sFile)
 
@@ -672,11 +724,15 @@ SaveConfig = -1
 
 out:
 Exit Function
-Error:
+error:
 Call HandleError("SaveConfig")
 Resume out:
 
 End Function
+
+Private Sub chkExcludeDefault_Click()
+bCheckSave = True
+End Sub
 
 Private Sub chkExcludeRooms_Click()
 
@@ -693,10 +749,9 @@ End Sub
 Private Sub ExcludeRoomsEnable(ByVal bTrue As Boolean)
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bTrue = True Then
-    fraRooms.Enabled = True
     txtFrom.Enabled = True
     txtTo.Enabled = True
     txtMap.Enabled = True
@@ -705,12 +760,13 @@ If bTrue = True Then
     cmdClear.Enabled = True
     lvExludedRooms.Enabled = True
     chkNoRooms.Enabled = True
+    chkHideExcludedRooms.Enabled = True
+    cmdHideHelp.Enabled = True
     
     For x = 0 To 2
         lblExRooms(x).Enabled = True
     Next x
 Else
-    fraRooms.Enabled = False
     txtFrom.Enabled = False
     txtTo.Enabled = False
     txtMap.Enabled = False
@@ -719,6 +775,8 @@ Else
     cmdClear.Enabled = False
     lvExludedRooms.Enabled = False
     chkNoRooms.Enabled = False
+    chkHideExcludedRooms.Enabled = False
+    cmdHideHelp.Enabled = False
     
     For x = 0 To 2
         lblExRooms(x).Enabled = False
@@ -726,10 +784,15 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError("ExcludeRoomsEnable")
 
 End Sub
+
+Private Sub chkHideExcludedRooms_Click()
+bCheckSave = True
+End Sub
+
 Private Sub chkLegit_Click()
 
 If chkLegit.Value = 1 Then
@@ -742,22 +805,27 @@ bCheckSave = True
 End Sub
 
 Private Sub EnableLegit(ByVal bTrue As Boolean)
-On Error GoTo Error:
+On Error GoTo error:
 
 If bTrue Then
     txtCustom.Enabled = False
     txtUpdateURL.Enabled = False
     fraRooms.Enabled = False
     
-    chkExcludeRooms.Enabled = False
+    chkExcludeRooms.Value = 0
     Call ExcludeRoomsEnable(False)
+    chkExcludeRooms.Enabled = False
+    
+    lvExludedRooms.Enabled = False
     chkOnly(0).Value = 0
     chkOnly(0).Enabled = False
 Else
     txtCustom.Enabled = True
     txtUpdateURL.Enabled = True
+    fraRooms.Enabled = True
     
     chkExcludeRooms.Enabled = True
+    
     If chkExcludeRooms.Value = 1 Then
         Call ExcludeRoomsEnable(True)
     Else
@@ -766,11 +834,12 @@ Else
     
     lvExludedRooms.Enabled = True
     chkOnly(0).Enabled = True
+    chkOnly(0).Value = 0
 End If
 
 
 Exit Sub
-Error:
+error:
 Call HandleError("EnableLegit")
 End Sub
 Private Sub chkNoRooms_Click()
@@ -795,6 +864,31 @@ End Select
 
 End Sub
 
+Private Sub cmdDefaultExcludeList_Click()
+Dim x As Integer, sMsg As String
+On Error GoTo error:
+
+sMsg = "The default rooms to exclude are..."
+For x = 0 To UBound(nDefaultExcludeMap())
+    sMsg = sMsg & vbCrLf & sDefaultExcludeNote(x) & ": " & nDefaultExcludeMap(x) & "/" & nDefaultExcludeFrom(x)
+    If Not nDefaultExcludeFrom(x) = nDefaultExcludeTo(x) Then
+        sMsg = sMsg & "-" & nDefaultExcludeTo(x)
+    End If
+Next x
+
+MsgBox sMsg, vbInformation
+
+out:
+Exit Sub
+error:
+Call HandleError("cmdDefaultExcludeList_Click")
+Resume out:
+End Sub
+
+Private Sub cmdHideHelp_Click()
+MsgBox "Excluded rooms are normally completey excluded (as of v1.6.3).  That means that rooms are not exported at all and everything referenced from those rooms will be considered as NOT in the game (unless they are also referenced from somewhere else).  Turning the HIDE option on will still consider those rooms in the game and basically only the names of the rooms will be exported (as was the case pre v1.6.3).  Users will not be able to map those rooms, effectively hiding them.", vbInformation
+End Sub
+
 Private Sub cmdNote_Click()
 MsgBox "Excluded rooms will still export the room names so monsters/shops/regen info/etc " _
     & "show a nice name instead of 'Room: 1/234'.  If the 'No Rooms' options is enabled " _
@@ -813,16 +907,60 @@ Private Sub cmdSaveConfig_Click()
 Call SaveConfig(sConfigFile, True)
 End Sub
 
-
-Private Sub Command1_Click()
-
+Private Sub AddToDefaultsArr(ByRef x As Integer, nAddMap As Long, nAddFrom As Long, nAddTo As Long, sNote As String)
+ReDim Preserve nDefaultExcludeMap(x)
+ReDim Preserve nDefaultExcludeFrom(x)
+ReDim Preserve nDefaultExcludeTo(x)
+ReDim Preserve sDefaultExcludeNote(x)
+nDefaultExcludeMap(x) = nAddMap
+nDefaultExcludeFrom(x) = nAddFrom
+nDefaultExcludeTo(x) = nAddTo
+sDefaultExcludeNote(x) = sNote
+x = x + 1
 End Sub
 
-Private Sub cmdSpecialExport_Click()
+Private Sub AddDefaultExcludes()
+Dim x As Integer
+On Error GoTo error:
+
+x = 0
+
+ReDim nDefaultExcludeMap(0) As Long
+ReDim nDefaultExcludeFrom(0) As Long
+ReDim nDefaultExcludeTo(0) As Long
+ReDim sDefaultExcludeNote(0) As String
+
+Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
+
+Call AddToDefaultsArr(x, 1, 2779, 2782, "sysop support module test rooms")
+Call AddToDefaultsArr(x, 1, 3343, 3346, "sysop support empty rooms")
+Call AddToDefaultsArr(x, 1, 3437, 3437, "sysop support rubbish room")
+
+Call AddToDefaultsArr(x, 2, 2963, 2963, "mod test room, mod 1")
+Call AddToDefaultsArr(x, 3, 788, 788, "mod test room, mod 2")
+Call AddToDefaultsArr(x, 8, 1407, 1407, "mod test room, mod 3")
+Call AddToDefaultsArr(x, 6, 3275, 3275, "mod test room, mod 4")
+Call AddToDefaultsArr(x, 9, 1432, 1432, "mod test room, mod 5")
+Call AddToDefaultsArr(x, 12, 2258, 2258, "mod test room, mod 6")
+Call AddToDefaultsArr(x, 16, 2673, 2673, "mod test room, mod 7")
+Call AddToDefaultsArr(x, 15, 2055, 2055, "mod test room, mod 8")
+Call AddToDefaultsArr(x, 17, 2839, 2839, "mod test room, mod 9")
+
+out:
+Exit Sub
+error:
+Call HandleError("AddDefaultExcludes")
+Resume out:
+End Sub
+
+Private Sub cmdAddtlOptions_Click()
 If fraSpecial.Visible Then
     fraSpecial.Visible = False
+    fraRooms.Visible = True
 Else
     fraSpecial.Visible = True
+    fraRooms.Visible = False
 End If
 End Sub
 
@@ -845,6 +983,8 @@ Me.Top = ReadINI("Windows", "MME-Top")
 
 Call LoadConfig(sConfigFile)
 
+Call AddDefaultExcludes
+
 Me.Show
 Me.SetFocus
 'cmdCancel.SetFocus
@@ -855,7 +995,7 @@ End Sub
 Private Sub cmdAdd_Click()
 Dim oLI As ListItem
 Dim nFrom As Long, nTo As Long, nMap As Long
-On Error GoTo Error:
+On Error GoTo error:
 
 nFrom = Val(txtFrom.Text)
 nTo = Val(txtTo.Text)
@@ -876,7 +1016,7 @@ bCheckSave = True
 out:
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError("cmdAdd_Click")
 Resume out:
 
@@ -888,7 +1028,7 @@ bCheckSave = True
 End Sub
 
 Private Sub cmdRemove_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 If Not lvExludedRooms.SelectedItem Is Nothing Then
     lvExludedRooms.ListItems.Remove lvExludedRooms.SelectedItem.Index
@@ -897,7 +1037,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdRemove_Click")
 Resume out:
 End Sub
@@ -936,7 +1076,7 @@ End Sub
 
 Private Sub cmdSelectConfig_Click()
 Dim sTemp As String, nTemp As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If bCheckSave Then
     nTemp = MsgBox("Save current config file first?", vbYesNoCancel + vbQuestion, "Save MME Config?")
@@ -957,7 +1097,7 @@ On Error GoTo canceled:
 CommonDialog1.ShowOpen
 If CommonDialog1.FileName = "" Then GoTo canceled:
 
-On Error GoTo Error:
+On Error GoTo error:
 
 sTemp = CommonDialog1.FileName
 If Right(sTemp, 4) <> ".ini" Then sTemp = sTemp & ".ini"
@@ -968,15 +1108,15 @@ canceled:
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdSelectConfig_Click")
 Resume out:
 End Sub
 
 
 Private Sub cmdGo_Click()
-On Error GoTo Error:
-Dim x As Integer, sPath As String
+On Error GoTo error:
+Dim x As Long, y As Long, sPath As String
 Dim sNewPath() As String
 Dim StartTime As Long, nTotalTime As Double, sTotalTime As String
 Dim nTmp As Integer, nStatus As Integer, frmForm As Form
@@ -1003,6 +1143,7 @@ Call ExcludeRoomsEnable(False)
 chkExcludeRooms.Enabled = False
 txtUpdateURL.Enabled = False
 cmdCancel.Caption = "&Cancel"
+cmdAddtlOptions.Enabled = False
 
 Call LockMenus
 Timer1.Enabled = True
@@ -1099,17 +1240,33 @@ Erase TBFromBadSource()
 ReDim MonGroup(39, 9999)
 
 
-If chkLegit.Value = 0 _
-    And chkNoRooms.Value = 0 _
-    And chkExcludeRooms.Value = 1 _
-    And lvExludedRooms.ListItems.Count > 0 Then
+If chkLegit.Value = 1 _
+    Or chkExcludeDefault.Value = 1 _
+    Or (chkExcludeRooms.Value = 1 And lvExludedRooms.ListItems.Count > 0) Then
     
-    ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count)
-    For x = 1 To lvExludedRooms.ListItems.Count
-        ExcludedRooms(1, x) = Val(lvExludedRooms.ListItems(x).Text)
-        ExcludedRooms(2, x) = Val(lvExludedRooms.ListItems(x).ListSubItems(1).Text)
-        ExcludedRooms(3, x) = Val(lvExludedRooms.ListItems(x).ListSubItems(2).Text)
-    Next x
+    If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
+        ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count + UBound(nDefaultExcludeMap()))
+    Else
+        ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count)
+    End If
+    
+    x = 0
+    If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
+        For x = 0 To UBound(nDefaultExcludeMap())
+            ExcludedRooms(1, x) = nDefaultExcludeMap(x)
+            ExcludedRooms(2, x) = nDefaultExcludeFrom(x)
+            ExcludedRooms(3, x) = nDefaultExcludeTo(x)
+        Next x
+    End If
+    
+    If chkExcludeRooms.Value = 1 And lvExludedRooms.ListItems.Count > 0 Then
+        For y = 1 To lvExludedRooms.ListItems.Count
+            ExcludedRooms(1, x) = Val(lvExludedRooms.ListItems(y).Text)
+            ExcludedRooms(2, x) = Val(lvExludedRooms.ListItems(y).ListSubItems(1).Text)
+            ExcludedRooms(3, x) = Val(lvExludedRooms.ListItems(y).ListSubItems(2).Text)
+            x = x + 1
+        Next y
+    End If
 Else
     ReDim ExcludedRooms(1, 0)
     ExcludedRooms(1, 0) = -1
@@ -1248,6 +1405,7 @@ cmdNote.Enabled = True
 txtDBVersion.Enabled = True
 chkLegit.Enabled = True
 txtConfigFile.Enabled = True
+cmdAddtlOptions.Enabled = True
 'txtCustom.Enabled = True
 cmdSelectConfig.Enabled = True
 cmdSaveConfig.Enabled = True
@@ -1262,7 +1420,7 @@ End If
 Set frmForm = Nothing
 Exit Sub
 
-Error:
+error:
 Call HandleError
 On Error Resume Next
 Call CloseDB(True)
@@ -1272,7 +1430,7 @@ End Sub
 
 Private Sub VerifyOneRecordInDBs()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If chkOnly(0).Value = 1 Then
     If tabShops.RecordCount = 0 Then
@@ -1447,7 +1605,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("VerifyOneRecordInDBs")
 Resume out:
     
@@ -1456,7 +1614,7 @@ Private Sub MarkShopInGame(ByVal nNum As Long, sFrom As String)
 Dim sTemp As String
 
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If nNum = 0 Then Exit Sub
 
@@ -1485,7 +1643,7 @@ End If
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("MarkShopInGame: #" & nNum)
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then bStopExport = True
@@ -1495,7 +1653,7 @@ Private Sub MarkMonsterInGame(ByVal nNum As Long, sFrom As String)
 Dim sTemp As String
 
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If nNum = 0 Then Exit Sub
 
@@ -1527,7 +1685,7 @@ End If
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("MarkMonsterInGame: #" & nNum)
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then bStopExport = True
@@ -1539,7 +1697,7 @@ Private Sub MarkItemInGame(ByVal nNum As Long, Optional ByVal sFrom As String, _
 Dim sTemp As String
 
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If nNum = 0 Then Exit Sub
 
@@ -1577,18 +1735,18 @@ End If
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("MarkItemInGame: #" & nNum)
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then bStopExport = True
         
 End Sub
 Private Sub MarkSpellInGame(ByVal nNum As Long, Optional ByVal sFrom As String, _
-    Optional bLearned As Boolean)
-Dim sTemp As String
+    Optional bLearned As Boolean, Optional sClasses As String)
+Dim sTemp As String, sNewArr() As String, x As Long
 
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If nNum = 0 Then Exit Sub
 
@@ -1618,6 +1776,17 @@ If tabSpells.NoMatch = False Then
         tabSpells.Edit
         tabSpells.Fields("Learnable") = 1
         tabSpells.Fields("Learned From") = sTemp
+        
+        If Not sClasses = "" And Not tabSpells.Fields("Classes") = "(*)" Then
+            If sClasses = "(*)" Or tabSpells.Fields("Classes") = "" Or tabSpells.Fields("Classes") = Chr(0) Then
+                tabSpells.Fields("Classes") = sClasses
+            Else
+                sNewArr = MergeStringArrays(StringOfNumbersToArray(tabSpells.Fields("Classes")), StringOfNumbersToArray(sClasses))
+                sClasses = "(" & Join(sNewArr, "),(") & ")"
+                tabSpells.Fields("Classes") = sClasses
+            End If
+        End If
+        
         tabSpells.Update
     Else
         'if the "sFrom" is already in the assigned to field, dont do it again
@@ -1644,7 +1813,7 @@ End If
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("MarkSpellInGame: #" & nNum)
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then bStopExport = True
@@ -1654,7 +1823,7 @@ Private Sub MarkTBInGame(ByVal nNum As Long, ByVal sFrom As String, Optional ByV
 Dim sTemp As String
 
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If nNum = 0 Then Exit Sub
 
@@ -1697,12 +1866,43 @@ tabTBInfo.Update
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("MarkTBInGame: #" & nNum)
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then bStopExport = True
 
 End Sub
+
+Private Function IsExcludedRoom(nMap As Long, nRoom As Long, Optional bDefaultOnly As Boolean = False) As Boolean
+Dim x As Long, nMaxIterate As Long
+On Error GoTo error:
+
+IsExcludedRoom = False
+
+If Not ExcludedRooms(1, 0) = -1 Then
+    If bDefaultOnly Then
+        nMaxIterate = UBound(nDefaultExcludeMap())
+    Else
+        nMaxIterate = UBound(ExcludedRooms(), 2)
+    End If
+    
+    For x = 0 To nMaxIterate
+        If nMap = ExcludedRooms(1, x) Then
+            If nRoom >= ExcludedRooms(2, x) And nRoom <= ExcludedRooms(3, x) Then
+                IsExcludedRoom = True
+                Exit Function
+            End If
+        End If
+    Next x
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("IsExcludedRoom")
+Resume out:
+End Function
+
 Private Sub ScanRooms()
 Dim nStatus As Integer, x As Integer, nRec As Long
 
@@ -1710,7 +1910,7 @@ Dim nStatus As Integer, x As Integer, nRec As Long
 '       ROOMS
 '-------------------------------
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -1719,10 +1919,12 @@ nRec = 1
 Do While nStatus = 0 And bStopExport = False
     RoomRowToStruct Roomdatabuf.buf
     lblPanel(1).Caption = "Searching Rooms (" & nRec & ")"
-    
-'    If Not RoomInGame(Roomrec.MapNumber, Roomrec.RoomNumber) Then
-'        GoTo skip:
-'    End If
+     
+    If chkHideExcludedRooms.Value = 1 Then
+        If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, True) Then GoTo Skip:
+    Else
+        If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then GoTo Skip:
+    End If
     
     'mark items that are placed items as in the game
     For x = 0 To 9
@@ -1805,7 +2007,7 @@ Loop
 '''''''Close #1
 
 Exit Sub
-Error:
+error:
 lblPanel(1).Caption = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
 DoEvents
 Call HandleError("ScanRooms")
@@ -1825,7 +2027,7 @@ Dim nStatus As Integer, x As Integer
 '       SHOPS
 '-------------------------------
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -1863,7 +2065,7 @@ Loop
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanShops")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -1881,7 +2083,7 @@ Dim nStatus As Integer, x As Integer
 '       MONSTERS
 '-------------------------------
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -1982,7 +2184,7 @@ Loop
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanMonsters")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -1994,13 +2196,13 @@ End If
 End Sub
 
 Private Sub ScanItems()
-Dim nStatus As Integer, x As Integer
+Dim nStatus As Integer, x As Integer, sClasses As String
 
 '-------------------------------
 '       ITEMS
 '-------------------------------
 Dim nYesNo As Integer, bContainer As Boolean
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -2019,6 +2221,17 @@ Do While nStatus = 0 And bStopExport = False
         bContainer = False
     End If
     
+    sClasses = ""
+    For x = 0 To 9
+        If Itemrec.Class(x) > 0 Then
+            If InStr(1, sClasses, "(" & Itemrec.Class(x) & ")", vbTextCompare) = 0 Then
+                If Not sClasses = "" Then sClasses = sClasses & ","
+                sClasses = sClasses & "(" & Itemrec.Class(x) & ")"
+            End If
+        End If
+    Next x
+    If sClasses = "" Then sClasses = "(*)"
+    
     For x = 0 To 19
         If Itemrec.AbilityA(x) > 0 And Itemrec.AbilityB(x) > 0 Then
             Select Case Itemrec.AbilityA(x)
@@ -2028,7 +2241,7 @@ Do While nStatus = 0 And bStopExport = False
                     
                 'learns any spells?
                 Case 42: 'learnspell
-                    Call MarkSpellInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number, True)
+                    Call MarkSpellInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number, True, sClasses)
                 
                 'casts any spells?
                 Case 43: '43-castssp
@@ -2068,7 +2281,7 @@ Loop
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanItems")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -2086,7 +2299,7 @@ Dim nNumber As Long
 '       SPELLS
 '-------------------------------
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -2154,7 +2367,7 @@ Loop
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanSpells")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -2173,7 +2386,7 @@ Dim decrypted As String, bCleared(1) As Boolean, nCurrentTB As Long, nCurrentPar
 '       TEXTBLOCKS
 '-------------------------------
 Dim nYesNo As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -2271,7 +2484,7 @@ Loop
 
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanTextblocks")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -2329,9 +2542,9 @@ Dim nStatus As Integer, x As Long, nRec As Long, nCurrentMonster As Long
 '-------------------------------
 Dim nYesNo As Integer, sData As String, z As Long, nTBNumber As Long
 Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long, y As Long
-Dim nMonsterSpells() As Currency
+Dim nMonsterSpells() As Currency, sMonsterSpellsClasses() As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -2374,7 +2587,11 @@ check_next_part:
     End If
     
     Erase nMonsterSpells()
+    Erase sMonsterSpellsClasses()
+    
     ReDim nMonsterSpells(0)
+    ReDim sMonsterSpellsClasses(0)
+    
     Erase nMonsterItems()
     ReDim nMonsterItems(1 To 3, 0) '1=number, 2=percent, 3=percent failure
     nDataPos = 1
@@ -2402,7 +2619,7 @@ check_next_part:
                 Call TextblockRowToStruct(TextblockDataBuf.buf)
                 nTBNumber = TextblockRec.LinkTo
                 If nTBNumber > 0 Then
-                    Call GetTBItems(nMonsterItems(), nTBNumber, nNest, True, nMonsterSpells())
+                    Call GetTBItems(nMonsterItems(), nTBNumber, nNest, True, nMonsterSpells(), sMonsterSpellsClasses())
                 End If
             End If
         End If
@@ -2411,10 +2628,7 @@ check_next_part:
     If UBound(nMonsterItems(), 2) > 0 Then
         For z = 0 To UBound(nMonsterItems(), 2)
             If nMonsterItems(1, z) > 0 Then
-                Call MarkItemInGame(nMonsterItems(1, z), "NPC #" _
-                    & nCurrentMonster)
-                    '& IIf(nMonsterItems(2, z) < 1 And nMonsterItems(2, z) > 0, "(" _
-                    '& Round(nMonsterItems(2, z) * 100, 1) & "%)", ""))
+                Call MarkItemInGame(nMonsterItems(1, z), "NPC #" & nCurrentMonster)
             End If
         Next z
         
@@ -2424,14 +2638,12 @@ check_next_part:
     If UBound(nMonsterSpells()) > 0 Then
         For z = 0 To UBound(nMonsterSpells())
             If nMonsterSpells(z) > 0 Then
-                Call MarkSpellInGame(nMonsterSpells(z), "NPC #" _
-                    & nCurrentMonster, True)
-                    '& IIf(nMonsterSpells(2, z) < 1 And nMonsterSpells(2, z) > 0, "(" _
-                    '& Round(nMonsterSpells(2, z) * 100, 1) & "%)", ""))
+                Call MarkSpellInGame(nMonsterSpells(z), "NPC #" & nCurrentMonster, True, sMonsterSpellsClasses(z))
             End If
         Next z
         
         Erase nMonsterSpells()
+        Erase sMonsterSpellsClasses()
     End If
 
 skipMonster:
@@ -2451,10 +2663,11 @@ Loop
 
 out:
 Erase nMonsterSpells()
+Erase sMonsterSpellsClasses()
 Erase nMonsterItems()
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanGreets")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -2473,10 +2686,10 @@ Dim nStatus As Integer, x As Long, nRec As Long, nCurrentItem As Long
 '       CONTAINERs
 '-------------------------------
 Dim nYesNo As Integer, nTBNumber As Long, sData As String, z As Long
-Dim nNest As Long, nChestItems() As Currency, nDataPos As Long, y As Long
+Dim nNest As Long, nChestItems() As Currency, nDataPos As Long, y As Long, sLazyProgrammerTrashVar() As String
 Dim nDummyArray() As Currency '=bad programming is what this is
 
-On Error GoTo Error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -2546,7 +2759,7 @@ Do While nStatus = 0 And bStopExport = False
                                     
                                     If z > nDataPos Then
                                         nTBNumber = Val(Mid(sData, nDataPos, z - nDataPos))
-                                        Call GetRandomTBItems(nChestItems(), nTBNumber, nNest, 1, False, nDummyArray())
+                                        Call GetRandomTBItems(nChestItems(), nTBNumber, nNest, 1, False, nDummyArray(), sLazyProgrammerTrashVar())
                                     End If
                                 Loop
                                 
@@ -2588,7 +2801,7 @@ Erase nDummyArray()
 Erase nChestItems()
 Exit Sub
 
-Error:
+error:
 Call HandleError("ScanContainers")
 nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
 If nYesNo = vbYes Then
@@ -2602,11 +2815,11 @@ End Sub
 
 
 Private Sub GetTBItems(ByRef nReturnArray() As Currency, ByVal nTBNumber As Long, _
-    ByRef nNest As Long, ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency)
-Dim sData As String, nDataPos As Long, x As Long, y As Long
-Dim sLine As String, nValue As Long, nPercent As Currency
+    ByRef nNest As Long, ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency, ByRef sReturnSpellsClasses() As String)
+Dim sData As String, nDataPos As Long, x As Long, y As Long, nLineStart As Long
+Dim sLine As String, nValue As Long, nPercent As Currency, sClassesTest As String, sNewArr() As String
 Dim nItemArray() As Currency, nStatus As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If nNest > 5 Then Exit Sub
 
@@ -2643,6 +2856,7 @@ Do While nDataPos < Len(sData)
     x = InStr(nDataPos, sData, Chr(10))
     If x <= 0 Then x = Len(sData)
     sLine = LCase(Mid(sData, nDataPos, x - nDataPos))
+    nLineStart = nDataPos
     nDataPos = x + 1
     
     'items not in game
@@ -2680,6 +2894,13 @@ check_spell_again:
             
             For x = 0 To UBound(nReturnSpellArray())
                 If nReturnSpellArray(x) = nValue Then
+                    sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
+                    If Not sClassesTest = "(*)" Then
+                        sNewArr = MergeStringArrays(StringOfNumbersToArray(sClassesTest), StringOfNumbersToArray(sReturnSpellsClasses(x)))
+                        sReturnSpellsClasses(x) = "(" & Join(sNewArr, "),(") & ")"
+                    Else
+                        sReturnSpellsClasses(x) = sClassesTest
+                    End If
                     x = -1
                     Exit For
                 End If
@@ -2687,7 +2908,11 @@ check_spell_again:
             If x >= 0 Then
                 x = UBound(nReturnSpellArray()) + 1
                 ReDim Preserve nReturnSpellArray(x)
+                ReDim Preserve sReturnSpellsClasses(x)
                 nReturnSpellArray(x) = nValue
+                
+                sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
+                sReturnSpellsClasses(x) = sClassesTest
             End If
             y = y + 1
             GoTo check_spell_again:
@@ -2700,7 +2925,7 @@ check_random_again:
     If y > 0 Then
         nValue = ExtractValueFromString(Mid(sLine, y), "random ")
         If nValue > 0 Then
-            Call GetRandomTBItems(nReturnArray(), nValue, nNest, 1, bCheckSpells, nReturnSpellArray())
+            Call GetRandomTBItems(nReturnArray(), nValue, nNest, 1, bCheckSpells, nReturnSpellArray(), sReturnSpellsClasses())
         End If
         y = y + 1
         GoTo check_random_again:
@@ -2741,7 +2966,7 @@ nNest = nNest - 1
 Erase nItemArray()
 
 Exit Sub
-Error:
+error:
 Call HandleError("GetTBItems-#" & nTBNumber)
 Erase nItemArray()
 End Sub
@@ -2749,11 +2974,11 @@ End Sub
 
 Private Sub GetRandomTBItems(ByRef nReturnArray() As Currency, ByVal nTBNumber As Long, _
     ByRef nNest As Long, ByVal nPercentMod As Currency, _
-    ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency)
-Dim sData As String, nDataPos As Long, x As Long, y As Long
+    ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency, ByRef sReturnSpellsClasses() As String)
+Dim sData As String, nDataPos As Long, x As Long, y As Long, nLineStart As Long
 Dim nPer1 As Long, nPer2 As Long, sLine As String, nValue As Long, nPercent As Currency
-Dim nItemArray() As Currency, nStatus As Integer
-On Error GoTo Error:
+Dim nItemArray() As Currency, nStatus As Integer, sClassesTest As String, sNewArr() As String
+On Error GoTo error:
 
 If nNest > 5 Then Exit Sub
 
@@ -2799,6 +3024,7 @@ Do While nDataPos < Len(sData)
         x = InStr(nDataPos, sData, Chr(10))
         If x <= 0 Then x = Len(sData)
         sLine = LCase(Mid(sData, nDataPos, x - nDataPos))
+        nLineStart = nDataPos
         nDataPos = x
         
         y = 1
@@ -2834,6 +3060,13 @@ check_spell_again:
                 
                 For x = 0 To UBound(nReturnSpellArray())
                     If nReturnSpellArray(x) = nValue Then
+                        sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
+                        If Not sClassesTest = "(*)" Then
+                            sNewArr = MergeStringArrays(StringOfNumbersToArray(sClassesTest), StringOfNumbersToArray(sReturnSpellsClasses(x)))
+                            sReturnSpellsClasses(x) = "(" & Join(sNewArr, "),(") & ")"
+                        Else
+                            sReturnSpellsClasses(x) = sClassesTest
+                        End If
                         x = -1
                         Exit For
                     End If
@@ -2841,7 +3074,11 @@ check_spell_again:
                 If x >= 0 Then
                     x = UBound(nReturnSpellArray()) + 1
                     ReDim Preserve nReturnSpellArray(x)
+                    ReDim Preserve sReturnSpellsClasses(x)
                     nReturnSpellArray(x) = nValue
+                    
+                    sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
+                    sReturnSpellsClasses(x) = sClassesTest
                 End If
                 y = y + 1
                 GoTo check_spell_again:
@@ -2855,7 +3092,7 @@ check_random_again:
             
             nValue = ExtractValueFromString(Mid(sLine, y), "random ")
             If nValue > 0 Then
-                Call GetRandomTBItems(nReturnArray(), nValue, nNest, (nPercent * nPercentMod), bCheckSpells, nReturnSpellArray())
+                Call GetRandomTBItems(nReturnArray(), nValue, nNest, (nPercent * nPercentMod), bCheckSpells, nReturnSpellArray(), sReturnSpellsClasses())
             End If
             
             y = y + 1
@@ -2900,7 +3137,7 @@ nNest = nNest - 1
 Erase nItemArray()
 
 Exit Sub
-Error:
+error:
 Call HandleError("GetRandomTBItems-#" & nTBNumber)
 Erase nItemArray()
 End Sub
@@ -2910,7 +3147,7 @@ End Sub
 Private Function CheckTBString(ByVal TBNumber As Long, ByVal WholeString As String, _
     ByVal StringToLookFor As String, RecordType As MarkType) As Boolean
 Dim x As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
-Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String
+Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String, sClasses As String
 Dim bLearnSpell As Boolean, sChar As String, bItemFail As Boolean, bRandom As Boolean
 Dim bGiveItem As Boolean
 
@@ -2991,7 +3228,8 @@ nextnumber:
                     If TBFromBadSource(TBNumber) = True Then
                         Call MarkSpellInGame(nNumber)
                     Else
-                        Call MarkSpellInGame(nNumber, "Textblock #" & TBNumber & sSuffix, bLearnSpell)
+                        sClasses = CheckForClassRestriction(sWhole, x)
+                        Call MarkSpellInGame(nNumber, "Textblock #" & TBNumber & sSuffix, bLearnSpell, sClasses)
                     End If
                 Else
                     Call MarkSpellInGame(nNumber, "Textblock #" & TBNumber & sSuffix, bLearnSpell)
@@ -3197,6 +3435,68 @@ Next z
 
 End Function
 
+Private Function CheckForClassRestriction(ByVal sWholeData As String, ByVal nCurrentPosition As Long) As String
+Dim sLook As String, sChar As String, sTest As String
+Dim x As Integer, y1 As Integer, y2 As Integer, z As Integer, nClass As Long
+
+'make sTest just the the part of the data up until the current position
+sTest = Mid(sWholeData, 1, nCurrentPosition - 1)
+
+CheckForClassRestriction = "(*)"
+
+x = 1
+NextLine:
+'move x to the position of the first linebreak
+If Not InStr(x, sTest, Chr(10)) = 0 Then
+    x = InStr(x, sTest, Chr(10)) + 1
+    GoTo NextLine:
+End If
+
+sTest = Mid(sWholeData, x, nCurrentPosition - x)
+
+x = 1
+sLook = "class "
+
+checknext:
+If Not InStr(x, sTest, sLook) = 0 Then
+
+    x = InStr(x, sTest, sLook) 'sets x to the position of the failed string
+    
+    'check to make sure this isn't part of another word
+    If x > 1 Then
+        sChar = Mid(sTest, x - 1, 1)
+        Select Case sChar
+            Case "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", _
+                "r", "s", "t", "u", "v", "w", "x", "y", "z":
+                GoTo checknext:
+            Case Else:
+        End Select
+    End If
+    
+    y1 = x + Len(sLook) 'len of string searching (to position y1 at first number)
+    y2 = 0
+    
+nextnumber:
+    sChar = Mid(sTest, y1 + y2, 1)
+    Select Case sChar
+        Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
+            If Not y1 + y2 - 1 = Len(sTest) Then
+                y2 = y2 + 1
+                GoTo nextnumber:
+            End If
+        Case Else:
+    End Select
+    
+    If y2 = 0 Then
+        'if there were no numbers after the string
+        x = y1
+        GoTo checknext:
+    End If
+    
+    CheckForClassRestriction = "(" & Mid(sTest, y1, y2) & ")"
+End If
+
+End Function
 
 Private Sub LocateRecords()
 Dim x As Integer
@@ -3248,7 +3548,7 @@ End If
 End Sub
 
 Private Sub ExportVersionInfo()
-On Error GoTo Error:
+On Error GoTo error:
 
 tryagain:
 If tabInfo.RecordCount <> 0 Then
@@ -3278,7 +3578,7 @@ tabInfo.Update
 
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -3433,6 +3733,7 @@ Do While nStatus = 0 And bStopExport = False
     tabSpells.Fields("Learnable") = 0
     tabSpells.Fields("Learned From") = Chr(0)
     tabSpells.Fields("Casted By") = Chr(0)
+    tabSpells.Fields("Classes") = Chr(0)
     
     For x = 0 To 9
         tabSpells.Fields("Abil-" & x) = Spellrec.AbilityA(x)
@@ -3756,7 +4057,7 @@ Loop
 
 End Sub
 Private Sub ExportRooms()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, sDir As String, sTemp As String
 Dim sActionNum As String, sMonsters As String, nAction As Integer, nNumActions As Long
 Dim nTempMap As Long, nTempRoom As Long, sActions() As String, sNewActions() As String
@@ -3793,6 +4094,12 @@ Do While nStatus = 0 And bStopExport = False
     
     If UCase(Left(Roomrec.Name, 11)) = "BUFFER ROOM" Then GoTo skiproom:
     
+    If chkHideExcludedRooms.Value = 1 Then
+        If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, True) Then GoTo skiproom:
+    Else
+        If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then GoTo skiproom:
+    End If
+    
     If bUpdateExistingADB = True Then
         If tabRooms.RecordCount = 0 Then
             tabRooms.AddNew
@@ -3813,42 +4120,33 @@ Do While nStatus = 0 And bStopExport = False
     tabRooms.Fields("Room Number") = Roomrec.RoomNumber
     tabRooms.Fields("Name") = ClipNull(Roomrec.Name)
     
-    'check for excluded room
-    If Not ExcludedRooms(1, 0) = -1 Then
-        For x = 0 To UBound(ExcludedRooms(), 2)
-            If Roomrec.MapNumber = ExcludedRooms(1, x) Then
-                If Roomrec.RoomNumber >= ExcludedRooms(2, x) Then
-                    If Roomrec.RoomNumber <= ExcludedRooms(3, x) Then
-                        
-                        tabRooms.Fields("Shop") = 0
-                        tabRooms.Fields("Spell") = 0
-                        tabRooms.Fields("NPC") = 0
-                        tabRooms.Fields("CMD") = 0
-                        tabRooms.Fields("Placed") = Chr(0)
-                        
-                        For y = 0 To 9
-                                Select Case y
-                                    Case 0: sDir = "N"
-                                    Case 1: sDir = "S"
-                                    Case 2: sDir = "E"
-                                    Case 3: sDir = "W"
-                                    Case 4: sDir = "NE"
-                                    Case 5: sDir = "NW"
-                                    Case 6: sDir = "SE"
-                                    Case 7: sDir = "SW"
-                                    Case 8: sDir = "U"
-                                    Case 9: sDir = "D"
-                                End Select
-                                    
-                                tabRooms.Fields(sDir) = Chr(0)
-                        Next y
-                        tabRooms.Fields("Lair") = Chr(0)
-                        
-                        GoTo excluded:
-                    End If
-                End If
-            End If
-        Next x
+    If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then
+
+        tabRooms.Fields("Shop") = 0
+        tabRooms.Fields("Spell") = 0
+        tabRooms.Fields("NPC") = 0
+        tabRooms.Fields("CMD") = 0
+        tabRooms.Fields("Placed") = Chr(0)
+
+        For y = 0 To 9
+                Select Case y
+                    Case 0: sDir = "N"
+                    Case 1: sDir = "S"
+                    Case 2: sDir = "E"
+                    Case 3: sDir = "W"
+                    Case 4: sDir = "NE"
+                    Case 5: sDir = "NW"
+                    Case 6: sDir = "SE"
+                    Case 7: sDir = "SW"
+                    Case 8: sDir = "U"
+                    Case 9: sDir = "D"
+                End Select
+
+                tabRooms.Fields(sDir) = Chr(0)
+        Next y
+        tabRooms.Fields("Lair") = Chr(0)
+
+        GoTo excluded:
     End If
     
     If Roomrec.Type = 1 And Roomrec.ShopNum > 0 Then
@@ -4180,7 +4478,7 @@ FinishedAccess:
 Erase sActions
 Erase sNewActions
 Exit Sub
-Error:
+error:
 On Error Resume Next
 lblPanel(1).Caption = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
 DoEvents
@@ -4191,7 +4489,7 @@ Erase sNewActions
 End Sub
 
 Private Function CheckVersion() As Boolean
-On Error GoTo Error:
+On Error GoTo error:
 Dim nYesNo As Integer, sVer As String, sCurrentVer As String, sNMRVer As String
 
 CheckVersion = False
@@ -4218,14 +4516,14 @@ End If
 CheckVersion = True
 
 Exit Function
-Error:
+error:
 Call HandleError
 nYesNo = MsgBox("Unable to verify export file version information, continue anyway?", vbYesNo + vbQuestion)
 If nYesNo = vbYes Then CheckVersion = True
 End Function
 
 Private Function CreateDatabase() As Integer
-On Error GoTo Error:
+On Error GoTo error:
 Dim sTemp As String, nYesNo As Integer, catDB As ADOX.Catalog
 Dim fso As FileSystemObject, x As Integer, nTemp As Integer, nTemp2 As Integer
 
@@ -4244,7 +4542,7 @@ On Error GoTo canceled:
 CommonDialog1.ShowSave
 If CommonDialog1.FileName = "" Then GoTo canceled:
 
-On Error GoTo Error:
+On Error GoTo error:
 
 sDataSource = CommonDialog1.FileName
 If LCase(Right(sDataSource, 4)) <> ".mdb" Then sDataSource = sDataSource & ".mdb"
@@ -4288,7 +4586,7 @@ CreateDatabase = 3
 Set fso = Nothing
 Set catDB = Nothing
 Exit Function
-Error:
+error:
 Call HandleError
 Set fso = Nothing
 Set catDB = Nothing
@@ -4296,7 +4594,7 @@ Set catDB = Nothing
 End Function
 
 Private Function CreateTables() As Boolean
-On Error GoTo Error:
+On Error GoTo error:
 Dim catNewDB As ADOX.Catalog
 Dim tabNewMonsters As ADOX.Table, tabNewSpells As ADOX.Table, tabNewShops As ADOX.Table
 Dim tabNewClasses As ADOX.Table, tabNewRaces As ADOX.Table, tabNewItems As ADOX.Table
@@ -4448,6 +4746,7 @@ With tabNewSpells
     .Columns.Append "Learnable", adInteger
     .Columns.Append "Learned From", adVarWChar
     .Columns.Append "Casted By", adVarWChar
+    .Columns.Append "Classes", adVarWChar
     
 End With
 catNewDB.Tables.Append tabNewSpells
@@ -4734,7 +5033,7 @@ CreateTables = True
 DoEvents
 
 Exit Function
-Error:
+error:
 Call HandleError
 Set pkRaces = Nothing
 Set pkClasses = Nothing
@@ -4806,7 +5105,7 @@ Timer1.Enabled = False
 End Sub
 
 Private Function CalcTotalRecords() As Long
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 
 CalcTotalRecords = 0
@@ -4881,12 +5180,12 @@ If CalcTotalRecords <= 0 Then CalcTotalRecords = 100000
 
 Exit Function
 
-Error:
+error:
 Call HandleError
 End Function
 
 Private Sub OpenTables()
-On Error GoTo Error:
+On Error GoTo error:
 
 Set tabItems = DB.OpenRecordset("Items")
 Set tabClasses = DB.OpenRecordset("Classes")
@@ -4899,7 +5198,7 @@ Set tabRooms = DB.OpenRecordset("Rooms")
 Set tabTBInfo = DB.OpenRecordset("TBInfo")
 
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume Next
 End Sub
@@ -4994,3 +5293,6 @@ Private Sub txtUpdateURL_GotFocus()
 Call SelectAll(txtUpdateURL)
 
 End Sub
+
+
+
