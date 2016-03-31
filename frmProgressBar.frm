@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmProgressBar 
    BorderStyle     =   1  'Fixed Single
    ClientHeight    =   1785
@@ -141,6 +141,9 @@ End If
 Select Case sCaption
     Case "Map Builder":
         Call frmMap.ToggleStopBuild
+    
+    Case "Building Control Room List"
+        bStopControlBuild = True
         
     Case "TextBlock Search":
         If FormOwner Is Nothing Then
