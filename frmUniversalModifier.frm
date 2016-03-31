@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmUniversalModifier 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Universal Modifier"
-   ClientHeight    =   3030
+   ClientHeight    =   4380
    ClientLeft      =   450
    ClientTop       =   975
    ClientWidth     =   7860
@@ -11,45 +11,143 @@ Begin VB.Form frmUniversalModifier
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   3030
+   ScaleHeight     =   4380
    ScaleWidth      =   7860
+   Begin VB.Frame Frame4 
+      Caption         =   "Only Perform Action If:"
+      Height          =   1155
+      Left            =   3660
+      TabIndex        =   37
+      Top             =   2040
+      Width           =   4095
+      Begin VB.CheckBox chkOnlyIfOn 
+         Caption         =   "Must be"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   1
+         Left            =   120
+         TabIndex        =   43
+         Top             =   780
+         Width           =   915
+      End
+      Begin VB.TextBox txtOnlyIfValue 
+         Enabled         =   0   'False
+         Height          =   315
+         Index           =   1
+         Left            =   2400
+         TabIndex        =   42
+         Text            =   "0"
+         Top             =   720
+         Width           =   1575
+      End
+      Begin VB.ComboBox cmbOnlyIfModifier 
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   1
+         ItemData        =   "frmUniversalModifier.frx":08CA
+         Left            =   1020
+         List            =   "frmUniversalModifier.frx":08DA
+         Style           =   2  'Dropdown List
+         TabIndex        =   41
+         Top             =   720
+         Width           =   1275
+      End
+      Begin VB.ComboBox cmbOnlyIf 
+         Enabled         =   0   'False
+         Height          =   315
+         Index           =   1
+         ItemData        =   "frmUniversalModifier.frx":08F8
+         Left            =   120
+         List            =   "frmUniversalModifier.frx":08FA
+         Style           =   2  'Dropdown List
+         TabIndex        =   40
+         Top             =   360
+         Width           =   2175
+      End
+      Begin VB.ComboBox cmbOnlyIfValue 
+         Enabled         =   0   'False
+         Height          =   315
+         Index           =   1
+         ItemData        =   "frmUniversalModifier.frx":08FC
+         Left            =   2400
+         List            =   "frmUniversalModifier.frx":0921
+         Style           =   2  'Dropdown List
+         TabIndex        =   39
+         Top             =   720
+         Visible         =   0   'False
+         Width           =   1575
+      End
+      Begin VB.ComboBox cmbOnlyIfAuxValue 
+         Enabled         =   0   'False
+         Height          =   315
+         Index           =   1
+         ItemData        =   "frmUniversalModifier.frx":097C
+         Left            =   2400
+         List            =   "frmUniversalModifier.frx":09A1
+         Style           =   2  'Dropdown List
+         TabIndex        =   38
+         Top             =   360
+         Visible         =   0   'False
+         Width           =   1575
+      End
+      Begin VB.Label lblOnlyIfAuxValue 
+         Caption         =   "lbl"
+         Height          =   195
+         Index           =   1
+         Left            =   2400
+         TabIndex        =   44
+         Top             =   180
+         Visible         =   0   'False
+         Width           =   1575
+      End
+   End
    Begin VB.CommandButton cmdNotes 
       Caption         =   "*&READ!*"
       Height          =   375
-      Left            =   2760
+      Left            =   1860
       TabIndex        =   33
-      Top             =   2340
-      Width           =   795
+      Top             =   2820
+      Width           =   1575
    End
    Begin VB.CheckBox chkOnlyChanges 
       Caption         =   "Only Log Changes"
       Height          =   195
       Left            =   1020
       TabIndex        =   36
-      Top             =   1980
+      Top             =   2280
       Width           =   1635
    End
    Begin VB.CommandButton cmdLog 
       Caption         =   "&Log"
       Height          =   375
-      Left            =   1920
+      Left            =   120
       TabIndex        =   35
-      Top             =   2340
-      Width           =   735
+      Top             =   2820
+      Width           =   1455
    End
    Begin VB.Frame Frame3 
       Caption         =   "Only Perform Action If:"
       Height          =   1155
       Left            =   3660
       TabIndex        =   19
-      Top             =   720
+      Top             =   780
       Width           =   4095
       Begin VB.ComboBox cmbOnlyIfAuxValue 
          Enabled         =   0   'False
          Height          =   315
-         ItemData        =   "frmUniversalModifier.frx":08CA
+         Index           =   0
+         ItemData        =   "frmUniversalModifier.frx":09FC
          Left            =   2400
-         List            =   "frmUniversalModifier.frx":08EF
+         List            =   "frmUniversalModifier.frx":0A21
          Style           =   2  'Dropdown List
          TabIndex        =   23
          Top             =   360
@@ -59,9 +157,10 @@ Begin VB.Form frmUniversalModifier
       Begin VB.ComboBox cmbOnlyIfValue 
          Enabled         =   0   'False
          Height          =   315
-         ItemData        =   "frmUniversalModifier.frx":094A
+         Index           =   0
+         ItemData        =   "frmUniversalModifier.frx":0A7C
          Left            =   2400
-         List            =   "frmUniversalModifier.frx":096F
+         List            =   "frmUniversalModifier.frx":0AA1
          Style           =   2  'Dropdown List
          TabIndex        =   26
          Top             =   720
@@ -71,9 +170,10 @@ Begin VB.Form frmUniversalModifier
       Begin VB.ComboBox cmbOnlyIf 
          Enabled         =   0   'False
          Height          =   315
-         ItemData        =   "frmUniversalModifier.frx":09CA
+         Index           =   0
+         ItemData        =   "frmUniversalModifier.frx":0AFC
          Left            =   120
-         List            =   "frmUniversalModifier.frx":09CC
+         List            =   "frmUniversalModifier.frx":0AFE
          Style           =   2  'Dropdown List
          TabIndex        =   22
          Top             =   360
@@ -91,9 +191,10 @@ Begin VB.Form frmUniversalModifier
             Strikethrough   =   0   'False
          EndProperty
          Height          =   315
-         ItemData        =   "frmUniversalModifier.frx":09CE
+         Index           =   0
+         ItemData        =   "frmUniversalModifier.frx":0B00
          Left            =   1020
-         List            =   "frmUniversalModifier.frx":09DE
+         List            =   "frmUniversalModifier.frx":0B10
          Style           =   2  'Dropdown List
          TabIndex        =   24
          Top             =   720
@@ -102,6 +203,7 @@ Begin VB.Form frmUniversalModifier
       Begin VB.TextBox txtOnlyIfValue 
          Enabled         =   0   'False
          Height          =   315
+         Index           =   0
          Left            =   2400
          TabIndex        =   25
          Text            =   "0"
@@ -112,6 +214,7 @@ Begin VB.Form frmUniversalModifier
          Caption         =   "Must be"
          Enabled         =   0   'False
          Height          =   195
+         Index           =   0
          Left            =   120
          TabIndex        =   20
          Top             =   780
@@ -120,6 +223,7 @@ Begin VB.Form frmUniversalModifier
       Begin VB.Label lblOnlyIfAuxValue 
          Caption         =   "lbl"
          Height          =   195
+         Index           =   0
          Left            =   2400
          TabIndex        =   21
          Top             =   180
@@ -132,7 +236,7 @@ Begin VB.Form frmUniversalModifier
       Height          =   1155
       Left            =   300
       TabIndex        =   11
-      Top             =   720
+      Top             =   780
       Width           =   2895
       Begin VB.TextBox txtMap 
          Enabled         =   0   'False
@@ -218,7 +322,7 @@ Begin VB.Form frmUniversalModifier
       Height          =   675
       Left            =   3660
       TabIndex        =   27
-      Top             =   2040
+      Top             =   3360
       Width           =   4095
       Begin VB.CheckBox chkLimit 
          Caption         =   "Limit to"
@@ -249,9 +353,9 @@ Begin VB.Form frmUniversalModifier
             Strikethrough   =   0   'False
          EndProperty
          Height          =   315
-         ItemData        =   "frmUniversalModifier.frx":09FC
+         ItemData        =   "frmUniversalModifier.frx":0B2E
          Left            =   1080
-         List            =   "frmUniversalModifier.frx":0A06
+         List            =   "frmUniversalModifier.frx":0B38
          Style           =   2  'Dropdown List
          TabIndex        =   29
          Top             =   240
@@ -261,19 +365,19 @@ Begin VB.Form frmUniversalModifier
    Begin VB.CommandButton cmdCancel 
       Cancel          =   -1  'True
       Caption         =   "&Close"
-      Height          =   375
-      Left            =   1020
+      Height          =   495
+      Left            =   1860
       TabIndex        =   32
-      Top             =   2340
-      Width           =   795
+      Top             =   3480
+      Width           =   1575
    End
    Begin VB.CommandButton cmdStart 
       Caption         =   "&Start"
-      Height          =   375
-      Left            =   60
+      Height          =   495
+      Left            =   120
       TabIndex        =   31
-      Top             =   2340
-      Width           =   855
+      Top             =   3480
+      Width           =   1455
    End
    Begin VB.TextBox txtValue 
       Height          =   315
@@ -293,9 +397,9 @@ Begin VB.Form frmUniversalModifier
          Strikethrough   =   0   'False
       EndProperty
       Height          =   315
-      ItemData        =   "frmUniversalModifier.frx":0A1A
+      ItemData        =   "frmUniversalModifier.frx":0B4C
       Left            =   5580
-      List            =   "frmUniversalModifier.frx":0A30
+      List            =   "frmUniversalModifier.frx":0B62
       Style           =   2  'Dropdown List
       TabIndex        =   8
       Top             =   300
@@ -303,9 +407,9 @@ Begin VB.Form frmUniversalModifier
    End
    Begin VB.ComboBox cmbField 
       Height          =   315
-      ItemData        =   "frmUniversalModifier.frx":0A46
+      ItemData        =   "frmUniversalModifier.frx":0B78
       Left            =   1740
-      List            =   "frmUniversalModifier.frx":0A48
+      List            =   "frmUniversalModifier.frx":0B7A
       Style           =   2  'Dropdown List
       TabIndex        =   6
       Top             =   300
@@ -313,9 +417,9 @@ Begin VB.Form frmUniversalModifier
    End
    Begin VB.ComboBox cmbEditor 
       Height          =   315
-      ItemData        =   "frmUniversalModifier.frx":0A4A
+      ItemData        =   "frmUniversalModifier.frx":0B7C
       Left            =   60
-      List            =   "frmUniversalModifier.frx":0A63
+      List            =   "frmUniversalModifier.frx":0B95
       Style           =   2  'Dropdown List
       TabIndex        =   5
       Top             =   300
@@ -326,7 +430,7 @@ Begin VB.Form frmUniversalModifier
       Height          =   255
       Left            =   0
       TabIndex        =   34
-      Top             =   2775
+      Top             =   4125
       Width           =   7860
       _ExtentX        =   13864
       _ExtentY        =   450
@@ -356,9 +460,9 @@ Begin VB.Form frmUniversalModifier
    Begin VB.ComboBox cmbAbilities 
       Enabled         =   0   'False
       Height          =   315
-      ItemData        =   "frmUniversalModifier.frx":0A9E
+      ItemData        =   "frmUniversalModifier.frx":0BD0
       Left            =   3660
-      List            =   "frmUniversalModifier.frx":0AA0
+      List            =   "frmUniversalModifier.frx":0BD2
       Style           =   2  'Dropdown List
       TabIndex        =   7
       Top             =   300
@@ -447,6 +551,8 @@ Dim sLogFile As String
 Dim ts As TextStream
 Dim fso As FileSystemObject
 Dim bStopProcess As Boolean
+
+
 
 Private Sub cmbField_Click()
 Dim bEnable As Boolean, bNoValue As Boolean, bNoMod As Boolean
@@ -547,6 +653,7 @@ End If
 
 End Sub
 
+
 Private Sub cmdLog_Click()
 On Error GoTo error:
 
@@ -577,7 +684,8 @@ cmbEditor.ListIndex = 0
 cmbModifier.ListIndex = 0
 cmbLimitModifier.ListIndex = 1
 cmbValue.ListIndex = 0
-cmbOnlyIfModifier.ListIndex = 0
+cmbOnlyIfModifier(0).ListIndex = 0
+cmbOnlyIfModifier(1).ListIndex = 0
 cmbAbilities.clear
 
 Dim i As Integer
@@ -639,394 +747,404 @@ Exit Sub
 error:
 Call HandleError
 End Sub
-Private Sub chkOnlyIfOn_Click()
-If chkOnlyIfOn.Value = 1 Then
-    cmbOnlyIf.Enabled = True
-    txtOnlyIfValue.Enabled = True
-    cmbOnlyIfModifier.Enabled = True
-    cmbOnlyIfAuxValue.Enabled = True
-    cmbOnlyIfValue.Enabled = True
-    Call cmbOnlyIf_Click
+Private Sub chkOnlyIfOn_Click(Index As Integer)
+If chkOnlyIfOn(Index).Value = 1 Then
+    cmbOnlyIf(Index).Enabled = True
+    txtOnlyIfValue(Index).Enabled = True
+    cmbOnlyIfModifier(Index).Enabled = True
+    cmbOnlyIfAuxValue(Index).Enabled = True
+    cmbOnlyIfValue(Index).Enabled = True
+    Call cmbOnlyIf_Click(Index)
 Else
-    cmbOnlyIf.Enabled = False
+    cmbOnlyIf(Index).Enabled = False
     
-    txtOnlyIfValue.Enabled = False
-'    txtOnlyIfValue.Visible = True
-'    cmbOnlyIfValue.Visible = False
-    cmbOnlyIfValue.Enabled = False
+    txtOnlyIfValue(Index).Enabled = False
+'    txtOnlyIfValue(Index).Visible = True
+'    cmbOnlyIfValue(Index0).Visible = False
+    cmbOnlyIfValue(Index).Enabled = False
     
-    cmbOnlyIfAuxValue.Visible = False
-    cmbOnlyIfAuxValue.Enabled = False
+    cmbOnlyIfAuxValue(Index).Visible = False
+    cmbOnlyIfAuxValue(Index).Enabled = False
     
-    cmbOnlyIfModifier.Enabled = False
+    cmbOnlyIfModifier(Index).Enabled = False
 End If
 End Sub
 
-Private Sub cmbOnlyIf_Click()
+Private Sub cmbOnlyIf_Click(Index As Integer)
 Dim x As Integer
 
-txtOnlyIfValue.Visible = True
-cmbOnlyIfValue.Visible = False
-cmbOnlyIfModifier.Locked = False
-cmbOnlyIfAuxValue.Visible = False
-cmbOnlyIfAuxValue.Locked = False
-lblOnlyIfAuxValue.Visible = False
+txtOnlyIfValue(Index).Visible = True
+cmbOnlyIfValue(Index).Visible = False
+cmbOnlyIfModifier(Index).Locked = False
+cmbOnlyIfAuxValue(Index).Visible = False
+cmbOnlyIfAuxValue(Index).Locked = False
+lblOnlyIfAuxValue(Index).Visible = False
 
 Select Case cmbEditor.ListIndex
 
     Case 0: '0 - class
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 0: 'combat
             
             Case 1: 'magery
-                cmbOnlyIfAuxValue.clear
-                cmbOnlyIfAuxValue.AddItem "None"
-                cmbOnlyIfAuxValue.AddItem "Mage"
-                cmbOnlyIfAuxValue.AddItem "Priest"
-                cmbOnlyIfAuxValue.AddItem "Druid"
-                cmbOnlyIfAuxValue.AddItem "Bard"
-                cmbOnlyIfAuxValue.AddItem "Kai"
+                cmbOnlyIfAuxValue(Index).clear
+                cmbOnlyIfAuxValue(Index).AddItem "None"
+                cmbOnlyIfAuxValue(Index).AddItem "Mage"
+                cmbOnlyIfAuxValue(Index).AddItem "Priest"
+                cmbOnlyIfAuxValue(Index).AddItem "Druid"
+                cmbOnlyIfAuxValue(Index).AddItem "Bard"
+                cmbOnlyIfAuxValue(Index).AddItem "Kai"
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
             Case 2: 'exp%
             Case 3: 'hp Min
             Case 4: 'hp max
             Case 5, 6: 'abilities
-                cmbOnlyIfAuxValue.clear
+                cmbOnlyIfAuxValue(Index).clear
                 For x = 0 To cmbAbilities.ListCount - 1
-                    cmbOnlyIfAuxValue.AddItem cmbAbilities.List(x), x
-                    cmbOnlyIfAuxValue.ItemData(x) = cmbAbilities.ItemData(x)
+                    cmbOnlyIfAuxValue(Index).AddItem cmbAbilities.List(x), x
+                    cmbOnlyIfAuxValue(Index).ItemData(x) = cmbAbilities.ItemData(x)
                 Next
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
         End Select
         
     Case 1: '1 - item
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 1: 'item type
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "Armour"
-                cmbOnlyIfValue.AddItem "Weapon"
-                cmbOnlyIfValue.AddItem "Projectile"
-                cmbOnlyIfValue.AddItem "Sign"
-                cmbOnlyIfValue.AddItem "Food"
-                cmbOnlyIfValue.AddItem "Drink"
-                cmbOnlyIfValue.AddItem "Light"
-                cmbOnlyIfValue.AddItem "Key"
-                cmbOnlyIfValue.AddItem "Container"
-                cmbOnlyIfValue.AddItem "Scroll"
-                cmbOnlyIfValue.AddItem "Special"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "Armour"
+                cmbOnlyIfValue(Index).AddItem "Weapon"
+                cmbOnlyIfValue(Index).AddItem "Projectile"
+                cmbOnlyIfValue(Index).AddItem "Sign"
+                cmbOnlyIfValue(Index).AddItem "Food"
+                cmbOnlyIfValue(Index).AddItem "Drink"
+                cmbOnlyIfValue(Index).AddItem "Light"
+                cmbOnlyIfValue(Index).AddItem "Key"
+                cmbOnlyIfValue(Index).AddItem "Container"
+                cmbOnlyIfValue(Index).AddItem "Scroll"
+                cmbOnlyIfValue(Index).AddItem "Special"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
             
             Case 2: 'armour type
-                cmbOnlyIfAuxValue.clear
-                cmbOnlyIfAuxValue.AddItem "Armour"
-                cmbOnlyIfAuxValue.AddItem "Weapon"
-                cmbOnlyIfAuxValue.AddItem "Projectile"
-                cmbOnlyIfAuxValue.AddItem "Sign"
-                cmbOnlyIfAuxValue.AddItem "Food"
-                cmbOnlyIfAuxValue.AddItem "Drink"
-                cmbOnlyIfAuxValue.AddItem "Light"
-                cmbOnlyIfAuxValue.AddItem "Key"
-                cmbOnlyIfAuxValue.AddItem "Container"
-                cmbOnlyIfAuxValue.AddItem "Scroll"
-                cmbOnlyIfAuxValue.AddItem "Special"
+                cmbOnlyIfAuxValue(Index).clear
+                cmbOnlyIfAuxValue(Index).AddItem "Armour"
+                cmbOnlyIfAuxValue(Index).AddItem "Weapon"
+                cmbOnlyIfAuxValue(Index).AddItem "Projectile"
+                cmbOnlyIfAuxValue(Index).AddItem "Sign"
+                cmbOnlyIfAuxValue(Index).AddItem "Food"
+                cmbOnlyIfAuxValue(Index).AddItem "Drink"
+                cmbOnlyIfAuxValue(Index).AddItem "Light"
+                cmbOnlyIfAuxValue(Index).AddItem "Key"
+                cmbOnlyIfAuxValue(Index).AddItem "Container"
+                cmbOnlyIfAuxValue(Index).AddItem "Scroll"
+                cmbOnlyIfAuxValue(Index).AddItem "Special"
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Locked = True
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Locked = True
+                cmbOnlyIfAuxValue(Index).Visible = True
                 
-                lblOnlyIfAuxValue.Caption = "Item Type"
-                lblOnlyIfAuxValue.Visible = True
+                lblOnlyIfAuxValue(Index).Caption = "Item Type"
+                lblOnlyIfAuxValue(Index).Visible = True
                 
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "Natural"
-                cmbOnlyIfValue.AddItem "Robes"
-                cmbOnlyIfValue.AddItem "Padded/Ninja"
-                cmbOnlyIfValue.AddItem "Soft Leather"
-                cmbOnlyIfValue.AddItem "Soft Stud Leather"
-                cmbOnlyIfValue.AddItem "Rigid Leather"
-                cmbOnlyIfValue.AddItem "Stud Rigid Leather"
-                cmbOnlyIfValue.AddItem "Chainmail"
-                cmbOnlyIfValue.AddItem "Scalemail"
-                cmbOnlyIfValue.AddItem "Platemail"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "Natural"
+                cmbOnlyIfValue(Index).AddItem "Robes"
+                cmbOnlyIfValue(Index).AddItem "Padded/Ninja"
+                cmbOnlyIfValue(Index).AddItem "Soft Leather"
+                cmbOnlyIfValue(Index).AddItem "Soft Stud Leather"
+                cmbOnlyIfValue(Index).AddItem "Rigid Leather"
+                cmbOnlyIfValue(Index).AddItem "Stud Rigid Leather"
+                cmbOnlyIfValue(Index).AddItem "Chainmail"
+                cmbOnlyIfValue(Index).AddItem "Scalemail"
+                cmbOnlyIfValue(Index).AddItem "Platemail"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
                 
             Case 3: 'weapon type
-                cmbOnlyIfAuxValue.clear
-                cmbOnlyIfAuxValue.AddItem "Armour"
-                cmbOnlyIfAuxValue.AddItem "Weapon"
-                cmbOnlyIfAuxValue.AddItem "Projectile"
-                cmbOnlyIfAuxValue.AddItem "Sign"
-                cmbOnlyIfAuxValue.AddItem "Food"
-                cmbOnlyIfAuxValue.AddItem "Drink"
-                cmbOnlyIfAuxValue.AddItem "Light"
-                cmbOnlyIfAuxValue.AddItem "Key"
-                cmbOnlyIfAuxValue.AddItem "Container"
-                cmbOnlyIfAuxValue.AddItem "Scroll"
-                cmbOnlyIfAuxValue.AddItem "Special"
+                cmbOnlyIfAuxValue(Index).clear
+                cmbOnlyIfAuxValue(Index).AddItem "Armour"
+                cmbOnlyIfAuxValue(Index).AddItem "Weapon"
+                cmbOnlyIfAuxValue(Index).AddItem "Projectile"
+                cmbOnlyIfAuxValue(Index).AddItem "Sign"
+                cmbOnlyIfAuxValue(Index).AddItem "Food"
+                cmbOnlyIfAuxValue(Index).AddItem "Drink"
+                cmbOnlyIfAuxValue(Index).AddItem "Light"
+                cmbOnlyIfAuxValue(Index).AddItem "Key"
+                cmbOnlyIfAuxValue(Index).AddItem "Container"
+                cmbOnlyIfAuxValue(Index).AddItem "Scroll"
+                cmbOnlyIfAuxValue(Index).AddItem "Special"
                 
-                cmbOnlyIfAuxValue.ListIndex = 1
-                cmbOnlyIfAuxValue.Locked = True
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 1
+                cmbOnlyIfAuxValue(Index).Locked = True
+                cmbOnlyIfAuxValue(Index).Visible = True
                 
-                lblOnlyIfAuxValue.Caption = "Item Type"
-                lblOnlyIfAuxValue.Visible = True
+                lblOnlyIfAuxValue(Index).Caption = "Item Type"
+                lblOnlyIfAuxValue(Index).Visible = True
                 
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "1 H Blunt"
-                cmbOnlyIfValue.AddItem "2 H Blunt"
-                cmbOnlyIfValue.AddItem "1 H Sharp"
-                cmbOnlyIfValue.AddItem "2 H Sharp"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "1 H Blunt"
+                cmbOnlyIfValue(Index).AddItem "2 H Blunt"
+                cmbOnlyIfValue(Index).AddItem "1 H Sharp"
+                cmbOnlyIfValue(Index).AddItem "2 H Sharp"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
             
             Case 4: 'worn on
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "Nowhere"
-                cmbOnlyIfValue.AddItem "Everywhere"
-                cmbOnlyIfValue.AddItem "Head"
-                cmbOnlyIfValue.AddItem "Hands"
-                cmbOnlyIfValue.AddItem "Finger (1)"
-                cmbOnlyIfValue.AddItem "Feet"
-                cmbOnlyIfValue.AddItem "Arms"
-                cmbOnlyIfValue.AddItem "Back"
-                cmbOnlyIfValue.AddItem "Neck"
-                cmbOnlyIfValue.AddItem "Legs"
-                cmbOnlyIfValue.AddItem "Waist"
-                cmbOnlyIfValue.AddItem "Torso"
-                cmbOnlyIfValue.AddItem "Off-Hand"
-                cmbOnlyIfValue.AddItem "Finger (2)"
-                cmbOnlyIfValue.AddItem "Wrist"
-                cmbOnlyIfValue.AddItem "Ears"
-                cmbOnlyIfValue.AddItem "Worn"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "Nowhere"
+                cmbOnlyIfValue(Index).AddItem "Everywhere"
+                cmbOnlyIfValue(Index).AddItem "Head"
+                cmbOnlyIfValue(Index).AddItem "Hands"
+                cmbOnlyIfValue(Index).AddItem "Finger (1)"
+                cmbOnlyIfValue(Index).AddItem "Feet"
+                cmbOnlyIfValue(Index).AddItem "Arms"
+                cmbOnlyIfValue(Index).AddItem "Back"
+                cmbOnlyIfValue(Index).AddItem "Neck"
+                cmbOnlyIfValue(Index).AddItem "Legs"
+                cmbOnlyIfValue(Index).AddItem "Waist"
+                cmbOnlyIfValue(Index).AddItem "Torso"
+                cmbOnlyIfValue(Index).AddItem "Off-Hand"
+                cmbOnlyIfValue(Index).AddItem "Finger (2)"
+                cmbOnlyIfValue(Index).AddItem "Wrist (1)"
+                cmbOnlyIfValue(Index).AddItem "Ears"
+                cmbOnlyIfValue(Index).AddItem "Worn"
+                cmbOnlyIfValue(Index).AddItem "Wrist (2)"
+                cmbOnlyIfValue(Index).AddItem "Eyes"
+                cmbOnlyIfValue(Index).AddItem "Face"
                 
-                Call OFUseComboValue
+'                Wrist (1)
+'                Ears
+'                Worn
+'                Wrist (2)
+'                Eyes
+'                Face
+'
+                Call OFUseComboValue(Index)
             
             Case 9: 'cost
                 
-                cmbOnlyIfAuxValue.clear
-                cmbOnlyIfAuxValue.AddItem "Copper"
-                cmbOnlyIfAuxValue.AddItem "Silver"
-                cmbOnlyIfAuxValue.AddItem "Gold"
-                cmbOnlyIfAuxValue.AddItem "Platinum"
-                cmbOnlyIfAuxValue.AddItem "Runic"
-                cmbOnlyIfAuxValue.AddItem "Any"
+                cmbOnlyIfAuxValue(Index).clear
+                cmbOnlyIfAuxValue(Index).AddItem "Copper"
+                cmbOnlyIfAuxValue(Index).AddItem "Silver"
+                cmbOnlyIfAuxValue(Index).AddItem "Gold"
+                cmbOnlyIfAuxValue(Index).AddItem "Platinum"
+                cmbOnlyIfAuxValue(Index).AddItem "Runic"
+                cmbOnlyIfAuxValue(Index).AddItem "Any"
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
             Case 14, 15: 'abilities
-                cmbOnlyIfAuxValue.clear
+                cmbOnlyIfAuxValue(Index).clear
                 For x = 0 To cmbAbilities.ListCount - 1
-                    cmbOnlyIfAuxValue.AddItem cmbAbilities.List(x), x
-                    cmbOnlyIfAuxValue.ItemData(x) = cmbAbilities.ItemData(x)
+                    cmbOnlyIfAuxValue(Index).AddItem cmbAbilities.List(x), x
+                    cmbOnlyIfAuxValue(Index).ItemData(x) = cmbAbilities.ItemData(x)
                 Next
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
         End Select
         
     Case 2: '2 - mons
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 3: 'mon index w/group
-                cmbOnlyIfAuxValue.clear
-                cmbOnlyIfAuxValue.AddItem "Lair"
-                cmbOnlyIfAuxValue.AddItem "Wanderer"
-                cmbOnlyIfAuxValue.AddItem "NPC"
-                cmbOnlyIfAuxValue.AddItem "Living"
-                cmbOnlyIfAuxValue.AddItem "Random"
-                cmbOnlyIfAuxValue.AddItem "Guard"
-                cmbOnlyIfAuxValue.AddItem "Group 1"
-                cmbOnlyIfAuxValue.AddItem "Group 2"
-                cmbOnlyIfAuxValue.AddItem "Group 3"
-                cmbOnlyIfAuxValue.AddItem "Group 4"
-                cmbOnlyIfAuxValue.AddItem "Group 5"
-                cmbOnlyIfAuxValue.AddItem "Group 6"
-                cmbOnlyIfAuxValue.AddItem "Group 7"
-                cmbOnlyIfAuxValue.AddItem "Group 8"
-                cmbOnlyIfAuxValue.AddItem "Group 9"
-                cmbOnlyIfAuxValue.AddItem "Group 10"
-                cmbOnlyIfAuxValue.AddItem "Group 11"
-                cmbOnlyIfAuxValue.AddItem "Group 12"
-                cmbOnlyIfAuxValue.AddItem "Group 13"
-                cmbOnlyIfAuxValue.AddItem "Group 14"
-                cmbOnlyIfAuxValue.AddItem "Group 15"
-                cmbOnlyIfAuxValue.AddItem "Group 16"
-                cmbOnlyIfAuxValue.AddItem "Group 17"
-                cmbOnlyIfAuxValue.AddItem "Group 18"
-                cmbOnlyIfAuxValue.AddItem "Group 19"
-                cmbOnlyIfAuxValue.AddItem "Group 20"
-                cmbOnlyIfAuxValue.AddItem "Group 21"
-                cmbOnlyIfAuxValue.AddItem "Group 22"
-                cmbOnlyIfAuxValue.AddItem "Group 23"
-                cmbOnlyIfAuxValue.AddItem "Group 24"
-                cmbOnlyIfAuxValue.AddItem "Group 25"
-                cmbOnlyIfAuxValue.AddItem "Group 26"
-                cmbOnlyIfAuxValue.AddItem "Group 27"
-                cmbOnlyIfAuxValue.AddItem "Group 28"
-                cmbOnlyIfAuxValue.AddItem "Group 29"
-                cmbOnlyIfAuxValue.AddItem "Group 30"
-                cmbOnlyIfAuxValue.AddItem "Arena"
-                cmbOnlyIfAuxValue.AddItem "Angel"
-                cmbOnlyIfAuxValue.AddItem "Quest"
-                cmbOnlyIfAuxValue.AddItem "Other"
+                cmbOnlyIfAuxValue(Index).clear
+                cmbOnlyIfAuxValue(Index).AddItem "Lair"
+                cmbOnlyIfAuxValue(Index).AddItem "Wanderer"
+                cmbOnlyIfAuxValue(Index).AddItem "NPC"
+                cmbOnlyIfAuxValue(Index).AddItem "Living"
+                cmbOnlyIfAuxValue(Index).AddItem "Random"
+                cmbOnlyIfAuxValue(Index).AddItem "Guard"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 1"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 2"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 3"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 4"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 5"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 6"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 7"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 8"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 9"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 10"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 11"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 12"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 13"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 14"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 15"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 16"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 17"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 18"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 19"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 20"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 21"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 22"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 23"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 24"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 25"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 26"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 27"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 28"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 29"
+                cmbOnlyIfAuxValue(Index).AddItem "Group 30"
+                cmbOnlyIfAuxValue(Index).AddItem "Arena"
+                cmbOnlyIfAuxValue(Index).AddItem "Angel"
+                cmbOnlyIfAuxValue(Index).AddItem "Quest"
+                cmbOnlyIfAuxValue(Index).AddItem "Other"
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
                 
-                lblOnlyIfAuxValue.Caption = "Group"
-                lblOnlyIfAuxValue.Visible = True
+                lblOnlyIfAuxValue(Index).Caption = "Group"
+                lblOnlyIfAuxValue(Index).Visible = True
             
             Case 4: 'group
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "Lair"
-                cmbOnlyIfValue.AddItem "Wanderer"
-                cmbOnlyIfValue.AddItem "NPC"
-                cmbOnlyIfValue.AddItem "Living"
-                cmbOnlyIfValue.AddItem "Random"
-                cmbOnlyIfValue.AddItem "Guard"
-                cmbOnlyIfValue.AddItem "Group 1"
-                cmbOnlyIfValue.AddItem "Group 2"
-                cmbOnlyIfValue.AddItem "Group 3"
-                cmbOnlyIfValue.AddItem "Group 4"
-                cmbOnlyIfValue.AddItem "Group 5"
-                cmbOnlyIfValue.AddItem "Group 6"
-                cmbOnlyIfValue.AddItem "Group 7"
-                cmbOnlyIfValue.AddItem "Group 8"
-                cmbOnlyIfValue.AddItem "Group 9"
-                cmbOnlyIfValue.AddItem "Group 10"
-                cmbOnlyIfValue.AddItem "Group 11"
-                cmbOnlyIfValue.AddItem "Group 12"
-                cmbOnlyIfValue.AddItem "Group 13"
-                cmbOnlyIfValue.AddItem "Group 14"
-                cmbOnlyIfValue.AddItem "Group 15"
-                cmbOnlyIfValue.AddItem "Group 16"
-                cmbOnlyIfValue.AddItem "Group 17"
-                cmbOnlyIfValue.AddItem "Group 18"
-                cmbOnlyIfValue.AddItem "Group 19"
-                cmbOnlyIfValue.AddItem "Group 20"
-                cmbOnlyIfValue.AddItem "Group 21"
-                cmbOnlyIfValue.AddItem "Group 22"
-                cmbOnlyIfValue.AddItem "Group 23"
-                cmbOnlyIfValue.AddItem "Group 24"
-                cmbOnlyIfValue.AddItem "Group 25"
-                cmbOnlyIfValue.AddItem "Group 26"
-                cmbOnlyIfValue.AddItem "Group 27"
-                cmbOnlyIfValue.AddItem "Group 28"
-                cmbOnlyIfValue.AddItem "Group 29"
-                cmbOnlyIfValue.AddItem "Group 30"
-                cmbOnlyIfValue.AddItem "Arena"
-                cmbOnlyIfValue.AddItem "Angel"
-                cmbOnlyIfValue.AddItem "Quest"
-                cmbOnlyIfValue.AddItem "Other"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "Lair"
+                cmbOnlyIfValue(Index).AddItem "Wanderer"
+                cmbOnlyIfValue(Index).AddItem "NPC"
+                cmbOnlyIfValue(Index).AddItem "Living"
+                cmbOnlyIfValue(Index).AddItem "Random"
+                cmbOnlyIfValue(Index).AddItem "Guard"
+                cmbOnlyIfValue(Index).AddItem "Group 1"
+                cmbOnlyIfValue(Index).AddItem "Group 2"
+                cmbOnlyIfValue(Index).AddItem "Group 3"
+                cmbOnlyIfValue(Index).AddItem "Group 4"
+                cmbOnlyIfValue(Index).AddItem "Group 5"
+                cmbOnlyIfValue(Index).AddItem "Group 6"
+                cmbOnlyIfValue(Index).AddItem "Group 7"
+                cmbOnlyIfValue(Index).AddItem "Group 8"
+                cmbOnlyIfValue(Index).AddItem "Group 9"
+                cmbOnlyIfValue(Index).AddItem "Group 10"
+                cmbOnlyIfValue(Index).AddItem "Group 11"
+                cmbOnlyIfValue(Index).AddItem "Group 12"
+                cmbOnlyIfValue(Index).AddItem "Group 13"
+                cmbOnlyIfValue(Index).AddItem "Group 14"
+                cmbOnlyIfValue(Index).AddItem "Group 15"
+                cmbOnlyIfValue(Index).AddItem "Group 16"
+                cmbOnlyIfValue(Index).AddItem "Group 17"
+                cmbOnlyIfValue(Index).AddItem "Group 18"
+                cmbOnlyIfValue(Index).AddItem "Group 19"
+                cmbOnlyIfValue(Index).AddItem "Group 20"
+                cmbOnlyIfValue(Index).AddItem "Group 21"
+                cmbOnlyIfValue(Index).AddItem "Group 22"
+                cmbOnlyIfValue(Index).AddItem "Group 23"
+                cmbOnlyIfValue(Index).AddItem "Group 24"
+                cmbOnlyIfValue(Index).AddItem "Group 25"
+                cmbOnlyIfValue(Index).AddItem "Group 26"
+                cmbOnlyIfValue(Index).AddItem "Group 27"
+                cmbOnlyIfValue(Index).AddItem "Group 28"
+                cmbOnlyIfValue(Index).AddItem "Group 29"
+                cmbOnlyIfValue(Index).AddItem "Group 30"
+                cmbOnlyIfValue(Index).AddItem "Arena"
+                cmbOnlyIfValue(Index).AddItem "Angel"
+                cmbOnlyIfValue(Index).AddItem "Quest"
+                cmbOnlyIfValue(Index).AddItem "Other"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
             Case 19, 20: 'abilities
-                cmbOnlyIfAuxValue.clear
+                cmbOnlyIfAuxValue(Index).clear
                 For x = 0 To cmbAbilities.ListCount - 1
-                    cmbOnlyIfAuxValue.AddItem cmbAbilities.List(x), x
-                    cmbOnlyIfAuxValue.ItemData(x) = cmbAbilities.ItemData(x)
+                    cmbOnlyIfAuxValue(Index).AddItem cmbAbilities.List(x), x
+                    cmbOnlyIfAuxValue(Index).ItemData(x) = cmbAbilities.ItemData(x)
                 Next
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
         End Select
 
     Case 3: '3 - race
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 0, 1: 'abilities
-                cmbOnlyIfAuxValue.clear
+                cmbOnlyIfAuxValue(Index).clear
                 For x = 0 To cmbAbilities.ListCount - 1
-                    cmbOnlyIfAuxValue.AddItem cmbAbilities.List(x), x
-                    cmbOnlyIfAuxValue.ItemData(x) = cmbAbilities.ItemData(x)
+                    cmbOnlyIfAuxValue(Index).AddItem cmbAbilities.List(x), x
+                    cmbOnlyIfAuxValue(Index).ItemData(x) = cmbAbilities.ItemData(x)
                 Next
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
         End Select
     Case 4: '4 - room
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 0: 'room type
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "Normal"
-                cmbOnlyIfValue.AddItem "Shop"
-                cmbOnlyIfValue.AddItem "Arena"
-                cmbOnlyIfValue.AddItem "Lair"
-                cmbOnlyIfValue.AddItem "Hotel"
-                cmbOnlyIfValue.AddItem "Colliseum"
-                cmbOnlyIfValue.AddItem "Jail"
-                cmbOnlyIfValue.AddItem "Library"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "Normal"
+                cmbOnlyIfValue(Index).AddItem "Shop"
+                cmbOnlyIfValue(Index).AddItem "Arena"
+                cmbOnlyIfValue(Index).AddItem "Lair"
+                cmbOnlyIfValue(Index).AddItem "Hotel"
+                cmbOnlyIfValue(Index).AddItem "Colliseum"
+                cmbOnlyIfValue(Index).AddItem "Jail"
+                cmbOnlyIfValue(Index).AddItem "Library"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
             Case 9: 'monster type
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "Lair"
-                cmbOnlyIfValue.AddItem "Wanderer"
-                cmbOnlyIfValue.AddItem "NPC"
-                cmbOnlyIfValue.AddItem "Living"
-                cmbOnlyIfValue.AddItem "Random"
-                cmbOnlyIfValue.AddItem "Guard"
-                cmbOnlyIfValue.AddItem "Group 1"
-                cmbOnlyIfValue.AddItem "Group 2"
-                cmbOnlyIfValue.AddItem "Group 3"
-                cmbOnlyIfValue.AddItem "Group 4"
-                cmbOnlyIfValue.AddItem "Group 5"
-                cmbOnlyIfValue.AddItem "Group 6"
-                cmbOnlyIfValue.AddItem "Group 7"
-                cmbOnlyIfValue.AddItem "Group 8"
-                cmbOnlyIfValue.AddItem "Group 9"
-                cmbOnlyIfValue.AddItem "Group 10"
-                cmbOnlyIfValue.AddItem "Group 11"
-                cmbOnlyIfValue.AddItem "Group 12"
-                cmbOnlyIfValue.AddItem "Group 13"
-                cmbOnlyIfValue.AddItem "Group 14"
-                cmbOnlyIfValue.AddItem "Group 15"
-                cmbOnlyIfValue.AddItem "Group 16"
-                cmbOnlyIfValue.AddItem "Group 17"
-                cmbOnlyIfValue.AddItem "Group 18"
-                cmbOnlyIfValue.AddItem "Group 19"
-                cmbOnlyIfValue.AddItem "Group 20"
-                cmbOnlyIfValue.AddItem "Group 21"
-                cmbOnlyIfValue.AddItem "Group 22"
-                cmbOnlyIfValue.AddItem "Group 23"
-                cmbOnlyIfValue.AddItem "Group 24"
-                cmbOnlyIfValue.AddItem "Group 25"
-                cmbOnlyIfValue.AddItem "Group 26"
-                cmbOnlyIfValue.AddItem "Group 27"
-                cmbOnlyIfValue.AddItem "Group 28"
-                cmbOnlyIfValue.AddItem "Group 29"
-                cmbOnlyIfValue.AddItem "Group 30"
-                cmbOnlyIfValue.AddItem "Arena"
-                cmbOnlyIfValue.AddItem "Angel"
-                cmbOnlyIfValue.AddItem "Quest"
-                cmbOnlyIfValue.AddItem "Other"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "Lair"
+                cmbOnlyIfValue(Index).AddItem "Wanderer"
+                cmbOnlyIfValue(Index).AddItem "NPC"
+                cmbOnlyIfValue(Index).AddItem "Living"
+                cmbOnlyIfValue(Index).AddItem "Random"
+                cmbOnlyIfValue(Index).AddItem "Guard"
+                cmbOnlyIfValue(Index).AddItem "Group 1"
+                cmbOnlyIfValue(Index).AddItem "Group 2"
+                cmbOnlyIfValue(Index).AddItem "Group 3"
+                cmbOnlyIfValue(Index).AddItem "Group 4"
+                cmbOnlyIfValue(Index).AddItem "Group 5"
+                cmbOnlyIfValue(Index).AddItem "Group 6"
+                cmbOnlyIfValue(Index).AddItem "Group 7"
+                cmbOnlyIfValue(Index).AddItem "Group 8"
+                cmbOnlyIfValue(Index).AddItem "Group 9"
+                cmbOnlyIfValue(Index).AddItem "Group 10"
+                cmbOnlyIfValue(Index).AddItem "Group 11"
+                cmbOnlyIfValue(Index).AddItem "Group 12"
+                cmbOnlyIfValue(Index).AddItem "Group 13"
+                cmbOnlyIfValue(Index).AddItem "Group 14"
+                cmbOnlyIfValue(Index).AddItem "Group 15"
+                cmbOnlyIfValue(Index).AddItem "Group 16"
+                cmbOnlyIfValue(Index).AddItem "Group 17"
+                cmbOnlyIfValue(Index).AddItem "Group 18"
+                cmbOnlyIfValue(Index).AddItem "Group 19"
+                cmbOnlyIfValue(Index).AddItem "Group 20"
+                cmbOnlyIfValue(Index).AddItem "Group 21"
+                cmbOnlyIfValue(Index).AddItem "Group 22"
+                cmbOnlyIfValue(Index).AddItem "Group 23"
+                cmbOnlyIfValue(Index).AddItem "Group 24"
+                cmbOnlyIfValue(Index).AddItem "Group 25"
+                cmbOnlyIfValue(Index).AddItem "Group 26"
+                cmbOnlyIfValue(Index).AddItem "Group 27"
+                cmbOnlyIfValue(Index).AddItem "Group 28"
+                cmbOnlyIfValue(Index).AddItem "Group 29"
+                cmbOnlyIfValue(Index).AddItem "Group 30"
+                cmbOnlyIfValue(Index).AddItem "Arena"
+                cmbOnlyIfValue(Index).AddItem "Angel"
+                cmbOnlyIfValue(Index).AddItem "Quest"
+                cmbOnlyIfValue(Index).AddItem "Other"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
         End Select
         
     Case 5: '5 - shop
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 0: 'shop type
-                cmbOnlyIfValue.clear
-                cmbOnlyIfValue.AddItem "General"
-                cmbOnlyIfValue.AddItem "Weapons"
-                cmbOnlyIfValue.AddItem "Armour"
-                cmbOnlyIfValue.AddItem "Items"
-                cmbOnlyIfValue.AddItem "Spells"
-                cmbOnlyIfValue.AddItem "Hospital"
-                cmbOnlyIfValue.AddItem "Tavern"
-                cmbOnlyIfValue.AddItem "Bank"
-                cmbOnlyIfValue.AddItem "Training"
-                cmbOnlyIfValue.AddItem "Inn"
-                cmbOnlyIfValue.AddItem "Specific"
-                cmbOnlyIfValue.AddItem "Gang Shop"
-                cmbOnlyIfValue.AddItem "Deed Shop"
+                cmbOnlyIfValue(Index).clear
+                cmbOnlyIfValue(Index).AddItem "General"
+                cmbOnlyIfValue(Index).AddItem "Weapons"
+                cmbOnlyIfValue(Index).AddItem "Armour"
+                cmbOnlyIfValue(Index).AddItem "Items"
+                cmbOnlyIfValue(Index).AddItem "Spells"
+                cmbOnlyIfValue(Index).AddItem "Hospital"
+                cmbOnlyIfValue(Index).AddItem "Tavern"
+                cmbOnlyIfValue(Index).AddItem "Bank"
+                cmbOnlyIfValue(Index).AddItem "Training"
+                cmbOnlyIfValue(Index).AddItem "Inn"
+                cmbOnlyIfValue(Index).AddItem "Specific"
+                cmbOnlyIfValue(Index).AddItem "Gang Shop"
+                cmbOnlyIfValue(Index).AddItem "Deed Shop"
                 
-                Call OFUseComboValue
+                Call OFUseComboValue(Index)
                 
             Case 1: 'regen time
             Case 2: 'regen %
@@ -1034,50 +1152,50 @@ Select Case cmbEditor.ListIndex
         End Select
 
     Case 6: '6 - spell
-        Select Case cmbOnlyIf.ListIndex
+        Select Case cmbOnlyIf(Index).ListIndex
             Case 0: 'magery
-                cmbOnlyIfAuxValue.clear
-                cmbOnlyIfAuxValue.AddItem "None"
-                cmbOnlyIfAuxValue.AddItem "Mage"
-                cmbOnlyIfAuxValue.AddItem "Priest"
-                cmbOnlyIfAuxValue.AddItem "Druid"
-                cmbOnlyIfAuxValue.AddItem "Bard"
-                cmbOnlyIfAuxValue.AddItem "Kai"
+                cmbOnlyIfAuxValue(Index).clear
+                cmbOnlyIfAuxValue(Index).AddItem "None"
+                cmbOnlyIfAuxValue(Index).AddItem "Mage"
+                cmbOnlyIfAuxValue(Index).AddItem "Priest"
+                cmbOnlyIfAuxValue(Index).AddItem "Druid"
+                cmbOnlyIfAuxValue(Index).AddItem "Bard"
+                cmbOnlyIfAuxValue(Index).AddItem "Kai"
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
                 
             Case 1: 'req level
             Case 15, 16: 'abilities
-                cmbOnlyIfAuxValue.clear
+                cmbOnlyIfAuxValue(Index).clear
                 For x = 0 To cmbAbilities.ListCount - 1
-                    cmbOnlyIfAuxValue.AddItem cmbAbilities.List(x), x
-                    cmbOnlyIfAuxValue.ItemData(x) = cmbAbilities.ItemData(x)
+                    cmbOnlyIfAuxValue(Index).AddItem cmbAbilities.List(x), x
+                    cmbOnlyIfAuxValue(Index).ItemData(x) = cmbAbilities.ItemData(x)
                 Next
                 
-                cmbOnlyIfAuxValue.ListIndex = 0
-                cmbOnlyIfAuxValue.Visible = True
+                cmbOnlyIfAuxValue(Index).ListIndex = 0
+                cmbOnlyIfAuxValue(Index).Visible = True
         End Select
 End Select
 
 
 End Sub
-Private Sub OFUseComboValue()
-    cmbOnlyIfValue.ListIndex = 0
-    cmbOnlyIfValue.Visible = True
-    txtOnlyIfValue.Visible = False
-    cmbOnlyIfModifier.ListIndex = 0
-'    cmbOnlyIfModifier.Locked = True
+Private Sub OFUseComboValue(Index As Integer)
+    cmbOnlyIfValue(Index).ListIndex = 0
+    cmbOnlyIfValue(Index).Visible = True
+    txtOnlyIfValue(Index).Visible = False
+    cmbOnlyIfModifier(Index).ListIndex = 0
+'    cmbOnlyIfModifier(Index).Locked = True
 End Sub
 
 
 Private Sub cmdNotes_Click()
 MsgBox "Notes on the Universal Modifier:" & vbCrLf _
     & "------------------------------------------" & vbCrLf _
-    & "Use the 'Limit' and 'Only if' options to your advantage.  You'll need to think about the outcome of *ALL*" & vbCrLf _
-    & "the values that will be calculated.  For example, say you wanted to subtract 5 from every monster's" & vbCrLf _
-    & "regen time. Well make sure you set the limit to ' > or = 1 ' so that you don't end up with any monsters" & vbCrLf _
-    & "that instant-regen.  You'll also want to say, 'Only if Regen Time > 0' so that you don't make a monster" & vbCrLf _
+    & "Use the 'Limit' and 'Only if' options to your advantage.  You'll need to think about the outcome of *ALL*" _
+    & "the values that will be calculated.  For example, say you wanted to subtract 5 from every monster's" _
+    & "regen time. Well make sure you set the limit to ' > or = 1 ' so that you don't end up with any monsters" _
+    & "that instant-regen.  You'll also want to say, 'Only if Regen Time > 0' so that you don't make a monster" _
     & "that had 0 regen time now have 1 regen time.", vbInformation
 End Sub
 
@@ -1113,13 +1231,18 @@ End If
 End Sub
 
 Private Sub cmbEditor_Click()
+Dim x As Integer
 
 lblMap.Enabled = False
 txtMap.Enabled = False
-chkOnlyIfOn.Value = 0
-chkOnlyIfOn.Enabled = False
-cmbOnlyIfAuxValue.Visible = False
-cmbOnlyIf.clear
+chkOnlyIfOn(0).Value = 0
+chkOnlyIfOn(1).Value = 0
+chkOnlyIfOn(0).Enabled = False
+chkOnlyIfOn(1).Enabled = False
+cmbOnlyIfAuxValue(0).Visible = False
+cmbOnlyIfAuxValue(1).Visible = False
+cmbOnlyIf(0).clear
+cmbOnlyIf(1).clear
         
 Select Case cmbEditor.ListIndex
 
@@ -1133,16 +1256,17 @@ Select Case cmbEditor.ListIndex
         cmbField.AddItem "Take Ability", 5
         cmbField.AddItem "Change Ability", 6
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Combat", 0
-        cmbOnlyIf.AddItem "Magery", 1
-        cmbOnlyIf.AddItem "Exp %", 2
-        cmbOnlyIf.AddItem "HP Min", 3
-        cmbOnlyIf.AddItem "HP Max", 4
-        cmbOnlyIf.AddItem "Has Ability", 5
-        cmbOnlyIf.AddItem "Doesn't have Ability", 6
-        cmbOnlyIf.ListIndex = 0
-        
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Combat", 0
+            cmbOnlyIf(x).AddItem "Magery", 1
+            cmbOnlyIf(x).AddItem "Exp %", 2
+            cmbOnlyIf(x).AddItem "HP Min", 3
+            cmbOnlyIf(x).AddItem "HP Max", 4
+            cmbOnlyIf(x).AddItem "Has Ability", 5
+            cmbOnlyIf(x).AddItem "Doesn't have Ability", 6
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
     Case 1: '1 - item
         cmbField.clear
         cmbField.AddItem "Game Limit", 0
@@ -1160,24 +1284,26 @@ Select Case cmbEditor.ListIndex
         cmbField.AddItem "Take Ability", 12
         cmbField.AddItem "Change Ability", 13
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Game Limit", 0
-        cmbOnlyIf.AddItem "Item Type", 1
-        cmbOnlyIf.AddItem "Armour Type", 2
-        cmbOnlyIf.AddItem "Weapon Type", 3
-        cmbOnlyIf.AddItem "Worn On", 4
-        cmbOnlyIf.AddItem "Weight", 5
-        cmbOnlyIf.AddItem "Speed", 6
-        cmbOnlyIf.AddItem "Req. Strength", 7
-        cmbOnlyIf.AddItem "Accuracy", 8
-        cmbOnlyIf.AddItem "Cost", 9
-        cmbOnlyIf.AddItem "AC", 10
-        cmbOnlyIf.AddItem "DR", 11
-        cmbOnlyIf.AddItem "Min Hit", 12
-        cmbOnlyIf.AddItem "Max Hit", 13
-        cmbOnlyIf.AddItem "Has Ability", 14
-        cmbOnlyIf.AddItem "Doesn't have Ability", 15
-        cmbOnlyIf.ListIndex = 0
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Game Limit", 0
+            cmbOnlyIf(x).AddItem "Item Type", 1
+            cmbOnlyIf(x).AddItem "Armour Type", 2
+            cmbOnlyIf(x).AddItem "Weapon Type", 3
+            cmbOnlyIf(x).AddItem "Worn On", 4
+            cmbOnlyIf(x).AddItem "Weight", 5
+            cmbOnlyIf(x).AddItem "Speed", 6
+            cmbOnlyIf(x).AddItem "Req. Strength", 7
+            cmbOnlyIf(x).AddItem "Accuracy", 8
+            cmbOnlyIf(x).AddItem "Cost", 9
+            cmbOnlyIf(x).AddItem "AC", 10
+            cmbOnlyIf(x).AddItem "DR", 11
+            cmbOnlyIf(x).AddItem "Min Hit", 12
+            cmbOnlyIf(x).AddItem "Max Hit", 13
+            cmbOnlyIf(x).AddItem "Has Ability", 14
+            cmbOnlyIf(x).AddItem "Doesn't have Ability", 15
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
         
     Case 2: '2 - mons
         cmbField.clear
@@ -1207,29 +1333,31 @@ Select Case cmbEditor.ListIndex
         cmbField.AddItem "Take Ability", 23
         cmbField.AddItem "Change Ability", 24
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Game Limit", 0
-        cmbOnlyIf.AddItem "Experience", 1
-        cmbOnlyIf.AddItem "Regen Time", 2
-        cmbOnlyIf.AddItem "Index (w/Group)", 3
-        cmbOnlyIf.AddItem "Group", 4
-        cmbOnlyIf.AddItem "Runic", 5
-        cmbOnlyIf.AddItem "Platinum", 6
-        cmbOnlyIf.AddItem "Gold", 7
-        cmbOnlyIf.AddItem "Silver", 8
-        cmbOnlyIf.AddItem "Copper", 9
-        cmbOnlyIf.AddItem "Charm LVL", 10
-        cmbOnlyIf.AddItem "Follow %", 11
-        cmbOnlyIf.AddItem "MR", 12
-        cmbOnlyIf.AddItem "HP Regen", 13
-        cmbOnlyIf.AddItem "Hit Points", 14
-        cmbOnlyIf.AddItem "AC", 15
-        cmbOnlyIf.AddItem "DR", 16
-        cmbOnlyIf.AddItem "Drop % (per item)", 17
-        cmbOnlyIf.AddItem "Drop Uses (per item)", 18
-        cmbOnlyIf.AddItem "Has Ability", 19
-        cmbOnlyIf.AddItem "Doesn't have Ability", 20
-        cmbOnlyIf.ListIndex = 0
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Game Limit", 0
+            cmbOnlyIf(x).AddItem "Experience", 1
+            cmbOnlyIf(x).AddItem "Regen Time", 2
+            cmbOnlyIf(x).AddItem "Index (w/Group)", 3
+            cmbOnlyIf(x).AddItem "Group", 4
+            cmbOnlyIf(x).AddItem "Runic", 5
+            cmbOnlyIf(x).AddItem "Platinum", 6
+            cmbOnlyIf(x).AddItem "Gold", 7
+            cmbOnlyIf(x).AddItem "Silver", 8
+            cmbOnlyIf(x).AddItem "Copper", 9
+            cmbOnlyIf(x).AddItem "Charm LVL", 10
+            cmbOnlyIf(x).AddItem "Follow %", 11
+            cmbOnlyIf(x).AddItem "MR", 12
+            cmbOnlyIf(x).AddItem "HP Regen", 13
+            cmbOnlyIf(x).AddItem "Hit Points", 14
+            cmbOnlyIf(x).AddItem "AC", 15
+            cmbOnlyIf(x).AddItem "DR", 16
+            cmbOnlyIf(x).AddItem "Drop % (per item)", 17
+            cmbOnlyIf(x).AddItem "Drop Uses (per item)", 18
+            cmbOnlyIf(x).AddItem "Has Ability", 19
+            cmbOnlyIf(x).AddItem "Doesn't have Ability", 20
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
         
     Case 3: '3 - race
         cmbField.clear
@@ -1254,10 +1382,12 @@ Select Case cmbEditor.ListIndex
         cmbField.AddItem "Take Ability", 18
         cmbField.AddItem "Change Ability", 19
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Has Ability", 0
-        cmbOnlyIf.AddItem "Doesn't have Ability", 1
-        cmbOnlyIf.ListIndex = 0
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Has Ability", 0
+            cmbOnlyIf(x).AddItem "Doesn't have Ability", 1
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
         
     Case 4: '4 - room
         cmbField.clear
@@ -1275,19 +1405,21 @@ Select Case cmbEditor.ListIndex
             txtMap.Enabled = True
         End If
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Room Type", 0
-        cmbOnlyIf.AddItem "Min Index", 1
-        cmbOnlyIf.AddItem "Max Index", 2
-        cmbOnlyIf.AddItem "Max Regen", 3
-        cmbOnlyIf.AddItem "Delay", 4
-        cmbOnlyIf.AddItem "Light", 5
-        cmbOnlyIf.AddItem "GangHouse #", 6
-        cmbOnlyIf.AddItem "Max Area", 7
-        cmbOnlyIf.AddItem "Control Room", 8
-        cmbOnlyIf.AddItem "Monster Type", 9
-        cmbOnlyIf.AddItem "Room Spell", 10
-        cmbOnlyIf.ListIndex = 0
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Room Type", 0
+            cmbOnlyIf(x).AddItem "Min Index", 1
+            cmbOnlyIf(x).AddItem "Max Index", 2
+            cmbOnlyIf(x).AddItem "Max Regen", 3
+            cmbOnlyIf(x).AddItem "Delay", 4
+            cmbOnlyIf(x).AddItem "Light", 5
+            cmbOnlyIf(x).AddItem "GangHouse #", 6
+            cmbOnlyIf(x).AddItem "Max Area", 7
+            cmbOnlyIf(x).AddItem "Control Room", 8
+            cmbOnlyIf(x).AddItem "Monster Type", 9
+            cmbOnlyIf(x).AddItem "Room Spell", 10
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
         
     Case 5: '5 - shop
         cmbField.clear
@@ -1300,16 +1432,17 @@ Select Case cmbEditor.ListIndex
         cmbField.AddItem "ALL Regen %", 6
         cmbField.AddItem "ALL Regen Amounts", 7
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Shop Type", 0
-        cmbOnlyIf.AddItem "Stock Now (per item)", 1
-        cmbOnlyIf.AddItem "Max Stock (per item)", 2
-        cmbOnlyIf.AddItem "Regen Time (per item)", 3
-        cmbOnlyIf.AddItem "Regen % (per item)", 4
-        cmbOnlyIf.AddItem "Regen # (per item)", 5
-        cmbOnlyIf.AddItem "Markup", 6
-        
-        cmbOnlyIf.ListIndex = 0
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Shop Type", 0
+            cmbOnlyIf(x).AddItem "Stock Now (per item)", 1
+            cmbOnlyIf(x).AddItem "Max Stock (per item)", 2
+            cmbOnlyIf(x).AddItem "Regen Time (per item)", 3
+            cmbOnlyIf(x).AddItem "Regen % (per item)", 4
+            cmbOnlyIf(x).AddItem "Regen # (per item)", 5
+            cmbOnlyIf(x).AddItem "Markup", 6
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
 
     Case 6: '6 - spell
         cmbField.clear
@@ -1331,25 +1464,27 @@ Select Case cmbEditor.ListIndex
         cmbField.AddItem "Take Ability", 15
         cmbField.AddItem "Change Ability", 16
         
-        chkOnlyIfOn.Enabled = True
-        cmbOnlyIf.AddItem "Magery", 0
-        cmbOnlyIf.AddItem "Req. Level", 1
-        cmbOnlyIf.AddItem "Energy", 2
-        cmbOnlyIf.AddItem "Mana", 3
-        cmbOnlyIf.AddItem "Difficulty", 4
-        cmbOnlyIf.AddItem "Min", 5
-        cmbOnlyIf.AddItem "Max", 6
-        cmbOnlyIf.AddItem "Duration", 7
-        cmbOnlyIf.AddItem "LVL Increase Cap", 8
-        cmbOnlyIf.AddItem "LVLs Min Increase", 9
-        cmbOnlyIf.AddItem "# Min Increase", 10
-        cmbOnlyIf.AddItem "LVLs Max Increase", 11
-        cmbOnlyIf.AddItem "# Max Increase", 12
-        cmbOnlyIf.AddItem "LVLs Dur Increase", 13
-        cmbOnlyIf.AddItem "# Dur Increase", 14
-        cmbOnlyIf.AddItem "Has Ability", 15
-        cmbOnlyIf.AddItem "Doesn't have Ability", 16
-        cmbOnlyIf.ListIndex = 0
+        For x = 0 To 1
+            chkOnlyIfOn(x).Enabled = True
+            cmbOnlyIf(x).AddItem "Magery", 0
+            cmbOnlyIf(x).AddItem "Req. Level", 1
+            cmbOnlyIf(x).AddItem "Energy", 2
+            cmbOnlyIf(x).AddItem "Mana", 3
+            cmbOnlyIf(x).AddItem "Difficulty", 4
+            cmbOnlyIf(x).AddItem "Min", 5
+            cmbOnlyIf(x).AddItem "Max", 6
+            cmbOnlyIf(x).AddItem "Duration", 7
+            cmbOnlyIf(x).AddItem "LVL Increase Cap", 8
+            cmbOnlyIf(x).AddItem "LVLs Min Increase", 9
+            cmbOnlyIf(x).AddItem "# Min Increase", 10
+            cmbOnlyIf(x).AddItem "LVLs Max Increase", 11
+            cmbOnlyIf(x).AddItem "# Max Increase", 12
+            cmbOnlyIf(x).AddItem "LVLs Dur Increase", 13
+            cmbOnlyIf(x).AddItem "# Dur Increase", 14
+            cmbOnlyIf(x).AddItem "Has Ability", 15
+            cmbOnlyIf(x).AddItem "Doesn't have Ability", 16
+            cmbOnlyIf(x).ListIndex = 0
+        Next x
         
 End Select
 
@@ -1373,7 +1508,7 @@ End Sub
 Private Sub cmdStart_Click()
 On Error GoTo error
 Dim nYesNo As Integer
-Dim q1 As String, q2 As String, q3 As String, q4
+Dim q1 As String, q2 As String, q3 As String, q4 As String, q5 As String
 
 bStopProcess = False
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
@@ -1435,26 +1570,26 @@ If chkLimit.Value = 1 Then
 End If
 
 q4 = ""
-If chkOnlyIfOn.Value = 1 Then
+If chkOnlyIfOn(0).Value = 1 Then
         q4 = vbCrLf & vbCrLf & "This action will only be performed if "
         
-        If Not InStr(1, cmbOnlyIf.Text, "bility") = 0 Then
-            q4 = q4 & "it " & cmbOnlyIf.Text & " """ & cmbOnlyIfAuxValue.Text & """ with a value"
+        If Not InStr(1, cmbOnlyIf(0).Text, "bility") = 0 Then
+            q4 = q4 & "it " & cmbOnlyIf(0).Text & " """ & cmbOnlyIfAuxValue(0).Text & """ with a value"
         Else
             q4 = q4 & "the "
             
-            If cmbOnlyIfAuxValue.Visible Then
-                If lblOnlyIfAuxValue.Visible Then
-                    q4 = q4 & lblOnlyIfAuxValue.Caption & " is " & cmbOnlyIfAuxValue.Text & ", and " & cmbOnlyIf.Text & " is"
+            If cmbOnlyIfAuxValue(0).Visible Then
+                If lblOnlyIfAuxValue(0).Visible Then
+                    q4 = q4 & lblOnlyIfAuxValue(0).Caption & " is " & cmbOnlyIfAuxValue(0).Text & ", and " & cmbOnlyIf(0).Text & " is"
                 Else
-                    q4 = q4 & cmbOnlyIf.Text & " is " & cmbOnlyIfAuxValue.Text & " and"
+                    q4 = q4 & cmbOnlyIf(0).Text & " is " & cmbOnlyIfAuxValue(0).Text & " and"
                 End If
             Else
-                q4 = q4 & cmbOnlyIf.Text & " is"
+                q4 = q4 & cmbOnlyIf(0).Text & " is"
             End If
         End If
         
-        Select Case cmbOnlyIfModifier.ListIndex
+        Select Case cmbOnlyIfModifier(0).ListIndex
             Case 0: '=
                 q4 = q4 & " equal to "
             Case 1: '<=
@@ -1465,16 +1600,56 @@ If chkOnlyIfOn.Value = 1 Then
                 q4 = q4 & " NOT equal to "
         End Select
         
-        If cmbOnlyIfValue.Visible = True Then
-            q4 = q4 & cmbOnlyIfValue.Text
+        If cmbOnlyIfValue(0).Visible = True Then
+            q4 = q4 & cmbOnlyIfValue(0).Text
         Else
-            q4 = q4 & Val(txtOnlyIfValue.Text)
+            q4 = q4 & Val(txtOnlyIfValue(0).Text)
         End If
         
         q4 = q4 & "."
 End If
 
-nYesNo = MsgBox("Are you sure you want to " & q1 & q2 & "?" & q3 & q4, vbYesNo + vbQuestion, "Are you sure?")
+q5 = ""
+If chkOnlyIfOn(1).Value = 1 Then
+        q5 = vbCrLf & vbCrLf & "This action will only be performed if "
+        
+        If Not InStr(1, cmbOnlyIf(1).Text, "bility") = 0 Then
+            q5 = q5 & "it " & cmbOnlyIf(1).Text & " """ & cmbOnlyIfAuxValue(1).Text & """ with a value"
+        Else
+            q5 = q5 & "the "
+            
+            If cmbOnlyIfAuxValue(1).Visible Then
+                If lblOnlyIfAuxValue(1).Visible Then
+                    q5 = q5 & lblOnlyIfAuxValue(1).Caption & " is " & cmbOnlyIfAuxValue(1).Text & ", and " & cmbOnlyIf(1).Text & " is"
+                Else
+                    q5 = q5 & cmbOnlyIf(1).Text & " is " & cmbOnlyIfAuxValue(1).Text & " and"
+                End If
+            Else
+                q5 = q5 & cmbOnlyIf(1).Text & " is"
+            End If
+        End If
+        
+        Select Case cmbOnlyIfModifier(1).ListIndex
+            Case 0: '=
+                q5 = q5 & " equal to "
+            Case 1: '<=
+                q5 = q5 & " less than or equal to "
+            Case 2: '>=
+                q5 = q5 & " greater than or equal to "
+            Case 3: 'NOT =
+                q5 = q5 & " NOT equal to "
+        End Select
+        
+        If cmbOnlyIfValue(1).Visible = True Then
+            q5 = q5 & cmbOnlyIfValue(1).Text
+        Else
+            q5 = q5 & Val(txtOnlyIfValue(1).Text)
+        End If
+        
+        q5 = q5 & "."
+End If
+
+nYesNo = MsgBox("Are you sure you want to " & q1 & q2 & "?" & q3 & q4 & q5, vbYesNo + vbQuestion, "Are you sure?")
 If nYesNo <> vbYes Then Exit Sub
 
 Call UnloadForms(Me.Name)
@@ -1548,7 +1723,7 @@ cmdCancel.Enabled = True
 
 Call HandleError
 End Sub
-Private Function TestOnlyIf(ByVal nValue As Double) As Boolean
+Private Function TestOnlyIf(ByVal nValue As Double, nOnlyIfIndex As Integer) As Boolean
 Dim nTest As Variant
 
 'true = pass
@@ -1556,13 +1731,13 @@ Dim nTest As Variant
 
 TestOnlyIf = False
 
-If cmbOnlyIfValue.Visible Then 'combo value
-    nTest = cmbOnlyIfValue.ListIndex
+If cmbOnlyIfValue(nOnlyIfIndex).Visible Then 'combo value
+    nTest = cmbOnlyIfValue(nOnlyIfIndex).ListIndex
 Else
-    nTest = Val(txtOnlyIfValue.Text)
+    nTest = Val(txtOnlyIfValue(nOnlyIfIndex).Text)
 End If
 
-Select Case cmbOnlyIfModifier.ListIndex
+Select Case cmbOnlyIfModifier(nOnlyIfIndex).ListIndex
     Case 0: '=
         If nValue = nTest Then TestOnlyIf = True
     Case 1: '<=
@@ -1574,11 +1749,11 @@ Select Case cmbOnlyIfModifier.ListIndex
 End Select
 
 End Function
-Private Function TestOnlyIfAux(ByVal nValue As Double) As Boolean
+Private Function TestOnlyIfAux(ByVal nValue As Double, nOnlyIfIndex As Integer) As Boolean
 
 TestOnlyIfAux = False
 
-If nValue = cmbOnlyIfAuxValue.ListIndex Then TestOnlyIfAux = True
+If nValue = cmbOnlyIfAuxValue(nOnlyIfIndex).ListIndex Then TestOnlyIfAux = True
 
 End Function
 
@@ -1662,7 +1837,7 @@ Call HandleError("DoMath")
 End Function
 Private Sub ModifySpell(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer
-Dim x As Integer, bSkip As Boolean
+Dim x As Integer, bSkip As Boolean, nOnlyIfIndex As Integer
 Dim sName As String
 
 StatusBar.Panels(1).Text = cmbEditor.Text & " - " & cmbField.Text
@@ -1690,67 +1865,69 @@ Do While nStatus = 0 And bStopProcess = False
         If Spellrec.Number > nRange2 Then Exit Do
     End If
     
-    If chkOnlyIfOn.Value = 1 Then
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'magery
-                bSkip = TestOnlyIfAux(Spellrec.MageryA)
-                If bSkip = False Then GoTo Skip:
-                bSkip = TestOnlyIf(Spellrec.MageryB)
-            
-            Case 1: 'req level
-                bSkip = TestOnlyIf(Spellrec.Level)
-            Case 2: '"Energy", 2
-                bSkip = TestOnlyIf(Spellrec.Energy)
-            Case 3: '"Mana", 3
-                bSkip = TestOnlyIf(Spellrec.Mana)
-            Case 4: '"Difficulty", 4
-                bSkip = TestOnlyIf(Spellrec.Difficulty)
-            Case 5: '"Min", 5
-                bSkip = TestOnlyIf(Spellrec.Min)
-            Case 6: '"Max", 6
-                bSkip = TestOnlyIf(Spellrec.Max)
-            Case 7: '"Duration", 7
-                bSkip = TestOnlyIf(Spellrec.duration)
-            Case 8: '"LVL Increase Cap", 8
-                bSkip = TestOnlyIf(Spellrec.LevelCap)
-            Case 9: '"LVLs Min Increase", 9
-                bSkip = TestOnlyIf(Spellrec.LVLSMinIncr)
-            Case 10: '"# Min Increase", 10
-                bSkip = TestOnlyIf(Spellrec.MinIncrease)
-            Case 11: '"LVLs Max Increase", 11
-                bSkip = TestOnlyIf(Spellrec.LVLSMaxIncr)
-            Case 12: '"# Max Increase", 12
-                bSkip = TestOnlyIf(Spellrec.MaxIncrease)
-            Case 13: '"LVLs Dur Increase", 13
-                bSkip = TestOnlyIf(Spellrec.LVLSDurIncr)
-            Case 14: '"# Dur Increase", 14
-                bSkip = TestOnlyIf(Spellrec.DurIncrease)
-            Case 15: 'has abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Spellrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Spellrec.AbilityB(x))
-                        If bSkip = True Then Exit For
-                    End If
-                Next x
-            Case 16: 'doesn't have abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Spellrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Spellrec.AbilityB(x))
-                        If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
-                            bSkip = False
-                            Exit For
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'magery
+                    bSkip = TestOnlyIfAux(Spellrec.MageryA, nOnlyIfIndex)
+                    If bSkip = False Then GoTo Skip:
+                    bSkip = TestOnlyIf(Spellrec.MageryB, nOnlyIfIndex)
+                
+                Case 1: 'req level
+                    bSkip = TestOnlyIf(Spellrec.Level, nOnlyIfIndex)
+                Case 2: '"Energy", 2
+                    bSkip = TestOnlyIf(Spellrec.Energy, nOnlyIfIndex)
+                Case 3: '"Mana", 3
+                    bSkip = TestOnlyIf(Spellrec.Mana, nOnlyIfIndex)
+                Case 4: '"Difficulty", 4
+                    bSkip = TestOnlyIf(Spellrec.Difficulty, nOnlyIfIndex)
+                Case 5: '"Min", 5
+                    bSkip = TestOnlyIf(Spellrec.Min, nOnlyIfIndex)
+                Case 6: '"Max", 6
+                    bSkip = TestOnlyIf(Spellrec.Max, nOnlyIfIndex)
+                Case 7: '"Duration", 7
+                    bSkip = TestOnlyIf(Spellrec.duration, nOnlyIfIndex)
+                Case 8: '"LVL Increase Cap", 8
+                    bSkip = TestOnlyIf(Spellrec.LevelCap, nOnlyIfIndex)
+                Case 9: '"LVLs Min Increase", 9
+                    bSkip = TestOnlyIf(Spellrec.LVLSMinIncr, nOnlyIfIndex)
+                Case 10: '"# Min Increase", 10
+                    bSkip = TestOnlyIf(Spellrec.MinIncrease, nOnlyIfIndex)
+                Case 11: '"LVLs Max Increase", 11
+                    bSkip = TestOnlyIf(Spellrec.LVLSMaxIncr, nOnlyIfIndex)
+                Case 12: '"# Max Increase", 12
+                    bSkip = TestOnlyIf(Spellrec.MaxIncrease, nOnlyIfIndex)
+                Case 13: '"LVLs Dur Increase", 13
+                    bSkip = TestOnlyIf(Spellrec.LVLSDurIncr, nOnlyIfIndex)
+                Case 14: '"# Dur Increase", 14
+                    bSkip = TestOnlyIf(Spellrec.DurIncrease, nOnlyIfIndex)
+                Case 15: 'has abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Spellrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Spellrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then Exit For
                         End If
-                    End If
-                    bSkip = True
-                Next x
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+                    Next x
+                Case 16: 'doesn't have abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Spellrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Spellrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
+                                bSkip = False
+                                Exit For
+                            End If
+                        End If
+                        bSkip = True
+                    Next x
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Spellrec.Number
     Select Case nIndex
@@ -1820,7 +1997,7 @@ Exit Sub
 End Sub
 Private Sub ModifyShop(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer, bSkip As Boolean
-Dim x As Integer
+Dim x As Integer, nOnlyIfIndex As Integer
 Dim sName As String
 
 On Error GoTo error:
@@ -1850,19 +2027,21 @@ Do While nStatus = 0 And bStopProcess = False
         If Shoprec.Number > nRange2 Then Exit Do
     End If
     
-    If chkOnlyIfOn.Value = 1 Then
-        bSkip = True
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'shop type
-                bSkip = TestOnlyIf(Shoprec.ShopType)
-            Case 6: 'markup
-                bSkip = TestOnlyIf(Shoprec.ShopMarkUp)
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            bSkip = True
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'shop type
+                    bSkip = TestOnlyIf(Shoprec.ShopType, nOnlyIfIndex)
+                Case 6: 'markup
+                    bSkip = TestOnlyIf(Shoprec.ShopMarkUp, nOnlyIfIndex)
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Shoprec.Number
     Select Case nIndex
@@ -1874,27 +2053,29 @@ Do While nStatus = 0 And bStopProcess = False
         
             For x = 0 To 19
                 
-                If chkOnlyIfOn.Value = 1 Then 'per item checks
-                    bSkip = True
-                    Select Case cmbOnlyIf.ListIndex
-                        Case 1: 'now
-                            bSkip = TestOnlyIf(Shoprec.ShopNow(x))
-                        Case 2: 'max
-                            bSkip = TestOnlyIf(Shoprec.ShopMax(x))
-                        Case 3: 'time
-                            bSkip = TestOnlyIf(Shoprec.ShopRgnTime(x))
-                        Case 4: '%
-                            bSkip = TestOnlyIf(Shoprec.ShopRgnPercentage(x))
-                        Case 5: '#
-                            bSkip = TestOnlyIf(Shoprec.ShopRgnNumber(x))
-                            
-                    End Select
-                    If bSkip = False Then
-                        If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " (" & x & ")" _
-                            & " ==> Skipped due to 'Only If' Setting"
-                        GoTo SkipIndiv:
+                For nOnlyIfIndex = 0 To 1
+                    If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then 'per item checks
+                        bSkip = True
+                        Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                            Case 1: 'now
+                                bSkip = TestOnlyIf(Shoprec.ShopNow(x), nOnlyIfIndex)
+                            Case 2: 'max
+                                bSkip = TestOnlyIf(Shoprec.ShopMax(x), nOnlyIfIndex)
+                            Case 3: 'time
+                                bSkip = TestOnlyIf(Shoprec.ShopRgnTime(x), nOnlyIfIndex)
+                            Case 4: '%
+                                bSkip = TestOnlyIf(Shoprec.ShopRgnPercentage(x), nOnlyIfIndex)
+                            Case 5: '#
+                                bSkip = TestOnlyIf(Shoprec.ShopRgnNumber(x), nOnlyIfIndex)
+                                
+                        End Select
+                        If bSkip = False Then
+                            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " (" & x & ")" _
+                                & " ==> Skipped due to 'Only If' Setting"
+                            GoTo SkipIndiv:
+                        End If
                     End If
-                End If
+                Next nOnlyIfIndex
                 
                 Select Case nIndex
                     Case 3: Shoprec.ShopNow(x) = DoMath(Shoprec.ShopNow(x), 1, 1, sName, x)
@@ -1922,7 +2103,7 @@ End Sub
 
 Private Sub ModifyRoom(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer, bSkip As Boolean
-Dim i As Long
+Dim i As Long, nOnlyIfIndex As Integer
 Dim sName As String
 
 StatusBar.Panels(1).Text = cmbEditor.Text & " - " & cmbField.Text
@@ -1950,36 +2131,38 @@ Do While nStatus = 0 And bStopProcess = False
     
     sName = Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " - " & ClipNull(Roomrec.Name)
     
-    If chkOnlyIfOn.Value = 1 Then
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'room type
-                bSkip = TestOnlyIf(Roomrec.Type)
-            Case 1:
-                bSkip = TestOnlyIf(Roomrec.MinIndex)
-            Case 2:
-                bSkip = TestOnlyIf(Roomrec.MaxIndex)
-            Case 3:
-                bSkip = TestOnlyIf(Roomrec.MaxRegen)
-            Case 4:
-                bSkip = TestOnlyIf(Roomrec.Delay)
-            Case 5:
-                bSkip = TestOnlyIf(Roomrec.Light)
-            Case 6:
-                bSkip = TestOnlyIf(Roomrec.GangHouseNumber)
-            Case 7:
-                bSkip = TestOnlyIf(Roomrec.MaxArea)
-            Case 8:
-                bSkip = TestOnlyIf(Roomrec.ControlRoom)
-            Case 9:
-                bSkip = TestOnlyIf(Roomrec.MonsterType)
-            Case 10:
-                bSkip = TestOnlyIf(Roomrec.Spell)
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'room type
+                    bSkip = TestOnlyIf(Roomrec.Type, nOnlyIfIndex)
+                Case 1:
+                    bSkip = TestOnlyIf(Roomrec.MinIndex, nOnlyIfIndex)
+                Case 2:
+                    bSkip = TestOnlyIf(Roomrec.MaxIndex, nOnlyIfIndex)
+                Case 3:
+                    bSkip = TestOnlyIf(Roomrec.MaxRegen, nOnlyIfIndex)
+                Case 4:
+                    bSkip = TestOnlyIf(Roomrec.Delay, nOnlyIfIndex)
+                Case 5:
+                    bSkip = TestOnlyIf(Roomrec.Light, nOnlyIfIndex)
+                Case 6:
+                    bSkip = TestOnlyIf(Roomrec.GangHouseNumber, nOnlyIfIndex)
+                Case 7:
+                    bSkip = TestOnlyIf(Roomrec.MaxArea, nOnlyIfIndex)
+                Case 8:
+                    bSkip = TestOnlyIf(Roomrec.ControlRoom, nOnlyIfIndex)
+                Case 9:
+                    bSkip = TestOnlyIf(Roomrec.MonsterType, nOnlyIfIndex)
+                Case 10:
+                    bSkip = TestOnlyIf(Roomrec.Spell, nOnlyIfIndex)
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Roomrec.RoomNumber
     Select Case nIndex
@@ -2026,7 +2209,7 @@ Exit Sub
 End Sub
 Private Sub ModifyRace(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer, x As Integer, bSkip As Boolean
-Dim sName As String
+Dim sName As String, nOnlyIfIndex As Integer
 
 StatusBar.Panels(1).Text = cmbEditor.Text & " - " & cmbField.Text
 
@@ -2053,34 +2236,36 @@ Do While nStatus = 0 And bStopProcess = False
         If Racerec.Number > nRange2 Then Exit Do
     End If
     
-    If chkOnlyIfOn.Value = 1 Then
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'has abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Racerec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Racerec.AbilityB(x))
-                        If bSkip = True Then Exit For
-                    End If
-                Next x
-            Case 1: 'doesn't have abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Racerec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Racerec.AbilityB(x))
-                        If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
-                            bSkip = False
-                            Exit For
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'has abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Racerec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Racerec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then Exit For
                         End If
-                    End If
-                    bSkip = True
-                Next x
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+                    Next x
+                Case 1: 'doesn't have abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Racerec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Racerec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
+                                bSkip = False
+                                Exit For
+                            End If
+                        End If
+                        bSkip = True
+                    Next x
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Racerec.Number
     
@@ -2164,7 +2349,7 @@ End Sub
 Private Sub ModifyMonster(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer, x As Integer
 Dim nBase As Double, nMulti As Double, nMultiMax As Double, y As Double, temp As Double, bSkip As Boolean
-Dim sName As String
+Dim sName As String, nOnlyIfIndex As Integer
 
 StatusBar.Panels(1).Text = cmbEditor.Text & " - " & cmbField.Text
 
@@ -2191,76 +2376,78 @@ Do While nStatus = 0 And bStopProcess = False
         If Monsterrec.Number > nRange2 Then Exit Do
     End If
     
-    If chkOnlyIfOn.Value = 1 Then
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'game limit
-                bSkip = TestOnlyIf(Monsterrec.GameLimit)
-            Case 1: 'experience
-                If eDatFileVersion >= v111j Then
-                    bSkip = TestOnlyIf(CDbl(Monsterrec.Experience) * CDbl(Monsterrec.ExpMulti))
-                Else
-                    bSkip = TestOnlyIf(Monsterrec.Experience)
-                End If
-            Case 2: 'regen time
-                bSkip = TestOnlyIf(Monsterrec.RegenTime)
-            Case 3: 'group w/index
-                bSkip = TestOnlyIfAux(Monsterrec.Group)
-                If bSkip = False Then GoTo Skip:
-                bSkip = TestOnlyIf(Monsterrec.Index)
-            Case 4: 'group
-                bSkip = TestOnlyIf(Monsterrec.Group)
-            Case 5: 'runic
-                bSkip = TestOnlyIf(Monsterrec.Runic)
-            Case 6: 'platinum
-                bSkip = TestOnlyIf(Monsterrec.Platinum)
-            Case 7: 'gold
-                bSkip = TestOnlyIf(Monsterrec.Gold)
-            Case 8: 'silver
-                bSkip = TestOnlyIf(Monsterrec.Silver)
-            Case 9: 'copper
-                bSkip = TestOnlyIf(Monsterrec.Copper)
-            Case 10: 'Charm LVL
-                bSkip = TestOnlyIf(Monsterrec.CharmLvL)
-            Case 11: 'Follow %
-                bSkip = TestOnlyIf(Monsterrec.Follow)
-            Case 12: 'MR
-                bSkip = TestOnlyIf(Monsterrec.MR)
-            Case 13: 'HP Regen
-                bSkip = TestOnlyIf(Monsterrec.HPRegen)
-            Case 14: 'Hit Points
-                bSkip = TestOnlyIf(Monsterrec.Hitpoints)
-            Case 15: 'AC"
-                bSkip = TestOnlyIf(Monsterrec.AC)
-            Case 16: 'DR
-                bSkip = TestOnlyIf(Monsterrec.DR)
-            Case 17, 18: 'Drop%, Item Uses
-                bSkip = True
-            Case 19: 'has abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Monsterrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Monsterrec.AbilityB(x))
-                        If bSkip = True Then Exit For
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'game limit
+                    bSkip = TestOnlyIf(Monsterrec.GameLimit, nOnlyIfIndex)
+                Case 1: 'experience
+                    If eDatFileVersion >= v111j Then
+                        bSkip = TestOnlyIf(CDbl(Monsterrec.Experience) * CDbl(Monsterrec.ExpMulti), nOnlyIfIndex)
+                    Else
+                        bSkip = TestOnlyIf(Monsterrec.Experience, nOnlyIfIndex)
                     End If
-                Next x
-            Case 20: 'doesn't have abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Monsterrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Monsterrec.AbilityB(x))
-                        If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
-                            bSkip = False
-                            Exit For
-                        End If
-                    End If
+                Case 2: 'regen time
+                    bSkip = TestOnlyIf(Monsterrec.RegenTime, nOnlyIfIndex)
+                Case 3: 'group w/index
+                    bSkip = TestOnlyIfAux(Monsterrec.Group, nOnlyIfIndex)
+                    If bSkip = False Then GoTo Skip:
+                    bSkip = TestOnlyIf(Monsterrec.Index, nOnlyIfIndex)
+                Case 4: 'group
+                    bSkip = TestOnlyIf(Monsterrec.Group, nOnlyIfIndex)
+                Case 5: 'runic
+                    bSkip = TestOnlyIf(Monsterrec.Runic, nOnlyIfIndex)
+                Case 6: 'platinum
+                    bSkip = TestOnlyIf(Monsterrec.Platinum, nOnlyIfIndex)
+                Case 7: 'gold
+                    bSkip = TestOnlyIf(Monsterrec.Gold, nOnlyIfIndex)
+                Case 8: 'silver
+                    bSkip = TestOnlyIf(Monsterrec.Silver, nOnlyIfIndex)
+                Case 9: 'copper
+                    bSkip = TestOnlyIf(Monsterrec.Copper, nOnlyIfIndex)
+                Case 10: 'Charm LVL
+                    bSkip = TestOnlyIf(Monsterrec.CharmLvL, nOnlyIfIndex)
+                Case 11: 'Follow %
+                    bSkip = TestOnlyIf(Monsterrec.Follow, nOnlyIfIndex)
+                Case 12: 'MR
+                    bSkip = TestOnlyIf(Monsterrec.MR, nOnlyIfIndex)
+                Case 13: 'HP Regen
+                    bSkip = TestOnlyIf(Monsterrec.HPRegen, nOnlyIfIndex)
+                Case 14: 'Hit Points
+                    bSkip = TestOnlyIf(Monsterrec.Hitpoints, nOnlyIfIndex)
+                Case 15: 'AC"
+                    bSkip = TestOnlyIf(Monsterrec.AC, nOnlyIfIndex)
+                Case 16: 'DR
+                    bSkip = TestOnlyIf(Monsterrec.DR, nOnlyIfIndex)
+                Case 17, 18: 'Drop%, Item Uses
                     bSkip = True
-                Next x
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+                Case 19: 'has abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Monsterrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Monsterrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then Exit For
+                        End If
+                    Next x
+                Case 20: 'doesn't have abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Monsterrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Monsterrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
+                                bSkip = False
+                                Exit For
+                            End If
+                        End If
+                        bSkip = True
+                    Next x
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Monsterrec.Number
     Select Case nIndex
@@ -2343,20 +2530,22 @@ tryagain:
         Case 19, 20: 'drop %, drop uses
         
             For x = 0 To 9
-                If chkOnlyIfOn.Value = 1 Then 'per item checks
-                    bSkip = True
-                    Select Case cmbOnlyIf.ListIndex
-                        Case 17: 'percent
-                            bSkip = TestOnlyIf(Monsterrec.ItemDropPer(x))
-                        Case 18: 'uses
-                            bSkip = TestOnlyIf(Monsterrec.ItemUses(x))
-                    End Select
-                    If bSkip = False Then
-                        If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " (" & x & ")" _
-                            & " ==> Skipped due to 'Only If' Setting"
-                        GoTo SkipIndiv:
+                For nOnlyIfIndex = 0 To 1
+                    If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then 'per item checks
+                        bSkip = True
+                        Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                            Case 17: 'percent
+                                bSkip = TestOnlyIf(Monsterrec.ItemDropPer(x), nOnlyIfIndex)
+                            Case 18: 'uses
+                                bSkip = TestOnlyIf(Monsterrec.ItemUses(x), nOnlyIfIndex)
+                        End Select
+                        If bSkip = False Then
+                            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " (" & x & ")" _
+                                & " ==> Skipped due to 'Only If' Setting"
+                            GoTo SkipIndiv:
+                        End If
                     End If
-                End If
+                Next nOnlyIfIndex
                 
                 Select Case nIndex
                     Case 19: Monsterrec.ItemDropPer(x) = DoMath(Monsterrec.ItemDropPer(x), dtByte, suSigned, sName, x)
@@ -2416,7 +2605,7 @@ Exit Sub
 End Sub
 Private Sub ModifyClass(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer, x As Integer
-Dim bSkip As Boolean
+Dim bSkip As Boolean, nOnlyIfIndex As Integer
 Dim sName As String
 
 StatusBar.Panels(1).Text = cmbEditor.Text & " - " & cmbField.Text
@@ -2444,46 +2633,48 @@ Do While nStatus = 0 And bStopProcess = False
         If Classrec.Number > nRange2 Then Exit Do
     End If
     
-    If chkOnlyIfOn.Value = 1 Then
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'combat
-                bSkip = TestOnlyIf(Classrec.Combat - 2)
-            Case 1: 'magery
-                bSkip = TestOnlyIfAux(Classrec.MagicType)
-                If bSkip = False Then GoTo Skip:
-                bSkip = TestOnlyIf(Classrec.MagicLvL)
-            Case 2: 'exp %
-                bSkip = TestOnlyIf(Classrec.Exp + 100)
-            Case 3: 'hp min
-                bSkip = TestOnlyIf(Classrec.MinHp)
-            Case 4: 'hp max
-                bSkip = TestOnlyIf(Classrec.MinHp + Classrec.MaxHP)
-            Case 5: 'has abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Classrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Classrec.AbilityB(x))
-                        If bSkip = True Then Exit For
-                    End If
-                Next x
-            Case 6: 'doesn't have abil
-                For x = 0 To 9
-                    bSkip = TestOnlyIfAux(Classrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Classrec.AbilityB(x))
-                        If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
-                            bSkip = False
-                            Exit For
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'combat
+                    bSkip = TestOnlyIf(Classrec.Combat - 2, nOnlyIfIndex)
+                Case 1: 'magery
+                    bSkip = TestOnlyIfAux(Classrec.MagicType, nOnlyIfIndex)
+                    If bSkip = False Then GoTo Skip:
+                    bSkip = TestOnlyIf(Classrec.MagicLvL, nOnlyIfIndex)
+                Case 2: 'exp %
+                    bSkip = TestOnlyIf(Classrec.Exp + 100, nOnlyIfIndex)
+                Case 3: 'hp min
+                    bSkip = TestOnlyIf(Classrec.MinHp, nOnlyIfIndex)
+                Case 4: 'hp max
+                    bSkip = TestOnlyIf(Classrec.MinHp + Classrec.MaxHP, nOnlyIfIndex)
+                Case 5: 'has abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Classrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Classrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then Exit For
                         End If
-                    End If
-                    bSkip = True
-                Next x
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+                    Next x
+                Case 6: 'doesn't have abil
+                    For x = 0 To 9
+                        bSkip = TestOnlyIfAux(Classrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Classrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
+                                bSkip = False
+                                Exit For
+                            End If
+                        End If
+                        bSkip = True
+                    Next x
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Classrec.Number
     
@@ -2541,7 +2732,7 @@ Exit Sub
 End Sub
 Private Sub ModifyItem(ByVal nIndex As Integer, ByVal nRange1 As Long, ByVal nRange2 As Long)
 Dim nStatus As Integer, x As Integer
-Dim bSkip As Boolean
+Dim bSkip As Boolean, nOnlyIfIndex As Integer
 Dim sName As String
 
 StatusBar.Panels(1).Text = cmbEditor.Text & " - " & cmbField.Text
@@ -2569,83 +2760,85 @@ Do While nStatus = 0 And bStopProcess = False
         If Itemrec.Number > nRange2 Then Exit Do
     End If
     
-    If chkOnlyIfOn.Value = 1 Then
-        Select Case cmbOnlyIf.ListIndex
-            Case 0: 'game limit
-                bSkip = TestOnlyIf(Itemrec.GameLimit)
-            
-            Case 1: 'item type
-                bSkip = TestOnlyIf(Itemrec.Type)
-            
-            Case 2: 'armour type
-                bSkip = TestOnlyIfAux(Itemrec.Type)
-                If bSkip = False Then GoTo Skip:
-                bSkip = TestOnlyIf(Itemrec.Armour)
+    For nOnlyIfIndex = 0 To 1
+        If chkOnlyIfOn(nOnlyIfIndex).Value = 1 Then
+            Select Case cmbOnlyIf(nOnlyIfIndex).ListIndex
+                Case 0: 'game limit
+                    bSkip = TestOnlyIf(Itemrec.GameLimit, nOnlyIfIndex)
                 
-            Case 3: 'weapon type
-                bSkip = TestOnlyIfAux(Itemrec.Type)
-                If bSkip = False Then GoTo Skip:
-                bSkip = TestOnlyIf(Itemrec.Weapon)
+                Case 1: 'item type
+                    bSkip = TestOnlyIf(Itemrec.Type, nOnlyIfIndex)
                 
-            Case 4: 'worn on
-                bSkip = TestOnlyIf(Itemrec.WornOn)
-            
-            Case 5: 'Weight
-                bSkip = TestOnlyIf(Itemrec.Weight)
-                
-            Case 6: 'Speed
-                bSkip = TestOnlyIf(Itemrec.Speed)
-            
-            Case 7: 'Req. Strength
-                bSkip = TestOnlyIf(Itemrec.ReqStr)
-                
-            Case 8: 'Accuracy
-                bSkip = TestOnlyIf(Itemrec.Accuracy)
-                
-            Case 9: 'Cost
-                If cmbOnlyIfAuxValue.ListIndex < 5 Then '5 is any
-                    bSkip = TestOnlyIfAux(Itemrec.CostType)
+                Case 2: 'armour type
+                    bSkip = TestOnlyIfAux(Itemrec.Type, nOnlyIfIndex)
                     If bSkip = False Then GoTo Skip:
-                End If
-                bSkip = TestOnlyIf(Itemrec.Cost)
-            
-            Case 10: 'AC
-                bSkip = TestOnlyIf(Itemrec.AC)
+                    bSkip = TestOnlyIf(Itemrec.Armour, nOnlyIfIndex)
+                    
+                Case 3: 'weapon type
+                    bSkip = TestOnlyIfAux(Itemrec.Type, nOnlyIfIndex)
+                    If bSkip = False Then GoTo Skip:
+                    bSkip = TestOnlyIf(Itemrec.Weapon, nOnlyIfIndex)
+                    
+                Case 4: 'worn on
+                    bSkip = TestOnlyIf(Itemrec.WornOn, nOnlyIfIndex)
                 
-            Case 11: 'DR
-                bSkip = TestOnlyIf(Itemrec.DR)
+                Case 5: 'Weight
+                    bSkip = TestOnlyIf(Itemrec.Weight, nOnlyIfIndex)
+                    
+                Case 6: 'Speed
+                    bSkip = TestOnlyIf(Itemrec.Speed, nOnlyIfIndex)
                 
-            Case 12: 'Min Hit
-                bSkip = TestOnlyIf(Itemrec.Minhit)
-                
-            Case 13: 'Max Hit
-                bSkip = TestOnlyIf(Itemrec.Maxhit)
-            Case 14: 'has abil
-                For x = 0 To 19
-                    bSkip = TestOnlyIfAux(Itemrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Itemrec.AbilityB(x))
-                        If bSkip = True Then Exit For
+                Case 7: 'Req. Strength
+                    bSkip = TestOnlyIf(Itemrec.ReqStr, nOnlyIfIndex)
+                    
+                Case 8: 'Accuracy
+                    bSkip = TestOnlyIf(Itemrec.Accuracy, nOnlyIfIndex)
+                    
+                Case 9: 'Cost
+                    If cmbOnlyIfAuxValue(0).ListIndex < 5 Then '5 is any
+                        bSkip = TestOnlyIfAux(Itemrec.CostType, nOnlyIfIndex)
+                        If bSkip = False Then GoTo Skip:
                     End If
-                Next x
-            Case 15: 'doesn't have abil
-                For x = 0 To 19
-                    bSkip = TestOnlyIfAux(Itemrec.AbilityA(x))
-                    If bSkip = True Then
-                        bSkip = TestOnlyIf(Itemrec.AbilityB(x))
-                        If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
-                            bSkip = False
-                            Exit For
+                    bSkip = TestOnlyIf(Itemrec.Cost, nOnlyIfIndex)
+                
+                Case 10: 'AC
+                    bSkip = TestOnlyIf(Itemrec.AC, nOnlyIfIndex)
+                    
+                Case 11: 'DR
+                    bSkip = TestOnlyIf(Itemrec.DR, nOnlyIfIndex)
+                    
+                Case 12: 'Min Hit
+                    bSkip = TestOnlyIf(Itemrec.Minhit, nOnlyIfIndex)
+                    
+                Case 13: 'Max Hit
+                    bSkip = TestOnlyIf(Itemrec.Maxhit, nOnlyIfIndex)
+                Case 14: 'has abil
+                    For x = 0 To 19
+                        bSkip = TestOnlyIfAux(Itemrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Itemrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then Exit For
                         End If
-                    End If
-                    bSkip = True
-                Next x
-        End Select
-        If bSkip = False Then
-            If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
-            GoTo Skip:
+                    Next x
+                Case 15: 'doesn't have abil
+                    For x = 0 To 19
+                        bSkip = TestOnlyIfAux(Itemrec.AbilityA(x), nOnlyIfIndex)
+                        If bSkip = True Then
+                            bSkip = TestOnlyIf(Itemrec.AbilityB(x), nOnlyIfIndex)
+                            If bSkip = True Then 'true because if it matches then it 'HAS' it, so skip
+                                bSkip = False
+                                Exit For
+                            End If
+                        End If
+                        bSkip = True
+                    Next x
+            End Select
+            If bSkip = False Then
+                If chkOnlyChanges.Value = 0 Then ts.WriteLine sName & " ==> Skipped due to 'Only If' Setting"
+                GoTo Skip:
+            End If
         End If
-    End If
+    Next nOnlyIfIndex
     
     StatusBar.Panels(2).Text = Itemrec.Number
     Select Case nIndex
@@ -2718,6 +2911,7 @@ End If
 
 End Sub
 
+
 Private Sub txtLimit_GotFocus()
 Call SelectAll(txtLimit)
 
@@ -2736,8 +2930,8 @@ Private Sub txtMap_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
-Private Sub txtOnlyIfValue_GotFocus()
-Call SelectAll(txtOnlyIfValue)
+Private Sub txtOnlyIfValue_GotFocus(Index As Integer)
+Call SelectAll(txtOnlyIfValue(Index))
 
 End Sub
 
@@ -2770,3 +2964,10 @@ End Sub
 Private Sub cmbValue_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
+
+
+
+
+
+
+
