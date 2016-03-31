@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmMap 
    AutoRedraw      =   -1  'True
    BackColor       =   &H00000000&
@@ -37,6 +37,35 @@ Begin VB.Form frmMap
          Top             =   60
          Visible         =   0   'False
          Width           =   2355
+         Begin VB.CommandButton cmdBuildControlRoomList 
+            Caption         =   "Rebuild"
+            Enabled         =   0   'False
+            Height          =   255
+            Left            =   1500
+            TabIndex        =   1711
+            ToolTipText     =   "Rebuild Control Room List"
+            Top             =   2100
+            Width           =   795
+         End
+         Begin VB.OptionButton optMarkAux 
+            Caption         =   "Control Rms"
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Small Fonts"
+               Size            =   6.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Index           =   3
+            Left            =   360
+            TabIndex        =   1710
+            Top             =   2100
+            Width           =   1695
+         End
          Begin VB.OptionButton optMarkAux 
             Caption         =   "Room Spells"
             Enabled         =   0   'False
@@ -112,7 +141,7 @@ Begin VB.Form frmMap
             Width           =   975
          End
          Begin VB.CheckBox chkNoColors 
-            Caption         =   "No Colors"
+            Caption         =   "No Color"
             BeginProperty Font 
                Name            =   "Small Fonts"
                Size            =   6.75
@@ -123,10 +152,10 @@ Begin VB.Form frmMap
                Strikethrough   =   0   'False
             EndProperty
             Height          =   165
-            Left            =   120
+            Left            =   1380
             TabIndex        =   26
-            Top             =   3840
-            Width           =   975
+            Top             =   3900
+            Width           =   915
          End
          Begin VB.CheckBox chkFollowMapChanges 
             Caption         =   "Follow Map Changes"
@@ -159,11 +188,11 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   20
-            Top             =   2400
+            Top             =   2640
             Width           =   1995
          End
          Begin VB.CheckBox chkNoLineColors 
-            Caption         =   "No Line Colors"
+            Caption         =   "No Line Color"
             BeginProperty Font 
                Name            =   "Small Fonts"
                Size            =   6.75
@@ -176,7 +205,7 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   25
-            Top             =   3600
+            Top             =   3900
             Width           =   1395
          End
          Begin VB.CheckBox chkMarkLair 
@@ -210,7 +239,7 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   19
-            Top             =   2160
+            Top             =   2400
             Width           =   1995
          End
          Begin VB.CheckBox chkMarkCMD 
@@ -271,7 +300,7 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   23
-            Top             =   3120
+            Top             =   3420
             Width           =   2115
          End
          Begin VB.CheckBox chkMonsterRegen 
@@ -288,7 +317,7 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   22
-            Top             =   2880
+            Top             =   3120
             Width           =   2055
          End
          Begin VB.CheckBox chkUseWhiteBG 
@@ -305,7 +334,7 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   24
-            Top             =   3360
+            Top             =   3660
             Width           =   2115
          End
          Begin VB.CheckBox chkNoTooltips 
@@ -322,7 +351,7 @@ Begin VB.Form frmMap
             Height          =   165
             Left            =   120
             TabIndex        =   21
-            Top             =   2640
+            Top             =   2880
             Width           =   1995
          End
          Begin VB.Label Label1 
@@ -20789,11 +20818,36 @@ If chkMarkAux.Value = 1 Then
     optMarkAux(0).Enabled = True
     optMarkAux(1).Enabled = True
     optMarkAux(2).Enabled = True
+    optMarkAux(3).Enabled = True
 Else
     optMarkAux(0).Enabled = False
     optMarkAux(1).Enabled = False
     optMarkAux(2).Enabled = False
+    optMarkAux(3).Enabled = False
 End If
+
+Call optMarkAux_Click(0)
+
+End Sub
+
+Private Sub cmdBuildControlRoomList_Click()
+On Error GoTo error:
+Dim nStatus As Integer, nYesNo As Integer
+
+nYesNo = MsgBox("Control rooms will be found as maps are drawn and rooms are pulled via other means.  If you would like a complete accurate list click yes to continue and scan all of the rooms.  Otherwise click no and just redraw an area a couple times to let it find the control rooms (in the immediate area).", vbInformation + vbYesNo)
+If Not nYesNo = vbYes Then Exit Sub
+
+frmMain.Enabled = False
+Call BuildControlRoomList
+
+kill:
+frmMain.Enabled = True
+If Not bStopControlBuild Then Call cmdReload_Click
+Exit Sub
+error:
+Call HandleError
+bStopControlBuild = True
+Resume kill:
 End Sub
 
 Private Sub Form_Load()
@@ -20841,11 +20895,11 @@ ElseIf Val(ReadINI("Options", "MapMarkAuxShops")) > 0 Then
     optMarkAux(1).Value = True
 ElseIf Val(ReadINI("Options", "MapMarkAuxRooms")) > 0 Then
     optMarkAux(2).Value = True
+ElseIf Val(ReadINI("Options", "MapMarkAuxControl")) > 0 Then
+    optMarkAux(3).Value = True
 End If
 
 Call cmbMapSize_Change
-
-
 
 Call StartMapping
 
@@ -21576,6 +21630,8 @@ If chkMarkCMD.Value = 1 And Roomrec.CmdText > 0 Then
     Call DrawOnRoom(lblRoomCell(Cell), drSquare, 6, BrightGreen)
 End If
 
+If Roomrec.ControlRoom > 0 Then Call AddControlRoom(Roomrec.MapNumber, Roomrec.ControlRoom, Roomrec.RoomNumber)
+
 If chkMarkAux.Value = 1 Then
     If optMarkAux(0).Value = True Then 'room spells
         If Roomrec.Spell > 0 Then Call DrawOnRoom(lblRoomCell(Cell), drStar, 2, BrightCyan)
@@ -21585,6 +21641,10 @@ If chkMarkAux.Value = 1 Then
         If Roomrec.ExitRoom > 0 Then
             Call DrawOnRoom(lblRoomCell(Cell), drStar, 2, BrightCyan)
         ElseIf Roomrec.DeathRoom > 0 Then
+            Call DrawOnRoom(lblRoomCell(Cell), drStar, 2, BrightCyan)
+        End If
+    ElseIf optMarkAux(3).Value = True Then 'control room
+        If ControlRoomList.Exists(Roomrec.MapNumber & "/" & Roomrec.RoomNumber) Then
             Call DrawOnRoom(lblRoomCell(Cell), drStar, 2, BrightCyan)
         End If
     End If
@@ -21778,6 +21838,10 @@ If chkNoTooltips.Value = 0 Then
                 ToolTipString = ToolTipString & vbCrLf & vbCrLf & "Also Here: <create monster index to see (Control+D)>"
             End If
         End If
+    End If
+    
+    If ControlRoomList.Exists(Roomrec.MapNumber & "/" & Roomrec.RoomNumber) Then
+        ToolTipString = ToolTipString & vbCrLf & vbCrLf & "Control Room From: " & GetControlRoomListByRoom(Roomrec.MapNumber, Roomrec.RoomNumber)
     End If
     
     rc.Left = lblRoomCell(Cell).Left
@@ -22142,14 +22206,22 @@ If optMarkAux(0).Value = True Then
     Call WriteINI("Options", "MapMarkAuxSpells", 1)
     Call WriteINI("Options", "MapMarkAuxShops", 0)
     Call WriteINI("Options", "MapMarkAuxRooms", 0)
+    Call WriteINI("Options", "MapMarkAuxControl", 0)
 ElseIf optMarkAux(1).Value = True Then
     Call WriteINI("Options", "MapMarkAuxSpells", 0)
     Call WriteINI("Options", "MapMarkAuxShops", 1)
     Call WriteINI("Options", "MapMarkAuxRooms", 0)
+    Call WriteINI("Options", "MapMarkAuxControl", 0)
 ElseIf optMarkAux(2).Value = True Then
     Call WriteINI("Options", "MapMarkAuxSpells", 0)
     Call WriteINI("Options", "MapMarkAuxShops", 0)
     Call WriteINI("Options", "MapMarkAuxRooms", 1)
+    Call WriteINI("Options", "MapMarkAuxControl", 0)
+ElseIf optMarkAux(3).Value = True Then
+    Call WriteINI("Options", "MapMarkAuxSpells", 0)
+    Call WriteINI("Options", "MapMarkAuxShops", 0)
+    Call WriteINI("Options", "MapMarkAuxRooms", 0)
+    Call WriteINI("Options", "MapMarkAuxControl", 1)
 End If
 
 If Not Me.WindowState = vbMinimized Then
@@ -22317,3 +22389,11 @@ End Select
 picMap.DrawWidth = nTemp
 End Sub
 
+
+Private Sub optMarkAux_Click(Index As Integer)
+    If optMarkAux(3).Value = False Or optMarkAux(3).Enabled = False Then
+        cmdBuildControlRoomList.Enabled = False
+    Else
+        cmdBuildControlRoomList.Enabled = True
+    End If
+End Sub
