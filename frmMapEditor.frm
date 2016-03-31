@@ -7058,6 +7058,8 @@ If chkMarkCMD.Value = 1 And Roomrec.CmdText > 0 Then
     Call DrawOnRoom(lblCell(Cell), drSquare, 10, BrightGreen)
 End If
 
+If Roomrec.ControlRoom > 0 Then Call AddControlRoom(Roomrec.MapNumber, Roomrec.ControlRoom, Roomrec.RoomNumber)
+
 'map exits
 For x = 0 To 9
     If Not Roomrec.RoomExit(x) = 0 Then
