@@ -1867,10 +1867,10 @@ End If
 frmUniversalModifier.cmbModifier.ListIndex = 2 '*
 frmUniversalModifier.txtValue.Text = 2 '2 to multiply by 2
 
-frmUniversalModifier.chkOnlyIfOn.Value = 1 'turn on "only if"
-frmUniversalModifier.cmbOnlyIf.ListIndex = 0 'game limit
-frmUniversalModifier.cmbOnlyIfModifier.ListIndex = 0 '=
-frmUniversalModifier.txtOnlyIfValue.Text = 1 '1 for 1 game limit
+frmUniversalModifier.chkOnlyIfOn(0).Value = 1 'turn on "only if"
+frmUniversalModifier.cmbOnlyIf(0).ListIndex = 0 'game limit
+frmUniversalModifier.cmbOnlyIfModifier(0).ListIndex = 0 '=
+frmUniversalModifier.txtOnlyIfValue(0).Text = 1 '1 for 1 game limit
 
 MsgBox "The Universal Modifier Fields have been set up for a Boss Exp Multiply." _
     & vbCrLf & "You can modify the settings if need be.  The '2' in the value field is what the exp will be multiplied by." _
