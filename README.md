@@ -6,7 +6,7 @@ v1.7 (4/1/2016) - (by Syntax)
 -NEW: tool to view and export said list of control rooms and their references  
 -NEW: complete overhaul of database exporter.  support for multiple ranges of records, ability to save config files, **import record numbers from existing database**  
 -NEW: added cross-referencing of class restrictions on learned spells via scrolls and textblocks for MME.  requires new version of MME to support it (coming soon).  
--NEW: added cross-referencing for where items/keys are used in rooms.  requires new version of MME to support it (coming soon).  
+-NEW: added cross-referencing for where items/keys are used in rooms and textblocks.  requires new version of MME to support it (coming soon).  
 -NEW: added default rooms to exclude on MME exports (currently only the sysop support chamber).  see additional options button.  
 -UP: excluded rooms on MME export will now be completely excluded and not exported at all.  references from those rooms will also be considered as not in the game. added option added to "hide" user-specified excluded rooms instead to retain previous functionality.  
 -UP: added Wrist(2), Eyes and Face to universal modifier's "only if" options  
