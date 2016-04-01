@@ -8,7 +8,7 @@ v1.7 (4/1/2016) - (by Syntax)
 -NEW: added cross-referencing of class restrictions on learned spells via scrolls and textblocks for MME.  requires new version of MME to support it (coming soon).  
 -NEW: added cross-referencing for where items/keys are used in rooms and textblocks.  requires new version of MME to support it (coming soon).  
 -NEW: added default rooms to exclude on MME exports (currently only the sysop support chamber).  see additional options button.  
--UP: excluded rooms on MME export will now be completely excluded and not exported at all.  references from those rooms will also be considered as not in the game. added option added to "hide" user-specified excluded rooms instead to retain previous functionality.  
+-UP: excluded rooms on MME export will now be completely excluded and not exported at all.  references from those rooms will also be considered as not in the game. option added to "hide" user-specified excluded rooms instead to retain previous functionality.  
 -UP: added Wrist(2), Eyes and Face to universal modifier's "only if" options  
 -UP: added second set of "only if" options on the universal modifier  
 -UP: added text on db importer error to help determine which table was missing fields upon import from old exports  
