@@ -291,6 +291,22 @@ Begin VB.Form frmDatabaseExport
       TabIndex        =   32
       Top             =   60
       Width           =   8775
+      Begin VB.CommandButton cmdGetFirstLast 
+         Height          =   195
+         Index           =   1
+         Left            =   5220
+         TabIndex        =   61
+         Top             =   240
+         Width           =   195
+      End
+      Begin VB.CommandButton cmdGetFirstLast 
+         Height          =   195
+         Index           =   0
+         Left            =   4320
+         TabIndex        =   60
+         Top             =   240
+         Width           =   195
+      End
       Begin VB.CommandButton cmdClearAll 
          Caption         =   "Clear All"
          Height          =   315
@@ -785,7 +801,7 @@ Begin VB.Form frmDatabaseExport
    End
    Begin VB.CommandButton cmdImportRecordNumbers 
       Caption         =   "Import Record Numbers from Database..."
-      Height          =   1035
+      Height          =   735
       Left            =   9720
       TabIndex        =   22
       Top             =   2580
@@ -802,19 +818,27 @@ Begin VB.Form frmDatabaseExport
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   1695
+      Height          =   2055
       Left            =   9060
       TabIndex        =   29
-      Top             =   3960
+      Top             =   3480
       Width           =   3735
+      Begin VB.CommandButton cmdUserInteractionQ 
+         Caption         =   "?"
+         Height          =   315
+         Left            =   3180
+         TabIndex        =   62
+         Top             =   1380
+         Width           =   270
+      End
       Begin VB.CheckBox chkZeroUserInteraction 
          Caption         =   """Reset"" User Interactable Fields on Export (Cash, Item Uses, Etc)"
-         Height          =   375
-         Left            =   180
+         Height          =   735
+         Left            =   480
          TabIndex        =   59
          Top             =   1200
          Value           =   1  'Checked
-         Width           =   3435
+         Width           =   2595
       End
       Begin VB.CommandButton cmdQ 
          Caption         =   "?"
@@ -1022,32 +1046,6 @@ ProgressBar.Min = 0
 ProgressBar.Max = nNewMax
 End Sub
 
-Private Sub cmdCopyTo_Click(Index As Integer)
-Dim x As Integer
-
-x = Index
-again:
-
-Select Case x
-    Case 1: txtItemsTo.Text = txtItemsFrom.Text
-    Case 2: txtMonstersTo.Text = txtMonstersFrom.Text
-    Case 3: txtSpellsTo.Text = txtSpellsFrom.Text
-    Case 4: txtShopsTo.Text = txtShopsFrom.Text
-    Case 5: txtRacesTo.Text = txtRacesFrom.Text
-    Case 6: txtClassesTo.Text = txtClassesFrom.Text
-    Case 7: txtMessagesTo.Text = txtMessagesFrom.Text
-    Case 8: txtTextblocksTo.Text = txtTextblocksFrom.Text
-    'Case 9: txtRoomsTo.Text = txtRoomsFrom.Text
-End Select
-
-If Index = 0 Or Index = 10 Then
-    If x = 10 Then x = 0
-    x = x + 1
-    If x <= 9 Then GoTo again:
-End If
-
-End Sub
-
 Private Sub chkActions_Click()
 bCheckSave = True
 End Sub
@@ -1066,6 +1064,10 @@ bCheckSave = True
 End Sub
 
 Private Sub chkUsers_Click()
+bCheckSave = True
+End Sub
+
+Private Sub chkZeroUserInteraction_Click()
 bCheckSave = True
 End Sub
 
@@ -1132,6 +1134,159 @@ For x = 0 To 8
     chkExportAll(x).Value = 1
 Next x
 bCheckSave = True
+End Sub
+
+Private Sub cmdGetFirstLast_Click(Index As Integer)
+On Error GoTo error:
+Dim nStatus As Integer, nOP As Integer, nRET As Long
+
+cmdGetFirstLast(0).Enabled = False
+cmdGetFirstLast(1).Enabled = False
+
+If Index = 0 Then
+    nOP = BGETFIRST
+Else
+    nOP = BGETLAST
+End If
+
+nRET = -1
+
+Select Case cmbDB.ListIndex
+    Case 0:
+        nStatus = BTRCALL(nOP, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first class record: " & BtrieveErrorCode(nStatus)
+        Else
+            ClassRowToStruct Classdatabuf.buf
+            nRET = Classrec.Number
+        End If
+    Case 1:
+        nStatus = BTRCALL(nOP, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first race record: " & BtrieveErrorCode(nStatus)
+        Else
+            RaceRowToStruct Racedatabuf.buf
+            nRET = Racerec.Number
+        End If
+    Case 2:
+        nStatus = BTRCALL(nOP, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first item record: " & BtrieveErrorCode(nStatus)
+        Else
+            ItemRowToStruct Itemdatabuf.buf
+            nRET = Itemrec.Number
+        End If
+    Case 3:
+        nStatus = BTRCALL(nOP, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first message record: " & BtrieveErrorCode(nStatus)
+        Else
+            MessageRowToStruct Messagedatabuf.buf
+            nRET = Messagerec.Number
+        End If
+    Case 4:
+        nStatus = BTRCALL(nOP, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first monster record: " & BtrieveErrorCode(nStatus)
+        Else
+            MonsterRowToStruct Monsterdatabuf.buf
+            nRET = Monsterrec.Number
+        End If
+    Case 5:
+        nStatus = BTRCALL(nOP, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first shop record: " & BtrieveErrorCode(nStatus)
+        Else
+            ShopRowToStruct Shopdatabuf.buf
+            nRET = Shoprec.Number
+        End If
+    Case 6:
+        nStatus = BTRCALL(nOP, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first spell record: " & BtrieveErrorCode(nStatus)
+        Else
+            SpellRowToStruct Spelldatabuf.buf
+            nRET = Spellrec.Number
+        End If
+    Case 7:
+        nStatus = BTRCALL(nOP, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then
+            MsgBox "Error getting first textblock record: " & BtrieveErrorCode(nStatus)
+        Else
+            TextblockRowToStruct TextblockDataBuf.buf
+            nRET = TextblockRec.Number
+        End If
+    Case 8:
+        If Val(txtMap.Text) > 0 Then
+            
+            nStatus = BTRCALL(BSTAT, RoomPosBlock, DBStatDatabuf, Len(Roomdatabuf), 0, KEY_BUF_LEN, 0)
+            If nStatus = 0 Then
+                DBStatRowToStruct DBStatDatabuf.buf
+                Call SetRange(DBStat.nRecords)
+            Else
+                Call SetRange(30000)
+            End If
+            ProgressBar.Visible = True
+            DoEvents
+                
+            If Index = 0 Then
+                nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+                If nStatus = 0 Then
+                    Do While nStatus = 0
+                        Call IncreaseProgressBar
+                        RoomRowToStruct Roomdatabuf.buf
+                        If Roomrec.MapNumber = Val(txtMap.Text) Then
+                            nRET = Roomrec.RoomNumber
+                            Exit Do
+                        End If
+                        nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+                        If Not bUseCPU Then DoEvents
+                    Loop
+                Else
+                    MsgBox "Error getting first room.", vbExclamation
+                End If
+            Else
+                nStatus = BTRCALL(BGETLAST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+                If nStatus = 0 Then
+                    Do While nStatus = 0
+                        Call IncreaseProgressBar
+                        RoomRowToStruct Roomdatabuf.buf
+                        If Roomrec.MapNumber = Val(txtMap.Text) Then
+                            nRET = Roomrec.RoomNumber
+                            Exit Do
+                        End If
+                        nStatus = BTRCALL(BGETPREVIOUS, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+                        If Not bUseCPU Then DoEvents
+                    Loop
+                Else
+                    MsgBox "Error getting first room.", vbExclamation
+                End If
+            End If
+        Else
+            MsgBox "Enter map number.", vbExclamation
+        End If
+End Select
+
+If nRET >= 0 Then
+    If Index = 0 Then
+        txtFrom.Text = nRET
+    Else
+        txtTo.Text = nRET
+    End If
+End If
+
+out:
+On Error Resume Next
+If cmbDB.ListIndex = 8 Then
+    ProgressBar.Value = ProgressBar.Max
+    ProgressBar.Visible = False
+End If
+cmdGetFirstLast(0).Enabled = True
+cmdGetFirstLast(1).Enabled = True
+Exit Sub
+error:
+Call HandleError("cmdGetFirstLast_Click")
+Resume out:
 End Sub
 
 Private Sub cmdImportRecordNumbers_Click()
@@ -1324,52 +1479,6 @@ MsgBox "The ""Use 1 field for Mon EXP"" setting is for people who need the Monst
     & "multiplied together in the export for sorting purposes with 3rd party applications.", vbInformation
 End Sub
 
-Private Sub cmdRoomAdd_Click()
-Dim oLI As ListItem
-Dim nFrom As Long, nTo As Long, nMap As Long
-On Error GoTo error:
-
-nFrom = Val(txtRoomFrom.Text)
-nTo = Val(txtRoomTo.Text)
-nMap = Val(txtRoomMap.Text)
-
-If nTo < 1 Then Exit Sub
-If nFrom < 1 Then Exit Sub
-If nTo < nFrom Then Exit Sub
-If nMap < 1 Then Exit Sub
-
-Set oLI = lvRooms.ListItems.add
-oLI.Text = nMap
-oLI.ListSubItems.add 1, , nFrom
-oLI.ListSubItems.add 2, , nTo
-
-out:
-Set oLI = Nothing
-Exit Sub
-error:
-Call HandleError("cmdRoomAdd_Click")
-Resume out:
-
-End Sub
-
-Private Sub cmdRoomClear_Click()
-lvRooms.ListItems.clear
-End Sub
-
-Private Sub cmdRoomRemove_Click()
-On Error GoTo error:
-
-If Not lvRooms.SelectedItem Is Nothing Then
-    lvRooms.ListItems.Remove lvRooms.SelectedItem.Index
-End If
-
-out:
-Exit Sub
-error:
-Call HandleError("cmdRoomRemove_Click")
-Resume out:
-End Sub
-
 Private Sub cmdRemove_Click()
 If cmbDB.ListIndex < 0 Then Exit Sub
 If lvList(cmbDB.ListIndex).SelectedItem Is Nothing Then Exit Sub
@@ -1418,6 +1527,18 @@ Exit Sub
 error:
 Call HandleError("cmdSelectConfig_Click")
 Resume out:
+End Sub
+
+Private Sub cmdUserInteractionQ_Click()
+Dim sText As String
+
+sText = "Monsters: Active, Date Killed, Time Killed (all set to 0) " & vbCrLf _
+& "Rooms: Visible/Hidden Cash and Items (all set to 0)" & vbCrLf _
+& "Shops: Current stock set to... " & vbCrLf _
+& "       ""ShopRegen%"" > 0 THEN ""NumToRegen"" ELSE 0"
+
+MsgBox "Current fields that get reset--" & vbCrLf & vbCrLf & sText, vbInformation
+
 End Sub
 
 Private Sub Form_Load()
@@ -1715,6 +1836,13 @@ Set objForm = Nothing
 Call UnLockMenus
 fra1.Enabled = True
 fra2.Enabled = True
+
+fraConfig.Enabled = True
+cmdImportRecordNumbers.Enabled = True
+For x = 0 To 8
+    lvList(x).Enabled = True
+Next x
+
 frmMain.Enabled = True
 ProgressBar.Visible = False
 stsStatusBar.Panels(1).Text = ""
@@ -1739,7 +1867,7 @@ GoTo ReEnable:
 End Sub
 
 Private Function HideWindows()
-Dim objForm As Form
+Dim objForm As Form, x As Integer
 On Error Resume Next
 
 For Each objForm In Forms
@@ -1753,8 +1881,12 @@ Next
 cmdGo.Enabled = False
 fra1.Enabled = False
 fra2.Enabled = False
-'cmdCancel.Enabled = False
-'frmMain.Enabled = False
+
+fraConfig.Enabled = False
+cmdImportRecordNumbers.Enabled = False
+For x = 0 To 8
+    lvList(x).Enabled = False
+Next x
 
 Call LockMenus
 
@@ -1881,333 +2013,6 @@ DoEvents
 End Sub
 
 
-Private Sub chkClassesAll_Click()
-If chkClassesAll.Value = 1 Then
-    txtClassesFrom.Enabled = False
-    txtClassesTo.Enabled = False
-Else
-    txtClassesFrom.Enabled = True
-    txtClassesTo.Enabled = True
-End If
-End Sub
-
-Private Sub chkItemsAll_Click()
-If chkItemsAll.Value = 1 Then
-    txtItemsFrom.Enabled = False
-    txtItemsTo.Enabled = False
-Else
-    txtItemsFrom.Enabled = True
-    txtItemsTo.Enabled = True
-End If
-
-End Sub
-
-Private Sub chkMessagesAll_Click()
-If chkMessagesAll.Value = 1 Then
-    txtMessagesFrom.Enabled = False
-    txtMessagesTo.Enabled = False
-Else
-    txtMessagesFrom.Enabled = True
-    txtMessagesTo.Enabled = True
-End If
-End Sub
-
-Private Sub chkMonstersAll_Click()
-If chkMonstersAll.Value = 1 Then
-    txtMonstersFrom.Enabled = False
-    txtMonstersTo.Enabled = False
-Else
-    txtMonstersFrom.Enabled = True
-    txtMonstersTo.Enabled = True
-End If
-End Sub
-
-Private Sub chkRacesAll_Click()
-If chkRacesAll.Value = 1 Then
-    txtRacesFrom.Enabled = False
-    txtRacesTo.Enabled = False
-Else
-    txtRacesFrom.Enabled = True
-    txtRacesTo.Enabled = True
-End If
-End Sub
-
-Private Sub chkRoomsAll_Click()
-If chkRoomsAll.Value = 1 Then
-    Call RoomRangeEnable(False)
-Else
-    Call RoomRangeEnable(True)
-End If
-End Sub
-
-Private Sub RoomRangeEnable(ByVal bTrue As Boolean)
-Dim x As Integer
-
-On Error GoTo error:
-
-If bTrue = True Then
-    txtRoomFrom.Enabled = True
-    txtRoomTo.Enabled = True
-    txtRoomMap.Enabled = True
-    cmdRoomAdd.Enabled = True
-    cmdRoomRemove.Enabled = True
-    cmdRoomClear.Enabled = True
-    lvRooms.Enabled = True
-
-    For x = 0 To 2
-        lblRooms(x).Enabled = True
-    Next x
-Else
-    txtRoomFrom.Enabled = False
-    txtRoomTo.Enabled = False
-    txtRoomMap.Enabled = False
-    cmdRoomAdd.Enabled = False
-    cmdRoomRemove.Enabled = False
-    cmdRoomClear.Enabled = False
-    lvRooms.Enabled = False
-    
-    For x = 0 To 2
-        lblRooms(x).Enabled = False
-    Next x
-End If
-
-Exit Sub
-error:
-Call HandleError("RoomRangeEnable")
-
-End Sub
-
-Private Sub chkShopsAll_Click()
-If chkShopsAll.Value = 1 Then
-    txtShopsFrom.Enabled = False
-    txtShopsTo.Enabled = False
-Else
-    txtShopsFrom.Enabled = True
-    txtShopsTo.Enabled = True
-End If
-End Sub
-
-Private Sub chkSpellsAll_Click()
-If chkSpellsAll.Value = 1 Then
-    txtSpellsFrom.Enabled = False
-    txtSpellsTo.Enabled = False
-Else
-    txtSpellsFrom.Enabled = True
-    txtSpellsTo.Enabled = True
-End If
-End Sub
-
-Private Sub chkTextblocksAll_Click()
-If chkTextblocksAll.Value = 1 Then
-    txtTextblocksFrom.Enabled = False
-    txtTextblocksTo.Enabled = False
-Else
-    txtTextblocksFrom.Enabled = True
-    txtTextblocksTo.Enabled = True
-End If
-End Sub
-
-Private Sub cmdAll_Click()
-
-chkMessages.Value = 1
-chkItems.Value = 1
-chkSpells.Value = 1
-chkClasses.Value = 1
-chkRaces.Value = 1
-chkShops.Value = 1
-chkRooms.Value = 1
-chkActions.Value = 1
-chkMonsters.Value = 1
-If optAccessDB.Value = False Then chkUsers.Value = 1
-If optAccessDB.Value = False Then chkBankbooks.Value = 1
-chkTextblocks.Value = 1
-
-End Sub
-
-
-Private Sub cmdGetFirsts_Click()
-Dim nStatus As Integer
-
-nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first item record: " & BtrieveErrorCode(nStatus)
-Else
-    ItemRowToStruct Itemdatabuf.buf
-    txtItemsFrom.Text = Itemrec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first monster record: " & BtrieveErrorCode(nStatus)
-Else
-    MonsterRowToStruct Monsterdatabuf.buf
-    txtMonstersFrom.Text = Monsterrec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first class record: " & BtrieveErrorCode(nStatus)
-Else
-    ClassRowToStruct Classdatabuf.buf
-    txtClassesFrom.Text = Classrec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first race record: " & BtrieveErrorCode(nStatus)
-Else
-    RaceRowToStruct Racedatabuf.buf
-    txtRacesFrom.Text = Racerec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first spell record: " & BtrieveErrorCode(nStatus)
-Else
-    SpellRowToStruct Spelldatabuf.buf
-    txtSpellsFrom.Text = Spellrec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first shop record: " & BtrieveErrorCode(nStatus)
-Else
-    ShopRowToStruct Shopdatabuf.buf
-    txtShopsFrom.Text = Shoprec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first message record: " & BtrieveErrorCode(nStatus)
-Else
-    MessageRowToStruct Messagedatabuf.buf
-    txtMessagesFrom.Text = Messagerec.Number
-End If
-
-nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first textblock record: " & BtrieveErrorCode(nStatus)
-Else
-    TextblockRowToStruct TextblockDataBuf.buf
-    txtTextblocksFrom.Text = TextblockRec.Number
-End If
-
-'nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-'If Not nStatus = 0 Then
-'    MsgBox "Error getting first room record: " & BtrieveErrorCode(nStatus)
-'Else
-'    RoomRowToStruct Roomdatabuf.buf
-'    txtRoomsFrom.Text = Roomrec.RoomNumber
-'    txtRoomsMap.Text = Roomrec.MapNumber
-'End If
-
-'chkMessagesAll.value = 0
-'chkItemsAll.value = 0
-'chkSpellsAll.value = 0
-'chkClassesAll.value = 0
-'chkRacesAll.value = 0
-'chkShopsAll.value = 0
-'chkRoomsAll.value = 0
-'chkMonstersAll.value = 0
-'chkTextblocksAll.value = 0
-
-End Sub
-
-Private Sub cmdGetLasts_Click()
-Dim nStatus As Integer
-
-nStatus = BTRCALL(BGETLAST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first item record: " & BtrieveErrorCode(nStatus)
-Else
-    ItemRowToStruct Itemdatabuf.buf
-    txtItemsTo.Text = Itemrec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first monster record: " & BtrieveErrorCode(nStatus)
-Else
-    MonsterRowToStruct Monsterdatabuf.buf
-    txtMonstersTo.Text = Monsterrec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first class record: " & BtrieveErrorCode(nStatus)
-Else
-    ClassRowToStruct Classdatabuf.buf
-    txtClassesTo.Text = Classrec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first race record: " & BtrieveErrorCode(nStatus)
-Else
-    RaceRowToStruct Racedatabuf.buf
-    txtRacesTo.Text = Racerec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first spell record: " & BtrieveErrorCode(nStatus)
-Else
-    SpellRowToStruct Spelldatabuf.buf
-    txtSpellsTo.Text = Spellrec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first shop record: " & BtrieveErrorCode(nStatus)
-Else
-    ShopRowToStruct Shopdatabuf.buf
-    txtShopsTo.Text = Shoprec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first message record: " & BtrieveErrorCode(nStatus)
-Else
-    MessageRowToStruct Messagedatabuf.buf
-    txtMessagesTo.Text = Messagerec.Number
-End If
-
-nStatus = BTRCALL(BGETLAST, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
-If Not nStatus = 0 Then
-    MsgBox "Error getting first textblock record: " & BtrieveErrorCode(nStatus)
-Else
-    TextblockRowToStruct TextblockDataBuf.buf
-    txtTextblocksTo.Text = TextblockRec.Number
-End If
-
-'chkMessagesAll.value = 0
-'chkItemsAll.value = 0
-'chkSpellsAll.value = 0
-'chkClassesAll.value = 0
-'chkRacesAll.value = 0
-'chkShopsAll.value = 0
-'chkMonstersAll.value = 0
-'chkTextblocksAll.value = 0
-
-End Sub
-
-
-Private Sub cmdNone_Click()
-chkMessages.Value = 0
-chkItems.Value = 0
-chkSpells.Value = 0
-chkClasses.Value = 0
-chkRaces.Value = 0
-chkShops.Value = 0
-chkRooms.Value = 0
-chkActions.Value = 0
-chkMonsters.Value = 0
-chkUsers.Value = 0
-chkBankbooks.Value = 0
-chkTextblocks.Value = 0
-End Sub
-
-
 Private Sub cmdCancel_Click()
 Dim nYesNo As Integer
 
@@ -2303,7 +2108,7 @@ End Sub
 Private Sub ExportTextblocks(format As String)
 Dim nStatus As Integer, decrypted As String, nLastRec(1) As Long
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 7
@@ -2311,30 +2116,30 @@ nListNum = 7
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextTextblockStart:
     TextblockKey.PartNum = 0
-    TextblockKey.Number = nRecNum
+    TextblockKey.Number = nRecnum
     nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No textblock actually found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextTextblockStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Textblocks: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -2345,7 +2150,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -2373,33 +2178,33 @@ GotoNextTextblock:
         If nStatus = 0 Then
             TextblockRowToStruct TextblockDataBuf.buf
             
-            If TextblockRec.Number > nRecNum Then
+            If TextblockRec.Number > nRecnum Then
                 'next record is not a new partnum
                 If TextblockRec.Number > nLastRecNum Then
                     'now out of range
                     If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo finish
                     nCurrenListItem = nCurrenListItem + 1
                         
-                    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                     
                     TextblockKey.PartNum = 0
-                    TextblockKey.Number = nRecNum
+                    TextblockKey.Number = nRecnum
                     
                     nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
                     If Not nStatus = 0 Then GoTo GotoNextTextblock:
                 Else
-                    nRecNum = nRecNum + 1
+                    nRecnum = nRecnum + 1
                 End If
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2438,7 +2243,7 @@ part_check:
     nLastRec(0) = TextblockRec.Number
     nLastRec(1) = TextblockRec.PartNum
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     
     If bUpdateExistingADB = True Then
         If tabTextblocks.RecordCount = 0 Then
@@ -2480,7 +2285,7 @@ part_check:
         If nStatus = 0 Then
             TextblockRowToStruct TextblockDataBuf.buf
             
-            If TextblockRec.Number > nRecNum Then
+            If TextblockRec.Number > nRecnum Then
                 'next record is not a new partnum
                 If TextblockRec.Number > nLastRecNum Then
                     'now out of range
@@ -2490,16 +2295,16 @@ GotoNextTextblock_access:
                     If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                     nCurrenListItem = nCurrenListItem + 1
                         
-                    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                     
                     TextblockKey.PartNum = 0
-                    TextblockKey.Number = nRecNum
+                    TextblockKey.Number = nRecnum
                     
                     nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
                     If Not nStatus = 0 Then GoTo GotoNextTextblock_access:
                 Else
-                    nRecNum = nRecNum + 1
+                    nRecnum = nRecnum + 1
                     Call IncreaseProgressBar
                 End If
             Else
@@ -2508,7 +2313,7 @@ GotoNextTextblock_access:
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
@@ -2528,7 +2333,7 @@ End Sub
 Private Sub ExportMessages(format As String)
 Dim nStatus As Integer
 Dim fso As FileSystemObject, ts As TextStream, x As Long
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 3
@@ -2536,28 +2341,28 @@ nListNum = 3
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextMessageStart:
-    nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No message found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextMessageStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Messages: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -2568,7 +2373,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "msg2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
     
@@ -2595,22 +2400,22 @@ GotoNextMessage:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextMessage:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2670,22 +2475,22 @@ GotoNextMessageAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextMessageAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2701,7 +2506,7 @@ End Sub
 Private Sub ExportItems(format As String)
 Dim nStatus As Integer
 Dim fso As FileSystemObject, ts As TextStream, x As Long
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 2
@@ -2709,28 +2514,28 @@ nListNum = 2
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextItemStart:
-    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No item found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextItemStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Items: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -2741,7 +2546,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "item2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -2837,22 +2642,22 @@ GotoNextItem:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextItem:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2963,22 +2768,22 @@ GotoNextItemAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextItemAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2993,7 +2798,7 @@ End Sub
 Private Sub ExportRooms(format As String)
 Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long, nMap As Long
+Dim nRecnum As Long, nLastRecNum As Long, nMap As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 8
@@ -3002,30 +2807,30 @@ If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
     nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
     
 GotoNextRoomStart:
     RoomKeyStruct.MapNum = nMap
-    RoomKeyStruct.RoomNum = nRecNum
+    RoomKeyStruct.RoomNum = nRecnum
     nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No rooms actually found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextRoomStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Rooms: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -3036,7 +2841,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -3150,28 +2955,28 @@ Do While nStatus = 0 And Not bStopExport
 GotoNextRoom:
         Call IncreaseProgressBar
         
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
             nCurrenListItem = nCurrenListItem + 1
             nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         
         RoomKeyStruct.MapNum = nMap
-        RoomKeyStruct.RoomNum = nRecNum
+        RoomKeyStruct.RoomNum = nRecnum
         
         nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
         If Not nStatus = 0 Then GoTo GotoNextRoom:
     Else
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         IncreaseProgressBar
     End If
 
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 
@@ -3227,33 +3032,62 @@ Do While nStatus = 0 And Not bStopExport
     tabRooms.Fields("Delay") = Roomrec.Delay
     tabRooms.Fields("Max Area") = Roomrec.MaxArea
     tabRooms.Fields("Control Room") = Roomrec.ControlRoom
-    tabRooms.Fields("Runic") = Roomrec.Runic
-    tabRooms.Fields("Platinum") = Roomrec.Platinum
-    tabRooms.Fields("Gold") = Roomrec.Gold
-    tabRooms.Fields("Silver") = Roomrec.Silver
-    tabRooms.Fields("Copper") = Roomrec.Copper
-    tabRooms.Fields("InvisRunic") = Roomrec.InvisRunic
-    tabRooms.Fields("InvisPlatinum") = Roomrec.InvisPlatinum
-    tabRooms.Fields("InvisGold") = Roomrec.InvisGold
-    tabRooms.Fields("InvisSilver") = Roomrec.InvisSilver
-    tabRooms.Fields("InvisCopper") = Roomrec.InvisCopper
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("Exit Room") = Roomrec.ExitRoom
     tabRooms.Fields("Attributes") = Roomrec.Attributes
     For x = 0 To 6
         tabRooms.Fields("Desc " & x) = Roomrec.Desc(x)
     Next
-    For x = 0 To 16
-        tabRooms.Fields("Room Item " & x) = Roomrec.RoomItems(x)
-        tabRooms.Fields("Room Item " & x & " QTY") = Roomrec.RoomItemQty(x)
-        tabRooms.Fields("Room Item " & x & " USES") = Roomrec.RoomItemUses(x)
-    Next
-    For x = 0 To 14
-        tabRooms.Fields("Hidden Item " & x) = Roomrec.InvisItems(x)
-        tabRooms.Fields("Hidden Item " & x & " QTY") = Roomrec.InvisItemQty(x)
-        tabRooms.Fields("Hidden Item " & x & " USES") = Roomrec.InvisItemUses(x)
-        tabRooms.Fields("CurrentRoomMon " & x) = 0 'Roomrec.CurrentRoomMon(x)
-    Next
+    
+    If chkZeroUserInteraction.Value = 1 Then
+        tabRooms.Fields("Runic") = 0
+        tabRooms.Fields("Platinum") = 0
+        tabRooms.Fields("Gold") = 0
+        tabRooms.Fields("Silver") = 0
+        tabRooms.Fields("Copper") = 0
+        tabRooms.Fields("InvisRunic") = 0
+        tabRooms.Fields("InvisPlatinum") = 0
+        tabRooms.Fields("InvisGold") = 0
+        tabRooms.Fields("InvisSilver") = 0
+        tabRooms.Fields("InvisCopper") = 0
+        
+        For x = 0 To 16
+            tabRooms.Fields("Room Item " & x) = 0
+            tabRooms.Fields("Room Item " & x & " QTY") = 0
+            tabRooms.Fields("Room Item " & x & " USES") = 0
+        Next
+        For x = 0 To 14
+            tabRooms.Fields("Hidden Item " & x) = 0
+            tabRooms.Fields("Hidden Item " & x & " QTY") = 0
+            tabRooms.Fields("Hidden Item " & x & " USES") = 0
+            tabRooms.Fields("CurrentRoomMon " & x) = 0
+        Next
+    Else
+        tabRooms.Fields("Runic") = Roomrec.Runic
+        tabRooms.Fields("Platinum") = Roomrec.Platinum
+        tabRooms.Fields("Gold") = Roomrec.Gold
+        tabRooms.Fields("Silver") = Roomrec.Silver
+        tabRooms.Fields("Copper") = Roomrec.Copper
+        tabRooms.Fields("InvisRunic") = Roomrec.InvisRunic
+        tabRooms.Fields("InvisPlatinum") = Roomrec.InvisPlatinum
+        tabRooms.Fields("InvisGold") = Roomrec.InvisGold
+        tabRooms.Fields("InvisSilver") = Roomrec.InvisSilver
+        tabRooms.Fields("InvisCopper") = Roomrec.InvisCopper
+        
+        For x = 0 To 16
+            tabRooms.Fields("Room Item " & x) = Roomrec.RoomItems(x)
+            tabRooms.Fields("Room Item " & x & " QTY") = Roomrec.RoomItemQty(x)
+            tabRooms.Fields("Room Item " & x & " USES") = Roomrec.RoomItemUses(x)
+        Next
+        For x = 0 To 14
+            tabRooms.Fields("Hidden Item " & x) = Roomrec.InvisItems(x)
+            tabRooms.Fields("Hidden Item " & x & " QTY") = Roomrec.InvisItemQty(x)
+            tabRooms.Fields("Hidden Item " & x & " USES") = Roomrec.InvisItemUses(x)
+            tabRooms.Fields("CurrentRoomMon " & x) = 0 'Roomrec.CurrentRoomMon(x)
+        Next
+    End If
+    
+    
     For x = 0 To 9
         tabRooms.Fields("Exit " & x) = Roomrec.RoomExit(x)
         tabRooms.Fields("Type " & x) = Roomrec.RoomType(x)
@@ -3270,28 +3104,28 @@ Do While nStatus = 0 And Not bStopExport
 GotoNextRoomAccess:
         Call IncreaseProgressBar
         
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess:
             nCurrenListItem = nCurrenListItem + 1
             nMap = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(2).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         
         RoomKeyStruct.MapNum = nMap
-        RoomKeyStruct.RoomNum = nRecNum
+        RoomKeyStruct.RoomNum = nRecnum
         
         nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
         If Not nStatus = 0 Then GoTo GotoNextRoomAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
 
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3306,7 +3140,7 @@ End Sub
 Private Sub ExportSpells(format As String)
 Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 6
@@ -3314,28 +3148,28 @@ nListNum = 6
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextSpellStart:
-    nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No spell found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextSpellStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Spells: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -3346,7 +3180,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "spel2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -3411,22 +3245,22 @@ GotoNextSpell:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextSpell:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3519,22 +3353,22 @@ GotoNextSpellAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextSpellAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3669,7 +3503,7 @@ End Sub
 Private Sub ExportClasses(format As String)
 Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 0
@@ -3677,28 +3511,28 @@ nListNum = 0
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextClassStart:
-    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No class found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextClassStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Classs: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -3709,7 +3543,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "clas2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -3756,22 +3590,22 @@ GotoNextClass:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextClass:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3844,22 +3678,22 @@ GotoNextClassAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextClassAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3874,7 +3708,7 @@ End Sub
 Private Sub ExportRaces(format As String)
 Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 1
@@ -3882,28 +3716,28 @@ nListNum = 1
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextRaceStart:
-    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No race found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextRaceStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Races: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -3914,7 +3748,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -3967,22 +3801,22 @@ GotoNextRace:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextRace:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4061,22 +3895,22 @@ GotoNextRaceAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextRaceAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4091,7 +3925,7 @@ End Sub
 Private Sub ExportShops(format As String)
 Dim nStatus As Integer, x As Long
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 5
@@ -4099,28 +3933,28 @@ nListNum = 5
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextShopStart:
-    nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No shop found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextShopStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Shops: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -4131,7 +3965,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "shop2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -4180,22 +4014,22 @@ GotoNextShop:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextShop:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4250,8 +4084,18 @@ Do While nStatus = 0 And Not bStopExport
     
     For x = 0 To 19
         tabShops.Fields("Item " & x) = Shoprec.ShopItemNumber(x)
+        
+        If chkZeroUserInteraction.Value = 1 Then
+            If Shoprec.ShopRgnPercentage(x) > 0 Then
+                tabShops.Fields("Normal " & x) = Shoprec.ShopRgnNumber(x)
+            Else
+                tabShops.Fields("Normal " & x) = 0
+            End If
+        Else
+            tabShops.Fields("Normal " & x) = Shoprec.ShopNow(x)
+        End If
+        
         tabShops.Fields("Max " & x) = Shoprec.ShopMax(x)
-        tabShops.Fields("Normal " & x) = Shoprec.ShopNow(x)
         tabShops.Fields("Regen Time " & x) = Shoprec.ShopRgnTime(x)
         tabShops.Fields("Regen Number" & x) = Shoprec.ShopRgnNumber(x)
         tabShops.Fields("Regen %" & x) = Shoprec.ShopRgnPercentage(x)
@@ -4271,22 +4115,22 @@ GotoNextShopAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextShopAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4301,7 +4145,7 @@ End Sub
 Private Sub ExportMonsters(format As String)
 Dim nStatus As Integer, x As Long
 Dim fso As FileSystemObject, ts As TextStream
-Dim nRecNum As Long, nLastRecNum As Long
+Dim nRecnum As Long, nLastRecNum As Long
 Dim nListNum As Integer, nCurrenListItem As Long
 
 nListNum = 4
@@ -4309,28 +4153,28 @@ nListNum = 4
 If chkExportAll(nListNum).Value = 0 Then
     If lvList(nListNum).ListItems.Count = 0 Then Exit Sub
     nCurrenListItem = 1
-    nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+    nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
     nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
     
 GotoNextMonsterStart:
-    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nRecNum, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nRecnum, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        If nRecNum = nLastRecNum Then
+        If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
                 MsgBox "No monster found to export.", vbInformation
                 Exit Sub
             End If
             nCurrenListItem = nCurrenListItem + 1
             
-            nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+            nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
             nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
         Else
-            nRecNum = nRecNum + 1
+            nRecnum = nRecnum + 1
         End If
         GoTo GotoNextMonsterStart:
     End If
 Else
-    nRecNum = 1
+    nRecnum = 1
     nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Monsters: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
@@ -4341,7 +4185,7 @@ End If
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "knms2.dat"
-stsStatusBar.Panels(2).Text = nRecNum
+stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
 
@@ -4471,22 +4315,22 @@ GotoNextMonster:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextMonster:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4564,13 +4408,12 @@ Do While nStatus = 0 And Not bStopExport
     tabMonsters.Fields("Charm LvL") = Monsterrec.CharmLvL
     tabMonsters.Fields("Charm RES") = Monsterrec.CharmRes
     tabMonsters.Fields("BS Defense") = Monsterrec.BSDefence
-    tabMonsters.Fields("Active") = Monsterrec.Active
+    
     tabMonsters.Fields("Type") = Monsterrec.Type
     tabMonsters.Fields("Undead") = Monsterrec.Undead
     tabMonsters.Fields("Alignment") = Monsterrec.Alignment
     tabMonsters.Fields("Regen Time") = Monsterrec.RegenTime
-    tabMonsters.Fields("Date Killed") = Monsterrec.DateKilled
-    tabMonsters.Fields("Time Killed") = Monsterrec.TimeKilled
+    
     tabMonsters.Fields("Move Msg") = Monsterrec.MoveMsg
     tabMonsters.Fields("Death Msg") = Monsterrec.DeathMsg
     tabMonsters.Fields("Runic") = Monsterrec.Runic
@@ -4588,7 +4431,17 @@ Do While nStatus = 0 And Not bStopExport
     tabMonsters.Fields("Desc 3") = Monsterrec.DescLine3
     tabMonsters.Fields("Desc 4") = Monsterrec.DescLine4
     tabMonsters.Fields("Gender") = Monsterrec.Gender
-
+    
+    If chkZeroUserInteraction.Value = 1 Then
+        tabMonsters.Fields("Active") = 0
+        tabMonsters.Fields("Date Killed") = 0
+        tabMonsters.Fields("Time Killed") = 0
+    Else
+        tabMonsters.Fields("Active") = Monsterrec.Active
+        tabMonsters.Fields("Date Killed") = Monsterrec.DateKilled
+        tabMonsters.Fields("Time Killed") = Monsterrec.TimeKilled
+    End If
+    
     For x = 0 To 4
         tabMonsters.Fields("Attack Type " & x) = Monsterrec.AttackType(x)
         tabMonsters.Fields("Attack Accu/Spell " & x) = Monsterrec.AttackAccuSpell(x)
@@ -4630,22 +4483,22 @@ GotoNextMonsterAccess:
                 If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                 nCurrenListItem = nCurrenListItem + 1
                     
-                nRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
+                nRecnum = Val(lvList(nListNum).ListItems(nCurrenListItem).Text)
                 nLastRecNum = Val(lvList(nListNum).ListItems(nCurrenListItem).ListSubItems(1).Text)
                 
-                nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nRecNum, KEY_BUF_LEN, 0)
+                nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nRecnum, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then GoTo GotoNextMonsterAccess:
             Else
-                nRecNum = nRecNum + 1
+                nRecnum = nRecnum + 1
             End If
         End If
     Else
         nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-        nRecNum = nRecNum + 1
+        nRecnum = nRecnum + 1
         Call IncreaseProgressBar
     End If
     
-    stsStatusBar.Panels(2).Text = nRecNum
+    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4963,33 +4816,6 @@ Dim nTemp As Integer
     Call CloseAll(True)
 End Sub
 
-Private Sub lblAll_Click(Index As Integer)
-
-If lblAll(0).Tag = "1" Then
-    chkItemsAll.Value = 1
-    chkMonstersAll.Value = 1
-    chkTextblocksAll.Value = 1
-    chkMessagesAll.Value = 1
-    chkClassesAll.Value = 1
-    chkRacesAll.Value = 1
-    chkSpellsAll.Value = 1
-    chkShopsAll.Value = 1
-    chkRoomsAll.Value = 1
-    lblAll(0).Tag = 0
-Else
-    chkItemsAll.Value = 0
-    chkMonstersAll.Value = 0
-    chkTextblocksAll.Value = 0
-    chkMessagesAll.Value = 0
-    chkClassesAll.Value = 0
-    chkRacesAll.Value = 0
-    chkSpellsAll.Value = 0
-    chkShopsAll.Value = 0
-    chkRoomsAll.Value = 0
-    lblAll(0).Tag = 1
-End If
-End Sub
-
 
 Private Sub lvList_Click(Index As Integer)
 cmbDB.ListIndex = Index
@@ -5004,6 +4830,7 @@ Private Sub optAccessDB_Click()
     chkBankbooks.Enabled = False
     chkUsers.Value = 0
     chkUsers.Enabled = False
+    chkZeroUserInteraction.Enabled = True
     If eDatFileVersion >= v111j Then chkOneExpField.Enabled = True
     bCheckSave = True
 End Sub
@@ -5012,197 +4839,11 @@ Private Sub optTextfile_Click()
     chkBankbooks.Enabled = True
     chkUsers.Enabled = True
     chkOneExpField.Enabled = False
+    chkZeroUserInteraction.Enabled = False
     If eDatFileVersion >= v111j Then chkOneExpField.Value = 0
     bCheckSave = True
 End Sub
-'Private Function CheckFirstRecords() As Boolean
-'Dim y As Integer, nStatus As Integer, x As Long, YN As Integer
-'Dim CheckboxArray(1 To 12) As Object
-'
-'Set CheckboxArray(1) = chkMessages
-'Set CheckboxArray(2) = chkItems
-'Set CheckboxArray(3) = chkSpells
-'Set CheckboxArray(4) = chkClasses
-'Set CheckboxArray(5) = chkRaces
-'Set CheckboxArray(6) = chkShops
-'Set CheckboxArray(7) = chkRooms
-'Set CheckboxArray(8) = chkActions
-'Set CheckboxArray(9) = chkMonsters
-'Set CheckboxArray(10) = chkUsers
-'Set CheckboxArray(11) = chkBankbooks
-'Set CheckboxArray(12) = chkTextblocks
-'
-'CheckFirstRecords = True
-'
-'For y = 1 To UBound(CheckboxArray())
-'    If CheckFirstRecords = False Then Exit For
-'    If CheckboxArray(y).Value = 1 Then
-'        Select Case y
-'            Case 1:
-'                If chkMessagesAll.Value = 0 Then
-'                    x = Val(txtMessagesFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Messages: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Messages: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 2:
-'                If chkItemsAll.Value = 0 Then
-'                    x = Val(txtItemsFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Items: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Items: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 3:
-'                If chkSpellsAll.Value = 0 Then
-'                    x = Val(txtSpellsFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Spells: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Spells: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 4:
-'                If chkClassesAll.Value = 0 Then
-'                    x = Val(txtClassesFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Classes: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Classes: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 5:
-'                If chkRacesAll.Value = 0 Then
-'                    x = Val(txtRacesFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Races: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Races: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 6:
-'                If chkShopsAll.Value = 0 Then
-'                    x = Val(txtShopsFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Shops: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Shops: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 7:
-'                If chkRoomsAll.Value = 0 Then
-'                    RoomKeyStruct.MapNum = Val(txtRoomsMap.Text)
-'                    RoomKeyStruct.RoomNum = Val(txtRoomsFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Rooms: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Rooms: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 8:
-'                nStatus = BTRCALL(BGETFIRST, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
-'                If Not nStatus = 0 Then
-'                    YN = MsgBox("Actions: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                    If YN = 7 Then CheckFirstRecords = False
-'                End If
-'            Case 9:
-'                If chkMonstersAll.Value = 0 Then
-'                    x = Val(txtMonstersFrom.Text)
-'                    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), x, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Monsters: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Monsters: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'            Case 10:
-'                nStatus = BTRCALL(BGETFIRST, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal UserKeyBuffer, KEY_BUF_LEN, 0)
-'                If Not nStatus = 0 Then
-'                    YN = MsgBox("Users: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                    If YN = 7 Then CheckFirstRecords = False
-'                End If
-'            Case 11:
-'                nStatus = BTRCALL(BGETFIRST, BankPosBlock, BankDatabuf, Len(BankDatabuf), ByVal BankKeyBuffer, KEY_BUF_LEN, 0)
-'                If Not nStatus = 0 Then
-'                    YN = MsgBox("Bankbooks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                    If YN = 7 Then CheckFirstRecords = False
-'                End If
-'            Case 12:
-'                If chkTextblocksAll.Value = 0 Then
-'                    TextblockKey.PartNum = 0
-'                    TextblockKey.Number = Val(txtTextblocksFrom.Text)
-'
-'                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Textblocks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                Else
-'                    nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
-'                    If Not nStatus = 0 Then
-'                        YN = MsgBox("Textblocks: Couldn't get first record, Error: " & BtrieveErrorCode(nStatus) & vbCrLf & vbCrLf & "Do you want to continue exporting (you will see more errors)?", vbYesNo + vbExclamation)
-'                        If YN = 7 Then CheckFirstRecords = False
-'                    End If
-'                End If
-'        End Select
-'    End If
-'Next y
-'
-'For y = 1 To UBound(CheckboxArray())
-'    Set CheckboxArray(y) = Nothing
-'Next
-'
-'End Function
+
 Private Function CalcTotalRecords() As Long
 On Error GoTo error:
 Dim nStatus As Integer, x As Long, y As Integer
@@ -5299,17 +4940,6 @@ End If
 
 End Sub
 
-
-Private Sub txtClassesFrom_GotFocus()
-Call SelectAll(txtClassesFrom)
-
-End Sub
-
-Private Sub txtClassesTo_GotFocus()
-Call SelectAll(txtClassesTo)
-
-End Sub
-
 Private Sub txtCustom_GotFocus()
 Call SelectAll(txtCustom)
 End Sub
@@ -5318,90 +4948,6 @@ Private Sub txtFrom_GotFocus()
 Call SelectAll(txtFrom)
 End Sub
 
-Private Sub txtItemsFrom_GotFocus()
-Call SelectAll(txtItemsFrom)
-
-End Sub
-
-Private Sub txtItemsTo_GotFocus()
-Call SelectAll(txtItemsTo)
-
-End Sub
-
-Private Sub txtMessagesFrom_GotFocus()
-Call SelectAll(txtMessagesFrom)
-
-End Sub
-
-Private Sub txtMessagesTo_GotFocus()
-Call SelectAll(txtMessagesTo)
-
-End Sub
-
-Private Sub txtMonstersFrom_GotFocus()
-Call SelectAll(txtMonstersFrom)
-
-End Sub
-
-Private Sub txtMonstersTo_GotFocus()
-Call SelectAll(txtMonstersTo)
-
-End Sub
-
-Private Sub txtRacesFrom_GotFocus()
-Call SelectAll(txtRacesFrom)
-
-End Sub
-
-Private Sub txtRacesTo_GotFocus()
-Call SelectAll(txtRacesTo)
-
-End Sub
-
-Private Sub txtRoomsFrom_GotFocus()
-Call SelectAll(txtRoomsFrom)
-
-End Sub
-
-Private Sub txtRoomsMap_GotFocus()
-Call SelectAll(txtRoomsMap)
-
-End Sub
-
-Private Sub txtRoomsTo_GotFocus()
-Call SelectAll(txtRoomsTo)
-
-End Sub
-
-Private Sub txtShopsFrom_GotFocus()
-Call SelectAll(txtShopsFrom)
-
-End Sub
-
-Private Sub txtShopsTo_GotFocus()
-Call SelectAll(txtShopsTo)
-
-End Sub
-
-Private Sub txtSpellsFrom_GotFocus()
-Call SelectAll(txtSpellsFrom)
-
-End Sub
-
-Private Sub txtSpellsTo_GotFocus()
-Call SelectAll(txtSpellsTo)
-
-End Sub
-
-Private Sub txtTextblocksFrom_GotFocus()
-Call SelectAll(txtTextblocksFrom)
-
-End Sub
-
-Private Sub txtTextblocksTo_GotFocus()
-Call SelectAll(txtTextblocksTo)
-
-End Sub
 
 Private Sub txtMap_GotFocus()
 Call SelectAll(txtMap)
@@ -5429,6 +4975,8 @@ If Not sLine = "0" Then
 Else
     txtCustom.Text = "Custom Export"
 End If
+
+chkZeroUserInteraction.Value = ReadINI("Settings", "ZeroUserInteraction", sFile, "1")
 
 For x = 0 To 8
     lvList(x).ListItems.clear
@@ -5525,6 +5073,7 @@ Call WriteINI("Settings", "Users", chkUsers.Value, sFile)
 Call WriteINI("Settings", "Bankbooks", chkBankbooks.Value, sFile)
 
 Call WriteINI("Settings", "OneExpField", chkOneExpField.Value, sFile)
+Call WriteINI("Settings", "ZeroUserInteraction", chkZeroUserInteraction.Value, sFile)
 
 For x = 0 To 8
     If chkExportAll(x).Value = 1 Then
