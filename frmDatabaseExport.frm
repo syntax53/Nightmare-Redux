@@ -24,6 +24,42 @@ Begin VB.Form frmDatabaseExport
    MDIChild        =   -1  'True
    ScaleHeight     =   7230
    ScaleWidth      =   12885
+   Begin VB.CommandButton cmdExportAllToggle 
+      Caption         =   "Export All's - OFF"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   435
+      Index           =   1
+      Left            =   11040
+      TabIndex        =   64
+      Top             =   3120
+      Width           =   1755
+   End
+   Begin VB.CommandButton cmdExportAllToggle 
+      Caption         =   "Export All's - ON"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   435
+      Index           =   0
+      Left            =   9060
+      TabIndex        =   63
+      Top             =   3120
+      Width           =   1755
+   End
    Begin MSComctlLib.ListView lvList 
       Height          =   1335
       Index           =   1
@@ -801,11 +837,11 @@ Begin VB.Form frmDatabaseExport
    End
    Begin VB.CommandButton cmdImportRecordNumbers 
       Caption         =   "Import Record Numbers from Database..."
-      Height          =   735
-      Left            =   9720
+      Height          =   555
+      Left            =   9060
       TabIndex        =   22
-      Top             =   2580
-      Width           =   2475
+      Top             =   2460
+      Width           =   3735
    End
    Begin VB.Frame fra2 
       Caption         =   "File Format"
@@ -821,7 +857,7 @@ Begin VB.Form frmDatabaseExport
       Height          =   2055
       Left            =   9060
       TabIndex        =   29
-      Top             =   3480
+      Top             =   3720
       Width           =   3735
       Begin VB.CommandButton cmdUserInteractionQ 
          Caption         =   "?"
@@ -829,7 +865,7 @@ Begin VB.Form frmDatabaseExport
          Left            =   3180
          TabIndex        =   62
          Top             =   1380
-         Width           =   270
+         Width           =   330
       End
       Begin VB.CheckBox chkZeroUserInteraction 
          Caption         =   """Reset"" User Interactable Fields on Export (Cash, Item Uses, Etc)"
@@ -842,11 +878,11 @@ Begin VB.Form frmDatabaseExport
       End
       Begin VB.CommandButton cmdQ 
          Caption         =   "?"
-         Height          =   255
-         Left            =   2280
+         Height          =   315
+         Left            =   2340
          TabIndex        =   28
-         Top             =   840
-         Width           =   210
+         Top             =   780
+         Width           =   330
       End
       Begin VB.CheckBox chkOneExpField 
          Caption         =   "Use 1 Field for Mon EXP"
@@ -1134,6 +1170,14 @@ For x = 0 To 8
     chkExportAll(x).Value = 1
 Next x
 bCheckSave = True
+End Sub
+
+Private Sub cmdExportAllToggle_Click(Index As Integer)
+Dim x As Integer, nOP As Integer
+If Index = 0 Then nOP = 1
+For x = 0 To 8
+    chkExportAll(x).Value = nOP
+Next x
 End Sub
 
 Private Sub cmdGetFirstLast_Click(Index As Integer)
@@ -5176,7 +5220,7 @@ start_over:
                     'ROOM
                     If nLastMap = Val(lvList(nRecIndex).ListItems(y).Text) Then
                         If Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) >= nLastLow _
-                            And Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) <= nLastHigh Then
+                            And Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) <= nLastHigh + 1 Then
                             
                             If Val(lvList(nRecIndex).ListItems(y).ListSubItems(2)) >= Val(lvList(nRecIndex).ListItems(y - 1).ListSubItems(2)) Then
                                 lvList(nRecIndex).ListItems(y - 1).ListSubItems(2) = lvList(nRecIndex).ListItems(y).ListSubItems(2)
@@ -5198,7 +5242,7 @@ start_over:
                 Else
                     'NON-ROOM
                     If Val(lvList(nRecIndex).ListItems(y).Text) >= nLastLow _
-                        And Val(lvList(nRecIndex).ListItems(y).Text) <= nLastHigh Then
+                        And Val(lvList(nRecIndex).ListItems(y).Text) <= nLastHigh + 1 Then
                         
                         If Val(lvList(nRecIndex).ListItems(y).ListSubItems(1)) >= Val(lvList(nRecIndex).ListItems(y - 1).ListSubItems(1)) Then
                             lvList(nRecIndex).ListItems(y - 1).ListSubItems(1) = lvList(nRecIndex).ListItems(y).ListSubItems(1)
@@ -5225,3 +5269,5 @@ error:
 Call HandleError("CombineRanges")
 Resume out:
 End Sub
+
+
