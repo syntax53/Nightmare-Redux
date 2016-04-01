@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Object = "{AA61DC5D-A4D1-4F73-AF2B-208862262908}#3.0#0"; "NMRTaskBar.ocx"
 Begin VB.MDIForm frmMain 
@@ -295,6 +295,9 @@ Begin VB.MDIForm frmMain
       Begin VB.Menu mnuAbilityEditor 
          Caption         =   "&Ability List Editor"
          Shortcut        =   {F6}
+      End
+      Begin VB.Menu mnuControlRoomList 
+         Caption         =   "Create Control Room List"
       End
       Begin VB.Menu mnuBuildMonsterIndex 
          Caption         =   "Create Monster/&Index List"
@@ -688,6 +691,20 @@ End Sub
 Private Sub mnuCompileBlank_Click()
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 Call CompileUpdatefile(True)
+End Sub
+
+Private Sub mnuControlRoomList_Click()
+On Error GoTo error:
+
+If FormIsLoaded("frmRoomControlRoomList") Then
+    frmRoomControlRoomList.SetFocus
+Else
+    frmRoomControlRoomList.Show
+End If
+
+Exit Sub
+error:
+Call HandleError
 End Sub
 
 Private Sub mnuDatabaseIndexChange_Click()
@@ -1850,10 +1867,10 @@ End If
 frmUniversalModifier.cmbModifier.ListIndex = 2 '*
 frmUniversalModifier.txtValue.Text = 2 '2 to multiply by 2
 
-frmUniversalModifier.chkOnlyIfOn.Value = 1 'turn on "only if"
-frmUniversalModifier.cmbOnlyIf.ListIndex = 0 'game limit
-frmUniversalModifier.cmbOnlyIfModifier.ListIndex = 0 '=
-frmUniversalModifier.txtOnlyIfValue.Text = 1 '1 for 1 game limit
+frmUniversalModifier.chkOnlyIfOn(0).Value = 1 'turn on "only if"
+frmUniversalModifier.cmbOnlyIf(0).ListIndex = 0 'game limit
+frmUniversalModifier.cmbOnlyIfModifier(0).ListIndex = 0 '=
+frmUniversalModifier.txtOnlyIfValue(0).Text = 1 '1 for 1 game limit
 
 MsgBox "The Universal Modifier Fields have been set up for a Boss Exp Multiply." _
     & vbCrLf & "You can modify the settings if need be.  The '2' in the value field is what the exp will be multiplied by." _

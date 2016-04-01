@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmItem 
    Caption         =   "Item Editor"
    ClientHeight    =   6135
@@ -692,30 +692,30 @@ Begin VB.Form frmItem
          TabCaption(1)   =   "Desc/Msg/Cash"
          TabPicture(1)   =   "frmItem.frx":0C0B
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "Frame6"
+         Tab(1).Control(0)=   "Frame2"
          Tab(1).Control(1)=   "Frame5"
-         Tab(1).Control(2)=   "Frame2"
+         Tab(1).Control(2)=   "Frame6"
          Tab(1).ControlCount=   3
          TabCaption(2)   =   "Race/Class/Negate"
          TabPicture(2)   =   "frmItem.frx":0C27
          Tab(2).ControlEnabled=   0   'False
-         Tab(2).Control(0)=   "Frame1"
+         Tab(2).Control(0)=   "Frame3"
          Tab(2).Control(1)=   "Frame4"
-         Tab(2).Control(2)=   "Frame3"
+         Tab(2).Control(2)=   "Frame1"
          Tab(2).ControlCount=   3
          TabCaption(3)   =   "Abilities p1"
          TabPicture(3)   =   "frmItem.frx":0C43
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "cmdAbilsClear(0)"
+         Tab(3).Control(0)=   "Label8"
          Tab(3).Control(1)=   "frmAbilities(0)"
-         Tab(3).Control(2)=   "Label8"
+         Tab(3).Control(2)=   "cmdAbilsClear(0)"
          Tab(3).ControlCount=   3
          TabCaption(4)   =   "Abilities p2"
          TabPicture(4)   =   "frmItem.frx":0C5F
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "Label9"
+         Tab(4).Control(0)=   "cmdAbilsClear(1)"
          Tab(4).Control(1)=   "frmAbilities(1)"
-         Tab(4).Control(2)=   "cmdAbilsClear(1)"
+         Tab(4).Control(2)=   "Label9"
          Tab(4).ControlCount=   3
          Begin VB.CommandButton cmdAbilsClear 
             Caption         =   "Clear"

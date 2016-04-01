@@ -45,7 +45,7 @@ Public bOnlyNames As Boolean
 Public sAppVersion As String
 Public sMenuCaption As String
 Public strDatCallLetters As String * 2
-
+Public bStopControlBuild As Boolean
 Public dbAbilities As Database
 Public rsAbilities As Recordset
 
@@ -54,6 +54,7 @@ Type MGILType
     'sName(20) As String
 End Type
 Public MGIL() As MGILType 'MGIL=Monster Group Index List
+Public ControlRoomList As New Dictionary
 Public Races() As ArrayRec
 Public Classes() As ArrayRec
 
@@ -1218,7 +1219,7 @@ DoEvents
 Call IntFieldMaps
 
 If ReadINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", "")) = "0" Then
-    eDatFileVersion = IIf(WorksWithN = True, 6, 7)
+    eDatFileVersion = IIf(WorksWithN = True, 6, 9)
     MsgBox "This appears to be your first time launching" & _
         " Nightmare Redux" & IIf(WorksWithN = True, " for vN.", ".") & _
         " Please set the path and version of your MajorMUD *.dat files on the following" & _
@@ -2654,3 +2655,246 @@ Call HandleError("FindAbilityName")
 Resume out:
 
 End Sub
+
+
+Public Sub BuildControlRoomList()
+On Error GoTo error:
+Dim nStatus As Integer, x As Integer, nMaxRooms As Long
+Dim sControlRoom As String, sRefRoom As String, sArr() As String, sArr2() As String
+
+ControlRoomList.RemoveAll
+
+nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then MsgBox "Error getting first room, error: " & BtrieveErrorCode(nStatus): Exit Sub
+
+nStatus = BTRCALL(BSTAT, RoomPosBlock, DBStatDatabuf, Len(Roomdatabuf), 0, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then
+    nMaxRooms = 30000
+Else
+    DBStatRowToStruct DBStatDatabuf.buf
+    nMaxRooms = DBStat.nRecords
+End If
+
+bStopControlBuild = False
+
+frmProgressBar.sCaption = "Building Control Room List"
+frmProgressBar.lblCaption = "Building Control Room List..."
+frmProgressBar.cmdCancel.Enabled = True
+
+Call frmProgressBar.SetRange(nMaxRooms)
+
+frmProgressBar.lblNote.Visible = False
+frmProgressBar.lblPanel(0).Caption = ""
+frmProgressBar.lblPanel(1).Caption = ""
+frmProgressBar.Show
+DoEvents
+
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(1).Caption = "Scanning Rooms..."
+
+nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+Do While nStatus = 0 And bStopControlBuild = False
+    RoomRowToStruct Roomdatabuf.buf
+    
+    sRefRoom = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+    'frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+    'frmProgressBar.lblPanel(1).Caption = sRefRoom
+    DoEvents
+    
+    If Roomrec.ControlRoom > 0 Then
+        
+'        sControlRoom = Roomrec.MapNumber & "/" & Roomrec.ControlRoom
+'
+'        If ControlRoomList.Exists(sControlRoom) Then
+'            If InStr(1, ControlRoomList.Item(sControlRoom), "more]", vbTextCompare) = 0 Then
+'                If InStr(1, ControlRoomList.Item(sControlRoom), ",", vbTextCompare) Then
+'                    sArr = Split(ControlRoomList.Item(sControlRoom), ",")
+'                    If UBound(sArr()) > 14 Then
+'                        ControlRoomList.Item(sControlRoom) = ControlRoomList.Item(sControlRoom) & " [+1 more]"
+'                        'Debug.Print ControlRoomList.Item(sControlRoom)
+'                    Else
+'                        ControlRoomList.Item(sControlRoom) = ControlRoomList.Item(sControlRoom) & ", " & Roomrec.RoomNumber
+'                    End If
+'                Else
+'                    ControlRoomList.Item(sControlRoom) = ControlRoomList.Item(sControlRoom) & ", " & Roomrec.RoomNumber
+'                End If
+'            Else
+'                sArr = Split(ControlRoomList.Item(sControlRoom), "+")
+'                If UBound(sArr()) = 1 Then
+'                    sArr2 = Split(sArr(1))
+'                    If UBound(sArr2()) = 1 Then
+'                        x = Val(sArr2(0))
+'                        ControlRoomList.Item(sControlRoom) = sArr(0) & "+" & (x + 1) & " more]"
+'                    End If
+'                End If
+'            End If
+'        Else
+'            ControlRoomList.add sControlRoom, sRefRoom
+'        End If
+        Call AddControlRoom(Roomrec.MapNumber, Roomrec.ControlRoom, Roomrec.RoomNumber)
+    End If
+    
+    Call frmProgressBar.IncreaseProgress
+    nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If Not bUseCPU Then DoEvents
+Loop
+
+frmProgressBar.ProgressBar.Value = frmProgressBar.ProgressBar.Max
+DoEvents
+
+kill:
+On Error Resume Next
+Unload frmProgressBar
+Exit Sub
+error:
+Call HandleError("BuildControlRoomList")
+bStopControlBuild = True
+Resume kill:
+End Sub
+
+Public Sub AddControlRoom(nMap As Long, nControlRoom As Long, nRefRoom As Long)
+Dim sControlRoom As String
+On Error GoTo error:
+
+sControlRoom = nMap & "/" & nControlRoom
+
+If ControlRoomList.Exists(sControlRoom) Then
+    If InStr(1, ControlRoomList.Item(sControlRoom), "(" & nRefRoom & ")", vbTextCompare) = 0 Then
+        ControlRoomList.Item(sControlRoom) = ControlRoomList.Item(sControlRoom) & "," & "(" & nRefRoom & ")"
+    End If
+Else
+    ControlRoomList.add sControlRoom, "(" & nRefRoom & ")"
+End If
+
+
+kill:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("AddControlRoom")
+Resume kill:
+End Sub
+
+Public Function GetControlRoomListByRoom(nMap As Long, nControlRoom As Long, Optional nMaxInList As Integer = 20, Optional bCountAlwaysFirst As Boolean = False) As String
+Dim sControlRoom As String, sArr() As String, sArr2() As String
+Dim sRoomList As String, x As Long, nTotalRefs As Long
+On Error GoTo error:
+
+sControlRoom = nMap & "/" & nControlRoom
+
+If ControlRoomList.Exists(sControlRoom) Then
+    sRoomList = ControlRoomList.Item(sControlRoom)
+    
+    If Not InStr(1, sRoomList, ",", vbTextCompare) = 0 Then
+        
+        sArr = Split(sRoomList, ",")
+        nTotalRefs = UBound(sArr()) + 1
+        
+        If nTotalRefs > nMaxInList Then
+            sRoomList = ""
+            For x = 0 To nMaxInList - 1
+                If x > 0 Then sRoomList = sRoomList & ", "
+                sRoomList = sRoomList & sArr(x)
+            Next x
+            
+            sRoomList = sRoomList & " [+" & (nTotalRefs - nMaxInList) & " more"
+            If bCountAlwaysFirst Then
+                sRoomList = sRoomList & "]"
+            Else
+                sRoomList = sRoomList & ", " & nTotalRefs & " total]"
+            End If
+        Else
+            sRoomList = Replace(sRoomList, ",", ", ")
+        End If
+    Else
+        nTotalRefs = 1
+    End If
+    
+    GetControlRoomListByRoom = Replace(Replace(sRoomList, "(", "", 1, -1, vbTextCompare), ")", "", 1, -1, vbTextCompare)
+    If bCountAlwaysFirst Then
+        GetControlRoomListByRoom = nTotalRefs & " total: " & GetControlRoomListByRoom
+    End If
+Else
+    GetControlRoomListByRoom = "N/A"
+End If
+
+kill:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetControlRoomListByRoom")
+Resume kill:
+End Function
+
+Public Function StringOfNumbersToArray(sNumberString As String) As String()
+Dim x As Long, sRet() As String
+On Error GoTo error:
+
+If InStr(1, sNumberString, ",", vbTextCompare) = 0 Then
+    ReDim sRet(0)
+    sRet(0) = Val(Replace(Replace(sNumberString, "(", "", 1, -1, vbTextCompare), ")", "", 1, -1, vbTextCompare))
+Else
+    sRet = Split(sNumberString, ",")
+    For x = 0 To UBound(sRet())
+        sRet(x) = Val(Replace(Replace(sRet(x), "(", "", 1, -1, vbTextCompare), ")", "", 1, -1, vbTextCompare))
+    Next x
+End If
+
+StringOfNumbersToArray = sRet
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("NumberStringToArray")
+Resume out:
+End Function
+
+Public Function MergeStringArrays(sArr1() As String, sArr2() As String) As String()
+Dim x As Long, y As Long, bMatch As Boolean, sRet() As String
+On Error GoTo error:
+
+If UBound(sArr1()) > UBound(sArr2()) Then
+    ReDim sRet(UBound(sArr1()))
+    sRet = sArr1
+    For x = LBound(sArr2()) To UBound(sArr2())
+        bMatch = False
+        For y = LBound(sRet()) To UBound(sRet())
+            If sArr2(x) = sRet(y) Then
+                bMatch = True
+                Exit For
+            End If
+        Next y
+        If Not bMatch Then
+            ReDim Preserve sRet(UBound(sRet()) + 1)
+            sRet(UBound(sRet())) = sArr2(x)
+        End If
+    Next x
+Else
+    ReDim sRet(UBound(sArr2()))
+    sRet = sArr2
+    For x = LBound(sArr1()) To UBound(sArr1())
+        bMatch = False
+        For y = LBound(sRet()) To UBound(sRet())
+            If sArr1(x) = sRet(y) Then
+                bMatch = True
+                Exit For
+            End If
+        Next y
+        If Not bMatch Then
+            ReDim Preserve sRet(UBound(sRet()) + 1)
+            sRet(UBound(sRet())) = sArr1(x)
+        End If
+    Next x
+End If
+
+MergeStringArrays = sRet
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("MergeStringArrays")
+Resume out:
+End Function
+

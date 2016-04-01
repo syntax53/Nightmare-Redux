@@ -906,23 +906,23 @@ Sub AddBankFieldMap(Map() As FieldMap, ByRef ctr As Integer)
 End Sub
 
 Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
-    AddField Map, ctr, FLD_STRING, 30   'bbs name
-    AddField Map, ctr, FLD_STRING, 10   'firstname
-    AddField Map, ctr, FLD_BYTE, 1
-    AddField Map, ctr, FLD_STRING, 18   'lastname
-    AddField Map, ctr, FLD_BYTE, 1
-    AddField Map, ctr, FLD_INTEGER, 4   'notexperience
-    AddField Map, ctr, FLD_INTEGER, 2   'splcast 1
-    AddField Map, ctr, FLD_INTEGER, 2   '2
-    AddField Map, ctr, FLD_INTEGER, 2   '3
-    AddField Map, ctr, FLD_INTEGER, 2   '4
-    AddField Map, ctr, FLD_INTEGER, 2   '5
-    AddField Map, ctr, FLD_INTEGER, 2   '6
-    AddField Map, ctr, FLD_INTEGER, 2   '7
-    AddField Map, ctr, FLD_INTEGER, 2   '8
-    AddField Map, ctr, FLD_INTEGER, 2   '9
-    AddField Map, ctr, FLD_INTEGER, 2   'splcast 10
-    AddField Map, ctr, FLD_INTEGER, 2   'splval 1
+    AddField Map, ctr, FLD_STRING, 30   'bbs name               'bytes 1-30
+    AddField Map, ctr, FLD_STRING, 10   'firstname              'starts at byte 31-40
+    AddField Map, ctr, FLD_BYTE, 1                              '41
+    AddField Map, ctr, FLD_STRING, 18   'lastname               '42-59
+    AddField Map, ctr, FLD_BYTE, 1                              '60
+    AddField Map, ctr, FLD_INTEGER, 4   'notexperience          '61-64
+    AddField Map, ctr, FLD_INTEGER, 2   'splcast 1              'starts at byte 65-66
+    AddField Map, ctr, FLD_INTEGER, 2   '2                      '67-68
+    AddField Map, ctr, FLD_INTEGER, 2   '3                      '69-70
+    AddField Map, ctr, FLD_INTEGER, 2   '4                      '71-72
+    AddField Map, ctr, FLD_INTEGER, 2   '5                      '73-74
+    AddField Map, ctr, FLD_INTEGER, 2   '6                      '75-76
+    AddField Map, ctr, FLD_INTEGER, 2   '7                      '77-78
+    AddField Map, ctr, FLD_INTEGER, 2   '8                      '79-80
+    AddField Map, ctr, FLD_INTEGER, 2   '9                      '81-82
+    AddField Map, ctr, FLD_INTEGER, 2   'splcast 10             '83-84
+    AddField Map, ctr, FLD_INTEGER, 2   'splval 1               '85
     AddField Map, ctr, FLD_INTEGER, 2   '2
     AddField Map, ctr, FLD_INTEGER, 2   '3
     AddField Map, ctr, FLD_INTEGER, 2   '4
@@ -932,7 +932,7 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2   '8
     AddField Map, ctr, FLD_INTEGER, 2   '9
     AddField Map, ctr, FLD_INTEGER, 2   'splval 10
-    AddField Map, ctr, FLD_INTEGER, 2   'splround 1
+    AddField Map, ctr, FLD_INTEGER, 2   'splround 1             '105
     AddField Map, ctr, FLD_INTEGER, 2   '2
     AddField Map, ctr, FLD_INTEGER, 2   '3
     AddField Map, ctr, FLD_INTEGER, 2   '4
@@ -941,12 +941,12 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2   '7
     AddField Map, ctr, FLD_INTEGER, 2   '8
     AddField Map, ctr, FLD_INTEGER, 2   '9
-    AddField Map, ctr, FLD_INTEGER, 2   'splround 10
-    AddField Map, ctr, FLD_STRING, 20   'title
-    AddField Map, ctr, FLD_INTEGER, 2   'Race
-    AddField Map, ctr, FLD_INTEGER, 2   'Class
-    AddField Map, ctr, FLD_INTEGER, 2   'Level
-    AddField Map, ctr, FLD_INTEGER, 2   'Stat1
+    AddField Map, ctr, FLD_INTEGER, 2   'splround 10            '125
+    AddField Map, ctr, FLD_STRING, 20   'title                  '127
+    AddField Map, ctr, FLD_INTEGER, 2   'Race                   '147
+    AddField Map, ctr, FLD_INTEGER, 2   'Class                  '149
+    AddField Map, ctr, FLD_INTEGER, 2   'Level                  '151
+    AddField Map, ctr, FLD_INTEGER, 2   'Stat1                  '153
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -957,14 +957,14 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2   'Stat12
-    AddField Map, ctr, FLD_INTEGER, 2   'MaxHP
-    AddField Map, ctr, FLD_INTEGER, 2   'CurrentHP
-    AddField Map, ctr, FLD_INTEGER, 2   'max encum
-    AddField Map, ctr, FLD_INTEGER, 2   'cur encum
-    AddField Map, ctr, FLD_INTEGER, 2   'energy
-    AddField Map, ctr, FLD_INTEGER, 2   'energy
-    AddField Map, ctr, FLD_INTEGER, 2   'energy
+    AddField Map, ctr, FLD_INTEGER, 2   'Stat12                 '177
+    AddField Map, ctr, FLD_INTEGER, 2   'MaxHP                  '176
+    AddField Map, ctr, FLD_INTEGER, 2   'CurrentHP              '178-179
+    AddField Map, ctr, FLD_INTEGER, 2   'max encum              '180-181
+    AddField Map, ctr, FLD_INTEGER, 2   'cur encum              '182-183
+    AddField Map, ctr, FLD_INTEGER, 2   'energy                 '184-185
+    AddField Map, ctr, FLD_INTEGER, 2   'energy                 '186-187
+    AddField Map, ctr, FLD_INTEGER, 2   'energy                 '188-189
     AddField Map, ctr, FLD_INTEGER, 2   '?
     AddField Map, ctr, FLD_INTEGER, 2   '?
     AddField Map, ctr, FLD_INTEGER, 2   'mr

@@ -1,0 +1,3 @@
+License Agreement
+
+Nightmare Redux is intended to view and edit databases on your local computer and nothing more.  We are not responsible for any misuse of this software.  Using this software to its fullest capabilities will void your MajorMUD® license!

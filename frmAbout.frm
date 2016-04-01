@@ -29,7 +29,7 @@ Begin VB.Form frmAbout
       EndProperty
       Height          =   345
       Left            =   3600
-      TabIndex        =   13
+      TabIndex        =   12
       Top             =   5055
       Width           =   1035
    End
@@ -43,7 +43,7 @@ Begin VB.Form frmAbout
       Left            =   300
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
-      TabIndex        =   4
+      TabIndex        =   3
       TabStop         =   0   'False
       Text            =   "frmAbout.frx":08CA
       Top             =   1020
@@ -54,7 +54,7 @@ Begin VB.Form frmAbout
       Default         =   -1  'True
       Height          =   375
       Left            =   4800
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   5040
       Width           =   975
    End
@@ -73,7 +73,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FF8080&
       Height          =   2895
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   720
       Width           =   5655
       Begin VB.Label Label1 
@@ -82,7 +82,7 @@ Begin VB.Form frmAbout
          Height          =   435
          Index           =   0
          Left            =   240
-         TabIndex        =   3
+         TabIndex        =   2
          Top             =   2400
          Width           =   5235
       End
@@ -102,14 +102,13 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FF8080&
       Height          =   1275
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   3660
       Width           =   5655
       Begin VB.Label lblLinks 
          Alignment       =   1  'Right Justify
          Appearance      =   0  'Flat
          BackColor       =   &H00000000&
-         BorderStyle     =   1  'Fixed Single
          Caption         =   "MajorMUD - Realm of Legends"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -125,7 +124,7 @@ Begin VB.Form frmAbout
          Index           =   3
          Left            =   3060
          MousePointer    =   2  'Cross
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   900
          Width           =   2475
       End
@@ -148,14 +147,14 @@ Begin VB.Form frmAbout
          Index           =   2
          Left            =   4140
          MousePointer    =   2  'Cross
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   300
          Width           =   1395
       End
       Begin VB.Label lblLinks 
          Appearance      =   0  'Flat
          BackColor       =   &H00000000&
-         Caption         =   "MajorMUD Message Board (MMB)"
+         Caption         =   "Nightmare Redux Source Code"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -170,15 +169,14 @@ Begin VB.Form frmAbout
          Index           =   1
          Left            =   120
          MousePointer    =   2  'Cross
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   900
          Width           =   2595
       End
       Begin VB.Label lblLinks 
          Appearance      =   0  'Flat
          BackColor       =   &H00000000&
-         BorderStyle     =   1  'Fixed Single
-         Caption         =   "Nightmare Redux Homepage"
+         Caption         =   "Nightmare Redux Forums"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -193,9 +191,9 @@ Begin VB.Form frmAbout
          Index           =   0
          Left            =   120
          MousePointer    =   2  'Cross
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   300
-         Width           =   2175
+         Width           =   2595
       End
       Begin VB.Label Label1 
          BackColor       =   &H00000000&
@@ -203,7 +201,7 @@ Begin VB.Form frmAbout
          Height          =   435
          Index           =   1
          Left            =   240
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   2400
          Width           =   5235
       End
@@ -225,29 +223,9 @@ Begin VB.Form frmAbout
       Height          =   255
       Left            =   1860
       MousePointer    =   2  'Cross
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   5085
       Width           =   915
-   End
-   Begin VB.Label Label2 
-      Alignment       =   2  'Center
-      BackColor       =   &H00000000&
-      Caption         =   "...just when you thought it was safe to sleep."
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   9
-         Charset         =   0
-         Weight          =   700
-         Underline       =   0   'False
-         Italic          =   -1  'True
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00808080&
-      Height          =   255
-      Left            =   180
-      TabIndex        =   1
-      Top             =   480
-      Width           =   5535
    End
    Begin VB.Label lblb2yb 
       BackColor       =   &H00000000&
@@ -264,7 +242,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00E0E0E0&
       Height          =   255
       Left            =   120
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   5100
       Width           =   1875
    End
@@ -285,7 +263,7 @@ Begin VB.Form frmAbout
       Height          =   495
       Left            =   240
       TabIndex        =   0
-      Top             =   60
+      Top             =   120
       Width           =   5415
    End
 End
@@ -344,13 +322,13 @@ For i = 0 To 3 'number of lbl links
     rc.Right = (lblLinks(i).Left + lblLinks(i).Width) \ Screen.TwipsPerPixelY
     Select Case i
         Case 0:
-            objTooltip.SetToolTipItem frmLinks.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://nmr.mudinfo.net/", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.mudinfo.net/viewforum.php?f=44", False
         Case 1:
-            objTooltip.SetToolTipItem frmLinks.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://mmb.forumshq.com/", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "https://github.com/syntax53/Nightmare-Redux", False
         Case 2:
-            objTooltip.SetToolTipItem frmLinks.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.mudinfo.net/", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.mudinfo.net/", False
         Case 3:
-            objTooltip.SetToolTipItem frmLinks.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.majormud.com/", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.majormud.com/", False
     End Select
 Next
 
@@ -358,7 +336,7 @@ rc.Left = lblSynEmail.Left \ Screen.TwipsPerPixelX
 rc.Top = lblSynEmail.Top \ Screen.TwipsPerPixelY
 rc.Bottom = (lblSynEmail.Top + lblSynEmail.Height) \ Screen.TwipsPerPixelX
 rc.Right = (lblSynEmail.Left + lblSynEmail.Width) \ Screen.TwipsPerPixelY
-objTooltip.SetToolTipItem Me.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "syntax53@mudinfo.net", False
+objTooltip.SetToolTipItem Me.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "syntax53@mudinfo.net", False
 
 Me.Show
 Me.SetFocus
@@ -371,8 +349,8 @@ End Sub
 Private Sub lblLinks_Click(Index As Integer)
 
 Select Case Index
-    Case 0: Call ShellExecute(0&, "open", "http://nmr.mudinfo.net/", vbNullString, vbNullString, vbNormalFocus)
-    Case 1: Call ShellExecute(0&, "open", "http://mmb.forumshq.com/", vbNullString, vbNullString, vbNormalFocus)
+    Case 0: Call ShellExecute(0&, "open", "http://www.mudinfo.net/viewforum.php?f=44", vbNullString, vbNullString, vbNormalFocus)
+    Case 1: Call ShellExecute(0&, "open", "https://github.com/syntax53/Nightmare-Redux", vbNullString, vbNullString, vbNormalFocus)
     Case 2: Call ShellExecute(0&, "open", "http://www.mudinfo.net/", vbNullString, vbNullString, vbNormalFocus)
     Case 3: Call ShellExecute(0&, "open", "http://www.majormud.com/", vbNullString, vbNullString, vbNormalFocus)
 End Select
