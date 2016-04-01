@@ -572,7 +572,10 @@ Dim MonGroup() As String
 
 Dim SpellFromContainerRef() As Boolean
 Dim TBFromBadSource() As Boolean
-'Dim RoomInGame() As Boolean
+'note 4/1/2016... I couldn't remember what the hell "TBFromBadSource" was and why i ever programmed it.
+'It looks like it only gets flagged as from bad source if it's a monster greet text or a spell textblock
+'called from an item container opening.  and i believe this indicates that these textblocks only execute
+'other textblocks by design.  mushy memory ftl.
 
 Dim nNewMax As Integer
 Dim MaxValue As Double
@@ -2455,6 +2458,20 @@ Do While nStatus = 0 And bStopExport = False
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, "giveitem ", Item)
     If bCleared(0) = False Then bCleared(1) = False
     
+    '----- [checking for item references]
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "takeitem ", Item)
+    If bCleared(0) = False Then bCleared(1) = False
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "checkitem ", Item)
+    If bCleared(0) = False Then bCleared(1) = False
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "failitem ", Item)
+    If bCleared(0) = False Then bCleared(1) = False
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "failroomitem ", Item)
+    If bCleared(0) = False Then bCleared(1) = False
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "roomitem ", Item)
+    If bCleared(0) = False Then bCleared(1) = False
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "clearitem ", Item)
+    If bCleared(0) = False Then bCleared(1) = False
+    
     '----- [checking for monster summons]
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, "summon ", Monster)
     If bCleared(0) = False Then bCleared(1) = False
@@ -3158,7 +3175,8 @@ Private Function CheckTBString(ByVal TBNumber As Long, ByVal WholeString As Stri
 Dim x As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
 Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String, sClasses As String
 Dim bLearnSpell As Boolean, sChar As String, bItemFail As Boolean, bRandom As Boolean
-Dim bGiveItem As Boolean
+Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean
+Dim sAddText As String
 
 sWhole = LCase(WholeString)
 sLook = LCase(StringToLookFor)
@@ -3167,6 +3185,18 @@ If Left(sLook, 5) = "learn" Then bLearnSpell = True 'learnspell?
 If Left(sLook, 6) = "random" Then bRandom = True 'random?
 If Left(sLook, 9) = "testskill" Then bTestSkill = True 'testskill
 If Left(sLook, 8) = "giveitem" Then bGiveItem = True
+
+bDontMarkInGame = False
+bItemReferenceOnly = False
+    
+If Left(sLook, 8) = "takeitem" Or Left(sLook, 9) = "checkitem" _
+    Or Left(sLook, 8) = "failitem" Or Left(sLook, 12) = "failroomitem" _
+    Or Left(sLook, 8) = "roomitem" Or Left(sLook, 9) = "clearitem" Then
+    bGiveItem = False
+    bDontMarkInGame = True
+    bItemReferenceOnly = True
+    'sAddText = "(" & Trim(Look) & ")"
+End If
 
 CheckTBString = True
 
@@ -3235,6 +3265,7 @@ nextnumber:
                     If UBound(TBFromBadSource()) < TBNumber Then _
                         ReDim Preserve TBFromBadSource(TBNumber)
                     If TBFromBadSource(TBNumber) = True Then
+                        'Debug.Print "TBFromBadSource/Spell:" & nNumber
                         Call MarkSpellInGame(nNumber)
                     Else
                         sClasses = CheckForClassRestriction(sWhole, x)
@@ -3249,12 +3280,13 @@ nextnumber:
                     If UBound(TBFromBadSource()) < TBNumber Then _
                         ReDim Preserve TBFromBadSource(TBNumber)
                     If TBFromBadSource(TBNumber) = True Then
+                        'Debug.Print "TBFromBadSource/Item:" & nNumber
                         Call MarkItemInGame(nNumber)
                     Else
                         Call MarkItemInGame(nNumber, "Textblock #" & TBNumber & sSuffix)
                     End If
                 Else
-                    Call MarkItemInGame(nNumber, "Textblock #" & TBNumber & sSuffix)
+                    Call MarkItemInGame(nNumber, "Textblock" & sAddText & " #" & TBNumber & sSuffix, bDontMarkInGame, bItemReferenceOnly)
                 End If
                 
             Case 2: 'monster
