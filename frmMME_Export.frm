@@ -1693,13 +1693,18 @@ If nYesNo = vbYes Then bStopExport = True
 End Sub
 
 Private Sub MarkItemInGame(ByVal nNum As Long, Optional ByVal sFrom As String, _
-    Optional ByVal DontMarkInGame As Boolean)
-Dim sTemp As String
-
+    Optional ByVal DontMarkInGame As Boolean, Optional ByVal bReference As Boolean = False)
+Dim sTemp As String, sField As String
 Dim nYesNo As Integer
 On Error GoTo error:
 
 If nNum = 0 Then Exit Sub
+
+If bReference Then
+    sField = "References"
+Else
+    sField = "Obtained From"
+End If
 
 If UBound(ItemInGame()) < nNum Then ReDim Preserve ItemInGame(nNum)
 ItemInGame(nNum) = True
@@ -1713,7 +1718,7 @@ tabItems.Seek "=", nNum
 If tabItems.NoMatch = False Then
     
     'if the "sFrom" is already in the assigned to field, dont do it again
-    sTemp = tabItems.Fields("Obtained From")
+    sTemp = tabItems.Fields(sField)
     If sFrom = "" Then GoTo nofrom:
     If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
     
@@ -1729,7 +1734,7 @@ If tabItems.NoMatch = False Then
 nofrom:
     tabItems.Edit
     If Not DontMarkInGame Then tabItems.Fields("In Game") = 1
-    tabItems.Fields("Obtained From") = sTemp
+    tabItems.Fields(sField) = sTemp
     tabItems.Update
 End If
 
@@ -1965,10 +1970,14 @@ Do While nStatus = 0 And bStopExport = False
     For x = 0 To 9
         If Not Roomrec.RoomExit(x) = 0 Then
             Select Case Roomrec.RoomType(x)
-                 Case 22: 'Cast
+                Case 2, 3, 17: 'ticket, item , key
+                    Call MarkItemInGame(Roomrec.Para1(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber, True, True)
+                Case 7, 11, 12: 'door, gate, remote act
+                    Call MarkItemInGame(Roomrec.Para4(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber, True, True)
+                Case 22: 'Cast
                     Call MarkSpellInGame(Roomrec.Para1(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
                     Call MarkSpellInGame(Roomrec.Para2(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
-                 Case 24: 'Spell Trap
+                Case 24: 'Spell Trap
                     Call MarkSpellInGame(Roomrec.Para1(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
             End Select
         End If
@@ -3644,6 +3653,7 @@ Do While nStatus = 0 And bStopExport = False
     tabItems.Fields("Retain After Uses") = Itemrec.RetainAfterUses
     tabItems.Fields("In Game") = IIf(bAllInGame, True, False)
     tabItems.Fields("Obtained From") = Chr(0)
+    tabItems.Fields("References") = Chr(0)
     
     For x = 0 To 9
         tabItems.Fields("ClassRest-" & x) = Itemrec.Class(x)
@@ -4857,6 +4867,7 @@ With tabNewItems
     
     .Columns.Append "In Game", adInteger
     .Columns.Append "Obtained From", adLongVarWChar, 2000 ', adVarWChar
+    .Columns.Append "References", adLongVarWChar, 2000
     
 End With
 catNewDB.Tables.Append tabNewItems
