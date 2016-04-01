@@ -1219,7 +1219,7 @@ DoEvents
 Call IntFieldMaps
 
 If ReadINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", "")) = "0" Then
-    eDatFileVersion = IIf(WorksWithN = True, 6, 7)
+    eDatFileVersion = IIf(WorksWithN = True, 6, 9)
     MsgBox "This appears to be your first time launching" & _
         " Nightmare Redux" & IIf(WorksWithN = True, " for vN.", ".") & _
         " Please set the path and version of your MajorMUD *.dat files on the following" & _
