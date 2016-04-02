@@ -4048,6 +4048,7 @@ Do While nStatus = 0 And bStopExport = False
     End If
     
     tabMonsters.Fields("HP") = Monsterrec.Hitpoints
+    tabMonsters.Fields("Energy") = Monsterrec.Energy
     tabMonsters.Fields("GreetTXT") = Monsterrec.GreetTxt
     tabMonsters.Fields("HPRegen") = Monsterrec.HPRegen
     tabMonsters.Fields("CharmLvL") = Monsterrec.CharmLvL
@@ -4806,6 +4807,7 @@ With tabNewMonsters
     .Columns.Append "EXP", adDouble
     If eDatFileVersion >= v111j Then .Columns.Append "ExpMulti", adDouble
     .Columns.Append "HP", adInteger
+    .Columns.Append "Energy", adInteger
     .Columns.Append "GreetTXT", adInteger
     .Columns.Append "HPRegen", adInteger
     .Columns.Append "CharmLVL", adInteger
