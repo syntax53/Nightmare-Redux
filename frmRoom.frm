@@ -255,12 +255,11 @@ Begin VB.Form frmRoom
       _Version        =   393216
       Style           =   1
       Tabs            =   6
-      Tab             =   1
       TabsPerRow      =   6
       TabHeight       =   520
       TabCaption(0)   =   "General"
       TabPicture(0)   =   "frmRoom.frx":08CA
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Frame1"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Frame2"
@@ -268,263 +267,135 @@ Begin VB.Form frmRoom
       Tab(0).ControlCount=   2
       TabCaption(1)   =   "Exits"
       TabPicture(1)   =   "frmRoom.frx":08E6
-      Tab(1).ControlEnabled=   -1  'True
-      Tab(1).Control(0)=   "lblExitType(0)"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "label(3)"
-      Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "label(4)"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "label(5)"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "label(6)"
-      Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "label(7)"
-      Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).Control(6)=   "label(8)"
-      Tab(1).Control(6).Enabled=   0   'False
-      Tab(1).Control(7)=   "label(9)"
-      Tab(1).Control(7).Enabled=   0   'False
-      Tab(1).Control(8)=   "label(10)"
-      Tab(1).Control(8).Enabled=   0   'False
-      Tab(1).Control(9)=   "label(12)"
-      Tab(1).Control(9).Enabled=   0   'False
-      Tab(1).Control(10)=   "label(13)"
-      Tab(1).Control(10).Enabled=   0   'False
-      Tab(1).Control(11)=   "lblRoomNum(0)"
-      Tab(1).Control(11).Enabled=   0   'False
-      Tab(1).Control(12)=   "lblPara1(0)"
-      Tab(1).Control(12).Enabled=   0   'False
-      Tab(1).Control(13)=   "lblPara2(0)"
-      Tab(1).Control(13).Enabled=   0   'False
-      Tab(1).Control(14)=   "lblPara3(0)"
-      Tab(1).Control(14).Enabled=   0   'False
-      Tab(1).Control(15)=   "lblPara4(0)"
-      Tab(1).Control(15).Enabled=   0   'False
-      Tab(1).Control(16)=   "lblPara4(1)"
-      Tab(1).Control(16).Enabled=   0   'False
-      Tab(1).Control(17)=   "lblPara3(1)"
-      Tab(1).Control(17).Enabled=   0   'False
-      Tab(1).Control(18)=   "lblPara2(1)"
-      Tab(1).Control(18).Enabled=   0   'False
-      Tab(1).Control(19)=   "lblPara1(1)"
-      Tab(1).Control(19).Enabled=   0   'False
-      Tab(1).Control(20)=   "lblPara4(2)"
-      Tab(1).Control(20).Enabled=   0   'False
-      Tab(1).Control(21)=   "lblPara3(2)"
-      Tab(1).Control(21).Enabled=   0   'False
-      Tab(1).Control(22)=   "lblPara2(2)"
-      Tab(1).Control(22).Enabled=   0   'False
-      Tab(1).Control(23)=   "lblPara1(2)"
-      Tab(1).Control(23).Enabled=   0   'False
-      Tab(1).Control(24)=   "lblPara4(3)"
-      Tab(1).Control(24).Enabled=   0   'False
-      Tab(1).Control(25)=   "lblPara3(3)"
-      Tab(1).Control(25).Enabled=   0   'False
-      Tab(1).Control(26)=   "lblPara2(3)"
-      Tab(1).Control(26).Enabled=   0   'False
-      Tab(1).Control(27)=   "lblPara1(3)"
-      Tab(1).Control(27).Enabled=   0   'False
-      Tab(1).Control(28)=   "lblPara4(4)"
-      Tab(1).Control(28).Enabled=   0   'False
-      Tab(1).Control(29)=   "lblPara3(4)"
-      Tab(1).Control(29).Enabled=   0   'False
-      Tab(1).Control(30)=   "lblPara2(4)"
-      Tab(1).Control(30).Enabled=   0   'False
-      Tab(1).Control(31)=   "lblPara1(4)"
-      Tab(1).Control(31).Enabled=   0   'False
-      Tab(1).Control(32)=   "lblPara4(5)"
-      Tab(1).Control(32).Enabled=   0   'False
-      Tab(1).Control(33)=   "lblPara3(5)"
-      Tab(1).Control(33).Enabled=   0   'False
-      Tab(1).Control(34)=   "lblPara2(5)"
-      Tab(1).Control(34).Enabled=   0   'False
-      Tab(1).Control(35)=   "lblPara1(5)"
-      Tab(1).Control(35).Enabled=   0   'False
-      Tab(1).Control(36)=   "lblPara4(6)"
-      Tab(1).Control(36).Enabled=   0   'False
-      Tab(1).Control(37)=   "lblPara3(6)"
-      Tab(1).Control(37).Enabled=   0   'False
-      Tab(1).Control(38)=   "lblPara2(6)"
-      Tab(1).Control(38).Enabled=   0   'False
-      Tab(1).Control(39)=   "lblPara1(6)"
-      Tab(1).Control(39).Enabled=   0   'False
-      Tab(1).Control(40)=   "lblPara4(7)"
-      Tab(1).Control(40).Enabled=   0   'False
-      Tab(1).Control(41)=   "lblPara3(7)"
-      Tab(1).Control(41).Enabled=   0   'False
-      Tab(1).Control(42)=   "lblPara2(7)"
-      Tab(1).Control(42).Enabled=   0   'False
-      Tab(1).Control(43)=   "lblPara1(7)"
-      Tab(1).Control(43).Enabled=   0   'False
-      Tab(1).Control(44)=   "lblPara4(8)"
-      Tab(1).Control(44).Enabled=   0   'False
-      Tab(1).Control(45)=   "lblPara3(8)"
-      Tab(1).Control(45).Enabled=   0   'False
-      Tab(1).Control(46)=   "lblPara2(8)"
-      Tab(1).Control(46).Enabled=   0   'False
-      Tab(1).Control(47)=   "lblPara1(8)"
-      Tab(1).Control(47).Enabled=   0   'False
-      Tab(1).Control(48)=   "lblPara4(9)"
-      Tab(1).Control(48).Enabled=   0   'False
-      Tab(1).Control(49)=   "lblPara3(9)"
-      Tab(1).Control(49).Enabled=   0   'False
-      Tab(1).Control(50)=   "lblPara2(9)"
-      Tab(1).Control(50).Enabled=   0   'False
-      Tab(1).Control(51)=   "lblPara1(9)"
-      Tab(1).Control(51).Enabled=   0   'False
-      Tab(1).Control(52)=   "lblPara4(10)"
-      Tab(1).Control(52).Enabled=   0   'False
-      Tab(1).Control(53)=   "lblPara3(10)"
-      Tab(1).Control(53).Enabled=   0   'False
-      Tab(1).Control(54)=   "lblPara2(10)"
-      Tab(1).Control(54).Enabled=   0   'False
-      Tab(1).Control(55)=   "lblPara1(10)"
-      Tab(1).Control(55).Enabled=   0   'False
-      Tab(1).Control(56)=   "Line1"
-      Tab(1).Control(56).Enabled=   0   'False
-      Tab(1).Control(57)=   "Label7"
-      Tab(1).Control(57).Enabled=   0   'False
-      Tab(1).Control(58)=   "cmbRoomType(9)"
-      Tab(1).Control(58).Enabled=   0   'False
-      Tab(1).Control(59)=   "cmbRoomType(8)"
-      Tab(1).Control(59).Enabled=   0   'False
-      Tab(1).Control(60)=   "cmbRoomType(7)"
-      Tab(1).Control(60).Enabled=   0   'False
-      Tab(1).Control(61)=   "cmbRoomType(6)"
-      Tab(1).Control(61).Enabled=   0   'False
-      Tab(1).Control(62)=   "cmbRoomType(5)"
-      Tab(1).Control(62).Enabled=   0   'False
-      Tab(1).Control(63)=   "cmbRoomType(4)"
-      Tab(1).Control(63).Enabled=   0   'False
-      Tab(1).Control(64)=   "cmbRoomType(3)"
-      Tab(1).Control(64).Enabled=   0   'False
-      Tab(1).Control(65)=   "cmbRoomType(2)"
-      Tab(1).Control(65).Enabled=   0   'False
-      Tab(1).Control(66)=   "cmbRoomType(1)"
-      Tab(1).Control(66).Enabled=   0   'False
-      Tab(1).Control(67)=   "cmbRoomType(0)"
-      Tab(1).Control(67).Enabled=   0   'False
-      Tab(1).Control(68)=   "txtRoomExit(0)"
-      Tab(1).Control(68).Enabled=   0   'False
-      Tab(1).Control(69)=   "txtRoomExit(1)"
-      Tab(1).Control(69).Enabled=   0   'False
-      Tab(1).Control(70)=   "txtRoomExit(2)"
-      Tab(1).Control(70).Enabled=   0   'False
-      Tab(1).Control(71)=   "txtRoomExit(3)"
-      Tab(1).Control(71).Enabled=   0   'False
-      Tab(1).Control(72)=   "txtRoomExit(4)"
-      Tab(1).Control(72).Enabled=   0   'False
-      Tab(1).Control(73)=   "txtRoomExit(5)"
-      Tab(1).Control(73).Enabled=   0   'False
-      Tab(1).Control(74)=   "txtRoomExit(6)"
-      Tab(1).Control(74).Enabled=   0   'False
-      Tab(1).Control(75)=   "txtRoomExit(7)"
-      Tab(1).Control(75).Enabled=   0   'False
-      Tab(1).Control(76)=   "txtRoomExit(8)"
-      Tab(1).Control(76).Enabled=   0   'False
-      Tab(1).Control(77)=   "txtRoomExit(9)"
-      Tab(1).Control(77).Enabled=   0   'False
-      Tab(1).Control(78)=   "txtRoomPara(0)"
-      Tab(1).Control(78).Enabled=   0   'False
-      Tab(1).Control(79)=   "txtRoomPara(1)"
-      Tab(1).Control(79).Enabled=   0   'False
-      Tab(1).Control(80)=   "txtRoomPara(2)"
-      Tab(1).Control(80).Enabled=   0   'False
-      Tab(1).Control(81)=   "txtRoomPara(3)"
-      Tab(1).Control(81).Enabled=   0   'False
-      Tab(1).Control(82)=   "txtRoomPara(4)"
-      Tab(1).Control(82).Enabled=   0   'False
-      Tab(1).Control(83)=   "txtRoomPara(5)"
-      Tab(1).Control(83).Enabled=   0   'False
-      Tab(1).Control(84)=   "txtRoomPara(6)"
-      Tab(1).Control(84).Enabled=   0   'False
-      Tab(1).Control(85)=   "txtRoomPara(7)"
-      Tab(1).Control(85).Enabled=   0   'False
-      Tab(1).Control(86)=   "txtRoomPara(8)"
-      Tab(1).Control(86).Enabled=   0   'False
-      Tab(1).Control(87)=   "txtRoomPara(9)"
-      Tab(1).Control(87).Enabled=   0   'False
-      Tab(1).Control(88)=   "txtRoomWPara(9)"
-      Tab(1).Control(88).Enabled=   0   'False
-      Tab(1).Control(89)=   "txtRoomWPara(8)"
-      Tab(1).Control(89).Enabled=   0   'False
-      Tab(1).Control(90)=   "txtRoomWPara(7)"
-      Tab(1).Control(90).Enabled=   0   'False
-      Tab(1).Control(91)=   "txtRoomWPara(6)"
-      Tab(1).Control(91).Enabled=   0   'False
-      Tab(1).Control(92)=   "txtRoomWPara(5)"
-      Tab(1).Control(92).Enabled=   0   'False
-      Tab(1).Control(93)=   "txtRoomWPara(4)"
-      Tab(1).Control(93).Enabled=   0   'False
-      Tab(1).Control(94)=   "txtRoomWPara(3)"
-      Tab(1).Control(94).Enabled=   0   'False
-      Tab(1).Control(95)=   "txtRoomWPara(2)"
-      Tab(1).Control(95).Enabled=   0   'False
-      Tab(1).Control(96)=   "txtRoomWPara(1)"
-      Tab(1).Control(96).Enabled=   0   'False
-      Tab(1).Control(97)=   "txtRoomWPara(0)"
-      Tab(1).Control(97).Enabled=   0   'False
-      Tab(1).Control(98)=   "txtRoomLPara1(9)"
-      Tab(1).Control(98).Enabled=   0   'False
-      Tab(1).Control(99)=   "txtRoomLPara1(8)"
-      Tab(1).Control(99).Enabled=   0   'False
-      Tab(1).Control(100)=   "txtRoomLPara1(7)"
-      Tab(1).Control(100).Enabled=   0   'False
-      Tab(1).Control(101)=   "txtRoomLPara1(6)"
-      Tab(1).Control(101).Enabled=   0   'False
-      Tab(1).Control(102)=   "txtRoomLPara1(5)"
-      Tab(1).Control(102).Enabled=   0   'False
-      Tab(1).Control(103)=   "txtRoomLPara1(4)"
-      Tab(1).Control(103).Enabled=   0   'False
-      Tab(1).Control(104)=   "txtRoomLPara1(3)"
-      Tab(1).Control(104).Enabled=   0   'False
-      Tab(1).Control(105)=   "txtRoomLPara1(2)"
-      Tab(1).Control(105).Enabled=   0   'False
-      Tab(1).Control(106)=   "txtRoomLPara1(1)"
-      Tab(1).Control(106).Enabled=   0   'False
-      Tab(1).Control(107)=   "txtRoomLPara1(0)"
-      Tab(1).Control(107).Enabled=   0   'False
-      Tab(1).Control(108)=   "txtRoomLPara2(9)"
-      Tab(1).Control(108).Enabled=   0   'False
-      Tab(1).Control(109)=   "txtRoomLPara2(8)"
-      Tab(1).Control(109).Enabled=   0   'False
-      Tab(1).Control(110)=   "txtRoomLPara2(7)"
-      Tab(1).Control(110).Enabled=   0   'False
-      Tab(1).Control(111)=   "txtRoomLPara2(6)"
-      Tab(1).Control(111).Enabled=   0   'False
-      Tab(1).Control(112)=   "txtRoomLPara2(5)"
-      Tab(1).Control(112).Enabled=   0   'False
-      Tab(1).Control(113)=   "txtRoomLPara2(4)"
-      Tab(1).Control(113).Enabled=   0   'False
-      Tab(1).Control(114)=   "txtRoomLPara2(3)"
-      Tab(1).Control(114).Enabled=   0   'False
-      Tab(1).Control(115)=   "txtRoomLPara2(2)"
-      Tab(1).Control(115).Enabled=   0   'False
-      Tab(1).Control(116)=   "txtRoomLPara2(1)"
-      Tab(1).Control(116).Enabled=   0   'False
-      Tab(1).Control(117)=   "txtRoomLPara2(0)"
-      Tab(1).Control(117).Enabled=   0   'False
-      Tab(1).Control(118)=   "cmdGotoRoom(0)"
-      Tab(1).Control(118).Enabled=   0   'False
-      Tab(1).Control(119)=   "cmdGotoRoom(1)"
-      Tab(1).Control(119).Enabled=   0   'False
-      Tab(1).Control(120)=   "cmdGotoRoom(2)"
-      Tab(1).Control(120).Enabled=   0   'False
-      Tab(1).Control(121)=   "cmdGotoRoom(3)"
-      Tab(1).Control(121).Enabled=   0   'False
-      Tab(1).Control(122)=   "cmdGotoRoom(4)"
-      Tab(1).Control(122).Enabled=   0   'False
-      Tab(1).Control(123)=   "cmdGotoRoom(5)"
-      Tab(1).Control(123).Enabled=   0   'False
-      Tab(1).Control(124)=   "cmdGotoRoom(6)"
-      Tab(1).Control(124).Enabled=   0   'False
-      Tab(1).Control(125)=   "cmdGotoRoom(7)"
-      Tab(1).Control(125).Enabled=   0   'False
-      Tab(1).Control(126)=   "cmdGotoRoom(8)"
-      Tab(1).Control(126).Enabled=   0   'False
-      Tab(1).Control(127)=   "cmdGotoRoom(9)"
-      Tab(1).Control(127).Enabled=   0   'False
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).Control(0)=   "cmdGotoRoom(9)"
+      Tab(1).Control(1)=   "cmdGotoRoom(8)"
+      Tab(1).Control(2)=   "cmdGotoRoom(7)"
+      Tab(1).Control(3)=   "cmdGotoRoom(6)"
+      Tab(1).Control(4)=   "cmdGotoRoom(5)"
+      Tab(1).Control(5)=   "cmdGotoRoom(4)"
+      Tab(1).Control(6)=   "cmdGotoRoom(3)"
+      Tab(1).Control(7)=   "cmdGotoRoom(2)"
+      Tab(1).Control(8)=   "cmdGotoRoom(1)"
+      Tab(1).Control(9)=   "cmdGotoRoom(0)"
+      Tab(1).Control(10)=   "txtRoomLPara2(0)"
+      Tab(1).Control(11)=   "txtRoomLPara2(1)"
+      Tab(1).Control(12)=   "txtRoomLPara2(2)"
+      Tab(1).Control(13)=   "txtRoomLPara2(3)"
+      Tab(1).Control(14)=   "txtRoomLPara2(4)"
+      Tab(1).Control(15)=   "txtRoomLPara2(5)"
+      Tab(1).Control(16)=   "txtRoomLPara2(6)"
+      Tab(1).Control(17)=   "txtRoomLPara2(7)"
+      Tab(1).Control(18)=   "txtRoomLPara2(8)"
+      Tab(1).Control(19)=   "txtRoomLPara2(9)"
+      Tab(1).Control(20)=   "txtRoomLPara1(0)"
+      Tab(1).Control(21)=   "txtRoomLPara1(1)"
+      Tab(1).Control(22)=   "txtRoomLPara1(2)"
+      Tab(1).Control(23)=   "txtRoomLPara1(3)"
+      Tab(1).Control(24)=   "txtRoomLPara1(4)"
+      Tab(1).Control(25)=   "txtRoomLPara1(5)"
+      Tab(1).Control(26)=   "txtRoomLPara1(6)"
+      Tab(1).Control(27)=   "txtRoomLPara1(7)"
+      Tab(1).Control(28)=   "txtRoomLPara1(8)"
+      Tab(1).Control(29)=   "txtRoomLPara1(9)"
+      Tab(1).Control(30)=   "txtRoomWPara(0)"
+      Tab(1).Control(31)=   "txtRoomWPara(1)"
+      Tab(1).Control(32)=   "txtRoomWPara(2)"
+      Tab(1).Control(33)=   "txtRoomWPara(3)"
+      Tab(1).Control(34)=   "txtRoomWPara(4)"
+      Tab(1).Control(35)=   "txtRoomWPara(5)"
+      Tab(1).Control(36)=   "txtRoomWPara(6)"
+      Tab(1).Control(37)=   "txtRoomWPara(7)"
+      Tab(1).Control(38)=   "txtRoomWPara(8)"
+      Tab(1).Control(39)=   "txtRoomWPara(9)"
+      Tab(1).Control(40)=   "txtRoomPara(9)"
+      Tab(1).Control(41)=   "txtRoomPara(8)"
+      Tab(1).Control(42)=   "txtRoomPara(7)"
+      Tab(1).Control(43)=   "txtRoomPara(6)"
+      Tab(1).Control(44)=   "txtRoomPara(5)"
+      Tab(1).Control(45)=   "txtRoomPara(4)"
+      Tab(1).Control(46)=   "txtRoomPara(3)"
+      Tab(1).Control(47)=   "txtRoomPara(2)"
+      Tab(1).Control(48)=   "txtRoomPara(1)"
+      Tab(1).Control(49)=   "txtRoomPara(0)"
+      Tab(1).Control(50)=   "txtRoomExit(9)"
+      Tab(1).Control(51)=   "txtRoomExit(8)"
+      Tab(1).Control(52)=   "txtRoomExit(7)"
+      Tab(1).Control(53)=   "txtRoomExit(6)"
+      Tab(1).Control(54)=   "txtRoomExit(5)"
+      Tab(1).Control(55)=   "txtRoomExit(4)"
+      Tab(1).Control(56)=   "txtRoomExit(3)"
+      Tab(1).Control(57)=   "txtRoomExit(2)"
+      Tab(1).Control(58)=   "txtRoomExit(1)"
+      Tab(1).Control(59)=   "txtRoomExit(0)"
+      Tab(1).Control(60)=   "cmbRoomType(0)"
+      Tab(1).Control(61)=   "cmbRoomType(1)"
+      Tab(1).Control(62)=   "cmbRoomType(2)"
+      Tab(1).Control(63)=   "cmbRoomType(3)"
+      Tab(1).Control(64)=   "cmbRoomType(4)"
+      Tab(1).Control(65)=   "cmbRoomType(5)"
+      Tab(1).Control(66)=   "cmbRoomType(6)"
+      Tab(1).Control(67)=   "cmbRoomType(7)"
+      Tab(1).Control(68)=   "cmbRoomType(8)"
+      Tab(1).Control(69)=   "cmbRoomType(9)"
+      Tab(1).Control(70)=   "Label7"
+      Tab(1).Control(71)=   "Line1"
+      Tab(1).Control(72)=   "lblPara1(10)"
+      Tab(1).Control(73)=   "lblPara2(10)"
+      Tab(1).Control(74)=   "lblPara3(10)"
+      Tab(1).Control(75)=   "lblPara4(10)"
+      Tab(1).Control(76)=   "lblPara1(9)"
+      Tab(1).Control(77)=   "lblPara2(9)"
+      Tab(1).Control(78)=   "lblPara3(9)"
+      Tab(1).Control(79)=   "lblPara4(9)"
+      Tab(1).Control(80)=   "lblPara1(8)"
+      Tab(1).Control(81)=   "lblPara2(8)"
+      Tab(1).Control(82)=   "lblPara3(8)"
+      Tab(1).Control(83)=   "lblPara4(8)"
+      Tab(1).Control(84)=   "lblPara1(7)"
+      Tab(1).Control(85)=   "lblPara2(7)"
+      Tab(1).Control(86)=   "lblPara3(7)"
+      Tab(1).Control(87)=   "lblPara4(7)"
+      Tab(1).Control(88)=   "lblPara1(6)"
+      Tab(1).Control(89)=   "lblPara2(6)"
+      Tab(1).Control(90)=   "lblPara3(6)"
+      Tab(1).Control(91)=   "lblPara4(6)"
+      Tab(1).Control(92)=   "lblPara1(5)"
+      Tab(1).Control(93)=   "lblPara2(5)"
+      Tab(1).Control(94)=   "lblPara3(5)"
+      Tab(1).Control(95)=   "lblPara4(5)"
+      Tab(1).Control(96)=   "lblPara1(4)"
+      Tab(1).Control(97)=   "lblPara2(4)"
+      Tab(1).Control(98)=   "lblPara3(4)"
+      Tab(1).Control(99)=   "lblPara4(4)"
+      Tab(1).Control(100)=   "lblPara1(3)"
+      Tab(1).Control(101)=   "lblPara2(3)"
+      Tab(1).Control(102)=   "lblPara3(3)"
+      Tab(1).Control(103)=   "lblPara4(3)"
+      Tab(1).Control(104)=   "lblPara1(2)"
+      Tab(1).Control(105)=   "lblPara2(2)"
+      Tab(1).Control(106)=   "lblPara3(2)"
+      Tab(1).Control(107)=   "lblPara4(2)"
+      Tab(1).Control(108)=   "lblPara1(1)"
+      Tab(1).Control(109)=   "lblPara2(1)"
+      Tab(1).Control(110)=   "lblPara3(1)"
+      Tab(1).Control(111)=   "lblPara4(1)"
+      Tab(1).Control(112)=   "lblPara4(0)"
+      Tab(1).Control(113)=   "lblPara3(0)"
+      Tab(1).Control(114)=   "lblPara2(0)"
+      Tab(1).Control(115)=   "lblPara1(0)"
+      Tab(1).Control(116)=   "lblRoomNum(0)"
+      Tab(1).Control(117)=   "label(13)"
+      Tab(1).Control(118)=   "label(12)"
+      Tab(1).Control(119)=   "label(10)"
+      Tab(1).Control(120)=   "label(9)"
+      Tab(1).Control(121)=   "label(8)"
+      Tab(1).Control(122)=   "label(7)"
+      Tab(1).Control(123)=   "label(6)"
+      Tab(1).Control(124)=   "label(5)"
+      Tab(1).Control(125)=   "label(4)"
+      Tab(1).Control(126)=   "label(3)"
+      Tab(1).Control(127)=   "lblExitType(0)"
       Tab(1).ControlCount=   128
       TabCaption(2)   =   "Placed Items/Monster"
       TabPicture(2)   =   "frmRoom.frx":0902
@@ -2528,7 +2399,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   9
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   129
          Top             =   5760
          Width           =   195
@@ -2536,7 +2407,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   8
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   122
          Top             =   5220
          Width           =   195
@@ -2544,7 +2415,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   7
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   115
          Top             =   4740
          Width           =   195
@@ -2552,7 +2423,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   6
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   108
          Top             =   4140
          Width           =   195
@@ -2560,7 +2431,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   5
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   101
          Top             =   3600
          Width           =   195
@@ -2568,7 +2439,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   4
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   94
          Top             =   3060
          Width           =   195
@@ -2576,7 +2447,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   3
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   87
          Top             =   2520
          Width           =   195
@@ -2584,7 +2455,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   2
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   80
          Top             =   1980
          Width           =   195
@@ -2592,7 +2463,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   1
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   73
          Top             =   1440
          Width           =   195
@@ -2600,7 +2471,7 @@ Begin VB.Form frmRoom
       Begin VB.CommandButton cmdGotoRoom 
          Height          =   195
          Index           =   0
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   66
          Top             =   900
          Width           =   195
@@ -2712,7 +2583,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   0
-         Left            =   5220
+         Left            =   -69780
          TabIndex        =   72
          Top             =   900
          Width           =   615
@@ -2720,7 +2591,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   1
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   79
          Top             =   1440
          Width           =   615
@@ -2728,7 +2599,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   2
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   86
          Top             =   1980
          Width           =   615
@@ -2736,7 +2607,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   3
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   93
          Top             =   2520
          Width           =   615
@@ -2744,7 +2615,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   4
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   100
          Top             =   3060
          Width           =   615
@@ -2752,7 +2623,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   5
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   107
          Top             =   3600
          Width           =   615
@@ -2760,7 +2631,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   6
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   114
          Top             =   4140
          Width           =   615
@@ -2768,7 +2639,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   7
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   121
          Top             =   4680
          Width           =   615
@@ -2776,7 +2647,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   285
          Index           =   8
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   128
          Top             =   5220
          Width           =   615
@@ -2784,7 +2655,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara2 
          Height          =   315
          Index           =   9
-         Left            =   5175
+         Left            =   -69825
          TabIndex        =   135
          Top             =   5760
          Width           =   615
@@ -2792,7 +2663,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   0
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   71
          Top             =   900
          Width           =   615
@@ -2800,7 +2671,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   1
-         Left            =   4500
+         Left            =   -70500
          TabIndex        =   78
          Top             =   1440
          Width           =   615
@@ -2808,7 +2679,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   2
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   85
          Top             =   1980
          Width           =   615
@@ -2816,7 +2687,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   3
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   92
          Top             =   2520
          Width           =   615
@@ -2824,7 +2695,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   4
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   99
          Top             =   3060
          Width           =   615
@@ -2832,7 +2703,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   5
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   106
          Top             =   3600
          Width           =   615
@@ -2840,7 +2711,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   6
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   113
          Top             =   4140
          Width           =   615
@@ -2848,7 +2719,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   7
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   120
          Top             =   4680
          Width           =   615
@@ -2856,7 +2727,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   285
          Index           =   8
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   127
          Top             =   5220
          Width           =   615
@@ -2864,7 +2735,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomLPara1 
          Height          =   315
          Index           =   9
-         Left            =   4455
+         Left            =   -70545
          TabIndex        =   134
          Top             =   5760
          Width           =   615
@@ -2872,7 +2743,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   0
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   70
          Top             =   900
          Width           =   615
@@ -2880,7 +2751,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   1
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   77
          Top             =   1440
          Width           =   615
@@ -2888,7 +2759,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   2
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   84
          Top             =   1980
          Width           =   615
@@ -2896,7 +2767,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   3
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   91
          Top             =   2520
          Width           =   615
@@ -2904,7 +2775,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   4
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   98
          Top             =   3060
          Width           =   615
@@ -2912,7 +2783,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   5
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   105
          Top             =   3600
          Width           =   615
@@ -2920,7 +2791,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   6
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   112
          Top             =   4140
          Width           =   615
@@ -2928,7 +2799,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   7
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   119
          Top             =   4680
          Width           =   615
@@ -2936,7 +2807,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   285
          Index           =   8
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   126
          Top             =   5220
          Width           =   615
@@ -2944,7 +2815,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomWPara 
          Height          =   315
          Index           =   9
-         Left            =   3735
+         Left            =   -71265
          TabIndex        =   133
          Top             =   5760
          Width           =   615
@@ -2952,7 +2823,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   315
          Index           =   9
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   132
          Top             =   5760
          Width           =   615
@@ -2960,7 +2831,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   8
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   125
          Top             =   5220
          Width           =   615
@@ -2968,7 +2839,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   7
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   118
          Top             =   4680
          Width           =   615
@@ -2976,7 +2847,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   6
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   111
          Top             =   4140
          Width           =   615
@@ -2984,7 +2855,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   5
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   104
          Top             =   3600
          Width           =   615
@@ -2992,7 +2863,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   4
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   97
          Top             =   3060
          Width           =   615
@@ -3000,7 +2871,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   3
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   90
          Top             =   2520
          Width           =   615
@@ -3008,7 +2879,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   2
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   83
          Top             =   1980
          Width           =   615
@@ -3016,7 +2887,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   1
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   76
          Top             =   1440
          Width           =   615
@@ -3024,7 +2895,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomPara 
          Height          =   285
          Index           =   0
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   69
          Top             =   900
          Width           =   615
@@ -3032,7 +2903,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   315
          Index           =   9
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   130
          Top             =   5760
          Width           =   615
@@ -3040,7 +2911,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   8
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   123
          Top             =   5220
          Width           =   615
@@ -3048,7 +2919,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   7
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   116
          Top             =   4680
          Width           =   615
@@ -3056,7 +2927,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   6
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   109
          Top             =   4140
          Width           =   615
@@ -3064,7 +2935,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   5
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   102
          Top             =   3600
          Width           =   615
@@ -3072,7 +2943,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   4
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   95
          Top             =   3060
          Width           =   615
@@ -3080,7 +2951,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   3
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   88
          Top             =   2520
          Width           =   615
@@ -3088,7 +2959,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   2
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   81
          Top             =   1980
          Width           =   615
@@ -3096,7 +2967,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   1
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   74
          Top             =   1440
          Width           =   615
@@ -3104,7 +2975,7 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtRoomExit 
          Height          =   285
          Index           =   0
-         Left            =   735
+         Left            =   -74265
          TabIndex        =   67
          Top             =   900
          Width           =   615
@@ -3113,7 +2984,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   0
          ItemData        =   "frmRoom.frx":0AF1
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":0B40
          Style           =   2  'Dropdown List
          TabIndex        =   68
@@ -3124,7 +2995,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   1
          ItemData        =   "frmRoom.frx":0C10
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":0C5F
          Style           =   2  'Dropdown List
          TabIndex        =   75
@@ -3135,7 +3006,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   2
          ItemData        =   "frmRoom.frx":0D2F
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":0D7E
          Style           =   2  'Dropdown List
          TabIndex        =   82
@@ -3146,7 +3017,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   3
          ItemData        =   "frmRoom.frx":0E4E
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":0E9D
          Style           =   2  'Dropdown List
          TabIndex        =   89
@@ -3157,7 +3028,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   4
          ItemData        =   "frmRoom.frx":0F6D
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":0FBC
          Style           =   2  'Dropdown List
          TabIndex        =   96
@@ -3168,7 +3039,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   5
          ItemData        =   "frmRoom.frx":108C
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":10DB
          Style           =   2  'Dropdown List
          TabIndex        =   103
@@ -3179,7 +3050,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   6
          ItemData        =   "frmRoom.frx":11AB
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":11FA
          Style           =   2  'Dropdown List
          TabIndex        =   110
@@ -3190,7 +3061,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   7
          ItemData        =   "frmRoom.frx":12CA
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":1319
          Style           =   2  'Dropdown List
          TabIndex        =   117
@@ -3201,7 +3072,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   8
          ItemData        =   "frmRoom.frx":13E9
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":1438
          Style           =   2  'Dropdown List
          TabIndex        =   124
@@ -3212,7 +3083,7 @@ Begin VB.Form frmRoom
          Height          =   315
          Index           =   9
          ItemData        =   "frmRoom.frx":1508
-         Left            =   1425
+         Left            =   -73575
          List            =   "frmRoom.frx":1557
          Style           =   2  'Dropdown List
          TabIndex        =   131
@@ -3222,7 +3093,7 @@ Begin VB.Form frmRoom
       Begin VB.Frame Frame2 
          Caption         =   "Description"
          Height          =   2835
-         Left            =   -74820
+         Left            =   180
          TabIndex        =   24
          Top             =   360
          Width           =   5715
@@ -3344,7 +3215,7 @@ Begin VB.Form frmRoom
       Begin VB.Frame Frame1 
          Caption         =   "Advanced"
          Height          =   3075
-         Left            =   -74820
+         Left            =   180
          TabIndex        =   37
          Top             =   3180
          Width           =   5715
@@ -3969,7 +3840,7 @@ Begin VB.Form frmRoom
             Strikethrough   =   0   'False
          EndProperty
          Height          =   195
-         Left            =   420
+         Left            =   -74580
          TabIndex        =   434
          Top             =   6120
          Width           =   5595
@@ -4079,8 +3950,8 @@ Begin VB.Form frmRoom
          Width           =   2055
       End
       Begin VB.Line Line1 
-         X1              =   600
-         X2              =   5880
+         X1              =   -74400
+         X2              =   -69120
          Y1              =   660
          Y2              =   660
       End
@@ -4089,7 +3960,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   10
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   245
          Top             =   420
          Width           =   570
@@ -4099,7 +3970,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   10
-         Left            =   3750
+         Left            =   -71250
          TabIndex        =   244
          Top             =   420
          Width           =   570
@@ -4109,7 +3980,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   10
-         Left            =   4470
+         Left            =   -70530
          TabIndex        =   243
          Top             =   420
          Width           =   570
@@ -4119,7 +3990,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   10
-         Left            =   5190
+         Left            =   -69810
          TabIndex        =   242
          Top             =   420
          Width           =   570
@@ -4129,7 +4000,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   9
-         Left            =   2940
+         Left            =   -72060
          TabIndex        =   241
          Top             =   5580
          Width           =   690
@@ -4139,7 +4010,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   9
-         Left            =   3690
+         Left            =   -71310
          TabIndex        =   240
          Top             =   5580
          Width           =   690
@@ -4149,7 +4020,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   9
-         Left            =   4410
+         Left            =   -70590
          TabIndex        =   239
          Top             =   5580
          Width           =   690
@@ -4159,7 +4030,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   9
-         Left            =   5130
+         Left            =   -69870
          TabIndex        =   238
          Top             =   5580
          Width           =   690
@@ -4169,7 +4040,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   8
-         Left            =   2940
+         Left            =   -72060
          TabIndex        =   237
          Top             =   5040
          Width           =   690
@@ -4179,7 +4050,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   8
-         Left            =   3690
+         Left            =   -71310
          TabIndex        =   236
          Top             =   5040
          Width           =   690
@@ -4189,7 +4060,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   8
-         Left            =   4410
+         Left            =   -70590
          TabIndex        =   235
          Top             =   5040
          Width           =   690
@@ -4199,7 +4070,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   8
-         Left            =   5130
+         Left            =   -69870
          TabIndex        =   234
          Top             =   5040
          Width           =   690
@@ -4209,7 +4080,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   7
-         Left            =   2940
+         Left            =   -72060
          TabIndex        =   233
          Top             =   4500
          Width           =   690
@@ -4219,7 +4090,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   7
-         Left            =   3690
+         Left            =   -71310
          TabIndex        =   232
          Top             =   4500
          Width           =   690
@@ -4229,7 +4100,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   7
-         Left            =   4410
+         Left            =   -70590
          TabIndex        =   231
          Top             =   4500
          Width           =   690
@@ -4239,7 +4110,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   7
-         Left            =   5130
+         Left            =   -69870
          TabIndex        =   230
          Top             =   4500
          Width           =   690
@@ -4249,7 +4120,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   6
-         Left            =   2940
+         Left            =   -72060
          TabIndex        =   229
          Top             =   3960
          Width           =   690
@@ -4259,7 +4130,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   6
-         Left            =   3690
+         Left            =   -71310
          TabIndex        =   228
          Top             =   3960
          Width           =   690
@@ -4269,7 +4140,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   6
-         Left            =   4410
+         Left            =   -70590
          TabIndex        =   227
          Top             =   3960
          Width           =   690
@@ -4279,7 +4150,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   6
-         Left            =   5130
+         Left            =   -69870
          TabIndex        =   226
          Top             =   3960
          Width           =   690
@@ -4289,7 +4160,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   5
-         Left            =   2940
+         Left            =   -72060
          TabIndex        =   225
          Top             =   3420
          Width           =   690
@@ -4299,7 +4170,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   5
-         Left            =   3690
+         Left            =   -71310
          TabIndex        =   224
          Top             =   3420
          Width           =   690
@@ -4309,7 +4180,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   5
-         Left            =   4410
+         Left            =   -70590
          TabIndex        =   223
          Top             =   3420
          Width           =   690
@@ -4319,7 +4190,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   5
-         Left            =   5130
+         Left            =   -69870
          TabIndex        =   222
          Top             =   3420
          Width           =   690
@@ -4329,7 +4200,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   4
-         Left            =   2955
+         Left            =   -72045
          TabIndex        =   221
          Top             =   2880
          Width           =   690
@@ -4339,7 +4210,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   4
-         Left            =   3705
+         Left            =   -71295
          TabIndex        =   220
          Top             =   2880
          Width           =   690
@@ -4349,7 +4220,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   4
-         Left            =   4425
+         Left            =   -70575
          TabIndex        =   219
          Top             =   2880
          Width           =   690
@@ -4359,7 +4230,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   4
-         Left            =   5145
+         Left            =   -69855
          TabIndex        =   218
          Top             =   2880
          Width           =   690
@@ -4369,7 +4240,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   3
-         Left            =   2955
+         Left            =   -72045
          TabIndex        =   217
          Top             =   2340
          Width           =   690
@@ -4379,7 +4250,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   3
-         Left            =   3705
+         Left            =   -71295
          TabIndex        =   216
          Top             =   2340
          Width           =   690
@@ -4389,7 +4260,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   3
-         Left            =   4425
+         Left            =   -70575
          TabIndex        =   215
          Top             =   2340
          Width           =   690
@@ -4399,7 +4270,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   3
-         Left            =   5145
+         Left            =   -69855
          TabIndex        =   214
          Top             =   2340
          Width           =   690
@@ -4409,7 +4280,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   2
-         Left            =   2955
+         Left            =   -72045
          TabIndex        =   213
          Top             =   1800
          Width           =   690
@@ -4419,7 +4290,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   2
-         Left            =   3705
+         Left            =   -71295
          TabIndex        =   212
          Top             =   1800
          Width           =   690
@@ -4429,7 +4300,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   2
-         Left            =   4425
+         Left            =   -70575
          TabIndex        =   211
          Top             =   1800
          Width           =   690
@@ -4439,7 +4310,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   2
-         Left            =   5145
+         Left            =   -69855
          TabIndex        =   210
          Top             =   1800
          Width           =   690
@@ -4449,7 +4320,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   1
-         Left            =   2955
+         Left            =   -72045
          TabIndex        =   209
          Top             =   1260
          Width           =   690
@@ -4459,7 +4330,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   1
-         Left            =   3705
+         Left            =   -71295
          TabIndex        =   208
          Top             =   1260
          Width           =   690
@@ -4469,7 +4340,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   1
-         Left            =   4425
+         Left            =   -70575
          TabIndex        =   207
          Top             =   1260
          Width           =   690
@@ -4479,7 +4350,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   1
-         Left            =   5145
+         Left            =   -69855
          TabIndex        =   206
          Top             =   1260
          Width           =   690
@@ -4499,7 +4370,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para4"
          Height          =   195
          Index           =   0
-         Left            =   5145
+         Left            =   -69855
          TabIndex        =   203
          Top             =   720
          Width           =   690
@@ -4509,7 +4380,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para3"
          Height          =   195
          Index           =   0
-         Left            =   4425
+         Left            =   -70575
          TabIndex        =   202
          Top             =   720
          Width           =   690
@@ -4519,7 +4390,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para2"
          Height          =   195
          Index           =   0
-         Left            =   3705
+         Left            =   -71295
          TabIndex        =   201
          Top             =   720
          Width           =   690
@@ -4529,7 +4400,7 @@ Begin VB.Form frmRoom
          Caption         =   "Para1"
          Height          =   195
          Index           =   0
-         Left            =   2955
+         Left            =   -72045
          TabIndex        =   200
          Top             =   720
          Width           =   690
@@ -4539,7 +4410,7 @@ Begin VB.Form frmRoom
          Caption         =   "Room #"
          Height          =   195
          Index           =   0
-         Left            =   780
+         Left            =   -74220
          TabIndex        =   199
          Top             =   420
          Width           =   570
@@ -4549,7 +4420,7 @@ Begin VB.Form frmRoom
          Caption         =   "D"
          Height          =   195
          Index           =   13
-         Left            =   495
+         Left            =   -74505
          TabIndex        =   198
          Top             =   5760
          Width           =   120
@@ -4559,7 +4430,7 @@ Begin VB.Form frmRoom
          Caption         =   "U"
          Height          =   195
          Index           =   12
-         Left            =   495
+         Left            =   -74505
          TabIndex        =   197
          Top             =   5220
          Width           =   120
@@ -4569,7 +4440,7 @@ Begin VB.Form frmRoom
          Caption         =   "SW"
          Height          =   195
          Index           =   10
-         Left            =   420
+         Left            =   -74580
          TabIndex        =   196
          Top             =   4740
          Width           =   270
@@ -4579,7 +4450,7 @@ Begin VB.Form frmRoom
          Caption         =   "SE"
          Height          =   195
          Index           =   9
-         Left            =   450
+         Left            =   -74550
          TabIndex        =   195
          Top             =   4140
          Width           =   210
@@ -4589,7 +4460,7 @@ Begin VB.Form frmRoom
          Caption         =   "NW"
          Height          =   195
          Index           =   8
-         Left            =   420
+         Left            =   -74580
          TabIndex        =   194
          Top             =   3600
          Width           =   285
@@ -4599,7 +4470,7 @@ Begin VB.Form frmRoom
          Caption         =   "NE"
          Height          =   195
          Index           =   7
-         Left            =   450
+         Left            =   -74550
          TabIndex        =   193
          Top             =   3060
          Width           =   225
@@ -4609,7 +4480,7 @@ Begin VB.Form frmRoom
          Caption         =   "W"
          Height          =   195
          Index           =   6
-         Left            =   480
+         Left            =   -74520
          TabIndex        =   192
          Top             =   2520
          Width           =   165
@@ -4619,7 +4490,7 @@ Begin VB.Form frmRoom
          Caption         =   "E"
          Height          =   195
          Index           =   5
-         Left            =   510
+         Left            =   -74490
          TabIndex        =   191
          Top             =   1980
          Width           =   105
@@ -4629,7 +4500,7 @@ Begin VB.Form frmRoom
          Caption         =   "S"
          Height          =   195
          Index           =   4
-         Left            =   510
+         Left            =   -74490
          TabIndex        =   190
          Top             =   1440
          Width           =   105
@@ -4639,7 +4510,7 @@ Begin VB.Form frmRoom
          Caption         =   "N"
          Height          =   195
          Index           =   3
-         Left            =   495
+         Left            =   -74505
          TabIndex        =   189
          Top             =   900
          Width           =   120
@@ -4649,7 +4520,7 @@ Begin VB.Form frmRoom
          Caption         =   "Exit Type"
          Height          =   195
          Index           =   0
-         Left            =   1740
+         Left            =   -73260
          TabIndex        =   188
          Top             =   420
          Width           =   810
