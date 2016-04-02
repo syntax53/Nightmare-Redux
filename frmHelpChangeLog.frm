@@ -1,18 +1,27 @@
 VERSION 5.00
 Begin VB.Form frmHelpChangeLog 
    Caption         =   "ChangeLog"
-   ClientHeight    =   6450
+   ClientHeight    =   6420
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   6810
+   ClientWidth     =   9360
    Icon            =   "frmHelpChangeLog.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   6450
-   ScaleWidth      =   6810
+   ScaleHeight     =   6420
+   ScaleWidth      =   9360
    Begin VB.TextBox Text1 
-      Height          =   6435
+      BeginProperty Font 
+         Name            =   "Courier New"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   6375
       Left            =   0
       Locked          =   -1  'True
       MultiLine       =   -1  'True
@@ -20,7 +29,7 @@ Begin VB.Form frmHelpChangeLog
       TabIndex        =   0
       Text            =   "frmHelpChangeLog.frx":08CA
       Top             =   0
-      Width           =   6795
+      Width           =   9315
    End
 End
 Attribute VB_Name = "frmHelpChangeLog"
@@ -33,10 +42,10 @@ Option Explicit
 
 Private Sub Form_Load()
 On Error Resume Next
-Me.Top = 1
-Me.Left = 1
+Me.Top = 100
+Me.Left = 100
 Me.Height = 7000
-Me.Width = 7000
+Me.Width = 10000
 Me.Show
 Me.SetFocus
 End Sub
