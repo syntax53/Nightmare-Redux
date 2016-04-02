@@ -3,7 +3,7 @@ Nightmare Redux is an editor for the game MajorMUD(r).
 v1.7.1 (4/2/2016)  
 ------------------------------------------  
 -FIX: Fixed rooms opening up to wrong tab  
--UP: Added engery field to MME export for future MME enhancement  
+-UP: Added energy field to MME export for future MME enhancement  
 
 v1.7 (4/1/2016) - (by Syntax)  
 ------------------------------------------  
