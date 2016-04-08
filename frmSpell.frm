@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Begin VB.Form frmSpell 
    Caption         =   "Spell Editor"
@@ -18,7 +18,7 @@ Begin VB.Form frmSpell
       Height          =   4755
       Left            =   60
       TabIndex        =   135
-      Top             =   360
+      Top             =   60
       Visible         =   0   'False
       Width           =   6675
       Begin VB.Frame fraFilter2 
@@ -724,6 +724,7 @@ Begin VB.Form frmSpell
             List            =   "frmSpell.frx":0DBF
             Style           =   2  'Dropdown List
             TabIndex        =   32
+            ToolTipText     =   "Never = Never Completely Resistable, No = Only Resistable by Anti-Magic, Yes = Resistable by All"
             Top             =   2040
             Width           =   1695
          End
@@ -1949,7 +1950,7 @@ Private Sub cmdFilterApply_Click()
 Dim nStatus As Integer, bAdd As Boolean, x As Integer, bFiltered As Boolean
 Dim z As Integer, bAbilMatch(4 To 6) As Boolean, nVal As Long
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bLoaded Then Call saverecord(nCurrentRecord)
 
@@ -2123,7 +2124,7 @@ End If
 out:
 Me.MousePointer = vbDefault
 Exit Sub
-Error:
+error:
 Call HandleError("cmdFilterApply_Click")
 Resume out:
 
@@ -2154,7 +2155,7 @@ End Sub
 
 Private Sub cmdAbilsClear_Click()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 9
     txtAbilityA(x).Text = 0
@@ -2163,7 +2164,7 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdAbilsClear_Click")
 Resume out:
 
@@ -2248,7 +2249,7 @@ End Sub
 
 Private Sub LoadAbilities()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 4 To 6
     cmbFilter(x).clear
@@ -2271,7 +2272,7 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("LoadAbilities")
 Resume out:
 
@@ -2362,7 +2363,7 @@ Call frmMessage.GotoMSG(Val(txtCastMsgB.Text))
 End Sub
 
 Private Sub cmdSave_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 If lvDatabase.SelectedItem Is Nothing Then Exit Sub
@@ -2384,7 +2385,7 @@ Set oLI = Nothing
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdSave_Click")
 Resume out:
 
@@ -2483,7 +2484,7 @@ Private Sub txtAbilityA_KeyPress(Index As Integer, KeyAscii As Integer)
 End Sub
 
 Private Sub LoadSpells()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 
 lvDatabase.ColumnHeaders.clear
@@ -2520,12 +2521,12 @@ SortListView lvDatabase, 1, ldtNumber, True
 bLoaded = True
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub AddSpellToLV(ByVal nNumber As Integer)
 Dim nStatus As Integer, oLI As ListItem
-On Error GoTo Error:
+On Error GoTo error:
 
 If Not nNumber = Spellrec.Number Then
     nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nNumber, KEY_BUF_LEN, 0)
@@ -2547,13 +2548,13 @@ End If
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
 
 Private Sub DispSpellInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 Call SpellRowToStruct(row())
@@ -2620,7 +2621,7 @@ bDontCalc = False
 Call CalcValues
 
 Exit Sub
-Error:
+error:
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
     & "Previous records stats may still be in memory.  Select 'Disable DB Writing'" & vbCrLf _
@@ -2629,7 +2630,7 @@ End Sub
 
 
 Private Sub saverecord(ByVal nRecord As Long)
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, x As Integer
 
 If nRecord = 0 Then Exit Sub
@@ -2688,7 +2689,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -2875,7 +2876,7 @@ Private Sub txtMin_Change()
 Call CalcValues
 End Sub
 Private Sub CalcValues()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nMin As Currency, nMax As Currency, nDur As Currency, nEnergy As Currency, x As Integer
 Dim nMRVal As Currency
 
@@ -2994,7 +2995,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("CalcValues")
 Resume out:
 End Sub
@@ -3104,7 +3105,7 @@ Next x
 End Sub
 
 Private Sub cmdDelete_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nDelete As Integer, temp As Long
 
@@ -3143,12 +3144,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdInsert_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nNewSpellNumber As String, oLI As ListItem
 
@@ -3192,7 +3193,7 @@ End If
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
@@ -3231,7 +3232,7 @@ Call SelectAll(txtShortName)
 End Sub
 
 Private Sub txtVSMR_Change()
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtVSMR.Text) < 0 Or Val(txtVSMR.Text) > 9999 Then
     txtVSMR.Text = 0
@@ -3245,7 +3246,7 @@ lblVSMR(1).Caption = "@Cap vs " & nVSMR & "MR"
 Call CalcValues
 
 Exit Sub
-Error:
+error:
 Call HandleError("txtVSMR_Change")
 
 End Sub
