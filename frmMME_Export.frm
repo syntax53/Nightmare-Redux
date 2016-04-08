@@ -3760,6 +3760,7 @@ Do While nStatus = 0 And bStopExport = False
     tabSpells.Fields("MinBase") = Spellrec.Min
     tabSpells.Fields("MaxBase") = Spellrec.Max
     tabSpells.Fields("Diff") = Spellrec.Difficulty
+    tabSpells.Fields("TypeOfResists") = Spellrec.TypeOfResists
     tabSpells.Fields("Targets") = Spellrec.Target
     tabSpells.Fields("Dur") = Spellrec.duration
     tabSpells.Fields("AttType") = Spellrec.TypeOfAttack
@@ -4768,6 +4769,7 @@ With tabNewSpells
     .Columns.Append "MinBase", adInteger
     .Columns.Append "MaxBase", adInteger
     .Columns.Append "Diff", adInteger
+    .Columns.Append "TypeOfResists", adInteger
     .Columns.Append "Targets", adInteger
     .Columns.Append "Dur", adInteger
     .Columns.Append "AttType", adInteger
