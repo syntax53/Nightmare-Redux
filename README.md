@@ -1,5 +1,10 @@
 Nightmare Redux is an editor for the game MajorMUD(r).  
 
+v1.7.2 (??/??/2016)  
+------------------------------------------  
+-UP: Added spells resist type field to MME export for future MME enhancement  
+-UP: Added tooltip to TypeOfResists field on spell editor  
+
 v1.7.1 (4/2/2016)  
 ------------------------------------------  
 -FIX: Fixed rooms opening up to wrong tab  
