@@ -1672,6 +1672,7 @@ ts.WriteLine ("Universal Modifier job started " & Date & " @ " & Time)
 ts.WriteLine q1 & q2
 If Not q3 = "" Then ts.WriteLine RemoveCharacter(RemoveCharacter(q3, vbCr), vbLf)
 If Not q4 = "" Then ts.WriteLine RemoveCharacter(RemoveCharacter(q4, vbCr), vbLf)
+If Not q5 = "" Then ts.WriteLine RemoveCharacter(RemoveCharacter(q5, vbCr), vbLf)
 ts.WriteBlankLines (1)
 
 DoEvents
