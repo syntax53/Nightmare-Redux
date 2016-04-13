@@ -724,7 +724,6 @@ Begin VB.Form frmSpell
             List            =   "frmSpell.frx":0DBF
             Style           =   2  'Dropdown List
             TabIndex        =   32
-            ToolTipText     =   "Never = Never Completely Resistable, No = Only Resistable by Anti-Magic, Yes = Resistable by All"
             Top             =   2040
             Width           =   1695
          End
@@ -772,9 +771,9 @@ Begin VB.Form frmSpell
          End
          Begin VB.ComboBox cmbMsgStyle 
             Height          =   315
-            ItemData        =   "frmSpell.frx":0DD3
+            ItemData        =   "frmSpell.frx":0DE5
             Left            =   1320
-            List            =   "frmSpell.frx":0DDD
+            List            =   "frmSpell.frx":0DEF
             Style           =   2  'Dropdown List
             TabIndex        =   36
             Top             =   3060

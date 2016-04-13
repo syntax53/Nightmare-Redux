@@ -1197,30 +1197,20 @@ End If
 
 MaxValue = CalcTotalRecords '* 5
 nScale = 0
-If MaxValue > MaxInt Then
-    If MaxValue / 2 < MaxInt Then
-        nScale = 2
-        nNewMax = MaxValue / 2
-    ElseIf MaxValue / 4 < MaxInt Then
-        nScale = 4
-        nNewMax = MaxValue / 4
-    ElseIf MaxValue / 8 < MaxInt Then
-        nScale = 8
-        nNewMax = MaxValue / 8
-    ElseIf MaxValue / 10 < MaxInt Then
-        nScale = 10
-        nNewMax = MaxValue / 10
+x = 2
+Do While MaxValue > MaxInt
+    If MaxValue / x < MaxInt Then
+        nScale = x
+        MaxValue = MaxValue / x
     Else
-        MaxValue = MaxInt
+        x = x + 2
     End If
-Else
-    nNewMax = MaxValue
-End If
+Loop
 
 nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
-ProgressBar.Max = nNewMax
+ProgressBar.Max = MaxValue
 ProgressBar.Visible = True
 
 Erase MonGroup()
@@ -1424,7 +1414,7 @@ Set frmForm = Nothing
 Exit Sub
 
 error:
-Call HandleError
+Call HandleError("cmdGo_Click")
 On Error Resume Next
 Call CloseDB(True)
 Resume ReEnable:
@@ -3620,7 +3610,7 @@ tabInfo.Update
 
 Exit Sub
 error:
-Call HandleError
+Call HandleError("ExportVersionInfo")
 End Sub
 
 Private Sub ExportItems()
@@ -4561,7 +4551,7 @@ CheckVersion = True
 
 Exit Function
 error:
-Call HandleError
+Call HandleError("CheckVersion")
 nYesNo = MsgBox("Unable to verify export file version information, continue anyway?", vbYesNo + vbQuestion)
 If nYesNo = vbYes Then CheckVersion = True
 End Function
@@ -4631,7 +4621,7 @@ Set fso = Nothing
 Set catDB = Nothing
 Exit Function
 error:
-Call HandleError
+Call HandleError("CreateDatabase")
 Set fso = Nothing
 Set catDB = Nothing
 
@@ -5081,7 +5071,7 @@ DoEvents
 
 Exit Function
 error:
-Call HandleError
+Call HandleError("CreateTables")
 Set pkRaces = Nothing
 Set pkClasses = Nothing
 Set pkShops = Nothing
@@ -5228,7 +5218,7 @@ If CalcTotalRecords <= 0 Then CalcTotalRecords = 100000
 Exit Function
 
 error:
-Call HandleError
+Call HandleError("CalcTotalRecords")
 End Function
 
 Private Sub OpenTables()
@@ -5246,7 +5236,7 @@ Set tabTBInfo = DB.OpenRecordset("TBInfo")
 
 Exit Sub
 error:
-Call HandleError
+Call HandleError("OpenTables")
 Resume Next
 End Sub
 Private Sub CloseDB(Optional DontCompact As Boolean)

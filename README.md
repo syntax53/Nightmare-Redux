@@ -3,9 +3,10 @@ Nightmare Redux is an editor for the game MajorMUD(r).
 v1.7.2 (??/??/2016)  
 ------------------------------------------  
 -UP: Added spells resist type field to MME export for future MME enhancement  
--UP: Added tooltip to TypeOfResists field on spell editor  
--UP: Added logging of the second universal modifier's only if option when chosen
+-UP: Changed drop down spell editor's "Type of Resist" to what I believe they actually mean  
+-UP: Added logging of the second universal modifier's only if option when chosen  
 -FIX: Universal modifier reported that it would set the directive to "0" when setting something to "= ##" (only the message was wrong, not the action)  
+-FIX: Fix for MME export erroring out when having a large number of database records  
 
 v1.7.1 (4/2/2016)  
 ------------------------------------------  
