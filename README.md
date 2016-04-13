@@ -4,6 +4,7 @@ v1.7.2 (??/??/2016)
 ------------------------------------------  
 -UP: Added spells resist type field to MME export for future MME enhancement  
 -UP: Added tooltip to TypeOfResists field on spell editor  
+-FIX: Universal modifier reported that it would set the directive to "0" when setting something to "= ##" (only the message was wrong, not the action)  
 
 v1.7.1 (4/2/2016)  
 ------------------------------------------  

@@ -1533,7 +1533,7 @@ If cmbAbilities.Enabled = True Then
             Case 2: q1 = q1 & " by multiplying " & Val(txtValue.Text) & " to the current ability value"
             Case 3: q1 = q1 & " by dividing " & Val(txtValue.Text) & " from the current ability value"
             Case 4: q1 = q1 & " by setting the current ability value to " & Val(cmbValue.Text) & "% of it's original value"
-            Case 5: q1 = q1 & " by setting the current ability value equal to " & Val(cmbValue.Text)
+            Case 5: q1 = q1 & " by setting the current ability value equal to " & Val(txtValue.Text)
         End Select
     Else
         If txtValue.Enabled = True Then
