@@ -3989,7 +3989,7 @@ Loop
 
 End Sub
 Private Sub ExportMonsters()
-Dim nStatus As Integer, recnum As Long, x As Long
+Dim nStatus As Integer, recnum As Long, x As Long, sTemp As String, y As Integer, z As Integer
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
@@ -4058,6 +4058,35 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("Summoned By") = Chr(0)
     
     For x = 0 To 4
+        If Monsterrec.AttackType(x) = 0 Then
+            tabMonsters.Fields("AttName-" & x) = "None"
+        ElseIf Monsterrec.AttackType(x) = 1 Then
+            sTemp = GetMessages(Monsterrec.AttackHitMsg(x), 1)
+            y = InStr(1, sTemp, "%s ", vbTextCompare) + 3
+            z = InStr(y, sTemp, " for ", vbTextCompare)
+            If z = 0 Then z = InStr(y, sTemp, " ", vbTextCompare)
+            
+            If y > 3 And z > y Then
+                If Mid(sTemp, y, z - y) = "all-out" And InStr(y + Len("all-out") + 1, sTemp, " ", vbTextCompare) > 0 Then
+                    z = InStr(y + Len("all-out") + 1, sTemp, " ", vbTextCompare)
+                    sTemp = Mid(sTemp, y, z - y)
+                Else
+                    sTemp = Mid(sTemp, y, z - y)
+                End If
+            Else
+                sTemp = "Physical"
+            End If
+            If Len(sTemp) > 49 Then sTemp = Left(sTemp, 46) & "..."
+            tabMonsters.Fields("AttName-" & x) = sTemp
+        ElseIf Monsterrec.AttackType(x) = 2 Then
+            sTemp = GetSpellName(Monsterrec.AttackAccuSpell(x))
+            If sTemp = "SPELL NOT IN DATABASE!" Then sTemp = "Spell " & Monsterrec.AttackAccuSpell(x)
+            tabMonsters.Fields("AttName-" & x) = sTemp
+        ElseIf Monsterrec.AttackType(x) = 1 Then
+            tabMonsters.Fields("AttName-" & x) = "Rob"
+        Else
+            tabMonsters.Fields("AttName-" & x) = "Unknown"
+        End If
         tabMonsters.Fields("AttType-" & x) = Monsterrec.AttackType(x)
         tabMonsters.Fields("AttAcc-" & x) = Monsterrec.AttackAccuSpell(x)
         tabMonsters.Fields("Att%-" & x) = Monsterrec.AttackPer(x)
@@ -4816,6 +4845,7 @@ With tabNewMonsters
     .Columns.Append "CreateSpell", adInteger
 
     For x = 0 To 4
+        .Columns.Append CStr("AttName-" & x), adVarWChar, 50
         .Columns.Append CStr("AttType-" & x), adInteger
         .Columns.Append CStr("AttAcc-" & x), adInteger
         .Columns.Append CStr("Att%-" & x), adInteger
