@@ -542,6 +542,8 @@ Option Explicit
 
 Const nPasses = 10
 
+Dim clsMonAtkSim As New clsMonsterAttackSim
+
 Dim DB As Database
 Dim tabItems As Recordset
 Dim tabClasses As Recordset
@@ -1419,6 +1421,181 @@ On Error Resume Next
 Call CloseDB(True)
 Resume ReEnable:
 
+End Sub
+
+Private Sub CalculateMonsterAvgDmg(ByVal nMonster As Long)
+Dim nStatus As Integer, x As Integer, y As Integer
+Dim nPercent As Integer, sTemp As String, nTest As Integer
+'On Error GoTo error:
+
+If Monsterrec.Number <> nMonster Then
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonster, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        MsgBox "Error on BGETEQUAL: " & BtrieveErrorCode(nStatus)
+        Exit Sub
+    End If
+    Call MonsterRowToStruct(Monsterdatabuf.buf)
+End If
+
+clsMonAtkSim.bUseCPU = bUseCPU
+clsMonAtkSim.nNumberOfRounds = 2000
+Call clsMonAtkSim.ResetValues
+
+clsMonAtkSim.nEnergyPerRound = Monsterrec.Energy
+
+If Monsterrec.WeaponNumber > 0 Then
+    If GetItemLimit(Monsterrec.WeaponNumber) = 0 Then
+        '4 = max dam ... accy = 22, 105, 106
+        If ItemHasAbility(Monsterrec.WeaponNumber, 22) > 0 _
+            Or ItemHasAbility(Monsterrec.WeaponNumber, 105) > 0 _
+            Or ItemHasAbility(Monsterrec.WeaponNumber, 106) > 0 _
+            Or ItemHasAbility(Monsterrec.WeaponNumber, 4) > 0 Then
+            
+            txtWeaponNumber.Text = Monsterrec.WeaponNumber
+        End If
+    End If
+End If
+
+For x = 0 To 9
+    If Monsterrec.ItemNumber(x) > 0 Then
+        If GetItemLimit(Monsterrec.ItemNumber(x)) = 0 Then
+            '4 = max dam ... accy = 22, 105, 106
+            If ItemHasAbility(Monsterrec.ItemNumber(x), 22) > 0 _
+                Or ItemHasAbility(Monsterrec.ItemNumber(x), 105) > 0 _
+                Or ItemHasAbility(Monsterrec.ItemNumber(x), 106) > 0 _
+                Or ItemHasAbility(Monsterrec.ItemNumber(x), 4) > 0 Then
+                
+                txtItemNumber(x).Text = Monsterrec.ItemNumber(x)
+                txtItemDropPer(x).Text = Monsterrec.ItemDropPer(x)
+            End If
+        End If
+    End If
+Next x
+
+nPercent = 0
+For x = 0 To 4
+    If Monsterrec.AttackType(x) > 0 And Monsterrec.AttackType(x) < 4 Then
+        sTemp = GetMonsterAttackName(Monsterrec.Number, x, 20)
+        If InStr(1, sTemp, " you ", vbTextCompare) Then
+            sTemp = Mid(sTemp, 1, InStr(1, sTemp, " you ", vbTextCompare))
+        ElseIf Right(sTemp, 4) = " you" Then
+            sTemp = Left(sTemp, Len(sTemp) - 4)
+        End If
+        txtAtkName(x).Text = sTemp
+        cmbAtkType(x).ListIndex = Monsterrec.AttackType(x)
+        txtAtkEnergy(x).Text = Monsterrec.AttackEnergy(x)
+        
+        txtAtkChance(x).Text = Monsterrec.AttackPer(x) - nPercent
+        nPercent = Monsterrec.AttackPer(x)
+        
+        If Monsterrec.AttackType(x) = 2 Then 'spell
+            nStatus = GetSpell(Monsterrec.AttackAccuSpell(x))
+            If nStatus = 0 Then
+                cmbAtkResist(x).ListIndex = Spellrec.TypeOfResists
+                
+                txtAtkDur(x).Text = GetSpellDuration(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                txtAtkMin(x).Text = 0
+                txtAtkMax(x).Text = 0
+                
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 1) '1=damage
+                If nTest >= 0 Then
+                    chkAtkDmgResist(x).Value = 0 'NO MR resist
+                    If nTest > 0 Then
+                        txtAtkMin(x).Text = nTest
+                        txtAtkMax(x).Text = nTest
+                    Else
+                        txtAtkMin(x).Text = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        txtAtkMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                    End If
+                End If
+                
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 17) '17=damage
+                If nTest >= 0 Then
+                    chkAtkDmgResist(x).Value = 1 'MR resist
+                    If nTest > 0 Then
+                        txtAtkMin(x).Text = nTest
+                        txtAtkMax(x).Text = nTest
+                    Else
+                        txtAtkMin(x).Text = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        txtAtkMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                    End If
+                End If
+                
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 8) '8=drain
+                If nTest >= 0 Then
+                    chkAtkDmgResist(x).Value = 0 'NO MR resist
+                    If nTest > 0 Then
+                        txtAtkMin(x).Text = nTest
+                        txtAtkMax(x).Text = nTest
+                    Else
+                        txtAtkMin(x).Text = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        txtAtkMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                    End If
+                End If
+                
+            Else
+                txtAtkMin(x).Text = "!"
+                txtAtkMax(x).Text = "!"
+            End If
+            txtAtkSuccess(x).Text = Monsterrec.AttackMinHCastPer(x)
+        Else
+            txtAtkMin(x).Text = Monsterrec.AttackMinHCastPer(x)
+            txtAtkMax(x).Text = Monsterrec.AttackMaxHCastLvl(x)
+            txtAtkSuccess(x).Text = Monsterrec.AttackAccuSpell(x)
+            If Monsterrec.AttackHitSpell(x) > 0 Then
+                
+                nStatus = GetSpell(Monsterrec.AttackHitSpell(x))
+                If nStatus = 0 Then
+                    cmbAtkResist(x).ListIndex = Spellrec.TypeOfResists
+                    txtAtkDur(x).Text = GetSpellDuration(Monsterrec.AttackHitSpell(x))
+                    
+                    If SpellHasAbility(Monsterrec.AttackHitSpell(x), 1) >= 0 Then
+                        chkAtkDmgResist(x).Value = 0
+                        txtAtkHitSpellMin(x).Text = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
+                        txtAtkHitSpellMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
+                        
+                    ElseIf SpellHasAbility(Monsterrec.AttackHitSpell(x), 17) >= 0 Then
+                        chkAtkDmgResist(x).Value = 1
+                        txtAtkHitSpellMin(x).Text = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
+                        txtAtkHitSpellMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
+                        
+                    Else
+                        txtAtkHitSpellMin(x).Text = 0
+                        txtAtkHitSpellMax(x).Text = 0
+                    End If
+                End If
+            End If
+        End If
+    End If
+Next x
+
+nPercent = 0
+For x = 0 To 4
+    If Monsterrec.SpellNumber(x) > 0 Then
+        txtBetweenSpellNumber(x).Text = Monsterrec.SpellNumber(x)
+        txtBetweenSpellCastPer(x).Text = Monsterrec.SpellCastPer(x) - nPercent
+        txtBetweenSpellCastLvL(x).Text = Monsterrec.SpellCastLvl(x)
+        nPercent = Monsterrec.SpellCastPer(x)
+    End If
+Next x
+
+For x = 0 To 4
+    If Len(txtAtkName(x).Text) > 0 Then
+        For y = 0 To 4
+            If y <> x And txtAtkName(x).Text = txtAtkName(y).Text Then
+                txtAtkName(x).Text = txtAtkName(x).Text & "-" & (x + 1)
+                txtAtkName(y).Text = txtAtkName(y).Text & "-" & (y + 1)
+            End If
+        Next y
+    End If
+Next x
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("CalculateMonsterAvgDmg")
+Resume out:
 End Sub
 
 Private Sub VerifyOneRecordInDBs()
@@ -4801,6 +4978,7 @@ With tabNewMonsters
     If eDatFileVersion >= v111j Then .Columns.Append "ExpMulti", adDouble
     .Columns.Append "HP", adInteger
     .Columns.Append "Energy", adInteger
+    .Columns.Append "AvgDmg", adInteger
     .Columns.Append "GreetTXT", adInteger
     .Columns.Append "HPRegen", adInteger
     .Columns.Append "CharmLVL", adInteger

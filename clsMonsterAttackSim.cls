@@ -48,6 +48,7 @@ Private m_nTotalAttacks As Currency
 Private m_nTotalDamage As Currency
 Private m_nMaxRoundDamage As Currency
 
+Private m_bDynamicCalc As Boolean
 Private m_bUseCPU As Boolean
 
 Private m_cProgressBar As ProgressBar
@@ -75,6 +76,14 @@ Private nActiveBetweenSpells_Ticks(0 To 4) As Integer
 Private nActiveBetweenSpells_DurationLeft(0 To 4) As Currency
 Private nActiveBetweenSpells_Value(0 To 4) As Integer
 Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
+
+Public Property Let bDynamicCalc(ByVal vData As Boolean)
+    m_bDynamicCalc = vData
+End Property
+
+Public Property Get bDynamicCalc() As Boolean
+    bDynamicCalc = m_bDynamicCalc
+End Property
 
 Public Property Get nAtkDuration(ByVal Index As Integer) As Integer
     nAtkDuration = m_nAtkDuration(Index)
@@ -203,10 +212,12 @@ Dim nLastAttackType As Integer, nLastAttackEnergy As Integer, nAttack_AdjSuccess
 Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer
 Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOriginalDamage As Currency
 Dim bSepShown As Boolean, bDurSpellApplied As Boolean
+Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
 
 'On Error GoTo error:
 
 Randomize
+If m_bDynamicCalc Then m_nNumberOfRounds = 100000
 
 If m_nNumberOfRounds < 1 Then Exit Sub
 If m_nEnergyPerRound < 1 Then Exit Sub
@@ -424,7 +435,7 @@ For nRound = 1 To m_nNumberOfRounds
                             '============================================================================
                             If m_nAtkHitSpellMin(nAttack) > 0 Or m_nAtkHitSpellMax(nAttack) > 0 Or m_nAtkDuration(nAttack) > 0 Then
                                 
-                                nHitSpellDamage = Me.RandomNumber(m_nAtkHitSpellMin(nAttack), m_nAtkHitSpellMax(nAttack))
+                                nHitSpellDamage = Round(Me.RandomNumber(m_nAtkHitSpellMin(nAttack), m_nAtkHitSpellMax(nAttack)))
                                 nActiveAtkSpells_ValueOriginal(nAttack) = nHitSpellDamage
                                 
                                 If m_nAtkMRdmgResist(nAttack) = 1 And nHitSpellDamage > 0 Then
@@ -480,7 +491,7 @@ For nRound = 1 To m_nNumberOfRounds
                         
                         If bAttackHit Then
                         
-                            If nOriginalDamage > nDamage And m_nAtkType(nAttack) = 2 Then 'spell
+                            If nOriginalDamage <> nDamage And m_nAtkType(nAttack) = 2 Then 'spell
                                 m_nStatAtkDmgResisted(nAttack) = m_nStatAtkDmgResisted(nAttack) + (nOriginalDamage - nDamage)
                             End If
                             
@@ -681,6 +692,27 @@ duration_ticks:
     
     Call ProgressBarIncrease
     If Not m_bUseCPU Then DoEvents
+    
+    If nDynamicRoundCount > 1000 And m_bDynamicCalc Then
+        If nCurrentAverageDamage = 0 Then
+            nCurrentAverageDamage = Round(m_nTotalDamage / nRound, 3)
+            If nCurrentAverageDamage < 1 Then
+                m_nNumberOfRounds = nRound
+                Exit Sub
+            End If
+            nDynamicRoundCount = 0
+        Else
+            nDifference = Abs(1 - (Round(m_nTotalDamage / nRound, 3) / nCurrentAverageDamage))
+            If nDifference < 0.0001 Then
+                m_nNumberOfRounds = nRound
+                Exit Sub
+            Else
+                nCurrentAverageDamage = Round(m_nTotalDamage / nRound, 3)
+                nDynamicRoundCount = 0
+            End If
+        End If
+    End If
+    nDynamicRoundCount = nDynamicRoundCount + 1
 Next nRound
 
 out:
@@ -887,6 +919,8 @@ For x = 0 To 4
     m_nBetweenRoundResistDmgMR(x) = 0
     
 Next x
+
+Call ResetActiveSpells
 
 out:
 On Error Resume Next
