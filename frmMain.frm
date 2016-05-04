@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{AA61DC5D-A4D1-4F73-AF2B-208862262908}#3.0#0"; "NMRTaskBar.ocx"
+Object = "{AA61DC5D-A4D1-4F73-AF2B-208862262908}#3.0#0"; "VB6DEBUG.DLL"
 Begin VB.MDIForm frmMain 
    BackColor       =   &H00000000&
    Caption         =   "Nightmare Redux"
@@ -212,6 +212,9 @@ Begin VB.MDIForm frmMain
       End
       Begin VB.Menu mnuMonster 
          Caption         =   "&Monsters"
+         Begin VB.Menu mnuMonsterAttackSim 
+            Caption         =   "&Attack Simulator"
+         End
          Begin VB.Menu mnuDivideExp 
             Caption         =   "&Divide All Exp"
          End
@@ -1753,6 +1756,11 @@ Private Sub mnuMMUDExplorer_Click()
 Unload frmMME_Export
 frmMME_Export.Show
 
+End Sub
+
+Private Sub mnuMonsterAttackSim_Click()
+Unload frmMonsterAttackSim
+Load frmMonsterAttackSim
 End Sub
 
 Private Sub mnuMonsterIndexCopyLine_Click()

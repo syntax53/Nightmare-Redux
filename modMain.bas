@@ -225,6 +225,17 @@ Declare Function SetWindowPos Lib "user32" _
       ByVal cy As Long, _
       ByVal wFlags As Long) As Long
 
+Public Function IsDimmed(Arr As Variant) As Boolean
+On Error GoTo ReturnFalse
+  IsDimmed = UBound(Arr) >= LBound(Arr)
+ReturnFalse:
+End Function
+
+Public Function RandomNumber(startNum As Integer, endNum As Integer) As Integer
+    Randomize
+    RandomNumber = Int(((endNum - startNum + 1) * Rnd) + startNum)
+End Function
+
 Public Sub ExpandCombo(ByRef Combo As ComboBox, ByVal ExpandType As eExpandType, _
     ByVal ExpandBy As eExpandBy, Optional ByVal hFrame As Long)
 

@@ -962,6 +962,62 @@ Resume out:
         
 End Function
 
+Public Function GetMonsterAttackName(ByVal nMonsterNumber As Long, ByVal nAttack As Integer, Optional nLength As Integer = 49) As String
+Dim sTemp As String, y As Integer, z As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nMonsterNumber = 0 Then
+    GetMonsterAttackName = "none"
+    Exit Function
+Else
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonsterNumber, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        GetMonsterAttackName = "unknown"
+        Exit Function
+    End If
+End If
+
+MonsterRowToStruct Monsterdatabuf.buf
+        
+If Monsterrec.AttackType(nAttack) = 0 Then
+    GetMonsterAttackName = "None"
+ElseIf Monsterrec.AttackType(nAttack) = 1 Then
+    sTemp = GetMessages(Monsterrec.AttackHitMsg(nAttack), 1)
+    y = InStr(1, sTemp, "%s ", vbTextCompare) + 3
+    z = InStr(y, sTemp, " for ", vbTextCompare)
+    If z = 0 Then z = InStr(y, sTemp, " ", vbTextCompare)
+    
+    If y > 3 And z > y Then
+        If Mid(sTemp, y, z - y) = "all-out" And InStr(y + Len("all-out") + 1, sTemp, " ", vbTextCompare) > 0 Then
+            z = InStr(y + Len("all-out") + 1, sTemp, " ", vbTextCompare)
+            sTemp = Mid(sTemp, y, z - y)
+        Else
+            sTemp = Mid(sTemp, y, z - y)
+        End If
+    Else
+        sTemp = "Physical"
+    End If
+    GetMonsterAttackName = sTemp
+ElseIf Monsterrec.AttackType(nAttack) = 2 Then
+    sTemp = GetSpellName(Monsterrec.AttackAccuSpell(nAttack))
+    If sTemp = "SPELL NOT IN DATABASE!" Then sTemp = "Spell " & Monsterrec.AttackAccuSpell(nAttack)
+    GetMonsterAttackName = sTemp
+ElseIf Monsterrec.AttackType(nAttack) = 1 Then
+    GetMonsterAttackName = "Rob"
+Else
+    GetMonsterAttackName = "Unknown"
+End If
+
+If Len(sTemp) > nLength Then sTemp = Left(sTemp, nLength - 3) & "..."
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetMonsterAttackName")
+Resume out:
+End Function
 Public Function GetMonGroupName(ByVal nNum As Integer) As String
 
 On Error GoTo error:
@@ -1285,13 +1341,40 @@ Call HandleError("GetSpellName")
 Resume out:
 End Function
 
+Public Function GetSpell(ByVal nSpellNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nSpellNumber = 0 Then
+    GetSpell = 1
+Else
+    nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nSpellNumber, Len(nSpellNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetSpell = 1
+        Else
+            MsgBox "Function GetSpellName, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+            GetSpell = 1
+        End If
+    Else
+        SpellRowToStruct Spelldatabuf.buf
+        GetSpell = 0
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetSpell")
+GetSpell = 1
+Resume out:
+End Function
+
 Public Function GetSpellRange(ByVal nSpellNumber As Long, ByVal nCastLevel As Long, _
     Optional ByVal nEnergyUsed As Integer) As String
 Dim nMin As Currency, nMax As Currency, nDur As Currency, nEnergy As Currency, x As Integer
 Dim nMRVal As Currency
 Dim nStatus As Integer
-On Error GoTo error:
-
 On Error GoTo error:
 
 If nSpellNumber = 0 Then Exit Function
@@ -1308,16 +1391,9 @@ Else
     nEnergy = 0
 End If
 
-If Spellrec.LVLSMinIncr = 0 Then
-    nMin = Spellrec.Min
-Else
-    nMin = Spellrec.Min + Fix((Spellrec.MinIncrease / Spellrec.LVLSMinIncr) * nCastLevel)
-End If
-If Spellrec.LVLSMaxIncr = 0 Then
-    nMax = Spellrec.Max
-Else
-    nMax = Spellrec.Max + Fix((Spellrec.MaxIncrease / Spellrec.LVLSMaxIncr) * nCastLevel)
-End If
+nMin = GetSpellMinDamage(nSpellNumber, nCastLevel)
+nMax = GetSpellMaxDamage(nSpellNumber, nCastLevel)
+
 If Spellrec.LVLSDurIncr = 0 Then
     nDur = Spellrec.duration
 Else
@@ -1339,6 +1415,85 @@ Call HandleError("GetSpellRange")
 Resume out:
 
 End Function
+
+Public Function GetSpellMinDamage(ByVal nSpellNumber As Long, Optional ByVal nCastLevel As Integer = 0) As Long
+Dim nStatus As Integer
+On Error GoTo error:
+
+GetSpellMinDamage = 0
+
+If nSpellNumber = 0 Then Exit Function
+nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nSpellNumber, Len(nSpellNumber), 0)
+If Not nStatus = 0 Then Exit Function
+
+SpellRowToStruct Spelldatabuf.buf
+
+If Spellrec.LVLSMinIncr = 0 Or nCastLevel <= 0 Then
+    GetSpellMinDamage = Spellrec.Min
+Else
+    GetSpellMinDamage = Spellrec.Min + Fix((Spellrec.MinIncrease / Spellrec.LVLSMinIncr) * nCastLevel)
+End If
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetSpellMinDamage")
+Resume out:
+End Function
+
+Public Function GetSpellMaxDamage(ByVal nSpellNumber As Long, Optional ByVal nCastLevel As Integer = 0) As Long
+Dim nStatus As Integer
+On Error GoTo error:
+
+GetSpellMaxDamage = 0
+
+If nSpellNumber = 0 Then Exit Function
+nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nSpellNumber, Len(nSpellNumber), 0)
+If Not nStatus = 0 Then Exit Function
+
+SpellRowToStruct Spelldatabuf.buf
+
+If Spellrec.LVLSMaxIncr = 0 Or nCastLevel <= 0 Then
+    GetSpellMaxDamage = Spellrec.Max
+Else
+    GetSpellMaxDamage = Spellrec.Max + Fix((Spellrec.MaxIncrease / Spellrec.LVLSMaxIncr) * nCastLevel)
+End If
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetSpellMaxDamage")
+Resume out:
+End Function
+
+Public Function GetSpellDuration(ByVal nSpellNumber As Long, Optional ByVal nCastLevel As Integer = 0) As Long
+Dim nStatus As Integer
+On Error GoTo error:
+
+GetSpellDuration = 0
+
+If nSpellNumber = 0 Then Exit Function
+nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nSpellNumber, Len(nSpellNumber), 0)
+If Not nStatus = 0 Then Exit Function
+
+SpellRowToStruct Spelldatabuf.buf
+
+If Spellrec.LVLSDurIncr = 0 Or nCastLevel <= 0 Then
+    GetSpellDuration = Spellrec.duration
+Else
+    GetSpellDuration = Spellrec.duration + Fix((Spellrec.DurIncrease / Spellrec.LVLSDurIncr) * nCastLevel)
+End If
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetSpellDuration")
+Resume out:
+End Function
+
 Public Function GetShortSpellName(ByVal nSpellNumber As Long) As String
 Dim nStatus As Integer
 On Error GoTo error:
@@ -1361,6 +1516,37 @@ error:
 Call HandleError("GetShortSpellName")
 Resume out:
 End Function
+
+Public Function SpellHasAbility(ByVal nSpellNumber As Long, ByVal nAbility As Integer) As Integer
+Dim nStatus As Integer, x As Integer
+On Error GoTo error:
+
+'-1 = does not have
+'>=0 = value of ability
+
+SpellHasAbility = -1
+If nAbility <= 0 Or nSpellNumber <= 0 Then Exit Function
+
+nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nSpellNumber, Len(nSpellNumber), 0)
+If Not nStatus = 0 Then Exit Function
+
+SpellRowToStruct Spelldatabuf.buf
+
+For x = 0 To 9
+    If Spellrec.AbilityA(x) = nAbility Then
+        SpellHasAbility = Spellrec.AbilityB(x)
+        Exit Function
+    End If
+Next x
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("SpellHasAbility")
+Resume out:
+End Function
+
 Public Function GetTextblockCMDS(ByVal TextBlockNumber As Long, Optional ByVal nMaxLength As Integer) As String
 Dim nStatus As Integer, x1 As Integer, x2 As Integer, sDecrypted As String
 
@@ -1749,6 +1935,92 @@ error:
 Call HandleError("CalcMarkup")
 Resume out:
     
+End Function
+
+Public Function GetItem(ByVal nItemNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nItemNumber = 0 Then
+    GetItem = 1
+Else
+    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nItemNumber, Len(nItemNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetItem = 1
+        Else
+            MsgBox "Function GetItemName, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+            GetItem = 1
+        End If
+    Else
+        ItemRowToStruct Itemdatabuf.buf
+        GetItem = 0
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetItem")
+GetItem = 1
+Resume out:
+End Function
+
+Public Function GetItemLimit(ByVal nItemNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+GetItemLimit = -1
+
+If nItemNumber = 0 Then Exit Function
+    
+nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nItemNumber, Len(nItemNumber), 0)
+If Not nStatus = 0 Then
+    If nStatus <> 4 Then
+        MsgBox "Function GetItemName, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+    End If
+    Exit Function
+End If
+
+ItemRowToStruct Itemdatabuf.buf
+GetItemLimit = Itemrec.GameLimit
+
+out:
+Exit Function
+error:
+Call HandleError("GetItem")
+GetItemLimit = -1
+Resume out:
+End Function
+
+Public Function ItemHasAbility(ByVal nItemNumber As Long, ByVal nAbility As Integer) As Integer
+Dim nStatus As Integer, x As Integer
+On Error GoTo error:
+
+'-1 = does not have
+'>=0 = value of ability
+
+ItemHasAbility = -1
+If nAbility <= 0 Or nItemNumber <= 0 Then Exit Function
+
+nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nItemNumber, Len(nItemNumber), 0)
+If Not nStatus = 0 Then Exit Function
+
+ItemRowToStruct Itemdatabuf.buf
+
+For x = 0 To 19
+    If Itemrec.AbilityA(x) = nAbility Then
+        ItemHasAbility = Itemrec.AbilityB(x)
+        Exit Function
+    End If
+Next x
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("ItemHasAbility")
+Resume out:
 End Function
 
 Public Function GetItemCost(ByVal nNum As Long, Optional ByVal nMarkUp As Integer) As String
