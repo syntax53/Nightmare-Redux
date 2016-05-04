@@ -13,6 +13,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Attribute VB_Ext_KEY = "SavedWithClassBuilder" ,"Yes"
 Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
+Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
 Option Explicit
 'Initialization of New ClassNames
 Private Const ICC_BAR_CLASSES = &H4      'toolbar, statusbar, trackbar, tooltips
@@ -61,7 +62,7 @@ End Type
 Private Type TOOLINFO
     cbSize      As Long
     uFlags      As Long
-    hWnd        As Long
+    hwnd        As Long
     uId         As Long
     cRect       As RECT
     hinst       As Long
@@ -93,13 +94,13 @@ Public Enum TTStyle
 End Enum
 
 Private Declare Function CreateWindowEx Lib "user32" Alias "CreateWindowExA" (ByVal dwExStyle As Long, ByVal lpClassName As String, ByVal lpWindowName As String, ByVal dwStyle As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
-Private Declare Function DestroyWindow Lib "user32" (ByVal hWnd As Long) As Long
-Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
-Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Private Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long) As Long
-Private Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
+Private Declare Function DestroyWindow Lib "user32" (ByVal hwnd As Long) As Long
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
+Private Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
 Private Declare Function CreateFontIndirect Lib "gdi32" Alias "CreateFontIndirectA" (lpLogFont As LOGFONT) As Long
-Private Declare Function GetDC Lib "user32" (ByVal hWnd As Long) As Long
+Private Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
 Private Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
 Private Declare Function MulDiv Lib "kernel32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
 Private Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
@@ -225,7 +226,7 @@ Public Sub SetToolTipObj(objHwnd As Long, sTipText As String, Optional bCenter A
 Attribute SetToolTipObj.VB_Description = "Assign ToolTip with sTipText to object (objHwnd)"
     Dim TI As TOOLINFO
     With TI
-        .hWnd = objHwnd
+        .hwnd = objHwnd
         .uFlags = TTF_IDISHWND Or TTF_SUBCLASS
         If bCenter Then
             .uFlags = .uFlags Or TTF_CENTERTIP
@@ -246,7 +247,7 @@ Attribute SetToolTipItem.VB_Description = "Assign ToolTip with stipText to speci
    rc.Top = tp
    With TI
         .cRect = rc
-        .hWnd = objHwnd
+        .hwnd = objHwnd
         .uFlags = TTF_SUBCLASS
         If bCenter Then
             .uFlags = .uFlags Or TTF_CENTERTIP
@@ -261,7 +262,7 @@ End Sub
 Public Sub DelToolTip(objHwnd As Long, Optional ByVal nItem As Long = -1)
 Attribute DelToolTip.VB_Description = "Remove ToolTip from object or item"
    Dim TI As TOOLINFO
-   TI.hWnd = objHwnd
+   TI.hwnd = objHwnd
    TI.cbSize = Len(TI)
    If nItem < 0 Then TI.uId = objHwnd Else TI.uId = nItem
    SendMessage hTT, TTM_DELTOOL, 0, TI
@@ -271,7 +272,7 @@ Public Sub AjustItemRect(objHwnd As Long, nItem As Long, lft As Long, tp As Long
 Attribute AjustItemRect.VB_Description = "Change rectangular where ToolTip appear for specific item"
     Dim TI As TOOLINFO, rc As RECT
     With TI
-        .hWnd = objHwnd
+        .hwnd = objHwnd
         .uId = nItem
         .cbSize = Len(TI)
     End With
