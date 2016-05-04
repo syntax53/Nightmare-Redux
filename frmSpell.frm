@@ -18,7 +18,7 @@ Begin VB.Form frmSpell
       Height          =   4755
       Left            =   60
       TabIndex        =   135
-      Top             =   60
+      Top             =   360
       Visible         =   0   'False
       Width           =   6675
       Begin VB.Frame fraFilter2 
