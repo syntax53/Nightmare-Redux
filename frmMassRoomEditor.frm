@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT3N.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmMassRoomEditor 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Mass Room Editor"
@@ -143,15 +143,17 @@ Begin VB.Form frmMassRoomEditor
          _Version        =   393216
          Style           =   1
          Tabs            =   6
-         Tab             =   2
          TabsPerRow      =   6
          TabHeight       =   520
          TabCaption(0)   =   "General"
          TabPicture(0)   =   "frmMassRoomEditor.frx":08CA
-         Tab(0).ControlEnabled=   0   'False
+         Tab(0).ControlEnabled=   -1  'True
          Tab(0).Control(0)=   "chkDescription"
+         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "frmDescription"
+         Tab(0).Control(1).Enabled=   0   'False
          Tab(0).Control(2)=   "Frame1"
+         Tab(0).Control(2).Enabled=   0   'False
          Tab(0).ControlCount=   3
          TabCaption(1)   =   "Exits"
          TabPicture(1)   =   "frmMassRoomEditor.frx":08E6
@@ -235,63 +237,46 @@ Begin VB.Form frmMassRoomEditor
          Tab(1).ControlCount=   76
          TabCaption(2)   =   "Placed Items/Monster"
          TabPicture(2)   =   "frmMassRoomEditor.frx":0902
-         Tab(2).ControlEnabled=   -1  'True
-         Tab(2).Control(0)=   "frmVisibleCoins"
-         Tab(2).Control(0).Enabled=   0   'False
-         Tab(2).Control(1)=   "chkMonies"
-         Tab(2).Control(1).Enabled=   0   'False
-         Tab(2).Control(2)=   "chkPlacedItems"
-         Tab(2).Control(2).Enabled=   0   'False
-         Tab(2).Control(3)=   "ChkPermNPC"
+         Tab(2).ControlEnabled=   0   'False
+         Tab(2).Control(0)=   "chkInvisMonies"
+         Tab(2).Control(1)=   "frmHiddenCoins"
+         Tab(2).Control(2)=   "txtPermNPC"
+         Tab(2).Control(3)=   "txtPermNPCName"
          Tab(2).Control(3).Enabled=   0   'False
-         Tab(2).Control(4)=   "txtPlacedItemsName(9)"
-         Tab(2).Control(4).Enabled=   0   'False
-         Tab(2).Control(5)=   "txtPlacedItemsName(8)"
-         Tab(2).Control(5).Enabled=   0   'False
-         Tab(2).Control(6)=   "txtPlacedItemsName(7)"
-         Tab(2).Control(6).Enabled=   0   'False
-         Tab(2).Control(7)=   "txtPlacedItemsName(6)"
-         Tab(2).Control(7).Enabled=   0   'False
-         Tab(2).Control(8)=   "txtPlacedItemsName(5)"
-         Tab(2).Control(8).Enabled=   0   'False
-         Tab(2).Control(9)=   "txtPlacedItemsName(4)"
-         Tab(2).Control(9).Enabled=   0   'False
-         Tab(2).Control(10)=   "txtPlacedItemsName(3)"
-         Tab(2).Control(10).Enabled=   0   'False
-         Tab(2).Control(11)=   "txtPlacedItemsName(2)"
-         Tab(2).Control(11).Enabled=   0   'False
-         Tab(2).Control(12)=   "txtPlacedItemsName(1)"
-         Tab(2).Control(12).Enabled=   0   'False
-         Tab(2).Control(13)=   "txtPlacedItemsName(0)"
-         Tab(2).Control(13).Enabled=   0   'False
-         Tab(2).Control(14)=   "txtPlacedItems(0)"
+         Tab(2).Control(4)=   "txtPlacedItems(9)"
+         Tab(2).Control(5)=   "txtPlacedItems(8)"
+         Tab(2).Control(6)=   "txtPlacedItems(7)"
+         Tab(2).Control(7)=   "txtPlacedItems(6)"
+         Tab(2).Control(8)=   "txtPlacedItems(5)"
+         Tab(2).Control(9)=   "txtPlacedItems(4)"
+         Tab(2).Control(10)=   "txtPlacedItems(3)"
+         Tab(2).Control(11)=   "txtPlacedItems(2)"
+         Tab(2).Control(12)=   "txtPlacedItems(1)"
+         Tab(2).Control(13)=   "txtPlacedItems(0)"
+         Tab(2).Control(14)=   "txtPlacedItemsName(0)"
          Tab(2).Control(14).Enabled=   0   'False
-         Tab(2).Control(15)=   "txtPlacedItems(1)"
+         Tab(2).Control(15)=   "txtPlacedItemsName(1)"
          Tab(2).Control(15).Enabled=   0   'False
-         Tab(2).Control(16)=   "txtPlacedItems(2)"
+         Tab(2).Control(16)=   "txtPlacedItemsName(2)"
          Tab(2).Control(16).Enabled=   0   'False
-         Tab(2).Control(17)=   "txtPlacedItems(3)"
+         Tab(2).Control(17)=   "txtPlacedItemsName(3)"
          Tab(2).Control(17).Enabled=   0   'False
-         Tab(2).Control(18)=   "txtPlacedItems(4)"
+         Tab(2).Control(18)=   "txtPlacedItemsName(4)"
          Tab(2).Control(18).Enabled=   0   'False
-         Tab(2).Control(19)=   "txtPlacedItems(5)"
+         Tab(2).Control(19)=   "txtPlacedItemsName(5)"
          Tab(2).Control(19).Enabled=   0   'False
-         Tab(2).Control(20)=   "txtPlacedItems(6)"
+         Tab(2).Control(20)=   "txtPlacedItemsName(6)"
          Tab(2).Control(20).Enabled=   0   'False
-         Tab(2).Control(21)=   "txtPlacedItems(7)"
+         Tab(2).Control(21)=   "txtPlacedItemsName(7)"
          Tab(2).Control(21).Enabled=   0   'False
-         Tab(2).Control(22)=   "txtPlacedItems(8)"
+         Tab(2).Control(22)=   "txtPlacedItemsName(8)"
          Tab(2).Control(22).Enabled=   0   'False
-         Tab(2).Control(23)=   "txtPlacedItems(9)"
+         Tab(2).Control(23)=   "txtPlacedItemsName(9)"
          Tab(2).Control(23).Enabled=   0   'False
-         Tab(2).Control(24)=   "txtPermNPCName"
-         Tab(2).Control(24).Enabled=   0   'False
-         Tab(2).Control(25)=   "txtPermNPC"
-         Tab(2).Control(25).Enabled=   0   'False
-         Tab(2).Control(26)=   "frmHiddenCoins"
-         Tab(2).Control(26).Enabled=   0   'False
-         Tab(2).Control(27)=   "chkInvisMonies"
-         Tab(2).Control(27).Enabled=   0   'False
+         Tab(2).Control(24)=   "ChkPermNPC"
+         Tab(2).Control(25)=   "chkPlacedItems"
+         Tab(2).Control(26)=   "chkMonies"
+         Tab(2).Control(27)=   "frmVisibleCoins"
          Tab(2).ControlCount=   28
          TabCaption(3)   =   "Visible Items"
          TabPicture(3)   =   "frmMassRoomEditor.frx":091E
@@ -492,7 +477,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox chkInvisMonies 
             Caption         =   "Hidden Coins"
             Height          =   195
-            Left            =   3720
+            Left            =   -71280
             TabIndex        =   344
             Top             =   3120
             Width           =   1275
@@ -500,7 +485,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.Frame frmHiddenCoins 
             Caption         =   "      "
             Height          =   2295
-            Left            =   3480
+            Left            =   -71520
             TabIndex        =   333
             Top             =   3120
             Width           =   2175
@@ -593,7 +578,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.Frame Frame1 
             Caption         =   "Advanced"
             Height          =   3135
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   29
             Top             =   3300
             Width           =   6015
@@ -1276,7 +1261,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.TextBox txtPermNPC 
             Enabled         =   0   'False
             Height          =   285
-            Left            =   165
+            Left            =   -74835
             MaxLength       =   5
             TabIndex        =   164
             Text            =   "0"
@@ -1286,7 +1271,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.TextBox txtPermNPCName 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   795
+            Left            =   -74205
             Locked          =   -1  'True
             TabIndex        =   165
             TabStop         =   0   'False
@@ -2154,7 +2139,7 @@ Begin VB.Form frmMassRoomEditor
             Caption         =   "Description"
             Enabled         =   0   'False
             Height          =   2895
-            Left            =   -74640
+            Left            =   360
             TabIndex        =   19
             Top             =   360
             Width           =   5775
@@ -2252,7 +2237,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   9
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   152
             Text            =   "0"
@@ -2263,7 +2248,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   8
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   151
             Text            =   "0"
@@ -2274,7 +2259,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   7
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   150
             Text            =   "0"
@@ -2285,7 +2270,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   6
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   149
             Text            =   "0"
@@ -2296,7 +2281,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   5
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   148
             Text            =   "0"
@@ -2307,7 +2292,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   4
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   147
             Text            =   "0"
@@ -2318,7 +2303,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   3
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   146
             Text            =   "0"
@@ -2329,7 +2314,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   2
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   145
             Text            =   "0"
@@ -2340,7 +2325,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   1
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   144
             Text            =   "0"
@@ -2351,7 +2336,7 @@ Begin VB.Form frmMassRoomEditor
             Enabled         =   0   'False
             Height          =   285
             Index           =   0
-            Left            =   180
+            Left            =   -74820
             MaxLength       =   5
             TabIndex        =   143
             Text            =   "0"
@@ -2362,7 +2347,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   0
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   153
@@ -2374,7 +2359,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   1
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   154
@@ -2386,7 +2371,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   2
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   155
@@ -2398,7 +2383,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   3
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   156
@@ -2410,7 +2395,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   4
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   157
@@ -2422,7 +2407,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   5
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   158
@@ -2434,7 +2419,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   6
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   159
@@ -2446,7 +2431,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   7
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   160
@@ -2458,7 +2443,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   8
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   161
@@ -2470,7 +2455,7 @@ Begin VB.Form frmMassRoomEditor
             BackColor       =   &H8000000F&
             Height          =   285
             Index           =   9
-            Left            =   780
+            Left            =   -74220
             Locked          =   -1  'True
             MaxLength       =   30
             TabIndex        =   162
@@ -2481,7 +2466,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox chkDescription 
             Caption         =   "Check1"
             Height          =   195
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   18
             Top             =   420
             Width           =   195
@@ -2701,7 +2686,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox ChkPermNPC 
             Caption         =   "Permanent NPC"
             Height          =   195
-            Left            =   180
+            Left            =   -74820
             TabIndex        =   163
             Top             =   4080
             Width           =   1635
@@ -2709,7 +2694,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox chkPlacedItems 
             Caption         =   "Placed Items"
             Height          =   195
-            Left            =   180
+            Left            =   -74820
             TabIndex        =   142
             Top             =   720
             Width           =   1275
@@ -2717,7 +2702,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.CheckBox chkMonies 
             Caption         =   "Visible Coins"
             Height          =   195
-            Left            =   3720
+            Left            =   -71280
             TabIndex        =   166
             Top             =   720
             Width           =   1275
@@ -3733,7 +3718,7 @@ Begin VB.Form frmMassRoomEditor
          Begin VB.Frame frmVisibleCoins 
             Caption         =   "        "
             Height          =   2295
-            Left            =   3480
+            Left            =   -71520
             TabIndex        =   322
             Top             =   720
             Width           =   2175
