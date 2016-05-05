@@ -1009,7 +1009,7 @@ Else
     GetMonsterAttackName = "Unknown"
 End If
 
-If Len(sTemp) > nLength Then sTemp = Left(sTemp, nLength - 3) & "..."
+If Len(GetMonsterAttackName) > nLength Then GetMonsterAttackName = Left(GetMonsterAttackName, nLength - 3) & "..."
 
 out:
 On Error Resume Next

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Begin VB.Form frmShop 
    Caption         =   "Shop Editor"
@@ -1992,7 +1992,7 @@ Dim x As Integer
 '11=Gang Shop
 '12=Deed Shop
 
-On Error GoTo Error:
+On Error GoTo error:
 
 cmbClasses.Enabled = False
 txtShopMinLvl.Enabled = False
@@ -2068,7 +2068,7 @@ End If
 Call txtShopMarkup_Change
 
 Exit Sub
-Error:
+error:
 Call HandleError("cmbType_Click")
 End Sub
 
@@ -2119,7 +2119,7 @@ End Sub
 Private Sub cmdDiscard_Click()
 Dim nStatus As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If lvDatabase.SelectedItem Is Nothing Or nCurrentRecord = 0 Then
     MsgBox "No current record."
@@ -2134,7 +2134,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError("cmdDiscard_Click")
 End Sub
 Public Sub GotoShop(ByVal nRecnum As Integer)
@@ -2153,7 +2153,7 @@ Me.Show
 Me.SetFocus
 End Sub
 Private Sub cmdSave_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 If lvDatabase.SelectedItem Is Nothing Then Exit Sub
@@ -2174,7 +2174,7 @@ End If
 Set oLI = Nothing
 
 Exit Sub
-Error:
+error:
 Call HandleError("cmdSave_Click")
 End Sub
 
@@ -2207,19 +2207,25 @@ If Not nStatus = 0 And Not nStatus = 9 Then
     MsgBox "LoadShops, Error: " & BtrieveErrorCode(nStatus)
 End If
 
-If lvDatabase.ListItems.Count >= 1 Then Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+If lvDatabase.ListItems.Count >= 1 Then
+    lvDatabase.refresh
+    If bOppositeListOrder Then
+        SortListView lvDatabase, 1, ldtNumber, False
+    Else
+        SortListView lvDatabase, 1, ldtNumber, True
+    End If
+    Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+End If
 
-lvDatabase.refresh
-SortListView lvDatabase, 1, ldtNumber, True
 bLoaded = True
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub AddShopToLV(ByVal nNumber As Integer)
 Dim nStatus As Integer, oLI As ListItem
-On Error GoTo Error:
+On Error GoTo error:
 
 If Not nNumber = Shoprec.Number Then
     nStatus = BTRCALL(BGETEQUAL, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), nNumber, KEY_BUF_LEN, 0)
@@ -2240,13 +2246,13 @@ End If
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
 
 Private Sub DispShopInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, sBankAccount As String, sChars As String, i As Integer
 
 Call ShopRowToStruct(row())
@@ -2303,7 +2309,7 @@ cmbClasses.ListIndex = Shoprec.ShopClassLimit
 txtShopMarkup.Text = Shoprec.ShopMarkUp
 
 Exit Sub
-Error:
+error:
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
     & "Previous records stats may still be in memory.  Select 'Disable DB Writing'" & vbCrLf _
@@ -2345,7 +2351,7 @@ End If
 End Sub
 
 Private Sub saverecord(ByVal nRecord As Long)
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, x As Integer, sChar As String, sChar2 As String
 
 If nRecord = 0 Then Exit Sub
@@ -2408,13 +2414,13 @@ Else
     DispShopInfo Shopdatabuf.buf
 End If
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lvDatabase_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
 Dim nSort As ListDataType
-On Error GoTo Error:
+On Error GoTo error:
 
 Select Case ColumnHeader.Index
     Case 1, 4, 5: nSort = ldtNumber
@@ -2423,13 +2429,13 @@ End Select
 SortListView lvDatabase, ColumnHeader.Index, nSort, lvDatabase.SortOrder
 
 Exit Sub
-Error:
+error:
 Call HandleError("lvDatabase_ColumnClick")
 End Sub
 
 Public Sub lvDatabase_ItemClick(ByVal Item As MSComctlLib.ListItem)
 Dim temp As Long, nStatus As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 If bLoaded = True And chkAutoSave.Value = 1 Then Call saverecord(nCurrentRecord)
 
@@ -2445,7 +2451,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError("lvDatabase_ItemClick")
 End Sub
 
@@ -2470,7 +2476,7 @@ End Sub
 Private Sub txtNumberSearch_KeyUp(KeyCode As Integer, Shift As Integer)
 Dim x As Long, SearchStart As Long
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If txtNumberSearch.Text = "" Then Exit Sub
 If lvDatabase.ListItems.Count < 1 Then Exit Sub
@@ -2496,7 +2502,7 @@ For x = SearchStart To lvDatabase.ListItems.Count
 Next x
 
 Exit Sub
-Error:
+error:
 Call HandleError("txtNumberSearch_KeyUp")
 
 End Sub
@@ -2518,7 +2524,7 @@ End Sub
 Private Sub txtSearch_KeyUp(KeyCode As Integer, Shift As Integer)
 Dim x As Long, SearchStart As Long
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If txtSearch.Text = "" Then Exit Sub
 If lvDatabase.ListItems.Count < 1 Then Exit Sub
@@ -2544,13 +2550,13 @@ For x = SearchStart To lvDatabase.ListItems.Count
 Next x
 
 Exit Sub
-Error:
+error:
 Call HandleError("txtSearch_KeyUp")
     
 End Sub
 
 Private Sub cmdDelete_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nDelete As Integer, temp As Long
 
@@ -2589,12 +2595,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdInsert_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nNewShopNumber As String, oLI As ListItem
 
@@ -2638,14 +2644,14 @@ End If
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
 
 
 Private Sub txtShopItemNumber_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 txtShopItemName(Index).Text = GetItemName(Val(txtShopItemNumber(Index).Text))
 
@@ -2657,7 +2663,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError("txtShopItemNumber_Change")
 End Sub
 
@@ -2668,7 +2674,7 @@ End Sub
 Private Sub txtShopMarkup_Change()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If cmbType.ListIndex = 11 Then 'gangshop
     For x = 0 To 19
@@ -2683,7 +2689,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtShopMarkup_Change")
 Resume out:
 

@@ -42,6 +42,7 @@ Public bUseCPU As Boolean
 Public bAbilityDBOpen As Boolean
 Public bDisableWriting As Boolean
 Public bOnlyNames As Boolean
+Public bOppositeListOrder As Boolean
 Public sAppVersion As String
 Public sMenuCaption As String
 Public strDatCallLetters As String * 2
@@ -1207,6 +1208,12 @@ Call GetTitleBarOffset
 Call CheckINIReadOnly
 Call InitTaskbar
 nStatus = 0
+
+If Val(ReadINI("Settings", "OppositeListOrder")) > 0 Then
+    bOppositeListOrder = True
+Else
+    bOppositeListOrder = False
+End If
 
 If Val(ReadINI("Settings", "OnlyLoadNames")) > 0 Then
     bOnlyNames = True

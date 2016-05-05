@@ -1423,56 +1423,85 @@ Resume ReEnable:
 
 End Sub
 
-Private Sub CalculateMonsterAvgDmg(ByVal nMonster As Long)
-Dim nStatus As Integer, x As Integer, y As Integer
-Dim nPercent As Integer, sTemp As String, nTest As Integer
-'On Error GoTo error:
+Private Function CalculateMonsterItemBonuses(nMonster As Long, nAbilities As Variant) As Integer
+Dim x As Integer, y As Integer, nTest As Integer, nStatus As Integer
+On Error GoTo error:
+
+If Not IsDimmed(nAbilities) Then Exit Function
 
 If Monsterrec.Number <> nMonster Then
     nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonster, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Error on BGETEQUAL: " & BtrieveErrorCode(nStatus)
-        Exit Sub
+        Exit Function
     End If
     Call MonsterRowToStruct(Monsterdatabuf.buf)
 End If
 
-clsMonAtkSim.bUseCPU = bUseCPU
-clsMonAtkSim.nNumberOfRounds = 2000
-Call clsMonAtkSim.ResetValues
-
-clsMonAtkSim.nEnergyPerRound = Monsterrec.Energy
-
 If Monsterrec.WeaponNumber > 0 Then
     If GetItemLimit(Monsterrec.WeaponNumber) = 0 Then
-        '4 = max dam ... accy = 22, 105, 106
-        If ItemHasAbility(Monsterrec.WeaponNumber, 22) > 0 _
-            Or ItemHasAbility(Monsterrec.WeaponNumber, 105) > 0 _
-            Or ItemHasAbility(Monsterrec.WeaponNumber, 106) > 0 _
-            Or ItemHasAbility(Monsterrec.WeaponNumber, 4) > 0 Then
-            
-            txtWeaponNumber.Text = Monsterrec.WeaponNumber
-        End If
+        For y = LBound(nAbilities) To UBound(nAbilities)
+            nTest = ItemHasAbility(Monsterrec.WeaponNumber, nAbilities(y))
+            If nTest > 0 Then
+                CalculateMonsterItemBonuses = CalculateMonsterItemBonuses + nTest
+            End If
+        Next y
     End If
 End If
 
 For x = 0 To 9
     If Monsterrec.ItemNumber(x) > 0 Then
         If GetItemLimit(Monsterrec.ItemNumber(x)) = 0 Then
-            '4 = max dam ... accy = 22, 105, 106
-            If ItemHasAbility(Monsterrec.ItemNumber(x), 22) > 0 _
-                Or ItemHasAbility(Monsterrec.ItemNumber(x), 105) > 0 _
-                Or ItemHasAbility(Monsterrec.ItemNumber(x), 106) > 0 _
-                Or ItemHasAbility(Monsterrec.ItemNumber(x), 4) > 0 Then
-                
-                txtItemNumber(x).Text = Monsterrec.ItemNumber(x)
-                txtItemDropPer(x).Text = Monsterrec.ItemDropPer(x)
-            End If
+            For y = LBound(nAbilities) To UBound(nAbilities)
+                nTest = ItemHasAbility(Monsterrec.ItemNumber(x), nAbilities(y))
+                If nTest > 0 Then
+                    If Monsterrec.ItemDropPer(x) > 100 Then Monsterrec.ItemDropPer(x) = 100
+                    CalculateMonsterItemBonuses = CalculateMonsterItemBonuses + (nTest * (Monsterrec.ItemDropPer(x) / 100))
+                End If
+            Next y
         End If
     End If
 Next x
 
-nPercent = 0
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("CalculateMonsterItemBonuses")
+Resume out:
+End Function
+
+Private Function CalculateMonsterAvgDmg(ByVal nMonster As Long) As Currency
+Dim nStatus As Integer, x As Integer, y As Integer
+Dim nPercent As Integer, sTemp As String, nTest As Integer
+Dim nDamageArr As Variant, nAccyArr As Variant
+Dim nItemDamageBonus As Integer, nItemAccyBonus As Integer
+On Error GoTo error:
+
+If Monsterrec.Number <> nMonster Then
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonster, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        MsgBox "Error on BGETEQUAL: " & BtrieveErrorCode(nStatus)
+        Exit Function
+    End If
+    Call MonsterRowToStruct(Monsterdatabuf.buf)
+End If
+
+Call clsMonAtkSim.ResetValues
+clsMonAtkSim.bDynamicCalc = False
+clsMonAtkSim.bUseCPU = True
+clsMonAtkSim.nCombatLogMaxRounds = 0
+clsMonAtkSim.nNumberOfRounds = 2000
+clsMonAtkSim.nUserMR = 50
+
+clsMonAtkSim.nEnergyPerRound = Monsterrec.Energy
+
+nDamageArr = Array(4) '4=max damage
+nAccyArr = Array(22, 105, 106) '22, 105, 106 = accuracy
+
+nItemDamageBonus = CalculateMonsterItemBonuses(nMonster, nDamageArr)
+nItemAccyBonus = CalculateMonsterItemBonuses(nMonster, nAccyArr)
+
 For x = 0 To 4
     If Monsterrec.AttackType(x) > 0 And Monsterrec.AttackType(x) < 4 Then
         sTemp = GetMonsterAttackName(Monsterrec.Number, x, 20)
@@ -1481,87 +1510,85 @@ For x = 0 To 4
         ElseIf Right(sTemp, 4) = " you" Then
             sTemp = Left(sTemp, Len(sTemp) - 4)
         End If
-        txtAtkName(x).Text = sTemp
-        cmbAtkType(x).ListIndex = Monsterrec.AttackType(x)
-        txtAtkEnergy(x).Text = Monsterrec.AttackEnergy(x)
-        
-        txtAtkChance(x).Text = Monsterrec.AttackPer(x) - nPercent
-        nPercent = Monsterrec.AttackPer(x)
+        clsMonAtkSim.sAtkName(x) = Trim(sTemp)
+        clsMonAtkSim.nAtkType(x) = Monsterrec.AttackType(x)
+        clsMonAtkSim.nAtkEnergy(x) = Monsterrec.AttackEnergy(x)
+        clsMonAtkSim.nAtkChance(x) = Monsterrec.AttackPer(x)
         
         If Monsterrec.AttackType(x) = 2 Then 'spell
             nStatus = GetSpell(Monsterrec.AttackAccuSpell(x))
             If nStatus = 0 Then
-                cmbAtkResist(x).ListIndex = Spellrec.TypeOfResists
+                clsMonAtkSim.nAtkResist(x) = Spellrec.TypeOfResists
                 
-                txtAtkDur(x).Text = GetSpellDuration(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
-                txtAtkMin(x).Text = 0
-                txtAtkMax(x).Text = 0
+                clsMonAtkSim.nAtkDuration(x) = GetSpellDuration(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                clsMonAtkSim.nAtkMin(x) = 0
+                clsMonAtkSim.nAtkMax(x) = 0
                 
                 nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 1) '1=damage
                 If nTest >= 0 Then
-                    chkAtkDmgResist(x).Value = 0 'NO MR resist
+                    clsMonAtkSim.nAtkMRdmgResist(x) = 0 'NO MR resist
                     If nTest > 0 Then
-                        txtAtkMin(x).Text = nTest
-                        txtAtkMax(x).Text = nTest
+                        clsMonAtkSim.nAtkMin(x) = nTest
+                        clsMonAtkSim.nAtkMax(x) = nTest
                     Else
-                        txtAtkMin(x).Text = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
-                        txtAtkMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMin(x) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMax(x) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                     End If
                 End If
                 
                 nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 17) '17=damage
                 If nTest >= 0 Then
-                    chkAtkDmgResist(x).Value = 1 'MR resist
+                    clsMonAtkSim.nAtkMRdmgResist(x) = 1 'MR resist
                     If nTest > 0 Then
-                        txtAtkMin(x).Text = nTest
-                        txtAtkMax(x).Text = nTest
+                        clsMonAtkSim.nAtkMin(x) = nTest
+                        clsMonAtkSim.nAtkMax(x) = nTest
                     Else
-                        txtAtkMin(x).Text = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
-                        txtAtkMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMin(x) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMax(x) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                     End If
                 End If
                 
                 nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 8) '8=drain
                 If nTest >= 0 Then
-                    chkAtkDmgResist(x).Value = 0 'NO MR resist
+                    clsMonAtkSim.nAtkMRdmgResist(x) = 0 'NO MR resist
                     If nTest > 0 Then
-                        txtAtkMin(x).Text = nTest
-                        txtAtkMax(x).Text = nTest
+                        clsMonAtkSim.nAtkMin(x) = nTest
+                        clsMonAtkSim.nAtkMax(x) = nTest
                     Else
-                        txtAtkMin(x).Text = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
-                        txtAtkMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMin(x) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMax(x) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                     End If
                 End If
                 
             Else
-                txtAtkMin(x).Text = "!"
-                txtAtkMax(x).Text = "!"
+                clsMonAtkSim.nAtkMin(x) = 0
+                clsMonAtkSim.nAtkMax(x) = 0
             End If
-            txtAtkSuccess(x).Text = Monsterrec.AttackMinHCastPer(x)
+            clsMonAtkSim.nAtkSuccess(x) = Monsterrec.AttackMinHCastPer(x)
         Else
-            txtAtkMin(x).Text = Monsterrec.AttackMinHCastPer(x)
-            txtAtkMax(x).Text = Monsterrec.AttackMaxHCastLvl(x)
-            txtAtkSuccess(x).Text = Monsterrec.AttackAccuSpell(x)
+            clsMonAtkSim.nAtkMin(x) = Monsterrec.AttackMinHCastPer(x) + nItemDamageBonus
+            clsMonAtkSim.nAtkMax(x) = Monsterrec.AttackMaxHCastLvl(x) + nItemDamageBonus
+            clsMonAtkSim.nAtkSuccess(x) = Monsterrec.AttackAccuSpell(x) + nItemAccyBonus
             If Monsterrec.AttackHitSpell(x) > 0 Then
                 
                 nStatus = GetSpell(Monsterrec.AttackHitSpell(x))
                 If nStatus = 0 Then
-                    cmbAtkResist(x).ListIndex = Spellrec.TypeOfResists
-                    txtAtkDur(x).Text = GetSpellDuration(Monsterrec.AttackHitSpell(x))
+                    clsMonAtkSim.nAtkResist(x) = Spellrec.TypeOfResists
+                    clsMonAtkSim.nAtkDuration(x) = GetSpellDuration(Monsterrec.AttackHitSpell(x))
                     
                     If SpellHasAbility(Monsterrec.AttackHitSpell(x), 1) >= 0 Then
-                        chkAtkDmgResist(x).Value = 0
-                        txtAtkHitSpellMin(x).Text = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
-                        txtAtkHitSpellMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
+                        clsMonAtkSim.nAtkMRdmgResist(x) = 0
+                        clsMonAtkSim.nAtkHitSpellMin(x) = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
+                        clsMonAtkSim.nAtkHitSpellMax(x) = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
                         
                     ElseIf SpellHasAbility(Monsterrec.AttackHitSpell(x), 17) >= 0 Then
-                        chkAtkDmgResist(x).Value = 1
-                        txtAtkHitSpellMin(x).Text = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
-                        txtAtkHitSpellMax(x).Text = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
+                        clsMonAtkSim.nAtkMRdmgResist(x) = 1
+                        clsMonAtkSim.nAtkHitSpellMin(x) = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
+                        clsMonAtkSim.nAtkHitSpellMax(x) = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
                         
                     Else
-                        txtAtkHitSpellMin(x).Text = 0
-                        txtAtkHitSpellMax(x).Text = 0
+                        clsMonAtkSim.nAtkHitSpellMin(x) = 0
+                        clsMonAtkSim.nAtkHitSpellMax(x) = 0
                     End If
                 End If
             End If
@@ -1572,31 +1599,74 @@ Next x
 nPercent = 0
 For x = 0 To 4
     If Monsterrec.SpellNumber(x) > 0 Then
-        txtBetweenSpellNumber(x).Text = Monsterrec.SpellNumber(x)
-        txtBetweenSpellCastPer(x).Text = Monsterrec.SpellCastPer(x) - nPercent
-        txtBetweenSpellCastLvL(x).Text = Monsterrec.SpellCastLvl(x)
-        nPercent = Monsterrec.SpellCastPer(x)
+        nStatus = GetSpell(Monsterrec.SpellNumber(x))
+        If nStatus = 0 Then
+            clsMonAtkSim.sBetweenRoundName(x) = ClipNull(Spellrec.Name)
+            clsMonAtkSim.nBetweenRoundResistType(x) = Spellrec.TypeOfResists
+            clsMonAtkSim.nBetweenRoundChance(x) = Monsterrec.SpellCastPer(x)
+            clsMonAtkSim.nBetweenRoundDuration(x) = GetSpellDuration(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+            
+            nTest = SpellHasAbility(Monsterrec.SpellNumber(x), 1) '1=damage
+            If nTest >= 0 Then
+                clsMonAtkSim.nBetweenRoundResistDmgMR(x) = 0 'NO MR resist
+                If nTest > 0 Then
+                    clsMonAtkSim.nBetweenRoundMin(x) = nTest
+                    clsMonAtkSim.nBetweenRoundMax(x) = nTest
+                Else
+                    clsMonAtkSim.nBetweenRoundMin(x) = GetSpellMinDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                    clsMonAtkSim.nBetweenRoundMax(x) = GetSpellMaxDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                End If
+            End If
+            
+            nTest = SpellHasAbility(Monsterrec.SpellNumber(x), 17) '17=damage-mr
+            If nTest >= 0 Then
+                clsMonAtkSim.nBetweenRoundResistDmgMR(x) = 1 'MR resist
+                If nTest > 0 Then
+                    clsMonAtkSim.nBetweenRoundMin(x) = nTest
+                    clsMonAtkSim.nBetweenRoundMax(x) = nTest
+                Else
+                    clsMonAtkSim.nBetweenRoundMin(x) = GetSpellMinDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                    clsMonAtkSim.nBetweenRoundMax(x) = GetSpellMaxDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                End If
+            End If
+            
+            nTest = SpellHasAbility(Monsterrec.SpellNumber(x), 8) '8=drain
+            If nTest >= 0 Then
+                clsMonAtkSim.nBetweenRoundResistDmgMR(x) = 0 'NO MR resist
+                If nTest > 0 Then
+                    clsMonAtkSim.nBetweenRoundMin(x) = nTest
+                    clsMonAtkSim.nBetweenRoundMax(x) = nTest
+                Else
+                    clsMonAtkSim.nBetweenRoundMin(x) = GetSpellMinDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                    clsMonAtkSim.nBetweenRoundMax(x) = GetSpellMaxDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                End If
+            End If
+        End If
     End If
 Next x
 
 For x = 0 To 4
-    If Len(txtAtkName(x).Text) > 0 Then
+    If Len(clsMonAtkSim.sAtkName(x)) > 0 Then
         For y = 0 To 4
-            If y <> x And txtAtkName(x).Text = txtAtkName(y).Text Then
-                txtAtkName(x).Text = txtAtkName(x).Text & "-" & (x + 1)
-                txtAtkName(y).Text = txtAtkName(y).Text & "-" & (y + 1)
+            If y <> x And clsMonAtkSim.sAtkName(x) = clsMonAtkSim.sAtkName(y) Then
+                clsMonAtkSim.sAtkName(x) = clsMonAtkSim.sAtkName(x) & "-" & (x + 1)
+                clsMonAtkSim.sAtkName(y) = clsMonAtkSim.sAtkName(y) & "-" & (y + 1)
             End If
         Next y
     End If
 Next x
 
+clsMonAtkSim.RunSim
+
+CalculateMonsterAvgDmg = clsMonAtkSim.nAverageDamage
+
 out:
 On Error Resume Next
-Exit Sub
+Exit Function
 error:
 Call HandleError("CalculateMonsterAvgDmg")
 Resume out:
-End Sub
+End Function
 
 Private Sub VerifyOneRecordInDBs()
 Dim x As Integer
@@ -4215,8 +4285,11 @@ Do While nStatus = 0 And bStopExport = False
         tabMonsters.Fields("ExpMulti") = SLong2ULong(Monsterrec.ExpMulti)
     End If
     
+    Call clsMonAtkSim.ResetValues
+    
     tabMonsters.Fields("HP") = Monsterrec.Hitpoints
     tabMonsters.Fields("Energy") = Monsterrec.Energy
+    tabMonsters.Fields("AvgDmg") = CalculateMonsterAvgDmg(Monsterrec.Number)
     tabMonsters.Fields("GreetTXT") = Monsterrec.GreetTxt
     tabMonsters.Fields("HPRegen") = Monsterrec.HPRegen
     tabMonsters.Fields("CharmLvL") = Monsterrec.CharmLvL
@@ -4239,6 +4312,13 @@ Do While nStatus = 0 And bStopExport = False
         tabMonsters.Fields("AttType-" & x) = Monsterrec.AttackType(x)
         tabMonsters.Fields("AttAcc-" & x) = Monsterrec.AttackAccuSpell(x)
         tabMonsters.Fields("Att%-" & x) = Monsterrec.AttackPer(x)
+        
+        If clsMonAtkSim.nStatAtkAttempted(x) > 0 And clsMonAtkSim.nTotalAttacks > 0 Then
+            tabMonsters.Fields("AttTrue%-" & x) = Round(clsMonAtkSim.nStatAtkAttempted(x) / clsMonAtkSim.nTotalAttacks, 3) * 100
+        Else
+            tabMonsters.Fields("AttTrue%-" & x) = 0
+        End If
+        
         tabMonsters.Fields("AttMin-" & x) = Monsterrec.AttackMinHCastPer(x)
         tabMonsters.Fields("AttMax-" & x) = Monsterrec.AttackMaxHCastLvl(x)
         tabMonsters.Fields("AttEnergy-" & x) = Monsterrec.AttackEnergy(x)
@@ -4978,7 +5058,7 @@ With tabNewMonsters
     If eDatFileVersion >= v111j Then .Columns.Append "ExpMulti", adDouble
     .Columns.Append "HP", adInteger
     .Columns.Append "Energy", adInteger
-    .Columns.Append "AvgDmg", adInteger
+    .Columns.Append "AvgDmg", adDouble
     .Columns.Append "GreetTXT", adInteger
     .Columns.Append "HPRegen", adInteger
     .Columns.Append "CharmLVL", adInteger
@@ -4999,6 +5079,7 @@ With tabNewMonsters
         .Columns.Append CStr("AttType-" & x), adInteger
         .Columns.Append CStr("AttAcc-" & x), adInteger
         .Columns.Append CStr("Att%-" & x), adInteger
+        .Columns.Append CStr("AttTrue%-" & x), adDouble
         .Columns.Append CStr("AttMin-" & x), adInteger
         .Columns.Append CStr("AttMax-" & x), adInteger
         .Columns.Append CStr("AttEnergy-" & x), adInteger

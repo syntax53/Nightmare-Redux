@@ -2513,10 +2513,16 @@ If Not nStatus = 0 And Not nStatus = 9 Then
     MsgBox "LoadSpells, Error: " & BtrieveErrorCode(nStatus)
 End If
 
-If lvDatabase.ListItems.Count >= 1 Then Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+If lvDatabase.ListItems.Count >= 1 Then
+    lvDatabase.refresh
+    If bOppositeListOrder Then
+        SortListView lvDatabase, 1, ldtNumber, False
+    Else
+        SortListView lvDatabase, 1, ldtNumber, True
+    End If
+    Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+End If
 
-lvDatabase.refresh
-SortListView lvDatabase, 1, ldtNumber, True
 bLoaded = True
 
 Exit Sub

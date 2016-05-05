@@ -47,6 +47,7 @@ Private m_nNumberOfRounds As Long
 Private m_nTotalAttacks As Currency
 Private m_nTotalDamage As Currency
 Private m_nMaxRoundDamage As Currency
+Private m_nAverageDamage As Currency
 
 Private m_bDynamicCalc As Boolean
 Private m_bUseCPU As Boolean
@@ -76,6 +77,10 @@ Private nActiveBetweenSpells_Ticks(0 To 4) As Integer
 Private nActiveBetweenSpells_DurationLeft(0 To 4) As Currency
 Private nActiveBetweenSpells_Value(0 To 4) As Integer
 Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
+
+Public Property Get nAverageDamage() As Currency
+    nAverageDamage = m_nAverageDamage
+End Property
 
 Public Property Let bDynamicCalc(ByVal vData As Boolean)
     m_bDynamicCalc = vData
@@ -186,7 +191,7 @@ Public Function RandomNumber(startNum As Integer, endNum As Integer) As Integer
 End Function
 
 Private Sub AddToCombatLog(sLeft As String, Optional sRight As String = "")
-'On Error GoTo error:
+On Error GoTo error:
 
 If nCombatLogRoundCount >= m_nCombatLogMaxRounds Then Exit Sub
 If Len(sRight) > 0 And Len(sLeft) > 29 Then
@@ -211,10 +216,10 @@ Dim bAttackHit As Boolean, bDodged As Boolean, bGlanced As Boolean, bResisted As
 Dim nLastAttackType As Integer, nLastAttackEnergy As Integer, nAttack_AdjSuccessChance As Currency
 Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer
 Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOriginalDamage As Currency
-Dim bSepShown As Boolean, bDurSpellApplied As Boolean
+Dim bSepShown As Boolean, bDurSpellApplied As Boolean, bNothingToSim As Boolean
 Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
 
-'On Error GoTo error:
+On Error GoTo error:
 
 Randomize
 If m_bDynamicCalc Then m_nNumberOfRounds = 100000
@@ -226,6 +231,18 @@ m_nTotalDamage = 0
 m_nMaxRoundDamage = 0
 
 Call ResetActiveSpells
+
+bNothingToSim = True: x = 0
+Do While x <= 4 And bNothingToSim
+    If m_nAtkMin(x) > 0 Then bNothingToSim = False
+    If m_nAtkMax(x) > 0 Then bNothingToSim = False
+    If m_nAtkHitSpellMin(x) > 0 Then bNothingToSim = False
+    If m_nAtkHitSpellMax(x) > 0 Then bNothingToSim = False
+    If m_nBetweenRoundMin(x) > 0 Then bNothingToSim = False
+    If m_nBetweenRoundMax(x) > 0 Then bNothingToSim = False
+    x = x + 1
+Loop
+If bNothingToSim Then GoTo end_sim:
 
 Call ProgressBarSetRange(m_nNumberOfRounds)
 
@@ -690,22 +707,19 @@ duration_ticks:
     Call AddToCombatLog("==================================================================")
     nCombatLogRoundCount = nCombatLogRoundCount + 1
     
-    Call ProgressBarIncrease
-    If Not m_bUseCPU Then DoEvents
-    
     If nDynamicRoundCount > 1000 And m_bDynamicCalc Then
         If nCurrentAverageDamage = 0 Then
             nCurrentAverageDamage = Round(m_nTotalDamage / nRound, 3)
             If nCurrentAverageDamage < 1 Then
                 m_nNumberOfRounds = nRound
-                Exit Sub
+                GoTo end_sim:
             End If
             nDynamicRoundCount = 0
         Else
             nDifference = Abs(1 - (Round(m_nTotalDamage / nRound, 3) / nCurrentAverageDamage))
             If nDifference < 0.0001 Then
                 m_nNumberOfRounds = nRound
-                Exit Sub
+                GoTo end_sim:
             Else
                 nCurrentAverageDamage = Round(m_nTotalDamage / nRound, 3)
                 nDynamicRoundCount = 0
@@ -713,7 +727,16 @@ duration_ticks:
         End If
     End If
     nDynamicRoundCount = nDynamicRoundCount + 1
+    
+    Call ProgressBarIncrease
+    If Not m_bUseCPU Then DoEvents
+    
 Next nRound
+
+end_sim:
+If nRound > 0 Then
+    m_nAverageDamage = Round(m_nTotalDamage / nRound, 1)
+End If
 
 out:
 On Error Resume Next

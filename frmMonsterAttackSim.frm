@@ -4365,7 +4365,7 @@ End Sub
 Public Sub PopulateAttacks(nMonster As Long)
 Dim nStatus As Integer, x As Integer, y As Integer
 Dim nPercent As Integer, sTemp As String, nTest As Integer
-'On Error GoTo error:
+On Error GoTo error:
 
 nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonster, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
@@ -4695,30 +4695,6 @@ nAccyArr = Array(22, 105, 106) '22, 105, 106 = accuracy
 nItemDamageBonus = CalculateItemBonuses(nDamageArr)
 nItemAccyBonus = CalculateItemBonuses(nAccyArr)
 
-For x = 0 To 9
-    If Val(txtItemNumber(x).Text) > 0 Then
-        '4 = max dam
-        nTest = ItemHasAbility(Val(txtItemNumber(x).Text), 4)
-        If nTest > 0 Then
-            nItemDamageBonus = nItemDamageBonus + (nTest * (Val(txtItemDropPer(x).Text) / 100))
-        End If
-        
-        'accy = 22, 105, 106
-        nTest = ItemHasAbility(Val(txtItemNumber(x).Text), 22)
-        If nTest > 0 Then
-            nItemAccyBonus = nItemAccyBonus + (nTest * (Val(txtItemDropPer(x).Text) / 100))
-        End If
-        nTest = ItemHasAbility(Val(txtItemNumber(x).Text), 105)
-        If nTest > 0 Then
-            nItemAccyBonus = nItemAccyBonus + (nTest * (Val(txtItemDropPer(x).Text) / 100))
-        End If
-        nTest = ItemHasAbility(Val(txtItemNumber(x).Text), 106)
-        If nTest > 0 Then
-            nItemAccyBonus = nItemAccyBonus + (nTest * (Val(txtItemDropPer(x).Text) / 100))
-        End If
-    End If
-Next x
-
 nPrevPercent = 0
 For x = 0 To 4
     txtStatTrueCast(x).Text = ""
@@ -4876,7 +4852,6 @@ On Error GoTo error:
 
 Call RefreshMonsters
 Call ResetMonsterFields
-Call chkDynamicRounds_Click
 
 For x = 0 To 4
     cmbAtkType(x).ListIndex = 0
@@ -4895,6 +4870,9 @@ txtUserDR.Text = ReadINI("Options", "MonSim-UserDR")
 txtUserDodge.Text = ReadINI("Options", "MonSim-UserDodge")
 txtUserMR.Text = ReadINI("Options", "MonSim-UserMR")
 chkUserAntiMagic.Value = ReadINI("Options", "MonSim-UserAntiMagic", , 0)
+chkDynamicRounds.Value = ReadINI("Options", "MonSim-DynamicRounds", , 1)
+
+Call chkDynamicRounds_Click
 
 Me.Left = ReadINI("Windows", "MonSim-Left")
 Me.Top = ReadINI("Windows", "MonSim-Top")
@@ -4962,6 +4940,7 @@ Call WriteINI("Options", "MonSim-UserDR", txtUserDR.Text)
 Call WriteINI("Options", "MonSim-UserDodge", txtUserDodge.Text)
 Call WriteINI("Options", "MonSim-UserMR", txtUserMR.Text)
 Call WriteINI("Options", "MonSim-UserAntiMagic", chkUserAntiMagic.Value)
+Call WriteINI("Options", "MonSim-DynamicRounds", chkDynamicRounds.Value)
 
 Call WriteINI("Windows", "MonSim-Left", Me.Left)
 Call WriteINI("Windows", "MonSim-Top", Me.Top)
@@ -4976,6 +4955,10 @@ End If
 End Sub
 
 
+Private Sub txtAtkChance_GotFocus(Index As Integer)
+Call SelectAll(txtAtkChance(Index))
+End Sub
+
 Private Sub txtAtkChance_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
@@ -4984,32 +4967,96 @@ Private Sub txtAtkChance_KeyUp(Index As Integer, KeyCode As Integer, Shift As In
 Call CheckAttackPercents
 End Sub
 
+Private Sub txtAtkDur_GotFocus(Index As Integer)
+Call SelectAll(txtAtkDur(Index))
+End Sub
+
+Private Sub txtAtkEnergy_GotFocus(Index As Integer)
+Call SelectAll(txtAtkEnergy(Index))
+End Sub
+
 Private Sub txtAtkEnergy_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtAtkHitSpellMax_GotFocus(Index As Integer)
+Call SelectAll(txtAtkHitSpellMax(Index))
 End Sub
 
 Private Sub txtAtkHitSpellMax_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
+Private Sub txtAtkHitSpellMin_GotFocus(Index As Integer)
+Call SelectAll(txtAtkHitSpellMin(Index))
+End Sub
+
 Private Sub txtAtkHitSpellMin_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtAtkMax_GotFocus(Index As Integer)
+Call SelectAll(txtAtkMax(Index))
 End Sub
 
 Private Sub txtAtkMax_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
+Private Sub txtAtkMin_GotFocus(Index As Integer)
+Call SelectAll(txtAtkMin(Index))
+End Sub
+
 Private Sub txtAtkMin_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtAtkName_GotFocus(Index As Integer)
+Call SelectAll(txtAtkName(Index))
+End Sub
+
+Private Sub txtAtkSuccess_GotFocus(Index As Integer)
+Call SelectAll(txtAtkSuccess(Index))
 End Sub
 
 Private Sub txtAtkSuccess_KeyPress(Index As Integer, KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
+Private Sub txtBetweenSpellCastLvL_GotFocus(Index As Integer)
+Call SelectAll(txtBetweenSpellCastLvL(Index))
+End Sub
+
+Private Sub txtBetweenSpellCastLvL_KeyPress(Index As Integer, KeyAscii As Integer)
+KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtBetweenSpellCastPer_GotFocus(Index As Integer)
+Call SelectAll(txtBetweenSpellCastPer(Index))
+End Sub
+
+Private Sub txtBetweenSpellCastPer_KeyPress(Index As Integer, KeyAscii As Integer)
+KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtBetweenSpellNumber_GotFocus(Index As Integer)
+Call SelectAll(txtBetweenSpellNumber(Index))
+End Sub
+
+Private Sub txtBetweenSpellNumber_KeyPress(Index As Integer, KeyAscii As Integer)
+KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
 Private Sub txtItemDropPer_Change(Index As Integer)
 Call UpdateItemBonusDisplay
+End Sub
+
+Private Sub txtItemDropPer_GotFocus(Index As Integer)
+Call SelectAll(txtItemDropPer(Index))
+End Sub
+
+Private Sub txtItemDropPer_KeyPress(Index As Integer, KeyAscii As Integer)
+KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
 Private Sub txtItemNumber_Change(Index As Integer)
@@ -5028,10 +5075,26 @@ Call HandleError("txtItemNumber_Change")
 Resume out:
 End Sub
 
+Private Sub txtItemNumber_GotFocus(Index As Integer)
+Call SelectAll(txtItemNumber(Index))
+End Sub
+
+Private Sub txtItemNumber_KeyPress(Index As Integer, KeyAscii As Integer)
+KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtMonsterEnergy_GotFocus()
+Call SelectAll(txtMonsterEnergy(Index))
+End Sub
+
 Private Sub txtMonsterEnergy_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
+
+Private Sub txtNumRounds_GotFocus()
+Call SelectAll(txtNumRounds)
+End Sub
 
 Private Sub txtNumRounds_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
@@ -5122,16 +5185,32 @@ Call HandleError("txtSpellNumber_Change")
 Resume out:
 End Sub
 
+Private Sub txtUserAC_GotFocus()
+Call SelectAll(txtUserAC)
+End Sub
+
 Private Sub txtUserAC_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtUserDodge_GotFocus()
+Call SelectAll(txtUserDodge)
 End Sub
 
 Private Sub txtUserDodge_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub
 
+Private Sub txtUserDR_GotFocus()
+Call SelectAll(txtUserDR)
+End Sub
+
 Private Sub txtUserDR_KeyPress(KeyAscii As Integer)
 KeyAscii = NumberKeysOnly(KeyAscii)
+End Sub
+
+Private Sub txtUserMR_GotFocus()
+Call SelectAll(txtUserMR)
 End Sub
 
 Private Sub txtUserMR_KeyPress(KeyAscii As Integer)
@@ -5153,4 +5232,12 @@ Exit Sub
 error:
 Call HandleError("txtWeaponNumber_Change")
 Resume out:
+End Sub
+
+Private Sub txtWeaponNumber_GotFocus()
+Call SelectAll(txtWeaponNumber)
+End Sub
+
+Private Sub txtWeaponNumber_KeyPress(KeyAscii As Integer)
+KeyAscii = NumberKeysOnly(KeyAscii)
 End Sub

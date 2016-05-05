@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmClass 
    Caption         =   "Class Editor"
    ClientHeight    =   5205
@@ -883,7 +883,7 @@ Dim nCurrentRecord As Integer
 
 Private Sub cmdAbilsClear_Click()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 9
     txtAbilityA(x).Text = 0
@@ -892,7 +892,7 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdAbilsClear_Click")
 Resume out:
 
@@ -947,7 +947,7 @@ Private Sub cmdEditTitleText_Click()
 End Sub
 
 Private Sub cmdSave_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 If lvDatabase.SelectedItem Is Nothing Then Exit Sub
@@ -970,14 +970,14 @@ Set oLI = Nothing
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdSave_Click")
 Resume out:
 
 End Sub
 
 Private Sub LoadClasses()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 
 lvDatabase.ColumnHeaders.clear
@@ -1009,20 +1009,25 @@ End If
 
 Call modMain.LoadClassArray
 
-If lvDatabase.ListItems.Count >= 1 Then Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+If lvDatabase.ListItems.Count >= 1 Then
+    lvDatabase.refresh
+    If bOppositeListOrder Then
+        SortListView lvDatabase, 1, ldtNumber, False
+    Else
+        SortListView lvDatabase, 1, ldtNumber, True
+    End If
+    Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+End If
 
-lvDatabase.refresh
-SortListView lvDatabase, 1, ldtNumber, True
 bLoaded = True
-
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub AddClassToLV(ByVal nNumber As Integer)
 Dim nStatus As Integer, oLI As ListItem
-On Error GoTo Error:
+On Error GoTo error:
 
 If Not nNumber = Classrec.Number Then
     nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nNumber, KEY_BUF_LEN, 0)
@@ -1044,12 +1049,12 @@ oLI.ListSubItems.add (7), "HP", Classrec.MinHp & "-" & (Classrec.MinHp + Classre
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
 Private Sub DispClassInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 Call ClassRowToStruct(row())
@@ -1073,7 +1078,7 @@ For x = 0 To 9
 Next x
 
 Exit Sub
-Error:
+error:
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
     & "Previous records stats may still be in memory.  Select 'Disable DB Writing'" & vbCrLf _
@@ -1126,7 +1131,7 @@ Call txtAbilityA_Change(Index)
 End Sub
 
 Private Sub saverecord(ByVal nRecord As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, x As Integer
 
 If nRecord = 0 Then Exit Sub
@@ -1163,7 +1168,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -1290,7 +1295,7 @@ Next x
 End Sub
 
 Private Sub cmdDelete_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nDelete As Integer, temp As Long
 
@@ -1331,12 +1336,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdInsert_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nNewClassNumber As String, oLI As ListItem
 
@@ -1381,7 +1386,7 @@ End If
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub

@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form frmSettings 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Settings"
-   ClientHeight    =   4185
+   ClientHeight    =   4605
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   8745
@@ -11,7 +11,7 @@ Begin VB.Form frmSettings
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   4185
+   ScaleHeight     =   4605
    ScaleWidth      =   8745
    Begin VB.Frame Frame2 
       Caption         =   "Previous Saves:"
@@ -34,16 +34,24 @@ Begin VB.Form frmSettings
       Height          =   375
       Left            =   3300
       TabIndex        =   25
-      Top             =   3720
+      Top             =   4140
       Width           =   1935
    End
    Begin VB.Frame Frame4 
       Caption         =   "Settings"
-      Height          =   3555
+      Height          =   3975
       Left            =   5760
       TabIndex        =   6
       Top             =   60
       Width           =   2895
+      Begin VB.CheckBox chkOppositeListOrder 
+         Caption         =   "Load Lists in Opposite Order (Highest Record # First)"
+         Height          =   375
+         Left            =   180
+         TabIndex        =   27
+         Top             =   3480
+         Width           =   2430
+      End
       Begin VB.CheckBox chkOnlyNames 
          Caption         =   "Only Load # && Name Columns (Speedier on Editors w/Lists)"
          Height          =   435
@@ -196,7 +204,7 @@ Begin VB.Form frmSettings
       Height          =   375
       Left            =   7380
       TabIndex        =   26
-      Top             =   3720
+      Top             =   4140
       Width           =   1275
    End
    Begin VB.CommandButton cmdSave 
@@ -204,18 +212,18 @@ Begin VB.Form frmSettings
       Height          =   375
       Left            =   60
       TabIndex        =   24
-      Top             =   3720
+      Top             =   4140
       Width           =   1035
    End
    Begin VB.Frame Frame1 
       Caption         =   "Datfile Path"
-      Height          =   2835
+      Height          =   3255
       Left            =   60
       TabIndex        =   2
       Top             =   780
       Width           =   5595
       Begin VB.FileListBox File1 
-         Height          =   2430
+         Height          =   2820
          Left            =   3120
          Pattern         =   "w*.dat"
          TabIndex        =   5
@@ -223,7 +231,7 @@ Begin VB.Form frmSettings
          Width           =   2295
       End
       Begin VB.DirListBox Dir1 
-         Height          =   2115
+         Height          =   2565
          Left            =   120
          TabIndex        =   4
          Top             =   600
@@ -298,6 +306,7 @@ chkTaskHide.Value = Val(ReadINI("Settings", "TaskBarAutoHide"))
 cmbTaskPos.ListIndex = Val(ReadINI("Settings", "TaskBarPos"))
 txtTaskDelay.Text = Val(ReadINI("Settings", "TaskBarDelay"))
 chkOnlyNames.Value = Val(ReadINI("Settings", "OnlyLoadNames"))
+chkOppositeListOrder.Value = Val(ReadINI("Settings", "OppositeListOrder"))
 
 If Val(txtTaskDelay.Text) < 1 Then txtTaskDelay.Text = 1
 
@@ -490,6 +499,7 @@ Call WriteINI("Settings", "eDatFileVersion" & IIf(WorksWithN = True, "_n", ""), 
 Call WriteINI("Settings", "UseCPU", chkUseCPU.Value)
 Call WriteINI("Settings", "AutoMonsterIndex", chkAutoMonsterIndex.Value)
 Call WriteINI("Settings", "OnlyLoadNames", chkOnlyNames.Value)
+Call WriteINI("Settings", "OppositeListOrder", chkOppositeListOrder.Value)
 
 Call WriteINI("Settings", "TaskBarAutoHide", chkTaskHide.Value)
 Call WriteINI("Settings", "TaskBarPos", cmbTaskPos.ListIndex)
@@ -587,3 +597,5 @@ Private Sub txtTaskDelay_GotFocus()
 Call SelectAll(txtTaskDelay)
 
 End Sub
+
+
