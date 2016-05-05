@@ -4531,6 +4531,9 @@ Do While nStatus = 0 And bStopExport = False
                 
                 Case 6: 'Hidden
                     Select Case Roomrec.Para1(x)
+                        Case 0:
+                            tabRooms.Fields(sDir) = 0 'error, no exit
+                            GoTo nextexit:
                         Case 1, 3: 'passable
                             sTemp = " (Hidden/Passable)"
                         Case 2, 4: 'searchable

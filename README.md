@@ -5,14 +5,17 @@ v1.8 (??/??/2016)
 -NEW: Monster attack simulator and Average/Max round calculator  
 -NEW: Setting to auto sort editors with lists in reverse order (highest record numbers first)  
 -NEW: Added "Find First" and "Find Last" room on map buttons to room editor  
--UP: Added spells resist type field to MME export for future MME enhancement  
--UP: Added attack names field to MME export for future MME enhancement  
--UP: Added average monster damage and true attack percentages to MME export for future MME enhancement (unique fields for MME)  
--UP: Added room 1/238 to default excluded rooms on MME export  
--UP: Additional references now shown for some items and spells on MME exports
 -UP: Changed drop down spell editor's "Type of Resist" to what I believe they actually mean  
 -UP: Added logging of the second universal modifier's only if option when chosen  
 -FIX: Universal modifier reported that it would set the directive to "0" when setting something to "= ##" (only the message was wrong, not the action)  
+
+-MME Export Updates (for future MME enhancements):  
+-UP: Added spell resist type (if the spell is completely resistible)  
+-UP: Added attack names field (will show attack names on monster details and in simulator)  
+-UP: Added average monster damage and true attack percentages (unique, calculated fields for MME)  
+-UP: Added room 1/238 to default list of excluded rooms  
+-UP: hidden exits with a 0 in para1 will no longer be considered an exit  
+-UP: Additional references now shown for some items and spells  
 -FIX: Fix for MME export erroring out when having a large number of database records  
 
 v1.7.1 (4/2/2016)  
