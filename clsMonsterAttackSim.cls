@@ -50,6 +50,7 @@ Private m_nMaxRoundDamage As Currency
 Private m_nAverageDamage As Currency
 
 Private m_bDynamicCalc As Boolean
+Private m_nDynamicCalcDifference As Currency
 Private m_bUseCPU As Boolean
 
 Private m_cProgressBar As ProgressBar
@@ -80,6 +81,14 @@ Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
 
 Public Property Get nAverageDamage() As Currency
     nAverageDamage = m_nAverageDamage
+End Property
+
+Public Property Let nDynamicCalcDifference(ByVal vData As Currency)
+    m_nDynamicCalcDifference = vData
+End Property
+
+Public Property Get nDynamicCalcDifference() As Currency
+    nDynamicCalcDifference = m_nDynamicCalcDifference
 End Property
 
 Public Property Let bDynamicCalc(ByVal vData As Boolean)
@@ -717,7 +726,7 @@ duration_ticks:
             nDynamicRoundCount = 0
         Else
             nDifference = Abs(1 - (Round(m_nTotalDamage / nRound, 3) / nCurrentAverageDamage))
-            If nDifference < 0.0001 Then
+            If nDifference < nDynamicCalcDifference Then
                 m_nNumberOfRounds = nRound
                 GoTo end_sim:
             Else
@@ -1177,5 +1186,6 @@ End Property
 
 Private Sub Class_Initialize()
 m_nCombatLogMaxRounds = 10
+m_nDynamicCalcDifference = 0.0001
 Randomize
 End Sub

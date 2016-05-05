@@ -1488,11 +1488,12 @@ If Monsterrec.Number <> nMonster Then
 End If
 
 Call clsMonAtkSim.ResetValues
-clsMonAtkSim.bDynamicCalc = False
 clsMonAtkSim.bUseCPU = True
 clsMonAtkSim.nCombatLogMaxRounds = 0
 clsMonAtkSim.nNumberOfRounds = 2000
 clsMonAtkSim.nUserMR = 50
+clsMonAtkSim.bDynamicCalc = True
+clsMonAtkSim.nDynamicCalcDifference = 0.01
 
 clsMonAtkSim.nEnergyPerRound = Monsterrec.Energy
 
@@ -1649,8 +1650,8 @@ For x = 0 To 4
     If Len(clsMonAtkSim.sAtkName(x)) > 0 Then
         For y = 0 To 4
             If y <> x And clsMonAtkSim.sAtkName(x) = clsMonAtkSim.sAtkName(y) Then
-                clsMonAtkSim.sAtkName(x) = clsMonAtkSim.sAtkName(x) & "-" & (x + 1)
-                clsMonAtkSim.sAtkName(y) = clsMonAtkSim.sAtkName(y) & "-" & (y + 1)
+                clsMonAtkSim.sAtkName(x) = Trim(clsMonAtkSim.sAtkName(x)) & (x + 1)
+                clsMonAtkSim.sAtkName(y) = Trim(clsMonAtkSim.sAtkName(y)) & (y + 1)
             End If
         Next y
     End If

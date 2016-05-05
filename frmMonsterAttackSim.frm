@@ -4518,8 +4518,8 @@ For x = 0 To 4
     If Len(txtAtkName(x).Text) > 0 Then
         For y = 0 To 4
             If y <> x And txtAtkName(x).Text = txtAtkName(y).Text Then
-                txtAtkName(x).Text = txtAtkName(x).Text & "-" & (x + 1)
-                txtAtkName(y).Text = txtAtkName(y).Text & "-" & (y + 1)
+                txtAtkName(x).Text = Trim(txtAtkName(x).Text) & (x + 1)
+                txtAtkName(y).Text = Trim(txtAtkName(y).Text) & (y + 1)
             End If
         Next y
     End If
