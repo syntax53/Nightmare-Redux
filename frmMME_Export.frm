@@ -7,14 +7,14 @@ Begin VB.Form frmMME_Export
    ClientHeight    =   5385
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   5520
+   ClientWidth     =   5490
    ClipControls    =   0   'False
    Icon            =   "frmMME_Export.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    ScaleHeight     =   5385
-   ScaleWidth      =   5520
+   ScaleWidth      =   5490
    Begin VB.CommandButton cmdAddtlOptions 
       Caption         =   "Additional Options"
       Height          =   555
@@ -541,6 +541,7 @@ Option Base 0
 Option Explicit
 
 Const nPasses = 10
+Dim bSomethingMarkedInGame As Boolean
 
 Dim clsMonAtkSim As New clsMonsterAttackSim
 
@@ -936,6 +937,7 @@ ReDim nDefaultExcludeTo(0) As Long
 ReDim sDefaultExcludeNote(0) As String
 
 Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
 Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
 
 Call AddToDefaultsArr(x, 1, 2779, 2782, "sysop support module test rooms")
@@ -1722,6 +1724,7 @@ If chkOnly(0).Value = 1 Then
         tabItems.Fields("Retain After Uses") = 0
         tabItems.Fields("In Game") = 0
         tabItems.Fields("Obtained From") = Chr(0)
+        tabItems.Fields("References") = Chr(0)
         
         For x = 0 To 9
             tabItems.Fields("ClassRest-" & x) = 0
@@ -1758,6 +1761,8 @@ If chkOnly(0).Value = 1 Then
         End If
         
         tabMonsters.Fields("HP") = 0
+        tabMonsters.Fields("Energy") = 0
+        tabMonsters.Fields("AvgDmg") = 0
         tabMonsters.Fields("GreetTXT") = 0
         tabMonsters.Fields("HPRegen") = 0
         tabMonsters.Fields("CharmLvL") = 0
@@ -1776,9 +1781,11 @@ If chkOnly(0).Value = 1 Then
         tabMonsters.Fields("Summoned By") = Chr(0)
         
         For x = 0 To 4
+            tabMonsters.Fields("AttName-" & x) = ""
             tabMonsters.Fields("AttType-" & x) = 0
             tabMonsters.Fields("AttAcc-" & x) = 0
             tabMonsters.Fields("Att%-" & x) = 0
+            tabMonsters.Fields("AttTrue%-" & x) = 0
             tabMonsters.Fields("AttMin-" & x) = 0
             tabMonsters.Fields("AttMax-" & x) = 0
             tabMonsters.Fields("AttEnergy-" & x) = 0
@@ -1814,6 +1821,7 @@ If chkOnly(0).Value = 1 Then
         tabSpells.Fields("Targets") = 0
         tabSpells.Fields("Dur") = 0
         tabSpells.Fields("AttType") = 0
+        tabSpells.Fields("TypeOfResists") = 0
         tabSpells.Fields("Magery") = 0
         tabSpells.Fields("MageryLVL") = 0
         tabSpells.Fields("Cap") = 0
@@ -1826,6 +1834,7 @@ If chkOnly(0).Value = 1 Then
         tabSpells.Fields("Learnable") = 0
         tabSpells.Fields("Learned From") = Chr(0)
         tabSpells.Fields("Casted By") = Chr(0)
+        tabSpells.Fields("Classes") = Chr(0)
         
         For x = 0 To 9
             tabSpells.Fields("Abil-" & x) = 0
@@ -1861,7 +1870,7 @@ If nNum = 0 Then Exit Sub
 
 tabShops.Index = "pkShops"
 tabShops.Seek "=", nNum
-If Not tabShops.NoMatch = True Then
+If tabShops.NoMatch = False Then
     
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabShops.Fields("Assigned To")
@@ -1899,8 +1908,9 @@ On Error GoTo error:
 If nNum = 0 Then Exit Sub
 
 If UBound(MonsterInGame()) < nNum Then ReDim Preserve MonsterInGame(nNum)
+If Not MonsterInGame(nNum) Then bSomethingMarkedInGame = True
 MonsterInGame(nNum) = True
-                        
+
 tabMonsters.Index = "pkMonsters"
 tabMonsters.Seek "=", nNum
 If Not tabMonsters.NoMatch = True Then
@@ -1948,8 +1958,9 @@ Else
 End If
 
 If UBound(ItemInGame()) < nNum Then ReDim Preserve ItemInGame(nNum)
+If Not ItemInGame(nNum) Then bSomethingMarkedInGame = True
 ItemInGame(nNum) = True
-                        
+
 'If InStr(1, sFrom, "9494") > 0 Then
 '    Debug.Print ""
 'End If
@@ -1997,7 +2008,9 @@ On Error GoTo error:
 If nNum = 0 Then Exit Sub
 
 If UBound(SpellInGame()) < nNum Then ReDim Preserve SpellInGame(nNum)
+If Not SpellInGame(nNum) Then bSomethingMarkedInGame = True
 SpellInGame(nNum) = True
+
 
 'if we are not defining where the spell is learned from, exit
 
@@ -2077,6 +2090,7 @@ tabTBInfo.Index = "pkTBInfo"
 tabTBInfo.Seek "=", nNum
 'if nomatch add a new one, if match add sfrom
 If tabTBInfo.NoMatch = True Then
+    bSomethingMarkedInGame = True
     tabTBInfo.AddNew
     tabTBInfo.Fields("Number") = nNum
     tabTBInfo.Fields("LinkTo") = 0
@@ -2596,7 +2610,8 @@ Do While nStatus = 0 And bStopExport = False
                                 If SpellFromContainerRef(Spellrec.Number) = True Then
                                     If UBound(TBFromBadSource()) < nNumber Then _
                                         ReDim Preserve TBFromBadSource(nNumber)
-                                    TBFromBadSource(nNumber) = True
+                                    'TBFromBadSource(nNumber) = True
+                                    '^ commented 5/5/2016
                                 End If
                             End If
                             
@@ -3503,7 +3518,7 @@ nextnumber:
                     If UBound(TBFromBadSource()) < TBNumber Then _
                         ReDim Preserve TBFromBadSource(TBNumber)
                     If TBFromBadSource(TBNumber) = True Then
-                        'Debug.Print "TBFromBadSource/Spell:" & nNumber
+                        'Text1.Text = Text1.Text & vbCrLf & "TB/Spell:" & TBNumber & "/" & nNumber
                         Call MarkSpellInGame(nNumber)
                     Else
                         sClasses = CheckForClassRestriction(sWhole, x)
@@ -3514,11 +3529,14 @@ nextnumber:
                 End If
                 
             Case 1: 'item
+'                If nNumber = 950 Then
+'                    nNumber = nNumber
+'                End If
                 If bGiveItem Then
                     If UBound(TBFromBadSource()) < TBNumber Then _
                         ReDim Preserve TBFromBadSource(TBNumber)
                     If TBFromBadSource(TBNumber) = True Then
-                        'Debug.Print "TBFromBadSource/Item:" & nNumber
+                        'Text1.Text = Text1.Text & vbCrLf & "TB/Item:" & TBNumber & "/" & nNumber
                         Call MarkItemInGame(nNumber)
                     Else
                         Call MarkItemInGame(nNumber, "Textblock #" & TBNumber & sSuffix)
@@ -3791,7 +3809,10 @@ DoEvents
 If bStopExport = True Then Exit Sub
 Call ScanShops
 
-For x = 1 To nPasses
+x = 1
+Do While (x <= nPasses Or bSomethingMarkedInGame = True) And x < 20
+    bSomethingMarkedInGame = False
+    
     If bStopExport = True Then Exit Sub
     lblPanel(0).Caption = "Cross Referencing (" & x & "/" & nPasses & ") ..."
     DoEvents
@@ -3806,7 +3827,9 @@ For x = 1 To nPasses
     DoEvents
     Call ScanItems
     If bStopExport = True Then Exit Sub
-Next x
+    
+    x = x + 1
+Loop
 
 DoEvents
 Call ScanContainers

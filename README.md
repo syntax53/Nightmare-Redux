@@ -8,6 +8,8 @@ v1.8 (??/??/2016)
 -UP: Added spells resist type field to MME export for future MME enhancement  
 -UP: Added attack names field to MME export for future MME enhancement  
 -UP: Added average monster damage and true attack percentages to MME export for future MME enhancement (unique fields for MME)  
+-UP: Added room 1/238 to default excluded rooms on MME export  
+-UP: Additional references now shown for some items and spells on MME exports
 -UP: Changed drop down spell editor's "Type of Resist" to what I believe they actually mean  
 -UP: Added logging of the second universal modifier's only if option when chosen  
 -FIX: Universal modifier reported that it would set the directive to "0" when setting something to "= ##" (only the message was wrong, not the action)  
