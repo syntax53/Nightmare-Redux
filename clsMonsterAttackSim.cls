@@ -48,6 +48,7 @@ Private m_nTotalAttacks As Currency
 Private m_nTotalDamage As Currency
 Private m_nMaxRoundDamage As Currency
 Private m_nAverageDamage As Currency
+Private m_nMaxEnergyPerRound As Long
 
 Private m_bDynamicCalc As Boolean
 Private m_nDynamicCalcDifference As Currency
@@ -60,6 +61,7 @@ Private nProgressBarScaleCount As Long
 Private m_sCombatLog As String
 Private m_nCombatLogMaxRounds As Long
 Private nCombatLogRoundCount As Long
+Private m_bCombatLogMaxRoundOnly As Boolean
 
 Private m_sBetweenRoundName(0 To 4) As String
 Private m_nBetweenRoundMin(0 To 4) As Integer
@@ -78,6 +80,18 @@ Private nActiveBetweenSpells_Ticks(0 To 4) As Integer
 Private nActiveBetweenSpells_DurationLeft(0 To 4) As Currency
 Private nActiveBetweenSpells_Value(0 To 4) As Integer
 Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
+
+Public Property Let bCombatLogMaxRoundOnly(ByVal vData As Boolean)
+    m_bCombatLogMaxRoundOnly = vData
+End Property
+
+Public Property Get bCombatLogMaxRoundOnly() As Boolean
+    bCombatLogMaxRoundOnly = m_bCombatLogMaxRoundOnly
+End Property
+
+Public Property Get nMaxEnergyPerRound() As Long
+    nMaxEnergyPerRound = m_nMaxEnergyPerRound
+End Property
 
 Public Property Get nAverageDamage() As Currency
     nAverageDamage = m_nAverageDamage
@@ -217,6 +231,131 @@ Call privHandleError("AddToCombatLog")
 Resume out:
 End Sub
 
+Public Function GetMaxDamage()
+Dim x As Integer, bNothingToSim As Boolean
+Dim nAttack As Integer, nAttempt As Integer
+Dim nLeastEnergyUsed As Long, nLowestCostAttack As Long, nLowEnergy As Long
+Dim nMaxEnergyRound As Long, nMaxCostAttack As Long
+Dim nDamage As Long, nMaxDamage As Long, nMaxAttempts As Integer, nMaxDPE As Currency
+Dim nEnergyForAttack As Long, nEnergyRemaining As Long, nDamagePerEnergy As Currency
+On Error GoTo error:
+
+bNothingToSim = True: x = 0
+Do While x <= 4 And bNothingToSim
+    If m_nAtkMin(x) > 0 Then bNothingToSim = False
+    If m_nAtkMax(x) > 0 Then bNothingToSim = False
+    If m_nAtkHitSpellMin(x) > 0 Then bNothingToSim = False
+    If m_nAtkHitSpellMax(x) > 0 Then bNothingToSim = False
+    If m_nBetweenRoundMin(x) > 0 Then bNothingToSim = False
+    If m_nBetweenRoundMax(x) > 0 Then bNothingToSim = False
+    x = x + 1
+Loop
+If bNothingToSim Then GoTo out:
+
+'determin lowest cost attack and highest cost attack
+For nAttack = 0 To 4
+    If m_nAtkType(nAttack) > 0 Then
+        nLowEnergy = m_nAtkEnergy(nAttack)
+        If m_nAtkType(nAttack) = 2 Then 'spell
+            If ((m_nAtkResist(nAttack) = 1 And m_nUserAntiMagic = 1) Or m_nAtkResist(nAttack) = 2) _
+                Or m_nAtkSuccess(nAttack) < 100 Then 'resistable or failable
+                
+                nLowEnergy = Round(m_nAtkEnergy(nAttack) / 2)
+            End If
+        End If
+        
+        If nLowestCostAttack = 0 Or nLowEnergy < nLowestCostAttack Then
+            nLowestCostAttack = nLowEnergy
+        End If
+        
+        If nMaxCostAttack = 0 Or m_nAtkEnergy(nAttack) > nMaxCostAttack Then
+            nMaxCostAttack = m_nAtkEnergy(nAttack)
+        End If
+    End If
+Next nAttack
+If nLowestCostAttack + nMaxCostAttack = 0 Then GoTo out:
+
+'determine max energy / round
+nMaxEnergyRound = m_nEnergyPerRound
+
+nLeastEnergyUsed = nLowestCostAttack
+Do While (nLeastEnergyUsed + nMaxCostAttack) <= nMaxEnergyRound
+    nLeastEnergyUsed = nLeastEnergyUsed + nLowestCostAttack
+Loop
+nEnergyRemaining = (m_nEnergyPerRound - nLeastEnergyUsed)
+If nEnergyRemaining < nLowestCostAttack Then nEnergyRemaining = nEnergyRemaining + (nLowestCostAttack - 1)
+
+nMaxEnergyRound = m_nEnergyPerRound + nEnergyRemaining
+
+'determine max damage from regular attacks
+nEnergyRemaining = nMaxEnergyRound
+x = 1
+Do While nEnergyRemaining >= nLowestCostAttack And x <= 6
+    nDamage = 0: nMaxDamage = 0: nEnergyForAttack = 0: nMaxDPE = 0
+    
+    For nAttack = 0 To 4
+        If m_nAtkEnergy(nAttack) <= nEnergyRemaining Then
+            If (m_nAtkType(nAttack) <> 2 Or m_nAtkSuccess(nAttack) > 0) And m_nAtkType(nAttack) > 0 Then
+                nDamage = m_nAtkMax(nAttack)
+                If m_nAtkType(nAttack) = 1 Then
+                    If Not m_nAtkDuration(nAttack) > 1 Then
+                        nDamage = nDamage + m_nAtkHitSpellMax(nAttack)
+                    End If
+                End If
+                
+                nMaxAttempts = Fix(nEnergyRemaining / m_nAtkEnergy(nAttack))
+                If nMaxAttempts > (6 - x + 1) Then nMaxAttempts = (6 - x + 1)
+                
+                nDamagePerEnergy = (nDamage * nMaxAttempts) / (nEnergyRemaining / m_nAtkEnergy(nAttack))
+                If nDamagePerEnergy > nMaxDPE Then
+                    nMaxDamage = nDamage
+                    nMaxDPE = nDamagePerEnergy
+                    nEnergyForAttack = m_nAtkEnergy(nAttack)
+                End If
+            End If
+        End If
+    Next nAttack
+    
+    GetMaxDamage = GetMaxDamage + nMaxDamage
+    nEnergyRemaining = nEnergyRemaining - nEnergyForAttack
+    x = x + 1
+Loop
+'add spell/hitspell duration ticks
+For nAttack = 0 To 4
+    If m_nAtkType(nAttack) = 1 And m_nAtkDuration(nAttack) > 1 Then
+        GetMaxDamage = GetMaxDamage + m_nAtkHitSpellMax(nAttack)
+        If m_nAtkDuration(nAttack) > 2 Then GetMaxDamage = GetMaxDamage + m_nAtkHitSpellMax(nAttack)
+    ElseIf m_nAtkType(nAttack) = 2 And m_nAtkDuration(nAttack) > 1 Then
+        GetMaxDamage = GetMaxDamage + m_nAtkMax(nAttack)
+        If m_nAtkDuration(nAttack) > 2 Then GetMaxDamage = GetMaxDamage + m_nAtkMax(nAttack)
+    End If
+Next nAttack
+
+'between rounds
+nMaxDamage = 0
+For x = 0 To 4
+    If m_nBetweenRoundChance(x) > 0 And Not m_nBetweenRoundDuration(x) > 1 Then
+        nDamage = m_nBetweenRoundMax(x)
+        If nDamage > nMaxDamage Then nMaxDamage = nDamage
+    End If
+Next x
+GetMaxDamage = GetMaxDamage + nMaxDamage
+'add between round duration ticks
+For x = 0 To 4
+    If m_nBetweenRoundChance(x) > 0 And m_nBetweenRoundDuration(x) > 1 Then
+        GetMaxDamage = GetMaxDamage + m_nBetweenRoundMax(x)
+        If m_nBetweenRoundDuration(x) > 2 Then GetMaxDamage = GetMaxDamage + m_nBetweenRoundMax(x)
+    End If
+Next x
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetMaxDamage")
+Resume out:
+End Function
+
 Public Sub RunSim()
 Dim nRound As Long, nAttempt As Integer, nAttack As Integer, x As Integer
 Dim nRemainingEnergy As Long, nEnergyUsed As Integer, bShowHitSpell As Boolean
@@ -227,7 +366,7 @@ Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance
 Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOriginalDamage As Currency
 Dim bSepShown As Boolean, bDurSpellApplied As Boolean, bNothingToSim As Boolean
 Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
-
+Dim sMaxRoundCombatLog As String
 On Error GoTo error:
 
 Randomize
@@ -238,6 +377,7 @@ If m_nEnergyPerRound < 1 Then Exit Sub
 m_nTotalAttacks = 0
 m_nTotalDamage = 0
 m_nMaxRoundDamage = 0
+m_nMaxEnergyPerRound = 0
 
 Call ResetActiveSpells
 
@@ -335,12 +475,12 @@ For nRound = 1 To m_nNumberOfRounds
     Call AddToCombatLog("")
     
     nRemainingEnergy = nRemainingEnergy + m_nEnergyPerRound
+    If nRemainingEnergy > m_nMaxEnergyPerRound Then m_nMaxEnergyPerRound = nRemainingEnergy
     
     '============================================================================
     ' BEGIN REGULAR ATTACK ATTEMPTS
     '============================================================================
     For nAttempt = 1 To 6
-
         nRoll_AttackChance = Me.RandomNumber(1, 100)
         nLastAttackType = 0
         nLastAttackEnergy = 0
@@ -431,7 +571,7 @@ For nRound = 1 To m_nNumberOfRounds
                                     'DURATION CONTINUES, NOT REALLY AN ATTEMPT
                                     m_nStatAtkAttempted(nAttack) = m_nStatAtkAttempted(nAttack) - 1
                                     m_nTotalAttacks = m_nTotalAttacks - 1
-                                    bAttackHit = False
+                                    GoTo choose_next_attack:
                                 End If
                             Else
                                 If IsSpellResisted(m_nAtkResist(nAttack), m_nUserMR, m_nUserAntiMagic) Then
@@ -517,7 +657,7 @@ For nRound = 1 To m_nNumberOfRounds
                         
                         If bAttackHit Then
                         
-                            If nOriginalDamage <> nDamage And m_nAtkType(nAttack) = 2 Then 'spell
+                            If nOriginalDamage <> nDamage And m_nAtkType(nAttack) = 2 And m_nAtkDuration(nAttack) < 1 Then 'spell
                                 m_nStatAtkDmgResisted(nAttack) = m_nStatAtkDmgResisted(nAttack) + (nOriginalDamage - nDamage)
                             End If
                             
@@ -550,10 +690,11 @@ For nRound = 1 To m_nNumberOfRounds
                     
                     If Not bAttackHit Then
                         If m_nAtkType(nAttack) = 2 Then 'spell
-                            If m_nAtkDuration(nAttack) = 0 Or nActiveAtkSpells_DurationLeft(nAttack) < 1 Then
+                            'If m_nAtkDuration(nAttack) = 0 Or nActiveAtkSpells_DurationLeft(nAttack) < 1 Then
                             'If m_nAtkDuration(nAttack) = 0 Or bResisted Then
+                            If m_nAtkDuration(nAttack) = 0 Or bResisted Then
                                 nEnergyUsed = Round(m_nAtkEnergy(nAttack) / 2, 0)
-                                
+                            
                                 nRemainingEnergy = nRemainingEnergy - nEnergyUsed
                                 
                                 Call AddToCombatLog(m_sAtkName(nAttack) & " (" _
@@ -572,6 +713,7 @@ For nRound = 1 To m_nNumberOfRounds
                 
                 GoTo next_attempt:
             End If
+choose_next_attack:
         Next nAttack
         
 next_attempt:
@@ -709,12 +851,22 @@ duration_ticks:
         End If
     Next x
     
-    If nRoundDamage > m_nMaxRoundDamage Then m_nMaxRoundDamage = nRoundDamage
-    
     Call AddToCombatLog("")
     Call AddToCombatLog("Damage for round: " & nRoundDamage, "Energy Remaining: " & nRemainingEnergy)
     Call AddToCombatLog("==================================================================")
     nCombatLogRoundCount = nCombatLogRoundCount + 1
+    
+    If nRoundDamage > m_nMaxRoundDamage Then
+        
+        m_nMaxRoundDamage = nRoundDamage
+        If m_bCombatLogMaxRoundOnly Then sMaxRoundCombatLog = m_sCombatLog
+        
+    ElseIf m_bCombatLogMaxRoundOnly Then
+        
+        m_sCombatLog = ""
+        nCombatLogRoundCount = 0
+    
+    End If
     
     If nDynamicRoundCount > 1000 And m_bDynamicCalc Then
         If nCurrentAverageDamage = 0 Then
@@ -746,6 +898,8 @@ end_sim:
 If nRound > 0 Then
     m_nAverageDamage = Round(m_nTotalDamage / nRound, 1)
 End If
+
+If m_bCombatLogMaxRoundOnly Then m_sCombatLog = sMaxRoundCombatLog
 
 out:
 On Error Resume Next
@@ -909,6 +1063,22 @@ Public Sub ResetValues()
 Dim x As Integer
 On Error GoTo error:
 
+m_nUserAC = 0
+m_nUserDR = 0
+m_nUserDodge = 0
+m_nUserMR = 0
+m_nUserAntiMagic = 0
+
+m_nEnergyPerRound = 0
+m_nNumberOfRounds = 0
+m_nTotalAttacks = 0
+m_nTotalDamage = 0
+m_nMaxRoundDamage = 0
+m_nMaxEnergyPerRound = 0
+
+m_sCombatLog = ""
+nCombatLogRoundCount = 0
+
 For x = 0 To 4
     m_sAtkName(x) = ""
     m_nAtkType(x) = 0
@@ -928,28 +1098,12 @@ For x = 0 To 4
     m_nStatAtkAttemptDodgedOrResisted(x) = 0
     m_nStatAtkTotalDamage(x) = 0
     
-    m_nUserAC = 0
-    m_nUserDR = 0
-    m_nUserDodge = 0
-    m_nUserMR = 0
-    m_nUserAntiMagic = 0
-    
-    m_nEnergyPerRound = 0
-    m_nNumberOfRounds = 0
-    m_nTotalAttacks = 0
-    m_nTotalDamage = 0
-    m_nMaxRoundDamage = 0
-    
-    m_sCombatLog = ""
-    nCombatLogRoundCount = 0
-    
     m_sBetweenRoundName(x) = ""
     m_nBetweenRoundMin(x) = 0
     m_nBetweenRoundMax(x) = 0
     m_nBetweenRoundChance(x) = 0
     m_nBetweenRoundResistType(x) = 0
     m_nBetweenRoundResistDmgMR(x) = 0
-    
 Next x
 
 Call ResetActiveSpells

@@ -4,7 +4,7 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmMonsterAttackSim 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Monster Attack Simulator"
-   ClientHeight    =   7725
+   ClientHeight    =   7875
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   14685
@@ -13,8 +13,16 @@ Begin VB.Form frmMonsterAttackSim
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   7725
+   ScaleHeight     =   7875
    ScaleWidth      =   14685
+   Begin VB.CheckBox chkCombatMaxRoundOnly 
+      Caption         =   "Show combat log only for max round seen."
+      Height          =   195
+      Left            =   10560
+      TabIndex        =   224
+      Top             =   6180
+      Width           =   3435
+   End
    Begin VB.CheckBox chkDynamicRounds 
       Alignment       =   1  'Right Justify
       Caption         =   "or Dynamic:"
@@ -31,7 +39,7 @@ Begin VB.Form frmMonsterAttackSim
       Left            =   12900
       TabIndex        =   221
       ToolTipText     =   "This will run the sim in 1,000 round increments untl the change in result is < 0.001%"
-      Top             =   6360
+      Top             =   6600
       Value           =   1  'Checked
       Width           =   1335
    End
@@ -1684,40 +1692,40 @@ Begin VB.Form frmMonsterAttackSim
       TabCaption(0)   =   "Between Round Spells"
       TabPicture(0)   =   "frmMonsterAttackSim.frx":0A96
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "label(34)"
-      Tab(0).Control(1)=   "label(33)"
-      Tab(0).Control(2)=   "label(32)"
-      Tab(0).Control(3)=   "label(31)"
-      Tab(0).Control(4)=   "txtBetweenSpellCastLvL(4)"
-      Tab(0).Control(5)=   "txtBetweenSpellCastPer(4)"
-      Tab(0).Control(6)=   "txtBetweenSpellName(4)"
+      Tab(0).Control(0)=   "cmdBetweenRoundSpellGoto(4)"
+      Tab(0).Control(1)=   "cmdBetweenRoundSpellGoto(3)"
+      Tab(0).Control(2)=   "cmdBetweenRoundSpellGoto(2)"
+      Tab(0).Control(3)=   "cmdBetweenRoundSpellGoto(1)"
+      Tab(0).Control(4)=   "cmdBetweenRoundSpellGoto(0)"
+      Tab(0).Control(5)=   "txtBetweenSpellNumber(0)"
+      Tab(0).Control(6)=   "txtBetweenSpellName(0)"
       Tab(0).Control(6).Enabled=   0   'False
-      Tab(0).Control(7)=   "txtBetweenSpellNumber(4)"
-      Tab(0).Control(8)=   "txtBetweenSpellCastLvL(3)"
-      Tab(0).Control(9)=   "txtBetweenSpellCastPer(3)"
-      Tab(0).Control(10)=   "txtBetweenSpellName(3)"
+      Tab(0).Control(7)=   "txtBetweenSpellCastPer(0)"
+      Tab(0).Control(8)=   "txtBetweenSpellCastLvL(0)"
+      Tab(0).Control(9)=   "txtBetweenSpellNumber(1)"
+      Tab(0).Control(10)=   "txtBetweenSpellName(1)"
       Tab(0).Control(10).Enabled=   0   'False
-      Tab(0).Control(11)=   "txtBetweenSpellNumber(3)"
-      Tab(0).Control(12)=   "txtBetweenSpellCastLvL(2)"
-      Tab(0).Control(13)=   "txtBetweenSpellCastPer(2)"
+      Tab(0).Control(11)=   "txtBetweenSpellCastPer(1)"
+      Tab(0).Control(12)=   "txtBetweenSpellCastLvL(1)"
+      Tab(0).Control(13)=   "txtBetweenSpellNumber(2)"
       Tab(0).Control(14)=   "txtBetweenSpellName(2)"
       Tab(0).Control(14).Enabled=   0   'False
-      Tab(0).Control(15)=   "txtBetweenSpellNumber(2)"
-      Tab(0).Control(16)=   "txtBetweenSpellCastLvL(1)"
-      Tab(0).Control(17)=   "txtBetweenSpellCastPer(1)"
-      Tab(0).Control(18)=   "txtBetweenSpellName(1)"
+      Tab(0).Control(15)=   "txtBetweenSpellCastPer(2)"
+      Tab(0).Control(16)=   "txtBetweenSpellCastLvL(2)"
+      Tab(0).Control(17)=   "txtBetweenSpellNumber(3)"
+      Tab(0).Control(18)=   "txtBetweenSpellName(3)"
       Tab(0).Control(18).Enabled=   0   'False
-      Tab(0).Control(19)=   "txtBetweenSpellNumber(1)"
-      Tab(0).Control(20)=   "txtBetweenSpellCastLvL(0)"
-      Tab(0).Control(21)=   "txtBetweenSpellCastPer(0)"
-      Tab(0).Control(22)=   "txtBetweenSpellName(0)"
+      Tab(0).Control(19)=   "txtBetweenSpellCastPer(3)"
+      Tab(0).Control(20)=   "txtBetweenSpellCastLvL(3)"
+      Tab(0).Control(21)=   "txtBetweenSpellNumber(4)"
+      Tab(0).Control(22)=   "txtBetweenSpellName(4)"
       Tab(0).Control(22).Enabled=   0   'False
-      Tab(0).Control(23)=   "txtBetweenSpellNumber(0)"
-      Tab(0).Control(24)=   "cmdBetweenRoundSpellGoto(0)"
-      Tab(0).Control(25)=   "cmdBetweenRoundSpellGoto(1)"
-      Tab(0).Control(26)=   "cmdBetweenRoundSpellGoto(2)"
-      Tab(0).Control(27)=   "cmdBetweenRoundSpellGoto(3)"
-      Tab(0).Control(28)=   "cmdBetweenRoundSpellGoto(4)"
+      Tab(0).Control(23)=   "txtBetweenSpellCastPer(4)"
+      Tab(0).Control(24)=   "txtBetweenSpellCastLvL(4)"
+      Tab(0).Control(25)=   "label(31)"
+      Tab(0).Control(26)=   "label(32)"
+      Tab(0).Control(27)=   "label(33)"
+      Tab(0).Control(28)=   "label(34)"
       Tab(0).ControlCount=   29
       TabCaption(1)   =   "Attack Statistics"
       TabPicture(1)   =   "frmMonsterAttackSim.frx":0AB2
@@ -1808,66 +1816,66 @@ Begin VB.Form frmMonsterAttackSim
       TabCaption(2)   =   "Items"
       TabPicture(2)   =   "frmMonsterAttackSim.frx":0ACE
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "label(17)"
-      Tab(2).Control(1)=   "Label3"
-      Tab(2).Control(2)=   "Label4"
-      Tab(2).Control(3)=   "Label5"
-      Tab(2).Control(4)=   "lblItemBonus"
-      Tab(2).Control(5)=   "cmdItemNote"
-      Tab(2).Control(6)=   "txtWeaponNumber"
-      Tab(2).Control(7)=   "txtWeaponName"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "cmdGotoWeapon"
-      Tab(2).Control(9)=   "cmdEditItemDrop(4)"
-      Tab(2).Control(10)=   "cmdEditItemDrop(3)"
-      Tab(2).Control(11)=   "cmdEditItemDrop(2)"
-      Tab(2).Control(12)=   "cmdEditItemDrop(1)"
-      Tab(2).Control(13)=   "cmdEditItemDrop(0)"
-      Tab(2).Control(14)=   "txtItemNumber(1)"
-      Tab(2).Control(15)=   "txtItemName(1)"
+      Tab(2).Control(0)=   "txtItemDropPer(5)"
+      Tab(2).Control(1)=   "txtItemDropPer(7)"
+      Tab(2).Control(2)=   "txtItemDropPer(8)"
+      Tab(2).Control(3)=   "txtItemDropPer(9)"
+      Tab(2).Control(4)=   "txtItemDropPer(6)"
+      Tab(2).Control(5)=   "txtItemDropPer(2)"
+      Tab(2).Control(6)=   "txtItemDropPer(3)"
+      Tab(2).Control(7)=   "txtItemDropPer(4)"
+      Tab(2).Control(8)=   "txtItemDropPer(0)"
+      Tab(2).Control(9)=   "txtItemDropPer(1)"
+      Tab(2).Control(10)=   "txtItemNumber(9)"
+      Tab(2).Control(11)=   "txtItemName(9)"
+      Tab(2).Control(11).Enabled=   0   'False
+      Tab(2).Control(12)=   "txtItemNumber(8)"
+      Tab(2).Control(13)=   "txtItemName(8)"
+      Tab(2).Control(13).Enabled=   0   'False
+      Tab(2).Control(14)=   "txtItemNumber(7)"
+      Tab(2).Control(15)=   "txtItemName(7)"
       Tab(2).Control(15).Enabled=   0   'False
-      Tab(2).Control(16)=   "txtItemNumber(0)"
-      Tab(2).Control(17)=   "txtItemName(0)"
-      Tab(2).Control(17).Enabled=   0   'False
-      Tab(2).Control(18)=   "txtItemNumber(2)"
-      Tab(2).Control(19)=   "txtItemName(2)"
-      Tab(2).Control(19).Enabled=   0   'False
-      Tab(2).Control(20)=   "txtItemNumber(3)"
-      Tab(2).Control(21)=   "txtItemName(3)"
-      Tab(2).Control(21).Enabled=   0   'False
-      Tab(2).Control(22)=   "txtItemNumber(4)"
-      Tab(2).Control(23)=   "txtItemName(4)"
-      Tab(2).Control(23).Enabled=   0   'False
+      Tab(2).Control(16)=   "txtItemName(5)"
+      Tab(2).Control(16).Enabled=   0   'False
+      Tab(2).Control(17)=   "txtItemNumber(6)"
+      Tab(2).Control(18)=   "txtItemName(6)"
+      Tab(2).Control(18).Enabled=   0   'False
+      Tab(2).Control(19)=   "txtItemNumber(5)"
+      Tab(2).Control(20)=   "cmdEditItemDrop(5)"
+      Tab(2).Control(21)=   "cmdEditItemDrop(6)"
+      Tab(2).Control(22)=   "cmdEditItemDrop(7)"
+      Tab(2).Control(23)=   "cmdEditItemDrop(8)"
       Tab(2).Control(24)=   "cmdEditItemDrop(9)"
-      Tab(2).Control(25)=   "cmdEditItemDrop(8)"
-      Tab(2).Control(26)=   "cmdEditItemDrop(7)"
-      Tab(2).Control(27)=   "cmdEditItemDrop(6)"
-      Tab(2).Control(28)=   "cmdEditItemDrop(5)"
-      Tab(2).Control(29)=   "txtItemNumber(5)"
-      Tab(2).Control(30)=   "txtItemName(6)"
-      Tab(2).Control(30).Enabled=   0   'False
-      Tab(2).Control(31)=   "txtItemNumber(6)"
-      Tab(2).Control(32)=   "txtItemName(5)"
-      Tab(2).Control(32).Enabled=   0   'False
-      Tab(2).Control(33)=   "txtItemName(7)"
+      Tab(2).Control(25)=   "txtItemName(4)"
+      Tab(2).Control(25).Enabled=   0   'False
+      Tab(2).Control(26)=   "txtItemNumber(4)"
+      Tab(2).Control(27)=   "txtItemName(3)"
+      Tab(2).Control(27).Enabled=   0   'False
+      Tab(2).Control(28)=   "txtItemNumber(3)"
+      Tab(2).Control(29)=   "txtItemName(2)"
+      Tab(2).Control(29).Enabled=   0   'False
+      Tab(2).Control(30)=   "txtItemNumber(2)"
+      Tab(2).Control(31)=   "txtItemName(0)"
+      Tab(2).Control(31).Enabled=   0   'False
+      Tab(2).Control(32)=   "txtItemNumber(0)"
+      Tab(2).Control(33)=   "txtItemName(1)"
       Tab(2).Control(33).Enabled=   0   'False
-      Tab(2).Control(34)=   "txtItemNumber(7)"
-      Tab(2).Control(35)=   "txtItemName(8)"
-      Tab(2).Control(35).Enabled=   0   'False
-      Tab(2).Control(36)=   "txtItemNumber(8)"
-      Tab(2).Control(37)=   "txtItemName(9)"
-      Tab(2).Control(37).Enabled=   0   'False
-      Tab(2).Control(38)=   "txtItemNumber(9)"
-      Tab(2).Control(39)=   "txtItemDropPer(1)"
-      Tab(2).Control(40)=   "txtItemDropPer(0)"
-      Tab(2).Control(41)=   "txtItemDropPer(4)"
-      Tab(2).Control(42)=   "txtItemDropPer(3)"
-      Tab(2).Control(43)=   "txtItemDropPer(2)"
-      Tab(2).Control(44)=   "txtItemDropPer(6)"
-      Tab(2).Control(45)=   "txtItemDropPer(9)"
-      Tab(2).Control(46)=   "txtItemDropPer(8)"
-      Tab(2).Control(47)=   "txtItemDropPer(7)"
-      Tab(2).Control(48)=   "txtItemDropPer(5)"
+      Tab(2).Control(34)=   "txtItemNumber(1)"
+      Tab(2).Control(35)=   "cmdEditItemDrop(0)"
+      Tab(2).Control(36)=   "cmdEditItemDrop(1)"
+      Tab(2).Control(37)=   "cmdEditItemDrop(2)"
+      Tab(2).Control(38)=   "cmdEditItemDrop(3)"
+      Tab(2).Control(39)=   "cmdEditItemDrop(4)"
+      Tab(2).Control(40)=   "cmdGotoWeapon"
+      Tab(2).Control(41)=   "txtWeaponName"
+      Tab(2).Control(41).Enabled=   0   'False
+      Tab(2).Control(42)=   "txtWeaponNumber"
+      Tab(2).Control(43)=   "cmdItemNote"
+      Tab(2).Control(44)=   "lblItemBonus"
+      Tab(2).Control(45)=   "Label5"
+      Tab(2).Control(46)=   "Label4"
+      Tab(2).Control(47)=   "Label3"
+      Tab(2).Control(48)=   "label(17)"
       Tab(2).ControlCount=   49
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
@@ -3850,7 +3858,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   1575
       Left            =   9600
       TabIndex        =   216
-      Top             =   4620
+      Top             =   4500
       Width           =   4995
       Begin VB.Label lblResultsMaxRound 
          Alignment       =   2  'Center
@@ -3901,7 +3909,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   495
       Left            =   9660
       TabIndex        =   222
-      Top             =   6780
+      Top             =   7020
       Width           =   4875
    End
    Begin VB.Frame fraChar 
@@ -3909,7 +3917,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   975
       Left            =   9600
       TabIndex        =   205
-      Top             =   3540
+      Top             =   3480
       Width           =   4995
       Begin VB.TextBox txtUserDR 
          Alignment       =   2  'Center
@@ -4148,7 +4156,7 @@ Begin VB.Form frmMonsterAttackSim
       Left            =   11640
       TabIndex        =   220
       Text            =   "2000"
-      Top             =   6300
+      Top             =   6540
       Width           =   915
    End
    Begin VB.TextBox txtMonsterEnergy 
@@ -4188,7 +4196,7 @@ Begin VB.Form frmMonsterAttackSim
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   3735
+      Height          =   3915
       Left            =   60
       Locked          =   -1  'True
       MultiLine       =   -1  'True
@@ -4220,7 +4228,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   255
       Left            =   60
       TabIndex        =   223
-      Top             =   7380
+      Top             =   7560
       Width           =   14535
       _ExtentX        =   25638
       _ExtentY        =   450
@@ -4243,7 +4251,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   195
       Left            =   9840
       TabIndex        =   219
-      Top             =   6360
+      Top             =   6600
       Width           =   1605
       WordWrap        =   -1  'True
    End
@@ -4689,6 +4697,12 @@ clsMonAtkSim.nNumberOfRounds = Val(txtNumRounds.Text)
 clsMonAtkSim.nEnergyPerRound = Val(txtMonsterEnergy.Text)
 clsMonAtkSim.nCombatLogMaxRounds = 50
 
+If chkCombatMaxRoundOnly.Value = 1 Then
+    clsMonAtkSim.bCombatLogMaxRoundOnly = True
+Else
+    clsMonAtkSim.bCombatLogMaxRoundOnly = False
+End If
+
 nDamageArr = Array(4) '4=max damage
 nAccyArr = Array(22, 105, 106) '22, 105, 106 = accuracy
 
@@ -4800,7 +4814,7 @@ txtCombatLog.Text = clsMonAtkSim.sCombatLog
 
 If clsMonAtkSim.nTotalAttacks > 0 And clsMonAtkSim.nNumberOfRounds > 0 Then
     lblResultsAvgDmg.Caption = "AVG Dmg/Rnd: " & Round(clsMonAtkSim.nTotalDamage / clsMonAtkSim.nNumberOfRounds, 1)
-    lblResultsMaxRound.Caption = "Max Seen: " & clsMonAtkSim.nMaxRoundDamage
+    lblResultsMaxRound.Caption = "Max/Seen: " & clsMonAtkSim.GetMaxDamage & "/" & clsMonAtkSim.nMaxRoundDamage
     
     For x = 0 To 4
         If clsMonAtkSim.nAtkType(x) > 0 Then
@@ -4845,6 +4859,7 @@ error:
 Call HandleError("cmdSim_Click")
 Resume out:
 End Sub
+
 
 Private Sub Form_Load()
 Dim x As Integer
