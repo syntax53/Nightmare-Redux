@@ -254,7 +254,7 @@ If bNothingToSim Then GoTo out:
 
 'determin lowest cost attack and highest cost attack
 For nAttack = 0 To 4
-    If m_nAtkType(nAttack) > 0 Then
+    If m_nAtkType(nAttack) > 0 And m_nAtkEnergy(nAttack) > 0 Then
         nLowEnergy = m_nAtkEnergy(nAttack)
         If m_nAtkType(nAttack) = 2 Then 'spell
             If ((m_nAtkResist(nAttack) = 1 And m_nUserAntiMagic = 1) Or m_nAtkResist(nAttack) = 2) _
@@ -264,16 +264,20 @@ For nAttack = 0 To 4
             End If
         End If
         
-        If nLowestCostAttack = 0 Or nLowEnergy < nLowestCostAttack Then
+        If (nLowestCostAttack = 0 Or nLowEnergy < nLowestCostAttack) And nLowEnergy > 0 Then
             nLowestCostAttack = nLowEnergy
         End If
         
         If nMaxCostAttack = 0 Or m_nAtkEnergy(nAttack) > nMaxCostAttack Then
             nMaxCostAttack = m_nAtkEnergy(nAttack)
         End If
+    ElseIf m_nAtkType(nAttack) > 0 And m_nAtkEnergy(nAttack) = 0 And m_nAtkChance(nAttack) > 0 Then
+        nLowestCostAttack = 0
+        nMaxEnergyRound = m_nEnergyPerRound * 2
+        GoTo zero_energy_attack_skip_calc:
     End If
 Next nAttack
-If nLowestCostAttack + nMaxCostAttack = 0 Then GoTo out:
+If nLowestCostAttack = 0 Then GoTo out:
 
 'determine max energy / round
 nMaxEnergyRound = m_nEnergyPerRound
@@ -287,6 +291,7 @@ If nEnergyRemaining < nLowestCostAttack Then nEnergyRemaining = nEnergyRemaining
 
 nMaxEnergyRound = m_nEnergyPerRound + nEnergyRemaining
 
+zero_energy_attack_skip_calc:
 'determine max damage from regular attacks
 nEnergyRemaining = nMaxEnergyRound
 x = 1
@@ -294,7 +299,7 @@ Do While nEnergyRemaining >= nLowestCostAttack And x <= 6
     nDamage = 0: nMaxDamage = 0: nEnergyForAttack = 0: nMaxDPE = 0
     
     For nAttack = 0 To 4
-        If m_nAtkEnergy(nAttack) <= nEnergyRemaining Then
+        If m_nAtkEnergy(nAttack) <= nEnergyRemaining And m_nAtkEnergy(nAttack) > 0 Then
             If (m_nAtkType(nAttack) <> 2 Or m_nAtkSuccess(nAttack) > 0) And m_nAtkType(nAttack) > 0 Then
                 nDamage = m_nAtkMax(nAttack)
                 If m_nAtkType(nAttack) = 1 Then

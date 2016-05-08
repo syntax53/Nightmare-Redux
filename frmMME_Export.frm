@@ -1521,8 +1521,20 @@ For x = 0 To 4
         If Monsterrec.AttackType(x) = 2 Then 'spell
             nStatus = GetSpell(Monsterrec.AttackAccuSpell(x))
             If nStatus = 0 Then
-                clsMonAtkSim.nAtkResist(x) = Spellrec.TypeOfResists
+                If Spellrec.Target = 12 Then
+                    nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 1) '1=damage
+                    If nTest > -1 Then
+                        'MsgBox "Attack #" & (x + 1) & " (" & txtAtkName(x).Text & ") has an area attack spell in a regular attack slot using ability 1 (damage) instead of 17 (damage-MR). " _
+                            & "This is an error and MMUD will not cast this.  Area attack spells must use ability 17 (or possibly 8-drain?).  The min/max damage and energy cost has been zero'd out for the sim to reflect the game.", vbExclamation
+                        clsMonAtkSim.nAtkDuration(x) = 0
+                        clsMonAtkSim.nAtkMin(x) = 0
+                        clsMonAtkSim.nAtkMax(x) = 0
+                        clsMonAtkSim.nAtkEnergy(x) = 0
+                        GoTo next_attack_slot:
+                    End If
+                End If
                 
+                clsMonAtkSim.nAtkResist(x) = Spellrec.TypeOfResists
                 clsMonAtkSim.nAtkDuration(x) = GetSpellDuration(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                 clsMonAtkSim.nAtkMin(x) = 0
                 clsMonAtkSim.nAtkMax(x) = 0
@@ -1597,6 +1609,7 @@ For x = 0 To 4
             End If
         End If
     End If
+next_attack_slot:
 Next x
 
 nPercent = 0

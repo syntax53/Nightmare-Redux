@@ -3897,6 +3897,7 @@ Begin VB.Form frmMonsterAttackSim
    End
    Begin VB.CommandButton cmdSim 
       Caption         =   "Run Sim"
+      Default         =   -1  'True
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   9.75
@@ -3919,6 +3920,14 @@ Begin VB.Form frmMonsterAttackSim
       TabIndex        =   205
       Top             =   3480
       Width           =   4995
+      Begin VB.CommandButton cmdMRNote 
+         Caption         =   "!"
+         Height          =   315
+         Left            =   3600
+         TabIndex        =   225
+         Top             =   480
+         Width           =   195
+      End
       Begin VB.TextBox txtUserDR 
          Alignment       =   2  'Center
          BeginProperty DataFormat 
@@ -3947,7 +3956,7 @@ Begin VB.Form frmMonsterAttackSim
       End
       Begin VB.CheckBox chkUserAntiMagic 
          Height          =   255
-         Left            =   4020
+         Left            =   4200
          TabIndex        =   215
          Top             =   480
          Width           =   255
@@ -4044,7 +4053,7 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   195
-         Left            =   3570
+         Left            =   3750
          TabIndex        =   210
          Top             =   240
          Width           =   1155
@@ -4432,8 +4441,22 @@ For x = 0 To 4
         nPercent = Monsterrec.AttackPer(x)
         
         If Monsterrec.AttackType(x) = 2 Then 'spell
+            txtAtkSuccess(x).Text = Monsterrec.AttackMinHCastPer(x)
+            
             nStatus = GetSpell(Monsterrec.AttackAccuSpell(x))
             If nStatus = 0 Then
+                If Spellrec.Target = 12 Then
+                    nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 1) '1=damage
+                    If nTest > -1 Then
+                        MsgBox "Attack #" & (x + 1) & " (" & txtAtkName(x).Text & ") has an area attack spell in a regular attack slot using ability 1 (damage) instead of 17 (damage-MR). " _
+                            & "This is an error and MMUD will not cast this.  Area attack spells must use ability 17 (or possibly 8-drain?).  The min/max damage and energy cost has been zero'd out for the sim to reflect the game.", vbExclamation
+                        txtAtkDur(x).Text = 0
+                        txtAtkMin(x).Text = 0
+                        txtAtkMax(x).Text = 0
+                        txtAtkEnergy(x).Text = 0
+                        GoTo next_attack_slot:
+                    End If
+                End If
                 cmbAtkResist(x).ListIndex = Spellrec.TypeOfResists
                 
                 txtAtkDur(x).Text = GetSpellDuration(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
@@ -4452,7 +4475,7 @@ For x = 0 To 4
                     End If
                 End If
                 
-                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 17) '17=damage
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 17) '17=damage-MR
                 If nTest >= 0 Then
                     chkAtkDmgResist(x).Value = 1 'MR resist
                     If nTest > 0 Then
@@ -4480,7 +4503,6 @@ For x = 0 To 4
                 txtAtkMin(x).Text = "!"
                 txtAtkMax(x).Text = "!"
             End If
-            txtAtkSuccess(x).Text = Monsterrec.AttackMinHCastPer(x)
         Else
             txtAtkMin(x).Text = Monsterrec.AttackMinHCastPer(x)
             txtAtkMax(x).Text = Monsterrec.AttackMaxHCastLvl(x)
@@ -4510,6 +4532,7 @@ For x = 0 To 4
             End If
         End If
     End If
+next_attack_slot:
 Next x
 
 nPercent = 0
@@ -4671,6 +4694,10 @@ Private Sub cmdItemNote_Click()
         & "Also note that bonuses stack for the same items." _
         & vbCrLf & vbCrLf & "If you want to force-include an item, just add it to the list and set the drop chance to 100%." _
         , vbOKOnly Or vbInformation, "Note on Items"
+End Sub
+
+Private Sub cmdMRNote_Click()
+MsgBox "Note: MR < 50 gives negative resistance when MR is taken into account.", vbInformation
 End Sub
 
 Private Sub cmdSim_Click()
@@ -4860,6 +4887,10 @@ Call HandleError("cmdSim_Click")
 Resume out:
 End Sub
 
+
+Private Sub Command1_Click()
+
+End Sub
 
 Private Sub Form_Load()
 Dim x As Integer
