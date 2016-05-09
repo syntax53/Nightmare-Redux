@@ -1,6 +1,6 @@
 Nightmare Redux is an editor for the game MajorMUD(r).  
 
-v1.8 (??/??/2016)  
+v1.8 (05/09/2016)  
 ------------------------------------------  
 -NEW: Monster attack simulator and Average/Max round calculator  
 -NEW: Setting to auto sort editors with lists in reverse order (highest record numbers first)  
