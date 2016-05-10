@@ -1,17 +1,17 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmMonster 
    Caption         =   "Monster Editor"
-   ClientHeight    =   6705
+   ClientHeight    =   6735
    ClientLeft      =   60
    ClientTop       =   345
    ClientWidth     =   8655
    Icon            =   "frmMonster.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
-   ScaleHeight     =   6705
+   ScaleHeight     =   6735
    ScaleWidth      =   8655
    Begin VB.CommandButton cmdFilter 
       Caption         =   "Filter"
@@ -2695,48 +2695,51 @@ Begin VB.Form frmMonster
             Tab(0).Control(30).Enabled=   0   'False
             Tab(0).Control(31)=   "txtAttackSpellDamage(0)"
             Tab(0).Control(31).Enabled=   0   'False
-            Tab(0).ControlCount=   32
+            Tab(0).Control(32)=   "cmdAttackSim(0)"
+            Tab(0).Control(32).Enabled=   0   'False
+            Tab(0).ControlCount=   33
             TabCaption(1)   =   "Attack 2"
             TabPicture(1)   =   "frmMonster.frx":0F1E
             Tab(1).ControlEnabled=   0   'False
-            Tab(1).Control(0)=   "txtAttackSpellDamage(1)"
-            Tab(1).Control(1)=   "cmdEditHitSpell(1)"
-            Tab(1).Control(2)=   "cmdEditDodgeMsg(1)"
-            Tab(1).Control(3)=   "cmdEditMissMsg(1)"
-            Tab(1).Control(4)=   "cmdEditHitMsg(1)"
-            Tab(1).Control(5)=   "cmdEditAttackSpell(1)"
-            Tab(1).Control(6)=   "cmbAttackType(1)"
-            Tab(1).Control(7)=   "txtAttackHitSpellName(1)"
-            Tab(1).Control(7).Enabled=   0   'False
-            Tab(1).Control(8)=   "txtAttackMissMsgDisplay(1)"
-            Tab(1).Control(8).Enabled=   0   'False
-            Tab(1).Control(9)=   "txtAttackDodgeMsgDisplay(1)"
-            Tab(1).Control(9).Enabled=   0   'False
-            Tab(1).Control(10)=   "txtAttackHitMsgDisplay(1)"
-            Tab(1).Control(10).Enabled=   0   'False
-            Tab(1).Control(11)=   "txtAttackHitSpell(1)"
-            Tab(1).Control(12)=   "txtAttackDodgeMsg(1)"
-            Tab(1).Control(13)=   "txtAttackMissMsg(1)"
-            Tab(1).Control(14)=   "txtAttackHitMsg(1)"
-            Tab(1).Control(15)=   "txtAttackEnergy(1)"
-            Tab(1).Control(16)=   "txtAttackPer(1)"
-            Tab(1).Control(17)=   "txtAttackMaxHCastLvL(1)"
-            Tab(1).Control(18)=   "txtAttackMinHCastPer(1)"
-            Tab(1).Control(19)=   "txtAttackAccuSpellName(1)"
-            Tab(1).Control(19).Enabled=   0   'False
-            Tab(1).Control(20)=   "txtAttackAccuSpell(1)"
-            Tab(1).Control(21)=   "lblAttackSpellRange(1)"
-            Tab(1).Control(22)=   "lblAttackHitSpell(0)"
-            Tab(1).Control(23)=   "lblAttackDodgeMsg(0)"
-            Tab(1).Control(24)=   "lblAttackMissMsg(0)"
-            Tab(1).Control(25)=   "lblAttackHitMsg(0)"
-            Tab(1).Control(26)=   "lblAttackEnergy(0)"
-            Tab(1).Control(27)=   "lblAttackPercent(0)"
-            Tab(1).Control(28)=   "lblAttackMaxHCastLvl(1)"
-            Tab(1).Control(29)=   "lblAttackMinHCastPer(1)"
-            Tab(1).Control(30)=   "lblAttackAccuSpell(1)"
-            Tab(1).Control(31)=   "lblAttackType(0)"
-            Tab(1).ControlCount=   32
+            Tab(1).Control(0)=   "lblAttackType(0)"
+            Tab(1).Control(1)=   "lblAttackAccuSpell(1)"
+            Tab(1).Control(2)=   "lblAttackMinHCastPer(1)"
+            Tab(1).Control(3)=   "lblAttackMaxHCastLvl(1)"
+            Tab(1).Control(4)=   "lblAttackPercent(0)"
+            Tab(1).Control(5)=   "lblAttackEnergy(0)"
+            Tab(1).Control(6)=   "lblAttackHitMsg(0)"
+            Tab(1).Control(7)=   "lblAttackMissMsg(0)"
+            Tab(1).Control(8)=   "lblAttackDodgeMsg(0)"
+            Tab(1).Control(9)=   "lblAttackHitSpell(0)"
+            Tab(1).Control(10)=   "lblAttackSpellRange(1)"
+            Tab(1).Control(11)=   "txtAttackAccuSpell(1)"
+            Tab(1).Control(12)=   "txtAttackAccuSpellName(1)"
+            Tab(1).Control(12).Enabled=   0   'False
+            Tab(1).Control(13)=   "txtAttackMinHCastPer(1)"
+            Tab(1).Control(14)=   "txtAttackMaxHCastLvL(1)"
+            Tab(1).Control(15)=   "txtAttackPer(1)"
+            Tab(1).Control(16)=   "txtAttackEnergy(1)"
+            Tab(1).Control(17)=   "txtAttackHitMsg(1)"
+            Tab(1).Control(18)=   "txtAttackMissMsg(1)"
+            Tab(1).Control(19)=   "txtAttackDodgeMsg(1)"
+            Tab(1).Control(20)=   "txtAttackHitSpell(1)"
+            Tab(1).Control(21)=   "txtAttackHitMsgDisplay(1)"
+            Tab(1).Control(21).Enabled=   0   'False
+            Tab(1).Control(22)=   "txtAttackDodgeMsgDisplay(1)"
+            Tab(1).Control(22).Enabled=   0   'False
+            Tab(1).Control(23)=   "txtAttackMissMsgDisplay(1)"
+            Tab(1).Control(23).Enabled=   0   'False
+            Tab(1).Control(24)=   "txtAttackHitSpellName(1)"
+            Tab(1).Control(24).Enabled=   0   'False
+            Tab(1).Control(25)=   "cmbAttackType(1)"
+            Tab(1).Control(26)=   "cmdEditAttackSpell(1)"
+            Tab(1).Control(27)=   "cmdEditHitMsg(1)"
+            Tab(1).Control(28)=   "cmdEditMissMsg(1)"
+            Tab(1).Control(29)=   "cmdEditDodgeMsg(1)"
+            Tab(1).Control(30)=   "cmdEditHitSpell(1)"
+            Tab(1).Control(31)=   "txtAttackSpellDamage(1)"
+            Tab(1).Control(32)=   "cmdAttackSim(1)"
+            Tab(1).ControlCount=   33
             TabCaption(2)   =   "Attack 3"
             TabPicture(2)   =   "frmMonster.frx":0F3A
             Tab(2).ControlEnabled=   0   'False
@@ -2777,7 +2780,8 @@ Begin VB.Form frmMonster
             Tab(2).Control(29)=   "cmdEditDodgeMsg(2)"
             Tab(2).Control(30)=   "cmdEditHitSpell(2)"
             Tab(2).Control(31)=   "txtAttackSpellDamage(2)"
-            Tab(2).ControlCount=   32
+            Tab(2).Control(32)=   "cmdAttackSim(2)"
+            Tab(2).ControlCount=   33
             TabCaption(3)   =   "Attack 4"
             TabPicture(3)   =   "frmMonster.frx":0F56
             Tab(3).ControlEnabled=   0   'False
@@ -2818,7 +2822,8 @@ Begin VB.Form frmMonster
             Tab(3).Control(29)=   "cmdEditDodgeMsg(3)"
             Tab(3).Control(30)=   "cmdEditHitSpell(3)"
             Tab(3).Control(31)=   "txtAttackSpellDamage(3)"
-            Tab(3).ControlCount=   32
+            Tab(3).Control(32)=   "cmdAttackSim(3)"
+            Tab(3).ControlCount=   33
             TabCaption(4)   =   "Attack 5"
             TabPicture(4)   =   "frmMonster.frx":0F72
             Tab(4).ControlEnabled=   0   'False
@@ -2859,25 +2864,116 @@ Begin VB.Form frmMonster
             Tab(4).Control(29)=   "cmdEditDodgeMsg(4)"
             Tab(4).Control(30)=   "cmdEditHitSpell(4)"
             Tab(4).Control(31)=   "txtAttackSpellDamage(4)"
-            Tab(4).ControlCount=   32
+            Tab(4).Control(32)=   "cmdAttackSim(4)"
+            Tab(4).ControlCount=   33
             TabCaption(5)   =   "Copy/Paste"
             TabPicture(5)   =   "frmMonster.frx":0F8E
             Tab(5).ControlEnabled=   0   'False
-            Tab(5).Control(0)=   "cmdAttackClear"
-            Tab(5).Control(1)=   "cmdAttackCopySingle(9)"
-            Tab(5).Control(2)=   "cmdAttackCopySingle(8)"
-            Tab(5).Control(3)=   "cmdAttackCopySingle(7)"
-            Tab(5).Control(4)=   "cmdAttackCopySingle(6)"
-            Tab(5).Control(5)=   "cmdAttackCopySingle(5)"
-            Tab(5).Control(6)=   "cmdAttackCopySingle(4)"
-            Tab(5).Control(7)=   "cmdAttackCopySingle(3)"
-            Tab(5).Control(8)=   "cmdAttackCopySingle(2)"
-            Tab(5).Control(9)=   "cmdAttackCopySingle(1)"
-            Tab(5).Control(10)=   "cmdAttackCopySingle(0)"
-            Tab(5).Control(11)=   "cmdAttackCopyAll(1)"
-            Tab(5).Control(12)=   "cmdAttackCopyAll(0)"
-            Tab(5).Control(13)=   "Label4"
+            Tab(5).Control(0)=   "Label4"
+            Tab(5).Control(1)=   "cmdAttackCopyAll(0)"
+            Tab(5).Control(2)=   "cmdAttackCopyAll(1)"
+            Tab(5).Control(3)=   "cmdAttackCopySingle(0)"
+            Tab(5).Control(4)=   "cmdAttackCopySingle(1)"
+            Tab(5).Control(5)=   "cmdAttackCopySingle(2)"
+            Tab(5).Control(6)=   "cmdAttackCopySingle(3)"
+            Tab(5).Control(7)=   "cmdAttackCopySingle(4)"
+            Tab(5).Control(8)=   "cmdAttackCopySingle(5)"
+            Tab(5).Control(9)=   "cmdAttackCopySingle(6)"
+            Tab(5).Control(10)=   "cmdAttackCopySingle(7)"
+            Tab(5).Control(11)=   "cmdAttackCopySingle(8)"
+            Tab(5).Control(12)=   "cmdAttackCopySingle(9)"
+            Tab(5).Control(13)=   "cmdAttackClear"
             Tab(5).ControlCount=   14
+            Begin VB.CommandButton cmdAttackSim 
+               Caption         =   "Open Combat Sim."
+               BeginProperty Font 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   315
+               Index           =   4
+               Left            =   -71820
+               TabIndex        =   469
+               Top             =   420
+               Width           =   1995
+            End
+            Begin VB.CommandButton cmdAttackSim 
+               Caption         =   "Open Combat Sim."
+               BeginProperty Font 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   315
+               Index           =   3
+               Left            =   -71820
+               TabIndex        =   468
+               Top             =   420
+               Width           =   1995
+            End
+            Begin VB.CommandButton cmdAttackSim 
+               Caption         =   "Open Combat Sim."
+               BeginProperty Font 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   315
+               Index           =   2
+               Left            =   -71820
+               TabIndex        =   467
+               Top             =   420
+               Width           =   1995
+            End
+            Begin VB.CommandButton cmdAttackSim 
+               Caption         =   "Open Combat Sim."
+               BeginProperty Font 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   315
+               Index           =   1
+               Left            =   -71820
+               TabIndex        =   466
+               Top             =   420
+               Width           =   1995
+            End
+            Begin VB.CommandButton cmdAttackSim 
+               Caption         =   "Open Combat Sim."
+               BeginProperty Font 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   315
+               Index           =   0
+               Left            =   3180
+               TabIndex        =   465
+               Top             =   420
+               Width           =   1995
+            End
             Begin VB.TextBox txtAttackSpellDamage 
                Alignment       =   2  'Center
                BackColor       =   &H8000000F&
@@ -6115,6 +6211,22 @@ Dim bLoaded As Boolean
 Dim nCurrentRecord As Long
 
 
+Private Sub cmdAttackSim_Click(Index As Integer)
+
+If lvDatabase.ListItems.Count < 1 Then Exit Sub
+
+If FormIsLoaded("frmMonsterAttackSim") Then
+    Call frmMonsterAttackSim.RefreshMonsters
+Else
+    Load frmMonsterAttackSim
+End If
+
+frmMonsterAttackSim.GotoMonster (Val(lvDatabase.SelectedItem.Text))
+frmMonsterAttackSim.Show
+frmMonsterAttackSim.SetFocus
+
+End Sub
+
 Private Sub cmdFilter_Click()
 If fraFilter.Visible Then
     txtNumberSearch.Enabled = True
@@ -6914,10 +7026,16 @@ If Not nStatus = 0 And Not nStatus = 9 Then
     MsgBox "LoadMonsters, Error: " & BtrieveErrorCode(nStatus)
 End If
 
-If lvDatabase.ListItems.Count >= 1 Then Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+If lvDatabase.ListItems.Count >= 1 Then
+    lvDatabase.refresh
+    If bOppositeListOrder Then
+        SortListView lvDatabase, 1, ldtNumber, False
+    Else
+        SortListView lvDatabase, 1, ldtNumber, True
+    End If
+    Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+End If
 
-lvDatabase.refresh
-SortListView lvDatabase, 1, ldtNumber, True
 bLoaded = True
 
 Exit Sub
@@ -7915,3 +8033,5 @@ Private Sub txtWeaponNumber_GotFocus()
 Call SelectAll(txtWeaponNumber)
 
 End Sub
+
+

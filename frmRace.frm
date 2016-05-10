@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmRace 
    Caption         =   "Race Editor"
    ClientHeight    =   5655
@@ -137,8 +137,8 @@ Begin VB.Form frmRace
          TabCaption(1)   =   "Abilities"
          TabPicture(1)   =   "frmRace.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "cmdAbilsClear"
-         Tab(1).Control(1)=   "frmAbilities"
+         Tab(1).Control(0)=   "frmAbilities"
+         Tab(1).Control(1)=   "cmdAbilsClear"
          Tab(1).ControlCount=   2
          Begin VB.CheckBox chkAutoSave 
             Caption         =   "Auto-Save"
@@ -934,7 +934,7 @@ Dim nCurrentRecord As Integer
 
 Private Sub cmdAbilsClear_Click()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 9
     txtAbilityA(x).Text = 0
@@ -943,7 +943,7 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdAbilsClear_Click")
 Resume out:
 
@@ -992,7 +992,7 @@ End If
 End Sub
 
 Private Sub cmdSave_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 If lvDatabase.SelectedItem Is Nothing Then Exit Sub
@@ -1016,7 +1016,7 @@ Set oLI = Nothing
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdSave_Click")
 Resume out:
 
@@ -1113,7 +1113,7 @@ Private Sub txtAbilityA_KeyPress(Index As Integer, KeyAscii As Integer)
 End Sub
 
 Private Sub LoadRaces()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 
 lvDatabase.ColumnHeaders.clear
@@ -1146,20 +1146,26 @@ End If
 
 Call modMain.LoadRaceArray
 
-If lvDatabase.ListItems.Count >= 1 Then Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+If lvDatabase.ListItems.Count >= 1 Then
+    lvDatabase.refresh
+    If bOppositeListOrder Then
+        SortListView lvDatabase, 1, ldtNumber, False
+    Else
+        SortListView lvDatabase, 1, ldtNumber, True
+    End If
+    Call lvDatabase_ItemClick(lvDatabase.ListItems(1))
+End If
 
-lvDatabase.refresh
-SortListView lvDatabase, 1, ldtNumber, True
 bLoaded = True
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub AddRaceToLV(ByVal nNumber As Integer)
 Dim nStatus As Integer, oLI As ListItem
-On Error GoTo Error:
+On Error GoTo error:
 
 If Not nNumber = Racerec.Number Then
     nStatus = BTRCALL(BGETEQUAL, RacePosBlock, Racedatabuf, Len(Racedatabuf), nNumber, KEY_BUF_LEN, 0)
@@ -1182,13 +1188,13 @@ oLI.ListSubItems.add (8), "CHM", Racerec.MinChm & "-" & Racerec.MaxChm
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub
 
 Private Sub DispRaceInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 Call RaceRowToStruct(row())
@@ -1219,7 +1225,7 @@ For x = 0 To 9
 Next
 
 Exit Sub
-Error:
+error:
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
     & "Previous records stats may still be in memory.  Select 'Disable DB Writing'" & vbCrLf _
@@ -1227,7 +1233,7 @@ MsgBox "Warning, record was not completely displayed." & vbCrLf _
 End Sub
 
 Private Sub saverecord(ByVal nRecord As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, x As Integer
 
 If nRecord = 0 Then Exit Sub
@@ -1271,7 +1277,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -1400,7 +1406,7 @@ Next x
 End Sub
 
 Private Sub cmdDelete_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nDelete As Integer, temp As Long
 
@@ -1441,12 +1447,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdInsert_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 Dim nNewRaceNumber As String, oLI As ListItem
 
@@ -1491,7 +1497,7 @@ End If
 
 Set oLI = Nothing
 Exit Sub
-Error:
+error:
 Call HandleError
 Set oLI = Nothing
 End Sub

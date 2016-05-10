@@ -567,7 +567,7 @@ On Error GoTo ErrorHandler
             SendMessage ghWnd, WM_MDIRESTORE, hWnd, 0&
         
         Case Else
-            Debug.Print "Menu Item: " & lMenu
+            'Debug.Print "Menu Item: " & lMenu
     End Select
 Done:
     Exit Function
@@ -648,7 +648,7 @@ Function MDI_ParentWndProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam A
                 objTB.OnRefresh lRet
                 objTB.RaiseChildActivate lRet
                 TheCount = TheCount + 1
-                Debug.Print "Get Active", TheCount
+                'Debug.Print "Get Active", TheCount
             
             Case WM_KILLFOCUS
                 objTB.OnRefresh wParam

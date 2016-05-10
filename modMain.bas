@@ -42,6 +42,7 @@ Public bUseCPU As Boolean
 Public bAbilityDBOpen As Boolean
 Public bDisableWriting As Boolean
 Public bOnlyNames As Boolean
+Public bOppositeListOrder As Boolean
 Public sAppVersion As String
 Public sMenuCaption As String
 Public strDatCallLetters As String * 2
@@ -224,6 +225,17 @@ Declare Function SetWindowPos Lib "user32" _
       ByVal cx As Long, _
       ByVal cy As Long, _
       ByVal wFlags As Long) As Long
+
+Public Function IsDimmed(Arr As Variant) As Boolean
+On Error GoTo ReturnFalse
+  IsDimmed = UBound(Arr) >= LBound(Arr)
+ReturnFalse:
+End Function
+
+Public Function RandomNumber(startNum As Integer, endNum As Integer) As Integer
+    Randomize
+    RandomNumber = Int(((endNum - startNum + 1) * Rnd) + startNum)
+End Function
 
 Public Sub ExpandCombo(ByRef Combo As ComboBox, ByVal ExpandType As eExpandType, _
     ByVal ExpandBy As eExpandBy, Optional ByVal hFrame As Long)
@@ -1196,6 +1208,12 @@ Call GetTitleBarOffset
 Call CheckINIReadOnly
 Call InitTaskbar
 nStatus = 0
+
+If Val(ReadINI("Settings", "OppositeListOrder")) > 0 Then
+    bOppositeListOrder = True
+Else
+    bOppositeListOrder = False
+End If
 
 If Val(ReadINI("Settings", "OnlyLoadNames")) > 0 Then
     bOnlyNames = True

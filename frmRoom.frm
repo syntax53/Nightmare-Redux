@@ -3,82 +3,49 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmRoom 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Room Editor"
-   ClientHeight    =   6825
+   ClientHeight    =   6870
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   7380
+   ClientWidth     =   8265
    Icon            =   "frmRoom.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   6825
-   ScaleWidth      =   7380
+   ScaleHeight     =   6870
+   ScaleWidth      =   8265
+   Begin VB.CommandButton cmdGotoFirstLastMapRoom 
+      Caption         =   "Goto Last Room on Map"
+      Height          =   375
+      Index           =   1
+      Left            =   6240
+      TabIndex        =   459
+      Top             =   2160
+      Width           =   1935
+   End
+   Begin VB.CommandButton cmdGotoFirstLastMapRoom 
+      Caption         =   "Goto First Room on Map"
+      Height          =   375
+      Index           =   0
+      Left            =   6240
+      TabIndex        =   457
+      Top             =   1800
+      Width           =   1935
+   End
    Begin VB.CommandButton cmdMinusOneRoom 
       Caption         =   "&- 1 room"
-      Height          =   315
+      Height          =   435
       Left            =   6300
       TabIndex        =   4
-      Top             =   1800
-      Width           =   975
+      Top             =   1260
+      Width           =   915
    End
    Begin VB.CommandButton cmdPlusOneRoom 
       Caption         =   "&+ 1 room"
-      Height          =   315
-      Left            =   6300
+      Height          =   435
+      Left            =   7260
       TabIndex        =   3
-      Top             =   1500
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdPrevious 
-      Caption         =   "&Previous"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   315
-      Left            =   6300
-      TabIndex        =   6
-      Top             =   2520
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdLast 
-      Caption         =   "Last"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   315
-      Left            =   6300
-      TabIndex        =   8
-      Top             =   3240
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdFirst 
-      Caption         =   "First"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   315
-      Left            =   6300
-      TabIndex        =   7
-      Top             =   2940
-      Width           =   975
+      Top             =   1260
+      Width           =   915
    End
    Begin VB.TextBox txtName 
       Height          =   285
@@ -123,41 +90,23 @@ Begin VB.Form frmRoom
       Left            =   6240
       TabIndex        =   16
       Top             =   6420
-      Width           =   1095
+      Width           =   1935
    End
    Begin VB.CommandButton cmdDelete 
-      Caption         =   "De&lete"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
+      Caption         =   "De&lete This Room"
       Height          =   375
       Left            =   6240
       TabIndex        =   10
-      Top             =   4020
-      Width           =   1095
+      Top             =   3720
+      Width           =   1935
    End
    Begin VB.CommandButton cmdInsert 
-      Caption         =   "Add / &Insert"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
+      Caption         =   "&Insert New Room"
       Height          =   375
       Left            =   6240
       TabIndex        =   9
-      Top             =   3660
-      Width           =   1095
+      Top             =   3360
+      Width           =   1935
    End
    Begin VB.CommandButton cmdMapEditor 
       Caption         =   "&Map Editor"
@@ -174,74 +123,101 @@ Begin VB.Form frmRoom
       Left            =   6240
       TabIndex        =   15
       Top             =   6060
-      Width           =   1095
+      Width           =   1935
    End
    Begin VB.CommandButton cmdDiscard 
       Caption         =   "Discar&d"
-      Height          =   375
+      Height          =   435
       Left            =   6240
       TabIndex        =   14
-      Top             =   5580
-      Width           =   1095
+      Top             =   5520
+      Width           =   1935
    End
    Begin VB.CommandButton cmdSave 
       Caption         =   "&Save"
-      Height          =   375
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   495
       Left            =   6240
       TabIndex        =   13
-      Top             =   5220
-      Width           =   1095
+      Top             =   5040
+      Width           =   1935
    End
    Begin VB.CommandButton cmdCopy2Exist 
-      Caption         =   "Copy 2 Exist"
-      Height          =   315
+      Caption         =   "Copy to Existing Room"
+      Height          =   375
       Left            =   6240
       TabIndex        =   12
-      Top             =   4800
-      Width           =   1095
+      Top             =   4560
+      Width           =   1935
    End
    Begin VB.CommandButton cmdCopy2New 
-      Caption         =   "Copy 2 New"
-      Height          =   315
+      Caption         =   "Copy to New Room"
+      Height          =   375
       Left            =   6240
       TabIndex        =   11
-      Top             =   4500
-      Width           =   1095
+      Top             =   4200
+      Width           =   1935
    End
    Begin VB.CommandButton cmdGoto 
       Caption         =   "&Goto"
       Default         =   -1  'True
       BeginProperty Font 
-         Name            =   "Arial"
+         Name            =   "MS Sans Serif"
          Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   915
+      Left            =   7260
+      TabIndex        =   2
+      Top             =   240
+      Width           =   915
+   End
+   Begin VB.TextBox txtGotoRoom 
+      Alignment       =   2  'Center
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   375
+      Height          =   360
       Left            =   6300
-      TabIndex        =   2
-      Top             =   0
-      Width           =   975
-   End
-   Begin VB.TextBox txtGotoRoom 
-      Alignment       =   2  'Center
-      Height          =   285
-      Left            =   6360
       TabIndex        =   1
       Text            =   "1"
-      Top             =   1110
+      Top             =   810
       Width           =   855
    End
    Begin VB.TextBox txtGotoMap 
       Alignment       =   2  'Center
-      Height          =   285
-      Left            =   6360
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   360
+      Left            =   6300
       TabIndex        =   0
       Text            =   "1"
-      Top             =   600
+      Top             =   240
       Width           =   855
    End
    Begin TabDlg.SSTab SSTab1 
@@ -397,288 +373,288 @@ Begin VB.Form frmRoom
       Tab(1).Control(126)=   "label(3)"
       Tab(1).Control(127)=   "lblExitType(0)"
       Tab(1).ControlCount=   128
-      TabCaption(2)   =   "Placed Items/Monster"
+      TabCaption(2)   =   "NPC / Items / Coins  "
       TabPicture(2)   =   "frmRoom.frx":0902
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "label(26)"
-      Tab(2).Control(1)=   "label(20)"
-      Tab(2).Control(2)=   "txtPlacedItemsName(9)"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "txtPlacedItemsName(8)"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "txtPlacedItemsName(7)"
-      Tab(2).Control(4).Enabled=   0   'False
-      Tab(2).Control(5)=   "txtPlacedItemsName(6)"
-      Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "txtPlacedItemsName(5)"
-      Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "txtPlacedItemsName(4)"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "txtPlacedItemsName(3)"
-      Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "txtPlacedItemsName(2)"
-      Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "txtPlacedItemsName(1)"
-      Tab(2).Control(10).Enabled=   0   'False
-      Tab(2).Control(11)=   "txtPlacedItemsName(0)"
-      Tab(2).Control(11).Enabled=   0   'False
-      Tab(2).Control(12)=   "txtPlacedItems(0)"
-      Tab(2).Control(13)=   "txtPlacedItems(1)"
-      Tab(2).Control(14)=   "txtPlacedItems(2)"
-      Tab(2).Control(15)=   "txtPlacedItems(3)"
-      Tab(2).Control(16)=   "txtPlacedItems(4)"
-      Tab(2).Control(17)=   "txtPlacedItems(5)"
+      Tab(2).Control(0)=   "Frame4"
+      Tab(2).Control(1)=   "Frame3"
+      Tab(2).Control(2)=   "cmdEditPlacedItem(9)"
+      Tab(2).Control(3)=   "cmdEditPlacedItem(8)"
+      Tab(2).Control(4)=   "cmdEditPlacedItem(7)"
+      Tab(2).Control(5)=   "cmdEditPlacedItem(6)"
+      Tab(2).Control(6)=   "cmdEditPlacedItem(5)"
+      Tab(2).Control(7)=   "cmdEditPlacedItem(4)"
+      Tab(2).Control(8)=   "cmdEditPlacedItem(3)"
+      Tab(2).Control(9)=   "cmdEditPlacedItem(2)"
+      Tab(2).Control(10)=   "cmdEditPlacedItem(1)"
+      Tab(2).Control(11)=   "cmdEditPlacedItem(0)"
+      Tab(2).Control(12)=   "cmdEditPermNPC"
+      Tab(2).Control(13)=   "txtPermNPC"
+      Tab(2).Control(14)=   "txtPermNPCName"
+      Tab(2).Control(14).Enabled=   0   'False
+      Tab(2).Control(15)=   "txtPlacedItems(9)"
+      Tab(2).Control(16)=   "txtPlacedItems(8)"
+      Tab(2).Control(17)=   "txtPlacedItems(7)"
       Tab(2).Control(18)=   "txtPlacedItems(6)"
-      Tab(2).Control(19)=   "txtPlacedItems(7)"
-      Tab(2).Control(20)=   "txtPlacedItems(8)"
-      Tab(2).Control(21)=   "txtPlacedItems(9)"
-      Tab(2).Control(22)=   "txtPermNPCName"
-      Tab(2).Control(22).Enabled=   0   'False
-      Tab(2).Control(23)=   "txtPermNPC"
-      Tab(2).Control(24)=   "cmdEditPermNPC"
-      Tab(2).Control(25)=   "cmdEditPlacedItem(0)"
-      Tab(2).Control(26)=   "cmdEditPlacedItem(1)"
-      Tab(2).Control(27)=   "cmdEditPlacedItem(2)"
-      Tab(2).Control(28)=   "cmdEditPlacedItem(3)"
-      Tab(2).Control(29)=   "cmdEditPlacedItem(4)"
-      Tab(2).Control(30)=   "cmdEditPlacedItem(5)"
-      Tab(2).Control(31)=   "cmdEditPlacedItem(6)"
-      Tab(2).Control(32)=   "cmdEditPlacedItem(7)"
-      Tab(2).Control(33)=   "cmdEditPlacedItem(8)"
-      Tab(2).Control(34)=   "cmdEditPlacedItem(9)"
-      Tab(2).Control(35)=   "Frame3"
-      Tab(2).Control(36)=   "Frame4"
+      Tab(2).Control(19)=   "txtPlacedItems(5)"
+      Tab(2).Control(20)=   "txtPlacedItems(4)"
+      Tab(2).Control(21)=   "txtPlacedItems(3)"
+      Tab(2).Control(22)=   "txtPlacedItems(2)"
+      Tab(2).Control(23)=   "txtPlacedItems(1)"
+      Tab(2).Control(24)=   "txtPlacedItems(0)"
+      Tab(2).Control(25)=   "txtPlacedItemsName(0)"
+      Tab(2).Control(25).Enabled=   0   'False
+      Tab(2).Control(26)=   "txtPlacedItemsName(1)"
+      Tab(2).Control(26).Enabled=   0   'False
+      Tab(2).Control(27)=   "txtPlacedItemsName(2)"
+      Tab(2).Control(27).Enabled=   0   'False
+      Tab(2).Control(28)=   "txtPlacedItemsName(3)"
+      Tab(2).Control(28).Enabled=   0   'False
+      Tab(2).Control(29)=   "txtPlacedItemsName(4)"
+      Tab(2).Control(29).Enabled=   0   'False
+      Tab(2).Control(30)=   "txtPlacedItemsName(5)"
+      Tab(2).Control(30).Enabled=   0   'False
+      Tab(2).Control(31)=   "txtPlacedItemsName(6)"
+      Tab(2).Control(31).Enabled=   0   'False
+      Tab(2).Control(32)=   "txtPlacedItemsName(7)"
+      Tab(2).Control(32).Enabled=   0   'False
+      Tab(2).Control(33)=   "txtPlacedItemsName(8)"
+      Tab(2).Control(33).Enabled=   0   'False
+      Tab(2).Control(34)=   "txtPlacedItemsName(9)"
+      Tab(2).Control(34).Enabled=   0   'False
+      Tab(2).Control(35)=   "label(20)"
+      Tab(2).Control(36)=   "label(26)"
       Tab(2).ControlCount=   37
       TabCaption(3)   =   "Visible Items"
       TabPicture(3)   =   "frmRoom.frx":091E
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "label(15)"
-      Tab(3).Control(1)=   "label(16)"
-      Tab(3).Control(2)=   "label(17)"
-      Tab(3).Control(3)=   "label(18)"
-      Tab(3).Control(4)=   "Label11"
-      Tab(3).Control(5)=   "cmdVisibleGoto(0)"
-      Tab(3).Control(6)=   "txtVisibleNumber(0)"
-      Tab(3).Control(7)=   "txtVisibleName(0)"
+      Tab(3).Control(0)=   "txtVisibleQty(16)"
+      Tab(3).Control(1)=   "txtVisibleUses(16)"
+      Tab(3).Control(2)=   "txtVisibleName(16)"
+      Tab(3).Control(2).Enabled=   0   'False
+      Tab(3).Control(3)=   "txtVisibleNumber(16)"
+      Tab(3).Control(4)=   "cmdVisibleGoto(16)"
+      Tab(3).Control(5)=   "txtVisibleQty(15)"
+      Tab(3).Control(6)=   "txtVisibleUses(15)"
+      Tab(3).Control(7)=   "txtVisibleName(15)"
       Tab(3).Control(7).Enabled=   0   'False
-      Tab(3).Control(8)=   "txtVisibleUses(0)"
-      Tab(3).Control(9)=   "txtVisibleQty(0)"
-      Tab(3).Control(10)=   "cmdVisibleGoto(1)"
-      Tab(3).Control(11)=   "txtVisibleNumber(1)"
-      Tab(3).Control(12)=   "txtVisibleName(1)"
+      Tab(3).Control(8)=   "txtVisibleNumber(15)"
+      Tab(3).Control(9)=   "cmdVisibleGoto(15)"
+      Tab(3).Control(10)=   "txtVisibleQty(14)"
+      Tab(3).Control(11)=   "txtVisibleUses(14)"
+      Tab(3).Control(12)=   "txtVisibleName(14)"
       Tab(3).Control(12).Enabled=   0   'False
-      Tab(3).Control(13)=   "txtVisibleUses(1)"
-      Tab(3).Control(14)=   "txtVisibleQty(1)"
-      Tab(3).Control(15)=   "cmdVisibleGoto(2)"
-      Tab(3).Control(16)=   "txtVisibleNumber(2)"
-      Tab(3).Control(17)=   "txtVisibleName(2)"
+      Tab(3).Control(13)=   "txtVisibleNumber(14)"
+      Tab(3).Control(14)=   "cmdVisibleGoto(14)"
+      Tab(3).Control(15)=   "txtVisibleQty(13)"
+      Tab(3).Control(16)=   "txtVisibleUses(13)"
+      Tab(3).Control(17)=   "txtVisibleName(13)"
       Tab(3).Control(17).Enabled=   0   'False
-      Tab(3).Control(18)=   "txtVisibleUses(2)"
-      Tab(3).Control(19)=   "txtVisibleQty(2)"
-      Tab(3).Control(20)=   "cmdVisibleGoto(3)"
-      Tab(3).Control(21)=   "txtVisibleNumber(3)"
-      Tab(3).Control(22)=   "txtVisibleName(3)"
+      Tab(3).Control(18)=   "txtVisibleNumber(13)"
+      Tab(3).Control(19)=   "cmdVisibleGoto(13)"
+      Tab(3).Control(20)=   "txtVisibleQty(12)"
+      Tab(3).Control(21)=   "txtVisibleUses(12)"
+      Tab(3).Control(22)=   "txtVisibleName(12)"
       Tab(3).Control(22).Enabled=   0   'False
-      Tab(3).Control(23)=   "txtVisibleUses(3)"
-      Tab(3).Control(24)=   "txtVisibleQty(3)"
-      Tab(3).Control(25)=   "cmdVisibleGoto(4)"
-      Tab(3).Control(26)=   "txtVisibleNumber(4)"
-      Tab(3).Control(27)=   "txtVisibleName(4)"
+      Tab(3).Control(23)=   "txtVisibleNumber(12)"
+      Tab(3).Control(24)=   "cmdVisibleGoto(12)"
+      Tab(3).Control(25)=   "txtVisibleQty(11)"
+      Tab(3).Control(26)=   "txtVisibleUses(11)"
+      Tab(3).Control(27)=   "txtVisibleName(11)"
       Tab(3).Control(27).Enabled=   0   'False
-      Tab(3).Control(28)=   "txtVisibleUses(4)"
-      Tab(3).Control(29)=   "txtVisibleQty(4)"
-      Tab(3).Control(30)=   "cmdVisibleGoto(5)"
-      Tab(3).Control(31)=   "txtVisibleNumber(5)"
-      Tab(3).Control(32)=   "txtVisibleName(5)"
+      Tab(3).Control(28)=   "txtVisibleNumber(11)"
+      Tab(3).Control(29)=   "cmdVisibleGoto(11)"
+      Tab(3).Control(30)=   "txtVisibleQty(10)"
+      Tab(3).Control(31)=   "txtVisibleUses(10)"
+      Tab(3).Control(32)=   "txtVisibleName(10)"
       Tab(3).Control(32).Enabled=   0   'False
-      Tab(3).Control(33)=   "txtVisibleUses(5)"
-      Tab(3).Control(34)=   "txtVisibleQty(5)"
-      Tab(3).Control(35)=   "cmdVisibleGoto(6)"
-      Tab(3).Control(36)=   "txtVisibleNumber(6)"
-      Tab(3).Control(37)=   "txtVisibleName(6)"
+      Tab(3).Control(33)=   "txtVisibleNumber(10)"
+      Tab(3).Control(34)=   "cmdVisibleGoto(10)"
+      Tab(3).Control(35)=   "txtVisibleQty(9)"
+      Tab(3).Control(36)=   "txtVisibleUses(9)"
+      Tab(3).Control(37)=   "txtVisibleName(9)"
       Tab(3).Control(37).Enabled=   0   'False
-      Tab(3).Control(38)=   "txtVisibleUses(6)"
-      Tab(3).Control(39)=   "txtVisibleQty(6)"
-      Tab(3).Control(40)=   "cmdVisibleGoto(7)"
-      Tab(3).Control(41)=   "txtVisibleNumber(7)"
-      Tab(3).Control(42)=   "txtVisibleName(7)"
+      Tab(3).Control(38)=   "txtVisibleNumber(9)"
+      Tab(3).Control(39)=   "cmdVisibleGoto(9)"
+      Tab(3).Control(40)=   "txtVisibleQty(8)"
+      Tab(3).Control(41)=   "txtVisibleUses(8)"
+      Tab(3).Control(42)=   "txtVisibleName(8)"
       Tab(3).Control(42).Enabled=   0   'False
-      Tab(3).Control(43)=   "txtVisibleUses(7)"
-      Tab(3).Control(44)=   "txtVisibleQty(7)"
-      Tab(3).Control(45)=   "cmdVisibleGoto(8)"
-      Tab(3).Control(46)=   "txtVisibleNumber(8)"
-      Tab(3).Control(47)=   "txtVisibleName(8)"
+      Tab(3).Control(43)=   "txtVisibleNumber(8)"
+      Tab(3).Control(44)=   "cmdVisibleGoto(8)"
+      Tab(3).Control(45)=   "txtVisibleQty(7)"
+      Tab(3).Control(46)=   "txtVisibleUses(7)"
+      Tab(3).Control(47)=   "txtVisibleName(7)"
       Tab(3).Control(47).Enabled=   0   'False
-      Tab(3).Control(48)=   "txtVisibleUses(8)"
-      Tab(3).Control(49)=   "txtVisibleQty(8)"
-      Tab(3).Control(50)=   "cmdVisibleGoto(9)"
-      Tab(3).Control(51)=   "txtVisibleNumber(9)"
-      Tab(3).Control(52)=   "txtVisibleName(9)"
+      Tab(3).Control(48)=   "txtVisibleNumber(7)"
+      Tab(3).Control(49)=   "cmdVisibleGoto(7)"
+      Tab(3).Control(50)=   "txtVisibleQty(6)"
+      Tab(3).Control(51)=   "txtVisibleUses(6)"
+      Tab(3).Control(52)=   "txtVisibleName(6)"
       Tab(3).Control(52).Enabled=   0   'False
-      Tab(3).Control(53)=   "txtVisibleUses(9)"
-      Tab(3).Control(54)=   "txtVisibleQty(9)"
-      Tab(3).Control(55)=   "cmdVisibleGoto(10)"
-      Tab(3).Control(56)=   "txtVisibleNumber(10)"
-      Tab(3).Control(57)=   "txtVisibleName(10)"
+      Tab(3).Control(53)=   "txtVisibleNumber(6)"
+      Tab(3).Control(54)=   "cmdVisibleGoto(6)"
+      Tab(3).Control(55)=   "txtVisibleQty(5)"
+      Tab(3).Control(56)=   "txtVisibleUses(5)"
+      Tab(3).Control(57)=   "txtVisibleName(5)"
       Tab(3).Control(57).Enabled=   0   'False
-      Tab(3).Control(58)=   "txtVisibleUses(10)"
-      Tab(3).Control(59)=   "txtVisibleQty(10)"
-      Tab(3).Control(60)=   "cmdVisibleGoto(11)"
-      Tab(3).Control(61)=   "txtVisibleNumber(11)"
-      Tab(3).Control(62)=   "txtVisibleName(11)"
+      Tab(3).Control(58)=   "txtVisibleNumber(5)"
+      Tab(3).Control(59)=   "cmdVisibleGoto(5)"
+      Tab(3).Control(60)=   "txtVisibleQty(4)"
+      Tab(3).Control(61)=   "txtVisibleUses(4)"
+      Tab(3).Control(62)=   "txtVisibleName(4)"
       Tab(3).Control(62).Enabled=   0   'False
-      Tab(3).Control(63)=   "txtVisibleUses(11)"
-      Tab(3).Control(64)=   "txtVisibleQty(11)"
-      Tab(3).Control(65)=   "cmdVisibleGoto(12)"
-      Tab(3).Control(66)=   "txtVisibleNumber(12)"
-      Tab(3).Control(67)=   "txtVisibleName(12)"
+      Tab(3).Control(63)=   "txtVisibleNumber(4)"
+      Tab(3).Control(64)=   "cmdVisibleGoto(4)"
+      Tab(3).Control(65)=   "txtVisibleQty(3)"
+      Tab(3).Control(66)=   "txtVisibleUses(3)"
+      Tab(3).Control(67)=   "txtVisibleName(3)"
       Tab(3).Control(67).Enabled=   0   'False
-      Tab(3).Control(68)=   "txtVisibleUses(12)"
-      Tab(3).Control(69)=   "txtVisibleQty(12)"
-      Tab(3).Control(70)=   "cmdVisibleGoto(13)"
-      Tab(3).Control(71)=   "txtVisibleNumber(13)"
-      Tab(3).Control(72)=   "txtVisibleName(13)"
+      Tab(3).Control(68)=   "txtVisibleNumber(3)"
+      Tab(3).Control(69)=   "cmdVisibleGoto(3)"
+      Tab(3).Control(70)=   "txtVisibleQty(2)"
+      Tab(3).Control(71)=   "txtVisibleUses(2)"
+      Tab(3).Control(72)=   "txtVisibleName(2)"
       Tab(3).Control(72).Enabled=   0   'False
-      Tab(3).Control(73)=   "txtVisibleUses(13)"
-      Tab(3).Control(74)=   "txtVisibleQty(13)"
-      Tab(3).Control(75)=   "cmdVisibleGoto(14)"
-      Tab(3).Control(76)=   "txtVisibleNumber(14)"
-      Tab(3).Control(77)=   "txtVisibleName(14)"
+      Tab(3).Control(73)=   "txtVisibleNumber(2)"
+      Tab(3).Control(74)=   "cmdVisibleGoto(2)"
+      Tab(3).Control(75)=   "txtVisibleQty(1)"
+      Tab(3).Control(76)=   "txtVisibleUses(1)"
+      Tab(3).Control(77)=   "txtVisibleName(1)"
       Tab(3).Control(77).Enabled=   0   'False
-      Tab(3).Control(78)=   "txtVisibleUses(14)"
-      Tab(3).Control(79)=   "txtVisibleQty(14)"
-      Tab(3).Control(80)=   "cmdVisibleGoto(15)"
-      Tab(3).Control(81)=   "txtVisibleNumber(15)"
-      Tab(3).Control(82)=   "txtVisibleName(15)"
+      Tab(3).Control(78)=   "txtVisibleNumber(1)"
+      Tab(3).Control(79)=   "cmdVisibleGoto(1)"
+      Tab(3).Control(80)=   "txtVisibleQty(0)"
+      Tab(3).Control(81)=   "txtVisibleUses(0)"
+      Tab(3).Control(82)=   "txtVisibleName(0)"
       Tab(3).Control(82).Enabled=   0   'False
-      Tab(3).Control(83)=   "txtVisibleUses(15)"
-      Tab(3).Control(84)=   "txtVisibleQty(15)"
-      Tab(3).Control(85)=   "cmdVisibleGoto(16)"
-      Tab(3).Control(86)=   "txtVisibleNumber(16)"
-      Tab(3).Control(87)=   "txtVisibleName(16)"
-      Tab(3).Control(87).Enabled=   0   'False
-      Tab(3).Control(88)=   "txtVisibleUses(16)"
-      Tab(3).Control(89)=   "txtVisibleQty(16)"
+      Tab(3).Control(83)=   "txtVisibleNumber(0)"
+      Tab(3).Control(84)=   "cmdVisibleGoto(0)"
+      Tab(3).Control(85)=   "Label11"
+      Tab(3).Control(86)=   "label(18)"
+      Tab(3).Control(87)=   "label(17)"
+      Tab(3).Control(88)=   "label(16)"
+      Tab(3).Control(89)=   "label(15)"
       Tab(3).ControlCount=   90
       TabCaption(4)   =   "Hidden Items"
       TabPicture(4)   =   "frmRoom.frx":093A
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "label(19)"
-      Tab(4).Control(1)=   "label(27)"
-      Tab(4).Control(2)=   "label(35)"
-      Tab(4).Control(3)=   "label(36)"
-      Tab(4).Control(4)=   "Label3"
-      Tab(4).Control(5)=   "cmdHiddenGoto(0)"
-      Tab(4).Control(6)=   "txtHiddenNumber(0)"
-      Tab(4).Control(7)=   "txtHiddenName(0)"
+      Tab(4).Control(0)=   "txtHiddenQty(14)"
+      Tab(4).Control(1)=   "txtHiddenUses(14)"
+      Tab(4).Control(2)=   "txtHiddenName(14)"
+      Tab(4).Control(2).Enabled=   0   'False
+      Tab(4).Control(3)=   "txtHiddenNumber(14)"
+      Tab(4).Control(4)=   "cmdHiddenGoto(14)"
+      Tab(4).Control(5)=   "txtHiddenQty(13)"
+      Tab(4).Control(6)=   "txtHiddenUses(13)"
+      Tab(4).Control(7)=   "txtHiddenName(13)"
       Tab(4).Control(7).Enabled=   0   'False
-      Tab(4).Control(8)=   "txtHiddenUses(0)"
-      Tab(4).Control(9)=   "txtHiddenQty(0)"
-      Tab(4).Control(10)=   "cmdHiddenGoto(1)"
-      Tab(4).Control(11)=   "txtHiddenNumber(1)"
-      Tab(4).Control(12)=   "txtHiddenName(1)"
+      Tab(4).Control(8)=   "txtHiddenNumber(13)"
+      Tab(4).Control(9)=   "cmdHiddenGoto(13)"
+      Tab(4).Control(10)=   "txtHiddenQty(12)"
+      Tab(4).Control(11)=   "txtHiddenUses(12)"
+      Tab(4).Control(12)=   "txtHiddenName(12)"
       Tab(4).Control(12).Enabled=   0   'False
-      Tab(4).Control(13)=   "txtHiddenUses(1)"
-      Tab(4).Control(14)=   "txtHiddenQty(1)"
-      Tab(4).Control(15)=   "cmdHiddenGoto(2)"
-      Tab(4).Control(16)=   "txtHiddenNumber(2)"
-      Tab(4).Control(17)=   "txtHiddenName(2)"
+      Tab(4).Control(13)=   "txtHiddenNumber(12)"
+      Tab(4).Control(14)=   "cmdHiddenGoto(12)"
+      Tab(4).Control(15)=   "txtHiddenQty(11)"
+      Tab(4).Control(16)=   "txtHiddenUses(11)"
+      Tab(4).Control(17)=   "txtHiddenName(11)"
       Tab(4).Control(17).Enabled=   0   'False
-      Tab(4).Control(18)=   "txtHiddenUses(2)"
-      Tab(4).Control(19)=   "txtHiddenQty(2)"
-      Tab(4).Control(20)=   "cmdHiddenGoto(3)"
-      Tab(4).Control(21)=   "txtHiddenNumber(3)"
-      Tab(4).Control(22)=   "txtHiddenName(3)"
+      Tab(4).Control(18)=   "txtHiddenNumber(11)"
+      Tab(4).Control(19)=   "cmdHiddenGoto(11)"
+      Tab(4).Control(20)=   "txtHiddenQty(10)"
+      Tab(4).Control(21)=   "txtHiddenUses(10)"
+      Tab(4).Control(22)=   "txtHiddenName(10)"
       Tab(4).Control(22).Enabled=   0   'False
-      Tab(4).Control(23)=   "txtHiddenUses(3)"
-      Tab(4).Control(24)=   "txtHiddenQty(3)"
-      Tab(4).Control(25)=   "cmdHiddenGoto(4)"
-      Tab(4).Control(26)=   "txtHiddenNumber(4)"
-      Tab(4).Control(27)=   "txtHiddenName(4)"
+      Tab(4).Control(23)=   "txtHiddenNumber(10)"
+      Tab(4).Control(24)=   "cmdHiddenGoto(10)"
+      Tab(4).Control(25)=   "txtHiddenQty(9)"
+      Tab(4).Control(26)=   "txtHiddenUses(9)"
+      Tab(4).Control(27)=   "txtHiddenName(9)"
       Tab(4).Control(27).Enabled=   0   'False
-      Tab(4).Control(28)=   "txtHiddenUses(4)"
-      Tab(4).Control(29)=   "txtHiddenQty(4)"
-      Tab(4).Control(30)=   "cmdHiddenGoto(5)"
-      Tab(4).Control(31)=   "txtHiddenNumber(5)"
-      Tab(4).Control(32)=   "txtHiddenName(5)"
+      Tab(4).Control(28)=   "txtHiddenNumber(9)"
+      Tab(4).Control(29)=   "cmdHiddenGoto(9)"
+      Tab(4).Control(30)=   "txtHiddenQty(8)"
+      Tab(4).Control(31)=   "txtHiddenUses(8)"
+      Tab(4).Control(32)=   "txtHiddenName(8)"
       Tab(4).Control(32).Enabled=   0   'False
-      Tab(4).Control(33)=   "txtHiddenUses(5)"
-      Tab(4).Control(34)=   "txtHiddenQty(5)"
-      Tab(4).Control(35)=   "cmdHiddenGoto(6)"
-      Tab(4).Control(36)=   "txtHiddenNumber(6)"
-      Tab(4).Control(37)=   "txtHiddenName(6)"
+      Tab(4).Control(33)=   "txtHiddenNumber(8)"
+      Tab(4).Control(34)=   "cmdHiddenGoto(8)"
+      Tab(4).Control(35)=   "txtHiddenQty(7)"
+      Tab(4).Control(36)=   "txtHiddenUses(7)"
+      Tab(4).Control(37)=   "txtHiddenName(7)"
       Tab(4).Control(37).Enabled=   0   'False
-      Tab(4).Control(38)=   "txtHiddenUses(6)"
-      Tab(4).Control(39)=   "txtHiddenQty(6)"
-      Tab(4).Control(40)=   "cmdHiddenGoto(7)"
-      Tab(4).Control(41)=   "txtHiddenNumber(7)"
-      Tab(4).Control(42)=   "txtHiddenName(7)"
+      Tab(4).Control(38)=   "txtHiddenNumber(7)"
+      Tab(4).Control(39)=   "cmdHiddenGoto(7)"
+      Tab(4).Control(40)=   "txtHiddenQty(6)"
+      Tab(4).Control(41)=   "txtHiddenUses(6)"
+      Tab(4).Control(42)=   "txtHiddenName(6)"
       Tab(4).Control(42).Enabled=   0   'False
-      Tab(4).Control(43)=   "txtHiddenUses(7)"
-      Tab(4).Control(44)=   "txtHiddenQty(7)"
-      Tab(4).Control(45)=   "cmdHiddenGoto(8)"
-      Tab(4).Control(46)=   "txtHiddenNumber(8)"
-      Tab(4).Control(47)=   "txtHiddenName(8)"
+      Tab(4).Control(43)=   "txtHiddenNumber(6)"
+      Tab(4).Control(44)=   "cmdHiddenGoto(6)"
+      Tab(4).Control(45)=   "txtHiddenQty(5)"
+      Tab(4).Control(46)=   "txtHiddenUses(5)"
+      Tab(4).Control(47)=   "txtHiddenName(5)"
       Tab(4).Control(47).Enabled=   0   'False
-      Tab(4).Control(48)=   "txtHiddenUses(8)"
-      Tab(4).Control(49)=   "txtHiddenQty(8)"
-      Tab(4).Control(50)=   "cmdHiddenGoto(9)"
-      Tab(4).Control(51)=   "txtHiddenNumber(9)"
-      Tab(4).Control(52)=   "txtHiddenName(9)"
+      Tab(4).Control(48)=   "txtHiddenNumber(5)"
+      Tab(4).Control(49)=   "cmdHiddenGoto(5)"
+      Tab(4).Control(50)=   "txtHiddenQty(4)"
+      Tab(4).Control(51)=   "txtHiddenUses(4)"
+      Tab(4).Control(52)=   "txtHiddenName(4)"
       Tab(4).Control(52).Enabled=   0   'False
-      Tab(4).Control(53)=   "txtHiddenUses(9)"
-      Tab(4).Control(54)=   "txtHiddenQty(9)"
-      Tab(4).Control(55)=   "cmdHiddenGoto(10)"
-      Tab(4).Control(56)=   "txtHiddenNumber(10)"
-      Tab(4).Control(57)=   "txtHiddenName(10)"
+      Tab(4).Control(53)=   "txtHiddenNumber(4)"
+      Tab(4).Control(54)=   "cmdHiddenGoto(4)"
+      Tab(4).Control(55)=   "txtHiddenQty(3)"
+      Tab(4).Control(56)=   "txtHiddenUses(3)"
+      Tab(4).Control(57)=   "txtHiddenName(3)"
       Tab(4).Control(57).Enabled=   0   'False
-      Tab(4).Control(58)=   "txtHiddenUses(10)"
-      Tab(4).Control(59)=   "txtHiddenQty(10)"
-      Tab(4).Control(60)=   "cmdHiddenGoto(11)"
-      Tab(4).Control(61)=   "txtHiddenNumber(11)"
-      Tab(4).Control(62)=   "txtHiddenName(11)"
+      Tab(4).Control(58)=   "txtHiddenNumber(3)"
+      Tab(4).Control(59)=   "cmdHiddenGoto(3)"
+      Tab(4).Control(60)=   "txtHiddenQty(2)"
+      Tab(4).Control(61)=   "txtHiddenUses(2)"
+      Tab(4).Control(62)=   "txtHiddenName(2)"
       Tab(4).Control(62).Enabled=   0   'False
-      Tab(4).Control(63)=   "txtHiddenUses(11)"
-      Tab(4).Control(64)=   "txtHiddenQty(11)"
-      Tab(4).Control(65)=   "cmdHiddenGoto(12)"
-      Tab(4).Control(66)=   "txtHiddenNumber(12)"
-      Tab(4).Control(67)=   "txtHiddenName(12)"
+      Tab(4).Control(63)=   "txtHiddenNumber(2)"
+      Tab(4).Control(64)=   "cmdHiddenGoto(2)"
+      Tab(4).Control(65)=   "txtHiddenQty(1)"
+      Tab(4).Control(66)=   "txtHiddenUses(1)"
+      Tab(4).Control(67)=   "txtHiddenName(1)"
       Tab(4).Control(67).Enabled=   0   'False
-      Tab(4).Control(68)=   "txtHiddenUses(12)"
-      Tab(4).Control(69)=   "txtHiddenQty(12)"
-      Tab(4).Control(70)=   "cmdHiddenGoto(13)"
-      Tab(4).Control(71)=   "txtHiddenNumber(13)"
-      Tab(4).Control(72)=   "txtHiddenName(13)"
+      Tab(4).Control(68)=   "txtHiddenNumber(1)"
+      Tab(4).Control(69)=   "cmdHiddenGoto(1)"
+      Tab(4).Control(70)=   "txtHiddenQty(0)"
+      Tab(4).Control(71)=   "txtHiddenUses(0)"
+      Tab(4).Control(72)=   "txtHiddenName(0)"
       Tab(4).Control(72).Enabled=   0   'False
-      Tab(4).Control(73)=   "txtHiddenUses(13)"
-      Tab(4).Control(74)=   "txtHiddenQty(13)"
-      Tab(4).Control(75)=   "cmdHiddenGoto(14)"
-      Tab(4).Control(76)=   "txtHiddenNumber(14)"
-      Tab(4).Control(77)=   "txtHiddenName(14)"
-      Tab(4).Control(77).Enabled=   0   'False
-      Tab(4).Control(78)=   "txtHiddenUses(14)"
-      Tab(4).Control(79)=   "txtHiddenQty(14)"
+      Tab(4).Control(73)=   "txtHiddenNumber(0)"
+      Tab(4).Control(74)=   "cmdHiddenGoto(0)"
+      Tab(4).Control(75)=   "Label3"
+      Tab(4).Control(76)=   "label(36)"
+      Tab(4).Control(77)=   "label(35)"
+      Tab(4).Control(78)=   "label(27)"
+      Tab(4).Control(79)=   "label(19)"
       Tab(4).ControlCount=   80
       TabCaption(5)   =   "Other"
       TabPicture(5)   =   "frmRoom.frx":0956
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "Label8"
-      Tab(5).Control(1)=   "txtCurrentRoomMon(14)"
-      Tab(5).Control(2)=   "txtCurrentRoomMon(0)"
-      Tab(5).Control(3)=   "txtCurrentRoomMon(13)"
-      Tab(5).Control(4)=   "txtCurrentRoomMon(12)"
-      Tab(5).Control(5)=   "txtCurrentRoomMon(11)"
-      Tab(5).Control(6)=   "txtCurrentRoomMon(10)"
-      Tab(5).Control(7)=   "txtCurrentRoomMon(9)"
+      Tab(5).Control(0)=   "txtNote"
+      Tab(5).Control(1)=   "txtCurrentRoomMon(1)"
+      Tab(5).Control(2)=   "txtCurrentRoomMon(2)"
+      Tab(5).Control(3)=   "txtCurrentRoomMon(3)"
+      Tab(5).Control(4)=   "txtCurrentRoomMon(4)"
+      Tab(5).Control(5)=   "txtCurrentRoomMon(5)"
+      Tab(5).Control(6)=   "txtCurrentRoomMon(6)"
+      Tab(5).Control(7)=   "txtCurrentRoomMon(7)"
       Tab(5).Control(8)=   "txtCurrentRoomMon(8)"
-      Tab(5).Control(9)=   "txtCurrentRoomMon(7)"
-      Tab(5).Control(10)=   "txtCurrentRoomMon(6)"
-      Tab(5).Control(11)=   "txtCurrentRoomMon(5)"
-      Tab(5).Control(12)=   "txtCurrentRoomMon(4)"
-      Tab(5).Control(13)=   "txtCurrentRoomMon(3)"
-      Tab(5).Control(14)=   "txtCurrentRoomMon(2)"
-      Tab(5).Control(15)=   "txtCurrentRoomMon(1)"
-      Tab(5).Control(16)=   "txtNote"
+      Tab(5).Control(9)=   "txtCurrentRoomMon(9)"
+      Tab(5).Control(10)=   "txtCurrentRoomMon(10)"
+      Tab(5).Control(11)=   "txtCurrentRoomMon(11)"
+      Tab(5).Control(12)=   "txtCurrentRoomMon(12)"
+      Tab(5).Control(13)=   "txtCurrentRoomMon(13)"
+      Tab(5).Control(14)=   "txtCurrentRoomMon(0)"
+      Tab(5).Control(15)=   "txtCurrentRoomMon(14)"
+      Tab(5).Control(16)=   "Label8"
       Tab(5).ControlCount=   17
       Begin VB.Frame Frame4 
          Caption         =   "Visible Coins"
@@ -4535,22 +4511,48 @@ Begin VB.Form frmRoom
          Width           =   2835
       End
    End
+   Begin VB.CommandButton cmdLast 
+      Caption         =   "Last"
+      Height          =   375
+      Left            =   7560
+      TabIndex        =   8
+      Top             =   2880
+      Width           =   615
+   End
    Begin VB.CommandButton cmdNext 
-      Caption         =   "&Next"
-      BeginProperty Font 
-         Name            =   "Arial"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   315
-      Left            =   6300
+      Caption         =   ">"
+      Height          =   375
+      Left            =   7200
       TabIndex        =   5
-      Top             =   2220
-      Width           =   975
+      ToolTipText     =   "Previous Record"
+      Top             =   2880
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdPrevious 
+      Caption         =   "<"
+      Height          =   375
+      Left            =   6840
+      TabIndex        =   6
+      ToolTipText     =   "Next Record"
+      Top             =   2880
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdFirst 
+      Caption         =   "First"
+      Height          =   375
+      Left            =   6240
+      TabIndex        =   7
+      Top             =   2880
+      Width           =   615
+   End
+   Begin VB.Label Label12 
+      Alignment       =   2  'Center
+      Caption         =   "Direct Record Navigation:"
+      Height          =   195
+      Left            =   6240
+      TabIndex        =   458
+      Top             =   2640
+      Width           =   1935
    End
    Begin VB.Label label 
       Caption         =   "Name"
@@ -4610,18 +4612,18 @@ Begin VB.Form frmRoom
       Alignment       =   2  'Center
       Caption         =   "Map #"
       Height          =   255
-      Left            =   6360
+      Left            =   6300
       TabIndex        =   187
-      Top             =   390
+      Top             =   30
       Width           =   855
    End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
       Caption         =   "Room #"
       Height          =   255
-      Left            =   6360
+      Left            =   6300
       TabIndex        =   186
-      Top             =   930
+      Top             =   630
       Width           =   855
    End
 End
@@ -4664,6 +4666,98 @@ txtAnsiMap.Text = "WCCMAP01.ANS"
 Exit Sub
 error:
 Call HandleError("cmdClearAdvanced_Click")
+End Sub
+
+Private Sub cmdGotoFirstLastMapRoom_Click(Index As Integer)
+Dim nStatus As Integer, nBtrieveAction As Integer, nMapToFind As Long, nMaxRooms As Long
+Dim sText As String
+On Error GoTo error:
+
+If bLoaded = True Then saverecord
+
+nMapToFind = Val(txtMap.Text)
+If nMapToFind < 1 Then Exit Sub
+
+nStatus = BTRCALL(BSTAT, RoomPosBlock, DBStatDatabuf, Len(Roomdatabuf), 0, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then
+    nMaxRooms = 30000
+Else
+    DBStatRowToStruct DBStatDatabuf.buf
+    nMaxRooms = DBStat.nRecords
+End If
+
+If Index = 0 Then
+    sText = "First"
+    nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then MsgBox "cmdGotoFirstLastMapRoom_Click(), BGETFIRST, Room, Error: " & BtrieveErrorCode(nStatus)
+Else
+    sText = "Last"
+    nStatus = BTRCALL(BGETLAST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then MsgBox "cmdGotoFirstLastMapRoom_Click(), BGETLAST, Room, Error: " & BtrieveErrorCode(nStatus)
+End If
+If Not nStatus = 0 Then Exit Sub
+
+If Index = 0 Then
+    nBtrieveAction = BGETNEXT
+Else
+    nBtrieveAction = BGETPREVIOUS
+End If
+
+Me.Enabled = False
+If FormIsLoaded("frmMap") Then frmMap.Enabled = False
+If FormIsLoaded("frmMapEditor") Then frmMapEditor.Enabled = False
+
+frmProgressBar.sCaption = "Finding " & sText & " Room on Map"
+frmProgressBar.lblCaption = "Finding " & sText & " Room on Map..."
+frmProgressBar.cmdCancel.Enabled = False
+
+Call frmProgressBar.SetRange(nMaxRooms)
+
+frmProgressBar.lblNote.Visible = False
+frmProgressBar.lblPanel(0).Caption = ""
+frmProgressBar.lblPanel(1).Caption = ""
+frmProgressBar.Show
+DoEvents
+
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(1).Caption = "Scanning Rooms..."
+DoEvents
+
+Do While nStatus = 0
+    nStatus = BTRCALL(nBtrieveAction, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If nStatus = 0 Then
+        Call RoomRowToStruct(Roomdatabuf.buf)
+        If Roomrec.MapNumber = nMapToFind Then GoTo found
+    End If
+    
+    Call frmProgressBar.IncreaseProgress
+    If Not bUseCPU Then DoEvents
+Loop
+
+found:
+Me.Enabled = True
+DoEvents
+
+If nStatus = 0 Then
+    frmProgressBar.ProgressBar.Value = frmProgressBar.ProgressBar.Max
+    DoEvents
+
+    DispRoomInfo Roomdatabuf.buf
+    If cmdNext.Enabled = False Then Call frmMapEditor.StartMapping
+Else
+    MsgBox "Failed to find room, Error: " & BtrieveErrorCode(nStatus), vbExclamation
+End If
+
+out:
+On Error Resume Next
+Unload frmProgressBar
+Me.Enabled = True
+If FormIsLoaded("frmMap") Then frmMap.Enabled = True
+If FormIsLoaded("frmMapEditor") Then frmMapEditor.Enabled = True
+Exit Sub
+error:
+Call HandleError("cmdGotoFirstLastMapRoom_Click")
+Resume out:
 End Sub
 
 Private Sub Form_Load()
@@ -6169,3 +6263,6 @@ Private Sub Form_Unload(Cancel As Integer)
         Call WriteINI("Windows", "RoomLeft", Me.Left)
         
 End Sub
+
+
+

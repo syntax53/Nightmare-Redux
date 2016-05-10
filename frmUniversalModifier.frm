@@ -1533,7 +1533,7 @@ If cmbAbilities.Enabled = True Then
             Case 2: q1 = q1 & " by multiplying " & Val(txtValue.Text) & " to the current ability value"
             Case 3: q1 = q1 & " by dividing " & Val(txtValue.Text) & " from the current ability value"
             Case 4: q1 = q1 & " by setting the current ability value to " & Val(cmbValue.Text) & "% of it's original value"
-            Case 5: q1 = q1 & " by setting the current ability value equal to " & Val(cmbValue.Text)
+            Case 5: q1 = q1 & " by setting the current ability value equal to " & Val(txtValue.Text)
         End Select
     Else
         If txtValue.Enabled = True Then
@@ -1672,6 +1672,7 @@ ts.WriteLine ("Universal Modifier job started " & Date & " @ " & Time)
 ts.WriteLine q1 & q2
 If Not q3 = "" Then ts.WriteLine RemoveCharacter(RemoveCharacter(q3, vbCr), vbLf)
 If Not q4 = "" Then ts.WriteLine RemoveCharacter(RemoveCharacter(q4, vbCr), vbLf)
+If Not q5 = "" Then ts.WriteLine RemoveCharacter(RemoveCharacter(q5, vbCr), vbLf)
 ts.WriteBlankLines (1)
 
 DoEvents

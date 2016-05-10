@@ -1,5 +1,12 @@
 _dats/*
 *.ini
+*.log
 nightmare_redux.exe
 nightmare_redux_n.exe
 NMR-Log_Universal.txt
+
+# User-specific files
+*.vbw
+*.tmp
+*.scc
+*.dca
