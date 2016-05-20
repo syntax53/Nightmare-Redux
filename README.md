@@ -1,10 +1,10 @@
 Nightmare Redux is an editor for the game MajorMUD(r).  
 
-v1.8.1 (??)  
+v1.8.1 (5/20/2016)  
 ------------------------------------------  
 -UP: increased length of monster summon field on MME export (more accurate LAIR counts in new MME)  
--UP: adjustments to monster attack sim  
--FIX: area attack durations spells being ignored on combat sim  
+-UP: adjustments to monster attack sim for accuracy  
+-FIX: area attack durations spells being ignored by monster attack sim  
 
 
 v1.8 (05/09/2016)  
