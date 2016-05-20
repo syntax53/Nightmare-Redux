@@ -1939,7 +1939,7 @@ If Not tabMonsters.NoMatch = True Then
     End If
         
     sTemp = sTemp & sFrom
-    If Len(sTemp) > 2000 Then sTemp = Left(sTemp, 1999) & "+" & Chr(0)
+    If Len(sTemp) > 10000 Then sTemp = Left(sTemp, 9999) & "+" & Chr(0)
     
     tabMonsters.Edit
     tabMonsters.Fields("In Game") = 1
