@@ -22,7 +22,7 @@ CompatibleEXE32="NMRTaskBar.ocx"
 VersionCompatible32="1"
 MajorVer=2
 MinorVer=2
-RevisionVer=25
+RevisionVer=26
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="Modified MDI Taskbar Control by syntax53.  Originally created by Gregg Housh from Planet-Source-Code.com: http://www.Planet-Source-Code.com/vb/scripts/ShowCode.asp?txtCodeId=39059&lngWId=1"
