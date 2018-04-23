@@ -1,0 +1,34 @@
+======================================
+DBUGetInfo @ WBTRV32.DLL: 0x10008600 (need to get debug'ed address)
+======================================
+-----------------------------
+IDA Function Signature
+-----------------------------
+.text:10008600                 public DBUGetInfo
+.text:10008600 DBUGetInfo      proc near               ; CODE XREF: sub_10002AD1+72p
+.text:10008600                                         ; sub_10002DFA+2Fp ...
+.text:10008600
+.text:10008600 var_18          = dword ptr -18h
+.text:10008600 var_14          = dword ptr -14h
+.text:10008600 var_10          = byte ptr -10h
+.text:10008600 var_C           = dword ptr -0Ch
+.text:10008600 var_8           = dword ptr -8
+.text:10008600 hKey            = dword ptr -4
+.text:10008600 arg_4           = dword ptr  0Ch
+.text:10008600 arg_8           = dword ptr  10h
+.text:10008600 arg_14          = dword ptr  1Ch
+.text:10008600 arg_18          = dword ptr  20h
+
+-----------------------------
+Notes
+-----------------------------
+Reload "MKDE (Workstation Edition)"" Settings:
+DBUGetInfo(0FFFFFFFFh, 5, 3E8h, 0, 0, 10h)
+push 00 00 46 00
+W32MKSET.EXE:004191B0 push    10h
+W32MKSET.EXE:004191B2 push    0
+W32MKSET.EXE:004191B4 push    0
+W32MKSET.EXE:004191B6 push    3E8h
+W32MKSET.EXE:004191BB push    5
+W32MKSET.EXE:004191BD push    0FFFFFFFFh
+W32MKSET.EXE:004191BF call    near ptr unk_45D1F8

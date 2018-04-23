@@ -1,0 +1,24 @@
+Dim out_dir As String
+Dim n As Integer
+n = FreeFile()
+out_dir = CreateObject("WScript.Shell").Specialfolders("Desktop")
+Open out_dir & "\vb6_debug.txt" For Output As #n
+Print #n, "TextblockRec.PartNum: "; Tab; Tab; TextblockRec.PartNum
+Print #n, "TextblockRec.LeadIn(1): "; Tab; Tab; TextblockRec.LeadIn(1)
+Print #n, "TextblockRec.LeadIn(2): "; Tab; Tab; TextblockRec.LeadIn(2)
+Print #n, "TextblockRec.LeadIn(3): "; Tab; Tab; TextblockRec.LeadIn(3)
+Print #n, "TextblockRec.LeadIn(4): "; Tab; Tab; TextblockRec.LeadIn(4)
+Print #n, "" 'Print #n, "TextblockRec.LeadIn(13): "; Tab; Tab; TextblockRec.LeadIn(13)
+Print #n, "" 'Print #n, "TextblockRec.LeadIn(14): "; Tab; Tab; TextblockRec.LeadIn(14)
+Print #n, "TextblockRec.LeadIn(5): "; Tab; Tab; TextblockRec.LeadIn(5)
+Print #n, "TextblockRec.LeadIn(6): "; Tab; Tab; TextblockRec.LeadIn(6)
+Print #n, "TextblockRec.LeadIn(7): "; Tab; Tab; TextblockRec.LeadIn(7)
+Print #n, "TextblockRec.LeadIn(8): "; Tab; Tab; TextblockRec.LeadIn(8)
+Print #n, "TextblockRec.LeadIn(9): "; Tab; Tab; TextblockRec.LeadIn(9)
+Print #n, "TextblockRec.LeadIn(10): "; Tab; Tab; TextblockRec.LeadIn(10)
+Print #n, "TextblockRec.LeadIn(11): "; Tab; Tab; TextblockRec.LeadIn(11)
+Print #n, "TextblockRec.LeadIn(12): "; Tab; Tab; TextblockRec.LeadIn(12)
+Print #n, "TextblockRec.Number: "; Tab; Tab; TextblockRec.Number
+Print #n, "TextblockRec.LinkTo: "; Tab; Tab; TextblockRec.LinkTo
+Print #n, "TextblockRec.Data: "; Tab; Tab; TextblockRec.Data
+Close #n

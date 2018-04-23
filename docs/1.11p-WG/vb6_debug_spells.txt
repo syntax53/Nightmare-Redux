@@ -1,0 +1,80 @@
+Dim out_dir As String
+Dim n As Integer
+n = FreeFile()
+out_dir = CreateObject("WScript.Shell").Specialfolders("Desktop")
+Open out_dir & "\vb6_debug.txt" For Output As #n
+Print #n, "Spellrec.Number: "; Tab; Tab; Spellrec.Number
+Print #n, "Spellrec.Name: "; Tab; Tab; Spellrec.Name
+Print #n, "Spellrec.AfterName: "; Tab; Tab; Spellrec.AfterName
+Print #n, "Spellrec.DescA: "; Tab; Tab; Spellrec.DescA
+Print #n, "Spellrec.AfterDescA: "; Tab; Tab; Spellrec.AfterDescA
+Print #n, "Spellrec.DescB: "; Tab; Tab; Spellrec.DescB
+Print #n, "Spellrec.AfterDescB: "; Tab; Tab; Spellrec.AfterDescB
+Print #n, "" 'Print #n, "Spellrec.N01: "; Tab; Tab; Spellrec.N01
+Print #n, "Spellrec.CastMsgA: "; Tab; Tab; Spellrec.CastMsgA
+Print #n, "Spellrec.N02(0): "; Tab; Tab; Spellrec.N02(0)
+Print #n, "Spellrec.N02(1): "; Tab; Tab; Spellrec.N02(1)
+Print #n, "Spellrec.N02(2): "; Tab; Tab; Spellrec.N02(2)
+Print #n, "Spellrec.N02(3): "; Tab; Tab; Spellrec.N02(3)
+Print #n, "Spellrec.N02(4): "; Tab; Tab; Spellrec.N02(4)
+Print #n, "Spellrec.N02(5): "; Tab; Tab; Spellrec.N02(5)
+Print #n, "Spellrec.N02(6): "; Tab; Tab; Spellrec.N02(6)
+Print #n, "Spellrec.N02(7): "; Tab; Tab; Spellrec.N02(7)
+Print #n, "Spellrec.N02(8): "; Tab; Tab; Spellrec.N02(8)
+Print #n, "Spellrec.N02(9): "; Tab; Tab; Spellrec.N02(9)
+Print #n, "" 'Print #n, "Spellrec.N02(10): "; Tab; Tab; Spellrec.N02(10)
+Print #n, "Spellrec.N02a: "; Tab; Tab; Spellrec.N02a
+Print #n, "Spellrec.LevelCap: "; Tab; Tab; Spellrec.LevelCap
+Print #n, "Spellrec.N03: "; Tab; Tab; Spellrec.N03
+Print #n, "Spellrec.MsgStyle: "; Tab; Tab; Spellrec.MsgStyle
+Print #n, "Spellrec.N04(0): "; Tab; Tab; Spellrec.N04(0)
+Print #n, "Spellrec.N04(1): "; Tab; Tab; Spellrec.N04(1)
+Print #n, "Spellrec.N04(2): "; Tab; Tab; Spellrec.N04(2)
+Print #n, "Spellrec.AbilityB(0): "; Tab; Tab; Spellrec.AbilityB(0)
+Print #n, "Spellrec.AbilityB(1): "; Tab; Tab; Spellrec.AbilityB(1)
+Print #n, "Spellrec.AbilityB(2): "; Tab; Tab; Spellrec.AbilityB(2)
+Print #n, "Spellrec.AbilityB(3): "; Tab; Tab; Spellrec.AbilityB(3)
+Print #n, "Spellrec.AbilityB(4): "; Tab; Tab; Spellrec.AbilityB(4)
+Print #n, "Spellrec.AbilityB(5): "; Tab; Tab; Spellrec.AbilityB(5)
+Print #n, "Spellrec.AbilityB(6): "; Tab; Tab; Spellrec.AbilityB(6)
+Print #n, "Spellrec.AbilityB(7): "; Tab; Tab; Spellrec.AbilityB(7)
+Print #n, "Spellrec.AbilityB(8): "; Tab; Tab; Spellrec.AbilityB(8)
+Print #n, "Spellrec.AbilityB(9): "; Tab; Tab; Spellrec.AbilityB(9)
+Print #n, "Spellrec.Energy: "; Tab; Tab; Spellrec.Energy
+Print #n, "Spellrec.Level: "; Tab; Tab; Spellrec.Level
+Print #n, "Spellrec.Min: "; Tab; Tab; Spellrec.Min
+Print #n, "Spellrec.Max: "; Tab; Tab; Spellrec.Max
+Print #n, "Spellrec.SpellType: "; Tab; Tab; Spellrec.SpellType
+Print #n, "Spellrec.TypeOfResists: "; Tab; Tab; Spellrec.TypeOfResists
+Print #n, "Spellrec.Difficulty: "; Tab; Tab; Spellrec.Difficulty
+Print #n, "Spellrec.UNDEFINED01: "; Tab; Tab; Spellrec.UNDEFINED01
+Print #n, "Spellrec.Target: "; Tab; Tab; Spellrec.Target
+Print #n, "Spellrec.duration: "; Tab; Tab; Spellrec.duration
+Print #n, "Spellrec.TypeOfAttack: "; Tab; Tab; Spellrec.TypeOfAttack
+Print #n, "Spellrec.UNDEFINED02: "; Tab; Tab; Spellrec.UNDEFINED02
+Print #n, "Spellrec.ResistAbility: "; Tab; Tab; Spellrec.ResistAbility
+Print #n, "Spellrec.MageryA: "; Tab; Tab; Spellrec.MageryA
+Print #n, "Spellrec.AbilityA(0): "; Tab; Tab; Spellrec.AbilityA(0)
+Print #n, "Spellrec.AbilityA(1): "; Tab; Tab; Spellrec.AbilityA(1)
+Print #n, "Spellrec.AbilityA(2): "; Tab; Tab; Spellrec.AbilityA(2)
+Print #n, "Spellrec.AbilityA(3): "; Tab; Tab; Spellrec.AbilityA(3)
+Print #n, "Spellrec.AbilityA(4): "; Tab; Tab; Spellrec.AbilityA(4)
+Print #n, "Spellrec.AbilityA(5): "; Tab; Tab; Spellrec.AbilityA(5)
+Print #n, "Spellrec.AbilityA(6): "; Tab; Tab; Spellrec.AbilityA(6)
+Print #n, "Spellrec.AbilityA(7): "; Tab; Tab; Spellrec.AbilityA(7)
+Print #n, "Spellrec.AbilityA(8): "; Tab; Tab; Spellrec.AbilityA(8)
+Print #n, "Spellrec.AbilityA(9): "; Tab; Tab; Spellrec.AbilityA(9)
+Print #n, "Spellrec.CastMsgB: "; Tab; Tab; Spellrec.CastMsgB
+Print #n, "" 'Print #n, "Spellrec.N05: "; Tab; Tab; Spellrec.N05
+Print #n, "Spellrec.Mana: "; Tab; Tab; Spellrec.Mana
+Print #n, "Spellrec.MaxIncrease: "; Tab; Tab; Spellrec.MaxIncrease
+Print #n, "Spellrec.LVLSMaxIncr: "; Tab; Tab; Spellrec.LVLSMaxIncr
+Print #n, "Spellrec.MageryB: "; Tab; Tab; Spellrec.MageryB
+Print #n, "Spellrec.MinIncrease: "; Tab; Tab; Spellrec.MinIncrease
+Print #n, "Spellrec.LVLSMinIncr: "; Tab; Tab; Spellrec.LVLSMinIncr
+Print #n, "Spellrec.DurIncrease: "; Tab; Tab; Spellrec.DurIncrease
+Print #n, "Spellrec.LVLSDurIncr: "; Tab; Tab; Spellrec.LVLSDurIncr
+Print #n, "Spellrec.ShortName: "; Tab; Tab; Spellrec.ShortName
+Print #n, "Spellrec.AfterShortName: "; Tab; Tab; Spellrec.AfterShortName
+Print #n, "Spellrec.N06: "; Tab; Tab; Spellrec.N06
+Close #n

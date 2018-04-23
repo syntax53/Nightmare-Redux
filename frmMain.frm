@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{AA61DC5D-A4D1-4F73-AF2B-208862262908}#3.0#0"; "VB6DEBUG.DLL"
+Object = "{AA61DC5D-A4D1-4F73-AF2B-208862262908}#3.0#0"; "NMRTaskBar.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm frmMain 
    BackColor       =   &H00000000&
    Caption         =   "Nightmare Redux"
@@ -509,7 +509,8 @@ Dim fso As FileSystemObject
 
 sAppVersion = "v" & App.Major & "." & App.Minor _
     & IIf(App.Revision > 0, "." & App.Revision, "") _
-    & IIf(WorksWithN = True, "n", "")
+    & IIf(WorksWithN = True, "n", "") _
+    & IIf(WorksWithWG = True, "-WG", "")
 sMenuCaption = App.Title & " " & sAppVersion
 
 Load frmSplash
@@ -630,7 +631,7 @@ frmProgressBar.sCaption = "Changing room call letters"
 frmProgressBar.lblCaption = "Changing room call letters ..."
 frmProgressBar.cmdCancel.Enabled = True
 frmProgressBar.ProgressBar.Value = 0
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -757,7 +758,7 @@ frmProgressBar.sCaption = "Deleting buffer rooms"
 frmProgressBar.lblCaption = "Deleting buffer rooms ..."
 frmProgressBar.cmdCancel.Enabled = True
 frmProgressBar.ProgressBar.Value = 0
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -863,7 +864,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Dividing Monster EXP"
 frmProgressBar.lblCaption.Caption = "Dividing Monster EXP ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -1217,7 +1218,7 @@ Private Sub mnuFindItem_Click()
 'frmProgressBar.sCaption = "Find Room Item"
 'frmProgressBar.lblCaption.Caption = "Searching ..."
 'frmProgressBar.cmdCancel.Enabled = True
-'frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+'frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 'frmProgressBar.Show
 'frmMain.Enabled = False
 'DoEvents
@@ -1309,7 +1310,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Fixing Number of Uses on Monster Item Drops"
 frmProgressBar.lblCaption.Caption = "Working ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -1451,7 +1452,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Fixing Number of Uses on Items"
 frmProgressBar.lblCaption.Caption = "Working ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_ITEMS
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -1794,7 +1795,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Combining Monster Exp"
 frmProgressBar.lblCaption.Caption = "Working ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -1925,7 +1926,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Multiplying Monster EXP"
 frmProgressBar.lblCaption.Caption = "Multiplying Monster EXP ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -2058,7 +2059,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Removing Level Restrictions on Items"
 frmProgressBar.lblCaption.Caption = "Removing Level Restrictions on Items..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_ITEMS
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -2132,7 +2133,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Removing Limits on Items"
 frmProgressBar.lblCaption.Caption = "Removing Limits on Items..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_ITEMS
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -2222,7 +2223,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Reseting Monster Last Killed Date/Time"
 frmProgressBar.lblCaption.Caption = "Reseting Monster Last Killed Date/Time ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -2298,7 +2299,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Setting Monster Last Killed Date/Time"
 frmProgressBar.lblCaption.Caption = "Setting Monster Last Killed Date/Time ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -2382,7 +2383,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Retrain Users"
 frmProgressBar.lblCaption.Caption = "Retraining Users ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "user2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_USERS
 frmProgressBar.ProgressBar.Value = 0
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -2481,7 +2482,7 @@ frmProgressBar.sCaption = "Padding Room Numbers"
 frmProgressBar.lblCaption = ""
 frmProgressBar.cmdCancel.Enabled = True
 frmProgressBar.ProgressBar.Value = 0
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -2650,7 +2651,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Combining like items in rooms"
 frmProgressBar.lblCaption.Caption = "Working ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 frmProgressBar.Show
 frmMain.Enabled = False
 DoEvents
@@ -2807,7 +2808,7 @@ frmProgressBar.sCaption = "Restocking Shops"
 frmProgressBar.lblCaption = "Restocking Shops ..."
 frmProgressBar.cmdCancel.Enabled = True
 frmProgressBar.ProgressBar.Value = 0
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "shop2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_SHOPS
 frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -2932,7 +2933,7 @@ End If
 frmProgressBar.sCaption = "Stripping TB Chars"
 frmProgressBar.lblCaption = "Stripping TB Chars ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "text2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_TEXT
 frmProgressBar.lblPanel(1).Caption = TextblockRec.Number
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -3064,7 +3065,7 @@ UnloadForms (Me.Name)
 frmProgressBar.sCaption = "Change User's Gang Names"
 frmProgressBar.lblCaption.Caption = "Changing Names ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "user2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_USERS
 frmProgressBar.ProgressBar.Value = 0
 frmProgressBar.Show
 frmMain.Enabled = False

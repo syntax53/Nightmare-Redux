@@ -30,13 +30,13 @@ If retlen = 0 Then
             Call WriteINI(Section, Key, 4000, ByVal sAlternateFile)
         
     ElseIf UCase(Section) = UCase("Settings") Then
-        If UCase(Key) = UCase("eDatFileVersion" & IIf(WorksWithN = True, "_n", "")) Then _
+        If UCase(Key) = UCase("eDatFileVersion" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", ""))) Then _
             Call WriteINI(Section, Key, 1, ByVal sAlternateFile)
         If UCase(Key) = UCase("ShowAbilityEditWarning") Then _
             Call WriteINI(Section, Key, 1, ByVal sAlternateFile)
-        If UCase(Key) = UCase("DatCallLetters" & IIf(WorksWithN = True, "_n", "")) Then _
+        If UCase(Key) = UCase("DatCallLetters" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", ""))) Then _
             Call WriteINI(Section, Key, "cc", ByVal sAlternateFile)
-        If UCase(Key) = UCase("WGPath" & IIf(WorksWithN = True, "_n", "")) Then _
+        If UCase(Key) = UCase("WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", ""))) Then _
             Call WriteINI(Section, Key, "c:\wgserv\", ByVal sAlternateFile)
         
     ElseIf UCase(Section) = UCase("Options") Then

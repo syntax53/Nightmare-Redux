@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmUser 
    Caption         =   "User Editor"
    ClientHeight    =   5430
@@ -30,27 +30,23 @@ Begin VB.Form frmUser
          _ExtentY        =   8705
          _Version        =   393216
          Tabs            =   7
+         Tab             =   6
          TabsPerRow      =   7
          TabHeight       =   520
          TabCaption(0)   =   "Stats"
          TabPicture(0)   =   "frmUser.frx":08CA
-         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).ControlEnabled=   0   'False
          Tab(0).Control(0)=   "frameGeneral"
-         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "Frame7"
-         Tab(0).Control(1).Enabled=   0   'False
          Tab(0).Control(2)=   "cmdPasteChar"
-         Tab(0).Control(2).Enabled=   0   'False
          Tab(0).Control(3)=   "cmdPasteStatQ"
-         Tab(0).Control(3).Enabled=   0   'False
          Tab(0).Control(4)=   "cmdCalcExp"
-         Tab(0).Control(4).Enabled=   0   'False
          Tab(0).ControlCount=   5
          TabCaption(1)   =   "Inven."
          TabPicture(1)   =   "frmUser.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "frmKeys"
-         Tab(1).Control(1)=   "frmItems"
+         Tab(1).Control(0)=   "frmItems"
+         Tab(1).Control(1)=   "frmKeys"
          Tab(1).ControlCount=   2
          TabCaption(2)   =   "Spellbk."
          TabPicture(2)   =   "frmUser.frx":0902
@@ -77,45 +73,82 @@ Begin VB.Form frmUser
          TabCaption(5)   =   "Worn"
          TabPicture(5)   =   "frmUser.frx":0956
          Tab(5).ControlEnabled=   0   'False
-         Tab(5).Control(0)=   "cmdPasteItems(2)"
-         Tab(5).Control(1)=   "cmdEditWeapon"
-         Tab(5).Control(2)=   "cmdClearWorn"
+         Tab(5).Control(0)=   "Label75"
+         Tab(5).Control(1)=   "txtWeaponNumber"
+         Tab(5).Control(2)=   "txtWeaponName"
+         Tab(5).Control(2).Enabled=   0   'False
          Tab(5).Control(3)=   "Frame5"
-         Tab(5).Control(4)=   "txtWeaponName"
-         Tab(5).Control(4).Enabled=   0   'False
-         Tab(5).Control(5)=   "txtWeaponNumber"
-         Tab(5).Control(6)=   "Label75"
+         Tab(5).Control(4)=   "cmdClearWorn"
+         Tab(5).Control(5)=   "cmdEditWeapon"
+         Tab(5).Control(6)=   "cmdPasteItems(2)"
          Tab(5).ControlCount=   7
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
-         Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "chkEdited"
-         Tab(6).Control(1)=   "Frame4"
-         Tab(6).Control(2)=   "txtTitle"
-         Tab(6).Control(3)=   "txtCurrentEncum"
-         Tab(6).Control(4)=   "txtMaxEncum"
-         Tab(6).Control(5)=   "txtEvilPoints"
-         Tab(6).Control(6)=   "txtBroadcastChan"
-         Tab(6).Control(7)=   "txtCopper"
-         Tab(6).Control(8)=   "txtSilver"
-         Tab(6).Control(9)=   "txtGold"
-         Tab(6).Control(10)=   "txtPlatinum"
-         Tab(6).Control(11)=   "txtRunic"
-         Tab(6).Control(12)=   "txtGang"
+         Tab(6).ControlEnabled=   -1  'True
+         Tab(6).Control(0)=   "Label76(0)"
+         Tab(6).Control(0).Enabled=   0   'False
+         Tab(6).Control(1)=   "Label76(1)"
+         Tab(6).Control(1).Enabled=   0   'False
+         Tab(6).Control(2)=   "Label76(2)"
+         Tab(6).Control(2).Enabled=   0   'False
+         Tab(6).Control(3)=   "Label76(3)"
+         Tab(6).Control(3).Enabled=   0   'False
+         Tab(6).Control(4)=   "Label76(4)"
+         Tab(6).Control(4).Enabled=   0   'False
+         Tab(6).Control(5)=   "Label76(5)"
+         Tab(6).Control(5).Enabled=   0   'False
+         Tab(6).Control(6)=   "Label76(6)"
+         Tab(6).Control(6).Enabled=   0   'False
+         Tab(6).Control(7)=   "Label76(7)"
+         Tab(6).Control(7).Enabled=   0   'False
+         Tab(6).Control(8)=   "Label76(8)"
+         Tab(6).Control(8).Enabled=   0   'False
+         Tab(6).Control(9)=   "Label76(9)"
+         Tab(6).Control(9).Enabled=   0   'False
+         Tab(6).Control(10)=   "Label76(10)"
+         Tab(6).Control(10).Enabled=   0   'False
+         Tab(6).Control(11)=   "Label76(11)"
+         Tab(6).Control(11).Enabled=   0   'False
+         Tab(6).Control(12)=   "Label76(12)"
+         Tab(6).Control(12).Enabled=   0   'False
          Tab(6).Control(13)=   "txtSuicide"
-         Tab(6).Control(14)=   "Label76(11)"
-         Tab(6).Control(15)=   "Label76(10)"
-         Tab(6).Control(16)=   "Label76(9)"
-         Tab(6).Control(17)=   "Label76(8)"
-         Tab(6).Control(18)=   "Label76(7)"
-         Tab(6).Control(19)=   "Label76(6)"
-         Tab(6).Control(20)=   "Label76(5)"
-         Tab(6).Control(21)=   "Label76(4)"
-         Tab(6).Control(22)=   "Label76(3)"
-         Tab(6).Control(23)=   "Label76(2)"
-         Tab(6).Control(24)=   "Label76(1)"
-         Tab(6).Control(25)=   "Label76(0)"
-         Tab(6).ControlCount=   26
+         Tab(6).Control(13).Enabled=   0   'False
+         Tab(6).Control(14)=   "txtGang"
+         Tab(6).Control(14).Enabled=   0   'False
+         Tab(6).Control(15)=   "txtRunic"
+         Tab(6).Control(15).Enabled=   0   'False
+         Tab(6).Control(16)=   "txtPlatinum"
+         Tab(6).Control(16).Enabled=   0   'False
+         Tab(6).Control(17)=   "txtGold"
+         Tab(6).Control(17).Enabled=   0   'False
+         Tab(6).Control(18)=   "txtSilver"
+         Tab(6).Control(18).Enabled=   0   'False
+         Tab(6).Control(19)=   "txtCopper"
+         Tab(6).Control(19).Enabled=   0   'False
+         Tab(6).Control(20)=   "txtBroadcastChan"
+         Tab(6).Control(20).Enabled=   0   'False
+         Tab(6).Control(21)=   "txtEvilPoints"
+         Tab(6).Control(21).Enabled=   0   'False
+         Tab(6).Control(22)=   "txtMaxEncum"
+         Tab(6).Control(22).Enabled=   0   'False
+         Tab(6).Control(23)=   "txtCurrentEncum"
+         Tab(6).Control(23).Enabled=   0   'False
+         Tab(6).Control(24)=   "txtTitle"
+         Tab(6).Control(24).Enabled=   0   'False
+         Tab(6).Control(25)=   "Frame4"
+         Tab(6).Control(25).Enabled=   0   'False
+         Tab(6).Control(26)=   "chkEdited"
+         Tab(6).Control(26).Enabled=   0   'False
+         Tab(6).Control(27)=   "txtCharLife"
+         Tab(6).Control(27).Enabled=   0   'False
+         Tab(6).ControlCount=   28
+         Begin VB.TextBox txtCharLife 
+            Height          =   285
+            Left            =   4740
+            TabIndex        =   473
+            Top             =   1900
+            Width           =   1690
+         End
          Begin VB.CommandButton cmdCalcExp 
             Caption         =   "Calc E&xperience"
             BeginProperty Font 
@@ -128,7 +161,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   3660
+            Left            =   -71340
             TabIndex        =   471
             Top             =   720
             Width           =   2595
@@ -145,7 +178,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   195
-            Left            =   -69960
+            Left            =   5040
             TabIndex        =   470
             Top             =   4380
             Width           =   1515
@@ -153,7 +186,7 @@ Begin VB.Form frmUser
          Begin VB.CommandButton cmdPasteStatQ 
             Caption         =   "?"
             Height          =   315
-            Left            =   6360
+            Left            =   -68640
             TabIndex        =   469
             Top             =   420
             Width           =   315
@@ -206,7 +239,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   3660
+            Left            =   -71340
             TabIndex        =   13
             Top             =   420
             Width           =   2595
@@ -214,7 +247,7 @@ Begin VB.Form frmUser
          Begin VB.Frame Frame4 
             Caption         =   "Spells Casted on User"
             Height          =   3255
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   391
             Top             =   1560
             Width           =   4455
@@ -711,7 +744,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtTitle 
             Height          =   285
-            Left            =   -74100
+            Left            =   900
             MaxLength       =   19
             TabIndex        =   368
             Top             =   435
@@ -719,35 +752,35 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtCurrentEncum 
             Height          =   285
-            Left            =   -73440
+            Left            =   1560
             TabIndex        =   372
             Top             =   1155
             Width           =   735
          End
          Begin VB.TextBox txtMaxEncum 
             Height          =   285
-            Left            =   -72420
+            Left            =   2580
             TabIndex        =   374
             Top             =   1155
             Width           =   735
          End
          Begin VB.TextBox txtEvilPoints 
             Height          =   285
-            Left            =   -70260
+            Left            =   4740
             TabIndex        =   378
             Top             =   795
             Width           =   615
          End
          Begin VB.TextBox txtBroadcastChan 
             Height          =   285
-            Left            =   -70260
+            Left            =   4740
             TabIndex        =   380
             Top             =   1155
             Width           =   615
          End
          Begin VB.TextBox txtCopper 
             Height          =   315
-            Left            =   -69180
+            Left            =   5820
             MaxLength       =   5
             TabIndex        =   390
             Top             =   3735
@@ -755,7 +788,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtSilver 
             Height          =   315
-            Left            =   -69180
+            Left            =   5820
             MaxLength       =   5
             TabIndex        =   388
             Top             =   3375
@@ -763,7 +796,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtGold 
             Height          =   315
-            Left            =   -69180
+            Left            =   5820
             MaxLength       =   5
             TabIndex        =   386
             Top             =   3015
@@ -771,7 +804,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtPlatinum 
             Height          =   315
-            Left            =   -69180
+            Left            =   5820
             MaxLength       =   5
             TabIndex        =   384
             Top             =   2655
@@ -779,7 +812,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtRunic 
             Height          =   315
-            Left            =   -69180
+            Left            =   5820
             MaxLength       =   5
             TabIndex        =   382
             Top             =   2295
@@ -787,7 +820,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtGang 
             Height          =   285
-            Left            =   -74100
+            Left            =   900
             MaxLength       =   19
             TabIndex        =   370
             Top             =   795
@@ -795,7 +828,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtSuicide 
             Height          =   285
-            Left            =   -70260
+            Left            =   4740
             TabIndex        =   376
             Top             =   420
             Width           =   1335
@@ -2588,7 +2621,7 @@ Begin VB.Form frmUser
          Begin VB.Frame Frame7 
             Caption         =   "BBS Name"
             Height          =   645
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   10
             Top             =   360
             Width           =   3375
@@ -2619,7 +2652,7 @@ Begin VB.Form frmUser
             EndProperty
             ForeColor       =   &H0000FF00&
             Height          =   3735
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   12
             Top             =   1080
             Width           =   6615
@@ -5081,6 +5114,25 @@ Begin VB.Form frmUser
             End
          End
          Begin VB.Label Label76 
+            AutoSize        =   -1  'True
+            Caption         =   "Char Life (mins)"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Index           =   12
+            Left            =   4740
+            TabIndex        =   472
+            Top             =   1650
+            Width           =   1335
+         End
+         Begin VB.Label Label76 
             Caption         =   "/"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -5093,7 +5145,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   315
             Index           =   11
-            Left            =   -72600
+            Left            =   2400
             TabIndex        =   373
             Top             =   1140
             Width           =   135
@@ -5112,7 +5164,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   10
-            Left            =   -70020
+            Left            =   4980
             TabIndex        =   389
             Top             =   3780
             Width           =   615
@@ -5131,7 +5183,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   9
-            Left            =   -70020
+            Left            =   4980
             TabIndex        =   387
             Top             =   3420
             Width           =   495
@@ -5150,7 +5202,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   8
-            Left            =   -70020
+            Left            =   4980
             TabIndex        =   385
             Top             =   3060
             Width           =   405
@@ -5169,7 +5221,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   7
-            Left            =   -70020
+            Left            =   4980
             TabIndex        =   383
             Top             =   2700
             Width           =   735
@@ -5188,7 +5240,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   6
-            Left            =   -70020
+            Left            =   4980
             TabIndex        =   381
             Top             =   2340
             Width           =   510
@@ -5207,7 +5259,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   5
-            Left            =   -71340
+            Left            =   3660
             TabIndex        =   379
             Top             =   1200
             Width           =   930
@@ -5226,7 +5278,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   4
-            Left            =   -71340
+            Left            =   3660
             TabIndex        =   377
             Top             =   840
             Width           =   975
@@ -5245,7 +5297,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   3
-            Left            =   -71340
+            Left            =   3660
             TabIndex        =   375
             Top             =   480
             Width           =   705
@@ -5264,7 +5316,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   2
-            Left            =   -74820
+            Left            =   180
             TabIndex        =   371
             Top             =   1200
             Width           =   1335
@@ -5283,7 +5335,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   1
-            Left            =   -74820
+            Left            =   180
             TabIndex        =   369
             Top             =   840
             Width           =   525
@@ -5302,7 +5354,7 @@ Begin VB.Form frmUser
             EndProperty
             Height          =   195
             Index           =   0
-            Left            =   -74820
+            Left            =   180
             TabIndex        =   367
             Top             =   480
             Width           =   450
@@ -6811,6 +6863,7 @@ txtTracking.Text = Userrec.Tracking
 txtMartialArts.Text = Userrec.MartialArts
 txtMagicResistance.Text = Userrec.MagicRes
 txtBroadcastChan = Userrec.BroadcastChan
+txtCharLife = CInt((Userrec.CharLifeMins1 / 2)) + Userrec.CharLifeMins2
 txtRunic.Text = SLong2ULong(Userrec.Runic)
 txtPlatinum.Text = SLong2ULong(Userrec.Platinum)
 txtGold.Text = SLong2ULong(Userrec.Gold)
@@ -6873,6 +6926,11 @@ End Sub
 
 Private Sub txtBroadcastChan_GotFocus()
 Call SelectAll(txtBroadcastChan)
+
+End Sub
+
+Private Sub txtCharLife_GotFocus()
+Call SelectAll(txtCharLife)
 
 End Sub
 
@@ -7371,6 +7429,8 @@ Userrec.MartialArts = Val(txtMartialArts.Text)
 Userrec.MagicRes = Val(txtMagicResistance.Text)
 Userrec.MagicRes2 = Val(txtMagicResistance.Text)
 Userrec.BroadcastChan = Val(txtBroadcastChan.Text)
+Userrec.CharLifeMins1 = 0 ' Don't really know their algorithm, so zero out here, store whole number in larger field (2)
+Userrec.CharLifeMins2 = Val(txtCharLife.Text)
 Userrec.Runic = ULong2SLong(Val(txtRunic.Text))
 Userrec.Platinum = ULong2SLong(Val(txtPlatinum.Text))
 Userrec.Gold = ULong2SLong(Val(txtGold.Text))

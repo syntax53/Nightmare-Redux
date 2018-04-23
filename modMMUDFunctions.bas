@@ -1558,7 +1558,7 @@ TextblockKey.Number = TextBlockNumber
 TextblockKey.PartNum = 0
 getlinkto:
     
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     If nStatus = 4 Then
         GetTextblockCMDS = "TEXTBLOCK (or LinkTo) NOT IN DATABASE"
@@ -1618,7 +1618,7 @@ TextblockKey.Number = TextBlockNumber
 TextblockKey.PartNum = 0
 getlinkto:
     
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     If nStatus = 4 Then
         GetTextblock = "TEXTBLOCK (or LinkTo) NOT IN DATABASE"
@@ -1660,7 +1660,7 @@ TextblockKey.Number = TextBlockNumber
 TextblockKey.PartNum = 0
 getlinkto:
     
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     If nStatus = 4 Then
         GetTextblockLink = 0

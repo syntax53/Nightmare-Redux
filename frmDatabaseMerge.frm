@@ -384,9 +384,9 @@ Dim fso As FileSystemObject
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-CommonDialog1.Filter = "User Dat Files (*user2.dat)|*user2.dat|All Files (*.*)|*.*"
+CommonDialog1.Filter = "User Dat Files (*user?.dat)|*user?.dat|All Files (*.*)|*.*"
 CommonDialog1.DialogTitle = "Select Destination Database..."
-CommonDialog1.InitDir = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""))
+CommonDialog1.InitDir = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
 
 On Error GoTo canceled:
 CommonDialog1.ShowOpen
@@ -406,7 +406,7 @@ Dim fso As FileSystemObject
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-CommonDialog1.Filter = "User Dat Files (*user2.dat)|*user2.dat|All Files (*.*)|*.*"
+CommonDialog1.Filter = "User Dat Files (*user?.dat)|*user?.dat|All Files (*.*)|*.*"
 CommonDialog1.DialogTitle = "Select Source Database..."
 
 On Error GoTo canceled:

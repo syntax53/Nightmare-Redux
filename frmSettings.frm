@@ -182,7 +182,7 @@ Begin VB.Form frmSettings
          Width           =   1275
       End
       Begin VB.Label Label2 
-         Caption         =   "item2.dat"
+         Caption         =   "item?.dat"
          Height          =   255
          Left            =   2025
          TabIndex        =   12
@@ -274,21 +274,25 @@ Dim fso As FileSystemObject, oFolder As Folder
 Dim temp As String, x As Integer, z1 As Integer, z2 As Integer
 
 cmbVersion.clear '***NEWMUDVER***
-cmbVersion.AddItem "v1.11h", 0
-cmbVersion.AddItem "v1.11i", 1
-cmbVersion.AddItem "v1.11J", 2
-cmbVersion.AddItem "v1.11k", 3
-cmbVersion.AddItem "v1.11L", 4
-cmbVersion.AddItem "v1.11m", 5
-cmbVersion.AddItem "v1.11n", 6
-cmbVersion.AddItem "v1.11o", 7
-cmbVersion.AddItem "v1.11p-b13", 8
-cmbVersion.AddItem "v1.11p", 9
+If Not WorksWithWG Then
+    cmbVersion.AddItem "v1.11h", 0
+    cmbVersion.AddItem "v1.11i", 1
+    cmbVersion.AddItem "v1.11J", 2
+    cmbVersion.AddItem "v1.11k", 3
+    cmbVersion.AddItem "v1.11L", 4
+    cmbVersion.AddItem "v1.11m", 5
+    cmbVersion.AddItem "v1.11n", 6
+    cmbVersion.AddItem "v1.11o", 7
+    cmbVersion.AddItem "v1.11p-b13", 8
+    cmbVersion.AddItem "v1.11p", 9
+Else
+    cmbVersion.AddItem "v1.11p-WG", 0
+End If
 
 bLoaded = False
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-temp = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""))
+temp = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
 If fso.FolderExists(temp) = False Then
     Drive1.Drive = App.Path
     Dir1.Path = App.Path
@@ -297,7 +301,7 @@ Else
     Dir1.Path = GetLongDirName(temp)
 End If
 
-txtDatCallLetters.Text = ReadINI("Settings", "DatCallLetters" & IIf(WorksWithN = True, "_n", ""))
+txtDatCallLetters.Text = ReadINI("Settings", "DatCallLetters" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
 chkAutoCompile.Value = Val(ReadINI("Settings", "AutoCompile"))
 chkUseCPU.Value = Val(ReadINI("Settings", "UseCPU"))
 cmbVersion.ListIndex = eDatFileVersion
@@ -490,12 +494,12 @@ Set fldr1 = fso.GetFolder(Dir1.Path)
 sStr = fldr1.ShortPath
 If Not Right(sStr, 1) = "\" Then sStr = sStr & "\"
 
-Call WriteINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", ""), 1)
+Call WriteINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")), 1)
 
-Call WriteINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""), sStr)
-Call WriteINI("Settings", "DatCallLetters" & IIf(WorksWithN = True, "_n", ""), txtDatCallLetters.Text)
+Call WriteINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")), sStr)
+Call WriteINI("Settings", "DatCallLetters" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")), txtDatCallLetters.Text)
 Call WriteINI("Settings", "AutoCompile", chkAutoCompile.Value)
-Call WriteINI("Settings", "eDatFileVersion" & IIf(WorksWithN = True, "_n", ""), cmbVersion.ListIndex)
+Call WriteINI("Settings", "eDatFileVersion" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")), cmbVersion.ListIndex)
 Call WriteINI("Settings", "UseCPU", chkUseCPU.Value)
 Call WriteINI("Settings", "AutoMonsterIndex", chkAutoMonsterIndex.Value)
 Call WriteINI("Settings", "OnlyLoadNames", chkOnlyNames.Value)

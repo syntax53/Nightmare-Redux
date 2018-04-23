@@ -2762,7 +2762,7 @@ Do While nStatus = 0 And bStopExport = False
     If Not TextblockRec.Number = nCurrentTB Then
         TextblockKey.Number = nCurrentTB
         TextblockKey.PartNum = nCurrentPart
-        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
         Call TextblockRowToStruct(TextblockDataBuf.buf)
     End If
     
@@ -3908,7 +3908,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_ITEMS
 lblPanel(1).Caption = recnum
 
 Do While nStatus = 0 And bStopExport = False
@@ -3998,7 +3998,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
    
-lblPanel(0).Caption = "w" & strDatCallLetters & "spel2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_SPELS
 lblPanel(1).Caption = recnum
 
 Do While nStatus = 0 And bStopExport = False
@@ -4077,7 +4077,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-lblPanel(0).Caption = "w" & strDatCallLetters & "clas2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_CLASS
 lblPanel(1).Caption = recnum
 
 Do While nStatus = 0 And bStopExport = False
@@ -4139,7 +4139,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-lblPanel(0).Caption = "w" & strDatCallLetters & "race2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_RACE
 lblPanel(1).Caption = recnum
 
 Do While nStatus = 0 And bStopExport = False
@@ -4208,7 +4208,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-lblPanel(0).Caption = "w" & strDatCallLetters & "shop2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_SHOPS
 lblPanel(1).Caption = recnum
 
 Do While nStatus = 0 And bStopExport = False
@@ -4282,7 +4282,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 lblPanel(1).Caption = recnum
 
 Do While nStatus = 0 And bStopExport = False
@@ -4401,13 +4401,13 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 lblPanel(1).Caption = "creating group/index list ..."
 DoEvents
 Call CreateMGIL
 
 recnum = 0
-lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 lblPanel(1).Caption = recnum
 DoEvents
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)

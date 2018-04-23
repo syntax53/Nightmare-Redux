@@ -280,7 +280,7 @@ Else
     Call frmProgressBar.SetRange(DBStat.nRecords)
 End If
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "text2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_TEXT
 frmProgressBar.lblPanel(1).Caption = Messagerec.Number
 frmProgressBar.Show
 frmMain.Enabled = False

@@ -50,6 +50,58 @@ Public bStopControlBuild As Boolean
 Public dbAbilities As Database
 Public rsAbilities As Recordset
 
+'------------------------------------------------------------------------------------------
+' START: Placeholders for the DAT file suffixes: NT or non-NT versions (MBBS/WG)
+'------------------------------------------------------------------------------------------
+'these get overwritten with either NT or non-NT strings
+Public strDatSuffix_ACTS As String
+Public strDatSuffix_BANKS As String
+Public strDatSuffix_CLASS As String
+Public strDatSuffix_GANGS As String
+Public strDatSuffix_ITEMS As String
+Public strDatSuffix_KNMSR As String
+Public strDatSuffix_MP As String
+Public strDatSuffix_MSG As String
+Public strDatSuffix_RACE As String
+Public strDatSuffix_SHOPS As String
+Public strDatSuffix_SPELS As String
+Public strDatSuffix_TEXT As String
+Public strDatSuffix_UPDAT As String
+Public strDatSuffix_USERS As String
+'non-NT DAT suffixes...
+Public Const strDatSuffixNNT_ACTS As String = "ACTS.DAT"
+Public Const strDatSuffixNNT_BANKS As String = "BANKS.DAT"
+Public Const strDatSuffixNNT_CLASS As String = "CLASS.DAT"
+Public Const strDatSuffixNNT_GANGS As String = "GANGS.DAT"
+Public Const strDatSuffixNNT_ITEMS As String = "ITEMS.DAT"
+Public Const strDatSuffixNNT_KNMSR As String = "KNMSR.DAT"
+Public Const strDatSuffixNNT_MP As String = "MP001.DAT"
+Public Const strDatSuffixNNT_MSG As String = "MSG.DAT"
+Public Const strDatSuffixNNT_RACE As String = "RACE.DAT"
+Public Const strDatSuffixNNT_SHOPS As String = "SHOPS.DAT"
+Public Const strDatSuffixNNT_SPELS As String = "SPELS.DAT"
+Public Const strDatSuffixNNT_TEXT As String = "TEXT.DAT"
+Public Const strDatSuffixNNT_UPDAT As String = "UPDAT.DAT"
+Public Const strDatSuffixNNT_USERS As String = "USERS.DAT"
+'NT DAT suffixes...
+Public Const strDatSuffixNT_ACTS As String = "acts2.dat"
+Public Const strDatSuffixNT_BANKS As String = "bank2.dat"
+Public Const strDatSuffixNT_CLASS As String = "clas2.dat"
+Public Const strDatSuffixNT_GANGS As String = "gang2.dat"
+Public Const strDatSuffixNT_ITEMS As String = "item2.dat"
+Public Const strDatSuffixNT_KNMSR As String = "knms2.dat"
+Public Const strDatSuffixNT_MP As String = "mp002.dat"
+Public Const strDatSuffixNT_MSG As String = "msg2.dat"
+Public Const strDatSuffixNT_RACE As String = "race2.dat"
+Public Const strDatSuffixNT_SHOPS As String = "shop2.dat"
+Public Const strDatSuffixNT_SPELS As String = "spel2.dat"
+Public Const strDatSuffixNT_TEXT As String = "text2.dat"
+Public Const strDatSuffixNT_UPDAT As String = "upda2.dat"
+Public Const strDatSuffixNT_USERS As String = "user2.dat"
+'------------------------------------------------------------------------------------------
+' END
+'------------------------------------------------------------------------------------------
+
 Type MGILType
     nNumber(10) As Long
     'sName(20) As String
@@ -899,129 +951,154 @@ Public Sub BankKeyRowToStruct(row() As Byte)
 RowToStruct row, BankKeyFldMap, BankKey, LenB(BankKey)
 End Sub
 
+'set and return here so we can avoid having to make a separate 'set' call before-hand.
+Public Function TextblockKeyStructToRow() As TextblockKeyDataBufType
+StructToRow TextblockKeyDataBuf.bytes, TextblockKeyFldMap, TextblockKey, LenB(TextblockKey)
+TextblockKeyStructToRow = TextblockKeyDataBuf
+End Function
+
 Private Function SetDatVersion() As Boolean
 
-eDatFileVersion = ReadINI("Settings", "eDatFileVersion" & IIf(WorksWithN = True, "_n", ""))
+eDatFileVersion = ReadINI("Settings", "eDatFileVersion" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
+Call SetDatSuffixStrings
 
-Select Case eDatFileVersion '***NEWMUDVER***
-    Case Is <= 6: 'v1.11h to v1.11n
-        If Not WorksWithN Then
-            MsgBox "This version of NMR only supports MajorMUD v1.11o and greater." & vbCrLf _
-                & "Please choose a valid dat file version from the settings window.", vbExclamation
+If Not WorksWithWG Then
+    Select Case eDatFileVersion '***NEWMUDVER***
+        Case Is <= 6: 'v1.11h to v1.11n
+            If Not WorksWithN Then
+                MsgBox "This version of NMR only supports MajorMUD v1.11o and greater." & vbCrLf _
+                    & "Please choose a valid dat file version from the settings window.", vbExclamation
+                Exit Function
+            End If
+        Case Is >= 7: 'v1.11o+
+            If WorksWithN Then
+                MsgBox "This version of NMR only supports MajorMUD v1.11i through v1.11n." & vbCrLf _
+                    & "Please choose a valid dat file version from the settings window.", vbExclamation
+                Exit Function
+            End If
+        Case Else:
+            MsgBox "'Dat File Version' setting invalid, please set it on the settings screen."
             Exit Function
-        End If
-    Case Is >= 7: 'v1.11o+
-        If WorksWithN Then
-            MsgBox "This version of NMR only supports MajorMUD v1.11i through v1.11n." & vbCrLf _
-                & "Please choose a valid dat file version from the settings window.", vbExclamation
-            Exit Function
-        End If
-    Case Else:
-        MsgBox "'Dat File Version' setting invalid, please set it on the settings screen."
-        Exit Function
-End Select
+    End Select
+End If
 
 'BankKey.nothing1 = &H0
 'BankKey.nothing2 = &H0
 
-Select Case eDatFileVersion '***NEWMUDVER***
-    Case 2: 'J
-        TextblockKey.PartNum = 0
-        TextblockKey.LeadIn(1) = &H63
-        TextblockKey.LeadIn(2) = &H20
-        TextblockKey.LeadIn(3) = &H63
-        TextblockKey.LeadIn(4) = &H6C
-        TextblockKey.LeadIn(5) = &H0
-        TextblockKey.LeadIn(6) = &H0
-        TextblockKey.LeadIn(7) = &H73
-        TextblockKey.LeadIn(8) = &HD
-        TextblockKey.LeadIn(9) = &H98
-        TextblockKey.LeadIn(10) = &H94
-        TextblockKey.LeadIn(11) = &H40
-        TextblockKey.LeadIn(12) = &H59
-        TextblockKey.LeadIn(13) = &H35
-        TextblockKey.LeadIn(14) = &H0
-    Case 4: 'L
-        TextblockKey.PartNum = 0
-        TextblockKey.LeadIn(1) = &H63
-        TextblockKey.LeadIn(2) = &H20
-        TextblockKey.LeadIn(3) = &H63
-        TextblockKey.LeadIn(4) = &H6C
-        TextblockKey.LeadIn(5) = &H0
-        TextblockKey.LeadIn(6) = &H0
-        TextblockKey.LeadIn(7) = &H73
-        TextblockKey.LeadIn(8) = &HD
-        TextblockKey.LeadIn(9) = &H70
-        TextblockKey.LeadIn(10) = &H72
-        TextblockKey.LeadIn(11) = &H65
-        TextblockKey.LeadIn(12) = &H6E
-        TextblockKey.LeadIn(13) = &H35
-        TextblockKey.LeadIn(14) = &H0
-    Case 6: 'N
-        TextblockKey.PartNum = 0
-        TextblockKey.LeadIn(1) = &H63
-        TextblockKey.LeadIn(2) = &H20
-        TextblockKey.LeadIn(3) = &H63
-        TextblockKey.LeadIn(4) = &H6C
-        TextblockKey.LeadIn(5) = &H0
-        TextblockKey.LeadIn(6) = &H0
-        TextblockKey.LeadIn(7) = &H73
-        TextblockKey.LeadIn(8) = &HD
-        TextblockKey.LeadIn(9) = &H65
-        TextblockKey.LeadIn(10) = &H63
-        TextblockKey.LeadIn(11) = &H6F
-        TextblockKey.LeadIn(12) = &H72
-        TextblockKey.LeadIn(13) = &H3A
-        TextblockKey.LeadIn(14) = &H0
-    Case 7 To 8: 'O & Pb13
-        TextblockKey.PartNum = 0
-        TextblockKey.LeadIn(1) = &H63
-        TextblockKey.LeadIn(2) = &H20
-        TextblockKey.LeadIn(3) = &H63
-        TextblockKey.LeadIn(4) = &H6C
-        TextblockKey.LeadIn(5) = &H0
-        TextblockKey.LeadIn(6) = &H0
-        TextblockKey.LeadIn(7) = &H73
-        TextblockKey.LeadIn(8) = &HD
-        TextblockKey.LeadIn(9) = &H1
-        TextblockKey.LeadIn(10) = &HB1
-        TextblockKey.LeadIn(11) = &H2
-        TextblockKey.LeadIn(12) = &H59
-        TextblockKey.LeadIn(13) = &H3B
-        TextblockKey.LeadIn(14) = &H0
-    Case 9: 'p final
-        TextblockKey.PartNum = 0
-        TextblockKey.LeadIn(1) = &H63
-        TextblockKey.LeadIn(2) = &H20
-        TextblockKey.LeadIn(3) = &H63
-        TextblockKey.LeadIn(4) = &H6C
-        TextblockKey.LeadIn(5) = &H0
-        TextblockKey.LeadIn(6) = &H0
-        TextblockKey.LeadIn(7) = &H73
-        TextblockKey.LeadIn(8) = &HD
-        TextblockKey.LeadIn(9) = &H9
-        TextblockKey.LeadIn(10) = &HD
-        TextblockKey.LeadIn(11) = &H0
-        TextblockKey.LeadIn(12) = &H0
-        TextblockKey.LeadIn(13) = &H0
-        TextblockKey.LeadIn(14) = &H0
-    Case Else: 'h, i, k, m
-        TextblockKey.PartNum = 0
-        TextblockKey.LeadIn(1) = &H63
-        TextblockKey.LeadIn(2) = &H20
-        TextblockKey.LeadIn(3) = &H63
-        TextblockKey.LeadIn(4) = &H6C
-        TextblockKey.LeadIn(5) = &H0
-        TextblockKey.LeadIn(6) = &H0
-        TextblockKey.LeadIn(7) = &H73
-        TextblockKey.LeadIn(8) = &HD
-        TextblockKey.LeadIn(9) = &H0
-        TextblockKey.LeadIn(10) = &H0
-        TextblockKey.LeadIn(11) = &H0
-        TextblockKey.LeadIn(12) = &H0
-        TextblockKey.LeadIn(13) = &H0
-        TextblockKey.LeadIn(14) = &H0
-End Select
+If WorksWithWG Then
+    TextblockKey.PartNum = 0
+    TextblockKey.LeadIn(1) = &H63
+    TextblockKey.LeadIn(2) = &H20
+    TextblockKey.LeadIn(3) = &H63
+    TextblockKey.LeadIn(4) = &H6C
+    TextblockKey.LeadIn(5) = &H73
+    TextblockKey.LeadIn(6) = &HD
+    TextblockKey.LeadIn(7) = &H9
+    TextblockKey.LeadIn(8) = &HD
+    TextblockKey.LeadIn(9) = &H0
+    TextblockKey.LeadIn(10) = &H0
+    TextblockKey.LeadIn(11) = &H0
+    TextblockKey.LeadIn(12) = &H0
+Else
+    Select Case eDatFileVersion '***NEWMUDVER***
+        Case 2: 'J
+            TextblockKey.PartNum = 0
+            TextblockKey.LeadIn(1) = &H63
+            TextblockKey.LeadIn(2) = &H20
+            TextblockKey.LeadIn(3) = &H63
+            TextblockKey.LeadIn(4) = &H6C
+            TextblockKey.LeadIn(5) = &H0
+            TextblockKey.LeadIn(6) = &H0
+            TextblockKey.LeadIn(7) = &H73
+            TextblockKey.LeadIn(8) = &HD
+            TextblockKey.LeadIn(9) = &H98
+            TextblockKey.LeadIn(10) = &H94
+            TextblockKey.LeadIn(11) = &H40
+            TextblockKey.LeadIn(12) = &H59
+            TextblockKey.LeadIn(13) = &H35
+            TextblockKey.LeadIn(14) = &H0
+        Case 4: 'L
+            TextblockKey.PartNum = 0
+            TextblockKey.LeadIn(1) = &H63
+            TextblockKey.LeadIn(2) = &H20
+            TextblockKey.LeadIn(3) = &H63
+            TextblockKey.LeadIn(4) = &H6C
+            TextblockKey.LeadIn(5) = &H0
+            TextblockKey.LeadIn(6) = &H0
+            TextblockKey.LeadIn(7) = &H73
+            TextblockKey.LeadIn(8) = &HD
+            TextblockKey.LeadIn(9) = &H70
+            TextblockKey.LeadIn(10) = &H72
+            TextblockKey.LeadIn(11) = &H65
+            TextblockKey.LeadIn(12) = &H6E
+            TextblockKey.LeadIn(13) = &H35
+            TextblockKey.LeadIn(14) = &H0
+        Case 6: 'N
+            TextblockKey.PartNum = 0
+            TextblockKey.LeadIn(1) = &H63
+            TextblockKey.LeadIn(2) = &H20
+            TextblockKey.LeadIn(3) = &H63
+            TextblockKey.LeadIn(4) = &H6C
+            TextblockKey.LeadIn(5) = &H0
+            TextblockKey.LeadIn(6) = &H0
+            TextblockKey.LeadIn(7) = &H73
+            TextblockKey.LeadIn(8) = &HD
+            TextblockKey.LeadIn(9) = &H65
+            TextblockKey.LeadIn(10) = &H63
+            TextblockKey.LeadIn(11) = &H6F
+            TextblockKey.LeadIn(12) = &H72
+            TextblockKey.LeadIn(13) = &H3A
+            TextblockKey.LeadIn(14) = &H0
+        Case 7 To 8: 'O & Pb13
+            TextblockKey.PartNum = 0
+            TextblockKey.LeadIn(1) = &H63
+            TextblockKey.LeadIn(2) = &H20
+            TextblockKey.LeadIn(3) = &H63
+            TextblockKey.LeadIn(4) = &H6C
+            TextblockKey.LeadIn(5) = &H0
+            TextblockKey.LeadIn(6) = &H0
+            TextblockKey.LeadIn(7) = &H73
+            TextblockKey.LeadIn(8) = &HD
+            TextblockKey.LeadIn(9) = &H1
+            TextblockKey.LeadIn(10) = &HB1
+            TextblockKey.LeadIn(11) = &H2
+            TextblockKey.LeadIn(12) = &H59
+            TextblockKey.LeadIn(13) = &H3B
+            TextblockKey.LeadIn(14) = &H0
+        Case 9: 'p final
+            TextblockKey.PartNum = 0
+            TextblockKey.LeadIn(1) = &H63
+            TextblockKey.LeadIn(2) = &H20
+            TextblockKey.LeadIn(3) = &H63
+            TextblockKey.LeadIn(4) = &H6C
+            TextblockKey.LeadIn(5) = &H0
+            TextblockKey.LeadIn(6) = &H0
+            TextblockKey.LeadIn(7) = &H73
+            TextblockKey.LeadIn(8) = &HD
+            TextblockKey.LeadIn(9) = &H9
+            TextblockKey.LeadIn(10) = &HD
+            TextblockKey.LeadIn(11) = &H0
+            TextblockKey.LeadIn(12) = &H0
+            TextblockKey.LeadIn(13) = &H0
+            TextblockKey.LeadIn(14) = &H0
+        Case Else: 'h, i, k, m
+            TextblockKey.PartNum = 0
+            TextblockKey.LeadIn(1) = &H63
+            TextblockKey.LeadIn(2) = &H20
+            TextblockKey.LeadIn(3) = &H63
+            TextblockKey.LeadIn(4) = &H6C
+            TextblockKey.LeadIn(5) = &H0
+            TextblockKey.LeadIn(6) = &H0
+            TextblockKey.LeadIn(7) = &H73
+            TextblockKey.LeadIn(8) = &HD
+            TextblockKey.LeadIn(9) = &H0
+            TextblockKey.LeadIn(10) = &H0
+            TextblockKey.LeadIn(11) = &H0
+            TextblockKey.LeadIn(12) = &H0
+            TextblockKey.LeadIn(13) = &H0
+            TextblockKey.LeadIn(14) = &H0
+    End Select
+End If
 
 SetDatVersion = True
 End Function
@@ -1055,6 +1132,8 @@ Select Case TextblockRec.LeadIn(10) 'checks the first textblock ***NEWMUDVER***
     Case &H0:
         If (TextblockRec.LeadIn(9) = &H0) And (TextblockRec.LeadIn(7) = &H73) Then
             sVer = "v1.11h, v1.11i, v1.11k, or v1.11m"
+        ElseIf (TextblockRec.LeadIn(9) = &H0) And (TextblockRec.LeadIn(7) = &H9) Then
+            sVer = "v1.11p-WG"
         Else
             sVer = "v?.??"
         End If
@@ -1062,31 +1141,38 @@ Select Case TextblockRec.LeadIn(10) 'checks the first textblock ***NEWMUDVER***
 End Select
 
 bMatch = True
-Select Case eDatFileVersion '***NEWMUDVER***
-    Case 2: 'J
-        If TextblockRec.LeadIn(12) <> &H59 Then bMatch = False
-        If TextblockRec.LeadIn(13) <> &H35 Then bMatch = False
-        If TextblockRec.LeadIn(10) <> &H94 Then bMatch = False
-    Case 4: 'L
-        If TextblockRec.LeadIn(12) <> &H6E Then bMatch = False
-        If TextblockRec.LeadIn(10) <> &H72 Then bMatch = False
-    Case 6: 'N
-        If TextblockRec.LeadIn(12) <> &H72 Then bMatch = False
-        If TextblockRec.LeadIn(10) <> &H63 Then bMatch = False
-    Case 7 To 8: 'o and p
-        If TextblockRec.LeadIn(12) <> &H59 Then bMatch = False
-        If TextblockRec.LeadIn(13) <> &H3B Then bMatch = False
-        If TextblockRec.LeadIn(10) <> &HB1 Then bMatch = False
-    Case 9: 'p final
-        If TextblockRec.LeadIn(8) <> &HD Then bMatch = False
-        If TextblockRec.LeadIn(9) <> &H9 Then bMatch = False
-        If TextblockRec.LeadIn(10) <> &HD Then bMatch = False
-    Case Else: 'h, i, k, m
-        If TextblockRec.LeadIn(12) <> &H0 Then bMatch = False
-        If TextblockRec.LeadIn(10) <> &H0 Then bMatch = False
-        If TextblockRec.LeadIn(8) <> &HD Then bMatch = False
-        If TextblockRec.LeadIn(7) <> &H73 Then bMatch = False
-End Select
+If WorksWithWG Then
+    If TextblockRec.LeadIn(12) <> &H0 Then bMatch = False
+    If TextblockRec.LeadIn(10) <> &H0 Then bMatch = False
+    If TextblockRec.LeadIn(8) <> &HD Then bMatch = False
+    If TextblockRec.LeadIn(7) <> &H9 Then bMatch = False
+Else
+    Select Case eDatFileVersion '***NEWMUDVER***
+        Case 2: 'J
+            If TextblockRec.LeadIn(12) <> &H59 Then bMatch = False
+            If TextblockRec.LeadIn(13) <> &H35 Then bMatch = False
+            If TextblockRec.LeadIn(10) <> &H94 Then bMatch = False
+        Case 4: 'L
+            If TextblockRec.LeadIn(12) <> &H6E Then bMatch = False
+            If TextblockRec.LeadIn(10) <> &H72 Then bMatch = False
+        Case 6: 'N
+            If TextblockRec.LeadIn(12) <> &H72 Then bMatch = False
+            If TextblockRec.LeadIn(10) <> &H63 Then bMatch = False
+        Case 7 To 8: 'o and p
+            If TextblockRec.LeadIn(12) <> &H59 Then bMatch = False
+            If TextblockRec.LeadIn(13) <> &H3B Then bMatch = False
+            If TextblockRec.LeadIn(10) <> &HB1 Then bMatch = False
+        Case 9: 'p final
+            If TextblockRec.LeadIn(8) <> &HD Then bMatch = False
+            If TextblockRec.LeadIn(9) <> &H9 Then bMatch = False
+            If TextblockRec.LeadIn(10) <> &HD Then bMatch = False
+        Case Else: 'h, i, k, m
+            If TextblockRec.LeadIn(12) <> &H0 Then bMatch = False
+            If TextblockRec.LeadIn(10) <> &H0 Then bMatch = False
+            If TextblockRec.LeadIn(8) <> &HD Then bMatch = False
+            If TextblockRec.LeadIn(7) <> &H73 Then bMatch = False
+    End Select
+End If
 
 bMonCheck = True
 
@@ -1108,6 +1194,8 @@ If nStatus = 0 Then
         If Not eDatFileVersion <= v111n Then bMatch = False
     ElseIf DBStat.RecLen = 1544 Then
         If Not eDatFileVersion >= v111o Then bMatch = False
+    ElseIf DBStat.RecLen = 1528 Then
+        If Not WorksWithWG Then bMatch = False
     Else
         CheckDatVersion = False
         MsgBox "Warning: Invalid room database record size returned while verifying dat file version setting.", vbExclamation
@@ -1143,19 +1231,23 @@ Call HandleError
 End Function
 
 Public Function FriendlyDatVersion(ByVal nNum As Integer) As String
-Select Case nNum '***NEWMUDVER***
-    Case 0: FriendlyDatVersion = "v1.11h"
-    Case 1: FriendlyDatVersion = "v1.11i"
-    Case 2: FriendlyDatVersion = "v1.11j"
-    Case 3: FriendlyDatVersion = "v1.11k"
-    Case 4: FriendlyDatVersion = "v1.11L"
-    Case 5: FriendlyDatVersion = "v1.11m"
-    Case 6: FriendlyDatVersion = "v1.11n"
-    Case 7: FriendlyDatVersion = "v1.11o"
-    Case 8: FriendlyDatVersion = "v1.11p-b13"
-    Case 9: FriendlyDatVersion = "v1.11p"
-    Case Else:  FriendlyDatVersion = "v???"
-End Select
+If WorksWithWG Then
+    FriendlyDatVersion = "v1.11p-WG"
+Else
+    Select Case nNum '***NEWMUDVER***
+        Case 0: FriendlyDatVersion = "v1.11h"
+        Case 1: FriendlyDatVersion = "v1.11i"
+        Case 2: FriendlyDatVersion = "v1.11j"
+        Case 3: FriendlyDatVersion = "v1.11k"
+        Case 4: FriendlyDatVersion = "v1.11L"
+        Case 5: FriendlyDatVersion = "v1.11m"
+        Case 6: FriendlyDatVersion = "v1.11n"
+        Case 7: FriendlyDatVersion = "v1.11o"
+        Case 8: FriendlyDatVersion = "v1.11p-b13"
+        Case 9: FriendlyDatVersion = "v1.11p"
+        Case Else:  FriendlyDatVersion = "v???"
+    End Select
+End If
 End Function
 
 Public Sub InitTaskbar()
@@ -1191,6 +1283,41 @@ Call HandleError("InitTaskbar")
 Resume out:
 
 End Sub
+
+Private Sub SetDatSuffixStrings()
+    If WorksWithWG Then
+        strDatSuffix_ACTS = strDatSuffixNNT_ACTS
+        strDatSuffix_BANKS = strDatSuffixNNT_BANKS
+        strDatSuffix_CLASS = strDatSuffixNNT_CLASS
+        strDatSuffix_GANGS = strDatSuffixNNT_GANGS
+        strDatSuffix_ITEMS = strDatSuffixNNT_ITEMS
+        strDatSuffix_KNMSR = strDatSuffixNNT_KNMSR
+        strDatSuffix_MP = strDatSuffixNNT_MP
+        strDatSuffix_MSG = strDatSuffixNNT_MSG
+        strDatSuffix_RACE = strDatSuffixNNT_RACE
+        strDatSuffix_SHOPS = strDatSuffixNNT_SHOPS
+        strDatSuffix_SPELS = strDatSuffixNNT_SPELS
+        strDatSuffix_TEXT = strDatSuffixNNT_TEXT
+        strDatSuffix_UPDAT = strDatSuffixNNT_UPDAT
+        strDatSuffix_USERS = strDatSuffixNNT_USERS
+    Else
+        strDatSuffix_ACTS = strDatSuffixNT_ACTS
+        strDatSuffix_BANKS = strDatSuffixNT_BANKS
+        strDatSuffix_CLASS = strDatSuffixNT_CLASS
+        strDatSuffix_GANGS = strDatSuffixNT_GANGS
+        strDatSuffix_ITEMS = strDatSuffixNT_ITEMS
+        strDatSuffix_KNMSR = strDatSuffixNT_KNMSR
+        strDatSuffix_MP = strDatSuffixNT_MP
+        strDatSuffix_MSG = strDatSuffixNT_MSG
+        strDatSuffix_RACE = strDatSuffixNT_RACE
+        strDatSuffix_SHOPS = strDatSuffixNT_SHOPS
+        strDatSuffix_SPELS = strDatSuffixNT_SPELS
+        strDatSuffix_TEXT = strDatSuffixNT_TEXT
+        strDatSuffix_UPDAT = strDatSuffixNT_UPDAT
+        strDatSuffix_USERS = strDatSuffixNT_USERS
+    End If
+End Sub
+
 Public Sub Startup()
 On Error GoTo error:
 Dim nYesNo As Integer, WGPath As String, nStatus As Integer, bTest As Boolean
@@ -1224,7 +1351,8 @@ End If
 frmSplash.lblStatus.Caption = "Opening Ability DB ..."
 Call OpenAbilityDB
 
-strDatCallLetters = ReadINI("Settings", "DatCallLetters" & IIf(WorksWithN = True, "_n", ""))
+strDatCallLetters = ReadINI("Settings", "DatCallLetters" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
+Call SetDatSuffixStrings
 
 If Val(ReadINI("Settings", "UseCPU")) > 0 Then
     bUseCPU = True
@@ -1236,8 +1364,9 @@ frmSplash.lblStatus.Caption = "Initializing Field Maps ..."
 DoEvents
 Call IntFieldMaps
 
-If ReadINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", "")) = "0" Then
-    eDatFileVersion = IIf(WorksWithN = True, 6, 9)
+If ReadINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", ""))) = "0" Then
+    eDatFileVersion = IIf(WorksWithN = True, 6, IIf(WorksWithWG = True, 0, 9))
+    Call SetDatSuffixStrings
     MsgBox "This appears to be your first time launching" & _
         " Nightmare Redux" & IIf(WorksWithN = True, " for vN.", ".") & _
         " Please set the path and version of your MajorMUD *.dat files on the following" & _
@@ -1250,35 +1379,35 @@ If bTest = False Then GoTo load_settings:
 
 frmSplash.lblStatus.Caption = "Opening Files ..."
 DoEvents
-WGPath = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""))
+WGPath = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
 If Not Right(WGPath, 1) = "\" Then
     WGPath = WGPath & "\"
-    Call WriteINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""), WGPath)
+    Call WriteINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")), WGPath)
 End If
 If DirectoryExists(WGPath) = False Then
     MsgBox "Nightmare cannot find your MajorMUD *.dat files.  Please choose the location of them on the settings screen.", vbExclamation
     GoTo load_settings:
 End If
-If FileExists(WGPath & "w" & strDatCallLetters & "race2.dat") = False Or _
-    FileExists(WGPath & "w" & strDatCallLetters & "clas2.dat") = False Then
-    MsgBox "w" & strDatCallLetters & "race2.dat or w" & strDatCallLetters & "clas2.dat was not found." _
+If FileExists(WGPath & "w" & strDatCallLetters & strDatSuffix_RACE) = False Or _
+    FileExists(WGPath & "w" & strDatCallLetters & strDatSuffix_CLASS) = False Then
+    MsgBox "w" & strDatCallLetters & strDatSuffix_RACE & " or w" & strDatCallLetters & strDatSuffix_CLASS & " was not found." _
     & "Please locate your dat files on the settings screen.", vbExclamation
     GoTo load_settings:
 End If
 
-RaceKeyBuffer = WGPath & "w" & strDatCallLetters & "race2.dat" & Chr(0)
-ClassKeyBuffer = WGPath & "w" & strDatCallLetters & "clas2.dat" & Chr(0)
-SpellKeyBuffer = WGPath & "w" & strDatCallLetters & "spel2.dat" & Chr(0)
-MonsterKeyBuffer = WGPath & "w" & strDatCallLetters & "knms2.dat" & Chr(0)
-ItemKeyBuffer = WGPath & "w" & strDatCallLetters & "item2.dat" & Chr(0)
-ShopKeyBuffer = WGPath & "w" & strDatCallLetters & "shop2.dat" & Chr(0)
-RoomKeyBuffer = WGPath & "w" & strDatCallLetters & "mp002.dat" & Chr(0)
-MessageKeyBuffer = WGPath & "w" & strDatCallLetters & "msg2.dat" & Chr(0)
-TextblockKeyBuffer = WGPath & "w" & strDatCallLetters & "text2.dat" & Chr(0)
-UserKeyBuffer = WGPath & "w" & strDatCallLetters & "user2.dat" & Chr(0)
-ActionKeyBuffer = WGPath & "w" & strDatCallLetters & "acts2.dat" & Chr(0)
-BankKeyBuffer = WGPath & "w" & strDatCallLetters & "bank2.dat" & Chr(0)
-GangKeyBuffer = WGPath & "w" & strDatCallLetters & "gang2.dat" & Chr(0)
+RaceKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_RACE & Chr(0)
+ClassKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_CLASS & Chr(0)
+SpellKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_SPELS & Chr(0)
+MonsterKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_KNMSR & Chr(0)
+ItemKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_ITEMS & Chr(0)
+ShopKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_SHOPS & Chr(0)
+RoomKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_MP & Chr(0)
+MessageKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_MSG & Chr(0)
+TextblockKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_TEXT & Chr(0)
+UserKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_USERS & Chr(0)
+ActionKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_ACTS & Chr(0)
+BankKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_BANKS & Chr(0)
+GangKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_GANGS & Chr(0)
 
 frmMain.stsStatusBar.Panels(2).Text = "call letters: " & strDatCallLetters
 If bUseCPU = True Then
@@ -2707,7 +2836,7 @@ frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
 DoEvents
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.lblPanel(1).Caption = "Scanning Rooms..."
 
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
@@ -2715,7 +2844,7 @@ Do While nStatus = 0 And bStopControlBuild = False
     RoomRowToStruct Roomdatabuf.buf
     
     sRefRoom = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
-    'frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+    'frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
     'frmProgressBar.lblPanel(1).Caption = sRefRoom
     DoEvents
     

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmRoom 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Room Editor"
@@ -4719,7 +4719,7 @@ frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
 DoEvents
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.lblPanel(1).Caption = "Scanning Rooms..."
 DoEvents
 
@@ -5376,7 +5376,7 @@ End Select
         
 frmProgressBar.sCaption = "Search Rooms for String"
 frmProgressBar.lblCaption.Caption = "Searching Rooms ..."
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.cmdCancel.Enabled = True
 frmProgressBar.ProgressBar.Value = 0
 Set frmProgressBar.FormOwner = Me

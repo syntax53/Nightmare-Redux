@@ -1,0 +1,15 @@
+----------------------------------------------------
+Confirm that no data is set for field 'NumMons'
+----------------------------------------------------
+> dump rooms database WCCMP001.DAT via butil to unformatted/raw file
+
+> Total Number of Records = 26720
+hexdump -v -e '"0x" 1/1 "%02X" " "' RYTZ_WG | grep -oh "0x00 0x00 0x00 0x0D 0x0A 0x31 0x35 0x32 0x38" | wc -w
+
+> Reuslt divided by 9 (# values above): 26719
+>> 26720 -1, not matching final record
+
+> Final record is shown as:
+0x00 0x00 0x00 0x0D 0x0A 0x1A
+
+> seems that 'NumMons' never has a value set

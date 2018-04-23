@@ -116,7 +116,7 @@ Call RoomRowToStruct(Roomdatabuf.buf)
 frmProgressBar.sCaption = "Building Monster NPC/Room List"
 frmProgressBar.lblCaption.Caption = "Scanning Rooms ..."
 frmProgressBar.cmdCancel.Enabled = True
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 frmProgressBar.lblPanel(1).Caption = ""
 Call frmProgressBar.SetRange(Roomrec.RoomNumber)
 frmProgressBar.Show

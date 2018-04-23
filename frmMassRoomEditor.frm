@@ -4420,7 +4420,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-stsStatus.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
+stsStatus.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MP
 stsStatus.Panels(2).Text = RoomKeyStruct.RoomNum
 ProgressBar.Value = 0
 ProgressBar.Max = Val(txtEndRoom.Text) - Val(txtStartRoom.Text) + 2
@@ -4505,7 +4505,7 @@ ts.WriteLine ("Range edit job started " & Date & " @ " & Time)
 ts.WriteLine ("Editing Rooms " & RoomStart & " to " & RoomEnd & " of Map " & txtStartMap.Text)
 ts.WriteBlankLines (1)
 
-stsStatus.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
+stsStatus.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MP
 
 For Each frm In Forms
     If LCase(Left(frm.Name, Len("room editor"))) = "room editor" Then
