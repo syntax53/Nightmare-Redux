@@ -275,8 +275,8 @@ DoEvents
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-WGPath = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""))
-UpdateKeyBuffer = WGPath & "w" & strDatCallLetters & "upda2.dat"
+WGPath = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
+UpdateKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_UPDAT
 
 If fso.FileExists(UpdateKeyBuffer) = True Then
     Set fil1 = fso.GetFile(UpdateKeyBuffer)

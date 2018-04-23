@@ -859,7 +859,7 @@ Private Sub DeleteBankbooks()
 Dim nStatus As Integer, recnum As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "bank2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_BANKS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, BankPosBlock, BankDatabuf, Len(BankDatabuf), ByVal BankKeyBuffer, KEY_BUF_LEN, 0)
@@ -887,7 +887,7 @@ Dim recnum As Long, TextblocksFrom As Long, y As Integer
 
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_TEXT
 stsStatusBar.Panels(2).Text = recnum
 
     nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
@@ -915,7 +915,7 @@ TextblocksFrom = Val(txtTextblocksFrom.Text)
 TextblocksTo = Val(txtTextblocksTo.Text)
 TextblockKey.PartNum = 0
 TextblockKey.Number = TextblocksFrom
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 
 'Do While nStatus = 0
 '    If bStopDelete Then Exit Do
@@ -938,7 +938,7 @@ For x = TextblocksFrom To TextblocksTo
     For y = 0 To 20
         If bStopDelete Then Exit Sub
         TextblockKey.PartNum = y
-        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), TextblockKey, KEY_BUF_LEN, 0)
+        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
         If nStatus = 0 Then
             nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
         Else
@@ -957,7 +957,7 @@ Private Sub DeleteMessages()
 Dim nStatus As Integer, recnum As Long, MessagesTo As Long, x As Long, MessagesFrom As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "msg2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MSG
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
@@ -1000,7 +1000,7 @@ Private Sub DeleteItems()
 Dim nStatus As Integer, recnum As Long, ItemsFrom As Long, ItemsTo As Long, x As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "item2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_ITEMS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
@@ -1041,7 +1041,7 @@ Private Sub DeleteRooms()
 Dim nStatus As Integer, recnum As Long, x As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MP
 stsStatusBar.Panels(2).Text = recnum
 
 If chkRoomsAll.Value = 1 Then
@@ -1099,7 +1099,7 @@ Private Sub DeleteSpells()
 Dim nStatus As Integer, recnum As Long, SpellsTo As Integer, x As Long, SpellsFrom As Integer
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "spel2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_SPELS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
@@ -1142,7 +1142,7 @@ Private Sub DeleteActions()
 Dim nStatus As Integer, recnum As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "acts2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_ACTS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
@@ -1169,7 +1169,7 @@ Private Sub DeleteClasses()
 Dim nStatus As Integer, recnum As Long, ClassesTo As Integer, x As Long, ClassesFrom As Integer
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "clas2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_CLASS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
@@ -1211,7 +1211,7 @@ Private Sub DeleteRaces()
 Dim nStatus As Integer, recnum As Long, RacesTo As Integer, x As Integer, RacesFrom As Integer
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_RACE
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
@@ -1253,7 +1253,7 @@ Private Sub DeleteShops()
 Dim nStatus As Integer, recnum As Long, ShopsTo As Long, x As Long, ShopsFrom As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "shop2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_SHOPS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
@@ -1296,7 +1296,7 @@ Private Sub DeleteMonsters()
 Dim nStatus As Integer, recnum As Long, MonstersTo As Long, x As Long, MonstersFrom As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "knms2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_KNMSR
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
@@ -1338,7 +1338,7 @@ Private Sub DeleteUsers()
 Dim nStatus As Integer, recnum As Long
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "user2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_USERS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal UserKeyBuffer, KEY_BUF_LEN, 0)

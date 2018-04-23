@@ -18,7 +18,7 @@ UpdateFileLoaded = False
 
 If bBlankFile Then
     nYesNo = MsgBox("This will delete the current update file and compile a blank w" & strDatCallLetters _
-        & "upda2.dat, are you sure?", _
+        & strDatSuffix_UPDAT & ", are you sure?", _
         vbYesNo + vbQuestion + vbDefaultButton2, "Compile blank update file?")
     If nYesNo <> vbYes Then
         Call StopUpdate
@@ -26,7 +26,7 @@ If bBlankFile Then
     End If
 Else
     nYesNo = MsgBox("This will close all open forms and compile a w" _
-        & strDatCallLetters & "upda2.dat, are you sure?" & vbCrLf & vbCrLf _
+        & strDatCallLetters & strDatSuffix_UPDAT & ", are you sure?" & vbCrLf & vbCrLf _
         & "NOTE: This will take anywhere from 1-20 minutes.", _
         vbYesNo + vbQuestion + vbDefaultButton2, "Compile an update file?")
     If nYesNo <> vbYes Then
@@ -139,7 +139,7 @@ End Sub
 Private Sub InsertMessages()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "msg2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MSG
 recnum = 1
 DoEvents
 
@@ -186,7 +186,7 @@ End Sub
 Private Sub InsertTextblocks()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "text2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_TEXT
 recnum = 1
 DoEvents
 
@@ -233,7 +233,7 @@ End Sub
 Private Sub InsertRaces()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "race2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_RACE
 recnum = 1
 DoEvents
 
@@ -280,7 +280,7 @@ End Sub
 Private Sub InsertClasses()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "clas2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_CLASS
 recnum = 1
 DoEvents
 
@@ -327,7 +327,7 @@ End Sub
 Private Sub InsertSpells()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "spel2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_SPELS
 recnum = 1
 DoEvents
 
@@ -375,7 +375,7 @@ End Sub
 Private Sub InsertItems()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_ITEMS
 recnum = 1
 DoEvents
 
@@ -422,7 +422,7 @@ End Sub
 Private Sub InsertShops()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "shop2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_SHOPS
 recnum = 1
 DoEvents
 
@@ -469,7 +469,7 @@ End Sub
 Private Sub InsertMonsters()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "knms2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_KNMSR
 recnum = 1
 DoEvents
 
@@ -516,7 +516,7 @@ End Sub
 Private Sub InsertRooms()
 Dim nStatus As Integer, nYesNo As Integer, x As Long
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 recnum = 1
 DoEvents
 
@@ -640,12 +640,11 @@ End Sub
 Private Sub CreateUpdateFile()
 Dim WGPath As String, nStatus As Integer
 Dim fso As FileSystemObject, fil1 As File
-Dim UpdateFileSpecSize As Long
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-WGPath = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", ""))
-UpdateKeyBuffer = WGPath & "w" & strDatCallLetters & "upda2.dat"
+WGPath = ReadINI("Settings", "WGPath" & IIf(WorksWithN = True, "_n", IIf(WorksWithWG = True, "_wg", "")))
+UpdateKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_UPDAT
 
 If fso.FileExists(UpdateKeyBuffer) = True Then
     Set fil1 = fso.GetFile(UpdateKeyBuffer)
@@ -655,34 +654,17 @@ End If
 Set fso = Nothing
 Set fil1 = Nothing
 
-UpdateFileSpec.RecordLength = 2032
-UpdateFileSpec.PageSize = 4096
-UpdateFileSpec.IndexCount = 1
-UpdateFileSpec.FileVersion = 96
-UpdateFileSpec.FileFlags = NO_INCLUDE_SYSTEM_DATA
-UpdateFileSpec.DuplicatePointCount = 0
-UpdateFileSpec.Allocation = 0
-UpdateFileSpec.KeyPosition = 1
-UpdateFileSpec.KeyLength = 4
-UpdateFileSpec.KeyFlags = EXTTYPE
-UpdateFileSpec.ExtDataType = 15
-UpdateFileSpec.NullValue = 0
-UpdateFileSpec.ManKeyNumber = 0
-UpdateFileSpec.ACSNumber = 0
+frmProgressBar.lblPanel(1).Caption = "Creating w" & strDatCallLetters & strDatSuffix_UPDAT
 
-UpdateFileSpecSize = 32
-    
-frmProgressBar.lblPanel(1).Caption = "Creating w" & strDatCallLetters & "upda2.dat"
-
-nStatus = BTRCALL(BCREATE, UpdatePosBlock, UpdateFileSpec, UpdateFileSpecSize, ByVal UpdateKeyBuffer, KEY_BUF_LEN, 0)
+nStatus = InitUpdateFile
 If Not nStatus = 0 Then
     MsgBox "Error creating update file: " & BtrieveErrorCode(nStatus)
     StopUpdate
     Exit Sub
 End If
 
-UpdateKeyBuffer = WGPath & "w" & strDatCallLetters & "upda2.dat"
-frmProgressBar.lblPanel(1).Caption = "Opening w" & strDatCallLetters & "upda2.dat"
+UpdateKeyBuffer = WGPath & "w" & strDatCallLetters & strDatSuffix_UPDAT
+frmProgressBar.lblPanel(1).Caption = "Opening w" & strDatCallLetters & strDatSuffix_UPDAT
 
 nStatus = BTRCALL(BOPEN, UpdatePosBlock, Updaterec, UpdateDataBufSize, ByVal UpdateKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then

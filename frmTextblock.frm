@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmTextblock 
    Caption         =   "Textblock Editor"
    ClientHeight    =   5880
@@ -1057,7 +1057,7 @@ If cmbRecent.ItemData(cmbRecent.ListIndex) = Val(txtNumber.Text) Then Exit Sub
 TextblockKey.PartNum = 0
 TextblockKey.Number = cmbRecent.ItemData(cmbRecent.ListIndex)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     If nStatus = 4 Then
         MsgBox "Record not found."
@@ -1116,7 +1116,7 @@ TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = nPart
 
 'get current record
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
     bLoaded = False
@@ -1230,7 +1230,7 @@ ElseIf nStatus = 0 Then
         TextblockKey.PartNum = nPart
         
         'get current record
-        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
         If Not nStatus = 0 Then
             MsgBox "Error re-getting last part." & BtrieveErrorCode(nStatus)
             Exit Sub
@@ -1243,7 +1243,7 @@ End If
 TextblockKey.PartNum = 0
 
 'get current record
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error re-getting current record." & BtrieveErrorCode(nStatus)
     bLoaded = False
@@ -1283,7 +1283,7 @@ End If
 TextblockKey.PartNum = 0
 TextblockKey.Number = nRecnum
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Goto Error: " & BtrieveErrorCode(nStatus)
     Exit Sub
@@ -1326,7 +1326,7 @@ TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = Val(txtPart.Text)
 
 'get current record
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
     bLoaded = False
@@ -1371,7 +1371,7 @@ End If
 TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = Val(txtPart.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus), vbExclamation
     bLoaded = False
@@ -1613,7 +1613,7 @@ Else 'find next
     
     TextblockKey.PartNum = Val(txtPart.Text)
     TextblockKey.Number = Val(txtNumber.Text)
-    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
         Exit Sub
@@ -1646,7 +1646,7 @@ Else
     Call frmProgressBar.SetRange(DBStat.nRecords)
 End If
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "text2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_TEXT
 frmProgressBar.lblPanel(1).Caption = TextblockRec.Number
 frmProgressBar.Show
 frmMain.Enabled = False
@@ -1700,7 +1700,7 @@ frmMain.Enabled = True
 frmMain.SetFocus
 TextblockKey.PartNum = Val(txtPart.Text)
 TextblockKey.Number = Val(txtNumber.Text)
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
 End If
@@ -1723,7 +1723,7 @@ If bLoaded Then Call SaveTextBlock
 TextblockKey.PartNum = 0
 TextblockKey.Number = Val(txtLinkTo.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Goto Error: " & BtrieveErrorCode(nStatus)
 Else
@@ -1743,7 +1743,7 @@ bLoaded = True
 
 RowToStruct row, TextblockFldMap, TextblockRec, LenB(TextblockRec)
 
-'For x = 1 To 14
+'For x = 1 To TextblockLeadInSize
 '    MsgBox TextblockRec.LeadIn(x)
 'Next
 
@@ -1780,7 +1780,7 @@ If bDisableWriting Then Exit Sub
 TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = Val(txtPart.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
     Exit Sub
@@ -1832,7 +1832,7 @@ Me.SetFocus
 TextblockKey.PartNum = nPart
 TextblockKey.Number = nTB
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     If Not nStatus = 4 Then MsgBox "Goto Error: " & BtrieveErrorCode(nStatus)
 Else
@@ -1854,7 +1854,7 @@ If bLoaded Then Call SaveTextBlock
 TextblockKey.PartNum = Val(txtGotoPart.Text)
 TextblockKey.Number = Val(txtGotoBlock.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Goto Error: " & BtrieveErrorCode(nStatus)
 Else
@@ -1916,7 +1916,7 @@ If nDelete = vbNo Then Exit Sub
 TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = Val(txtPart.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
     Exit Sub
@@ -1949,9 +1949,9 @@ If NewTextBlockPart = "" Then Exit Sub
 TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = Val(txtPart.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
-    For x = 1 To 14
+    For x = 1 To TextblockLeadInSize
         TextblockRec.LeadIn(x) = TextblockKey.LeadIn(x)
     Next
     
@@ -2172,7 +2172,7 @@ End Sub
 'TextblockKey.PartNum = Val(txtPart.Text)
 'TextblockKey.Number = Val(txtNumber.Text)
 '
-'nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+'nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 'If Not nStatus = 0 Then
 '    MsgBox "Error going to previously viewed record, close and open the textblock form."
 '    Exit Sub
@@ -2187,7 +2187,7 @@ Dim nStatus As Integer
 TextblockKey.Number = Val(txtNumber.Text)
 TextblockKey.PartNum = Val(txtPart.Text)
 
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     MsgBox "Error getting current record." & BtrieveErrorCode(nStatus)
     Exit Sub

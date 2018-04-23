@@ -1,0 +1,5 @@
+> TextblockKeyDataBuf/Type needed (similarly to BankKeyDataBuf/Type) due to LONG 
+byte alignment issues with BTRCALL(BGETEQUAL,...).
+>> On any textblock numbers other than zero, would return error #4 (no records found)
+
+> see also commented notes in modFieldMaps for WG

@@ -2,6 +2,8 @@ Attribute VB_Name = "modFieldmaps"
 Option Base 0
 Option Explicit
 
+Public Const WorksWithWG = False
+
 Public DB As Database
 Public rsTABLE As Recordset
 Public NewData As String
@@ -497,7 +499,7 @@ Public Type MessagePosBlockType
     buf(1 To 128) As Byte
 End Type
 
-Global Const TextblockFixedSize = 24
+Public Const TextblockLeadInSize = 14
 Global PreviewLoaded As Boolean
 Global TextblockRec As TextblockRecType
 Global TextblockDataBuf As TextblockDataBufType
@@ -505,7 +507,7 @@ Global TextblockPosBlock As TextblockPosBlockType
 Global TextblockKeyBuffer As String * 255
 Public Type TextblockRecType
     PartNum As Integer
-    LeadIn(1 To 14) As Byte
+    LeadIn(1 To TextblockLeadInSize) As Byte
     Number As Long
     LinkTo As Long
     Data As String * 2000
@@ -520,10 +522,18 @@ Public Type TextblockPosBlockType
 End Type
 
 Global TextblockKey As TextblockKeyType
+Public TextblockKeyFldMap(0 To (1 + TextblockLeadInSize + 1 - 1)) As FieldMap
 Public Type TextblockKeyType
     PartNum As Integer
-    LeadIn(1 To 14) As Byte
+    LeadIn(1 To TextblockLeadInSize) As Byte
     Number As Long
+End Type
+' From version WG: This approach required because of issues with Long datatypes and byte sequencing with VB6
+' BTRCALL(BGETEQUAL,...) calls will fail with 4 (no rec found) on text block keys
+' with numbers greater than 0 (unless an integer is used).
+Public TextblockKeyDataBuf As TextblockKeyDataBufType
+Public Type TextblockKeyDataBufType
+    bytes(2 + TextblockLeadInSize + 4 - 1) As Byte 'SizeOfBytes(TextblockKeyType)
 End Type
 
 Global Userrec As UserRecType
@@ -616,14 +626,14 @@ Public Type UserRecType
     unknown13e As Integer
     unknown13f As Integer
     unknown13g As Integer
-    CharLife As Long
+    CharLifeMins2 As Long
     unknown13(8) As Integer 'unknowns
     Bitmask1 As Byte
     Bitmask2 As Byte
     TestFlag1 As Byte
     TestFlag2 As Byte
     'TestFlag3 As Integer
-    unknown14 As Integer
+    CharLifeMins1 As Integer
     unknown15(3) As Long
 End Type
 Const UserDataBufSize = 2028
@@ -771,6 +781,62 @@ Public Type DBStatDatabufType
 End Type
 Global DBStatDatabuf As DBStatDatabufType
 
+Public Function InitUpdateFile() As Integer
+    Const UpdateFileSpecSize = 32
+    Dim nStatus As Integer
+    nStatus = 0
+
+    Dim msgstr As String
+    Dim nYesNo As Integer
+    Const msgstr_success = "The change to your registry was SUCCESSFUL." & vbCrLf & vbCrLf
+    Const msgstr_restart = _
+        "You will need to restart NR for any registry changes to take affect." & vbCrLf & _
+        "After you close NR, make sure both 'W32MKDE.EXE' and 'WBTRV32.DLL' have unloaded." & _
+        "You will now exit the update creation." & vbCrLf & vbCrLf & _
+        "Ignore the next error message and please restart NR."
+
+    UpdateFileSpec.RecordLength = 2032
+    UpdateFileSpec.PageSize = 4096
+    UpdateFileSpec.IndexCount = 1
+    UpdateFileSpec.FileVersion = 96
+    UpdateFileSpec.FileFlags = NO_INCLUDE_SYSTEM_DATA
+    UpdateFileSpec.DuplicatePointCount = 0
+    UpdateFileSpec.Allocation = 0
+    UpdateFileSpec.KeyPosition = 1
+    UpdateFileSpec.KeyLength = 4
+    UpdateFileSpec.KeyFlags = EXTTYPE
+    UpdateFileSpec.ExtDataType = BAUTOINC
+    UpdateFileSpec.NullValue = 0
+    UpdateFileSpec.ManKeyNumber = 0
+    UpdateFileSpec.ACSNumber = 0
+    
+    ' check for 1.11p with v5...
+    If GetBTRCreateIsV5() Then
+        msgstr = "**** READ THIS ****" & vbCrLf & vbCrLf & _
+            "MajorMUD 1.11p requires BTRIEVE v6 databases." & vbCrLf & _
+            "Your registry settings are set to create v5 databases." & vbCrLf & _
+            "The '" & BTRV_CREATE_KEY_VALUE_NAME & "' registry key value forces v5 DBs." & vbCrLf & vbCrLf
+            
+        If SetBTRCreateV5(False) <> 0 Then
+            msgstr = msgstr & _
+                "I was UNABLE to change your registry settings to BTRIEVE v6." & vbCrLf & _
+                "Check your path, permissions, and value on the following key path / value:" & _
+                vbCrLf & vbCrLf & _
+                "HKLM\\" & BTRV_CREATE_KEY_PATH & vbCrLf & _
+                "Add registry value '" & BTRV_CREATE_KEY_VALUE_NAME & "' as a string and set to '0'." & vbCrLf & vbCrLf
+        Else
+            msgstr = msgstr & msgstr_success
+        End If
+            
+        msgstr = msgstr & msgstr_restart
+        nYesNo = MsgBox(msgstr, vbOK, "MajorMUD 1.11p BTRIEVE v6 Check")
+        nStatus = 1
+    Else
+        nStatus = BTRCALL(BCREATE, UpdatePosBlock, UpdateFileSpec, UpdateFileSpecSize, ByVal UpdateKeyBuffer, KEY_BUF_LEN, 0)
+    End If
+
+    InitUpdateFile = nStatus
+End Function
 
 Sub IntFieldMaps()
     AddRaceFieldMap RaceFldMap, 0
@@ -787,6 +853,7 @@ Sub IntFieldMaps()
     AddBankFieldMap BankFldMap, 0
     AddBankKeyFieldMap BankKeyFldMap, 0
     AddDBStatFieldMap DBStatFldMap, 0
+    AddTextblockKeyFieldMap TextblockKeyFldMap, 0
 End Sub
 Sub AddDBStatFieldMap(map() As FieldMap, ByRef ctr As Integer)
     AddField map, ctr, FLD_INTEGER, 2
@@ -1538,7 +1605,7 @@ Sub AddUserFieldMap(map() As FieldMap, ByRef ctr As Integer)
     AddField map, ctr, FLD_INTEGER, 2 'unknown13e
     AddField map, ctr, FLD_INTEGER, 2 'unknown13f
     AddField map, ctr, FLD_INTEGER, 2 'unknown13g
-    AddField map, ctr, FLD_INTEGER, 4 'charlife
+    AddField map, ctr, FLD_INTEGER, 4 'CharLifeMins2
     AddField map, ctr, FLD_INTEGER, 2
     AddField map, ctr, FLD_INTEGER, 2 '10
     AddField map, ctr, FLD_INTEGER, 2
@@ -1553,7 +1620,7 @@ Sub AddUserFieldMap(map() As FieldMap, ByRef ctr As Integer)
     AddField map, ctr, FLD_BYTE, 1 'test1
     AddField map, ctr, FLD_BYTE, 1 'test2
     'AddField map, ctr, FLD_INTEGER, 2 'test3
-    AddField map, ctr, FLD_INTEGER, 2 'unknown14 -1
+    AddField map, ctr, FLD_INTEGER, 2 'CharLifeMins1 -1
     AddField map, ctr, FLD_INTEGER, 4 'unknown15 -1
     AddField map, ctr, FLD_INTEGER, 4 'unknown15 -2
     AddField map, ctr, FLD_INTEGER, 4 'unknown15 -3
@@ -2605,6 +2672,25 @@ Sub AddActionFieldMap(map() As FieldMap, ByRef ctr As Integer)
     AddField map, ctr, FLD_INTEGER, 2
     AddField map, ctr, FLD_INTEGER, 2
     AddField map, ctr, FLD_STRING, 74   '11
+End Sub
+
+Sub AddTextblockKeyFieldMap(Map() As FieldMap, ByRef ctr As Integer)
+    AddField Map, ctr, FLD_INTEGER, 2   'PartNum
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_BYTE, 1      'LeadIn(TextblockLeadInSize)
+    AddField Map, ctr, FLD_INTEGER, 4   'Number
 End Sub
 
 Sub AddField(map() As FieldMap, ByRef ctr As Integer, dataType As Long, length As Long)

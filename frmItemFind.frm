@@ -163,15 +163,15 @@ DoEvents
 
 LockWindowUpdate Me.hwnd
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "user2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_USERS
 If chkUsers.Value = 1 Then Call ScanUsers
 If bCancel Then GoTo ReEnable:
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "shop2.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_SHOPS
 If chkShops.Value = 1 Then Call ScanShops
 If bCancel Then GoTo ReEnable:
 
-frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & "mp002.dat"
+frmProgressBar.lblPanel(0).Caption = "w" & strDatCallLetters & strDatSuffix_MP
 If chkRooms.Value = 1 Then Call ScanRooms
 If bCancel Then GoTo ReEnable:
 

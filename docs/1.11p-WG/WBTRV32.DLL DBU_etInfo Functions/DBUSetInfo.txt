@@ -1,0 +1,66 @@
+======================================
+DBUSetInfo @ WBTRV32.DLL: 0x37033C
+======================================
+All Notes below relevant to changing
+"Create 5x Files" in the registry
+through BTRIEVE. Ya. Right.
+======================================
+
+-----------------------------
+IDA Function Signature
+-----------------------------
+BEGTEXT:0037033C public _DBUSetInfo
+BEGTEXT:0037033C _DBUSetInfo proc near                   ; DATA XREF: W32MKSET.EXE:off_4702D0o
+BEGTEXT:0037033C
+BEGTEXT:0037033C var_3C= byte ptr -3Ch
+BEGTEXT:0037033C var_38= word ptr -38h
+BEGTEXT:0037033C var_36= word ptr -36h
+BEGTEXT:0037033C var_34= dword ptr -34h
+BEGTEXT:0037033C var_30= dword ptr -30h
+BEGTEXT:0037033C var_2C= word ptr -2Ch
+BEGTEXT:0037033C var_2A= word ptr -2Ah
+BEGTEXT:0037033C var_28= dword ptr -28h
+BEGTEXT:0037033C var_24= dword ptr -24h
+BEGTEXT:0037033C var_20= dword ptr -20h
+BEGTEXT:0037033C var_1C= dword ptr -1Ch
+BEGTEXT:0037033C arg_0= dword ptr  8 		// "this" pointer
+BEGTEXT:0037033C arg_4= dword ptr  0Ch 		// registry key position (top is 1 in regedit, excluding 'default')
+BEGTEXT:0037033C arg_8= dword ptr  10h 		// not sure
+BEGTEXT:0037033C arg_C= dword ptr  14h 		// not sure
+BEGTEXT:0037033C arg_10= dword ptr  18h  	// value (I think this is calculated internally to use the 3rd highest byte [xx1x])
+
+-----------------------------
+"Create 5x Files" RegSetValueExA @ W32MKDE.EXE: 0x40ABB3 (loc start 0x40AB60)
+-----------------------------
+Byte Array for Below (I think just the lower 2 bytes 3E-3F)
+--------------------------------------
+Stack[000011D4]:0018F73C db  0FFh
+Stack[000011D4]:0018F73D db  0FFh
+Stack[000011D4]:0018F73E db  0FFh
+Stack[000011D4]:0018F73F db  0FFh
+--------------------------------------
+Stack[000011D4]:0018F740 db  38h ; 8
+Stack[000011D4]:0018F741 db 0F8h ; °
+Stack[000011D4]:0018F742 db  18h
+Stack[000011D4]:0018F743 db    0
+--------------------------------------
+Stack[000011D4]:0018F744 db  1Bh
+Stack[000011D4]:0018F745 db  97h ; ù
+Stack[000011D4]:0018F746 db  41h ; A
+Stack[000011D4]:0018F747 db    0
+
+-----------------------------
+Settings Change Pass1: 0x419FDF (loc start 0x419FBC)
+-----------------------------
+DBUSetInfo(this_pointer, 0x2(00)(10h)h, 0x(80)(00)h, 0, 0) == ?
+
+-----------------------------
+Settings Change Pass2: 0x41A113 (loc start 0x41A0DE) > gets set on this run
+-----------------------------9
+DBUSetInfo(this_pointer, 5, 0, 3, 0x1(01)(10)h == ON
+DBUSetInfo(this_pointer, 5, 0, 3, 0x1(00)(76)h == OFF
+
+-----------------------------
+Settings Change Pass3: 0x41A25D (loc start 0x41A248)
+-----------------------------
+DBUSetInfo(this_pointer, 5, 0x(80)(01)h, 0, 0) == ?

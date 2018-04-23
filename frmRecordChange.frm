@@ -3978,7 +3978,7 @@ Private Sub ScanUsers()
 '    Exit Sub
 'End If
 '
-'stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "user2.dat"
+'stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_USERS
 '
 'nRec = 1
 'Do While nStatus = 0 And bCancelProcess = False

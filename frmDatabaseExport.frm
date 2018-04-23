@@ -2108,7 +2108,7 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 Set ts = fso.OpenTextFile(BankbooksTextfile, ForWriting)
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "bank2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_BANKS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, BankPosBlock, BankDatabuf, Len(BankDatabuf), ByVal BankKeyBuffer, KEY_BUF_LEN, 0)
@@ -2166,7 +2166,7 @@ If chkExportAll(nListNum).Value = 0 Then
 GotoNextTextblockStart:
     TextblockKey.PartNum = 0
     TextblockKey.Number = nRecnum
-    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then
@@ -2193,7 +2193,7 @@ End If
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_TEXT
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -2235,7 +2235,7 @@ GotoNextTextblock:
                     TextblockKey.PartNum = 0
                     TextblockKey.Number = nRecnum
                     
-                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
                     If Not nStatus = 0 Then GoTo GotoNextTextblock:
                 Else
                     nRecnum = nRecnum + 1
@@ -2345,7 +2345,7 @@ GotoNextTextblock_access:
                     TextblockKey.PartNum = 0
                     TextblockKey.Number = nRecnum
                     
-                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+                    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
                     If Not nStatus = 0 Then GoTo GotoNextTextblock_access:
                 Else
                     nRecnum = nRecnum + 1
@@ -2416,7 +2416,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "msg2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MSG
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -2589,7 +2589,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "item2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_ITEMS
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -2884,7 +2884,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MP
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -3223,7 +3223,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "spel2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_SPELS
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -3430,7 +3430,7 @@ Dim nStatus As Integer, recnum As Long
 Dim fso As FileSystemObject, ts As TextStream
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "acts2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_ACTS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
@@ -3586,7 +3586,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "clas2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_CLASS
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -3791,7 +3791,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_RACE
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -4008,7 +4008,7 @@ End If
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "shop2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_SHOPS
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -4228,7 +4228,7 @@ End If
     
 Set fso = CreateObject("Scripting.FileSystemObject")
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "knms2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_KNMSR
 stsStatusBar.Panels(2).Text = nRecnum
 
 If format = "Access" Then GoTo Access:
@@ -4591,7 +4591,7 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 Set ts = fso.OpenTextFile(UsersTextfile, ForWriting)
 
 recnum = 1
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "user2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_USERS
 stsStatusBar.Panels(2).Text = recnum
 
 nStatus = BTRCALL(BGETFIRST, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal UserKeyBuffer, KEY_BUF_LEN, 0)

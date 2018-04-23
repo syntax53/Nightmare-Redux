@@ -1468,7 +1468,7 @@ On Error GoTo error:
 Dim nStatus As Integer, decrypted As String, nLastRec(1) As Long
 Dim recnum As Long, x As Integer, ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_TEXT
 
 If tabTextblocks.RecordCount = 0 Then Exit Sub
 tabTextblocks.MoveFirst
@@ -1491,7 +1491,7 @@ Do While tabTextblocks.EOF = False And bStopImport = False
 part_check:
         TextblockKey.PartNum = TextblockKey.PartNum + 1
         
-        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+        nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
         If nStatus = 0 Then
             nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
             If nStatus <> 0 Then
@@ -1523,7 +1523,7 @@ part_check:
     End If
     
     ExistingRecord = True
-    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKeyStructToRow(), KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         If nStatus = 4 Then
             ExistingRecord = False
@@ -1596,7 +1596,7 @@ TextblockStructToRow TextblockDataBuf.buf
 If bPreview Then
     ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Update Error: " & nStatus)
     Else
@@ -1611,7 +1611,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "msg2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MSG
 
 If tabMessages.RecordCount = 0 Then Exit Sub
 tabMessages.MoveFirst
@@ -1703,7 +1703,7 @@ MessageStructToRow Messagedatabuf.buf
 If bPreview Then
     ts.WriteLine ("Message #" & Messagerec.Number & " -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Message #" & Messagerec.Number & " -- Update Error: " & nStatus)
     Else
@@ -1717,7 +1717,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "item2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_ITEMS
 
 If tabItems.RecordCount = 0 Then Exit Sub
 tabItems.MoveFirst
@@ -1859,7 +1859,7 @@ ItemStructToRow Itemdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -1873,7 +1873,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_MP
 
 recnum = 0
 If tabRooms.RecordCount = 0 Then Exit Sub
@@ -2047,7 +2047,7 @@ RoomStructToRow Roomdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2061,7 +2061,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "spel2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_SPELS
 
 If tabSpells.RecordCount = 0 Then Exit Sub
 tabSpells.MoveFirst
@@ -2184,7 +2184,7 @@ SpellStructToRow Spelldatabuf.buf
 If bPreview Then
     ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2199,7 +2199,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long, ActionName As String * 30
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "acts2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_ACTS
 
 If tabActions.RecordCount = 0 Then Exit Sub
 tabActions.MoveFirst
@@ -2287,7 +2287,7 @@ ActionStructToRow ActionDatabuf.buf
 If bPreview Then
     ts.WriteLine ("Action: " & RemoveCharacter(Actionrec.Name, " ") & "-- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Action: " & RemoveCharacter(Actionrec.Name, " ") & "-- Update Error: " & nStatus)
     Else
@@ -2301,7 +2301,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "clas2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_CLASS
     
 If tabClasses.RecordCount = 0 Then Exit Sub
 tabClasses.MoveFirst
@@ -2406,7 +2406,7 @@ ClassStructToRow Classdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Class #" & Classrec.Number & " [" & ClipNull(Classrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Class #" & Classrec.Number & " [" & ClipNull(Classrec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2420,7 +2420,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_RACE
 
 If tabRaces.RecordCount = 0 Then Exit Sub
 tabRaces.MoveFirst
@@ -2531,7 +2531,7 @@ RaceStructToRow Racedatabuf.buf
 If bPreview Then
     ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2545,7 +2545,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "shop2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_SHOPS
 
 If tabShops.RecordCount = 0 Then Exit Sub
 tabShops.MoveFirst
@@ -2651,7 +2651,7 @@ ShopStructToRow Shopdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Update Error: " & nStatus)
     Else
@@ -2693,7 +2693,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long, test As Boolean, nYesNo As Integer, ExpMulti1 As Boolean
 Dim ExistingRecord As Boolean
 
-stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "knms2.dat"
+stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & strDatSuffix_KNMSR
 
 If tabMonsters.RecordCount = 0 Then Exit Sub
 tabMonsters.MoveFirst
@@ -2878,7 +2878,7 @@ MonsterStructToRow Monsterdatabuf.buf
 If bPreview Then
     ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Existing Record, would be updated.")
 Else
-    nStatus = BTRCALL(bUpdate, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
+    nStatus = BTRCALL(BUPDATE, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
         ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Update Error: " & nStatus)
     Else
