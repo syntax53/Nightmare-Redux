@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmMME_Export 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Export to MMUD Explorer"
@@ -2755,9 +2755,12 @@ Do While nStatus = 0 And bStopExport = False
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, "text ", TextBlock)
     If bCleared(0) = False Then bCleared(1) = False
     
+    'checkspell
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "checkspell ", TextBlock)
+    If bCleared(0) = False Then bCleared(1) = False
+    
     'checks for ":<textblock>"
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, ":", TextBlock)
-    If bCleared(0) = False Then bCleared(1) = False
     
     If Not TextblockRec.Number = nCurrentTB Then
         TextblockKey.Number = nCurrentTB
@@ -3441,8 +3444,8 @@ Private Function CheckTBString(ByVal TBNumber As Long, ByVal WholeString As Stri
 Dim x As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
 Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String, sClasses As String
 Dim bLearnSpell As Boolean, sChar As String, bItemFail As Boolean, bRandom As Boolean
-Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean
-Dim sAddText As String
+Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean, bCheckSpell As Boolean
+Dim sAddText As String, nNumber2 As Long
 
 sWhole = LCase(WholeString)
 sLook = LCase(StringToLookFor)
@@ -3451,6 +3454,7 @@ If Left(sLook, 5) = "learn" Then bLearnSpell = True 'learnspell?
 If Left(sLook, 6) = "random" Then bRandom = True 'random?
 If Left(sLook, 9) = "testskill" Then bTestSkill = True 'testskill
 If Left(sLook, 8) = "giveitem" Then bGiveItem = True
+If Left(sLook, 10) = "checkspell" Then bCheckSpell = True
 
 bDontMarkInGame = False
 bItemReferenceOnly = False
@@ -3491,7 +3495,7 @@ nextnumber:
 
     Select Case sChar
         Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
-            If Not y1 + y2 - 1 = Len(sWhole) Then
+            If Not y1 + y2 - 1 >= Len(sWhole) Then
                 y2 = y2 + 1
                 GoTo nextnumber:
             End If
@@ -3506,6 +3510,48 @@ nextnumber:
     
     nNumber = Val(Mid(sWhole, y1, y2))
     
+    If bCheckSpell Then
+        If nNumber = 711 Then
+            Debug.Print 1
+        End If
+        
+        If nNumber = 0 Then x = y1: GoTo checknext:
+        
+        y1 = y1 + y2 + 1 'len of string searching (to position y1 at first number)
+        y2 = 0
+nextnumber2:
+        sChar = Mid(sWhole, y1 + y2, 1)
+    
+        Select Case sChar
+            Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
+                If Not y1 + y2 - 1 >= Len(sWhole) Then
+                    y2 = y2 + 1
+                    GoTo nextnumber2:
+                End If
+            Case Else:
+        End Select
+        
+        If y2 = 0 Then
+            'if there were no numbers after the last number
+            x = y1
+            GoTo checknext:
+        End If
+        
+        nNumber2 = Val(Mid(sWhole, y1, y2))
+        
+        If nNumber2 = 0 Then x = y1: GoTo checknext:
+        If UBound(SpellInGame()) < nNumber Then ReDim Preserve SpellInGame(nNumber)
+        
+        If Not SpellInGame(nNumber) Then
+            CheckTBString = False
+            x = y1
+            GoTo checknext:
+        End If
+        
+        nNumber = nNumber2
+    End If
+    
+
     sSuffix = ""
     bItemFail = TestItemFail(sWhole, x) 'test to make sure any items required for this block are in the game
     If bItemFail = False Then
