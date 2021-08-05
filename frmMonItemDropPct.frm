@@ -473,10 +473,18 @@ Do While nStatus = 0
             
             If bLogOnly Then
                 sTemp = "LOG_ONLY: " & sTemp
+                ts.WriteLine (sTemp)
             Else
-                
+                Monsterrec.ItemDropPer(x) = z
+                nStatus = UpdateMonster
+                If Not nStatus = 0 Then
+                    ts.WriteLine (sTemp)
+                    ts.WriteLine ("ERROR Updating Monster Record # " & Monsterrec.Number & " - " & BtrieveErrorCode(nStatus))
+                Else
+                    ts.WriteLine (sTemp)
+                End If
             End If
-            ts.WriteLine (sTemp)
+            
         End If
     Next
     
