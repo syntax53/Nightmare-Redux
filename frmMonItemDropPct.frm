@@ -2,15 +2,43 @@ VERSION 5.00
 Begin VB.Form frmMonsterItemDropPct 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Monster Item Drop Percentage Modifier"
-   ClientHeight    =   2160
+   ClientHeight    =   2490
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   7935
+   ClientWidth     =   8535
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   2160
-   ScaleWidth      =   7935
+   ScaleHeight     =   2490
+   ScaleWidth      =   8535
+   Begin VB.OptionButton optLimiteds 
+      Caption         =   "Only do limited items"
+      Height          =   195
+      Index           =   2
+      Left            =   6540
+      TabIndex        =   22
+      Top             =   900
+      Width           =   1875
+   End
+   Begin VB.OptionButton optLimiteds 
+      Caption         =   "Exclude limited items"
+      Height          =   195
+      Index           =   1
+      Left            =   6540
+      TabIndex        =   21
+      Top             =   660
+      Width           =   1875
+   End
+   Begin VB.OptionButton optLimiteds 
+      Caption         =   "Inlcude limited items"
+      Height          =   195
+      Index           =   0
+      Left            =   6540
+      TabIndex        =   20
+      Top             =   420
+      Value           =   -1  'True
+      Width           =   1875
+   End
    Begin VB.CheckBox chkExcludeDelMain 
       Caption         =   "Exclude items with abil-119 Del@maint"
       BeginProperty Font 
@@ -25,7 +53,7 @@ Begin VB.Form frmMonsterItemDropPct
       Height          =   495
       Left            =   3660
       TabIndex        =   19
-      Top             =   1140
+      Top             =   1380
       Value           =   1  'Checked
       Width           =   2535
    End
@@ -35,7 +63,7 @@ Begin VB.Form frmMonsterItemDropPct
       Left            =   2880
       TabIndex        =   18
       Text            =   "1"
-      Top             =   1800
+      Top             =   2100
       Width           =   615
    End
    Begin VB.CheckBox chkMonRegen 
@@ -52,7 +80,7 @@ Begin VB.Form frmMonsterItemDropPct
       Height          =   255
       Left            =   120
       TabIndex        =   17
-      Top             =   1800
+      Top             =   2100
       Value           =   1  'Checked
       Width           =   2775
    End
@@ -61,7 +89,7 @@ Begin VB.Form frmMonsterItemDropPct
          Name            =   "MS Sans Serif"
          Size            =   8.25
          Charset         =   0
-         Weight          =   700
+         Weight          =   400
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
@@ -77,9 +105,9 @@ Begin VB.Form frmMonsterItemDropPct
    End
    Begin VB.ComboBox cmbOption 
       Height          =   315
-      ItemData        =   "frmMonItemDropPct.frx":002E
+      ItemData        =   "frmMonItemDropPct.frx":0030
       Left            =   60
-      List            =   "frmMonItemDropPct.frx":0038
+      List            =   "frmMonItemDropPct.frx":003A
       Style           =   2  'Dropdown List
       TabIndex        =   13
       Top             =   360
@@ -97,17 +125,17 @@ Begin VB.Form frmMonsterItemDropPct
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   6660
+      Left            =   6840
       TabIndex        =   11
-      Top             =   1140
+      Top             =   1500
       Width           =   1155
    End
    Begin VB.CheckBox chkLogOnly 
       Caption         =   "Log Only - No Changes"
       Height          =   255
-      Left            =   5820
+      Left            =   6420
       TabIndex        =   10
-      Top             =   1800
+      Top             =   2100
       Value           =   1  'Checked
       Width           =   1995
    End
@@ -117,7 +145,7 @@ Begin VB.Form frmMonsterItemDropPct
       Index           =   4
       Left            =   4860
       TabIndex        =   9
-      Top             =   780
+      Top             =   720
       Value           =   1  'Checked
       Width           =   915
    End
@@ -127,7 +155,7 @@ Begin VB.Form frmMonsterItemDropPct
       Index           =   3
       Left            =   4860
       TabIndex        =   8
-      Top             =   480
+      Top             =   420
       Value           =   1  'Checked
       Width           =   1095
    End
@@ -135,9 +163,9 @@ Begin VB.Form frmMonsterItemDropPct
       Caption         =   "Keys"
       Height          =   255
       Index           =   2
-      Left            =   6060
+      Left            =   3660
       TabIndex        =   6
-      Top             =   480
+      Top             =   1020
       Value           =   1  'Checked
       Width           =   795
    End
@@ -147,7 +175,7 @@ Begin VB.Form frmMonsterItemDropPct
       Index           =   1
       Left            =   3660
       TabIndex        =   5
-      Top             =   780
+      Top             =   720
       Value           =   1  'Checked
       Width           =   915
    End
@@ -157,7 +185,7 @@ Begin VB.Form frmMonsterItemDropPct
       Index           =   0
       Left            =   3660
       TabIndex        =   3
-      Top             =   480
+      Top             =   420
       Value           =   1  'Checked
       Width           =   1095
    End
@@ -178,6 +206,24 @@ Begin VB.Form frmMonsterItemDropPct
       Text            =   "20"
       Top             =   360
       Width           =   735
+   End
+   Begin VB.Label Label1 
+      Caption         =   "Limited Items"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Index           =   2
+      Left            =   6540
+      TabIndex        =   23
+      Top             =   120
+      Width           =   1875
    End
    Begin VB.Label Label1 
       Caption         =   "Value"
@@ -220,11 +266,11 @@ Begin VB.Form frmMonsterItemDropPct
       Height          =   255
       Left            =   3660
       TabIndex        =   12
-      Top             =   1800
-      Width           =   2115
+      Top             =   2100
+      Width           =   2535
    End
    Begin VB.Label lblExtra 
-      Caption         =   "(AND if % is greater than 0)"
+      Caption         =   "(AND if drop % is greater than 0)"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -444,6 +490,9 @@ Do While nStatus = 0
                     If chkItemTypes(4).Value = 0 And bIsScroll Then bMatch = False
                 End If
                 
+                If Itemrec.GameLimit > 0 And optLimiteds(1).Value = True Then bMatch = False
+                If Itemrec.GameLimit = 0 And optLimiteds(2).Value = True Then bMatch = False
+                
                 If bMatch And (bIsWeapon Or bIsArmour) And chkExcludeDelMain.Value = 1 Then
                     For y = 0 To 19
                         If Itemrec.AbilityA(y) = 119 Then
@@ -525,6 +574,12 @@ Dim nStatus As Integer
 Me.Top = ReadINI("Windows", "MonItemPctTop")
 Me.Left = ReadINI("Windows", "MonItemPctLeft")
 cmbOption.ListIndex = 0
+
+cmbOnlyIfModifier.clear
+cmbOnlyIfModifier.AddItem "=", 0
+cmbOnlyIfModifier.AddItem "< or =", 1
+cmbOnlyIfModifier.AddItem "> or =", 2
+cmbOnlyIfModifier.AddItem "NOT =", 3
 cmbOnlyIfModifier.ListIndex = 1
 End Sub
 
