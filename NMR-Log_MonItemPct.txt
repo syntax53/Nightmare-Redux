@@ -1,0 +1,17 @@
+Monster Item Drop Percentage Modifier 8/5/2021 @ 1:07:36 AM
+** LOGGING ONLY, NO CHANGES EXECUTED **
+
+LOG_ONLY: Monster #29 - dark cultist: Item #172 - black star key: Drop % changed from 7 to 27
+LOG_ONLY: Monster #40 - Sheriff Lionheart: Item #1416 - jail key: Drop % changed from 1 to 21
+LOG_ONLY: Monster #142 - dark cultist: Item #172 - black star key: Drop % changed from 5 to 25
+LOG_ONLY: Monster #218 - orc warleader: Item #569 - rusty iron key: Drop % changed from 25 to 45
+LOG_ONLY: Monster #532 - Inquisitor Fulgore: Item #1077 - ancient obsidian key: Drop % changed from 50 to 70
+LOG_ONLY: Monster #532 - Inquisitor Fulgore: Item #1532 - iron key: Drop % changed from 1 to 21
+ERROR: Monster #602 - saracen commander: Item #2078 - ITEM NOT FOUND
+LOG_ONLY: Monster #676 - magma golem: Item #1265 - magma key: Drop % changed from 5 to 25
+LOG_ONLY: Monster #679 - lava imp: Item #1264 - chiseled key: Drop % changed from 5 to 25
+LOG_ONLY: Monster #683 - fire knight: Item #1267 - red rock key: Drop % changed from 5 to 25
+LOG_ONLY: Monster #685 - giant efreeti: Item #1263 - feathered key: Drop % changed from 25 to 45
+LOG_ONLY: Monster #1099 - guard captain: Item #172 - black star key: Drop % changed from 1 to 21
+
+Finished - 8/5/2021 @ 1:07:36 AM
