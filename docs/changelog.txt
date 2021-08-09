@@ -2,6 +2,7 @@ v1.8.2 (8/??/2021)
 ------------------------------------------  
 -FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail.
 -NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info
+-UP: added a bunch of additional logging on the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import
 
 v1.8.1 (5/20/2016)  
 ------------------------------------------  
