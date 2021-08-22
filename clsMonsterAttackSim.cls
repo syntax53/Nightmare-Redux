@@ -1102,6 +1102,7 @@ m_nTotalAttacks = 0
 m_nTotalDamage = 0
 m_nMaxRoundDamage = 0
 m_nMaxEnergyPerRound = 0
+m_nAverageDamage = 0
 
 m_sCombatLog = ""
 nCombatLogRoundCount = 0
