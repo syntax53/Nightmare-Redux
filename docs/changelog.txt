@@ -1,8 +1,10 @@
 v1.8.2 (8/??/2021)  
 ------------------------------------------  
--FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail.
 -NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info
 -UP: added a bunch of additional logging on the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import
+-UP: max room regen added to lair info for monsters.  to be used in corresponding update in MME.
+-FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail.
+-FIX: during an MME export, monsters that had no attacks were getting the average damage value of the previously calculated mob
 
 v1.8.1 (5/20/2016)  
 ------------------------------------------  
