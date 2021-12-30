@@ -2916,3 +2916,33 @@ Call HandleError("MergeStringArrays")
 Resume out:
 End Function
 
+Function SearchReplaceRegX(inputStr, SearchPattern, ReplacePattern) As String
+Dim str, objRegExp
+
+On Error GoTo error:
+
+str = inputStr
+Set objRegExp = CreateObject("VBScript.RegExp")
+
+objRegExp.Global = True
+objRegExp.Pattern = SearchPattern
+
+'//Use following code to get all matches
+'Set objMatches = objRegExp.Execute(str)
+'For Each match In objMatches
+'  Debug.Print match
+'Next
+
+'//You can use following to test your RegEx --It will return True if Match
+'Debug.Print objRegExp.Test(str)
+
+str = objRegExp.Replace(str, ReplacePattern)
+SearchReplaceRegX = str
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("SearchReplaceRegX")
+Resume out:
+End Function

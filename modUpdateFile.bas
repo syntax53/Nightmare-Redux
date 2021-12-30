@@ -44,7 +44,7 @@ Else
     
     Call frmProgressBar.SetRange(CalcTotalRecords)
     
-    frmProgressBar.lblNote.Visible = True
+    frmProgressBar.lblNOTE.Visible = True
     frmProgressBar.lblPanel(0).Caption = ""
     frmProgressBar.lblPanel(1).Caption = ""
     frmProgressBar.Show
@@ -170,10 +170,15 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
-    
+        
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
     nYesNo = MsgBox("Error exporting Messages, Btrieve Error: " & BtrieveErrorCode(nStatus, True) _
@@ -217,8 +222,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
     
 Loop
@@ -264,8 +274,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
     
 Loop
@@ -311,8 +326,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -359,8 +379,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -406,8 +431,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
     
 Loop
@@ -453,8 +483,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -500,8 +535,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
     
 Loop
@@ -547,8 +587,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -594,8 +639,13 @@ Do While nStatus = 0 And UpdateFileLoaded = True
     
     Updaterec.recnumber = Updaterec.recnumber + 1
     recnum = recnum + 1
-    frmProgressBar.lblPanel(1).Caption = recnum
-    Call frmProgressBar.IncreaseProgress
+    If frmProgressBar.nProgressCount >= frmProgressBar.nProgressInterval Then
+        frmProgressBar.lblPanel(1).Caption = recnum
+        Call frmProgressBar.IncreaseProgress(frmProgressBar.nProgressCount)
+        frmProgressBar.nProgressCount = 1
+    Else
+        frmProgressBar.nProgressCount = frmProgressBar.nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -633,7 +683,7 @@ End If
 frmMain.Enabled = True
 frmMain.WindowState = InitialWindowState
 
-frmProgressBar.lblNote.Visible = False
+frmProgressBar.lblNOTE.Visible = False
 Unload frmProgressBar
 
 End Sub

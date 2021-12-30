@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmMME_Export 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Export to MMUD Explorer"
@@ -556,6 +556,9 @@ Dim tabShops As Recordset
 Dim tabRooms As Recordset
 Dim tabTBInfo As Recordset
 
+Dim nProgressInterval As Integer
+Dim nProgressCount As Integer
+
 Dim bAllInGame As Boolean
 Dim bCheckSave As Boolean
 Dim bUpdateExistingADB As Boolean
@@ -938,6 +941,8 @@ ReDim sDefaultExcludeNote(0) As String
 
 Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
 Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
+Call AddToDefaultsArr(x, 1, 288, 288, "fake silver river room")
+Call AddToDefaultsArr(x, 1, 289, 289, "halls of training, entrance")
 Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
 
 Call AddToDefaultsArr(x, 1, 2779, 2782, "sysop support module test rooms")
@@ -949,10 +954,15 @@ Call AddToDefaultsArr(x, 3, 788, 788, "mod test room, mod 2")
 Call AddToDefaultsArr(x, 8, 1407, 1407, "mod test room, mod 3")
 Call AddToDefaultsArr(x, 6, 3275, 3275, "mod test room, mod 4")
 Call AddToDefaultsArr(x, 9, 1432, 1432, "mod test room, mod 5")
+
 Call AddToDefaultsArr(x, 12, 2258, 2258, "mod test room, mod 6")
+Call AddToDefaultsArr(x, 12, 2381, 2381, "platform of stars")
+
 Call AddToDefaultsArr(x, 16, 2673, 2673, "mod test room, mod 7")
 Call AddToDefaultsArr(x, 15, 2055, 2055, "mod test room, mod 8")
+
 Call AddToDefaultsArr(x, 17, 2839, 2839, "mod test room, mod 9")
+Call AddToDefaultsArr(x, 17, 2867, 2867, "sysop training room")
 
 out:
 Exit Sub
@@ -991,6 +1001,9 @@ Me.Top = ReadINI("Windows", "MME-Top")
 Call LoadConfig(sConfigFile)
 
 Call AddDefaultExcludes
+
+nProgressCount = 1
+nProgressInterval = 10
 
 Me.Show
 Me.SetFocus
@@ -1205,7 +1218,7 @@ x = 2
 Do While MaxValue > MaxInt
     If MaxValue / x < MaxInt Then
         nScale = x
-        MaxValue = MaxValue / x
+        MaxValue = MaxInt - 1
     Else
         x = x + 2
     End If
@@ -2188,11 +2201,17 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Searching Rooms (" & 0 & ")"
+
 nRec = 1
 Do While nStatus = 0 And bStopExport = False
     RoomRowToStruct Roomdatabuf.buf
-    lblPanel(1).Caption = "Searching Rooms (" & nRec & ")"
-     
+    
+    'lblPanel(1).Caption = "Searching Rooms (" & nRec & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Searching Rooms (" & nRec & ")"
+    End If
+    
     If chkHideExcludedRooms.Value = 1 Then
         If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, True) Then GoTo Skip:
     Else
@@ -2257,7 +2276,7 @@ Do While nStatus = 0 And bStopExport = False
             If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
             If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
             If Roomrec.Type = 3 Then 'lair
-                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             Else
                 MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             End If
@@ -2268,7 +2287,13 @@ Skip:
     nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
     nRec = nRec + 1
-    Call IncreaseProgressBar
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
 Loop
 
 '''''''Open "c:\group.txt" For Output As #1
@@ -2309,9 +2334,15 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Searching Shops (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     ShopRowToStruct Shopdatabuf.buf
-    lblPanel(1).Caption = "Searching Shops (" & Shoprec.Number & ")"
+    
+    'lblPanel(1).Caption = "Searching Shops (" & Shoprec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Searching Shops (" & Shoprec.Number & ")"
+    End If
     
     tabShops.Index = "pkShops"
     tabShops.Seek "=", Shoprec.Number
@@ -2337,7 +2368,13 @@ Do While nStatus = 0 And bStopExport = False
 skipshop:
     nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
 Loop
 
 Exit Sub
@@ -2365,9 +2402,14 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Searching Monsters (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     MonsterRowToStruct Monsterdatabuf.buf
-    lblPanel(1).Caption = "Searching Monsters (" & Monsterrec.Number & ")"
+    
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Searching Monsters (" & Monsterrec.Number & ")"
+    End If
     
     'if it begins with "sdf" then we know it's NOT in the game
     If LCase(Left(Monsterrec.Name, 3)) = "sdf" Then GoTo skipmon:
@@ -2456,7 +2498,13 @@ Do While nStatus = 0 And bStopExport = False
 skipmon:
     nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
 Loop
 
 Exit Sub
@@ -2484,9 +2532,14 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Searching Items (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     ItemRowToStruct Itemdatabuf.buf
-    lblPanel(1).Caption = "Searching Items (" & Itemrec.Number & ")"
+    'lblPanel(1).Caption = "Searching Items (" & Itemrec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Searching Items (" & Itemrec.Number & ")"
+    End If
     
     'if item not detected as in game yet, skip it
     If UBound(ItemInGame()) < Itemrec.Number Then ReDim Preserve ItemInGame(Itemrec.Number)
@@ -2553,7 +2606,13 @@ Do While nStatus = 0 And bStopExport = False
 skipitem:
     nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
 Loop
 
 Exit Sub
@@ -2581,9 +2640,15 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Searching Spells (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     SpellRowToStruct Spelldatabuf.buf
-    lblPanel(1).Caption = "Searching Spells (" & Spellrec.Number & ")"
+    
+    'lblPanel(1).Caption = "Searching Spells (" & Spellrec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Searching Spells (" & Spellrec.Number & ")"
+    End If
     
     'if spell not marked as in game, skip
     If UBound(SpellInGame()) < Spellrec.Number Then ReDim Preserve SpellInGame(Spellrec.Number)
@@ -2640,7 +2705,13 @@ Do While nStatus = 0 And bStopExport = False
 skipspell:
     nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
 Loop
 
 Exit Sub
@@ -2669,11 +2740,18 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Searching Textblocks (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     TextblockRowToStruct TextblockDataBuf.buf
-    lblPanel(1).Caption = "Searching Textblocks (" & TextblockRec.Number & ")"
+    
     nCurrentTB = TextblockRec.Number
     nCurrentPart = TextblockRec.PartNum
+    
+    'lblPanel(1).Caption = "Searching Textblocks (" & TextblockRec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Searching Textblocks (" & TextblockRec.Number & ")"
+    End If
     
 '    If TextblockRec.Number = 428 Then
 '        Debug.Print ""
@@ -2755,9 +2833,12 @@ Do While nStatus = 0 And bStopExport = False
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, "text ", TextBlock)
     If bCleared(0) = False Then bCleared(1) = False
     
+    'checkspell
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "checkspell ", TextBlock)
+    If bCleared(0) = False Then bCleared(1) = False
+    
     'checks for ":<textblock>"
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, ":", TextBlock)
-    If bCleared(0) = False Then bCleared(1) = False
     
     If Not TextblockRec.Number = nCurrentTB Then
         TextblockKey.Number = nCurrentTB
@@ -2770,8 +2851,16 @@ Do While nStatus = 0 And bStopExport = False
     
 skipTB:
     nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
+    
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
 Loop
 
 Exit Sub
@@ -2797,9 +2886,15 @@ Dim decrypted As String
 nStatus = BTRCALL(BGETFIRST, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Entering textblock commands (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     TextblockRowToStruct TextblockDataBuf.buf
-    lblPanel(1).Caption = "Entering textblock commands (" & TextblockRec.Number & ")"
+    
+    'lblPanel(1).Caption = "Entering textblock commands (" & TextblockRec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Entering textblock commands (" & TextblockRec.Number & ")"
+    End If
     
     decrypted = DecryptTextblock(TextblockRec.Data)
     
@@ -2820,8 +2915,16 @@ Do While nStatus = 0 And bStopExport = False
     
 skipTB:
     nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
+    
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
 Loop
 
 End Sub
@@ -2841,9 +2944,15 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Scanning Greets (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     MonsterRowToStruct Monsterdatabuf.buf
-    lblPanel(1).Caption = "Scanning Greets (" & Monsterrec.Number & ")"
+    
+    'lblPanel(1).Caption = "Scanning Greets (" & Monsterrec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Scanning Greets (" & Monsterrec.Number & ")"
+    End If
     
     nCurrentMonster = Monsterrec.Number
     'if Monster not detected as in game yet, skip it
@@ -2949,8 +3058,16 @@ skipMonster:
     End If
     
     nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
+    
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
+    
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
 Loop
 
 out:
@@ -2986,9 +3103,16 @@ On Error GoTo error:
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
 
+lblPanel(1).Caption = "Scanning Chests (" & 0 & ")"
+
 Do While nStatus = 0 And bStopExport = False
     ItemRowToStruct Itemdatabuf.buf
-    lblPanel(1).Caption = "Scanning Chests (" & Itemrec.Number & ")"
+    
+    
+    'lblPanel(1).Caption = "Scanning Chests (" & Itemrec.Number & ")"
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = "Scanning Chests (" & Itemrec.Number & ")"
+    End If
     
     nCurrentItem = Itemrec.Number
     'if item not detected as in game yet, skip it
@@ -3084,8 +3208,16 @@ skipitem:
     End If
     
     nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
+    
+    'Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
+    
     If Not bUseCPU Then DoEvents
-    Call IncreaseProgressBar
 Loop
 
 out:
@@ -3441,8 +3573,8 @@ Private Function CheckTBString(ByVal TBNumber As Long, ByVal WholeString As Stri
 Dim x As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
 Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String, sClasses As String
 Dim bLearnSpell As Boolean, sChar As String, bItemFail As Boolean, bRandom As Boolean
-Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean
-Dim sAddText As String
+Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean, bCheckSpell As Boolean
+Dim sAddText As String, nNumber2 As Long
 
 sWhole = LCase(WholeString)
 sLook = LCase(StringToLookFor)
@@ -3451,6 +3583,7 @@ If Left(sLook, 5) = "learn" Then bLearnSpell = True 'learnspell?
 If Left(sLook, 6) = "random" Then bRandom = True 'random?
 If Left(sLook, 9) = "testskill" Then bTestSkill = True 'testskill
 If Left(sLook, 8) = "giveitem" Then bGiveItem = True
+If Left(sLook, 10) = "checkspell" Then bCheckSpell = True
 
 bDontMarkInGame = False
 bItemReferenceOnly = False
@@ -3491,7 +3624,7 @@ nextnumber:
 
     Select Case sChar
         Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
-            If Not y1 + y2 - 1 = Len(sWhole) Then
+            If Not y1 + y2 - 1 >= Len(sWhole) Then
                 y2 = y2 + 1
                 GoTo nextnumber:
             End If
@@ -3506,6 +3639,48 @@ nextnumber:
     
     nNumber = Val(Mid(sWhole, y1, y2))
     
+    If bCheckSpell Then
+        If nNumber = 711 Then
+            Debug.Print 1
+        End If
+        
+        If nNumber = 0 Then x = y1: GoTo checknext:
+        
+        y1 = y1 + y2 + 1 'len of string searching (to position y1 at first number)
+        y2 = 0
+nextnumber2:
+        sChar = Mid(sWhole, y1 + y2, 1)
+    
+        Select Case sChar
+            Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
+                If Not y1 + y2 - 1 >= Len(sWhole) Then
+                    y2 = y2 + 1
+                    GoTo nextnumber2:
+                End If
+            Case Else:
+        End Select
+        
+        If y2 = 0 Then
+            'if there were no numbers after the last number
+            x = y1
+            GoTo checknext:
+        End If
+        
+        nNumber2 = Val(Mid(sWhole, y1, y2))
+        
+        If nNumber2 = 0 Then x = y1: GoTo checknext:
+        If UBound(SpellInGame()) < nNumber Then ReDim Preserve SpellInGame(nNumber)
+        
+        If Not SpellInGame(nNumber) Then
+            CheckTBString = False
+            x = y1
+            GoTo checknext:
+        End If
+        
+        nNumber = nNumber2
+    End If
+    
+
     sSuffix = ""
     bItemFail = TestItemFail(sWhole, x) 'test to make sure any items required for this block are in the game
     If bItemFail = False Then
@@ -3916,8 +4091,13 @@ Do While nStatus = 0 And bStopExport = False
     RowToStruct Itemdatabuf.buf, ItemFldMap, Itemrec, LenB(Itemrec)
     
     recnum = Itemrec.Number
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabItems.RecordCount = 0 Then
@@ -4006,8 +4186,13 @@ Do While nStatus = 0 And bStopExport = False
     RowToStruct Spelldatabuf.buf, SpellFldMap, Spellrec, LenB(Spellrec)
     
     recnum = Spellrec.Number
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabSpells.RecordCount = 0 Then
@@ -4085,8 +4270,13 @@ Do While nStatus = 0 And bStopExport = False
     RowToStruct Classdatabuf.buf, ClassFldMap, Classrec, LenB(Classrec)
     
     recnum = Classrec.Number
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabClasses.RecordCount = 0 Then
@@ -4147,8 +4337,13 @@ Do While nStatus = 0 And bStopExport = False
     RowToStruct Racedatabuf.buf, RaceFldMap, Racerec, LenB(Racerec)
         
     recnum = Racerec.Number
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabRaces.RecordCount = 0 Then
@@ -4216,8 +4411,13 @@ Do While nStatus = 0 And bStopExport = False
     RowToStruct Shopdatabuf.buf, ShopFldMap, Shoprec, LenB(Shoprec)
     
     recnum = Shoprec.Number
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabShops.RecordCount = 0 Then
@@ -4290,8 +4490,13 @@ Do While nStatus = 0 And bStopExport = False
     RowToStruct Monsterdatabuf.buf, MonsterFldMap, Monsterrec, LenB(Monsterrec)
     
     recnum = Monsterrec.Number
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabMonsters.RecordCount = 0 Then
@@ -4415,8 +4620,13 @@ Do While nStatus = 0 And bStopExport = False
     RoomRowToStruct Roomdatabuf.buf
     
     recnum = recnum + 1
-    lblPanel(1).Caption = recnum
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        lblPanel(1).Caption = recnum
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
 '    'only going to export the names that have shops assigned
 '    If Not Roomrec.Type = 1 Or Roomrec.ShopNum = 0 Then GoTo skiproom:
@@ -4452,6 +4662,7 @@ Do While nStatus = 0 And bStopExport = False
     If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then
 
         tabRooms.Fields("Shop") = 0
+        tabRooms.Fields("Light") = 0
         tabRooms.Fields("Spell") = 0
         tabRooms.Fields("NPC") = 0
         tabRooms.Fields("CMD") = 0
@@ -4484,6 +4695,7 @@ Do While nStatus = 0 And bStopExport = False
         tabRooms.Fields("Shop") = 0
     End If
     
+    tabRooms.Fields("Light") = Roomrec.Light
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("NPC") = Roomrec.PermNPC
     tabRooms.Fields("CMD") = Roomrec.CmdText
@@ -4965,6 +5177,7 @@ With tabNewRooms
     .Columns.Append "Map Number", adInteger
     .Columns.Append "Room Number", adInteger
     .Columns.Append "Name", adVarWChar, 55
+    .Columns.Append "Light", adInteger
     .Columns.Append "Shop", adInteger
     .Columns.Append "NPC", adInteger
     .Columns.Append "CMD", adInteger
@@ -5510,7 +5723,7 @@ If Not nStatus = 0 Then
     CalcTotalRecords = CalcTotalRecords + 20000
 Else
     DBStatRowToStruct DBStatDatabuf.buf
-    CalcTotalRecords = CalcTotalRecords + (DBStat.nRecords * (nPasses + 3)) 'chests, tb commands
+    CalcTotalRecords = CalcTotalRecords + (DBStat.nRecords * (nPasses + 1)) 'chests, tb commands
 End If
 
 If CalcTotalRecords <= 0 Then CalcTotalRecords = 100000
@@ -5583,18 +5796,28 @@ Set fso = Nothing
 DoEvents
 End Sub
 
-Private Sub IncreaseProgressBar()
+Private Sub IncreaseProgressBar(Optional ByVal nAmount As Integer = 1)
 On Error Resume Next
 
 If nScale > 0 Then
-    If nScaleCount = nScale Then
-        If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
-        nScaleCount = 1
+    nAmount = nAmount / nScale
+    If nAmount < 1 Then nAmount = 1
+    If nScaleCount + nAmount >= nScale Then
+        If ProgressBar.Value + nScaleCount + nAmount < ProgressBar.Max Then
+            ProgressBar.Value = ProgressBar.Value + nScaleCount + nAmount
+        Else
+            ProgressBar.Value = ProgressBar.Max
+        End If
+        nScaleCount = 0
     Else
-        nScaleCount = nScaleCount + 1
+        nScaleCount = nScaleCount + nAmount
     End If
 Else
-    If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
+    If ProgressBar.Value + nAmount < ProgressBar.Max Then
+        ProgressBar.Value = ProgressBar.Value + nAmount
+    Else
+        ProgressBar.Value = ProgressBar.Max
+    End If
 End If
 
 End Sub

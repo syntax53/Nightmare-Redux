@@ -1,19 +1,18 @@
-Nightmare Redux is an editor for the game MajorMUD(r).  
-
 v1.8.2 (12/30/2021)  
 ------------------------------------------  
--NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info.  this will allow you to do things like set the minimum drop percentage to 50% for items dropped by monsters that regen greater than 7 days, for example  
--UP: added a bunch of additional logging to the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import  
--UP: max room regen added to lair info for monsters, to be used in corresponding update in MME  
--UP: room illumination added to mme room export, to be used in corresponding update in MME  
--UP: added 4 rooms to the default exclude list for mme exports (1/288, 1/289, 12/2381, 17/2867)  
--FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail  
--FIX: during an MME export, monsters that had no attacks were getting the average damage value of the previously calculated mob  
+-NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info.  this will allow you to do things like set the minimum drop percentage to 50% for items dropped by monsters that regen greater than 7 days, for example.
+-UP: added a bunch of additional logging to the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import
+-UP: max room regen added to lair info for monsters, to be used in corresponding update in MME.
+-UP: room illumination added to mme room export, to be used in corresponding update in MME.
+-UP: added 4 rooms to the default exclude list for mme exports (1/288, 1/289, 12/2381, 17/2867)
+-FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail.
+-FIX: during an MME export, monsters that had no attacks were getting the average damage value of the previously calculated mob.
 
 
 v1.8.1 (5/20/2016)  
 ------------------------------------------  
--UP: increased length of monster summon field on MME export (more accurate LAIR counts in new MME)  
+-UP: increased length of monster summon field on MME export (more accurate LAIR 
+counts in new MME)  
 -UP: adjustments to monster attack sim for accuracy  
 -FIX: area attack durations spells being ignored by monster attack sim  
 
@@ -21,16 +20,21 @@ v1.8.1 (5/20/2016)
 v1.8 (05/09/2016)  
 ------------------------------------------  
 -NEW: Monster attack simulator and Average/Max round calculator  
--NEW: Setting to auto sort editors with lists in reverse order (highest record numbers first)  
+-NEW: Setting to auto sort editors with lists in reverse order (highest record 
+numbers first)  
 -NEW: Added "Find First" and "Find Last" room on map buttons to room editor  
--UP: Changed drop down spell editor's "Type of Resist" to what I believe they actually mean  
+-UP: Changed drop down spell editor's "Type of Resist" to what I believe they 
+actually mean  
 -UP: Added logging of the second universal modifier's only if option when chosen  
--FIX: Universal modifier reported that it would set the directive to "0" when setting something to "= ##" (only the message was wrong, not the action)  
+-FIX: Universal modifier reported that it would set the directive to "0" when setting 
+something to "= ##" (only the message was wrong, not the action)  
 
 -MME Export Updates (for future MME enhancements):  
 -UP: Added spell resist type (if the spell is completely resistible)  
--UP: Added attack names field (will show attack names on monster details and in simulator)  
--UP: Added average monster damage and true attack percentages (unique, calculated fields for MME)  
+-UP: Added attack names field (will show attack names on monster details and in 
+simulator)  
+-UP: Added average monster damage and true attack percentages (unique, calculated 
+fields for MME)  
 -UP: Added room 1/238 to default list of excluded rooms  
 -UP: hidden exits with a 0 in para1 will no longer be considered an exit  
 -UP: Additional references now shown for some items and spells  
@@ -45,17 +49,26 @@ v1.7 (4/1/2016) - (by Syntax)
 ------------------------------------------  
 -NEW: ability to mark control rooms on the map in the room editor  
 -NEW: tool to view and export said list of control rooms and their references  
--NEW: complete overhaul of database exporter.  support for multiple ranges of records, ability to save config files, **import record numbers from existing database**  
--NEW: added cross-referencing of class restrictions on learned spells via scrolls and textblocks for MME.  requires new version of MME to support it (coming soon).  
--NEW: added cross-referencing for where items/keys are used in rooms and textblocks.  requires new version of MME to support it (coming soon).  
--NEW: added default rooms to exclude on MME exports (currently only the sysop support chamber).  see additional options button.  
--UP: excluded rooms on MME export will now be completely excluded and not exported at all.  references from those rooms will also be considered as not in the game. option added to "hide" user-specified excluded rooms instead to retain previous functionality.  
+-NEW: complete overhaul of database exporter.  support for multiple ranges of 
+records, ability to save config files, **import record numbers from existing 
+database**  
+-NEW: added cross-referencing of class restrictions on learned spells via scrolls and 
+textblocks for MME.  requires new version of MME to support it (coming soon).  
+-NEW: added cross-referencing for where items/keys are used in rooms and textblocks.  
+requires new version of MME to support it (coming soon).  
+-NEW: added default rooms to exclude on MME exports (currently only the sysop support 
+chamber).  see additional options button.  
+-UP: excluded rooms on MME export will now be completely excluded and not exported at 
+all.  references from those rooms will also be considered as not in the game. option 
+added to "hide" user-specified excluded rooms instead to retain previous 
+functionality.  
 -UP: added Wrist(2), Eyes and Face to universal modifier's "only if" options  
 -UP: added second set of "only if" options on the universal modifier  
--UP: added text on db importer error to help determine which table was missing fields upon import from old exports  
+-UP: added text on db importer error to help determine which table was missing fields 
+upon import from old exports  
 -UP: updated about pages and links  
 -UP: installer repackaged and updated to newer version  
- 
+
 
 v1.6.2/n (06/01/2007) - (by Ghaleon)  
 ------------------------------------------  
@@ -429,12 +442,18 @@ v0.7.51 BETA (01/04/03)
 -NEW: option in settings to switch between dat file versions  
 -NEW: exporter now creates an "Info" table, shows the version of NMR and dat files  
 -NEW: option to import old monsters and "convert" to new exp format (during import)  
--NEW: status bar at the bottom -shows call letters, dat file version, and if writing disabled  
--UP: monster editor now has exp 'base' and 'multiplier' fields to reflect v1.11j changes  
--UP: upon startup, NMR will check to make sure the correct dat file version is selected  
--UP: exits in room editor now have clickable buttons to jump to those rooms (thx tsunami)  
--UP: 'exp multiplier' and 'exp total' options added to universal modifier for monsters  
--FIX: class editor wasn't allowing negative number input into the ability values (thx xetox)  
+-NEW: status bar at the bottom -shows call letters, dat file version, and if writing 
+disabled  
+-UP: monster editor now has exp 'base' and 'multiplier' fields to reflect v1.11j 
+changes  
+-UP: upon startup, NMR will check to make sure the correct dat file version is 
+selected  
+-UP: exits in room editor now have clickable buttons to jump to those rooms (thx 
+tsunami)  
+-UP: 'exp multiplier' and 'exp total' options added to universal modifier for 
+monsters  
+-FIX: class editor wasn't allowing negative number input into the ability values (thx 
+xetox)  
 -FIX: running two mass room operations consecutively caused an error (thx dxpac)  
 
 
@@ -447,12 +466,16 @@ v0.7.32 BETA (12/24/02)
 v0.7.3 BETA (12/18/02)  
 ------------------------------------------  
 -UP: you can now cancel the update compiling and map building processes  
--UP: update comp., mass room, and import/export/deleter all show accurate progress bars  
--UP: implemented some error prevention for races/classes that didn't exist in an installation  
+-UP: update comp., mass room, and import/export/deleter all show accurate progress 
+bars  
+-UP: implemented some error prevention for races/classes that didn't exist in an 
+installation  
 -UP: LOTS of work in general on the importer and exporter  
--UP: option to add to/update an existing DataExport file instead of creating a new one  
+-UP: option to add to/update an existing DataExport file instead of creating a new 
+one  
 -UP: added checks for the importer to strip trailing spaces on text fields  
--UP: moved "Charm LvL" to a different column in the DataExport file (it was lost in the mix)  
+-UP: moved "Charm LvL" to a different column in the DataExport file (it was lost in 
+the mix)  
 -UP: added option to close all windows to the windows menu  
 -FIX: fixed some crashing problems on exit  
 -FIX: fixed some problems with the log file in the mass room editor  
@@ -463,19 +486,23 @@ v0.7.21 BETA (11/24/02)
 ------------------------------------------  
 -NEW: option on file menu to disable database writing  
 -FIX: keypad movement in the map editor was broken (thx Epro)  
--FIX: fixed some possible problems with a file being in the root directory of a drive  
--FIX: fixed some problems in the exporter with the status bar panel and its record counts  
+-FIX: fixed some possible problems with a file being in the root directory of a drive 
+
+-FIX: fixed some problems in the exporter with the status bar panel and its record 
+counts  
 
 
 v0.7.2 BETA (11/14/02)  
 ------------------------------------------  
--NEW: universal modifier --perform math functions on many of the fields within the editors  
+-NEW: universal modifier --perform math functions on many of the fields within the 
+editors  
 -NEW: added 5 more negate slots to the item editor (thx locke cole)  
 -UP: tool tips on the map editor will now show instantly (hover mouse over a room)  
 -UP: tool tips on the map now show a lot of useful information  
 -UP: in-game AC and DR is calculated and shown on the item editor  
 -UP: min/max/duration values now calculate as you change them in the spell editor  
--UP: as you tab or click through the fields in the room editor it will auto-select it’s contents  
+-UP: as you tab or click through the fields in the room editor it will auto-select 
+it’s contents  
 -UP: tab order in room editor should be better now  
 -UP: added get first/last record number buttons to db exporter  
 -UP: db importer won’t log updated records anymore unless log-all is selected  
@@ -486,23 +513,27 @@ v0.7.2 BETA (11/14/02)
 
 v0.7.1 BETA (11/4/02)  
 ------------------------------------------  
--NEW: map display from the room editor, displays 1680 rooms (thx scorpion for help on this)  
+-NEW: map display from the room editor, displays 1680 rooms (thx scorpion for help on 
+this)  
 -UP: map editor now updates if you make changes in the room editor and hit save  
 -UP: added a clear button to clear the current room description  
 -UP: when typing room descriptions it will automatically go to the next line  
 -UP: MiniMap renamed to "Map Editor"  
--FIX: database exporter/importer wasn’t exporting/importing a spell’s level restriction field  
+-FIX: database exporter/importer wasn’t exporting/importing a spell’s level 
+restriction field  
 
 
 v0.7.0 BETA (09/29/02)  
 ------------------------------------------  
 -NEW: database import!  
--NEW: quest organizer -- (props to Demonic for digging through the alignment textblocks)  
+-NEW: quest organizer -- (props to Demonic for digging through the alignment 
+textblocks)  
 -NEW: new window menu for selecting/tiling/cascading the open windows  
 -UP: edit rooms while using MiniMap  
 -UP: two versions of MiniMap now, a big one and small one  
 -UP: revamped database exporter, allowing for range export  
--UP: added jump buttons next to a lot of the fields, enabling a jump to a record in another  
+-UP: added jump buttons next to a lot of the fields, enabling a jump to a record in 
+another  
 editor  
 -UP: mass room editor now logs errors (and only the critical errors) to a log file  
 -UP: you can now minimize all of the windows  
@@ -518,83 +549,4 @@ v0.6.6 BETA (08/20/02)
 ------------------------------------------  
 -NEW: added export to access database in the database exporter  
 -NEW: added a help for monsters, which is currently just my group to index list  
--UP: added a clear all to all of the user editor lists (items, keys, and spells)  
--UP: enabled double clicking on an item, key, or spell in the user editor lists to edit it  
--UP: revamped the general page in the spell editor, adding many new editing fields (thx  
-atma)  
--UP: added all/none selection to the database exporter  
--UP: added a 'Jump to Last' option to auto jump to the last item in a list after an insert or  
-delete  
--UP: spiffied up the search fields --pressing the right arrow key now searches for the next  
-item  
--UP: added ini entries to save minimap settings, minimap position, and database export path  
--FIX: fixed the CP field in user editor to allow negative number input (thx bad_hex)  
-
-
-v0.6.5 BETA (07/23/02)  
-------------------------------------------  
--NEW: added a tool to reset all of the monster's last killed time  
--NEW: added the time & date stamp of when a monster was last killed to the monster editor  
--UP: changed the font on the preview window so it displays the textblocks MUCH better  
--FIX: added the "Part#" (formerly StepTo) to the textblocks (big thx to kix on noticing this  
-missing)  
--FIX: the missing part# created problems deleting a range of textblocks and misc other  
-things  
-
-
-v0.6.4 BETA (07/22/02)  
-------------------------------------------  
--NEW: added a help for messages (thx MrBlack for some help)  
--UP: added range deletion for all dats (via the database deleter)  
--UP: reorganized the data of the exported text files  
--UP: added column headings to the first line of exported text files so you know what is what  
--UP: tweaked the minimap some more, disabled the keypad when typing numbers  
--UP: added more message and text block quick-displays to the editors  
--UP: added code to write missing .ini settings instead of crashing program  
--UP: added more items not to be effected by the no limited tool (see general help)  
--FIX: fixed crash when you tried to maximize two help screens (thx kix)  
--FIX: fixed problems with a lot of the description fields  
--FIX: fixed problems with some of the name fields  
-
-
-v0.6.3 BETA (07/18/02)  
-------------------------------------------  
--UP: spruced up the menu with a few more shortcuts  
--UP: added 'select all' and 'select none' to the mass room editor  
--UP: added option on the MiniMap to specify the next incremented room number  
--UP: added option to auto use that incremented room number  
--FIX: fixed problem with the room type and ansi map in the mass room editor (thx dxpac)  
--FIX: fixed the messages showing up under the monsters spells/attacks (thx MrBlack)  
-
-
-v0.6.2 BETA (07/16/02)  
-------------------------------------------  
--UP: reconfigured cap on monster HPs, new cap should be 65535  
--FIX: fixed bug with the monster divider (it set the exp to 1!)  
--FIX: fixed some bad grammar in the room editor ;-) (thx MrBlack)  
-
-
-v0.6.1 BETA (07/16/02)  
-------------------------------------------  
--NEW: Added functionality to walk around and create rooms via the map editor  
--NEW: Added the ability to remove all item level restrictions  
--UP: Renamed the 'room range editor' to the 'mass room editor'  
--UP: Added the ability to delete a range of rooms in the mass room editor  
--FIX: few bug fixes  
-
-
-v0.6.0 BETA  
-------------------------------------------  
--NEW: compatibility with (and only with) the mod9 dat files  
--NEW: compile an update file  
--NEW: mass room editor  
--NEW: user editor  
--NEW: bank book editor  
--NEW: action editor  
--NEW: database export to text files  
--NEW: database record deleter  
--NEW: divide monster experience  
--NEW: edit multiple named dat files (wbb*.dat)  
--NEW: help with editing  
--NEW: settings menu; auto-compile, dat file locations, etc  
--UP: improved error message handling  
+-UP: added a clear all to all of the user edito

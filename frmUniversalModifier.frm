@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form frmUniversalModifier 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Universal Modifier"
@@ -679,7 +679,25 @@ Resume out:
 End Sub
 
 Private Sub Form_Load()
+Dim i As Integer
 On Error Resume Next
+
+For i = 0 To 1
+    cmbOnlyIfModifier(i).clear
+    cmbOnlyIfModifier(i).AddItem "=", 0
+    cmbOnlyIfModifier(i).AddItem "< or =", 1
+    cmbOnlyIfModifier(i).AddItem "> or =", 2
+    cmbOnlyIfModifier(i).AddItem "NOT =", 3
+Next i
+
+cmbModifier.clear
+cmbModifier.AddItem "+", 0
+cmbModifier.AddItem "-", 1
+cmbModifier.AddItem "*", 2
+cmbModifier.AddItem "/", 3
+cmbModifier.AddItem "%", 4
+cmbModifier.AddItem "=", 5
+
 cmbEditor.ListIndex = 0
 cmbModifier.ListIndex = 0
 cmbLimitModifier.ListIndex = 1
@@ -688,7 +706,6 @@ cmbOnlyIfModifier(0).ListIndex = 0
 cmbOnlyIfModifier(1).ListIndex = 0
 cmbAbilities.clear
 
-Dim i As Integer
 For i = 1 To 100
     cmbValue.AddItem i
 Next i

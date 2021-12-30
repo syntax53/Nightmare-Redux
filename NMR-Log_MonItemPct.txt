@@ -1,0 +1,133 @@
+Monster Item Drop Percentage Modifier 8/5/2021 @ 11:11:49 AM
+** LOGGING ONLY, NO CHANGES EXECUTED **
+
+LOG_ONLY: Monster #52 - giant spider: Item #216 - gold ring: Drop % changed from 20 to 50
+LOG_ONLY: Monster #59 - Thrag: Item #211 - golden belt: Drop % changed from 20 to 50
+LOG_ONLY: Monster #59 - Thrag: Item #209 - huge darkwood club: Drop % changed from 20 to 50
+LOG_ONLY: Monster #68 - guardian golem: Item #214 - holy medallion: Drop % changed from 20 to 50
+LOG_ONLY: Monster #68 - guardian golem: Item #212 - ruby necklace: Drop % changed from 20 to 50
+LOG_ONLY: Monster #68 - guardian golem: Item #215 - platinum bracers: Drop % changed from 20 to 50
+LOG_ONLY: Monster #68 - guardian golem: Item #213 - black leather tunic: Drop % changed from 20 to 50
+LOG_ONLY: Monster #68 - guardian golem: Item #210 - platinum ring: Drop % changed from 20 to 50
+LOG_ONLY: Monster #69 - chest: Item #267 - rosewood staff: Drop % changed from 20 to 50
+LOG_ONLY: Monster #69 - chest: Item #265 - golden broadsword: Drop % changed from 20 to 50
+LOG_ONLY: Monster #113 - banshee: Item #408 - ethereal amulet: Drop % changed from 20 to 50
+LOG_ONLY: Monster #114 - minotaur chieftain: Item #226 - ebony greataxe: Drop % changed from 20 to 50
+LOG_ONLY: Monster #122 - high druid: Item #460 - golden sickle: Drop % changed from 20 to 50
+LOG_ONLY: Monster #122 - high druid: Item #412 - wyvernhide tunic: Drop % changed from 20 to 50
+LOG_ONLY: Monster #122 - high druid: Item #1006 - antlered helm: Drop % changed from 20 to 50
+LOG_ONLY: Monster #131 - cyclops: Item #438 - belt of might: Drop % changed from 20 to 50
+LOG_ONLY: Monster #131 - cyclops: Item #478 - tree trunk: Drop % changed from 20 to 50
+LOG_ONLY: Monster #168 - serpentkin chieftain: Item #482 - crystal sword: Drop % changed from 20 to 50
+LOG_ONLY: Monster #169 - serpentkin witchdoctor: Item #483 - crystal club: Drop % changed from 20 to 50
+LOG_ONLY: Monster #174 - dark bishop: Item #454 - hell-flail: Drop % changed from 20 to 50
+LOG_ONLY: Monster #174 - dark bishop: Item #1708 - runed sacrificial robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #176 - dark wizard: Item #455 - thunderstaff: Drop % changed from 20 to 50
+LOG_ONLY: Monster #178 - master assassin: Item #497 - katana: Drop % changed from 20 to 50
+LOG_ONLY: Monster #180 - Champion of Blood: Item #493 - skull sword: Drop % changed from 20 to 50
+LOG_ONLY: Monster #216 - Demoness Irikani: Item #541 - obsidian claymore: Drop % changed from 20 to 50
+LOG_ONLY: Monster #216 - Demoness Irikani: Item #609 - flaming scimitar: Drop % changed from 20 to 50
+LOG_ONLY: Monster #281 - quickling lord: Item #752 - black silk robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #281 - quickling lord: Item #753 - black silk pants: Drop % changed from 20 to 50
+LOG_ONLY: Monster #281 - quickling lord: Item #754 - black silk slippers: Drop % changed from 20 to 50
+LOG_ONLY: Monster #281 - quickling lord: Item #755 - black silk gloves: Drop % changed from 20 to 50
+LOG_ONLY: Monster #292 - woodelf lord: Item #1528 - silverwood helm: Drop % changed from 20 to 50
+LOG_ONLY: Monster #292 - woodelf lord: Item #728 - silverwood plate corselet: Drop % changed from 20 to 50
+LOG_ONLY: Monster #309 - crimson mist: Item #203 - emerald-tipped crozier: Drop % changed from 20 to 50
+LOG_ONLY: Monster #311 - Goru-Nezar: Item #741 - dragonclaw staff: Drop % changed from 20 to 50
+LOG_ONLY: Monster #311 - Goru-Nezar: Item #743 - spiked plate corselet: Drop % changed from 20 to 50
+LOG_ONLY: Monster #312 - huge basilisk: Item #745 - blades of balance: Drop % changed from 20 to 50
+LOG_ONLY: Monster #313 - chimera: Item #747 - demonhide bracers: Drop % changed from 20 to 50
+LOG_ONLY: Monster #313 - chimera: Item #1838 - demonhide sandals: Drop % changed from 20 to 50
+LOG_ONLY: Monster #314 - beholder: Item #748 - mithril helm: Drop % changed from 20 to 50
+LOG_ONLY: Monster #314 - beholder: Item #764 - black tome: Drop % changed from 20 to 50
+LOG_ONLY: Monster #315 - prismatic dragon: Item #749 - holy avenger: Drop % changed from 20 to 50
+LOG_ONLY: Monster #317 - wraithlord: Item #742 - silverwood staff: Drop % changed from 20 to 50
+LOG_ONLY: Monster #318 - unholy idol: Item #763 - blood lance: Drop % changed from 20 to 50
+LOG_ONLY: Monster #318 - unholy idol: Item #765 - forgotten scroll: Drop % changed from 20 to 50
+LOG_ONLY: Monster #329 - Lord of the Hunt: Item #800 - shining metallic robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #345 - dark-elf archmage: Item #687 - twisted bone staff: Drop % changed from 20 to 50
+LOG_ONLY: Monster #345 - dark-elf archmage: Item #548 - scroll of spirit horde: Drop % changed from 20 to 50
+LOG_ONLY: Monster #346 - captain of the guard: Item #825 - adamantite claymore: Drop % changed from 20 to 50
+LOG_ONLY: Monster #346 - captain of the guard: Item #826 - obsidian field plate: Drop % changed from 20 to 50
+LOG_ONLY: Monster #368 - feline prisoner: Item #1084 - azure shamshir: Drop % changed from 20 to 50
+LOG_ONLY: Monster #368 - feline prisoner: Item #1529 - cobra earrings: Drop % changed from 20 to 50
+LOG_ONLY: Monster #369 - fallen angel: Item #218 - laen longsword: Drop % changed from 20 to 50
+LOG_ONLY: Monster #371 - crimson high priest: Item #561 - demon's skull mask: Drop % changed from 20 to 50
+LOG_ONLY: Monster #371 - crimson high priest: Item #1638 - amber sceptre: Drop % changed from 20 to 50
+LOG_ONLY: Monster #371 - crimson high priest: Item #1640 - crimson blood robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #371 - crimson high priest: Item #1989 - burning scroll: Drop % changed from 20 to 50
+LOG_ONLY: Monster #372 - Devil Fiend Malivek: Item #325 - hellblade: Drop % changed from 20 to 50
+LOG_ONLY: Monster #372 - Devil Fiend Malivek: Item #1248 - deathcoil: Drop % changed from 20 to 50
+LOG_ONLY: Monster #372 - Devil Fiend Malivek: Item #1352 - smoking blackwood chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #393 - giant two-headed troll: Item #909 - iron-banded chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #409 - spectral knight: Item #932 - spectral sword: Drop % changed from 20 to 50
+LOG_ONLY: Monster #456 - duergar lord: Item #1710 - serrated dwarven axe: Drop % changed from 20 to 50
+LOG_ONLY: Monster #486 - Leo the Quick: Item #369 - emerald-hilted rapier: Drop % changed from 20 to 50
+LOG_ONLY: Monster #494 - necromancer: Item #999 - skull mask: Drop % changed from 20 to 50
+LOG_ONLY: Monster #530 - Crazed Inquisitor: Item #1071 - Demon's Maw: Drop % changed from 20 to 50
+LOG_ONLY: Monster #530 - Crazed Inquisitor: Item #1491 - crimson scalemail tunic: Drop % changed from 20 to 50
+LOG_ONLY: Monster #540 - Vashti: Item #2032 - skirts of flame: Drop % changed from 20 to 50
+LOG_ONLY: Monster #588 - manscorpion king: Item #1170 - golden pike: Drop % changed from 20 to 50
+LOG_ONLY: Monster #616 - tasloi chief: Item #1191 - stone javelin: Drop % changed from 20 to 50
+LOG_ONLY: Monster #617 - tasloi animal master: Item #1195 - black leather leggings: Drop % changed from 20 to 50
+LOG_ONLY: Monster #617 - tasloi animal master: Item #1242 - sparkling pendant: Drop % changed from 20 to 50
+LOG_ONLY: Monster #617 - tasloi animal master: Item #1203 - bronze chakram: Drop % changed from 20 to 50
+LOG_ONLY: Monster #617 - tasloi animal master: Item #1232 - trollskin boots: Drop % changed from 20 to 50
+LOG_ONLY: Monster #619 - tasloi shaman: Item #1188 - dented wizard's hat: Drop % changed from 20 to 50
+LOG_ONLY: Monster #619 - tasloi shaman: Item #1187 - bone necklace: Drop % changed from 20 to 50
+LOG_ONLY: Monster #619 - tasloi shaman: Item #1186 - spider silk trousers: Drop % changed from 20 to 50
+LOG_ONLY: Monster #619 - tasloi shaman: Item #1262 - spider silk robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #622 - massive fanged spider: Item #1184 - curved fang: Drop % changed from 20 to 50
+LOG_ONLY: Monster #637 - storm giant king: Item #877 - stormhammer: Drop % changed from 20 to 50
+LOG_ONLY: Monster #637 - storm giant king: Item #1216 - storm crown: Drop % changed from 20 to 50
+LOG_ONLY: Monster #637 - storm giant king: Item #1214 - stormmetal scalemail tunic: Drop % changed from 20 to 50
+LOG_ONLY: Monster #637 - storm giant king: Item #1243 - icy scroll: Drop % changed from 20 to 50
+LOG_ONLY: Monster #639 - storm giant commander: Item #1213 - stormmetal greataxe: Drop % changed from 20 to 50
+LOG_ONLY: Monster #639 - storm giant commander: Item #1298 - thundering scroll: Drop % changed from 20 to 50
+LOG_ONLY: Monster #639 - storm giant commander: Item #1835 - stormmetal corselet: Drop % changed from 20 to 50
+LOG_ONLY: Monster #639 - storm giant commander: Item #1700 - stormmetal belt: Drop % changed from 20 to 50
+LOG_ONLY: Monster #642 - stone giant chieftain: Item #1217 - titanic stone maul: Drop % changed from 20 to 50
+LOG_ONLY: Monster #642 - stone giant chieftain: Item #1212 - petrified stone corselet: Drop % changed from 20 to 50
+LOG_ONLY: Monster #647 - hill giant chieftan: Item #1211 - great spiked club: Drop % changed from 20 to 50
+LOG_ONLY: Monster #647 - hill giant chieftan: Item #1210 - lionskin tunic: Drop % changed from 20 to 50
+LOG_ONLY: Monster #658 - massive cocoon: Item #1228 - dark hood: Drop % changed from 20 to 50
+LOG_ONLY: Monster #658 - massive cocoon: Item #1229 - runed longbow: Drop % changed from 20 to 50
+LOG_ONLY: Monster #658 - massive cocoon: Item #642 - white gold ring: Drop % changed from 20 to 50
+LOG_ONLY: Monster #658 - massive cocoon: Item #436 - moonstone ring: Drop % changed from 20 to 50
+LOG_ONLY: Monster #700 - dark phoenix: Item #956 - golden chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #700 - dark phoenix: Item #957 - adamantite chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #700 - dark phoenix: Item #958 - black iron chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #724 - orc warlord: Item #1330 - lifestealer: Drop % changed from 20 to 50
+LOG_ONLY: Monster #751 - lady of the dark: Item #1331 - black embroidered robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #784 - Mayor Godfrey: Item #1361 - platinum greatsword: Drop % changed from 20 to 50
+LOG_ONLY: Monster #784 - Mayor Godfrey: Item #1649 - Crest of Silvermere: Drop % changed from 20 to 50
+LOG_ONLY: Monster #811 - Bloody Executioner: Item #1459 - executioner's hood: Drop % changed from 20 to 50
+LOG_ONLY: Monster #811 - Bloody Executioner: Item #1484 - mithril executioner's axe: Drop % changed from 20 to 50
+LOG_ONLY: Monster #811 - Bloody Executioner: Item #1460 - black stained tunic: Drop % changed from 20 to 50
+LOG_ONLY: Monster #811 - Bloody Executioner: Item #1461 - heavy black boots: Drop % changed from 20 to 50
+LOG_ONLY: Monster #817 - Banished One: Item #1435 - soulblighter: Drop % changed from 20 to 50
+LOG_ONLY: Monster #836 - Ozrinom the Vampire Lord: Item #1487 - Sword of Ozrinom: Drop % changed from 20 to 50
+LOG_ONLY: Monster #836 - Ozrinom the Vampire Lord: Item #1444 - bloodwood chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #844 - ancient gypsy woman: Item #1443 - withered walking stick: Drop % changed from 20 to 50
+LOG_ONLY: Monster #844 - ancient gypsy woman: Item #1442 - faded shawl: Drop % changed from 20 to 50
+LOG_ONLY: Monster #851 - colossal midnight dragon: Item #1444 - bloodwood chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #852 - Shadow Master: Item #1495 - dragonfang ninjato: Drop % changed from 20 to 50
+LOG_ONLY: Monster #852 - Shadow Master: Item #1961 - black dragon hood: Drop % changed from 20 to 50
+LOG_ONLY: Monster #852 - Shadow Master: Item #1676 - black dragon robes: Drop % changed from 20 to 50
+LOG_ONLY: Monster #852 - Shadow Master: Item #1843 - black dragon tabi: Drop % changed from 20 to 50
+LOG_ONLY: Monster #876 - Dread Captain: Item #1654 - ethereal sabre: Drop % changed from 20 to 50
+LOG_ONLY: Monster #876 - Dread Captain: Item #1496 - great blackwood chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #876 - Dread Captain: Item #1959 - dusty tricorne: Drop % changed from 20 to 50
+LOG_ONLY: Monster #906 - Dreadlord of Blood: Item #1526 - star helm: Drop % changed from 20 to 50
+LOG_ONLY: Monster #929 - crowned spider: Item #1813 - crowned spider skull: Drop % changed from 20 to 50
+LOG_ONLY: Monster #930 - Darken Beast Lord: Item #685 - Dusk: Drop % changed from 20 to 50
+LOG_ONLY: Monster #930 - Darken Beast Lord: Item #1485 - burnt iron chest: Drop % changed from 20 to 50
+LOG_ONLY: Monster #933 - ancient gremlin shaman: Item #1657 - shamanic headdress: Drop % changed from 20 to 50
+LOG_ONLY: Monster #934 - Lord Feyr: Item #1802 - Feyr: Drop % changed from 20 to 50
+LOG_ONLY: Monster #934 - Lord Feyr: Item #1808 - shadowy corselet: Drop % changed from 20 to 50
+LOG_ONLY: Monster #934 - Lord Feyr: Item #1047 - ruby-encrusted bracers: Drop % changed from 20 to 50
+LOG_ONLY: Monster #937 - mind flayer magus: Item #1641 - vortex staff: Drop % changed from 20 to 50
+LOG_ONLY: Monster #937 - mind flayer magus: Item #1642 - barbed circlet: Drop % changed from 20 to 50
+
+Finished - 8/5/2021 @ 11:11:49 AM

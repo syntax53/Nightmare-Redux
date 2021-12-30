@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form frmDatabaseImport 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Importer"
@@ -1466,7 +1466,9 @@ End Function
 Private Sub ImportTextblocks()
 On Error GoTo error:
 Dim nStatus As Integer, decrypted As String, nLastRec(1) As Long
-Dim recnum As Long, x As Integer, ExistingRecord As Boolean
+Dim recnum As Long, x As Integer, ExistingRecord As Boolean, sOriginal As String, sNew As String, sPattern As String
+
+sPattern = "[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]"
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
 
@@ -1540,7 +1542,13 @@ part_check:
     End If
     
     TextblockRowToStruct TextblockDataBuf.buf
-
+    
+    If ExistingRecord Then
+        sOriginal = "[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(DecryptTextblock(TextblockRec.Data)), sPattern, ""), Chr(0)), 25) & "]"
+    Else
+        sOriginal = ""
+    End If
+    
     TextblockRec.Number = tabTextblocks.Fields("Number")
     TextblockRec.PartNum = tabTextblocks.Fields("Part #")
     TextblockRec.LinkTo = tabTextblocks.Fields("Link To")
@@ -1555,7 +1563,7 @@ part_check:
     TextblockRec.Data = EncryptTextblock(decrypted)
     
     If ExistingRecord = True Then
-        iUpdateTextblock
+        iUpdateTextblock sOriginal
     Else
         For x = 1 To 14
             TextblockRec.LeadIn(x) = TextblockKey.LeadIn(x)
@@ -1563,16 +1571,18 @@ part_check:
 
         TextblockStructToRow TextblockDataBuf.buf
         
+        sNew = "[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(DecryptTextblock(TextblockRec.Data)), sPattern, ""), Chr(0)), 25) & "]"
+        
         If bPreview Then
-            ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & " -- Non-Existing Record, would be inserted.")
+            ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & ": " & sNew & " -- Non-Existing Record, would be inserted.")
         Else
             nStatus = BTRCALL(BINSERT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
             If Not nStatus = 0 Then
-                ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & " -- Insert Error: " & nStatus)
+                ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & ": " & sNew & " -- Insert Error: " & nStatus)
             Else
                 If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                 If optErrorsOnly.Value = True Then GoTo SkipRecord:
-                ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & " -- Insert Successful.")
+                ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & ": " & sNew & " -- Insert Successful.")
             End If
         End If
     End If
@@ -1588,20 +1598,24 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateTextblock()
-Dim nStatus As Integer
+Private Sub iUpdateTextblock(sOriginal As String)
+Dim nStatus As Integer, sNew As String, sPattern As String
+
+sPattern = "[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]"
 
 TextblockStructToRow TextblockDataBuf.buf
 
+sNew = "[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(DecryptTextblock(TextblockRec.Data)), sPattern, ""), Chr(0)), 25) & "]"
+
 If bPreview Then
-    ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Existing Record, would be updated.")
+    ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & ": " & sOriginal & " => " & sNew & " -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Update Error: " & nStatus)
+        ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & ": " & sOriginal & " => " & sNew & " -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & " -- Update Successful.")
+        ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & ": " & sOriginal & " => " & sNew & " -- Update Successful.")
     End If
 End If
 End Sub
@@ -1609,7 +1623,9 @@ End Sub
 Private Sub ImportMessages()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String, sNew As String, sPattern As String
+
+sPattern = "[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]"
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "msg2.dat"
 
@@ -1659,7 +1675,15 @@ Do While tabMessages.EOF = False And bStopImport = False
     End If
     
     MessageRowToStruct Messagedatabuf.buf
-
+    
+    If ExistingRecord Then
+        sOriginal = "[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine1), sPattern, ""), Chr(0)), 10) & "]"
+        sOriginal = sOriginal & "...[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine2), sPattern, ""), Chr(0)), 10) & "]"
+        sOriginal = sOriginal & "...[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine3), sPattern, ""), Chr(0)), 10) & "]"
+    Else
+        sOriginal = ""
+    End If
+    
     Messagerec.Number = tabMessages.Fields("Number")
     Messagerec.MessageLine1 = Trim(tabMessages.Fields("Line 1"))
     Messagerec.MessageLine2 = Trim(tabMessages.Fields("Line 2"))
@@ -1667,21 +1691,24 @@ Do While tabMessages.EOF = False And bStopImport = False
     
             
         If ExistingRecord = True Then
-            iUpdateMessage
+            iUpdateMessage sOriginal
         Else
-
+            sNew = "[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine1), sPattern, ""), Chr(0)), 10) & "]"
+            sNew = sNew & "...[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine2), sPattern, ""), Chr(0)), 10) & "]"
+            sNew = sNew & "...[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine3), sPattern, ""), Chr(0)), 10) & "]"
+            
             MessageStructToRow Messagedatabuf.buf
             
             If bPreview Then
-                ts.WriteLine ("Message #" & tabMessages.Fields("Number") & " -- Non-Existing Record, would be inserted.")
+                ts.WriteLine ("Message #" & tabMessages.Fields("Number") & ": " & sNew & " -- Non-Existing Record, would be inserted.")
             Else
                 nStatus = BTRCALL(BINSERT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then
-                    ts.WriteLine ("Message #" & tabMessages.Fields("Number") & " -- Insert Error: " & nStatus)
+                    ts.WriteLine ("Message #" & tabMessages.Fields("Number") & ": " & sNew & " -- Insert Error: " & nStatus)
                 Else
                     If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                     If optErrorsOnly.Value = True Then GoTo SkipRecord:
-                    ts.WriteLine ("Message #" & tabMessages.Fields("Number") & " -- Insert Successful.")
+                    ts.WriteLine ("Message #" & tabMessages.Fields("Number") & ": " & sNew & " -- Insert Successful.")
                 End If
             End If
         End If
@@ -1695,27 +1722,34 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateMessage()
-Dim nStatus As Integer
+Private Sub iUpdateMessage(sOriginal As String)
+Dim nStatus As Integer, sNew As String, sPattern As String
+
+sPattern = "[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]"
+
+sNew = "[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine1), sPattern, ""), Chr(0)), 10) & "]"
+sNew = sNew & "...[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine2), sPattern, ""), Chr(0)), 10) & "]"
+sNew = sNew & "...[" & Left(RemoveCharacter(SearchReplaceRegX(Trim(Messagerec.MessageLine3), sPattern, ""), Chr(0)), 10) & "]"
 
 MessageStructToRow Messagedatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Message #" & Messagerec.Number & " -- Existing Record, would be updated.")
+    ts.WriteLine ("Message #" & Messagerec.Number & ": {" & sOriginal & "} => {" & sNew & "} -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Message #" & Messagerec.Number & " -- Update Error: " & nStatus)
+        ts.WriteLine ("Message #" & Messagerec.Number & ": {" & sOriginal & "} => {" & sNew & "} -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Message #" & Messagerec.Number & " -- Update Successful.")
+        ts.WriteLine ("Message #" & Messagerec.Number & ": {" & sOriginal & "} => {" & sNew & "} -- Update Successful.")
     End If
 End If
+
 End Sub
 Private Sub ImportItems()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "item2.dat"
 
@@ -1765,7 +1799,13 @@ Do While tabItems.EOF = False And bStopImport = False
     End If
     
     ItemRowToStruct Itemdatabuf.buf
-
+    
+    If ExistingRecord Then
+        sOriginal = ClipNull(Itemrec.Name)
+    Else
+        sOriginal = ""
+    End If
+    
     Itemrec.Number = tabItems.Fields("Number")
     Itemrec.Name = Trim(tabItems.Fields("Name"))
     Itemrec.GameLimit = tabItems.Fields("Game Limit")
@@ -1823,21 +1863,21 @@ Do While tabItems.EOF = False And bStopImport = False
     Next
             
         If ExistingRecord = True Then
-            iUpdateItem
+            iUpdateItem sOriginal
         Else
 
             ItemStructToRow Itemdatabuf.buf
             
             If bPreview Then
-                ts.WriteLine ("Item #" & tabItems.Fields("Number") & " [" & ClipNull(tabItems.Fields("Name")) & "] -- Non-Existing Record, would be inserted.")
+                ts.WriteLine ("Item #" & tabItems.Fields("Number") & ": [" & ClipNull(tabItems.Fields("Name")) & "] -- Non-Existing Record, would be inserted.")
             Else
                 nStatus = BTRCALL(BINSERT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then
-                    ts.WriteLine ("Item #" & tabItems.Fields("Number") & " [" & ClipNull(tabItems.Fields("Name")) & "] -- Insert Error: " & nStatus)
+                    ts.WriteLine ("Item #" & tabItems.Fields("Number") & ": [" & ClipNull(tabItems.Fields("Name")) & "] -- Insert Error: " & nStatus)
                 Else
                     If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                     If optErrorsOnly.Value = True Then GoTo SkipRecord:
-                    ts.WriteLine ("Item #" & tabItems.Fields("Number") & " [" & ClipNull(tabItems.Fields("Name")) & "] -- Insert Successful.")
+                    ts.WriteLine ("Item #" & tabItems.Fields("Number") & ": [" & ClipNull(tabItems.Fields("Name")) & "] -- Insert Successful.")
                 End If
             End If
         End If
@@ -1851,27 +1891,27 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateItem()
+Private Sub iUpdateItem(sOriginal As String)
 Dim nStatus As Integer
 
 ItemStructToRow Itemdatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Existing Record, would be updated.")
+    ts.WriteLine ("Item #" & Itemrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Itemrec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Update Error: " & nStatus)
+        ts.WriteLine ("Item #" & Itemrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Itemrec.Name) & "] -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Item #" & Itemrec.Number & " [" & ClipNull(Itemrec.Name) & "] -- Update Successful.")
+        ts.WriteLine ("Item #" & Itemrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Itemrec.Name) & "] -- Update Successful.")
     End If
 End If
 End Sub
 Private Sub ImportRooms()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
 
@@ -1933,7 +1973,13 @@ Do While tabRooms.EOF = False And bStopImport = False
     End If
     
     Call RoomRowToStruct(Roomdatabuf.buf)
-
+    
+    If ExistingRecord Then
+        sOriginal = ClipNull(Roomrec.Name)
+    Else
+        sOriginal = ""
+    End If
+    
     Roomrec.MapNumber = tabRooms.Fields("Map Number")
     Roomrec.RoomNumber = tabRooms.Fields("Room Number")
     
@@ -2006,25 +2052,25 @@ not_items:
 only_items:
 
     If ExistingRecord = True Then
-        iUpdateRoom
+        iUpdateRoom sOriginal
     Else
         RoomStructToRow Roomdatabuf.buf
 
         If bPreview Then
             ts.WriteLine ("Room " & tabRooms.Fields("Map Number") & "/" _
-                & tabRooms.Fields("Room Number") & " [" & ClipNull(tabRooms.Fields("Name")) _
+                & tabRooms.Fields("Room Number") & ": [" & ClipNull(tabRooms.Fields("Name")) _
                 & "] -- Non-Existing Record, would be inserted.")
         Else
             nStatus = BTRCALL(BINSERT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
             If Not nStatus = 0 Then
                 ts.WriteLine ("Room " & tabRooms.Fields("Map Number") & "/" _
-                    & tabRooms.Fields("Room Number") & " [" & ClipNull(tabRooms.Fields("Name")) _
+                    & tabRooms.Fields("Room Number") & ": [" & ClipNull(tabRooms.Fields("Name")) _
                     & "] -- Insert Error: " & nStatus)
             Else
                 If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                 If optErrorsOnly.Value = True Then GoTo SkipRecord:
                 ts.WriteLine ("Room " & tabRooms.Fields("Map Number") & "/" _
-                    & tabRooms.Fields("Room Number") & " [" & ClipNull(tabRooms.Fields("Name")) _
+                    & tabRooms.Fields("Room Number") & ": [" & ClipNull(tabRooms.Fields("Name")) _
                     & "] -- Insert Successful.")
             End If
         End If
@@ -2039,27 +2085,27 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateRoom()
+Private Sub iUpdateRoom(sOriginal As String)
 Dim nStatus As Integer
 
 RoomStructToRow Roomdatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Existing Record, would be updated.")
+    ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ": [" & sOriginal & "] => [" & ClipNull(Roomrec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Update Error: " & nStatus)
+        ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ": [" & sOriginal & "] => [" & ClipNull(Roomrec.Name) & "] -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & " [" & ClipNull(Roomrec.Name) & "] -- Update Successful.")
+        ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ": [" & sOriginal & "] => [" & ClipNull(Roomrec.Name) & "] -- Update Successful.")
     End If
 End If
 End Sub
 Private Sub ImportSpells()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "spel2.dat"
 
@@ -2110,6 +2156,12 @@ Do While tabSpells.EOF = False And bStopImport = False
     
     SpellRowToStruct Spelldatabuf.buf
     
+    If ExistingRecord Then
+        sOriginal = ClipNull(Spellrec.Name)
+    Else
+        sOriginal = ""
+    End If
+    
         Spellrec.Number = tabSpells.Fields("Number")
         Spellrec.Name = Trim(tabSpells.Fields("Name"))
         Spellrec.ShortName = Trim(tabSpells.Fields("Short Name"))
@@ -2148,21 +2200,21 @@ Do While tabSpells.EOF = False And bStopImport = False
         Next
         
         If ExistingRecord = True Then
-            iUpdateSpell
+            iUpdateSpell sOriginal
         Else
 
             SpellStructToRow Spelldatabuf.buf
             
             If bPreview Then
-                ts.WriteLine ("Spell #" & tabSpells.Fields("Number") & " [" & ClipNull(tabSpells.Fields("Name")) & "] -- Non-Existing Record, would be Inserted.")
+                ts.WriteLine ("Spell #" & tabSpells.Fields("Number") & ": [" & ClipNull(tabSpells.Fields("Name")) & "] -- Non-Existing Record, would be Inserted.")
             Else
                 nStatus = BTRCALL(BINSERT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then
-                    ts.WriteLine ("Spell #" & tabSpells.Fields("Number") & " [" & ClipNull(tabSpells.Fields("Name")) & "] -- Insert Error: " & nStatus)
+                    ts.WriteLine ("Spell #" & tabSpells.Fields("Number") & ": [" & ClipNull(tabSpells.Fields("Name")) & "] -- Insert Error: " & nStatus)
                 Else
                     If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                     If optErrorsOnly.Value = True Then GoTo SkipRecord:
-                    ts.WriteLine ("Spell #" & tabSpells.Fields("Number") & " [" & ClipNull(tabSpells.Fields("Name")) & "] -- Insert Successful.")
+                    ts.WriteLine ("Spell #" & tabSpells.Fields("Number") & ": [" & ClipNull(tabSpells.Fields("Name")) & "] -- Insert Successful.")
                 End If
             End If
         End If
@@ -2176,20 +2228,20 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateSpell()
+Private Sub iUpdateSpell(sOriginal As String)
 Dim nStatus As Integer
 
 SpellStructToRow Spelldatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Existing Record, would be updated.")
+    ts.WriteLine ("Spell #" & Spellrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Spellrec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Update Error: " & nStatus)
+        ts.WriteLine ("Spell #" & Spellrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Spellrec.Name) & "] -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Spell #" & Spellrec.Number & " [" & ClipNull(Spellrec.Name) & "] -- Update Successful.")
+        ts.WriteLine ("Spell #" & Spellrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Spellrec.Name) & "] -- Update Successful.")
     End If
 End If
 End Sub
@@ -2418,7 +2470,7 @@ End Sub
 Private Sub ImportRaces()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
 
@@ -2469,6 +2521,12 @@ Do While tabRaces.EOF = False And bStopImport = False
     
     RaceRowToStruct Racedatabuf.buf
     
+    If ExistingRecord Then
+        sOriginal = ClipNull(Racerec.Name)
+    Else
+        sOriginal = ""
+    End If
+    
         Racerec.Number = tabRaces.Fields("Number")
         Racerec.Name = Trim(tabRaces.Fields("Name"))
         Racerec.MinInt = tabRaces.Fields("Min INT")
@@ -2493,21 +2551,21 @@ Do While tabRaces.EOF = False And bStopImport = False
         Next
 
         If ExistingRecord = True Then
-            iUpdateRace
+            iUpdateRace sOriginal
         Else
 
             RaceStructToRow Racedatabuf.buf
             
             If bPreview Then
-                ts.WriteLine ("Race #" & tabRaces.Fields("Number") & " [" & ClipNull(tabRaces.Fields("Name")) & "] -- Non-Existing Record, would be inserted.")
+                ts.WriteLine ("Race #" & tabRaces.Fields("Number") & ": [" & ClipNull(tabRaces.Fields("Name")) & "] -- Non-Existing Record, would be inserted.")
             Else
                 nStatus = BTRCALL(BINSERT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then
-                    ts.WriteLine ("Race #" & tabRaces.Fields("Number") & " [" & ClipNull(tabRaces.Fields("Name")) & "] -- Insert Error: " & nStatus)
+                    ts.WriteLine ("Race #" & tabRaces.Fields("Number") & ": [" & ClipNull(tabRaces.Fields("Name")) & "] -- Insert Error: " & nStatus)
                 Else
                     If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                     If optErrorsOnly.Value = True Then GoTo SkipRecord:
-                    ts.WriteLine ("Race #" & tabRaces.Fields("Number") & " [" & ClipNull(tabRaces.Fields("Name")) & "] -- Insert Successful.")
+                    ts.WriteLine ("Race #" & tabRaces.Fields("Number") & ": [" & ClipNull(tabRaces.Fields("Name")) & "] -- Insert Successful.")
                 End If
             End If
         End If
@@ -2523,27 +2581,27 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateRace()
+Private Sub iUpdateRace(sOriginal As String)
 Dim nStatus As Integer
 
 RaceStructToRow Racedatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Existing Record, would be updated.")
+    ts.WriteLine ("Race #" & Racerec.Number & ": [" & sOriginal & "] => [" & ClipNull(Racerec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Update Error: " & nStatus)
+        ts.WriteLine ("Race #" & Racerec.Number & ": [" & sOriginal & "] => [" & ClipNull(Racerec.Name) & "] -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Race #" & Racerec.Number & " [" & ClipNull(Racerec.Name) & "] -- Update Successful.")
+        ts.WriteLine ("Race #" & Racerec.Number & ": [" & sOriginal & "] => [" & ClipNull(Racerec.Name) & "] -- Update Successful.")
     End If
 End If
 End Sub
 Private Sub ImportShops()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "shop2.dat"
 
@@ -2594,6 +2652,12 @@ Do While tabShops.EOF = False And bStopImport = False
     
     ShopRowToStruct Shopdatabuf.buf
     
+    If ExistingRecord Then
+        sOriginal = ClipNull(Shoprec.Name)
+    Else
+        sOriginal = ""
+    End If
+    
         Shoprec.Number = tabShops.Fields("Number")
         Shoprec.Name = Trim(tabShops.Fields("Name"))
         Shoprec.ShopDescriptionA = Trim(tabShops.Fields("Desc A"))
@@ -2615,21 +2679,21 @@ Do While tabShops.EOF = False And bStopImport = False
         Next
 
         If ExistingRecord = True Then
-            iUpdateShop
+            iUpdateShop sOriginal
         Else
 
             ShopStructToRow Shopdatabuf.buf
             
             If bPreview Then
-                ts.WriteLine ("Shop #" & tabShops.Fields("Number") & " [" & ClipNull(tabShops.Fields("Name")) & "] -- Non-Existing Record, would be inserted.")
+                ts.WriteLine ("Shop #" & tabShops.Fields("Number") & ": [" & ClipNull(tabShops.Fields("Name")) & "] -- Non-Existing Record, would be inserted.")
             Else
                 nStatus = BTRCALL(BINSERT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
                 If Not nStatus = 0 Then
-                    ts.WriteLine ("Shop #" & tabShops.Fields("Number") & " [" & ClipNull(tabShops.Fields("Name")) & "] -- Insert Error: " & nStatus)
+                    ts.WriteLine ("Shop #" & tabShops.Fields("Number") & ": [" & ClipNull(tabShops.Fields("Name")) & "] -- Insert Error: " & nStatus)
                 Else
                     If optErrorsNSkips.Value = True Then GoTo SkipRecord:
                     If optErrorsOnly.Value = True Then GoTo SkipRecord:
-                    ts.WriteLine ("Shop #" & tabShops.Fields("Number") & " [" & ClipNull(tabShops.Fields("Name")) & "] -- Insert Successful.")
+                    ts.WriteLine ("Shop #" & tabShops.Fields("Number") & ": [" & ClipNull(tabShops.Fields("Name")) & "] -- Insert Successful.")
                 End If
             End If
         End If
@@ -2643,20 +2707,20 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateShop()
+Private Sub iUpdateShop(sOriginal As String)
 Dim nStatus As Integer
 
 ShopStructToRow Shopdatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Existing Record, would be updated.")
+    ts.WriteLine ("Shop #" & Shoprec.Number & ": [" & sOriginal & "] => [" & ClipNull(Shoprec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Update Error: " & nStatus)
+        ts.WriteLine ("Shop #" & Shoprec.Number & ": [" & sOriginal & "] => [" & ClipNull(Shoprec.Name) & "] -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Shop #" & Shoprec.Number & " [" & ClipNull(Shoprec.Name) & "] -- Update Successful.")
+        ts.WriteLine ("Shop #" & Shoprec.Number & ": [" & sOriginal & "] => [" & ClipNull(Shoprec.Name) & "] -- Update Successful.")
     End If
 End If
 End Sub
@@ -2691,7 +2755,7 @@ End Function
 Private Sub ImportMonsters()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, x As Long, test As Boolean, nYesNo As Integer, ExpMulti1 As Boolean
-Dim ExistingRecord As Boolean
+Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "knms2.dat"
 
@@ -2757,6 +2821,12 @@ Do While tabMonsters.EOF = False And bStopImport = False
     End If
     
     MonsterRowToStruct Monsterdatabuf.buf
+    
+    If ExistingRecord Then
+        sOriginal = ClipNull(Monsterrec.Name)
+    Else
+        sOriginal = ""
+    End If
     
         Monsterrec.Number = tabMonsters.Fields("Number")
         Monsterrec.Name = Trim(tabMonsters.Fields("Name"))
@@ -2842,7 +2912,7 @@ Do While tabMonsters.EOF = False And bStopImport = False
 
 
         If ExistingRecord = True Then
-            iUpdateMonster
+            iUpdateMonster sOriginal
         Else
 
             MonsterStructToRow Monsterdatabuf.buf
@@ -2870,20 +2940,20 @@ Exit Sub
 error:
 If CheckError = True Then Resume Next
 End Sub
-Private Sub iUpdateMonster()
+Private Sub iUpdateMonster(sOriginal As String)
 Dim nStatus As Integer
 
 MonsterStructToRow Monsterdatabuf.buf
 
 If bPreview Then
-    ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Existing Record, would be updated.")
+    ts.WriteLine ("Monster #" & Monsterrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Monsterrec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
-        ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Update Error: " & nStatus)
+        ts.WriteLine ("Monster #" & Monsterrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Monsterrec.Name) & "] -- Update Error: " & nStatus)
     Else
         If optErrorsOnly.Value = True Or optErrorsNSkips.Value = True Then Exit Sub
-        ts.WriteLine ("Monster #" & Monsterrec.Number & " [" & ClipNull(Monsterrec.Name) & "] -- Update Successful.")
+        ts.WriteLine ("Monster #" & Monsterrec.Number & ": [" & sOriginal & "] => [" & ClipNull(Monsterrec.Name) & "] -- Update Successful.")
     End If
 End If
 End Sub
