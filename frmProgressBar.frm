@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form frmProgressBar 
    BorderStyle     =   1  'Fixed Single
    ClientHeight    =   1785
@@ -108,6 +108,10 @@ Dim nPerCount As Long
 Dim nPerUp As Long
 Dim nScale As Integer
 Dim nScaleCount As Long
+
+Public nProgressInterval As Integer
+Public nProgressCount As Integer
+
 Public sCaption As String
 Public FormOwner As Form
 
@@ -126,6 +130,9 @@ ProgressBar.Value = 0
 ProgressBar.Min = 0
 ProgressBar.Max = 32767
 lblNote.Visible = False
+
+nProgressCount = 1
+nProgressInterval = 10
 
 End Sub
 Private Sub cmdCancel_Click()
@@ -199,22 +206,24 @@ Call HandleError("cmdCancel_Click")
 Resume out:
 
 End Sub
-Public Sub IncreaseProgress()
+Public Sub IncreaseProgress(Optional ByVal nAmount As Integer = 1)
 On Error Resume Next
 
 If Me.Caption = "" Then Me.Caption = "0% NMR: " & sCaption
 
 If nScale > 0 Then
-    If nScaleCount >= nScale Then
-        'If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
-        ProgressBar.Value = ProgressBar.Value + 1
+    nAmount = nAmount / nScale
+    If nAmount < 1 Then nAmount = 1
+    If nScaleCount + nAmount >= nScale Then
+        If ProgressBar.Value + nScaleCount + nAmount < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + nScaleCount + nAmount
+        'ProgressBar.Value = ProgressBar.Value + 1
         nScaleCount = 1
     Else
-        nScaleCount = nScaleCount + 1
+        nScaleCount = nScaleCount + nAmount
     End If
 Else
     'If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
-    ProgressBar.Value = ProgressBar.Value + 1
+    ProgressBar.Value = ProgressBar.Value + nAmount
 End If
 
 If nPerCount >= nPerUp Then

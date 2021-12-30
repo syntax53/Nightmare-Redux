@@ -1,10 +1,13 @@
-v1.8.2 (8/??/2021)  
+v1.8.2 (12/30/2021)  
 ------------------------------------------  
--NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info
--UP: added a bunch of additional logging on the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import
--UP: max room regen added to lair info for monsters.  to be used in corresponding update in MME.
+-NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info.  this will allow you to do things like set the minimum drop percentage to 50% for items dropped by monsters that regen greater than 7 days, for example.
+-UP: added a bunch of additional logging to the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import
+-UP: max room regen added to lair info for monsters, to be used in corresponding update in MME.
+-UP: room illumination added to mme room export, to be used in corresponding update in MME.
+-UP: added 4 rooms to the default exclude list for mme exports (1/288, 1/289, 12/2381, 17/2867)
 -FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail.
--FIX: during an MME export, monsters that had no attacks were getting the average damage value of the previously calculated mob
+-FIX: during an MME export, monsters that had no attacks were getting the average damage value of the previously calculated mob.
+
 
 v1.8.1 (5/20/2016)  
 ------------------------------------------  
