@@ -2190,12 +2190,12 @@ Resume out:
 End Function
 
 Private Sub ScanRooms()
-Dim nStatus As Integer, x As Integer, nRec As Long
+Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer
 
 '-------------------------------
 '       ROOMS
 '-------------------------------
-Dim nYesNo As Integer
+Dim nYesNo As Integer, nMobsInIndex As Integer
 On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
@@ -2272,11 +2272,18 @@ Do While nStatus = 0 And bStopExport = False
 
     'mark which group and indexs this room includes
     If Roomrec.MinIndex > 0 And Roomrec.MaxIndex > 0 Then
+        nMobsInIndex = 0
+        For x = Roomrec.MinIndex To Roomrec.MaxIndex
+            For y = 0 To 10 '20
+                If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then nMobsInIndex = nMobsInIndex + 1
+            Next y
+        Next x
+        
         For x = Roomrec.MinIndex To Roomrec.MaxIndex
             If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
             If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
             If Roomrec.Type = 3 Then 'lair
-                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Roomrec.MaxRegen & "_" & nMobsInIndex & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             Else
                 MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             End If
