@@ -1,18 +1,18 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmMonster 
    Caption         =   "Monster Editor"
    ClientHeight    =   6735
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   8655
+   ClientWidth     =   8670
    Icon            =   "frmMonster.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   6735
-   ScaleWidth      =   8655
+   ScaleWidth      =   8670
    Begin VB.CommandButton cmdFilter 
       Caption         =   "Filter"
       BeginProperty Font 

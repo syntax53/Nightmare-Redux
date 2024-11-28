@@ -2190,7 +2190,7 @@ Resume out:
 End Function
 
 Private Sub ScanRooms()
-Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer
+Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer, nIndexExp As Double
 
 '-------------------------------
 '       ROOMS
@@ -2273,17 +2273,26 @@ Do While nStatus = 0 And bStopExport = False
     'mark which group and indexs this room includes
     If Roomrec.MinIndex > 0 And Roomrec.MaxIndex > 0 Then
         nMobsInIndex = 0
-        For x = Roomrec.MinIndex To Roomrec.MaxIndex
-            For y = 0 To 10 '20
-                If MGIL(Roomrec.MonsterType, x).nNumber(y) > 0 Then nMobsInIndex = nMobsInIndex + 1
-            Next y
-        Next x
+        nIndexExp = 0
+        If Roomrec.Type = 3 Then 'lair
+            For x = Roomrec.MinIndex To Roomrec.MaxIndex
+                For y = 0 To 10 '20
+                    If MGIL(Roomrec.MonsterType, x).nNumber(y) > 0 Then
+                        If IsMonsterLimited(MGIL(Roomrec.MonsterType, x).nNumber(y)) = False Then
+                            nMobsInIndex = nMobsInIndex + 1
+                            nIndexExp = nIndexExp + GetMonsterExp(MGIL(Roomrec.MonsterType, x).nNumber(y))
+                        End If
+                    End If
+                Next y
+            Next x
+        End If
         
         For x = Roomrec.MinIndex To Roomrec.MaxIndex
             If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
             If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
-            If Roomrec.Type = 3 Then 'lair
-                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & nMobsInIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+            If Roomrec.Type = 3 Then  'lair
+                If nMobsInIndex = 0 Then nMobsInIndex = 1
+                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Round(nIndexExp / nMobsInIndex) & "][" & nMobsInIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             Else
                 MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             End If
@@ -3647,10 +3656,6 @@ nextnumber:
     nNumber = Val(Mid(sWhole, y1, y2))
     
     If bCheckSpell Then
-        If nNumber = 711 Then
-            Debug.Print 1
-        End If
-        
         If nNumber = 0 Then x = y1: GoTo checknext:
         
         y1 = y1 + y2 + 1 'len of string searching (to position y1 at first number)

@@ -1179,6 +1179,63 @@ Resume out:
 
 End Function
 
+Public Function GetMonsterExp(ByVal nMonsterNumber As Long) As Double
+Dim nStatus As Integer
+
+On Error GoTo error:
+
+If nMonsterNumber = 0 Then
+    GetMonsterExp = 0
+Else
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonsterNumber, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetMonsterExp = 0
+        Else
+            GetMonsterExp = -1
+        End If
+    Else
+        MonsterRowToStruct Monsterdatabuf.buf
+        If eDatFileVersion >= v111j Then
+            GetMonsterExp = (Monsterrec.Experience * Monsterrec.ExpMulti)
+        Else
+            GetMonsterExp = Monsterrec.Experience
+        End If
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetMonsterExp")
+Resume out:
+End Function
+
+Public Function IsMonsterLimited(ByVal nMonsterNumber As Long) As Boolean
+Dim nStatus As Integer
+
+On Error GoTo error:
+IsMonsterLimited = False
+
+If nMonsterNumber = 0 Then
+    Exit Function
+Else
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonsterNumber, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        Exit Function
+    Else
+        MonsterRowToStruct Monsterdatabuf.buf
+        If Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0 Then IsMonsterLimited = True
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("IsMonsterLimited")
+Resume out:
+End Function
+
 Public Function GetItemName(ByVal nItemNumber As Long) As String
 Dim nStatus As Integer
 On Error GoTo error:
