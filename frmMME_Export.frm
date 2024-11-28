@@ -2290,8 +2290,7 @@ Do While nStatus = 0 And bStopExport = False
         For x = Roomrec.MinIndex To Roomrec.MaxIndex
             If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
             If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
-            If Roomrec.Type = 3 Then  'lair
-                If nMobsInIndex = 0 Then nMobsInIndex = 1
+            If Roomrec.Type = 3 And nMobsInIndex > 0 Then  'lair
                 MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Round(nIndexExp / nMobsInIndex) & "][" & nMobsInIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             Else
                 MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
