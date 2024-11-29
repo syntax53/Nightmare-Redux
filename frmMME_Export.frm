@@ -2278,7 +2278,7 @@ Do While nStatus = 0 And bStopExport = False
             For x = Roomrec.MinIndex To Roomrec.MaxIndex
                 For y = 0 To 10 '20
                     If MGIL(Roomrec.MonsterType, x).nNumber(y) > 0 Then
-                        If IsMonsterLimited(MGIL(Roomrec.MonsterType, x).nNumber(y)) = False Then
+                        If GetMonsterRegen(MGIL(Roomrec.MonsterType, x).nNumber(y)) = 0 Then
                             nMobsInIndex = nMobsInIndex + 1
                             nIndexExp = nIndexExp + GetMonsterExp(MGIL(Roomrec.MonsterType, x).nNumber(y))
                         End If
@@ -4550,6 +4550,7 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("Undead") = Monsterrec.Undead
     tabMonsters.Fields("Align") = Monsterrec.Alignment
     tabMonsters.Fields("RegenTime") = Monsterrec.RegenTime
+    tabMonsters.Fields("GameLimit") = Monsterrec.GameLimit
     tabMonsters.Fields("R") = Monsterrec.Runic
     tabMonsters.Fields("P") = Monsterrec.Platinum
     tabMonsters.Fields("G") = Monsterrec.Gold
@@ -5330,6 +5331,7 @@ With tabNewMonsters
     .Columns.Append "Undead", adInteger
     .Columns.Append "Align", adInteger
     .Columns.Append "RegenTime", adInteger
+    .Columns.Append "GameLimit", adInteger
     .Columns.Append "R", adInteger
     .Columns.Append "P", adInteger
     .Columns.Append "G", adInteger

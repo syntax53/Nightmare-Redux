@@ -1,6 +1,7 @@
 v1.8.3 ()
 ------------------------------------------  
--UP: Added number of mobs possible per group/index/room for MME export
+-UP: Added average exp and number of unique mobs per lair for MME export
+-UP: Added monster game limit field
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  

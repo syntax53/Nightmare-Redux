@@ -1211,28 +1211,28 @@ Call HandleError("GetMonsterExp")
 Resume out:
 End Function
 
-Public Function IsMonsterLimited(ByVal nMonsterNumber As Long) As Boolean
+Public Function GetMonsterRegen(ByVal nMonsterNumber As Long) As Integer
 Dim nStatus As Integer
-
 On Error GoTo error:
-IsMonsterLimited = False
 
 If nMonsterNumber = 0 Then
+    GetMonsterRegen = -1
     Exit Function
 Else
     nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonsterNumber, KEY_BUF_LEN, 0)
     If Not nStatus = 0 Then
+        GetMonsterRegen = -1
         Exit Function
     Else
         MonsterRowToStruct Monsterdatabuf.buf
-        If Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0 Then IsMonsterLimited = True
+        GetMonsterRegen = Monsterrec.RegenTime
     End If
 End If
 
 out:
 Exit Function
 error:
-Call HandleError("IsMonsterLimited")
+Call HandleError("GetMonsterRegen")
 Resume out:
 End Function
 
