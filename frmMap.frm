@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmMap 
    AutoRedraw      =   -1  'True
    BackColor       =   &H00000000&
@@ -21817,7 +21817,7 @@ If chkNoTooltips.Value = 0 Then
                 If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex)
                 
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
-                    For y = 0 To 10 '20
+                    For y = 0 To 14
                         If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
                             If sMonsters = "" Then
                                 sMonsters = "Also here: "

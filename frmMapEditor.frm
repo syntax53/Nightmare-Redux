@@ -7236,7 +7236,7 @@ If chkNoTooltips.Value = 0 Then
                 If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex)
 
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
-                    For y = 0 To 10 '20
+                    For y = 0 To 14
                         If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
                             If sMonsters = "" Then
                                 sMonsters = "Also here: "

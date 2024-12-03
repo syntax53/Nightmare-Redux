@@ -1857,7 +1857,7 @@ Do While nStatus = 0
     If UBound(MGIL(), 2) < Monsterrec.Index Then ReDim Preserve MGIL(UBound(MGIL(), 1), Monsterrec.Index)
     'If UBound(MGIL(), 3) < Monsterrec.Number Then ReDim Preserve MGIL(UBound(MGIL(), 1), UBound(MGIL(), 2), Monsterrec.Number)
     
-    For x = 0 To 10 '20
+    For x = 0 To 14
         If MGIL(Monsterrec.Group, Monsterrec.Index).nNumber(x) = 0 Then
             MGIL(Monsterrec.Group, Monsterrec.Index).nNumber(x) = Monsterrec.Number
             'MGIL(Monsterrec.Group, Monsterrec.Index).sName(x) = ClipNull(Monsterrec.Name)
