@@ -688,6 +688,8 @@ Dim x As Long, sArr() As String, i As Integer
 If Len(tUpdatedLairInfo.sGroupIndex) < 5 Then Exit Sub
 x = GetLairInfoIndex(tUpdatedLairInfo.sGroupIndex)
 
+'averages are for a single mob, averaged from all of the mobs in the list/index
+'the max regen is not taken into account (multiply by that for total average exp, for example)
 colLairs(x).sMobList = tUpdatedLairInfo.sMobList
 colLairs(x).nMobs = tUpdatedLairInfo.nMobs
 colLairs(x).nAvgExp = tUpdatedLairInfo.nAvgExp
@@ -2508,7 +2510,7 @@ On Error GoTo error:
 Dim sRegexLairPattern As String, tMatches() As RegexMatches, sRoomKey As String, sGroupIndex As String
 Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Integer, tLairInfo As LairInfoType
 Dim nLairMobDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
-Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer
+Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer, nAvgLairExp As Currency
 Dim iLair As Long, iMonster As Integer, arrMonsters() As String, tMonsterStats As MonsterStats
 
 'calculate lair damage and script value now that monsters have had their damage calculated
@@ -2545,6 +2547,7 @@ If Not tabTempRS.EOF Then
         nMobsTotal = 0
         nLairs = 0
         nPossy = 0
+        nAvgLairExp = 0
         nMobScriptValue = 0
         tMatches() = RegExpFindv2(tabTempRS.Fields("Summoned By"), sRegexLairPattern)
         If UBound(tMatches()) > 0 Or Len(tMatches(0).sFullMatch) > 0 Then
@@ -2574,58 +2577,12 @@ If Not tabTempRS.EOF Then
                 
                 If nMaxRegen > 0 And Len(sGroupIndex) > 4 Then
                     tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(nMaxRegen))
+                    nAvgLairExp = nAvgLairExp + (tLairInfo.nAvgExp * nMaxRegen)
                     nMobScriptValue = nMobScriptValue + tLairInfo.nScriptValue
                     nMobsTotal = nMobsTotal + tLairInfo.nMaxRegen
                 ElseIf nMaxRegen > 0 Then
                     nMobsTotal = nMobsTotal + nMaxRegen
                 End If
-                
-'                If nMap > 0 And nRoom > 0 Then
-'                    sRoomKey = "[" & nMap & "/" & nRoom & "]"
-'                    nRoomScriptValue = 0
-'                    If Not dictRoomLairs.Exists(sRoomKey) Then
-'                        If nUniqueMobs > 0 And nMaxRegen > 0 Then
-'                            nSpawnChance = Round(1 - (1 - (1 / nUniqueMobs)) ^ nMaxRegen, 2)
-'                        End If
-'
-'                        sTemp = MDB_GetRoomLairMobs(nMap, nRoom)
-'                        nLairMobExp = 0
-'                        nLairMobDamage = 0
-'                        nLairMobHP = 0
-'                        If Len(sTemp) > 0 Then
-'                            sArr() = Split(sTemp, ",")
-'                            For i = 0 To UBound(sArr())
-'                                tLairMob = MDB_GetMonsterScriptValue(Val(sArr(i)))
-'                                If tLairMob.Regen = 0 Then
-'                                    If tLairMob.GameLimit > 0 And tLairMob.GameLimit < nMaxRegen Then
-'                                        nLairMobExp = nLairMobExp + ((tLairMob.Exp * nSpawnChance) * (tLairMob.GameLimit / nMaxRegen))
-'                                        nLairMobDamage = nLairMobDamage + ((tLairMob.Damage * nSpawnChance) * (tLairMob.GameLimit / nMaxRegen))
-'                                        nLairMobHP = nLairMobHP + ((tLairMob.HP * nSpawnChance) * (tLairMob.GameLimit / nMaxRegen))
-'                                    Else
-'                                        nLairMobExp = nLairMobExp + (tLairMob.Exp * nSpawnChance)
-'                                        nLairMobDamage = nLairMobDamage + (tLairMob.Damage * nSpawnChance)
-'                                        nLairMobHP = nLairMobHP + (tLairMob.HP * nSpawnChance)
-'                                    End If
-'                                End If
-'                            Next i
-'                            If (nLairMobHP + nLairMobDamage) > 0 Then
-'                                nRoomScriptValue = (Round((nLairMobExp / (nLairMobHP + nLairMobDamage)) * 100))
-'                            Else
-'                                nRoomScriptValue = nLairMobExp * 100
-'                            End If
-'
-'                            nRoomScriptValue = (nRoomScriptValue / (UBound(sArr()) + 1)) * nMaxRegen
-'                        End If
-'
-'                        dictRoomLairs.add sRoomKey, nRoomScriptValue
-'                    Else
-'                        nRoomScriptValue = dictRoomLairs.Item(sRoomKey)
-'                    End If
-'
-'                    nMobScriptValue = nMobScriptValue + nRoomScriptValue
-'
-'                    nMobsTotal = nMobsTotal + nMaxRegen
-'                End If
             Next iLair
 
             nMobScriptValue = Round(nMobScriptValue / nLairs)
@@ -2638,11 +2595,12 @@ If Not tabTempRS.EOF Then
                 nMobScriptValue = Round(nMobScriptValue * nLairPCT)
             End If
             
-            If nMobScriptValue >= 1 Then
+            If nMobScriptValue >= 1 Or nAvgLairExp > 0 Then
                 tabMonsters.Index = "pkMonsters"
                 tabMonsters.Seek "=", tabTempRS.Fields("Number")
                 If Not tabMonsters.NoMatch = True Then
                     tabMonsters.Edit
+                    tabMonsters.Fields("AvgLairExp") = Round(nAvgLairExp / nLairs)
                     tabMonsters.Fields("ScriptValue") = nMobScriptValue
                     tabMonsters.Update
                 End If
@@ -4959,6 +4917,7 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("Align") = Monsterrec.Alignment
     tabMonsters.Fields("RegenTime") = Monsterrec.RegenTime
     tabMonsters.Fields("GameLimit") = Monsterrec.GameLimit
+    tabMonsters.Fields("AvgLairExp") = 0
     tabMonsters.Fields("ScriptValue") = 0
     tabMonsters.Fields("R") = Monsterrec.Runic
     tabMonsters.Fields("P") = Monsterrec.Platinum
@@ -5731,6 +5690,7 @@ With tabNewMonsters
     .Columns.Append "Align", adInteger
     .Columns.Append "RegenTime", adInteger
     .Columns.Append "GameLimit", adInteger
+    .Columns.Append "AvgLairExp", adDouble
     .Columns.Append "ScriptValue", adDouble
     .Columns.Append "R", adInteger
     .Columns.Append "P", adInteger
