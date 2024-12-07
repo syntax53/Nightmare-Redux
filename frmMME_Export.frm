@@ -702,17 +702,21 @@ If colLairs(x).nMaxRegen = 0 Then
     colLairs(x).nMaxRegen = Val(sArr(UBound(sArr())))
 End If
 
-If colLairs(x).nMaxRegen > 0 And (colLairs(x).nAvgHP > 0 Or colLairs(x).nAvgDmg > 0) Then
-    colLairs(x).nScriptValue = _
-        Round( _
-                ( _
-                    (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
+If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
+    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
+        colLairs(x).nScriptValue = colLairs(x).nAvgExp * colLairs(x).nMaxRegen * 100
+    Else
+        colLairs(x).nScriptValue = _
+            Round( _
                     ( _
-                        (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
-                        (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
+                        (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
+                        ( _
+                            (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
+                            (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
+                        ) _
                     ) _
-                ) _
-            * 100)
+                * 100)
+    End If
 Else
     colLairs(x).nScriptValue = 0
 End If
