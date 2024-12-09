@@ -6041,6 +6041,7 @@ Set tabClasses = Nothing
 Set tabInfo = Nothing
 Set tabRooms = Nothing
 Set tabTBInfo = Nothing
+Set tabLairs = Nothing
 
 Set DB = Nothing
 
@@ -6161,6 +6162,7 @@ tabMonsters.Close
 tabShops.Close
 tabRooms.Close
 tabTBInfo.Close
+tabLairs.Close
 
 DB.Close
 
