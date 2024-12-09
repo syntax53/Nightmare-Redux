@@ -715,7 +715,8 @@ If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
                             (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
                         ) _
                     ) _
-                * 100)
+                    * 100 _
+                )
     End If
 Else
     colLairs(x).nScriptValue = 0
