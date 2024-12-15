@@ -44,7 +44,7 @@ Begin VB.Form frmProgressBar
       Height          =   255
       Index           =   0
       Left            =   -60
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   1560
       Width           =   2415
    End
@@ -56,27 +56,9 @@ Begin VB.Form frmProgressBar
       Height          =   255
       Index           =   1
       Left            =   2340
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   1560
       Width           =   4035
-   End
-   Begin VB.Label lblNOTE 
-      Caption         =   "NOTE: Minimizing this window can significantly increase the processing speed."
-      BeginProperty Font 
-         Name            =   "Small Fonts"
-         Size            =   6.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   195
-      Left            =   60
-      TabIndex        =   3
-      Top             =   960
-      Visible         =   0   'False
-      Width           =   6195
    End
    Begin VB.Label lblCaption 
       Caption         =   "status"
@@ -129,7 +111,7 @@ nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
 ProgressBar.Max = 32767
-lblNote.Visible = False
+'lblNote.Visible = False
 
 nProgressCount = 1
 nProgressInterval = 10
@@ -226,7 +208,7 @@ Else
     ProgressBar.Value = ProgressBar.Value + nAmount
 End If
 
-If nPerCount >= nPerUp Then
+If (nPerCount * nScale) >= nPerUp Then
     Me.Caption = CStr(Round(frmProgressBar.ProgressBar.Value / frmProgressBar.ProgressBar.Max, 2) * 100) & "% NMR: " & sCaption
     nPerCount = 1
 Else
@@ -237,39 +219,49 @@ End Sub
 Public Sub SetRange(ByVal MaxValue As Double)
 Dim nNewMax As Integer
 
-nScale = 0
+'nScale = 0
+'
+'If MaxValue > MaxInt Then
+'    If MaxValue / 2 < MaxInt Then
+'        nScale = 2
+'        nNewMax = MaxValue / 2
+'    ElseIf MaxValue / 4 < MaxInt Then
+'        nScale = 4
+'        nNewMax = MaxValue / 4
+'    ElseIf MaxValue / 8 < MaxInt Then
+'        nScale = 8
+'        nNewMax = MaxValue / 8
+'    ElseIf MaxValue / 10 < MaxInt Then
+'        nScale = 10
+'        nNewMax = MaxValue / 10
+'    ElseIf MaxValue / 50 < MaxInt Then
+'        nScale = 50
+'        nNewMax = MaxValue / 50
+'    Else
+'        MaxValue = MaxInt
+'    End If
+'Else
+'    nNewMax = MaxValue
+'End If
+'
+'nNewMax = Fix(nNewMax)
 
-If MaxValue > MaxInt Then
-    If MaxValue / 2 < MaxInt Then
-        nScale = 2
-        nNewMax = MaxValue / 2
-    ElseIf MaxValue / 4 < MaxInt Then
-        nScale = 4
-        nNewMax = MaxValue / 4
-    ElseIf MaxValue / 8 < MaxInt Then
-        nScale = 8
-        nNewMax = MaxValue / 8
-    ElseIf MaxValue / 10 < MaxInt Then
-        nScale = 10
-        nNewMax = MaxValue / 10
-    ElseIf MaxValue / 50 < MaxInt Then
-        nScale = 50
-        nNewMax = MaxValue / 50
-    Else
-        MaxValue = MaxInt
-    End If
-Else
-    nNewMax = MaxValue
-End If
+nScale = 1
 
-nNewMax = Fix(nNewMax)
+Do While (nScale < 100 And (MaxValue / nScale) > 100) Or (MaxValue / nScale) > MaxInt
+    nScale = nScale + 1
+Loop
+
+nNewMax = (MaxValue / nScale)
 
 nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
 ProgressBar.Max = nNewMax
+nProgressInterval = nScale
 nPerCount = 1
 nPerUp = Fix((nNewMax * IIf(nScale > 0, nScale, 1)) * 0.01)
+Debug.Print nPerUp
 End Sub
 Private Sub UpdateFileCancel()
 On Error Resume Next

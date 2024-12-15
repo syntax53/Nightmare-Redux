@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmUser 
    Caption         =   "User Editor"
    ClientHeight    =   5430
@@ -20,6 +20,24 @@ Begin VB.Form frmUser
       TabIndex        =   3
       Top             =   60
       Width           =   6915
+      Begin VB.CommandButton cmdUserImport 
+         Caption         =   "Import"
+         Height          =   255
+         Left            =   2760
+         TabIndex        =   473
+         ToolTipText     =   "Import User from TXT"
+         Top             =   0
+         Width           =   795
+      End
+      Begin VB.CommandButton cmdUserExport 
+         Caption         =   "Export"
+         Height          =   255
+         Left            =   1980
+         TabIndex        =   472
+         ToolTipText     =   "Export User to TXT"
+         Top             =   0
+         Width           =   735
+      End
       Begin TabDlg.SSTab SSTab3 
          Height          =   4935
          Left            =   0
@@ -60,61 +78,61 @@ Begin VB.Form frmUser
          TabCaption(3)   =   "Abilities"
          TabPicture(3)   =   "frmUser.frx":091E
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "SSTab2"
-         Tab(3).Control(1)=   "cmdAbilsClear"
+         Tab(3).Control(0)=   "cmdAbilsClear"
+         Tab(3).Control(1)=   "SSTab2"
          Tab(3).ControlCount=   2
          TabCaption(4)   =   "Rooms"
          TabPicture(4)   =   "frmUser.frx":093A
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "Label74"
-         Tab(4).Control(1)=   "txtCurrentMap"
-         Tab(4).Control(2)=   "txtCurrentRoom"
-         Tab(4).Control(3)=   "frmMapTrail"
-         Tab(4).Control(4)=   "cmdEditCurrentRoom"
-         Tab(4).Control(5)=   "txtCurrRoomDisp"
-         Tab(4).Control(5).Enabled=   0   'False
+         Tab(4).Control(0)=   "txtCurrRoomDisp"
+         Tab(4).Control(0).Enabled=   0   'False
+         Tab(4).Control(1)=   "cmdEditCurrentRoom"
+         Tab(4).Control(2)=   "frmMapTrail"
+         Tab(4).Control(3)=   "txtCurrentRoom"
+         Tab(4).Control(4)=   "txtCurrentMap"
+         Tab(4).Control(5)=   "Label74"
          Tab(4).ControlCount=   6
          TabCaption(5)   =   "Worn"
          TabPicture(5)   =   "frmUser.frx":0956
          Tab(5).ControlEnabled=   0   'False
-         Tab(5).Control(0)=   "cmdPasteItems(2)"
-         Tab(5).Control(1)=   "cmdEditWeapon"
-         Tab(5).Control(2)=   "cmdClearWorn"
+         Tab(5).Control(0)=   "Label75"
+         Tab(5).Control(1)=   "txtWeaponNumber"
+         Tab(5).Control(2)=   "txtWeaponName"
+         Tab(5).Control(2).Enabled=   0   'False
          Tab(5).Control(3)=   "Frame5"
-         Tab(5).Control(4)=   "txtWeaponName"
-         Tab(5).Control(4).Enabled=   0   'False
-         Tab(5).Control(5)=   "txtWeaponNumber"
-         Tab(5).Control(6)=   "Label75"
+         Tab(5).Control(4)=   "cmdClearWorn"
+         Tab(5).Control(5)=   "cmdEditWeapon"
+         Tab(5).Control(6)=   "cmdPasteItems(2)"
          Tab(5).ControlCount=   7
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
          Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "chkEdited"
-         Tab(6).Control(1)=   "Frame4"
-         Tab(6).Control(2)=   "txtTitle"
-         Tab(6).Control(3)=   "txtCurrentEncum"
-         Tab(6).Control(4)=   "txtMaxEncum"
-         Tab(6).Control(5)=   "txtEvilPoints"
-         Tab(6).Control(6)=   "txtBroadcastChan"
-         Tab(6).Control(7)=   "txtCopper"
-         Tab(6).Control(8)=   "txtSilver"
-         Tab(6).Control(9)=   "txtGold"
-         Tab(6).Control(10)=   "txtPlatinum"
-         Tab(6).Control(11)=   "txtRunic"
-         Tab(6).Control(12)=   "txtGang"
-         Tab(6).Control(13)=   "txtSuicide"
-         Tab(6).Control(14)=   "Label76(11)"
-         Tab(6).Control(15)=   "Label76(10)"
-         Tab(6).Control(16)=   "Label76(9)"
-         Tab(6).Control(17)=   "Label76(8)"
-         Tab(6).Control(18)=   "Label76(7)"
-         Tab(6).Control(19)=   "Label76(6)"
-         Tab(6).Control(20)=   "Label76(5)"
-         Tab(6).Control(21)=   "Label76(4)"
-         Tab(6).Control(22)=   "Label76(3)"
-         Tab(6).Control(23)=   "Label76(2)"
-         Tab(6).Control(24)=   "Label76(1)"
-         Tab(6).Control(25)=   "Label76(0)"
+         Tab(6).Control(0)=   "Label76(0)"
+         Tab(6).Control(1)=   "Label76(1)"
+         Tab(6).Control(2)=   "Label76(2)"
+         Tab(6).Control(3)=   "Label76(3)"
+         Tab(6).Control(4)=   "Label76(4)"
+         Tab(6).Control(5)=   "Label76(5)"
+         Tab(6).Control(6)=   "Label76(6)"
+         Tab(6).Control(7)=   "Label76(7)"
+         Tab(6).Control(8)=   "Label76(8)"
+         Tab(6).Control(9)=   "Label76(9)"
+         Tab(6).Control(10)=   "Label76(10)"
+         Tab(6).Control(11)=   "Label76(11)"
+         Tab(6).Control(12)=   "txtSuicide"
+         Tab(6).Control(13)=   "txtGang"
+         Tab(6).Control(14)=   "txtRunic"
+         Tab(6).Control(15)=   "txtPlatinum"
+         Tab(6).Control(16)=   "txtGold"
+         Tab(6).Control(17)=   "txtSilver"
+         Tab(6).Control(18)=   "txtCopper"
+         Tab(6).Control(19)=   "txtBroadcastChan"
+         Tab(6).Control(20)=   "txtEvilPoints"
+         Tab(6).Control(21)=   "txtMaxEncum"
+         Tab(6).Control(22)=   "txtCurrentEncum"
+         Tab(6).Control(23)=   "txtTitle"
+         Tab(6).Control(24)=   "Frame4"
+         Tab(6).Control(25)=   "chkEdited"
          Tab(6).ControlCount=   26
          Begin VB.CommandButton cmdCalcExp 
             Caption         =   "Calc E&xperience"
@@ -5347,10 +5365,10 @@ Begin VB.Form frmUser
       Begin VB.CommandButton cmdDiscard 
          Caption         =   "Dis&card"
          Height          =   255
-         Left            =   5880
+         Left            =   5940
          TabIndex        =   8
          Top             =   0
-         Width           =   975
+         Width           =   915
       End
       Begin VB.CommandButton cmdDelete 
          Caption         =   "&Delete"
@@ -5358,7 +5376,7 @@ Begin VB.Form frmUser
          Left            =   960
          TabIndex        =   5
          Top             =   0
-         Width           =   975
+         Width           =   855
       End
       Begin VB.CommandButton cmdSave 
          Caption         =   "&Save"
@@ -5369,21 +5387,21 @@ Begin VB.Form frmUser
          Width           =   1035
       End
       Begin VB.CommandButton cmdCopy 
-         Caption         =   "Cop&y"
+         Caption         =   "Duplicate"
          Height          =   255
          Left            =   0
          TabIndex        =   4
          Top             =   0
-         Width           =   975
+         Width           =   915
       End
       Begin VB.CheckBox chkAutoSave 
          Caption         =   "Auto-Save"
          Height          =   195
-         Left            =   3600
+         Left            =   3720
          TabIndex        =   6
          ToolTipText     =   "Turn this on to auto-save users when switching records (carefule if using live dats!)"
          Top             =   15
-         Width           =   1215
+         Width           =   1095
       End
    End
    Begin VB.TextBox txtSearch 
@@ -5460,7 +5478,7 @@ Dim sCurrentRecord As String * 30
 
 Private Sub chkNoRoomNames_Click()
 
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 For x = 0 To 19
@@ -5469,14 +5487,14 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("chkNoRoomNames_Click")
 Resume out:
 End Sub
 
 Private Sub cmdAbilsClear_Click()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 29
     txtAbilityA(x).Text = 0
@@ -5485,14 +5503,14 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdAbilsClear_Click")
 Resume out:
 
 End Sub
 
 Private Sub cmdCalcExp_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 frmExpCalc.Show
 frmExpCalc.SetFocus
@@ -5501,24 +5519,24 @@ Call frmExpCalc.CalcBy(cmbClasses.ListIndex, cmbRaces.ListIndex, Val(txtLevel.Te
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdCalcExp_Click")
 Resume out:
 End Sub
 
 Private Sub cmdPasteChar_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 Call PasteCharacter
 
 Exit Sub
 
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub PasteCharacter()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, sSearch As String, x As Long, y As Integer, x2 As Integer
 Dim sRaceName As String, sClassName As String, sChar As String
 Dim sStr As String
@@ -5721,14 +5739,14 @@ End If
 canceled:
 Me.Enabled = True
 Exit Sub
-Error:
+error:
 Call HandleError
 Me.Enabled = True
 End Sub
 
 Private Function GetNextNumbers(ByVal nStart As Long, sSearchString As String) As String
 Dim y As Long, sChar As String
-On Error GoTo Error:
+On Error GoTo error:
 
 y = nStart
 Do Until y > Len(sSearchString)
@@ -5748,12 +5766,12 @@ End If
 out:
 On Error Resume Next
 Exit Function
-Error:
+error:
 Call HandleError("GetNextNumbers")
 Resume out:
 End Function
 Private Sub PasteItems()
-On Error GoTo Error:
+On Error GoTo error:
 Dim sSearch As String, sText As String, sChar As String, x As Integer, y As Integer, x2 As Integer
 Dim nStatus As Integer, sAmount As String, bResult As Boolean, nMaxSItems As Integer
 Dim nCurKey As Integer, nCurItem As Integer, nCurWorn As Integer
@@ -6068,13 +6086,13 @@ Me.MousePointer = vbDefault
 Me.Enabled = True
 Unload frmUserSelectItem
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume canceled:
 End Sub
 
 Private Sub PasteSpells()
-On Error GoTo Error:
+On Error GoTo error:
 Dim sSearch As String, sText As String, sChar As String, x As Integer, y As Integer, x2 As Integer
 Dim nStatus As Integer, bResult As Boolean, nMaxSSpells As Integer, nCurSpell As Integer
 Dim sSpells(0 To 199) As String, nOrigMatch As Long
@@ -6254,7 +6272,7 @@ Me.MousePointer = vbDefault
 Me.Enabled = True
 Unload frmUserSelectItem
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume canceled:
 End Sub
@@ -6275,12 +6293,276 @@ MsgBox "Paste a capture of a character's ""stat"" output.  Class, Race, Level, E
 End Sub
 
 Private Sub cmdSpellEditor_GotFocus()
-Call SelectAll(cmdSpellEditor)
+'Call SelectAll(cmdSpellEditor)
 
 End Sub
 
+Private Sub cmdUserExport_Click()
+On Error GoTo error:
+Dim x As Integer, sTemp(1 To 3) As String, nStatus As Integer
+Dim sExportText As String
+
+nStatus = BTRCALL(BGETEQUAL, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal sCurrentRecord, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then
+    MsgBox "Error on save, BGETQUAL: " & BtrieveErrorCode(nStatus)
+    Exit Sub
+Else
+    UserRowToStruct Userdatabuf.buf
+End If
+
+sExportText = AutoAppendString(sExportText, "BBSName:" & ClipNull(Userrec.BBSName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "FirstName:" & ClipNull(Userrec.FirstName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "LastName:" & ClipNull(Userrec.LastName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Race:" & Userrec.Race, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Class:" & Userrec.Class, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Experience:" & (SLong2ULong(Userrec.BillionsOfExperience) * 1000000000#) + SLong2ULong(Userrec.MillionsOfExperience), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Level:" & SInt2UInt(Userrec.Level), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Title:" & ClipNull(Userrec.Title), vbCrLf)
+sExportText = AutoAppendString(sExportText, "EvilPoints:" & Userrec.EvilPoints, vbCrLf)
+sExportText = AutoAppendString(sExportText, "GangName:" & ClipNull(Userrec.GangName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "SuicidePassword:" & ClipNull(Userrec.SuicidePassword), vbCrLf)
+sExportText = AutoAppendString(sExportText, "BroadcastChan:" & Userrec.BroadcastChan, vbCrLf)
+sExportText = AutoAppendString(sExportText, "bEDITED:" & Userrec.bEDITED, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Runic:" & SLong2ULong(Userrec.Runic), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Platinum:" & SLong2ULong(Userrec.Platinum), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Gold:" & SLong2ULong(Userrec.Gold), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Silver:" & SLong2ULong(Userrec.Silver), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Copper:" & SLong2ULong(Userrec.Copper), vbCrLf)
+
+sExportText = AutoAppendString(sExportText, "MaxHP:" & Userrec.MaxHP, vbCrLf)
+sExportText = AutoAppendString(sExportText, "CurrentHP:" & Userrec.CurrentHP, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MaxMana:" & Userrec.MaxMana, vbCrLf)
+sExportText = AutoAppendString(sExportText, "CurrentMana:" & Userrec.CurrentMana, vbCrLf)
+sExportText = AutoAppendString(sExportText, "SpellCasting:" & Userrec.SpellCasting, vbCrLf)
+sExportText = AutoAppendString(sExportText, "LivesRemaining:" & Userrec.LivesRemaining, vbCrLf)
+sExportText = AutoAppendString(sExportText, "CPRemaining:" & Userrec.CPRemaining, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Perception:" & Userrec.Perception, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Thievery:" & Userrec.Thievery, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Traps:" & Userrec.Traps, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Picklocks:" & Userrec.Picklocks, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Tracking:" & Userrec.Tracking, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MartialArts:" & Userrec.MartialArts, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MagicRes:" & Userrec.MagicRes, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Stealth:" & Userrec.Stealth, vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 11
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.Stat(x))
+Next
+sExportText = AutoAppendString(sExportText, "STATS:" & sTemp(1), vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 29
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.Ability(x) & "|" & Userrec.AbilityModifier(x))
+Next x
+sExportText = AutoAppendString(sExportText, "ABILS:" & sTemp(1), vbCrLf)
+
+
+sExportText = AutoAppendString(sExportText, "CurrentENC:" & SInt2UInt(Userrec.CurrentENC), vbCrLf)
+sExportText = AutoAppendString(sExportText, "MaxENC:" & SInt2UInt(Userrec.MaxENC), vbCrLf)
+sExportText = AutoAppendString(sExportText, "WeaponHand:" & Userrec.WeaponHand, vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 19
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.WornItem(x))
+Next x
+sExportText = AutoAppendString(sExportText, "WORN:" & sTemp(1), vbCrLf)
+
+sTemp(1) = ""
+sTemp(2) = ""
+sTemp(3) = ""
+For x = 0 To 99
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.Item(x) & "|" & Userrec.ItemUses(x))
+    If x < 50 Then sTemp(2) = AutoAppendString(sTemp(2), Userrec.Key(x) & "|" & Userrec.KeyUses(x))
+    sTemp(3) = AutoAppendString(sTemp(3), Userrec.Spell(x))
+Next x
+
+sExportText = AutoAppendString(sExportText, "ITEMS:" & sTemp(1), vbCrLf)
+sExportText = AutoAppendString(sExportText, "KEYS:" & sTemp(2), vbCrLf)
+sExportText = AutoAppendString(sExportText, "SPELLS:" & sTemp(3), vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 9
+    sTemp(1) = AutoAppendString(sTemp(1), SInt2UInt(Userrec.SpellCasted(x)) & "|" & SInt2UInt(Userrec.SpellValue(x)) & "|" & SInt2UInt(Userrec.SpellRoundsLeft(x)))
+Next x
+sExportText = AutoAppendString(sExportText, "AURAS:" & sTemp(1), vbCrLf)
+
+sExportText = AutoAppendString(sExportText, "RoomNum:" & Userrec.RoomNum, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MapNumber:" & Userrec.MapNumber, vbCrLf)
+sTemp(1) = ""
+For x = 0 To 19
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.LastMap(x) & "|" & Userrec.LastRoom(x))
+Next x
+sExportText = AutoAppendString(sExportText, "ROOMS:" & sTemp(1), vbCrLf)
+
+Clipboard.clear
+Clipboard.SetText sExportText
+
+MsgBox "Data copied to clipboard.", vbOKOnly + vbInformation, "Export User"
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdUserExport_Click")
+Resume out:
+End Sub
+
+Private Sub cmdUserImport_Click()
+On Error GoTo error:
+Dim x As Integer, y As Integer, sSubMatches() As String, sSubValues() As String
+Dim sImportText As String, iMatch As Integer, iSubMatch As Integer, nValue As Long
+Dim tMatches() As RegexMatches, sRegexPattern As String
+Dim nWriteName As Integer, nWriteGang As Integer
+
+sImportText = Trim(Clipboard.GetText)
+If Len(sImportText) = 0 Then Exit Sub
+
+sRegexPattern = "^([^\r\n:]+):([^\r\n]+|)$"
+tMatches() = RegExpFindv2(sImportText, sRegexPattern, False, True, True)
+If UBound(tMatches()) = 0 And Len(tMatches(0).sFullMatch) = 0 Then Exit Sub
+
+If InStr(sImportText, "FirstName") > 0 Or InStr(sImportText, "LastName") > 0 Then
+    nWriteName = MsgBox("Import name? Make sure first name is unique before saving.", vbYesNo + vbQuestion + vbDefaultButton2)
+End If
+
+If InStr(sImportText, "GangName") > 0 Then
+    nWriteGang = MsgBox("Import Gang Name?", vbYesNo + vbQuestion + vbDefaultButton2)
+End If
+
+For iMatch = 0 To UBound(tMatches())
+    If UBound(tMatches(iMatch).sSubMatches()) = 0 Then GoTo skip_match
+    
+    Select Case tMatches(iMatch).sSubMatches(0)
+        Case "FirstName": If nWriteName = vbYes Then txtFirstName.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "LastName": If nWriteName = vbYes Then txtLastName.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Experience": txtExperience.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Level": txtLevel.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Title": txtTitle.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "GangName": If nWriteGang = vbYes Then txtGang.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "SuicidePassword": txtSuicide.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "EvilPoints": txtEvilPoints.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "BroadcastChan": txtBroadcastChan.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MaxHP": txtMaxHP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CurrentHP": txtCurrentHP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MaxMana": txtMaxMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CurrentMana": txtCurrentMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "SpellCasting": txtSpellcasting.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "LivesRemaining": txtLives.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CPRemaining": txtCp.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Perception": txtPerception.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Thievery": txtThievery.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Traps": txtTraps.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Picklocks": txtPicklocks.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Tracking": txtTracking.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MartialArts": txtMartialArts.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MagicRes": txtMagicResistance.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Stealth": txtStealth.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "WeaponHand": txtWeaponNumber.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "RoomNum": txtCurrentRoom.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MapNumber": txtCurrentMap.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CurrentENC": txtCurrentEncum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MaxENC": txtMaxEncum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Runic": txtRunic.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Platinum": txtPlatinum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Gold": txtGold.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Silver": txtSilver.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Copper": txtCopper.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        
+        Case "bEDITED":
+            nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
+            If nValue > 0 Then
+                chkEdited.Value = 1
+            Else
+                chkEdited.Value = 0
+            End If
+            
+        Case "Race":
+            nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
+            If nValue > cmbRaces.ListCount - 1 Then
+                MsgBox "Race not found.", vbOKOnly + vbInformation
+                Call Add2RaceArray(nValue)
+                cmbRaces.clear
+                For x = 0 To UBound(Races)
+                    cmbRaces.AddItem Races(x).Name
+                Next x
+            End If
+            cmbRaces.ListIndex = nValue
+            
+        Case "Class":
+            nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
+            If nValue > cmbClasses.ListCount - 1 Then
+                MsgBox "Class not found.", vbOKOnly + vbInformation
+                Call Add2ClassArray(nValue)
+                cmbClasses.clear
+                For x = 0 To UBound(Classes)
+                    cmbClasses.AddItem Classes(x).Name
+                Next x
+            End If
+            cmbClasses.ListIndex = nValue
+            
+        Case "STATS", "WORN", "SPELLS":
+            sSubMatches() = Split(Trim(tMatches(iMatch).sSubMatches(1)), ",")
+            For x = 0 To UBound(sSubMatches())
+                Select Case tMatches(iMatch).sSubMatches(0)
+                    Case "STATS": txtStat(x).Text = sSubMatches(x)
+                    Case "WORN": txtWornItem(x).Text = sSubMatches(x)
+                    Case "SPELLS": UserSpell(x) = Val(sSubMatches(x))
+                End Select
+            Next x
+            
+        Case "ABILS", "ITEMS", "KEYS", "ROOMS":
+            sSubMatches() = Split(Trim(tMatches(iMatch).sSubMatches(1)), ",")
+            For x = 0 To UBound(sSubMatches())
+                sSubValues() = Split(sSubMatches(x), "|")
+                If UBound(sSubValues()) = 1 Then
+                    Select Case tMatches(iMatch).sSubMatches(0)
+                        Case "ABILS":
+                            txtAbilityA(x).Text = sSubValues(0)
+                            txtAbilityB(x).Text = sSubValues(1)
+                        Case "ITEMS":
+                            UserItem(x) = sSubValues(0)
+                            UserItemUses(x) = sSubValues(1)
+                         Case "KEYS":
+                            UserKey(x) = sSubValues(0)
+                            UserKeyUses(x) = sSubValues(1)
+                        Case "ROOMS":
+                            txtMapTrail(x).Text = sSubValues(0)
+                            txtRoomTrail(x).Text = sSubValues(1)
+                    End Select
+                End If
+            Next x
+        
+        Case "AURAS":
+            sSubMatches() = Split(Trim(tMatches(iMatch).sSubMatches(1)), ",")
+            For x = 0 To UBound(sSubMatches())
+                sSubValues() = Split(sSubMatches(x), "|")
+                If UBound(sSubValues()) = 2 Then
+                    txtSpellNumber(x).Text = sSubValues(0)
+                    txtSpellValue(x).Text = sSubValues(1)
+                    txtSpellRounds(x).Text = sSubValues(2)
+                End If
+            Next x
+        
+    End Select
+    
+skip_match:
+Next iMatch
+
+Call LoadUserItems(True)
+
+MsgBox "Done. Save if happy, discard if not.", vbOKOnly + vbInformation, "Import User"
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdUserImport_Click")
+Resume out:
+End Sub
+
 Private Sub Form_Load()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 bLoaded = False
 
@@ -6319,7 +6601,7 @@ txtSearch.SetFocus
 If ReadINI("Windows", "UserMaxed") = "1" Then Me.WindowState = vbMaximized
 
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume Next
 End Sub
@@ -6327,7 +6609,7 @@ End Sub
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Private Sub LoadUsers()
-On Error GoTo Error:
+On Error GoTo error:
 Dim oLI As ListItem, x As Integer
 Dim nStatus As Integer
 
@@ -6379,7 +6661,7 @@ lvDatabase.refresh
 Set oLI = Nothing
 
 Exit Sub
-Error:
+error:
 Call HandleError("LoadUsers")
 Set oLI = Nothing
 
@@ -6387,7 +6669,7 @@ End Sub
 Private Sub AddUser2LV(lv As ListView)
 Dim oLI As ListItem
     
-On Error GoTo Error:
+On Error GoTo error:
 
     Set oLI = lv.ListItems.add()
     oLI.Text = ClipNull(Userrec.FirstName, Len(Userrec.FirstName))
@@ -6405,7 +6687,7 @@ On Error GoTo Error:
 Set oLI = Nothing
 
 Exit Sub
-Error:
+error:
 Call HandleError("AddUser2LV")
 End Sub
 
@@ -6415,7 +6697,7 @@ End Sub
 Private Sub cmdClearAllItem_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 99
     UserItem(x) = 0
@@ -6425,13 +6707,13 @@ Next
 Call LoadUserItems(True)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdClearAllKey_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 49
     UserKey(x) = 0
@@ -6441,14 +6723,14 @@ Next
 Call LoadUserItems(True)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdClearAllSpell_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 99
     UserSpell(x) = 0
@@ -6457,14 +6739,14 @@ Next
 Call LoadUserItems(True)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdClearSpellsCasted_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 9
     txtSpellNumber(x).Text = 0
@@ -6474,14 +6756,14 @@ For x = 0 To 9
 Next
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdClearWorn_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 txtWeaponNumber.Text = 0
 
@@ -6491,13 +6773,13 @@ Next
 
 
 Exit Sub
-Error:
+error:
 Call HandleError
 
 End Sub
 
 Private Sub cmdCopy_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, nStatus As Integer, BBSName As String, FirstName As String, temp As String
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
@@ -6569,14 +6851,14 @@ End If
 Form_Load
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdDiscard_Click()
 Dim nStatus As Integer, BBSName As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If lvDatabase.ListItems.Count = 0 Then Exit Sub
 
@@ -6593,7 +6875,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -6639,37 +6921,37 @@ End If
 End Sub
 
 Private Sub lstItems_DblClick()
-On Error GoTo Error:
+On Error GoTo error:
 
 cmdEditItem_Click
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lstKeys_DblClick()
-On Error GoTo Error:
+On Error GoTo error:
 
 cmdEditKey_Click
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lstSpells_DblClick()
-On Error GoTo Error:
+On Error GoTo error:
 
 cmdEditSpell_Click
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lvDatabase_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-On Error GoTo Error:
+On Error GoTo error:
 
 Dim nSort As ListDataType
 Select Case ColumnHeader.Index
@@ -6679,7 +6961,7 @@ End Select
 SortListView lvDatabase, ColumnHeader.Index, nSort, lvDatabase.SortOrder
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -6711,7 +6993,7 @@ End Sub
 Public Sub lvDatabase_ItemClick(ByVal Item As MSComctlLib.ListItem)
 Dim nStatus As Integer, BBSName As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bLoaded = True And chkAutoSave.Value = 1 Then saverecord (sCurrentRecord)
 
@@ -6730,12 +7012,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub DispUserInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, counter As Integer, temp As String
 
 Me.MousePointer = 11
@@ -6853,7 +7135,7 @@ Call LoadUserItems(False)
 'bDontSetup = False
 Me.MousePointer = 0
 Exit Sub
-Error:
+error:
 Me.MousePointer = 0
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
@@ -6893,7 +7175,7 @@ End Sub
 
 Private Sub txtCurrentMap_Change()
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtCurrentMap.Text) > 0 And Val(txtCurrentRoom.Text) > 0 Then
     txtCurrRoomDisp.Text = GetRoomName(Val(txtCurrentMap.Text), _
@@ -6904,7 +7186,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtCurrentMap_Change")
 Resume out:
 
@@ -7015,7 +7297,7 @@ Call SelectAll(txtLives)
 End Sub
 
 Private Sub txtMapTrail_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtMapTrail(Index)) > 0 And Val(txtRoomTrail(Index)) > 0 _
     And chkNoRoomNames.Value = 0 Then
@@ -7027,7 +7309,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtMapTrail_Change")
 Resume out:
 End Sub
@@ -7048,7 +7330,7 @@ Call SelectAll(txtPlatinum)
 End Sub
 
 Private Sub txtRoomTrail_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtMapTrail(Index)) > 0 And Val(txtRoomTrail(Index)) > 0 _
     And chkNoRoomNames.Value = 0 Then
@@ -7060,7 +7342,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtRoomTrail_Change")
 Resume out:
 End Sub
@@ -7083,7 +7365,7 @@ End Sub
 Private Sub txtSearch_KeyUp(KeyCode As Integer, Shift As Integer)
 Dim i As Long, SearchStart As Long, SearchAgain As Boolean, SelectText As String, temp As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If KeyCode = vbKeyUp Then Exit Sub
 If KeyCode = vbKeyLeft Then Exit Sub
@@ -7126,12 +7408,12 @@ For i = SearchStart To lvDatabase.ListItems.Count
 Next
 
 Exit Sub
-Error:
+error:
 Call HandleError
 
 End Sub
 Private Sub cmdEditItem_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim ItemNum As Long, ItemUses As Integer, temp As String, nTmp As Integer
 
 temp = InputBox("Enter new Item Number (0 for none)", "Changing inventory item #" & lstItems.ListIndex, UserItem(lstItems.ListIndex))
@@ -7152,11 +7434,11 @@ Call LoadUserItems(True)
 lstItems.ListIndex = nTmp
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub LoadUserItems(RefreshOnly As Boolean)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 If RefreshOnly Then GoTo refresh:
@@ -7199,12 +7481,12 @@ lstSpells.ListIndex = 0
 lstKeys.ListIndex = 0
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditKey_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim KeyNum As Long, KeyUses As Integer, temp As String, nTmp As Integer
 
 temp = InputBox("Enter new Key number (0 for none)", "Changing inventory Key #" & lstKeys.ListIndex, UserKey(lstKeys.ListIndex))
@@ -7224,11 +7506,11 @@ Call LoadUserItems(True)
 
 lstKeys.ListIndex = nTmp
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdEditSpell_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim SpellNum As Integer, temp As String, nTmp As Integer
 
 temp = InputBox("Enter new Spell number (0 for none)", "Changing spellbook #" & lstSpells.ListIndex, UserSpell(lstSpells.ListIndex))
@@ -7243,12 +7525,12 @@ Call LoadUserItems(True)
 
 lstSpells.ListIndex = nTmp
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub saverecord(ByVal sRecord As String)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, nStatus As Integer
 
 nStatus = BTRCALL(BGETEQUAL, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal sRecord, KEY_BUF_LEN, 0)
@@ -7269,25 +7551,25 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdSave_Click()
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 Call saverecord(sCurrentRecord)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdDelete_Click()
 Dim nStatus As Integer
 Dim nDelete As Integer, BBSName As String, temp As Long
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 
@@ -7328,11 +7610,11 @@ End If
 
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub FormValuesToRecord()
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 'Userrec.Bitmask1 = Val(Text4.Text)
@@ -7425,86 +7707,86 @@ For x = 0 To 49
 Next
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdEditCurrentRoom_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmRoom.GotoRoom(Val(txtCurrentMap.Text), Val(txtCurrentRoom.Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditSpellCasted_Click(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmSpell.GotoSpell(Val(txtSpellNumber(Index).Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditWeapon_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(Val(txtWeaponNumber.Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditWornItem_Click(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(Val(txtWornItem(Index).Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdGotoRoom_Click(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmRoom.GotoRoom(Val(txtMapTrail(Index).Text), Val(txtRoomTrail(Index).Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdItemEditor_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(UserItem(lstItems.ListIndex))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdItemEditorKey_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(UserKey(lstKeys.ListIndex))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdSpellEditor_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmSpell.GotoSpell(UserSpell(lstSpells.ListIndex))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -7514,13 +7796,13 @@ Call SelectAll(txtSilver)
 End Sub
 
 Private Sub txtSpellNumber_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 txtSpellName(Index).Text = GetSpellName(Val(txtSpellNumber(Index).Text))
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtSpellNumber_Change")
 Resume out:
 End Sub
@@ -7551,13 +7833,13 @@ Call SelectAll(txtTitle)
 End Sub
 
 Private Sub txtWeaponNumber_Change()
-On Error GoTo Error:
+On Error GoTo error:
 
 txtWeaponName.Text = GetItemName(Val(txtWeaponNumber.Text))
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtWeaponNumber_Change")
 Resume out:
 End Sub
@@ -7568,13 +7850,13 @@ Call SelectAll(txtWeaponNumber)
 End Sub
 
 Private Sub txtWornItem_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 txtWornItemName(Index).Text = GetItemName(Val(txtWornItem(Index).Text))
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtWornItem_Change")
 Resume out:
 End Sub

@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmDatabaseExport 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Exporter"
@@ -4967,7 +4967,7 @@ Exit Function
 error:
 Call HandleError("CalcTotalRecords")
 End Function
-Private Sub IncreaseProgressBar()
+Private Sub IncreaseProgressBar(Optional ByVal sStatus2 As String)
 On Error Resume Next
 'If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
 

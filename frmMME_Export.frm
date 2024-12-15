@@ -1347,23 +1347,20 @@ If bUpdateExistingADB Then
     End If
 End If
 
-MaxValue = CalcTotalRecords '* 5
-nScale = 0
-x = 2
-Do While MaxValue > MaxInt
-    If MaxValue / x < MaxInt Then
-        nScale = x
-        MaxValue = MaxInt - 1
-    Else
-        x = x + 2
-    End If
+MaxValue = CalcTotalRecords
+
+nScale = 1
+Do While (nScale < 100 And (MaxValue / nScale) > 100) Or (MaxValue / nScale) > MaxInt
+    nScale = nScale + 1
 Loop
+MaxValue = Fix((MaxValue / nScale))
 
 nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
 ProgressBar.Max = MaxValue
 ProgressBar.Visible = True
+nProgressInterval = nScale
 
 Erase MonGroup()
 Erase MonsterInGame()

@@ -865,29 +865,13 @@ Dim fso As FileSystemObject
 Private Sub SetRange(ByVal MaxValue As Double)
 Dim nNewMax As Integer
 
-nScale = 0
+nScale = 1
 
-If MaxValue > MaxInt Then
-    If MaxValue / 2 < MaxInt Then
-        nScale = 2
-        nNewMax = MaxValue / 2
-    ElseIf MaxValue / 4 < MaxInt Then
-        nScale = 4
-        nNewMax = MaxValue / 4
-    ElseIf MaxValue / 8 < MaxInt Then
-        nScale = 8
-        nNewMax = MaxValue / 8
-    ElseIf MaxValue / 10 < MaxInt Then
-        nScale = 10
-        nNewMax = MaxValue / 10
-    Else
-        MaxValue = MaxInt
-    End If
-Else
-    nNewMax = MaxValue
-End If
+Do While (nScale < 100 And (MaxValue / nScale) > 100) Or (MaxValue / nScale) > MaxInt
+    nScale = nScale + 1
+Loop
 
-nNewMax = Fix(nNewMax)
+nNewMax = (MaxValue / nScale)
 
 nScaleCount = 1
 ProgressBar.Value = 0
@@ -1471,6 +1455,7 @@ Dim recnum As Long, x As Integer, ExistingRecord As Boolean, sOriginal As String
 sPattern = "[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]"
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "text2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabTextblocks.RecordCount = 0 Then Exit Sub
 tabTextblocks.MoveFirst
@@ -1508,8 +1493,8 @@ part_check:
     End If
     
     recnum = tabTextblocks.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     TextblockKey.PartNum = tabTextblocks.Fields("Part #")
     TextblockKey.Number = tabTextblocks.Fields("Number")
@@ -1628,6 +1613,7 @@ Dim ExistingRecord As Boolean, sOriginal As String, sNew As String, sPattern As 
 sPattern = "[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]"
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "msg2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabMessages.RecordCount = 0 Then Exit Sub
 tabMessages.MoveFirst
@@ -1642,8 +1628,8 @@ End If
 Do While tabMessages.EOF = False And bStopImport = False
     
     recnum = tabMessages.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabMessages.Fields("Number")
 
@@ -1752,6 +1738,7 @@ Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "item2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabItems.RecordCount = 0 Then Exit Sub
 tabItems.MoveFirst
@@ -1766,8 +1753,8 @@ End If
 Do While tabItems.EOF = False And bStopImport = False
     
     recnum = tabItems.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabItems.Fields("Number")
     
@@ -1914,6 +1901,7 @@ Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "mp002.dat"
+stsStatusBar.Panels(2).Text = 0
 
 recnum = 0
 If tabRooms.RecordCount = 0 Then Exit Sub
@@ -1929,8 +1917,8 @@ End If
 Do While tabRooms.EOF = False And bStopImport = False
     
     recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     RoomKeyStruct.MapNum = tabRooms.Fields("Map Number")
     RoomKeyStruct.RoomNum = tabRooms.Fields("Room Number")
@@ -2108,6 +2096,7 @@ Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "spel2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabSpells.RecordCount = 0 Then Exit Sub
 tabSpells.MoveFirst
@@ -2122,8 +2111,8 @@ End If
 Do While tabSpells.EOF = False And bStopImport = False
     
     recnum = tabSpells.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabSpells.Fields("Number")
     
@@ -2252,6 +2241,7 @@ Dim nStatus As Integer, recnum As Long, x As Long, ActionName As String * 30
 Dim ExistingRecord As Boolean
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "acts2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabActions.RecordCount = 0 Then Exit Sub
 tabActions.MoveFirst
@@ -2263,8 +2253,8 @@ recnum = 0
 Do While tabActions.EOF = False And bStopImport = False
     
     recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     ActionName = tabActions.Fields("Action") & Chr(0)
     
@@ -2354,7 +2344,8 @@ Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "clas2.dat"
-    
+stsStatusBar.Panels(2).Text = 0
+
 If tabClasses.RecordCount = 0 Then Exit Sub
 tabClasses.MoveFirst
 ts.WriteBlankLines (2)
@@ -2368,8 +2359,8 @@ End If
 Do While tabClasses.EOF = False And bStopImport = False
     
     recnum = tabClasses.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabClasses.Fields("Number")
     
@@ -2473,6 +2464,7 @@ Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "race2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabRaces.RecordCount = 0 Then Exit Sub
 tabRaces.MoveFirst
@@ -2487,8 +2479,8 @@ End If
 Do While tabRaces.EOF = False And bStopImport = False
     
     recnum = tabRaces.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabRaces.Fields("Number")
 
@@ -2604,6 +2596,7 @@ Dim nStatus As Integer, recnum As Long, x As Long
 Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "shop2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabShops.RecordCount = 0 Then Exit Sub
 tabShops.MoveFirst
@@ -2618,8 +2611,8 @@ End If
 Do While tabShops.EOF = False And bStopImport = False
     
     recnum = tabShops.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabShops.Fields("Number")
     
@@ -2758,6 +2751,7 @@ Dim nStatus As Integer, recnum As Long, x As Long, test As Boolean, nYesNo As In
 Dim ExistingRecord As Boolean, sOriginal As String
 
 stsStatusBar.Panels(1).Text = "w" & strDatCallLetters & "knms2.dat"
+stsStatusBar.Panels(2).Text = 0
 
 If tabMonsters.RecordCount = 0 Then Exit Sub
 tabMonsters.MoveFirst
@@ -2788,8 +2782,8 @@ End If
 Do While tabMonsters.EOF = False And bStopImport = False
     
     recnum = tabMonsters.Fields("Number")
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    'stsStatusBar.Panels(2).Text = recnum
+    IncreaseProgressBar recnum
     
     x = tabMonsters.Fields("Number")
 
@@ -3130,19 +3124,21 @@ Call HandleError
 'Set tabTemp = Nothing
 'Set adoConnect = Nothing
 End Function
-Private Sub IncreaseProgressBar()
+Private Sub IncreaseProgressBar(Optional ByVal sStatus2 As String)
 On Error Resume Next
 'If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
 
 If nScale > 0 Then
     If nScaleCount = nScale Then
         If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
+        If Len(sStatus2) > 0 Then stsStatusBar.Panels(2).Text = sStatus2
         nScaleCount = 1
     Else
         nScaleCount = nScaleCount + 1
     End If
 Else
     If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
+    If Len(sStatus2) > 0 Then stsStatusBar.Panels(2).Text = sStatus2
 End If
 
 End Sub

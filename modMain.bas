@@ -2706,7 +2706,7 @@ frmProgressBar.cmdCancel.Enabled = True
 
 Call frmProgressBar.SetRange(nMaxRooms)
 
-frmProgressBar.lblNote.Visible = False
+'frmProgressBar.lblNote.Visible = False
 frmProgressBar.lblPanel(0).Caption = ""
 frmProgressBar.lblPanel(1).Caption = ""
 frmProgressBar.Show
@@ -3119,7 +3119,7 @@ Cleanup:
 End Function
 
 Function RegExpFindv2(LookIn As String, PatternStr As String, _
-    Optional MatchCase As Boolean = True, Optional MultiLine As Boolean = False) As RegexMatches()
+    Optional MatchCase As Boolean = True, Optional MultiLine As Boolean = False, Optional bAllowEmptySubMatches As Boolean = False) As RegexMatches()
     'tTest() = RegExpFindv2("[3][2][1]Group(lair): 6/789", "(?:^|,)\[?(\d+)?\]?\[?(\d+)?\]?\[?(\d+)?\]?Group\(lair\): (\d+)\/(\d+)")
     'If UBound(tTest()) = 0 And tTest(0).sFullMatch = "" Then
     '    Debug.Print "no match"
@@ -3139,7 +3139,7 @@ Function RegExpFindv2(LookIn As String, PatternStr As String, _
     Static RegX As Object
     Dim TheMatches As Object
     Dim Answer() As RegexMatches
-    Dim counter As Long, SubCounter As Long, i As Integer
+    Dim counter As Long, SubCounter As Long, i As Integer, nCheck As Integer
     ReDim RegExpFindv2(0)
     
     ' Create instance of RegExp object if needed, and set properties
@@ -3166,8 +3166,10 @@ Function RegExpFindv2(LookIn As String, PatternStr As String, _
             ReDim Answer(counter).sSubMatches(0)
             If TheMatches(counter).Submatches.Count > 0 Then
                 SubCounter = 0
+                nCheck = 0
+                If bAllowEmptySubMatches Then nCheck = -1
                 For i = 0 To TheMatches(counter).Submatches.Count - 1
-                    If Len(TheMatches(counter).Submatches.Item(i)) > 0 Then
+                    If Len(TheMatches(counter).Submatches.Item(i)) > nCheck Then
                         If SubCounter > 0 Then ReDim Preserve Answer(counter).sSubMatches(SubCounter)
                         Answer(counter).sSubMatches(SubCounter) = TheMatches(counter).Submatches.Item(i)
                         SubCounter = SubCounter + 1
@@ -3207,6 +3209,23 @@ On Error Resume Next
 Exit Function
 error:
 Call HandleError("EscapeRegexPattern")
+Resume out:
+End Function
+
+Public Function AutoAppendString(ByVal sFullString As String, ByVal sAppendString As String, Optional ByVal sGlue As String = ",") As String
+On Error GoTo error:
+
+If sFullString = "" Then
+    AutoAppendString = sAppendString
+Else
+    AutoAppendString = sFullString & sGlue & sAppendString
+End If
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("AutoAppendString")
 Resume out:
 End Function
 
