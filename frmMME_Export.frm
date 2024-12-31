@@ -2590,7 +2590,7 @@ If Not tabTempRS.EOF Then
             nMobScriptValue = Round(nMobScriptValue / nLairs)
             
             nPossy = Round(nMobsTotal / nLairs, 1) 'average number of monsters per lair
-            nMaxLairsPerHour = 75 'max 1-mob lairs you can clear in an hour before the first lair starts to regen (4-seconds per kill, average at 5 minutes for regen)
+            nMaxLairsPerHour = 45 'average max lairs you could clear before things start to regen anyway (4-seconds per kill, average 3 minutes for regen)
             If nPossy > 1 Then nMaxLairsPerHour = (nMaxLairsPerHour / nPossy) + 1
             If nLairs < nMaxLairsPerHour Then
                 nLairPCT = Round(nLairs / nMaxLairsPerHour, 2)

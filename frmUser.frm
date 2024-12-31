@@ -48,11 +48,12 @@ Begin VB.Form frmUser
          _ExtentY        =   8705
          _Version        =   393216
          Tabs            =   7
+         Tab             =   5
          TabsPerRow      =   7
          TabHeight       =   520
          TabCaption(0)   =   "Stats"
          TabPicture(0)   =   "frmUser.frx":08CA
-         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).ControlEnabled=   0   'False
          Tab(0).Control(0)=   "frameGeneral"
          Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "Frame7"
@@ -67,8 +68,8 @@ Begin VB.Form frmUser
          TabCaption(1)   =   "Inven."
          TabPicture(1)   =   "frmUser.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "frmItems"
-         Tab(1).Control(1)=   "frmKeys"
+         Tab(1).Control(0)=   "frmKeys"
+         Tab(1).Control(1)=   "frmItems"
          Tab(1).ControlCount=   2
          TabCaption(2)   =   "Spellbk."
          TabPicture(2)   =   "frmUser.frx":0902
@@ -78,23 +79,23 @@ Begin VB.Form frmUser
          TabCaption(3)   =   "Abilities"
          TabPicture(3)   =   "frmUser.frx":091E
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "SSTab2"
-         Tab(3).Control(1)=   "cmdAbilsClear"
+         Tab(3).Control(0)=   "cmdAbilsClear"
+         Tab(3).Control(1)=   "SSTab2"
          Tab(3).ControlCount=   2
          TabCaption(4)   =   "Rooms"
          TabPicture(4)   =   "frmUser.frx":093A
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "Label74"
-         Tab(4).Control(1)=   "txtCurrentMap"
-         Tab(4).Control(2)=   "txtCurrentRoom"
-         Tab(4).Control(3)=   "frmMapTrail"
-         Tab(4).Control(4)=   "cmdEditCurrentRoom"
-         Tab(4).Control(5)=   "txtCurrRoomDisp"
-         Tab(4).Control(5).Enabled=   0   'False
+         Tab(4).Control(0)=   "txtCurrRoomDisp"
+         Tab(4).Control(0).Enabled=   0   'False
+         Tab(4).Control(1)=   "cmdEditCurrentRoom"
+         Tab(4).Control(2)=   "frmMapTrail"
+         Tab(4).Control(3)=   "txtCurrentRoom"
+         Tab(4).Control(4)=   "txtCurrentMap"
+         Tab(4).Control(5)=   "Label74"
          Tab(4).ControlCount=   6
          TabCaption(5)   =   "Worn"
          TabPicture(5)   =   "frmUser.frx":0956
-         Tab(5).ControlEnabled=   0   'False
+         Tab(5).ControlEnabled=   -1  'True
          Tab(5).Control(0)=   "Label75"
          Tab(5).Control(0).Enabled=   0   'False
          Tab(5).Control(1)=   "txtWeaponNumber"
@@ -113,32 +114,32 @@ Begin VB.Form frmUser
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
          Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "chkEdited"
-         Tab(6).Control(1)=   "Frame4"
-         Tab(6).Control(2)=   "txtTitle"
-         Tab(6).Control(3)=   "txtCurrentEncum"
-         Tab(6).Control(4)=   "txtMaxEncum"
-         Tab(6).Control(5)=   "txtEvilPoints"
-         Tab(6).Control(6)=   "txtBroadcastChan"
-         Tab(6).Control(7)=   "txtCopper"
-         Tab(6).Control(8)=   "txtSilver"
-         Tab(6).Control(9)=   "txtGold"
-         Tab(6).Control(10)=   "txtPlatinum"
-         Tab(6).Control(11)=   "txtRunic"
-         Tab(6).Control(12)=   "txtGang"
-         Tab(6).Control(13)=   "txtSuicide"
-         Tab(6).Control(14)=   "Label76(11)"
-         Tab(6).Control(15)=   "Label76(10)"
-         Tab(6).Control(16)=   "Label76(9)"
-         Tab(6).Control(17)=   "Label76(8)"
-         Tab(6).Control(18)=   "Label76(7)"
-         Tab(6).Control(19)=   "Label76(6)"
-         Tab(6).Control(20)=   "Label76(5)"
-         Tab(6).Control(21)=   "Label76(4)"
-         Tab(6).Control(22)=   "Label76(3)"
-         Tab(6).Control(23)=   "Label76(2)"
-         Tab(6).Control(24)=   "Label76(1)"
-         Tab(6).Control(25)=   "Label76(0)"
+         Tab(6).Control(0)=   "Label76(0)"
+         Tab(6).Control(1)=   "Label76(1)"
+         Tab(6).Control(2)=   "Label76(2)"
+         Tab(6).Control(3)=   "Label76(3)"
+         Tab(6).Control(4)=   "Label76(4)"
+         Tab(6).Control(5)=   "Label76(5)"
+         Tab(6).Control(6)=   "Label76(6)"
+         Tab(6).Control(7)=   "Label76(7)"
+         Tab(6).Control(8)=   "Label76(8)"
+         Tab(6).Control(9)=   "Label76(9)"
+         Tab(6).Control(10)=   "Label76(10)"
+         Tab(6).Control(11)=   "Label76(11)"
+         Tab(6).Control(12)=   "txtSuicide"
+         Tab(6).Control(13)=   "txtGang"
+         Tab(6).Control(14)=   "txtRunic"
+         Tab(6).Control(15)=   "txtPlatinum"
+         Tab(6).Control(16)=   "txtGold"
+         Tab(6).Control(17)=   "txtSilver"
+         Tab(6).Control(18)=   "txtCopper"
+         Tab(6).Control(19)=   "txtBroadcastChan"
+         Tab(6).Control(20)=   "txtEvilPoints"
+         Tab(6).Control(21)=   "txtMaxEncum"
+         Tab(6).Control(22)=   "txtCurrentEncum"
+         Tab(6).Control(23)=   "txtTitle"
+         Tab(6).Control(24)=   "Frame4"
+         Tab(6).Control(25)=   "chkEdited"
          Tab(6).ControlCount=   26
          Begin VB.CommandButton cmdCalcExp 
             Caption         =   "Calc E&xperience"
@@ -152,7 +153,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   3660
+            Left            =   -71340
             TabIndex        =   471
             Top             =   720
             Width           =   2595
@@ -177,7 +178,7 @@ Begin VB.Form frmUser
          Begin VB.CommandButton cmdPasteStatQ 
             Caption         =   "?"
             Height          =   315
-            Left            =   6360
+            Left            =   -68640
             TabIndex        =   469
             Top             =   420
             Width           =   315
@@ -213,7 +214,7 @@ Begin VB.Form frmUser
             Caption         =   "&Paste Items/Keys/Worn/$$"
             Height          =   315
             Index           =   2
-            Left            =   -74580
+            Left            =   420
             TabIndex        =   300
             Top             =   480
             Width           =   2415
@@ -230,7 +231,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   3660
+            Left            =   -71340
             TabIndex        =   13
             Top             =   420
             Width           =   2595
@@ -826,7 +827,7 @@ Begin VB.Form frmUser
          End
          Begin VB.CommandButton cmdEditWeapon 
             Height          =   195
-            Left            =   -74580
+            Left            =   420
             TabIndex        =   301
             Top             =   1200
             Width           =   195
@@ -834,7 +835,7 @@ Begin VB.Form frmUser
          Begin VB.CommandButton cmdClearWorn 
             Caption         =   "Clear All"
             Height          =   315
-            Left            =   -70260
+            Left            =   4740
             TabIndex        =   305
             Top             =   1140
             Width           =   1515
@@ -842,7 +843,7 @@ Begin VB.Form frmUser
          Begin VB.Frame Frame5 
             Caption         =   "Worn on Body"
             Height          =   2895
-            Left            =   -74640
+            Left            =   360
             TabIndex        =   306
             Top             =   1680
             Width           =   6135
@@ -1390,7 +1391,7 @@ Begin VB.Form frmUser
          Begin VB.TextBox txtWeaponName 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   -72660
+            Left            =   2340
             Locked          =   -1  'True
             TabIndex        =   304
             TabStop         =   0   'False
@@ -1399,7 +1400,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtWeaponNumber 
             Height          =   285
-            Left            =   -73380
+            Left            =   1620
             TabIndex        =   303
             Top             =   1140
             Width           =   735
@@ -2612,7 +2613,7 @@ Begin VB.Form frmUser
          Begin VB.Frame Frame7 
             Caption         =   "BBS Name"
             Height          =   645
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   10
             Top             =   360
             Width           =   3375
@@ -2643,7 +2644,7 @@ Begin VB.Form frmUser
             EndProperty
             ForeColor       =   &H0000FF00&
             Height          =   3735
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   12
             Top             =   1080
             Width           =   6615
@@ -5344,7 +5345,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   195
-            Left            =   -74280
+            Left            =   720
             TabIndex        =   302
             Top             =   1200
             Width           =   780
@@ -5718,7 +5719,7 @@ If x > 0 Then
     x = x + 1
     
     If x <= Len(sSearch) Then
-        txtCP.Text = GetNextNumbers(x, sSearch)
+        txtCp.Text = GetNextNumbers(x, sSearch)
     End If
 End If
 
@@ -6455,7 +6456,7 @@ For iMatch = 0 To UBound(tMatches())
         Case "CurrentMana": txtCurrentMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "SpellCasting": txtSpellcasting.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "LivesRemaining": txtLives.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "CPRemaining": txtCP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CPRemaining": txtCp.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Perception": txtPerception.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Thievery": txtThievery.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Traps": txtTraps.Text = Trim(tMatches(iMatch).sSubMatches(1))
@@ -7089,7 +7090,7 @@ txtMaxMana.Text = Userrec.MaxMana
 txtCurrentMana.Text = Userrec.CurrentMana
 txtSpellcasting.Text = Userrec.SpellCasting
 txtLives.Text = Userrec.LivesRemaining
-txtCP.Text = Userrec.CPRemaining
+txtCp.Text = Userrec.CPRemaining
 txtPerception.Text = Userrec.Perception
 txtStealth.Text = Userrec.Stealth
 txtThievery.Text = Userrec.Thievery
@@ -7170,7 +7171,7 @@ Call SelectAll(txtCopper)
 End Sub
 
 Private Sub txtCP_GotFocus()
-Call SelectAll(txtCP)
+Call SelectAll(txtCp)
 
 End Sub
 
@@ -7648,7 +7649,7 @@ Userrec.MaxMana = Val(txtMaxMana.Text)
 Userrec.CurrentMana = Val(txtCurrentMana.Text)
 Userrec.SpellCasting = Val(txtSpellcasting.Text)
 Userrec.LivesRemaining = Val(txtLives.Text)
-Userrec.CPRemaining = Val(txtCP.Text)
+Userrec.CPRemaining = Val(txtCp.Text)
 Userrec.Perception = Val(txtPerception.Text)
 Userrec.Stealth = Val(txtStealth.Text)
 Userrec.Thievery = Val(txtThievery.Text)
