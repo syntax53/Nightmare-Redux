@@ -1,4 +1,4 @@
-frmUser = 78, 78, 1876, 823, , 52, 52, 1608, 898, C
+frmUser = 78, 78, 1876, 823, C, 52, 52, 1608, 898, C
 frmMain = 78, 78, 1005, 574, C, 26, 26, 1582, 872, C
 frmClass = 78, 78, 1943, 871, C, 104, 104, 1660, 950, C
 frmSpell = 0, 0, 0, 0, C, 130, 130, 1686, 976, C
@@ -37,7 +37,7 @@ modWin32Ver = 26, 26, 1798, 810, C
 modSelectDir = 0, 0, 0, 0, C
 frmDatabaseMerge = 0, 0, 0, 0, C, 364, 364, 1920, 1210, C
 frmHelpChangeLog = 0, 0, 0, 0, C, -364, 157, 1192, 1003, C
-frmMME_Export = 52, 52, 1608, 836, Z, 235, 65, 1791, 911, C
+frmMME_Export = 52, 52, 1608, 836, C, 235, 65, 1791, 911, C
 frmDatabaseExport = 156, 156, 1995, 940, C, 0, 0, 1556, 846, C
 frmHelpTextblocks = 0, 0, 0, 0, C, 26, 26, 1582, 872, C
 frmRecordChange = 312, 312, 2110, 1057, C, 52, 52, 1608, 898, C

@@ -48,12 +48,11 @@ Begin VB.Form frmUser
          _ExtentY        =   8705
          _Version        =   393216
          Tabs            =   7
-         Tab             =   5
          TabsPerRow      =   7
          TabHeight       =   520
          TabCaption(0)   =   "Stats"
          TabPicture(0)   =   "frmUser.frx":08CA
-         Tab(0).ControlEnabled=   0   'False
+         Tab(0).ControlEnabled=   -1  'True
          Tab(0).Control(0)=   "frameGeneral"
          Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "Frame7"
@@ -95,21 +94,15 @@ Begin VB.Form frmUser
          Tab(4).ControlCount=   6
          TabCaption(5)   =   "Worn"
          TabPicture(5)   =   "frmUser.frx":0956
-         Tab(5).ControlEnabled=   -1  'True
-         Tab(5).Control(0)=   "Label75"
-         Tab(5).Control(0).Enabled=   0   'False
-         Tab(5).Control(1)=   "txtWeaponNumber"
-         Tab(5).Control(1).Enabled=   0   'False
-         Tab(5).Control(2)=   "txtWeaponName"
-         Tab(5).Control(2).Enabled=   0   'False
+         Tab(5).ControlEnabled=   0   'False
+         Tab(5).Control(0)=   "cmdPasteItems(2)"
+         Tab(5).Control(1)=   "cmdEditWeapon"
+         Tab(5).Control(2)=   "cmdClearWorn"
          Tab(5).Control(3)=   "Frame5"
-         Tab(5).Control(3).Enabled=   0   'False
-         Tab(5).Control(4)=   "cmdClearWorn"
+         Tab(5).Control(4)=   "txtWeaponName"
          Tab(5).Control(4).Enabled=   0   'False
-         Tab(5).Control(5)=   "cmdEditWeapon"
-         Tab(5).Control(5).Enabled=   0   'False
-         Tab(5).Control(6)=   "cmdPasteItems(2)"
-         Tab(5).Control(6).Enabled=   0   'False
+         Tab(5).Control(5)=   "txtWeaponNumber"
+         Tab(5).Control(6)=   "Label75"
          Tab(5).ControlCount=   7
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
@@ -153,7 +146,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   -71340
+            Left            =   3660
             TabIndex        =   471
             Top             =   720
             Width           =   2595
@@ -178,7 +171,7 @@ Begin VB.Form frmUser
          Begin VB.CommandButton cmdPasteStatQ 
             Caption         =   "?"
             Height          =   315
-            Left            =   -68640
+            Left            =   6360
             TabIndex        =   469
             Top             =   420
             Width           =   315
@@ -214,7 +207,7 @@ Begin VB.Form frmUser
             Caption         =   "&Paste Items/Keys/Worn/$$"
             Height          =   315
             Index           =   2
-            Left            =   420
+            Left            =   -74580
             TabIndex        =   300
             Top             =   480
             Width           =   2415
@@ -231,7 +224,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   315
-            Left            =   -71340
+            Left            =   3660
             TabIndex        =   13
             Top             =   420
             Width           =   2595
@@ -827,7 +820,7 @@ Begin VB.Form frmUser
          End
          Begin VB.CommandButton cmdEditWeapon 
             Height          =   195
-            Left            =   420
+            Left            =   -74580
             TabIndex        =   301
             Top             =   1200
             Width           =   195
@@ -835,7 +828,7 @@ Begin VB.Form frmUser
          Begin VB.CommandButton cmdClearWorn 
             Caption         =   "Clear All"
             Height          =   315
-            Left            =   4740
+            Left            =   -70260
             TabIndex        =   305
             Top             =   1140
             Width           =   1515
@@ -843,7 +836,7 @@ Begin VB.Form frmUser
          Begin VB.Frame Frame5 
             Caption         =   "Worn on Body"
             Height          =   2895
-            Left            =   360
+            Left            =   -74640
             TabIndex        =   306
             Top             =   1680
             Width           =   6135
@@ -1391,7 +1384,7 @@ Begin VB.Form frmUser
          Begin VB.TextBox txtWeaponName 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   2340
+            Left            =   -72660
             Locked          =   -1  'True
             TabIndex        =   304
             TabStop         =   0   'False
@@ -1400,7 +1393,7 @@ Begin VB.Form frmUser
          End
          Begin VB.TextBox txtWeaponNumber 
             Height          =   285
-            Left            =   1620
+            Left            =   -73380
             TabIndex        =   303
             Top             =   1140
             Width           =   735
@@ -2613,7 +2606,7 @@ Begin VB.Form frmUser
          Begin VB.Frame Frame7 
             Caption         =   "BBS Name"
             Height          =   645
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   10
             Top             =   360
             Width           =   3375
@@ -2644,7 +2637,7 @@ Begin VB.Form frmUser
             EndProperty
             ForeColor       =   &H0000FF00&
             Height          =   3735
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   12
             Top             =   1080
             Width           =   6615
@@ -5345,7 +5338,7 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             Height          =   195
-            Left            =   720
+            Left            =   -74280
             TabIndex        =   302
             Top             =   1200
             Width           =   780
