@@ -2510,7 +2510,7 @@ End Sub
 Private Sub CalculateScriptValue()
 On Error GoTo error:
 Dim sRegexLairPattern As String, tMatches() As RegexMatches, sRoomKey As String, sGroupIndex As String
-Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Integer, tLairInfo As LairInfoType
+Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Currency, tLairInfo As LairInfoType
 Dim nLairMobDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
 Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer, nAvgLairExp As Currency
 Dim iLair As Long, iMonster As Integer, arrMonsters() As String, tMonsterStats As MonsterStats
@@ -2591,7 +2591,7 @@ If Not tabTempRS.EOF Then
             
             nPossy = Round(nMobsTotal / nLairs, 1) 'average number of monsters per lair
             nMaxLairsPerHour = 45 'average max lairs you could clear before things start to regen anyway (4-seconds per kill, average 3 minutes for regen)
-            If nPossy > 1 Then nMaxLairsPerHour = (nMaxLairsPerHour / nPossy) + 1
+            If nPossy > 1 Then nMaxLairsPerHour = Round((nMaxLairsPerHour / nPossy) + 1, 2)
             If nLairs < nMaxLairsPerHour Then
                 nLairPCT = Round(nLairs / nMaxLairsPerHour, 2)
                 nMobScriptValue = Round(nMobScriptValue * nLairPCT)
