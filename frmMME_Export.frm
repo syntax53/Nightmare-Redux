@@ -563,6 +563,7 @@ Dim nMonsterSpawnChance() As Currency
 Dim nMonsterAVGLairExp() As Currency
 Dim nAveragePossSpawns As Currency
 Dim nAverageMobsPerLair As Currency
+Dim nTheoreticalAvgMaxLairsPerRegenPeriod As Integer 'max 1-mob lairs you can clear in 3 minutes (average lair regen of 3 minutes divided by average round of 5 seconds = 36 lairs)
 
 Dim nProgressInterval As Integer
 Dim nProgressCount As Integer
@@ -1119,6 +1120,8 @@ lvExludedRooms.ColumnHeaders.clear
 lvExludedRooms.ColumnHeaders.add , , "Map", 600
 lvExludedRooms.ColumnHeaders.add , , "From", 700
 lvExludedRooms.ColumnHeaders.add , , "To", 700
+
+nTheoreticalAvgMaxLairsPerRegenPeriod = 36
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
@@ -2590,7 +2593,7 @@ If Not tabTempRS.EOF Then
             nMobScriptValue = Round(nMobScriptValue / nLairs)
             
             nPossy = Round(nMobsTotal / nLairs, 1) 'average number of monsters per lair
-            nMaxLairsPerHour = 45 'average max lairs you could clear before things start to regen anyway (4-seconds per kill, average 3 minutes for regen)
+            nMaxLairsPerHour = nTheoreticalAvgMaxLairsPerRegenPeriod
             If nPossy > 1 Then nMaxLairsPerHour = Round((nMaxLairsPerHour / nPossy) + 1, 2)
             If nLairs < nMaxLairsPerHour Then
                 nLairPCT = Round(nLairs / nMaxLairsPerHour, 2)
