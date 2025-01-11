@@ -1,9 +1,12 @@
 v1.8.3 ()
 ------------------------------------------  
--NEW: Can now import and export (copy and paste) users using a proprietary TXT format
+-NEW: Can now import and export users from clipboard using a proprietary text format
+-NEW: additional user field for hit point rolls that play into a character's maximum HP
+-UP: added display of all of the unknown users values on a tab
 -UP: Added monster game limit, script values, lair exp fields for MME export
 -UP: completely reworked script/lair value calculations to be more based on the lair composition of all monsters that regen in the lair.  lair table now created during mme export with lair information (avg damage, exp, max regen, etc) to be used in MME.  monsters and lairs have pre-calculated script values.
 -UP: sped up some of the slow progressbars
+-UP: fixed some positioning of elements bleeding off the edges of the windows on most of the editors
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  

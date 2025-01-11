@@ -627,7 +627,11 @@ Public Type UserRecType
     unknown12a(7) As Integer
     bEDITED As Byte
     unknown12c As Byte
-    unknown12d(29) As Integer        'unknown
+    
+    unknown12d(18) As Integer
+    HitPointRolls As Byte 'identified 2025.01.11
+    unknown12e As Byte
+    unknown12f(9) As Integer
     
     Ability(29) As Integer
     AbilityModifier(29) As Integer

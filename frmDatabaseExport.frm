@@ -4600,7 +4600,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-ts.Write ("BBS Name" & vbTab & "First Name" & vbTab & "Last Name" & vbTab & "Race" & vbTab & "Class" & vbTab & "LVL" & vbTab & "EXP" & vbTab & "Max HP" & vbTab & "HP" & vbTab & "Max Mana" & vbTab & "Mana" & vbTab & "SC" & vbTab & "Lives" & vbTab & "CP" & vbTab)
+ts.Write ("BBS Name" & vbTab & "First Name" & vbTab & "Last Name" & vbTab & "Race" & vbTab & "Class" & vbTab & "LVL" & vbTab & "EXP" & vbTab & "Max HP" & vbTab & "HP" & vbTab & "HPRolls" & vbTab & "Max Mana" & vbTab & "Mana" & vbTab & "SC" & vbTab & "Lives" & vbTab & "CP" & vbTab)
 ts.Write ("Perception" & vbTab & "Stealth" & vbTab & "Thievery" & vbTab & "Traps" & vbTab & "Picklocks" & vbTab & "Tracking" & vbTab & "MA" & vbTab & "MR" & vbTab & "MR2" & vbTab & "Broadcast" & vbTab & "Runic" & vbTab & "Platinum" & vbTab & "Gold" & vbTab & "Silver" & vbTab & "Copper" & vbTab)
 ts.Write ("Max ENC" & vbTab & "ENC" & vbTab & "EPs" & vbTab & "Gang" & vbTab & "Suicide Pass" & vbTab & "Title" & vbTab & "Room" & vbTab & "Map" & vbTab & "Weapon" & vbTab)
 
@@ -4638,6 +4638,7 @@ Do While nStatus = 0 And Not bStopExport
     ts.Write (((SLong2ULong(Userrec.BillionsOfExperience) * 1000000000#) + SLong2ULong(Userrec.MillionsOfExperience)) & vbTab)
     ts.Write (Userrec.MaxHP & vbTab)
     ts.Write (Userrec.CurrentHP & vbTab)
+    ts.Write (Userrec.HitPointRolls & vbTab)
     ts.Write (Userrec.MaxMana & vbTab)
     ts.Write (Userrec.CurrentMana & vbTab)
     ts.Write (Userrec.SpellCasting & vbTab)

@@ -904,8 +904,8 @@ bLoaded = False
 
 With EL1
     .FormInQuestion = Me
-    .MINHEIGHT = 375 + (TITLEBAR_OFFSET / 10)
-    .MINWIDTH = 445
+    .MINHEIGHT = 375 + (TITLEBAR_OFFSET / 10) + 12
+    .MINWIDTH = 445 + 12
     .CenterOnLoad = False
     .EnableLimiter = True
 End With
@@ -1089,9 +1089,9 @@ End Sub
 Private Sub Form_Resize()
 On Error Resume Next
 If Me.WindowState = vbMinimized Then Exit Sub
-framNav.Left = Me.Width - framNav.Width - 220
+framNav.Left = Me.Width - framNav.Width - 220 - 100
 lvDatabase.Width = framNav.Left - 100
-lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET
+lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET - 150
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

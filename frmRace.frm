@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmRace 
    Caption         =   "Race Editor"
    ClientHeight    =   5655
@@ -137,8 +137,8 @@ Begin VB.Form frmRace
          TabCaption(1)   =   "Abilities"
          TabPicture(1)   =   "frmRace.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "frmAbilities"
-         Tab(1).Control(1)=   "cmdAbilsClear"
+         Tab(1).Control(0)=   "cmdAbilsClear"
+         Tab(1).Control(1)=   "frmAbilities"
          Tab(1).ControlCount=   2
          Begin VB.CheckBox chkAutoSave 
             Caption         =   "Auto-Save"
@@ -955,8 +955,8 @@ bLoaded = False
 
 With EL1
     .FormInQuestion = Me
-    .MINHEIGHT = 405 + (TITLEBAR_OFFSET / 10)
-    .MINWIDTH = 435
+    .MINHEIGHT = 405 + (TITLEBAR_OFFSET / 10) + 12
+    .MINWIDTH = 435 + 12
     .CenterOnLoad = False
     .EnableLimiter = True
 End With
@@ -1025,9 +1025,9 @@ End Sub
 Private Sub Form_Resize()
 On Error Resume Next
 If Me.WindowState = vbMinimized Then Exit Sub
-framNav.Left = Me.Width - framNav.Width - 220
+framNav.Left = Me.Width - framNav.Width - 220 - 100
 lvDatabase.Width = framNav.Left - 100
-lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET
+lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET - 150
 End Sub
 
 Private Sub lblName_GotFocus(Index As Integer)
@@ -1205,7 +1205,7 @@ txtNumber.Text = Racerec.Number
 txtName.Text = Racerec.Name
 txtExpChart.Text = Racerec.ExpChart
 txtHpBonus.Text = Racerec.HPBonus
-txtCp.Text = Racerec.CP
+txtCP.Text = Racerec.CP
 txtMinIntellect.Text = Racerec.MinInt
 txtMinAgility.Text = Racerec.MinAgl
 txtMinStrength.Text = Racerec.MinStr
@@ -1250,7 +1250,7 @@ End If
 Racerec.Name = txtName.Text & Chr(0)
 Racerec.ExpChart = Val(txtExpChart.Text)
 Racerec.HPBonus = Val(txtHpBonus.Text)
-Racerec.CP = Val(txtCp.Text)
+Racerec.CP = Val(txtCP.Text)
 Racerec.MinInt = Val(txtMinIntellect.Text)
 Racerec.MinAgl = Val(txtMinAgility.Text)
 Racerec.MinStr = Val(txtMinStrength.Text)
@@ -1288,7 +1288,7 @@ Call SelectAll(txtAbilityB(Index))
 End Sub
 
 Private Sub txtCP_GotFocus()
-Call SelectAll(txtCp)
+Call SelectAll(txtCP)
 
 End Sub
 

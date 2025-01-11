@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Begin VB.Form frmTextblock 
    Caption         =   "Textblock Editor"
@@ -1001,8 +1001,8 @@ Dim nStatus As Integer
 With EL1
     .FormInQuestion = Me
     .EnableLimiter = True
-    .MINHEIGHT = 255 + (TITLEBAR_OFFSET / 10)
-    .MINWIDTH = 660
+    .MINHEIGHT = 255 + (TITLEBAR_OFFSET / 10) + 12
+    .MINWIDTH = 660 + 12
     .CenterOnLoad = False
 End With
 
@@ -2088,12 +2088,12 @@ fraMain.Width = Me.Width
 fraMain.Height = Me.Height
 fraEdit.Width = Me.Width
 fraEdit.Height = Me.Height
-txtAnsi.Width = Me.Width - 135
-txtAnsi.Height = Me.Height - 2900 - TITLEBAR_OFFSET
+txtAnsi.Width = Me.Width - 135 - 150
+txtAnsi.Height = Me.Height - 2900 - TITLEBAR_OFFSET - 150
 
 'lvLines.Height = fraEdit.Height - lvLines.Top - 450 - TITLEBAR_OFFSET
-splSplitter.Width = Me.Width
-splSplitter.Height = Me.Height - 950 - TITLEBAR_OFFSET
+splSplitter.Width = Me.Width - 150
+splSplitter.Height = Me.Height - 950 - TITLEBAR_OFFSET - 150
 
 End Sub
 
