@@ -7,6 +7,7 @@ v1.8.3 ()
 -UP: completely reworked script/lair value calculations to be more based on the lair composition of all monsters that regen in the lair.  lair table now created during mme export with lair information (avg damage, exp, max regen, etc) to be used in MME.  monsters and lairs have pre-calculated script values.
 -UP: sped up some of the slow progressbars
 -UP: fixed some positioning of elements bleeding off the edges of the windows on most of the editors
+-UP: update to the previous save list in settings so that it doesn't create duplicates
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  
