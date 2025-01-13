@@ -643,7 +643,7 @@ Public Type UserRecType
     'unknown12d(2)                          '1796
     'unknown12d(3)                          '1798
     'unknown12d(4)                          '1800
-    'unknown12d(5)                          '1802
+    'unknown12d(5)                          '1802 CURRENT_ENCUM_PERCENTAGE - 2025.01.12
     'unknown12d(6)                          '1804
     'unknown12d(7)                          '1806
     'unknown12d(8)                          '1808
