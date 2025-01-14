@@ -16,18 +16,34 @@ Begin VB.Form frmUser
    Begin VB.Frame framImport 
       Caption         =   "Import"
       Height          =   5295
-      Left            =   10320
+      Left            =   10260
       TabIndex        =   579
       Top             =   60
       Visible         =   0   'False
       Width           =   6915
+      Begin VB.CheckBox chkImportDeets 
+         Caption         =   "Import Lives, Suicide, Channel, Cash"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   590
+         Top             =   1620
+         Width           =   3195
+      End
+      Begin VB.CheckBox chkImportRooms 
+         Caption         =   "Import Rooms"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   589
+         Top             =   1980
+         Width           =   1875
+      End
       Begin VB.CommandButton cmdImportGo 
          Caption         =   "Cancel"
          Height          =   435
          Index           =   1
          Left            =   2520
          TabIndex        =   588
-         Top             =   4500
+         Top             =   4620
          Width           =   1575
       End
       Begin VB.CommandButton cmdImportGo 
@@ -45,7 +61,7 @@ Begin VB.Form frmUser
          Index           =   0
          Left            =   2520
          TabIndex        =   587
-         Top             =   3420
+         Top             =   3780
          Width           =   1575
       End
       Begin VB.CheckBox chkImportClearAbils 
@@ -53,7 +69,7 @@ Begin VB.Form frmUser
          Height          =   195
          Left            =   2640
          TabIndex        =   586
-         Top             =   2880
+         Top             =   3420
          Width           =   1875
       End
       Begin VB.CheckBox chkImportClearKeys 
@@ -61,7 +77,7 @@ Begin VB.Form frmUser
          Height          =   195
          Left            =   2640
          TabIndex        =   585
-         Top             =   2160
+         Top             =   3060
          Width           =   1875
       End
       Begin VB.CheckBox chkImportClearSpells 
@@ -69,7 +85,7 @@ Begin VB.Form frmUser
          Height          =   195
          Left            =   2640
          TabIndex        =   584
-         Top             =   2520
+         Top             =   2340
          Value           =   1  'Checked
          Width           =   1875
       End
@@ -78,7 +94,7 @@ Begin VB.Form frmUser
          Height          =   195
          Left            =   2640
          TabIndex        =   583
-         Top             =   1800
+         Top             =   2700
          Value           =   1  'Checked
          Width           =   1875
       End
@@ -87,16 +103,16 @@ Begin VB.Form frmUser
          Height          =   195
          Left            =   2640
          TabIndex        =   582
-         Top             =   1440
+         Top             =   1260
          Width           =   1875
       End
       Begin VB.CheckBox chkImportName 
-         Caption         =   "Import Name"
+         Caption         =   "Import Character Name"
          Height          =   195
          Left            =   2640
          TabIndex        =   580
-         Top             =   1080
-         Width           =   1875
+         Top             =   900
+         Width           =   2295
       End
       Begin VB.Label Label36 
          Alignment       =   2  'Center
@@ -171,8 +187,8 @@ Begin VB.Form frmUser
          TabCaption(1)   =   "Inven."
          TabPicture(1)   =   "frmUser.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "frmKeys"
-         Tab(1).Control(1)=   "frmItems"
+         Tab(1).Control(0)=   "frmItems"
+         Tab(1).Control(1)=   "frmKeys"
          Tab(1).ControlCount=   2
          TabCaption(2)   =   "Spellbk."
          TabPicture(2)   =   "frmUser.frx":0902
@@ -182,170 +198,170 @@ Begin VB.Form frmUser
          TabCaption(3)   =   "Abilities"
          TabPicture(3)   =   "frmUser.frx":091E
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "cmdAbilsClear"
-         Tab(3).Control(1)=   "SSTab2"
+         Tab(3).Control(0)=   "SSTab2"
+         Tab(3).Control(1)=   "cmdAbilsClear"
          Tab(3).ControlCount=   2
          TabCaption(4)   =   "Rooms"
          TabPicture(4)   =   "frmUser.frx":093A
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "txtCurrRoomDisp"
-         Tab(4).Control(0).Enabled=   0   'False
-         Tab(4).Control(1)=   "cmdEditCurrentRoom"
-         Tab(4).Control(2)=   "frmMapTrail"
-         Tab(4).Control(3)=   "txtCurrentRoom"
-         Tab(4).Control(4)=   "txtCurrentMap"
-         Tab(4).Control(5)=   "Label74"
+         Tab(4).Control(0)=   "Label74"
+         Tab(4).Control(1)=   "txtCurrentMap"
+         Tab(4).Control(2)=   "txtCurrentRoom"
+         Tab(4).Control(3)=   "frmMapTrail"
+         Tab(4).Control(4)=   "cmdEditCurrentRoom"
+         Tab(4).Control(5)=   "txtCurrRoomDisp"
+         Tab(4).Control(5).Enabled=   0   'False
          Tab(4).ControlCount=   6
          TabCaption(5)   =   "Worn"
          TabPicture(5)   =   "frmUser.frx":0956
          Tab(5).ControlEnabled=   0   'False
-         Tab(5).Control(0)=   "cmdPasteItems(2)"
-         Tab(5).Control(1)=   "cmdEditWeapon"
-         Tab(5).Control(2)=   "cmdClearWorn"
+         Tab(5).Control(0)=   "Label75"
+         Tab(5).Control(1)=   "txtWeaponNumber"
+         Tab(5).Control(2)=   "txtWeaponName"
+         Tab(5).Control(2).Enabled=   0   'False
          Tab(5).Control(3)=   "Frame5"
-         Tab(5).Control(4)=   "txtWeaponName"
-         Tab(5).Control(4).Enabled=   0   'False
-         Tab(5).Control(5)=   "txtWeaponNumber"
-         Tab(5).Control(6)=   "Label75"
+         Tab(5).Control(4)=   "cmdClearWorn"
+         Tab(5).Control(5)=   "cmdEditWeapon"
+         Tab(5).Control(6)=   "cmdPasteItems(2)"
          Tab(5).ControlCount=   7
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
          Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "cmdUserHitPointRollQ"
-         Tab(6).Control(1)=   "txtHitPointRolls"
-         Tab(6).Control(2)=   "chkEdited"
-         Tab(6).Control(3)=   "Frame4"
-         Tab(6).Control(4)=   "txtTitle"
-         Tab(6).Control(5)=   "txtCurrentEncum"
-         Tab(6).Control(6)=   "txtMaxEncum"
-         Tab(6).Control(7)=   "txtEvilPoints"
-         Tab(6).Control(8)=   "txtBroadcastChan"
-         Tab(6).Control(9)=   "txtCopper"
-         Tab(6).Control(10)=   "txtSilver"
-         Tab(6).Control(11)=   "txtGold"
-         Tab(6).Control(12)=   "txtPlatinum"
-         Tab(6).Control(13)=   "txtRunic"
+         Tab(6).Control(0)=   "Label76(0)"
+         Tab(6).Control(1)=   "Label76(1)"
+         Tab(6).Control(2)=   "Label76(2)"
+         Tab(6).Control(3)=   "Label76(3)"
+         Tab(6).Control(4)=   "Label76(4)"
+         Tab(6).Control(5)=   "Label76(5)"
+         Tab(6).Control(6)=   "Label76(6)"
+         Tab(6).Control(7)=   "Label76(7)"
+         Tab(6).Control(8)=   "Label76(8)"
+         Tab(6).Control(9)=   "Label76(9)"
+         Tab(6).Control(10)=   "Label76(10)"
+         Tab(6).Control(11)=   "Label76(11)"
+         Tab(6).Control(12)=   "Label76(12)"
+         Tab(6).Control(13)=   "txtSuicide"
          Tab(6).Control(14)=   "txtGang"
-         Tab(6).Control(15)=   "txtSuicide"
-         Tab(6).Control(16)=   "Label76(12)"
-         Tab(6).Control(17)=   "Label76(11)"
-         Tab(6).Control(18)=   "Label76(10)"
-         Tab(6).Control(19)=   "Label76(9)"
-         Tab(6).Control(20)=   "Label76(8)"
-         Tab(6).Control(21)=   "Label76(7)"
-         Tab(6).Control(22)=   "Label76(6)"
-         Tab(6).Control(23)=   "Label76(5)"
-         Tab(6).Control(24)=   "Label76(4)"
-         Tab(6).Control(25)=   "Label76(3)"
-         Tab(6).Control(26)=   "Label76(2)"
-         Tab(6).Control(27)=   "Label76(1)"
-         Tab(6).Control(28)=   "Label76(0)"
+         Tab(6).Control(15)=   "txtRunic"
+         Tab(6).Control(16)=   "txtPlatinum"
+         Tab(6).Control(17)=   "txtGold"
+         Tab(6).Control(18)=   "txtSilver"
+         Tab(6).Control(19)=   "txtCopper"
+         Tab(6).Control(20)=   "txtBroadcastChan"
+         Tab(6).Control(21)=   "txtEvilPoints"
+         Tab(6).Control(22)=   "txtMaxEncum"
+         Tab(6).Control(23)=   "txtCurrentEncum"
+         Tab(6).Control(24)=   "txtTitle"
+         Tab(6).Control(25)=   "Frame4"
+         Tab(6).Control(26)=   "chkEdited"
+         Tab(6).Control(27)=   "txtHitPointRolls"
+         Tab(6).Control(28)=   "cmdUserHitPointRollQ"
          Tab(6).ControlCount=   29
          TabCaption(7)   =   "???"
          TabPicture(7)   =   "frmUser.frx":098E
          Tab(7).ControlEnabled=   0   'False
-         Tab(7).Control(0)=   "lblUserUnknowns(0)"
-         Tab(7).Control(1)=   "lblUserUnknowns(1)"
-         Tab(7).Control(2)=   "lblUserUnknowns(2)"
-         Tab(7).Control(3)=   "lblUserUnknowns(3)"
-         Tab(7).Control(4)=   "lblUserUnknowns(4)"
-         Tab(7).Control(5)=   "lblUserUnknowns(5)"
-         Tab(7).Control(6)=   "lblUserUnknowns(6)"
-         Tab(7).Control(7)=   "lblUserUnknowns(7)"
-         Tab(7).Control(8)=   "lblUserUnknowns(8)"
-         Tab(7).Control(9)=   "lblUserUnknowns(9)"
-         Tab(7).Control(10)=   "lblUserUnknowns(10)"
-         Tab(7).Control(11)=   "lblUserUnknowns(11)"
-         Tab(7).Control(12)=   "lblUserUnknowns(12)"
-         Tab(7).Control(13)=   "lblUserUnknowns(13)"
-         Tab(7).Control(14)=   "lblUserUnknowns(14)"
-         Tab(7).Control(15)=   "lblUserUnknowns(15)"
-         Tab(7).Control(16)=   "lblUserUnknowns(16)"
-         Tab(7).Control(17)=   "lblUserUnknowns(17)"
-         Tab(7).Control(18)=   "lblUserUnknowns(18)"
-         Tab(7).Control(19)=   "lblUserUnknowns(19)"
-         Tab(7).Control(20)=   "lblUserUnknowns(20)"
-         Tab(7).Control(21)=   "lblUserUnknowns(21)"
-         Tab(7).Control(22)=   "lblUserUnknowns(22)"
-         Tab(7).Control(23)=   "lblUserUnknowns(23)"
-         Tab(7).Control(24)=   "lblUserUnknowns(24)"
-         Tab(7).Control(25)=   "lblUserUnknowns(25)"
-         Tab(7).Control(26)=   "lblUserUnknowns(26)"
-         Tab(7).Control(27)=   "lblUserUnknowns(27)"
-         Tab(7).Control(28)=   "lblUserUnknowns(28)"
-         Tab(7).Control(29)=   "lblUserUnknowns(29)"
-         Tab(7).Control(30)=   "lblUserUnknowns(30)"
-         Tab(7).Control(31)=   "lblUserUnknowns(31)"
-         Tab(7).Control(32)=   "lblUserUnknowns(32)"
-         Tab(7).Control(33)=   "lblUserUnknowns(33)"
-         Tab(7).Control(34)=   "lblUserUnknowns(34)"
-         Tab(7).Control(35)=   "lblUserUnknowns(35)"
-         Tab(7).Control(36)=   "lblUserUnknowns(36)"
-         Tab(7).Control(37)=   "lblUserUnknowns(37)"
-         Tab(7).Control(38)=   "lblUserUnknowns(38)"
-         Tab(7).Control(39)=   "lblUserUnknowns(39)"
-         Tab(7).Control(40)=   "lblUserUnknowns(40)"
-         Tab(7).Control(41)=   "lblUserUnknowns(41)"
-         Tab(7).Control(42)=   "lblUserUnknowns(42)"
-         Tab(7).Control(43)=   "lblUserUnknowns(43)"
-         Tab(7).Control(44)=   "lblUserUnknowns(44)"
-         Tab(7).Control(45)=   "lblUserUnknowns(45)"
-         Tab(7).Control(46)=   "lblUserUnknowns(46)"
-         Tab(7).Control(47)=   "lblUserUnknowns(47)"
-         Tab(7).Control(48)=   "lblUserUnknowns(48)"
-         Tab(7).Control(49)=   "txtUserUnknowns(0)"
-         Tab(7).Control(50)=   "txtUserUnknowns(1)"
-         Tab(7).Control(51)=   "txtUserUnknowns(2)"
-         Tab(7).Control(52)=   "txtUserUnknowns(3)"
-         Tab(7).Control(53)=   "txtUserUnknowns(4)"
-         Tab(7).Control(54)=   "txtUserUnknowns(5)"
-         Tab(7).Control(55)=   "txtUserUnknowns(6)"
-         Tab(7).Control(56)=   "txtUserUnknowns(7)"
-         Tab(7).Control(57)=   "txtUserUnknowns(8)"
-         Tab(7).Control(58)=   "txtUserUnknowns(9)"
-         Tab(7).Control(59)=   "txtUserUnknowns(10)"
-         Tab(7).Control(60)=   "txtUserUnknowns(11)"
-         Tab(7).Control(61)=   "txtUserUnknowns(12)"
-         Tab(7).Control(62)=   "txtUserUnknowns(13)"
-         Tab(7).Control(63)=   "txtUserUnknowns(14)"
-         Tab(7).Control(64)=   "txtUserUnknowns(15)"
-         Tab(7).Control(65)=   "txtUserUnknowns(16)"
-         Tab(7).Control(66)=   "txtUserUnknowns(17)"
-         Tab(7).Control(67)=   "txtUserUnknowns(18)"
-         Tab(7).Control(68)=   "txtUserUnknowns(19)"
-         Tab(7).Control(69)=   "txtUserUnknowns(20)"
-         Tab(7).Control(70)=   "txtUserUnknowns(21)"
-         Tab(7).Control(71)=   "txtUserUnknowns(22)"
-         Tab(7).Control(72)=   "txtUserUnknowns(23)"
-         Tab(7).Control(73)=   "txtUserUnknowns(24)"
-         Tab(7).Control(74)=   "txtUserUnknowns(25)"
-         Tab(7).Control(75)=   "txtUserUnknowns(26)"
-         Tab(7).Control(76)=   "txtUserUnknowns(27)"
-         Tab(7).Control(77)=   "txtUserUnknowns(28)"
-         Tab(7).Control(78)=   "txtUserUnknowns(29)"
-         Tab(7).Control(79)=   "txtUserUnknowns(30)"
-         Tab(7).Control(80)=   "txtUserUnknowns(31)"
-         Tab(7).Control(81)=   "txtUserUnknowns(32)"
-         Tab(7).Control(82)=   "txtUserUnknowns(33)"
-         Tab(7).Control(83)=   "txtUserUnknowns(34)"
-         Tab(7).Control(84)=   "txtUserUnknowns(35)"
-         Tab(7).Control(85)=   "txtUserUnknowns(36)"
-         Tab(7).Control(86)=   "txtUserUnknowns(37)"
-         Tab(7).Control(87)=   "txtUserUnknowns(38)"
-         Tab(7).Control(88)=   "txtUserUnknowns(39)"
-         Tab(7).Control(89)=   "txtUserUnknowns(40)"
-         Tab(7).Control(90)=   "txtUserUnknowns(41)"
-         Tab(7).Control(91)=   "txtUserUnknowns(42)"
-         Tab(7).Control(92)=   "txtUserUnknowns(43)"
-         Tab(7).Control(93)=   "txtUserUnknowns(44)"
-         Tab(7).Control(94)=   "txtUserUnknowns(45)"
-         Tab(7).Control(95)=   "txtUserUnknowns(46)"
-         Tab(7).Control(96)=   "txtUserUnknowns(47)"
-         Tab(7).Control(97)=   "txtUserUnknowns(48)"
-         Tab(7).Control(98)=   "optUserUnknowns(0)"
-         Tab(7).Control(99)=   "optUserUnknowns(1)"
-         Tab(7).Control(100)=   "optUserUnknowns(2)"
-         Tab(7).Control(101)=   "cmdUserUnknownsNote"
+         Tab(7).Control(0)=   "cmdUserUnknownsNote"
+         Tab(7).Control(1)=   "optUserUnknowns(2)"
+         Tab(7).Control(2)=   "optUserUnknowns(1)"
+         Tab(7).Control(3)=   "optUserUnknowns(0)"
+         Tab(7).Control(4)=   "txtUserUnknowns(48)"
+         Tab(7).Control(5)=   "txtUserUnknowns(47)"
+         Tab(7).Control(6)=   "txtUserUnknowns(46)"
+         Tab(7).Control(7)=   "txtUserUnknowns(45)"
+         Tab(7).Control(8)=   "txtUserUnknowns(44)"
+         Tab(7).Control(9)=   "txtUserUnknowns(43)"
+         Tab(7).Control(10)=   "txtUserUnknowns(42)"
+         Tab(7).Control(11)=   "txtUserUnknowns(41)"
+         Tab(7).Control(12)=   "txtUserUnknowns(40)"
+         Tab(7).Control(13)=   "txtUserUnknowns(39)"
+         Tab(7).Control(14)=   "txtUserUnknowns(38)"
+         Tab(7).Control(15)=   "txtUserUnknowns(37)"
+         Tab(7).Control(16)=   "txtUserUnknowns(36)"
+         Tab(7).Control(17)=   "txtUserUnknowns(35)"
+         Tab(7).Control(18)=   "txtUserUnknowns(34)"
+         Tab(7).Control(19)=   "txtUserUnknowns(33)"
+         Tab(7).Control(20)=   "txtUserUnknowns(32)"
+         Tab(7).Control(21)=   "txtUserUnknowns(31)"
+         Tab(7).Control(22)=   "txtUserUnknowns(30)"
+         Tab(7).Control(23)=   "txtUserUnknowns(29)"
+         Tab(7).Control(24)=   "txtUserUnknowns(28)"
+         Tab(7).Control(25)=   "txtUserUnknowns(27)"
+         Tab(7).Control(26)=   "txtUserUnknowns(26)"
+         Tab(7).Control(27)=   "txtUserUnknowns(25)"
+         Tab(7).Control(28)=   "txtUserUnknowns(24)"
+         Tab(7).Control(29)=   "txtUserUnknowns(23)"
+         Tab(7).Control(30)=   "txtUserUnknowns(22)"
+         Tab(7).Control(31)=   "txtUserUnknowns(21)"
+         Tab(7).Control(32)=   "txtUserUnknowns(20)"
+         Tab(7).Control(33)=   "txtUserUnknowns(19)"
+         Tab(7).Control(34)=   "txtUserUnknowns(18)"
+         Tab(7).Control(35)=   "txtUserUnknowns(17)"
+         Tab(7).Control(36)=   "txtUserUnknowns(16)"
+         Tab(7).Control(37)=   "txtUserUnknowns(15)"
+         Tab(7).Control(38)=   "txtUserUnknowns(14)"
+         Tab(7).Control(39)=   "txtUserUnknowns(13)"
+         Tab(7).Control(40)=   "txtUserUnknowns(12)"
+         Tab(7).Control(41)=   "txtUserUnknowns(11)"
+         Tab(7).Control(42)=   "txtUserUnknowns(10)"
+         Tab(7).Control(43)=   "txtUserUnknowns(9)"
+         Tab(7).Control(44)=   "txtUserUnknowns(8)"
+         Tab(7).Control(45)=   "txtUserUnknowns(7)"
+         Tab(7).Control(46)=   "txtUserUnknowns(6)"
+         Tab(7).Control(47)=   "txtUserUnknowns(5)"
+         Tab(7).Control(48)=   "txtUserUnknowns(4)"
+         Tab(7).Control(49)=   "txtUserUnknowns(3)"
+         Tab(7).Control(50)=   "txtUserUnknowns(2)"
+         Tab(7).Control(51)=   "txtUserUnknowns(1)"
+         Tab(7).Control(52)=   "txtUserUnknowns(0)"
+         Tab(7).Control(53)=   "lblUserUnknowns(48)"
+         Tab(7).Control(54)=   "lblUserUnknowns(47)"
+         Tab(7).Control(55)=   "lblUserUnknowns(46)"
+         Tab(7).Control(56)=   "lblUserUnknowns(45)"
+         Tab(7).Control(57)=   "lblUserUnknowns(44)"
+         Tab(7).Control(58)=   "lblUserUnknowns(43)"
+         Tab(7).Control(59)=   "lblUserUnknowns(42)"
+         Tab(7).Control(60)=   "lblUserUnknowns(41)"
+         Tab(7).Control(61)=   "lblUserUnknowns(40)"
+         Tab(7).Control(62)=   "lblUserUnknowns(39)"
+         Tab(7).Control(63)=   "lblUserUnknowns(38)"
+         Tab(7).Control(64)=   "lblUserUnknowns(37)"
+         Tab(7).Control(65)=   "lblUserUnknowns(36)"
+         Tab(7).Control(66)=   "lblUserUnknowns(35)"
+         Tab(7).Control(67)=   "lblUserUnknowns(34)"
+         Tab(7).Control(68)=   "lblUserUnknowns(33)"
+         Tab(7).Control(69)=   "lblUserUnknowns(32)"
+         Tab(7).Control(70)=   "lblUserUnknowns(31)"
+         Tab(7).Control(71)=   "lblUserUnknowns(30)"
+         Tab(7).Control(72)=   "lblUserUnknowns(29)"
+         Tab(7).Control(73)=   "lblUserUnknowns(28)"
+         Tab(7).Control(74)=   "lblUserUnknowns(27)"
+         Tab(7).Control(75)=   "lblUserUnknowns(26)"
+         Tab(7).Control(76)=   "lblUserUnknowns(25)"
+         Tab(7).Control(77)=   "lblUserUnknowns(24)"
+         Tab(7).Control(78)=   "lblUserUnknowns(23)"
+         Tab(7).Control(79)=   "lblUserUnknowns(22)"
+         Tab(7).Control(80)=   "lblUserUnknowns(21)"
+         Tab(7).Control(81)=   "lblUserUnknowns(20)"
+         Tab(7).Control(82)=   "lblUserUnknowns(19)"
+         Tab(7).Control(83)=   "lblUserUnknowns(18)"
+         Tab(7).Control(84)=   "lblUserUnknowns(17)"
+         Tab(7).Control(85)=   "lblUserUnknowns(16)"
+         Tab(7).Control(86)=   "lblUserUnknowns(15)"
+         Tab(7).Control(87)=   "lblUserUnknowns(14)"
+         Tab(7).Control(88)=   "lblUserUnknowns(13)"
+         Tab(7).Control(89)=   "lblUserUnknowns(12)"
+         Tab(7).Control(90)=   "lblUserUnknowns(11)"
+         Tab(7).Control(91)=   "lblUserUnknowns(10)"
+         Tab(7).Control(92)=   "lblUserUnknowns(9)"
+         Tab(7).Control(93)=   "lblUserUnknowns(8)"
+         Tab(7).Control(94)=   "lblUserUnknowns(7)"
+         Tab(7).Control(95)=   "lblUserUnknowns(6)"
+         Tab(7).Control(96)=   "lblUserUnknowns(5)"
+         Tab(7).Control(97)=   "lblUserUnknowns(4)"
+         Tab(7).Control(98)=   "lblUserUnknowns(3)"
+         Tab(7).Control(99)=   "lblUserUnknowns(2)"
+         Tab(7).Control(100)=   "lblUserUnknowns(1)"
+         Tab(7).Control(101)=   "lblUserUnknowns(0)"
          Tab(7).ControlCount=   102
          Begin VB.CommandButton cmdUserHitPointRollQ 
             Caption         =   "?"
@@ -7090,6 +7106,10 @@ Dim bLoaded As Boolean
 'Dim bDontSetup As Boolean
 Dim sCurrentRecord As String * 30
 
+Private Sub Check1_Click()
+
+End Sub
+
 'Private Declare Function CalcExpNeeded Lib "lltmmudxp" (ByVal Level As Integer, ByVal Chart As Integer) As Currency
 
 
@@ -7336,7 +7356,7 @@ If x > 0 Then
     x = x + 1
     
     If x <= Len(sSearch) Then
-        txtCP.Text = GetNextNumbers(x, sSearch)
+        txtCp.Text = GetNextNumbers(x, sSearch)
     End If
 End If
 
@@ -8050,7 +8070,8 @@ On Error GoTo error:
 Dim x As Integer, y As Integer, sSubMatches() As String, sSubValues() As String
 Dim sImportText As String, iMatch As Integer, iSubMatch As Integer, nValue As Long
 Dim tMatches() As RegexMatches, sRegexPattern As String
-Dim nWriteName As Integer, nWriteGang As Integer
+Dim bWriteName As Integer, bWriteGang As Integer, bImportRooms As Boolean
+Dim bImportDeets As Boolean
 
 sImportText = Trim(Clipboard.GetText)
 If Len(sImportText) = 0 Then Exit Sub
@@ -8059,8 +8080,10 @@ sRegexPattern = "^([^\r\n:]+):([^\r\n]+|)$"
 tMatches() = RegExpFindv2(sImportText, sRegexPattern, False, True, True)
 If UBound(tMatches()) = 0 And Len(tMatches(0).sFullMatch) = 0 Then Exit Sub
 
-If chkImportName.Value = 1 Then nWriteName = vbYes
-If chkImportName.Value = 1 Then nWriteGang = vbYes
+If chkImportRooms.Value = 1 Then bImportRooms = True
+If chkImportDeets.Value = 1 Then bImportDeets = True
+If chkImportName.Value = 1 Then bWriteName = True
+If chkImportName.Value = 1 Then bWriteGang = True
 If chkImportClearItems.Value = 1 Then
     Call cmdClearAllItem_Click
     Call cmdClearWorn_Click
@@ -8076,23 +8099,23 @@ For iMatch = 0 To UBound(tMatches())
     If UBound(tMatches(iMatch).sSubMatches()) = 0 Then GoTo skip_match
     
     Select Case tMatches(iMatch).sSubMatches(0)
-        Case "FirstName": If nWriteName = vbYes Then txtFirstName.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "LastName": If nWriteName = vbYes Then txtLastName.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "FirstName": If bWriteName Then txtFirstName.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "LastName": If bWriteName Then txtLastName.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Experience": txtExperience.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Level": txtLevel.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Title": txtTitle.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "GangName": If nWriteGang = vbYes Then txtGang.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "SuicidePassword": txtSuicide.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "GangName": If bWriteGang Then txtGang.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "SuicidePassword": If bImportDeets Then txtSuicide.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "EvilPoints": txtEvilPoints.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "BroadcastChan": txtBroadcastChan.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "BroadcastChan": If bImportDeets Then txtBroadcastChan.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "MaxHP": txtMaxHP.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "CurrentHP": txtCurrentHP.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "MaxMana": txtMaxMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "HPRolls": txtHitPointRolls.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "CurrentMana": txtCurrentMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "SpellCasting": txtSpellcasting.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "LivesRemaining": txtLives.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "CPRemaining": txtCP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "LivesRemaining": If bImportDeets Then txtLives.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CPRemaining": txtCp.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Perception": txtPerception.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Thievery": txtThievery.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Traps": txtTraps.Text = Trim(tMatches(iMatch).sSubMatches(1))
@@ -8102,15 +8125,15 @@ For iMatch = 0 To UBound(tMatches())
         Case "MagicRes": txtMagicResistance.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Stealth": txtStealth.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "WeaponHand": txtWeaponNumber.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "RoomNum": txtCurrentRoom.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "MapNumber": txtCurrentMap.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "RoomNum": If bImportRooms Then txtCurrentRoom.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MapNumber": If bImportRooms Then txtCurrentMap.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "CurrentENC": txtCurrentEncum.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "MaxENC": txtMaxEncum.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "Runic": txtRunic.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "Platinum": txtPlatinum.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "Gold": txtGold.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "Silver": txtSilver.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "Copper": txtCopper.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Runic": If bImportDeets Then txtRunic.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Platinum": If bImportDeets Then txtPlatinum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Gold": If bImportDeets Then txtGold.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Silver": If bImportDeets Then txtSilver.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Copper": If bImportDeets Then txtCopper.Text = Trim(tMatches(iMatch).sSubMatches(1))
         
         Case "bEDITED":
             nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
@@ -8170,8 +8193,10 @@ For iMatch = 0 To UBound(tMatches())
                             UserKey(x) = sSubValues(0)
                             UserKeyUses(x) = sSubValues(1)
                         Case "ROOMS":
-                            txtMapTrail(x).Text = sSubValues(0)
-                            txtRoomTrail(x).Text = sSubValues(1)
+                            If bImportRooms Then
+                                txtMapTrail(x).Text = sSubValues(0)
+                                txtRoomTrail(x).Text = sSubValues(1)
+                            End If
                     End Select
                 End If
             Next x
@@ -8742,7 +8767,7 @@ txtMaxMana.Text = Userrec.MaxMana
 txtCurrentMana.Text = Userrec.CurrentMana
 txtSpellcasting.Text = Userrec.SpellCasting
 txtLives.Text = Userrec.LivesRemaining
-txtCP.Text = Userrec.CPRemaining
+txtCp.Text = Userrec.CPRemaining
 txtPerception.Text = Userrec.Perception
 txtStealth.Text = Userrec.Stealth
 txtThievery.Text = Userrec.Thievery
@@ -8916,7 +8941,7 @@ Call SelectAll(txtCopper)
 End Sub
 
 Private Sub txtCP_GotFocus()
-Call SelectAll(txtCP)
+Call SelectAll(txtCp)
 
 End Sub
 
@@ -9433,7 +9458,7 @@ Userrec.MaxMana = Val(txtMaxMana.Text)
 Userrec.CurrentMana = Val(txtCurrentMana.Text)
 Userrec.SpellCasting = Val(txtSpellcasting.Text)
 Userrec.LivesRemaining = Val(txtLives.Text)
-Userrec.CPRemaining = Val(txtCP.Text)
+Userrec.CPRemaining = Val(txtCp.Text)
 Userrec.Perception = Val(txtPerception.Text)
 Userrec.Stealth = Val(txtStealth.Text)
 Userrec.Thievery = Val(txtThievery.Text)
