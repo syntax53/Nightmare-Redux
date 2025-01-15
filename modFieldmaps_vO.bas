@@ -163,10 +163,10 @@ Public Type MonsterRecType
     Number          As Long      '4
     EmptySpace      As String * 50  '54
     Name            As String * 29  '83
-    nothing1        As Byte
-    Group           As Integer
-    nothingXX1      As Integer
-    ExpMulti        As Long
+    nothing1        As Byte         '84
+    Group           As Integer      '86
+    nothingXX1      As Integer      '88
+    ExpMulti        As Long         '92
     'nothingXX2      As Integer
     Index           As Integer
     nothingXX3      As Integer
