@@ -9,6 +9,7 @@ v1.8.3 ()
 -UP: fixed some positioning of elements bleeding off the edges of the windows on most of the editors
 -UP: update to the previous save list in settings so that it doesn't create duplicates
 -UP: update attack sim to change how dodge percentage is shown to refelect how it's checked after the AC check
+-UP: added the average hit for each attack to the monster attack simulator
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  

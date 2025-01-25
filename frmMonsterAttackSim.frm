@@ -7,18 +7,18 @@ Begin VB.Form frmMonsterAttackSim
    ClientHeight    =   7875
    ClientLeft      =   45
    ClientTop       =   360
-   ClientWidth     =   14685
+   ClientWidth     =   15450
    Icon            =   "frmMonsterAttackSim.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
    ScaleHeight     =   7875
-   ScaleWidth      =   14685
+   ScaleWidth      =   15450
    Begin VB.CheckBox chkCombatMaxRoundOnly 
       Caption         =   "Show combat log only for max round seen."
       Height          =   195
-      Left            =   10560
+      Left            =   11160
       TabIndex        =   224
       Top             =   6180
       Width           =   3435
@@ -36,7 +36,7 @@ Begin VB.Form frmMonsterAttackSim
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   12900
+      Left            =   13500
       TabIndex        =   221
       ToolTipText     =   "This will run the sim in 1,000 round increments untl the change in result is < 0.001%"
       Top             =   6600
@@ -1683,8 +1683,8 @@ Begin VB.Form frmMonsterAttackSim
       Left            =   10080
       TabIndex        =   84
       Top             =   180
-      Width           =   4515
-      _ExtentX        =   7964
+      Width           =   5295
+      _ExtentX        =   9340
       _ExtentY        =   5741
       _Version        =   393216
       Tab             =   1
@@ -1692,40 +1692,40 @@ Begin VB.Form frmMonsterAttackSim
       TabCaption(0)   =   "Between Round Spells"
       TabPicture(0)   =   "frmMonsterAttackSim.frx":0A96
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdBetweenRoundSpellGoto(4)"
-      Tab(0).Control(1)=   "cmdBetweenRoundSpellGoto(3)"
-      Tab(0).Control(2)=   "cmdBetweenRoundSpellGoto(2)"
-      Tab(0).Control(3)=   "cmdBetweenRoundSpellGoto(1)"
-      Tab(0).Control(4)=   "cmdBetweenRoundSpellGoto(0)"
-      Tab(0).Control(5)=   "txtBetweenSpellNumber(0)"
-      Tab(0).Control(6)=   "txtBetweenSpellName(0)"
+      Tab(0).Control(0)=   "label(34)"
+      Tab(0).Control(1)=   "label(33)"
+      Tab(0).Control(2)=   "label(32)"
+      Tab(0).Control(3)=   "label(31)"
+      Tab(0).Control(4)=   "txtBetweenSpellCastLvL(4)"
+      Tab(0).Control(5)=   "txtBetweenSpellCastPer(4)"
+      Tab(0).Control(6)=   "txtBetweenSpellName(4)"
       Tab(0).Control(6).Enabled=   0   'False
-      Tab(0).Control(7)=   "txtBetweenSpellCastPer(0)"
-      Tab(0).Control(8)=   "txtBetweenSpellCastLvL(0)"
-      Tab(0).Control(9)=   "txtBetweenSpellNumber(1)"
-      Tab(0).Control(10)=   "txtBetweenSpellName(1)"
+      Tab(0).Control(7)=   "txtBetweenSpellNumber(4)"
+      Tab(0).Control(8)=   "txtBetweenSpellCastLvL(3)"
+      Tab(0).Control(9)=   "txtBetweenSpellCastPer(3)"
+      Tab(0).Control(10)=   "txtBetweenSpellName(3)"
       Tab(0).Control(10).Enabled=   0   'False
-      Tab(0).Control(11)=   "txtBetweenSpellCastPer(1)"
-      Tab(0).Control(12)=   "txtBetweenSpellCastLvL(1)"
-      Tab(0).Control(13)=   "txtBetweenSpellNumber(2)"
+      Tab(0).Control(11)=   "txtBetweenSpellNumber(3)"
+      Tab(0).Control(12)=   "txtBetweenSpellCastLvL(2)"
+      Tab(0).Control(13)=   "txtBetweenSpellCastPer(2)"
       Tab(0).Control(14)=   "txtBetweenSpellName(2)"
       Tab(0).Control(14).Enabled=   0   'False
-      Tab(0).Control(15)=   "txtBetweenSpellCastPer(2)"
-      Tab(0).Control(16)=   "txtBetweenSpellCastLvL(2)"
-      Tab(0).Control(17)=   "txtBetweenSpellNumber(3)"
-      Tab(0).Control(18)=   "txtBetweenSpellName(3)"
+      Tab(0).Control(15)=   "txtBetweenSpellNumber(2)"
+      Tab(0).Control(16)=   "txtBetweenSpellCastLvL(1)"
+      Tab(0).Control(17)=   "txtBetweenSpellCastPer(1)"
+      Tab(0).Control(18)=   "txtBetweenSpellName(1)"
       Tab(0).Control(18).Enabled=   0   'False
-      Tab(0).Control(19)=   "txtBetweenSpellCastPer(3)"
-      Tab(0).Control(20)=   "txtBetweenSpellCastLvL(3)"
-      Tab(0).Control(21)=   "txtBetweenSpellNumber(4)"
-      Tab(0).Control(22)=   "txtBetweenSpellName(4)"
+      Tab(0).Control(19)=   "txtBetweenSpellNumber(1)"
+      Tab(0).Control(20)=   "txtBetweenSpellCastLvL(0)"
+      Tab(0).Control(21)=   "txtBetweenSpellCastPer(0)"
+      Tab(0).Control(22)=   "txtBetweenSpellName(0)"
       Tab(0).Control(22).Enabled=   0   'False
-      Tab(0).Control(23)=   "txtBetweenSpellCastPer(4)"
-      Tab(0).Control(24)=   "txtBetweenSpellCastLvL(4)"
-      Tab(0).Control(25)=   "label(31)"
-      Tab(0).Control(26)=   "label(32)"
-      Tab(0).Control(27)=   "label(33)"
-      Tab(0).Control(28)=   "label(34)"
+      Tab(0).Control(23)=   "txtBetweenSpellNumber(0)"
+      Tab(0).Control(24)=   "cmdBetweenRoundSpellGoto(0)"
+      Tab(0).Control(25)=   "cmdBetweenRoundSpellGoto(1)"
+      Tab(0).Control(26)=   "cmdBetweenRoundSpellGoto(2)"
+      Tab(0).Control(27)=   "cmdBetweenRoundSpellGoto(3)"
+      Tab(0).Control(28)=   "cmdBetweenRoundSpellGoto(4)"
       Tab(0).ControlCount=   29
       TabCaption(1)   =   "Attack Statistics"
       TabPicture(1)   =   "frmMonsterAttackSim.frx":0AB2
@@ -1752,135 +1752,293 @@ Begin VB.Form frmMonsterAttackSim
       Tab(1).Control(9).Enabled=   0   'False
       Tab(1).Control(10)=   "lblHeadings(13)"
       Tab(1).Control(10).Enabled=   0   'False
-      Tab(1).Control(11)=   "txtStatResistDodge(4)"
+      Tab(1).Control(11)=   "lblHeadings(26)"
       Tab(1).Control(11).Enabled=   0   'False
-      Tab(1).Control(12)=   "txtStatDmgResist(4)"
+      Tab(1).Control(12)=   "txtStatResistDodge(4)"
       Tab(1).Control(12).Enabled=   0   'False
-      Tab(1).Control(13)=   "txtStatSuccess(4)"
+      Tab(1).Control(13)=   "txtStatDmgResist(4)"
       Tab(1).Control(13).Enabled=   0   'False
-      Tab(1).Control(14)=   "txtStatAvgRound(4)"
+      Tab(1).Control(14)=   "txtStatSuccess(4)"
       Tab(1).Control(14).Enabled=   0   'False
-      Tab(1).Control(15)=   "txtStatAttRound(4)"
+      Tab(1).Control(15)=   "txtStatAvgRound(4)"
       Tab(1).Control(15).Enabled=   0   'False
-      Tab(1).Control(16)=   "txtStatTrueCast(4)"
+      Tab(1).Control(16)=   "txtStatAttRound(4)"
       Tab(1).Control(16).Enabled=   0   'False
-      Tab(1).Control(17)=   "txtStatResistDodge(3)"
+      Tab(1).Control(17)=   "txtStatTrueCast(4)"
       Tab(1).Control(17).Enabled=   0   'False
-      Tab(1).Control(18)=   "txtStatDmgResist(3)"
+      Tab(1).Control(18)=   "txtStatResistDodge(3)"
       Tab(1).Control(18).Enabled=   0   'False
-      Tab(1).Control(19)=   "txtStatSuccess(3)"
+      Tab(1).Control(19)=   "txtStatDmgResist(3)"
       Tab(1).Control(19).Enabled=   0   'False
-      Tab(1).Control(20)=   "txtStatAvgRound(3)"
+      Tab(1).Control(20)=   "txtStatSuccess(3)"
       Tab(1).Control(20).Enabled=   0   'False
-      Tab(1).Control(21)=   "txtStatAttRound(3)"
+      Tab(1).Control(21)=   "txtStatAvgRound(3)"
       Tab(1).Control(21).Enabled=   0   'False
-      Tab(1).Control(22)=   "txtStatTrueCast(3)"
+      Tab(1).Control(22)=   "txtStatAttRound(3)"
       Tab(1).Control(22).Enabled=   0   'False
-      Tab(1).Control(23)=   "txtStatResistDodge(2)"
+      Tab(1).Control(23)=   "txtStatTrueCast(3)"
       Tab(1).Control(23).Enabled=   0   'False
-      Tab(1).Control(24)=   "txtStatDmgResist(2)"
+      Tab(1).Control(24)=   "txtStatResistDodge(2)"
       Tab(1).Control(24).Enabled=   0   'False
-      Tab(1).Control(25)=   "txtStatSuccess(2)"
+      Tab(1).Control(25)=   "txtStatDmgResist(2)"
       Tab(1).Control(25).Enabled=   0   'False
-      Tab(1).Control(26)=   "txtStatAvgRound(2)"
+      Tab(1).Control(26)=   "txtStatSuccess(2)"
       Tab(1).Control(26).Enabled=   0   'False
-      Tab(1).Control(27)=   "txtStatAttRound(2)"
+      Tab(1).Control(27)=   "txtStatAvgRound(2)"
       Tab(1).Control(27).Enabled=   0   'False
-      Tab(1).Control(28)=   "txtStatTrueCast(2)"
+      Tab(1).Control(28)=   "txtStatAttRound(2)"
       Tab(1).Control(28).Enabled=   0   'False
-      Tab(1).Control(29)=   "txtStatResistDodge(1)"
+      Tab(1).Control(29)=   "txtStatTrueCast(2)"
       Tab(1).Control(29).Enabled=   0   'False
-      Tab(1).Control(30)=   "txtStatDmgResist(1)"
+      Tab(1).Control(30)=   "txtStatResistDodge(1)"
       Tab(1).Control(30).Enabled=   0   'False
-      Tab(1).Control(31)=   "txtStatSuccess(1)"
+      Tab(1).Control(31)=   "txtStatDmgResist(1)"
       Tab(1).Control(31).Enabled=   0   'False
-      Tab(1).Control(32)=   "txtStatAvgRound(1)"
+      Tab(1).Control(32)=   "txtStatSuccess(1)"
       Tab(1).Control(32).Enabled=   0   'False
-      Tab(1).Control(33)=   "txtStatAttRound(1)"
+      Tab(1).Control(33)=   "txtStatAvgRound(1)"
       Tab(1).Control(33).Enabled=   0   'False
-      Tab(1).Control(34)=   "txtStatTrueCast(1)"
+      Tab(1).Control(34)=   "txtStatAttRound(1)"
       Tab(1).Control(34).Enabled=   0   'False
-      Tab(1).Control(35)=   "txtStatResistDodge(0)"
+      Tab(1).Control(35)=   "txtStatTrueCast(1)"
       Tab(1).Control(35).Enabled=   0   'False
-      Tab(1).Control(36)=   "txtStatDmgResist(0)"
+      Tab(1).Control(36)=   "txtStatResistDodge(0)"
       Tab(1).Control(36).Enabled=   0   'False
-      Tab(1).Control(37)=   "txtStatSuccess(0)"
+      Tab(1).Control(37)=   "txtStatDmgResist(0)"
       Tab(1).Control(37).Enabled=   0   'False
-      Tab(1).Control(38)=   "txtStatAvgRound(0)"
+      Tab(1).Control(38)=   "txtStatSuccess(0)"
       Tab(1).Control(38).Enabled=   0   'False
-      Tab(1).Control(39)=   "txtStatAttRound(0)"
+      Tab(1).Control(39)=   "txtStatAvgRound(0)"
       Tab(1).Control(39).Enabled=   0   'False
-      Tab(1).Control(40)=   "txtStatTrueCast(0)"
+      Tab(1).Control(40)=   "txtStatAttRound(0)"
       Tab(1).Control(40).Enabled=   0   'False
-      Tab(1).ControlCount=   41
+      Tab(1).Control(41)=   "txtStatTrueCast(0)"
+      Tab(1).Control(41).Enabled=   0   'False
+      Tab(1).Control(42)=   "txtStatAvgHit(0)"
+      Tab(1).Control(42).Enabled=   0   'False
+      Tab(1).Control(43)=   "txtStatAvgHit(1)"
+      Tab(1).Control(43).Enabled=   0   'False
+      Tab(1).Control(44)=   "txtStatAvgHit(2)"
+      Tab(1).Control(44).Enabled=   0   'False
+      Tab(1).Control(45)=   "txtStatAvgHit(3)"
+      Tab(1).Control(45).Enabled=   0   'False
+      Tab(1).Control(46)=   "txtStatAvgHit(4)"
+      Tab(1).Control(46).Enabled=   0   'False
+      Tab(1).ControlCount=   47
       TabCaption(2)   =   "Items"
       TabPicture(2)   =   "frmMonsterAttackSim.frx":0ACE
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "txtItemDropPer(5)"
-      Tab(2).Control(1)=   "txtItemDropPer(7)"
-      Tab(2).Control(2)=   "txtItemDropPer(8)"
-      Tab(2).Control(3)=   "txtItemDropPer(9)"
-      Tab(2).Control(4)=   "txtItemDropPer(6)"
-      Tab(2).Control(5)=   "txtItemDropPer(2)"
-      Tab(2).Control(6)=   "txtItemDropPer(3)"
-      Tab(2).Control(7)=   "txtItemDropPer(4)"
-      Tab(2).Control(8)=   "txtItemDropPer(0)"
-      Tab(2).Control(9)=   "txtItemDropPer(1)"
-      Tab(2).Control(10)=   "txtItemNumber(9)"
-      Tab(2).Control(11)=   "txtItemName(9)"
-      Tab(2).Control(11).Enabled=   0   'False
-      Tab(2).Control(12)=   "txtItemNumber(8)"
-      Tab(2).Control(13)=   "txtItemName(8)"
-      Tab(2).Control(13).Enabled=   0   'False
-      Tab(2).Control(14)=   "txtItemNumber(7)"
-      Tab(2).Control(15)=   "txtItemName(7)"
+      Tab(2).Control(0)=   "label(17)"
+      Tab(2).Control(1)=   "Label3"
+      Tab(2).Control(2)=   "Label4"
+      Tab(2).Control(3)=   "Label5"
+      Tab(2).Control(4)=   "lblItemBonus"
+      Tab(2).Control(5)=   "cmdItemNote"
+      Tab(2).Control(6)=   "txtWeaponNumber"
+      Tab(2).Control(7)=   "txtWeaponName"
+      Tab(2).Control(7).Enabled=   0   'False
+      Tab(2).Control(8)=   "cmdGotoWeapon"
+      Tab(2).Control(9)=   "cmdEditItemDrop(4)"
+      Tab(2).Control(10)=   "cmdEditItemDrop(3)"
+      Tab(2).Control(11)=   "cmdEditItemDrop(2)"
+      Tab(2).Control(12)=   "cmdEditItemDrop(1)"
+      Tab(2).Control(13)=   "cmdEditItemDrop(0)"
+      Tab(2).Control(14)=   "txtItemNumber(1)"
+      Tab(2).Control(15)=   "txtItemName(1)"
       Tab(2).Control(15).Enabled=   0   'False
-      Tab(2).Control(16)=   "txtItemName(5)"
-      Tab(2).Control(16).Enabled=   0   'False
-      Tab(2).Control(17)=   "txtItemNumber(6)"
-      Tab(2).Control(18)=   "txtItemName(6)"
-      Tab(2).Control(18).Enabled=   0   'False
-      Tab(2).Control(19)=   "txtItemNumber(5)"
-      Tab(2).Control(20)=   "cmdEditItemDrop(5)"
-      Tab(2).Control(21)=   "cmdEditItemDrop(6)"
-      Tab(2).Control(22)=   "cmdEditItemDrop(7)"
-      Tab(2).Control(23)=   "cmdEditItemDrop(8)"
+      Tab(2).Control(16)=   "txtItemNumber(0)"
+      Tab(2).Control(17)=   "txtItemName(0)"
+      Tab(2).Control(17).Enabled=   0   'False
+      Tab(2).Control(18)=   "txtItemNumber(2)"
+      Tab(2).Control(19)=   "txtItemName(2)"
+      Tab(2).Control(19).Enabled=   0   'False
+      Tab(2).Control(20)=   "txtItemNumber(3)"
+      Tab(2).Control(21)=   "txtItemName(3)"
+      Tab(2).Control(21).Enabled=   0   'False
+      Tab(2).Control(22)=   "txtItemNumber(4)"
+      Tab(2).Control(23)=   "txtItemName(4)"
+      Tab(2).Control(23).Enabled=   0   'False
       Tab(2).Control(24)=   "cmdEditItemDrop(9)"
-      Tab(2).Control(25)=   "txtItemName(4)"
-      Tab(2).Control(25).Enabled=   0   'False
-      Tab(2).Control(26)=   "txtItemNumber(4)"
-      Tab(2).Control(27)=   "txtItemName(3)"
-      Tab(2).Control(27).Enabled=   0   'False
-      Tab(2).Control(28)=   "txtItemNumber(3)"
-      Tab(2).Control(29)=   "txtItemName(2)"
-      Tab(2).Control(29).Enabled=   0   'False
-      Tab(2).Control(30)=   "txtItemNumber(2)"
-      Tab(2).Control(31)=   "txtItemName(0)"
-      Tab(2).Control(31).Enabled=   0   'False
-      Tab(2).Control(32)=   "txtItemNumber(0)"
-      Tab(2).Control(33)=   "txtItemName(1)"
+      Tab(2).Control(25)=   "cmdEditItemDrop(8)"
+      Tab(2).Control(26)=   "cmdEditItemDrop(7)"
+      Tab(2).Control(27)=   "cmdEditItemDrop(6)"
+      Tab(2).Control(28)=   "cmdEditItemDrop(5)"
+      Tab(2).Control(29)=   "txtItemNumber(5)"
+      Tab(2).Control(30)=   "txtItemName(6)"
+      Tab(2).Control(30).Enabled=   0   'False
+      Tab(2).Control(31)=   "txtItemNumber(6)"
+      Tab(2).Control(32)=   "txtItemName(5)"
+      Tab(2).Control(32).Enabled=   0   'False
+      Tab(2).Control(33)=   "txtItemName(7)"
       Tab(2).Control(33).Enabled=   0   'False
-      Tab(2).Control(34)=   "txtItemNumber(1)"
-      Tab(2).Control(35)=   "cmdEditItemDrop(0)"
-      Tab(2).Control(36)=   "cmdEditItemDrop(1)"
-      Tab(2).Control(37)=   "cmdEditItemDrop(2)"
-      Tab(2).Control(38)=   "cmdEditItemDrop(3)"
-      Tab(2).Control(39)=   "cmdEditItemDrop(4)"
-      Tab(2).Control(40)=   "cmdGotoWeapon"
-      Tab(2).Control(41)=   "txtWeaponName"
-      Tab(2).Control(41).Enabled=   0   'False
-      Tab(2).Control(42)=   "txtWeaponNumber"
-      Tab(2).Control(43)=   "cmdItemNote"
-      Tab(2).Control(44)=   "lblItemBonus"
-      Tab(2).Control(45)=   "Label5"
-      Tab(2).Control(46)=   "Label4"
-      Tab(2).Control(47)=   "Label3"
-      Tab(2).Control(48)=   "label(17)"
+      Tab(2).Control(34)=   "txtItemNumber(7)"
+      Tab(2).Control(35)=   "txtItemName(8)"
+      Tab(2).Control(35).Enabled=   0   'False
+      Tab(2).Control(36)=   "txtItemNumber(8)"
+      Tab(2).Control(37)=   "txtItemName(9)"
+      Tab(2).Control(37).Enabled=   0   'False
+      Tab(2).Control(38)=   "txtItemNumber(9)"
+      Tab(2).Control(39)=   "txtItemDropPer(1)"
+      Tab(2).Control(40)=   "txtItemDropPer(0)"
+      Tab(2).Control(41)=   "txtItemDropPer(4)"
+      Tab(2).Control(42)=   "txtItemDropPer(3)"
+      Tab(2).Control(43)=   "txtItemDropPer(2)"
+      Tab(2).Control(44)=   "txtItemDropPer(6)"
+      Tab(2).Control(45)=   "txtItemDropPer(9)"
+      Tab(2).Control(46)=   "txtItemDropPer(8)"
+      Tab(2).Control(47)=   "txtItemDropPer(7)"
+      Tab(2).Control(48)=   "txtItemDropPer(5)"
       Tab(2).ControlCount=   49
+      Begin VB.TextBox txtStatAvgHit 
+         Alignment       =   2  'Center
+         BackColor       =   &H80000004&
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "M/dd/yy"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   0
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Index           =   4
+         Left            =   1740
+         Locked          =   -1  'True
+         TabIndex        =   231
+         Top             =   2775
+         Width           =   675
+      End
+      Begin VB.TextBox txtStatAvgHit 
+         Alignment       =   2  'Center
+         BackColor       =   &H80000004&
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "M/dd/yy"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   0
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Index           =   3
+         Left            =   1740
+         Locked          =   -1  'True
+         TabIndex        =   230
+         Top             =   2340
+         Width           =   675
+      End
+      Begin VB.TextBox txtStatAvgHit 
+         Alignment       =   2  'Center
+         BackColor       =   &H80000004&
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "M/dd/yy"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   0
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Index           =   2
+         Left            =   1740
+         Locked          =   -1  'True
+         TabIndex        =   229
+         Top             =   1935
+         Width           =   675
+      End
+      Begin VB.TextBox txtStatAvgHit 
+         Alignment       =   2  'Center
+         BackColor       =   &H80000004&
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "M/dd/yy"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   0
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Index           =   1
+         Left            =   1740
+         Locked          =   -1  'True
+         TabIndex        =   228
+         Top             =   1515
+         Width           =   675
+      End
+      Begin VB.TextBox txtStatAvgHit 
+         Alignment       =   2  'Center
+         BackColor       =   &H80000004&
+         BeginProperty DataFormat 
+            Type            =   0
+            Format          =   "M/dd/yy"
+            HaveTrueFalseNull=   0
+            FirstDayOfWeek  =   0
+            FirstWeekOfYear =   0
+            LCID            =   1033
+            SubFormatType   =   0
+         EndProperty
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Index           =   0
+         Left            =   1740
+         Locked          =   -1  'True
+         TabIndex        =   227
+         Text            =   "99999"
+         Top             =   1080
+         Width           =   675
+      End
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   5
-         Left            =   -71100
+         Left            =   -70380
          TabIndex        =   122
          Top             =   1260
          Width           =   495
@@ -1888,7 +2046,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   7
-         Left            =   -71100
+         Left            =   -70380
          TabIndex        =   155
          Top             =   1830
          Width           =   495
@@ -1896,7 +2054,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   8
-         Left            =   -71100
+         Left            =   -70380
          TabIndex        =   170
          Top             =   2115
          Width           =   495
@@ -1904,7 +2062,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   9
-         Left            =   -71100
+         Left            =   -70380
          TabIndex        =   183
          Top             =   2400
          Width           =   495
@@ -1912,7 +2070,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   6
-         Left            =   -71100
+         Left            =   -70380
          TabIndex        =   135
          Top             =   1545
          Width           =   495
@@ -1920,7 +2078,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   2
-         Left            =   -73200
+         Left            =   -72840
          TabIndex        =   149
          Top             =   1830
          Width           =   435
@@ -1928,7 +2086,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   3
-         Left            =   -73200
+         Left            =   -72840
          TabIndex        =   166
          Top             =   2115
          Width           =   435
@@ -1936,7 +2094,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   4
-         Left            =   -73200
+         Left            =   -72840
          TabIndex        =   179
          Top             =   2400
          Width           =   435
@@ -1944,7 +2102,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   0
-         Left            =   -73200
+         Left            =   -72840
          TabIndex        =   119
          Top             =   1260
          Width           =   435
@@ -1952,7 +2110,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemDropPer 
          Height          =   285
          Index           =   1
-         Left            =   -73200
+         Left            =   -72840
          TabIndex        =   131
          Top             =   1545
          Width           =   435
@@ -1960,7 +2118,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.TextBox txtItemNumber 
          Height          =   285
          Index           =   9
-         Left            =   -72480
+         Left            =   -72120
          TabIndex        =   181
          Top             =   2400
          Width           =   555
@@ -1969,17 +2127,17 @@ Begin VB.Form frmMonsterAttackSim
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   9
-         Left            =   -71925
+         Left            =   -71565
          Locked          =   -1  'True
          TabIndex        =   182
          TabStop         =   0   'False
          Top             =   2400
-         Width           =   795
+         Width           =   1155
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
          Index           =   8
-         Left            =   -72480
+         Left            =   -72120
          TabIndex        =   168
          Top             =   2115
          Width           =   555
@@ -1988,17 +2146,17 @@ Begin VB.Form frmMonsterAttackSim
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   8
-         Left            =   -71925
+         Left            =   -71565
          Locked          =   -1  'True
          TabIndex        =   169
          TabStop         =   0   'False
          Top             =   2115
-         Width           =   795
+         Width           =   1155
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
          Index           =   7
-         Left            =   -72480
+         Left            =   -72120
          TabIndex        =   151
          Top             =   1830
          Width           =   555
@@ -2007,28 +2165,28 @@ Begin VB.Form frmMonsterAttackSim
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   7
-         Left            =   -71925
+         Left            =   -71565
          Locked          =   -1  'True
          TabIndex        =   154
          TabStop         =   0   'False
          Top             =   1830
-         Width           =   795
+         Width           =   1155
       End
       Begin VB.TextBox txtItemName 
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   5
-         Left            =   -71925
+         Left            =   -71580
          Locked          =   -1  'True
          TabIndex        =   121
          TabStop         =   0   'False
          Top             =   1260
-         Width           =   795
+         Width           =   1155
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
          Index           =   6
-         Left            =   -72480
+         Left            =   -72120
          TabIndex        =   133
          Top             =   1545
          Width           =   555
@@ -2037,17 +2195,17 @@ Begin VB.Form frmMonsterAttackSim
          BackColor       =   &H8000000F&
          Height          =   285
          Index           =   6
-         Left            =   -71925
+         Left            =   -71565
          Locked          =   -1  'True
          TabIndex        =   134
          TabStop         =   0   'False
          Top             =   1545
-         Width           =   795
+         Width           =   1155
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
          Index           =   5
-         Left            =   -72480
+         Left            =   -72120
          TabIndex        =   120
          Top             =   1260
          Width           =   555
@@ -2055,7 +2213,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.CommandButton cmdEditItemDrop 
          Height          =   195
          Index           =   5
-         Left            =   -72720
+         Left            =   -72360
          TabIndex        =   109
          Top             =   1260
          Width           =   195
@@ -2063,7 +2221,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.CommandButton cmdEditItemDrop 
          Height          =   195
          Index           =   6
-         Left            =   -72720
+         Left            =   -72360
          TabIndex        =   132
          Top             =   1545
          Width           =   195
@@ -2071,7 +2229,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.CommandButton cmdEditItemDrop 
          Height          =   195
          Index           =   7
-         Left            =   -72720
+         Left            =   -72360
          TabIndex        =   150
          Top             =   1830
          Width           =   195
@@ -2079,7 +2237,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.CommandButton cmdEditItemDrop 
          Height          =   195
          Index           =   8
-         Left            =   -72720
+         Left            =   -72360
          TabIndex        =   167
          Top             =   2115
          Width           =   195
@@ -2087,7 +2245,7 @@ Begin VB.Form frmMonsterAttackSim
       Begin VB.CommandButton cmdEditItemDrop 
          Height          =   195
          Index           =   9
-         Left            =   -72720
+         Left            =   -72360
          TabIndex        =   180
          Top             =   2400
          Width           =   195
@@ -2101,7 +2259,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   178
          TabStop         =   0   'False
          Top             =   2400
-         Width           =   855
+         Width           =   1215
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
@@ -2120,7 +2278,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   165
          TabStop         =   0   'False
          Top             =   2115
-         Width           =   855
+         Width           =   1215
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
@@ -2139,7 +2297,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   148
          TabStop         =   0   'False
          Top             =   1830
-         Width           =   855
+         Width           =   1215
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
@@ -2158,7 +2316,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   118
          TabStop         =   0   'False
          Top             =   1260
-         Width           =   855
+         Width           =   1215
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
@@ -2177,7 +2335,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   130
          TabStop         =   0   'False
          Top             =   1545
-         Width           =   855
+         Width           =   1215
       End
       Begin VB.TextBox txtItemNumber 
          Height          =   285
@@ -2243,7 +2401,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   88
          TabStop         =   0   'False
          Top             =   660
-         Width           =   1755
+         Width           =   2235
       End
       Begin VB.TextBox txtWeaponNumber 
          Height          =   285
@@ -2264,7 +2422,7 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   375
-         Left            =   -71340
+         Left            =   -70620
          TabIndex        =   89
          Top             =   600
          Width           =   735
@@ -2347,7 +2505,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   104
          TabStop         =   0   'False
          Top             =   975
-         Width           =   1815
+         Width           =   2535
       End
       Begin VB.TextBox txtBetweenSpellCastPer 
          Alignment       =   2  'Center
@@ -2362,7 +2520,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   0
-         Left            =   -71820
+         Left            =   -71100
          TabIndex        =   105
          Text            =   "99"
          Top             =   975
@@ -2381,7 +2539,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   0
-         Left            =   -71280
+         Left            =   -70560
          TabIndex        =   106
          Top             =   975
          Width           =   615
@@ -2424,7 +2582,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   126
          TabStop         =   0   'False
          Top             =   1395
-         Width           =   1815
+         Width           =   2535
       End
       Begin VB.TextBox txtBetweenSpellCastPer 
          Alignment       =   2  'Center
@@ -2439,7 +2597,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   1
-         Left            =   -71820
+         Left            =   -71100
          TabIndex        =   127
          Top             =   1395
          Width           =   435
@@ -2457,7 +2615,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   1
-         Left            =   -71280
+         Left            =   -70560
          TabIndex        =   128
          Top             =   1395
          Width           =   615
@@ -2500,7 +2658,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   147
          TabStop         =   0   'False
          Top             =   1815
-         Width           =   1815
+         Width           =   2535
       End
       Begin VB.TextBox txtBetweenSpellCastPer 
          Alignment       =   2  'Center
@@ -2515,7 +2673,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   2
-         Left            =   -71820
+         Left            =   -71100
          TabIndex        =   152
          Top             =   1815
          Width           =   435
@@ -2533,7 +2691,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   2
-         Left            =   -71280
+         Left            =   -70560
          TabIndex        =   153
          Top             =   1815
          Width           =   615
@@ -2576,7 +2734,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   174
          TabStop         =   0   'False
          Top             =   2235
-         Width           =   1815
+         Width           =   2535
       End
       Begin VB.TextBox txtBetweenSpellCastPer 
          Alignment       =   2  'Center
@@ -2591,7 +2749,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   3
-         Left            =   -71820
+         Left            =   -71100
          TabIndex        =   175
          Top             =   2235
          Width           =   435
@@ -2609,7 +2767,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   3
-         Left            =   -71280
+         Left            =   -70560
          TabIndex        =   176
          Top             =   2235
          Width           =   615
@@ -2652,7 +2810,7 @@ Begin VB.Form frmMonsterAttackSim
          TabIndex        =   193
          TabStop         =   0   'False
          Top             =   2655
-         Width           =   1815
+         Width           =   2535
       End
       Begin VB.TextBox txtBetweenSpellCastPer 
          Alignment       =   2  'Center
@@ -2667,7 +2825,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   4
-         Left            =   -71820
+         Left            =   -71100
          TabIndex        =   194
          Top             =   2655
          Width           =   435
@@ -2685,7 +2843,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   405
          Index           =   4
-         Left            =   -71280
+         Left            =   -70560
          TabIndex        =   195
          Top             =   2655
          Width           =   615
@@ -2773,7 +2931,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   0
-         Left            =   1725
+         Left            =   2505
          Locked          =   -1  'True
          TabIndex        =   112
          Text            =   "99999"
@@ -2803,7 +2961,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   0
-         Left            =   2445
+         Left            =   3225
          Locked          =   -1  'True
          TabIndex        =   113
          Text            =   "100%"
@@ -2833,7 +2991,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   0
-         Left            =   3105
+         Left            =   3885
          Locked          =   -1  'True
          TabIndex        =   114
          Text            =   "100%"
@@ -2863,7 +3021,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   0
-         Left            =   3765
+         Left            =   4545
          Locked          =   -1  'True
          TabIndex        =   115
          Text            =   "100%"
@@ -2951,7 +3109,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   1
-         Left            =   1725
+         Left            =   2505
          Locked          =   -1  'True
          TabIndex        =   138
          Top             =   1515
@@ -2980,7 +3138,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   1
-         Left            =   2445
+         Left            =   3225
          Locked          =   -1  'True
          TabIndex        =   139
          Top             =   1515
@@ -3009,7 +3167,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   1
-         Left            =   3105
+         Left            =   3885
          Locked          =   -1  'True
          TabIndex        =   140
          Top             =   1515
@@ -3038,7 +3196,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   1
-         Left            =   3765
+         Left            =   4545
          Locked          =   -1  'True
          TabIndex        =   141
          Top             =   1515
@@ -3125,7 +3283,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   2
-         Left            =   1725
+         Left            =   2505
          Locked          =   -1  'True
          TabIndex        =   158
          Top             =   1935
@@ -3154,7 +3312,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   2
-         Left            =   2445
+         Left            =   3225
          Locked          =   -1  'True
          TabIndex        =   159
          Top             =   1935
@@ -3183,7 +3341,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   2
-         Left            =   3105
+         Left            =   3885
          Locked          =   -1  'True
          TabIndex        =   160
          Top             =   1935
@@ -3212,7 +3370,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   2
-         Left            =   3765
+         Left            =   4545
          Locked          =   -1  'True
          TabIndex        =   161
          Top             =   1935
@@ -3273,7 +3431,7 @@ Begin VB.Form frmMonsterAttackSim
          Left            =   1005
          Locked          =   -1  'True
          TabIndex        =   185
-         Top             =   2355
+         Top             =   2340
          Width           =   675
       End
       Begin VB.TextBox txtStatAvgRound 
@@ -3299,7 +3457,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   3
-         Left            =   1725
+         Left            =   2505
          Locked          =   -1  'True
          TabIndex        =   186
          Top             =   2355
@@ -3328,7 +3486,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   3
-         Left            =   2445
+         Left            =   3225
          Locked          =   -1  'True
          TabIndex        =   187
          Top             =   2355
@@ -3357,7 +3515,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   3
-         Left            =   3105
+         Left            =   3885
          Locked          =   -1  'True
          TabIndex        =   188
          Top             =   2355
@@ -3386,7 +3544,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   3
-         Left            =   3765
+         Left            =   4545
          Locked          =   -1  'True
          TabIndex        =   189
          Top             =   2355
@@ -3473,7 +3631,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   4
-         Left            =   1725
+         Left            =   2505
          Locked          =   -1  'True
          TabIndex        =   199
          Top             =   2775
@@ -3502,7 +3660,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   4
-         Left            =   2445
+         Left            =   3225
          Locked          =   -1  'True
          TabIndex        =   200
          Top             =   2775
@@ -3531,7 +3689,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   4
-         Left            =   3105
+         Left            =   3885
          Locked          =   -1  'True
          TabIndex        =   201
          Top             =   2775
@@ -3560,11 +3718,30 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   360
          Index           =   4
-         Left            =   3765
+         Left            =   4545
          Locked          =   -1  'True
          TabIndex        =   202
          Top             =   2775
          Width           =   615
+      End
+      Begin VB.Label lblHeadings 
+         Alignment       =   2  'Center
+         Caption         =   "Avg Hit"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Index           =   26
+         Left            =   1800
+         TabIndex        =   226
+         Top             =   660
+         Width           =   555
       End
       Begin VB.Label lblItemBonus 
          Height          =   435
@@ -3578,7 +3755,7 @@ Begin VB.Form frmMonsterAttackSim
          Alignment       =   2  'Center
          Caption         =   "%"
          Height          =   195
-         Left            =   -70980
+         Left            =   -70260
          TabIndex        =   107
          Top             =   1020
          Width           =   315
@@ -3587,7 +3764,7 @@ Begin VB.Form frmMonsterAttackSim
          Alignment       =   2  'Center
          Caption         =   "%"
          Height          =   195
-         Left            =   -73140
+         Left            =   -72840
          TabIndex        =   101
          Top             =   1020
          Width           =   315
@@ -3614,7 +3791,7 @@ Begin VB.Form frmMonsterAttackSim
          Caption         =   "Cast LVL"
          Height          =   255
          Index           =   31
-         Left            =   -71340
+         Left            =   -70620
          TabIndex        =   93
          Top             =   735
          Width           =   735
@@ -3624,7 +3801,7 @@ Begin VB.Form frmMonsterAttackSim
          Caption         =   "%"
          Height          =   255
          Index           =   32
-         Left            =   -71820
+         Left            =   -71100
          TabIndex        =   92
          Top             =   735
          Width           =   435
@@ -3637,7 +3814,7 @@ Begin VB.Form frmMonsterAttackSim
          Left            =   -73680
          TabIndex        =   91
          Top             =   735
-         Width           =   1695
+         Width           =   2415
       End
       Begin VB.Label label 
          Alignment       =   2  'Center
@@ -3688,7 +3865,7 @@ Begin VB.Form frmMonsterAttackSim
       End
       Begin VB.Label lblHeadings 
          Alignment       =   2  'Center
-         Caption         =   "Avg Round"
+         Caption         =   "Avg /Round"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -3700,10 +3877,10 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   435
          Index           =   15
-         Left            =   1785
+         Left            =   2445
          TabIndex        =   96
          Top             =   675
-         Width           =   555
+         Width           =   795
       End
       Begin VB.Label lblHeadings 
          Alignment       =   2  'Center
@@ -3719,10 +3896,10 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   255
          Index           =   16
-         Left            =   2445
+         Left            =   3285
          TabIndex        =   97
          Top             =   855
-         Width           =   615
+         Width           =   495
       End
       Begin VB.Label lblHeadings 
          Alignment       =   2  'Center
@@ -3738,7 +3915,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   435
          Index           =   17
-         Left            =   3105
+         Left            =   3885
          TabIndex        =   98
          Top             =   675
          Width           =   615
@@ -3757,7 +3934,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   435
          Index           =   18
-         Left            =   3705
+         Left            =   4485
          TabIndex        =   99
          Top             =   675
          Width           =   735
@@ -3856,10 +4033,10 @@ Begin VB.Form frmMonsterAttackSim
    Begin VB.Frame fraResults 
       Caption         =   "Results"
       Height          =   1575
-      Left            =   9600
+      Left            =   10080
       TabIndex        =   216
       Top             =   4500
-      Width           =   4995
+      Width           =   5295
       Begin VB.Label lblResultsMaxRound 
          Alignment       =   2  'Center
          BeginProperty Font 
@@ -3875,7 +4052,7 @@ Begin VB.Form frmMonsterAttackSim
          Left            =   180
          TabIndex        =   218
          Top             =   960
-         Width           =   4575
+         Width           =   4875
       End
       Begin VB.Label lblResultsAvgDmg 
          Alignment       =   2  'Center
@@ -3892,7 +4069,7 @@ Begin VB.Form frmMonsterAttackSim
          Left            =   180
          TabIndex        =   217
          Top             =   300
-         Width           =   4575
+         Width           =   4875
       End
    End
    Begin VB.CommandButton cmdSim 
@@ -3908,7 +4085,7 @@ Begin VB.Form frmMonsterAttackSim
          Strikethrough   =   0   'False
       EndProperty
       Height          =   495
-      Left            =   9660
+      Left            =   10260
       TabIndex        =   222
       Top             =   7020
       Width           =   4875
@@ -3916,10 +4093,10 @@ Begin VB.Form frmMonsterAttackSim
    Begin VB.Frame fraChar 
       Caption         =   "Character Defenses"
       Height          =   975
-      Left            =   9600
+      Left            =   10080
       TabIndex        =   205
       Top             =   3480
-      Width           =   4995
+      Width           =   5295
       Begin VB.CommandButton cmdMRNote 
          Caption         =   "!"
          Height          =   315
@@ -3956,7 +4133,7 @@ Begin VB.Form frmMonsterAttackSim
       End
       Begin VB.CheckBox chkUserAntiMagic 
          Height          =   255
-         Left            =   4200
+         Left            =   4380
          TabIndex        =   215
          Top             =   480
          Width           =   255
@@ -4053,7 +4230,7 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   195
-         Left            =   3750
+         Left            =   3930
          TabIndex        =   210
          Top             =   240
          Width           =   1155
@@ -4162,7 +4339,7 @@ Begin VB.Form frmMonsterAttackSim
          Strikethrough   =   0   'False
       EndProperty
       Height          =   360
-      Left            =   11640
+      Left            =   12240
       TabIndex        =   220
       Text            =   "2000"
       Top             =   6540
@@ -4212,7 +4389,7 @@ Begin VB.Form frmMonsterAttackSim
       ScrollBars      =   3  'Both
       TabIndex        =   204
       Top             =   3540
-      Width           =   9435
+      Width           =   9915
    End
    Begin VB.CommandButton cmbRefresh 
       Caption         =   "Refresh List"
@@ -4238,8 +4415,8 @@ Begin VB.Form frmMonsterAttackSim
       Left            =   60
       TabIndex        =   223
       Top             =   7560
-      Width           =   14535
-      _ExtentX        =   25638
+      Width           =   15315
+      _ExtentX        =   27014
       _ExtentY        =   450
       _Version        =   393216
       Appearance      =   1
@@ -4258,7 +4435,7 @@ Begin VB.Form frmMonsterAttackSim
          Strikethrough   =   0   'False
       EndProperty
       Height          =   195
-      Left            =   9840
+      Left            =   10440
       TabIndex        =   219
       Top             =   6600
       Width           =   1605
@@ -4611,6 +4788,7 @@ For x = 0 To 4
     txtStatTrueCast(x).Text = ""
     txtStatAttRound(x).Text = ""
     txtStatAvgRound(x).Text = ""
+    txtStatAvgHit(x).Text = ""
     txtStatSuccess(x).Text = ""
     txtStatDmgResist(x).Text = ""
     txtStatResistDodge(x).Text = ""
@@ -4743,6 +4921,7 @@ For x = 0 To 4
     txtStatTrueCast(x).Text = ""
     txtStatAttRound(x).Text = ""
     txtStatAvgRound(x).Text = ""
+    txtStatAvgHit(x).Text = ""
     txtStatSuccess(x).Text = ""
     txtStatDmgResist(x).Text = ""
     txtStatResistDodge(x).Text = ""
@@ -4855,6 +5034,13 @@ If clsMonAtkSim.nTotalAttacks > 0 And clsMonAtkSim.nNumberOfRounds > 0 Then
             Else
                 txtStatAvgRound(x).Text = 0
             End If
+            
+            If clsMonAtkSim.nStatAtkTotalDamage(x) > 0 And clsMonAtkSim.nStatAtkHits(x) Then
+                txtStatAvgHit(x).Text = Round(clsMonAtkSim.nStatAtkTotalDamage(x) / clsMonAtkSim.nStatAtkHits(x))
+            Else
+                txtStatAvgHit(x).Text = 0
+            End If
+            
             
             If clsMonAtkSim.nStatAtkAttempted(x) > 0 Then
                 txtStatSuccess(x).Text = Round(clsMonAtkSim.nStatAtkHits(x) / clsMonAtkSim.nStatAtkAttempted(x), 3) * 100
