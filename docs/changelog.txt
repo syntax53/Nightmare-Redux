@@ -10,6 +10,7 @@ v1.8.3 ()
 -UP: update to the previous save list in settings so that it doesn't create duplicates
 -UP: update attack sim to change how dodge percentage is shown to refelect how it's checked after the AC check
 -UP: added the average hit for each attack to the monster attack simulator
+-UP: room 12/2381 platform of stars removed from exclusion list on mme export
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  
