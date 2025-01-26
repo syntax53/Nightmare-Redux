@@ -584,12 +584,11 @@ Begin VB.Form frmMonster
          _Version        =   393216
          Style           =   1
          Tabs            =   5
-         Tab             =   2
          TabsPerRow      =   5
          TabHeight       =   520
          TabCaption(0)   =   "General "
          TabPicture(0)   =   "frmMonster.frx":0BCD
-         Tab(0).ControlEnabled=   0   'False
+         Tab(0).ControlEnabled=   -1  'True
          Tab(0).Control(0)=   "label(0)"
          Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "label(1)"
@@ -708,7 +707,7 @@ Begin VB.Form frmMonster
          Tab(1).ControlCount=   1
          TabCaption(2)   =   " Spells/Attacks "
          TabPicture(2)   =   "frmMonster.frx":0C05
-         Tab(2).ControlEnabled=   -1  'True
+         Tab(2).ControlEnabled=   0   'False
          Tab(2).Control(0)=   "label(10)"
          Tab(2).Control(0).Enabled=   0   'False
          Tab(2).Control(1)=   "label(41)"
@@ -733,45 +732,45 @@ Begin VB.Form frmMonster
          TabCaption(3)   =   " Weapon/Txt/Msg "
          TabPicture(3)   =   "frmMonster.frx":0C21
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "txtDeathMsgDisplay"
-         Tab(3).Control(0).Enabled=   0   'False
-         Tab(3).Control(1)=   "txtDeathMsg"
-         Tab(3).Control(2)=   "txtMoveMsgDisplay"
-         Tab(3).Control(2).Enabled=   0   'False
-         Tab(3).Control(3)=   "txtMoveMsg"
-         Tab(3).Control(4)=   "txtTalkTxt"
-         Tab(3).Control(5)=   "txtDescTxt"
-         Tab(3).Control(6)=   "txtGreetTxt"
-         Tab(3).Control(7)=   "txtGreetTxtDisplay"
-         Tab(3).Control(7).Enabled=   0   'False
-         Tab(3).Control(8)=   "txtTalkTxtDisplay"
-         Tab(3).Control(8).Enabled=   0   'False
-         Tab(3).Control(9)=   "txtDescTxtDisplay"
+         Tab(3).Control(0)=   "label(17)"
+         Tab(3).Control(1)=   "label(73)"
+         Tab(3).Control(2)=   "label(72)"
+         Tab(3).Control(3)=   "label(71)"
+         Tab(3).Control(4)=   "label(70)"
+         Tab(3).Control(5)=   "label(69)"
+         Tab(3).Control(6)=   "Label13(0)"
+         Tab(3).Control(7)=   "Label13(1)"
+         Tab(3).Control(8)=   "cmdEditWeapon"
+         Tab(3).Control(9)=   "txtWeaponName"
          Tab(3).Control(9).Enabled=   0   'False
-         Tab(3).Control(10)=   "cmdEditMoveMsg"
-         Tab(3).Control(11)=   "cmdEditDeathMsg"
-         Tab(3).Control(12)=   "cmdEditGreetTxt"
-         Tab(3).Control(13)=   "cmdEditTalkText"
-         Tab(3).Control(14)=   "cmdEditDescText"
-         Tab(3).Control(15)=   "txtWeaponNumber"
-         Tab(3).Control(16)=   "txtWeaponName"
+         Tab(3).Control(10)=   "txtWeaponNumber"
+         Tab(3).Control(11)=   "cmdEditDescText"
+         Tab(3).Control(12)=   "cmdEditTalkText"
+         Tab(3).Control(13)=   "cmdEditGreetTxt"
+         Tab(3).Control(14)=   "cmdEditDeathMsg"
+         Tab(3).Control(15)=   "cmdEditMoveMsg"
+         Tab(3).Control(16)=   "txtDescTxtDisplay"
          Tab(3).Control(16).Enabled=   0   'False
-         Tab(3).Control(17)=   "cmdEditWeapon"
-         Tab(3).Control(18)=   "Label13(1)"
-         Tab(3).Control(19)=   "Label13(0)"
-         Tab(3).Control(20)=   "label(69)"
-         Tab(3).Control(21)=   "label(70)"
-         Tab(3).Control(22)=   "label(71)"
-         Tab(3).Control(23)=   "label(72)"
-         Tab(3).Control(24)=   "label(73)"
-         Tab(3).Control(25)=   "label(17)"
+         Tab(3).Control(17)=   "txtTalkTxtDisplay"
+         Tab(3).Control(17).Enabled=   0   'False
+         Tab(3).Control(18)=   "txtGreetTxtDisplay"
+         Tab(3).Control(18).Enabled=   0   'False
+         Tab(3).Control(19)=   "txtGreetTxt"
+         Tab(3).Control(20)=   "txtDescTxt"
+         Tab(3).Control(21)=   "txtTalkTxt"
+         Tab(3).Control(22)=   "txtMoveMsg"
+         Tab(3).Control(23)=   "txtMoveMsgDisplay"
+         Tab(3).Control(23).Enabled=   0   'False
+         Tab(3).Control(24)=   "txtDeathMsg"
+         Tab(3).Control(25)=   "txtDeathMsgDisplay"
+         Tab(3).Control(25).Enabled=   0   'False
          Tab(3).ControlCount=   26
          TabCaption(4)   =   " Abilities "
          TabPicture(4)   =   "frmMonster.frx":0C3D
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "cmdAbilsClear"
+         Tab(4).Control(0)=   "Label8"
          Tab(4).Control(1)=   "frmAbilities"
-         Tab(4).Control(2)=   "Label8"
+         Tab(4).Control(2)=   "cmdAbilsClear"
          Tab(4).ControlCount=   3
          Begin VB.CommandButton cmdAbilsClear 
             Caption         =   "Clear"
@@ -1441,7 +1440,7 @@ Begin VB.Form frmMonster
          Begin VB.TextBox txtDeathSpellName 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   2640
+            Left            =   -72360
             Locked          =   -1  'True
             MaxLength       =   28
             TabIndex        =   115
@@ -1451,14 +1450,14 @@ Begin VB.Form frmMonster
          End
          Begin VB.TextBox txtDeathSpellNumber 
             Height          =   285
-            Left            =   1920
+            Left            =   -73080
             TabIndex        =   114
             Top             =   720
             Width           =   615
          End
          Begin VB.TextBox txtCreateSpellNumber 
             Height          =   285
-            Left            =   1920
+            Left            =   -73080
             TabIndex        =   110
             Top             =   420
             Width           =   615
@@ -1466,7 +1465,7 @@ Begin VB.Form frmMonster
          Begin VB.TextBox txtCreateSpellName 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   2640
+            Left            =   -72360
             Locked          =   -1  'True
             MaxLength       =   28
             TabIndex        =   111
@@ -1476,14 +1475,14 @@ Begin VB.Form frmMonster
          End
          Begin VB.CommandButton cmdEditCreateSpell 
             Height          =   195
-            Left            =   660
+            Left            =   -74340
             TabIndex        =   108
             Top             =   420
             Width           =   195
          End
          Begin VB.CommandButton cmdEditDeathSpell 
             Height          =   195
-            Left            =   660
+            Left            =   -74340
             TabIndex        =   112
             Top             =   720
             Width           =   195
@@ -1516,21 +1515,21 @@ Begin VB.Form frmMonster
          Begin VB.CommandButton cmdResetKill 
             Caption         =   "< Reset"
             Height          =   255
-            Left            =   -71520
+            Left            =   3480
             TabIndex        =   26
             Top             =   4455
             Width           =   795
          End
          Begin VB.TextBox txtCharmRes 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   34
             Top             =   2880
             Width           =   735
          End
          Begin VB.TextBox txtBSDefense 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   35
             Top             =   3180
             Width           =   735
@@ -1538,7 +1537,7 @@ Begin VB.Form frmMonster
          Begin VB.Frame Frame3 
             Caption         =   "Betwen Round Spells:"
             Height          =   1755
-            Left            =   420
+            Left            =   -74580
             TabIndex        =   116
             Top             =   1080
             Width           =   4755
@@ -1805,7 +1804,7 @@ Begin VB.Form frmMonster
          End
          Begin VB.TextBox txtBase 
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   13
             Top             =   1020
             Visible         =   0   'False
@@ -1813,7 +1812,7 @@ Begin VB.Form frmMonster
          End
          Begin VB.TextBox txtMulti 
             Height          =   285
-            Left            =   -72840
+            Left            =   2160
             TabIndex        =   14
             Top             =   1020
             Visible         =   0   'False
@@ -1830,7 +1829,7 @@ Begin VB.Form frmMonster
                SubFormatType   =   0
             EndProperty
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   24
             Top             =   4440
             Width           =   1095
@@ -1846,14 +1845,14 @@ Begin VB.Form frmMonster
                SubFormatType   =   0
             EndProperty
             Height          =   285
-            Left            =   -72720
+            Left            =   2280
             TabIndex        =   25
             Top             =   4440
             Width           =   1095
          End
          Begin VB.TextBox txtActive 
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   19
             Top             =   2580
             Width           =   735
@@ -2419,7 +2418,7 @@ Begin VB.Form frmMonster
          Begin VB.Frame Frame2 
             Caption         =   "Description"
             Height          =   1515
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   38
             Top             =   4740
             Width           =   5295
@@ -2467,7 +2466,7 @@ Begin VB.Form frmMonster
          Begin VB.ComboBox cmbGroup 
             Height          =   315
             ItemData        =   "frmMonster.frx":0C59
-            Left            =   -73860
+            Left            =   1140
             List            =   "frmMonster.frx":0CD5
             Style           =   2  'Dropdown List
             TabIndex        =   17
@@ -2477,7 +2476,7 @@ Begin VB.Form frmMonster
          Begin VB.ComboBox txtAlignment 
             Height          =   315
             ItemData        =   "frmMonster.frx":0E44
-            Left            =   -73860
+            Left            =   1140
             List            =   "frmMonster.frx":0E5D
             Style           =   2  'Dropdown List
             TabIndex        =   22
@@ -2487,7 +2486,7 @@ Begin VB.Form frmMonster
          Begin VB.ComboBox cmbType 
             Height          =   315
             ItemData        =   "frmMonster.frx":0EAC
-            Left            =   -73860
+            Left            =   1140
             List            =   "frmMonster.frx":0EBC
             Style           =   2  'Dropdown List
             TabIndex        =   21
@@ -2497,7 +2496,7 @@ Begin VB.Form frmMonster
          Begin VB.ComboBox txtGender 
             Height          =   315
             ItemData        =   "frmMonster.frx":0EE4
-            Left            =   -73860
+            Left            =   1140
             List            =   "frmMonster.frx":0EF1
             Style           =   2  'Dropdown List
             TabIndex        =   23
@@ -2506,77 +2505,77 @@ Begin VB.Form frmMonster
          End
          Begin VB.TextBox txtIndex 
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   16
             Top             =   1620
             Width           =   735
          End
          Begin VB.TextBox txtExperience 
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   15
             Top             =   1320
             Width           =   1935
          End
          Begin VB.TextBox txtHitPoints 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   29
             Top             =   1380
             Width           =   735
          End
          Begin VB.TextBox txtHpRegen 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   30
             Top             =   1680
             Width           =   735
          End
          Begin VB.TextBox txtMR 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   31
             Top             =   1980
             Width           =   735
          End
          Begin VB.TextBox txtCharmlvl 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   33
             Top             =   2580
             Width           =   735
          End
          Begin VB.TextBox txtAC 
             Height          =   285
-            Left            =   -71160
+            Left            =   3840
             TabIndex        =   27
             Top             =   1020
             Width           =   735
          End
          Begin VB.TextBox txtDR 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   28
             Top             =   1020
             Width           =   735
          End
          Begin VB.TextBox txtFollow 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   32
             Top             =   2280
             Width           =   735
          End
          Begin VB.TextBox txtRegenTime 
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   20
             Top             =   2880
             Width           =   735
          End
          Begin VB.TextBox txtEnergy 
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   36
             Top             =   3480
             Width           =   735
@@ -2585,21 +2584,21 @@ Begin VB.Form frmMonster
             Alignment       =   1  'Right Justify
             Caption         =   "Undead"
             Height          =   255
-            Left            =   -71100
+            Left            =   3900
             TabIndex        =   37
             Top             =   3810
             Width           =   930
          End
          Begin VB.TextBox txtGameLimit 
             Height          =   285
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   18
             Top             =   2280
             Width           =   735
          End
          Begin VB.TextBox txtName 
             Height          =   285
-            Left            =   -73920
+            Left            =   1080
             MaxLength       =   29
             TabIndex        =   12
             Top             =   420
@@ -2608,7 +2607,7 @@ Begin VB.Form frmMonster
          Begin VB.TextBox txtNumber 
             BackColor       =   &H8000000F&
             Height          =   285
-            Left            =   -70380
+            Left            =   4620
             Locked          =   -1  'True
             TabIndex        =   11
             TabStop         =   0   'False
@@ -2617,7 +2616,7 @@ Begin VB.Form frmMonster
          End
          Begin TabDlg.SSTab SSTab2 
             Height          =   3375
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   146
             Top             =   2880
             Width           =   5295
@@ -2710,188 +2709,188 @@ Begin VB.Form frmMonster
             TabCaption(1)   =   "Attack 2"
             TabPicture(1)   =   "frmMonster.frx":0F1E
             Tab(1).ControlEnabled=   0   'False
-            Tab(1).Control(0)=   "lblAttackType(0)"
-            Tab(1).Control(1)=   "lblAttackAccuSpell(1)"
-            Tab(1).Control(2)=   "lblAttackMinHCastPer(1)"
-            Tab(1).Control(3)=   "lblAttackMaxHCastLvl(1)"
-            Tab(1).Control(4)=   "lblAttackPercent(0)"
-            Tab(1).Control(5)=   "lblAttackEnergy(0)"
-            Tab(1).Control(6)=   "lblAttackHitMsg(0)"
-            Tab(1).Control(7)=   "lblAttackMissMsg(0)"
-            Tab(1).Control(8)=   "lblAttackDodgeMsg(0)"
-            Tab(1).Control(9)=   "lblAttackHitSpell(0)"
-            Tab(1).Control(10)=   "lblAttackSpellRange(1)"
-            Tab(1).Control(11)=   "txtAttackAccuSpell(1)"
-            Tab(1).Control(12)=   "txtAttackAccuSpellName(1)"
-            Tab(1).Control(12).Enabled=   0   'False
-            Tab(1).Control(13)=   "txtAttackMinHCastPer(1)"
-            Tab(1).Control(14)=   "txtAttackMaxHCastLvL(1)"
-            Tab(1).Control(15)=   "txtAttackPer(1)"
+            Tab(1).Control(0)=   "cmdAttackSim(1)"
+            Tab(1).Control(1)=   "txtAttackSpellDamage(1)"
+            Tab(1).Control(2)=   "cmdEditHitSpell(1)"
+            Tab(1).Control(3)=   "cmdEditDodgeMsg(1)"
+            Tab(1).Control(4)=   "cmdEditMissMsg(1)"
+            Tab(1).Control(5)=   "cmdEditHitMsg(1)"
+            Tab(1).Control(6)=   "cmdEditAttackSpell(1)"
+            Tab(1).Control(7)=   "cmbAttackType(1)"
+            Tab(1).Control(8)=   "txtAttackHitSpellName(1)"
+            Tab(1).Control(8).Enabled=   0   'False
+            Tab(1).Control(9)=   "txtAttackMissMsgDisplay(1)"
+            Tab(1).Control(9).Enabled=   0   'False
+            Tab(1).Control(10)=   "txtAttackDodgeMsgDisplay(1)"
+            Tab(1).Control(10).Enabled=   0   'False
+            Tab(1).Control(11)=   "txtAttackHitMsgDisplay(1)"
+            Tab(1).Control(11).Enabled=   0   'False
+            Tab(1).Control(12)=   "txtAttackHitSpell(1)"
+            Tab(1).Control(13)=   "txtAttackDodgeMsg(1)"
+            Tab(1).Control(14)=   "txtAttackMissMsg(1)"
+            Tab(1).Control(15)=   "txtAttackHitMsg(1)"
             Tab(1).Control(16)=   "txtAttackEnergy(1)"
-            Tab(1).Control(17)=   "txtAttackHitMsg(1)"
-            Tab(1).Control(18)=   "txtAttackMissMsg(1)"
-            Tab(1).Control(19)=   "txtAttackDodgeMsg(1)"
-            Tab(1).Control(20)=   "txtAttackHitSpell(1)"
-            Tab(1).Control(21)=   "txtAttackHitMsgDisplay(1)"
-            Tab(1).Control(21).Enabled=   0   'False
-            Tab(1).Control(22)=   "txtAttackDodgeMsgDisplay(1)"
-            Tab(1).Control(22).Enabled=   0   'False
-            Tab(1).Control(23)=   "txtAttackMissMsgDisplay(1)"
-            Tab(1).Control(23).Enabled=   0   'False
-            Tab(1).Control(24)=   "txtAttackHitSpellName(1)"
-            Tab(1).Control(24).Enabled=   0   'False
-            Tab(1).Control(25)=   "cmbAttackType(1)"
-            Tab(1).Control(26)=   "cmdEditAttackSpell(1)"
-            Tab(1).Control(27)=   "cmdEditHitMsg(1)"
-            Tab(1).Control(28)=   "cmdEditMissMsg(1)"
-            Tab(1).Control(29)=   "cmdEditDodgeMsg(1)"
-            Tab(1).Control(30)=   "cmdEditHitSpell(1)"
-            Tab(1).Control(31)=   "txtAttackSpellDamage(1)"
-            Tab(1).Control(32)=   "cmdAttackSim(1)"
+            Tab(1).Control(17)=   "txtAttackPer(1)"
+            Tab(1).Control(18)=   "txtAttackMaxHCastLvL(1)"
+            Tab(1).Control(19)=   "txtAttackMinHCastPer(1)"
+            Tab(1).Control(20)=   "txtAttackAccuSpellName(1)"
+            Tab(1).Control(20).Enabled=   0   'False
+            Tab(1).Control(21)=   "txtAttackAccuSpell(1)"
+            Tab(1).Control(22)=   "lblAttackSpellRange(1)"
+            Tab(1).Control(23)=   "lblAttackHitSpell(0)"
+            Tab(1).Control(24)=   "lblAttackDodgeMsg(0)"
+            Tab(1).Control(25)=   "lblAttackMissMsg(0)"
+            Tab(1).Control(26)=   "lblAttackHitMsg(0)"
+            Tab(1).Control(27)=   "lblAttackEnergy(0)"
+            Tab(1).Control(28)=   "lblAttackPercent(0)"
+            Tab(1).Control(29)=   "lblAttackMaxHCastLvl(1)"
+            Tab(1).Control(30)=   "lblAttackMinHCastPer(1)"
+            Tab(1).Control(31)=   "lblAttackAccuSpell(1)"
+            Tab(1).Control(32)=   "lblAttackType(0)"
             Tab(1).ControlCount=   33
             TabCaption(2)   =   "Attack 3"
             TabPicture(2)   =   "frmMonster.frx":0F3A
             Tab(2).ControlEnabled=   0   'False
-            Tab(2).Control(0)=   "lblAttackType(1)"
-            Tab(2).Control(1)=   "lblAttackAccuSpell(2)"
-            Tab(2).Control(2)=   "lblAttackMinHCastPer(2)"
-            Tab(2).Control(3)=   "lblAttackMaxHCastLvl(2)"
-            Tab(2).Control(4)=   "lblAttackPercent(1)"
-            Tab(2).Control(5)=   "lblAttackEnergy(1)"
-            Tab(2).Control(6)=   "lblAttackHitMsg(1)"
-            Tab(2).Control(7)=   "lblAttackMissMsg(1)"
-            Tab(2).Control(8)=   "lblAttackDodgeMsg(1)"
-            Tab(2).Control(9)=   "lblAttackHitSpell(1)"
-            Tab(2).Control(10)=   "lblAttackSpellRange(2)"
-            Tab(2).Control(11)=   "txtAttackAccuSpell(2)"
-            Tab(2).Control(12)=   "txtAttackAccuSpellName(2)"
-            Tab(2).Control(12).Enabled=   0   'False
-            Tab(2).Control(13)=   "txtAttackMinHCastPer(2)"
-            Tab(2).Control(14)=   "txtAttackMaxHCastLvL(2)"
-            Tab(2).Control(15)=   "txtAttackPer(2)"
+            Tab(2).Control(0)=   "cmdAttackSim(2)"
+            Tab(2).Control(1)=   "txtAttackSpellDamage(2)"
+            Tab(2).Control(2)=   "cmdEditHitSpell(2)"
+            Tab(2).Control(3)=   "cmdEditDodgeMsg(2)"
+            Tab(2).Control(4)=   "cmdEditMissMsg(2)"
+            Tab(2).Control(5)=   "cmdEditHitMsg(2)"
+            Tab(2).Control(6)=   "cmdEditAttackSpell(2)"
+            Tab(2).Control(7)=   "cmbAttackType(2)"
+            Tab(2).Control(8)=   "txtAttackHitSpellName(2)"
+            Tab(2).Control(8).Enabled=   0   'False
+            Tab(2).Control(9)=   "txtAttackMissMsgDisplay(2)"
+            Tab(2).Control(9).Enabled=   0   'False
+            Tab(2).Control(10)=   "txtAttackDodgeMsgDisplay(2)"
+            Tab(2).Control(10).Enabled=   0   'False
+            Tab(2).Control(11)=   "txtAttackHitMsgDisplay(2)"
+            Tab(2).Control(11).Enabled=   0   'False
+            Tab(2).Control(12)=   "txtAttackHitSpell(2)"
+            Tab(2).Control(13)=   "txtAttackDodgeMsg(2)"
+            Tab(2).Control(14)=   "txtAttackMissMsg(2)"
+            Tab(2).Control(15)=   "txtAttackHitMsg(2)"
             Tab(2).Control(16)=   "txtAttackEnergy(2)"
-            Tab(2).Control(17)=   "txtAttackHitMsg(2)"
-            Tab(2).Control(18)=   "txtAttackMissMsg(2)"
-            Tab(2).Control(19)=   "txtAttackDodgeMsg(2)"
-            Tab(2).Control(20)=   "txtAttackHitSpell(2)"
-            Tab(2).Control(21)=   "txtAttackHitMsgDisplay(2)"
-            Tab(2).Control(21).Enabled=   0   'False
-            Tab(2).Control(22)=   "txtAttackDodgeMsgDisplay(2)"
-            Tab(2).Control(22).Enabled=   0   'False
-            Tab(2).Control(23)=   "txtAttackMissMsgDisplay(2)"
-            Tab(2).Control(23).Enabled=   0   'False
-            Tab(2).Control(24)=   "txtAttackHitSpellName(2)"
-            Tab(2).Control(24).Enabled=   0   'False
-            Tab(2).Control(25)=   "cmbAttackType(2)"
-            Tab(2).Control(26)=   "cmdEditAttackSpell(2)"
-            Tab(2).Control(27)=   "cmdEditHitMsg(2)"
-            Tab(2).Control(28)=   "cmdEditMissMsg(2)"
-            Tab(2).Control(29)=   "cmdEditDodgeMsg(2)"
-            Tab(2).Control(30)=   "cmdEditHitSpell(2)"
-            Tab(2).Control(31)=   "txtAttackSpellDamage(2)"
-            Tab(2).Control(32)=   "cmdAttackSim(2)"
+            Tab(2).Control(17)=   "txtAttackPer(2)"
+            Tab(2).Control(18)=   "txtAttackMaxHCastLvL(2)"
+            Tab(2).Control(19)=   "txtAttackMinHCastPer(2)"
+            Tab(2).Control(20)=   "txtAttackAccuSpellName(2)"
+            Tab(2).Control(20).Enabled=   0   'False
+            Tab(2).Control(21)=   "txtAttackAccuSpell(2)"
+            Tab(2).Control(22)=   "lblAttackSpellRange(2)"
+            Tab(2).Control(23)=   "lblAttackHitSpell(1)"
+            Tab(2).Control(24)=   "lblAttackDodgeMsg(1)"
+            Tab(2).Control(25)=   "lblAttackMissMsg(1)"
+            Tab(2).Control(26)=   "lblAttackHitMsg(1)"
+            Tab(2).Control(27)=   "lblAttackEnergy(1)"
+            Tab(2).Control(28)=   "lblAttackPercent(1)"
+            Tab(2).Control(29)=   "lblAttackMaxHCastLvl(2)"
+            Tab(2).Control(30)=   "lblAttackMinHCastPer(2)"
+            Tab(2).Control(31)=   "lblAttackAccuSpell(2)"
+            Tab(2).Control(32)=   "lblAttackType(1)"
             Tab(2).ControlCount=   33
             TabCaption(3)   =   "Attack 4"
             TabPicture(3)   =   "frmMonster.frx":0F56
             Tab(3).ControlEnabled=   0   'False
-            Tab(3).Control(0)=   "lblAttackType(2)"
-            Tab(3).Control(1)=   "lblAttackAccuSpell(3)"
-            Tab(3).Control(2)=   "lblAttackMinHCastPer(3)"
-            Tab(3).Control(3)=   "lblAttackMaxHCastLvl(3)"
-            Tab(3).Control(4)=   "lblAttackPercent(2)"
-            Tab(3).Control(5)=   "lblAttackEnergy(2)"
-            Tab(3).Control(6)=   "lblAttackHitMsg(2)"
-            Tab(3).Control(7)=   "lblAttackMissMsg(2)"
-            Tab(3).Control(8)=   "lblAttackDodgeMsg(2)"
-            Tab(3).Control(9)=   "lblAttackHitSpell(2)"
-            Tab(3).Control(10)=   "lblAttackSpellRange(3)"
-            Tab(3).Control(11)=   "txtAttackAccuSpell(3)"
-            Tab(3).Control(12)=   "txtAttackAccuSpellName(3)"
-            Tab(3).Control(12).Enabled=   0   'False
-            Tab(3).Control(13)=   "txtAttackMinHCastPer(3)"
-            Tab(3).Control(14)=   "txtAttackMaxHCastLvL(3)"
-            Tab(3).Control(15)=   "txtAttackPer(3)"
+            Tab(3).Control(0)=   "cmdAttackSim(3)"
+            Tab(3).Control(1)=   "txtAttackSpellDamage(3)"
+            Tab(3).Control(2)=   "cmdEditHitSpell(3)"
+            Tab(3).Control(3)=   "cmdEditDodgeMsg(3)"
+            Tab(3).Control(4)=   "cmdEditMissMsg(3)"
+            Tab(3).Control(5)=   "cmdEditHitMsg(3)"
+            Tab(3).Control(6)=   "cmdEditAttackSpell(3)"
+            Tab(3).Control(7)=   "cmbAttackType(3)"
+            Tab(3).Control(8)=   "txtAttackHitSpellName(3)"
+            Tab(3).Control(8).Enabled=   0   'False
+            Tab(3).Control(9)=   "txtAttackMissMsgDisplay(3)"
+            Tab(3).Control(9).Enabled=   0   'False
+            Tab(3).Control(10)=   "txtAttackDodgeMsgDisplay(3)"
+            Tab(3).Control(10).Enabled=   0   'False
+            Tab(3).Control(11)=   "txtAttackHitMsgDisplay(3)"
+            Tab(3).Control(11).Enabled=   0   'False
+            Tab(3).Control(12)=   "txtAttackHitSpell(3)"
+            Tab(3).Control(13)=   "txtAttackDodgeMsg(3)"
+            Tab(3).Control(14)=   "txtAttackMissMsg(3)"
+            Tab(3).Control(15)=   "txtAttackHitMsg(3)"
             Tab(3).Control(16)=   "txtAttackEnergy(3)"
-            Tab(3).Control(17)=   "txtAttackHitMsg(3)"
-            Tab(3).Control(18)=   "txtAttackMissMsg(3)"
-            Tab(3).Control(19)=   "txtAttackDodgeMsg(3)"
-            Tab(3).Control(20)=   "txtAttackHitSpell(3)"
-            Tab(3).Control(21)=   "txtAttackHitMsgDisplay(3)"
-            Tab(3).Control(21).Enabled=   0   'False
-            Tab(3).Control(22)=   "txtAttackDodgeMsgDisplay(3)"
-            Tab(3).Control(22).Enabled=   0   'False
-            Tab(3).Control(23)=   "txtAttackMissMsgDisplay(3)"
-            Tab(3).Control(23).Enabled=   0   'False
-            Tab(3).Control(24)=   "txtAttackHitSpellName(3)"
-            Tab(3).Control(24).Enabled=   0   'False
-            Tab(3).Control(25)=   "cmbAttackType(3)"
-            Tab(3).Control(26)=   "cmdEditAttackSpell(3)"
-            Tab(3).Control(27)=   "cmdEditHitMsg(3)"
-            Tab(3).Control(28)=   "cmdEditMissMsg(3)"
-            Tab(3).Control(29)=   "cmdEditDodgeMsg(3)"
-            Tab(3).Control(30)=   "cmdEditHitSpell(3)"
-            Tab(3).Control(31)=   "txtAttackSpellDamage(3)"
-            Tab(3).Control(32)=   "cmdAttackSim(3)"
+            Tab(3).Control(17)=   "txtAttackPer(3)"
+            Tab(3).Control(18)=   "txtAttackMaxHCastLvL(3)"
+            Tab(3).Control(19)=   "txtAttackMinHCastPer(3)"
+            Tab(3).Control(20)=   "txtAttackAccuSpellName(3)"
+            Tab(3).Control(20).Enabled=   0   'False
+            Tab(3).Control(21)=   "txtAttackAccuSpell(3)"
+            Tab(3).Control(22)=   "lblAttackSpellRange(3)"
+            Tab(3).Control(23)=   "lblAttackHitSpell(2)"
+            Tab(3).Control(24)=   "lblAttackDodgeMsg(2)"
+            Tab(3).Control(25)=   "lblAttackMissMsg(2)"
+            Tab(3).Control(26)=   "lblAttackHitMsg(2)"
+            Tab(3).Control(27)=   "lblAttackEnergy(2)"
+            Tab(3).Control(28)=   "lblAttackPercent(2)"
+            Tab(3).Control(29)=   "lblAttackMaxHCastLvl(3)"
+            Tab(3).Control(30)=   "lblAttackMinHCastPer(3)"
+            Tab(3).Control(31)=   "lblAttackAccuSpell(3)"
+            Tab(3).Control(32)=   "lblAttackType(2)"
             Tab(3).ControlCount=   33
             TabCaption(4)   =   "Attack 5"
             TabPicture(4)   =   "frmMonster.frx":0F72
             Tab(4).ControlEnabled=   0   'False
-            Tab(4).Control(0)=   "lblAttackType(3)"
-            Tab(4).Control(1)=   "lblAttackAccuSpell(4)"
-            Tab(4).Control(2)=   "lblAttackMinHCastPer(4)"
-            Tab(4).Control(3)=   "lblAttackMaxHCastLvl(4)"
-            Tab(4).Control(4)=   "lblAttackPercent(3)"
-            Tab(4).Control(5)=   "lblAttackEnergy(3)"
-            Tab(4).Control(6)=   "lblAttackHitMsg(3)"
-            Tab(4).Control(7)=   "lblAttackMissMsg(3)"
-            Tab(4).Control(8)=   "lblAttackDodgeMsg(3)"
-            Tab(4).Control(9)=   "lblAttackHitSpell(3)"
-            Tab(4).Control(10)=   "lblAttackSpellRange(4)"
-            Tab(4).Control(11)=   "txtAttackAccuSpell(4)"
-            Tab(4).Control(12)=   "txtAttackAccuSpellName(4)"
-            Tab(4).Control(12).Enabled=   0   'False
-            Tab(4).Control(13)=   "txtAttackMinHCastPer(4)"
-            Tab(4).Control(14)=   "txtAttackMaxHCastLvL(4)"
-            Tab(4).Control(15)=   "txtAttackPer(4)"
+            Tab(4).Control(0)=   "cmdAttackSim(4)"
+            Tab(4).Control(1)=   "txtAttackSpellDamage(4)"
+            Tab(4).Control(2)=   "cmdEditHitSpell(4)"
+            Tab(4).Control(3)=   "cmdEditDodgeMsg(4)"
+            Tab(4).Control(4)=   "cmdEditMissMsg(4)"
+            Tab(4).Control(5)=   "cmdEditHitMsg(4)"
+            Tab(4).Control(6)=   "cmdEditAttackSpell(4)"
+            Tab(4).Control(7)=   "cmbAttackType(4)"
+            Tab(4).Control(8)=   "txtAttackHitSpellName(4)"
+            Tab(4).Control(8).Enabled=   0   'False
+            Tab(4).Control(9)=   "txtAttackMissMsgDisplay(4)"
+            Tab(4).Control(9).Enabled=   0   'False
+            Tab(4).Control(10)=   "txtAttackDodgeMsgDisplay(4)"
+            Tab(4).Control(10).Enabled=   0   'False
+            Tab(4).Control(11)=   "txtAttackHitMsgDisplay(4)"
+            Tab(4).Control(11).Enabled=   0   'False
+            Tab(4).Control(12)=   "txtAttackHitSpell(4)"
+            Tab(4).Control(13)=   "txtAttackDodgeMsg(4)"
+            Tab(4).Control(14)=   "txtAttackMissMsg(4)"
+            Tab(4).Control(15)=   "txtAttackHitMsg(4)"
             Tab(4).Control(16)=   "txtAttackEnergy(4)"
-            Tab(4).Control(17)=   "txtAttackHitMsg(4)"
-            Tab(4).Control(18)=   "txtAttackMissMsg(4)"
-            Tab(4).Control(19)=   "txtAttackDodgeMsg(4)"
-            Tab(4).Control(20)=   "txtAttackHitSpell(4)"
-            Tab(4).Control(21)=   "txtAttackHitMsgDisplay(4)"
-            Tab(4).Control(21).Enabled=   0   'False
-            Tab(4).Control(22)=   "txtAttackDodgeMsgDisplay(4)"
-            Tab(4).Control(22).Enabled=   0   'False
-            Tab(4).Control(23)=   "txtAttackMissMsgDisplay(4)"
-            Tab(4).Control(23).Enabled=   0   'False
-            Tab(4).Control(24)=   "txtAttackHitSpellName(4)"
-            Tab(4).Control(24).Enabled=   0   'False
-            Tab(4).Control(25)=   "cmbAttackType(4)"
-            Tab(4).Control(26)=   "cmdEditAttackSpell(4)"
-            Tab(4).Control(27)=   "cmdEditHitMsg(4)"
-            Tab(4).Control(28)=   "cmdEditMissMsg(4)"
-            Tab(4).Control(29)=   "cmdEditDodgeMsg(4)"
-            Tab(4).Control(30)=   "cmdEditHitSpell(4)"
-            Tab(4).Control(31)=   "txtAttackSpellDamage(4)"
-            Tab(4).Control(32)=   "cmdAttackSim(4)"
+            Tab(4).Control(17)=   "txtAttackPer(4)"
+            Tab(4).Control(18)=   "txtAttackMaxHCastLvL(4)"
+            Tab(4).Control(19)=   "txtAttackMinHCastPer(4)"
+            Tab(4).Control(20)=   "txtAttackAccuSpellName(4)"
+            Tab(4).Control(20).Enabled=   0   'False
+            Tab(4).Control(21)=   "txtAttackAccuSpell(4)"
+            Tab(4).Control(22)=   "lblAttackSpellRange(4)"
+            Tab(4).Control(23)=   "lblAttackHitSpell(3)"
+            Tab(4).Control(24)=   "lblAttackDodgeMsg(3)"
+            Tab(4).Control(25)=   "lblAttackMissMsg(3)"
+            Tab(4).Control(26)=   "lblAttackHitMsg(3)"
+            Tab(4).Control(27)=   "lblAttackEnergy(3)"
+            Tab(4).Control(28)=   "lblAttackPercent(3)"
+            Tab(4).Control(29)=   "lblAttackMaxHCastLvl(4)"
+            Tab(4).Control(30)=   "lblAttackMinHCastPer(4)"
+            Tab(4).Control(31)=   "lblAttackAccuSpell(4)"
+            Tab(4).Control(32)=   "lblAttackType(3)"
             Tab(4).ControlCount=   33
             TabCaption(5)   =   "Copy/Paste"
             TabPicture(5)   =   "frmMonster.frx":0F8E
             Tab(5).ControlEnabled=   0   'False
-            Tab(5).Control(0)=   "Label4"
-            Tab(5).Control(1)=   "cmdAttackCopyAll(0)"
-            Tab(5).Control(2)=   "cmdAttackCopyAll(1)"
-            Tab(5).Control(3)=   "cmdAttackCopySingle(0)"
-            Tab(5).Control(4)=   "cmdAttackCopySingle(1)"
-            Tab(5).Control(5)=   "cmdAttackCopySingle(2)"
-            Tab(5).Control(6)=   "cmdAttackCopySingle(3)"
-            Tab(5).Control(7)=   "cmdAttackCopySingle(4)"
-            Tab(5).Control(8)=   "cmdAttackCopySingle(5)"
-            Tab(5).Control(9)=   "cmdAttackCopySingle(6)"
-            Tab(5).Control(10)=   "cmdAttackCopySingle(7)"
-            Tab(5).Control(11)=   "cmdAttackCopySingle(8)"
-            Tab(5).Control(12)=   "cmdAttackCopySingle(9)"
-            Tab(5).Control(13)=   "cmdAttackClear"
+            Tab(5).Control(0)=   "cmdAttackClear"
+            Tab(5).Control(1)=   "cmdAttackCopySingle(9)"
+            Tab(5).Control(2)=   "cmdAttackCopySingle(8)"
+            Tab(5).Control(3)=   "cmdAttackCopySingle(7)"
+            Tab(5).Control(4)=   "cmdAttackCopySingle(6)"
+            Tab(5).Control(5)=   "cmdAttackCopySingle(5)"
+            Tab(5).Control(6)=   "cmdAttackCopySingle(4)"
+            Tab(5).Control(7)=   "cmdAttackCopySingle(3)"
+            Tab(5).Control(8)=   "cmdAttackCopySingle(2)"
+            Tab(5).Control(9)=   "cmdAttackCopySingle(1)"
+            Tab(5).Control(10)=   "cmdAttackCopySingle(0)"
+            Tab(5).Control(11)=   "cmdAttackCopyAll(1)"
+            Tab(5).Control(12)=   "cmdAttackCopyAll(0)"
+            Tab(5).Control(13)=   "Label4"
             Tab(5).ControlCount=   14
             Begin VB.CommandButton cmdAttackSim 
                Caption         =   "Open Combat Sim."
@@ -5838,7 +5837,7 @@ Begin VB.Form frmMonster
             Caption         =   "Death Spell"
             Height          =   255
             Index           =   41
-            Left            =   960
+            Left            =   -74040
             TabIndex        =   113
             Top             =   720
             Width           =   855
@@ -5848,7 +5847,7 @@ Begin VB.Form frmMonster
             Caption         =   "Create Spell"
             Height          =   255
             Index           =   10
-            Left            =   900
+            Left            =   -74100
             TabIndex        =   109
             Top             =   420
             Width           =   915
@@ -5867,7 +5866,7 @@ Begin VB.Form frmMonster
             Caption         =   "Charm Resist"
             Height          =   255
             Index           =   30
-            Left            =   -71700
+            Left            =   3300
             TabIndex        =   322
             Top             =   2880
             Width           =   1215
@@ -5877,7 +5876,7 @@ Begin VB.Form frmMonster
             Caption         =   "BS Defense"
             Height          =   255
             Index           =   24
-            Left            =   -71520
+            Left            =   3480
             TabIndex        =   321
             Top             =   3180
             Width           =   1035
@@ -5887,7 +5886,7 @@ Begin VB.Form frmMonster
             Caption         =   "DR"
             Height          =   195
             Index           =   19
-            Left            =   -70380
+            Left            =   4620
             TabIndex        =   320
             Top             =   840
             Width           =   735
@@ -5897,7 +5896,7 @@ Begin VB.Form frmMonster
             Caption         =   "Index"
             Height          =   255
             Index           =   3
-            Left            =   -74400
+            Left            =   600
             TabIndex        =   319
             Top             =   1620
             Width           =   435
@@ -5906,7 +5905,7 @@ Begin VB.Form frmMonster
             Alignment       =   2  'Center
             Caption         =   "Multiplier"
             Height          =   195
-            Left            =   -72840
+            Left            =   2160
             TabIndex        =   318
             Top             =   840
             Visible         =   0   'False
@@ -5916,7 +5915,7 @@ Begin VB.Form frmMonster
             Alignment       =   2  'Center
             Caption         =   "Base"
             Height          =   195
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   317
             Top             =   840
             Visible         =   0   'False
@@ -5925,7 +5924,7 @@ Begin VB.Form frmMonster
          Begin VB.Label Label16 
             Caption         =   "HH:MM:SS"
             Height          =   195
-            Left            =   -73860
+            Left            =   1140
             TabIndex        =   316
             Top             =   4260
             Width           =   1095
@@ -5933,7 +5932,7 @@ Begin VB.Form frmMonster
          Begin VB.Label Label15 
             Caption         =   "MM/DD/YYYY"
             Height          =   195
-            Left            =   -72720
+            Left            =   2280
             TabIndex        =   315
             Top             =   4260
             Width           =   1095
@@ -5942,7 +5941,7 @@ Begin VB.Form frmMonster
             Alignment       =   1  'Right Justify
             Caption         =   "Last Killed"
             Height          =   195
-            Left            =   -74760
+            Left            =   240
             TabIndex        =   314
             Top             =   4380
             Width           =   795
@@ -5952,7 +5951,7 @@ Begin VB.Form frmMonster
             Caption         =   "Active"
             Height          =   255
             Index           =   74
-            Left            =   -74520
+            Left            =   480
             TabIndex        =   313
             Top             =   2580
             Width           =   555
@@ -5962,7 +5961,7 @@ Begin VB.Form frmMonster
             Caption         =   "Gender"
             Height          =   255
             Index           =   16
-            Left            =   -74580
+            Left            =   420
             TabIndex        =   312
             Top             =   3900
             Width           =   615
@@ -5972,7 +5971,7 @@ Begin VB.Form frmMonster
             Caption         =   "Group"
             Height          =   255
             Index           =   2
-            Left            =   -74460
+            Left            =   540
             TabIndex        =   311
             Top             =   1920
             Width           =   495
@@ -5982,7 +5981,7 @@ Begin VB.Form frmMonster
             Caption         =   "Experience"
             Height          =   255
             Index           =   4
-            Left            =   -74820
+            Left            =   180
             TabIndex        =   310
             Top             =   1320
             Width           =   855
@@ -5992,7 +5991,7 @@ Begin VB.Form frmMonster
             Caption         =   "Hitpoints"
             Height          =   255
             Index           =   5
-            Left            =   -71160
+            Left            =   3840
             TabIndex        =   309
             Top             =   1380
             Width           =   675
@@ -6002,7 +6001,7 @@ Begin VB.Form frmMonster
             Caption         =   "HP Regen"
             Height          =   255
             Index           =   6
-            Left            =   -71400
+            Left            =   3600
             TabIndex        =   308
             Top             =   1680
             Width           =   915
@@ -6012,7 +6011,7 @@ Begin VB.Form frmMonster
             Caption         =   "M.R."
             Height          =   255
             Index           =   7
-            Left            =   -70920
+            Left            =   4080
             TabIndex        =   307
             Top             =   1980
             Width           =   435
@@ -6022,7 +6021,7 @@ Begin VB.Form frmMonster
             Caption         =   "Charm Lvl"
             Height          =   255
             Index           =   8
-            Left            =   -71220
+            Left            =   3780
             TabIndex        =   306
             Top             =   2580
             Width           =   735
@@ -6032,7 +6031,7 @@ Begin VB.Form frmMonster
             Caption         =   "AC"
             Height          =   195
             Index           =   9
-            Left            =   -71160
+            Left            =   3840
             TabIndex        =   305
             Top             =   840
             Width           =   735
@@ -6042,7 +6041,7 @@ Begin VB.Form frmMonster
             Caption         =   "Follow %"
             Height          =   255
             Index           =   11
-            Left            =   -71220
+            Left            =   3780
             TabIndex        =   304
             Top             =   2280
             Width           =   735
@@ -6052,7 +6051,7 @@ Begin VB.Form frmMonster
             Caption         =   "Regen Time"
             Height          =   255
             Index           =   12
-            Left            =   -74940
+            Left            =   60
             TabIndex        =   303
             Top             =   2880
             Width           =   975
@@ -6062,7 +6061,7 @@ Begin VB.Form frmMonster
             Caption         =   "Type"
             Height          =   255
             Index           =   13
-            Left            =   -74400
+            Left            =   600
             TabIndex        =   302
             Top             =   3180
             Width           =   435
@@ -6072,7 +6071,7 @@ Begin VB.Form frmMonster
             Caption         =   "Energy"
             Height          =   255
             Index           =   14
-            Left            =   -71100
+            Left            =   3900
             TabIndex        =   301
             Top             =   3480
             Width           =   615
@@ -6082,7 +6081,7 @@ Begin VB.Form frmMonster
             Caption         =   "Alignment"
             Height          =   255
             Index           =   15
-            Left            =   -74700
+            Left            =   300
             TabIndex        =   300
             Top             =   3540
             Width           =   735
@@ -6092,14 +6091,14 @@ Begin VB.Form frmMonster
             Caption         =   "Game Limit"
             Height          =   255
             Index           =   54
-            Left            =   -74820
+            Left            =   180
             TabIndex        =   299
             Top             =   2280
             Width           =   855
          End
          Begin VB.Line Line1 
-            X1              =   -74880
-            X2              =   -69600
+            X1              =   120
+            X2              =   5400
             Y1              =   780
             Y2              =   780
          End
@@ -6116,7 +6115,7 @@ Begin VB.Form frmMonster
             EndProperty
             Height          =   255
             Index           =   1
-            Left            =   -74760
+            Left            =   240
             TabIndex        =   298
             Top             =   420
             Width           =   855
@@ -6134,7 +6133,7 @@ Begin VB.Form frmMonster
             EndProperty
             Height          =   255
             Index           =   0
-            Left            =   -71160
+            Left            =   3840
             TabIndex        =   297
             Top             =   420
             Width           =   855
