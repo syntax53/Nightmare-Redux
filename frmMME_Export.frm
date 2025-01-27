@@ -660,19 +660,19 @@ End Function
 
 Private Function GetLairInfo(sGroupIndex As String) As LairInfoType
 On Error GoTo error:
-Dim X As Long
+Dim x As Long
 
 If Len(sGroupIndex) < 5 Then Exit Function
-X = GetLairInfoIndex(sGroupIndex)
+x = GetLairInfoIndex(sGroupIndex)
 
-GetLairInfo.sGroupIndex = colLairs(X).sGroupIndex
-GetLairInfo.sMobList = colLairs(X).sMobList
-GetLairInfo.nMobs = colLairs(X).nMobs
-GetLairInfo.nAvgExp = colLairs(X).nAvgExp
-GetLairInfo.nAvgDmg = colLairs(X).nAvgDmg
-GetLairInfo.nAvgHP = colLairs(X).nAvgHP
-GetLairInfo.nMaxRegen = colLairs(X).nMaxRegen
-GetLairInfo.nScriptValue = colLairs(X).nScriptValue
+GetLairInfo.sGroupIndex = colLairs(x).sGroupIndex
+GetLairInfo.sMobList = colLairs(x).sMobList
+GetLairInfo.nMobs = colLairs(x).nMobs
+GetLairInfo.nAvgExp = colLairs(x).nAvgExp
+GetLairInfo.nAvgDmg = colLairs(x).nAvgDmg
+GetLairInfo.nAvgHP = colLairs(x).nAvgHP
+GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
+GetLairInfo.nScriptValue = colLairs(x).nScriptValue
 
 out:
 On Error Resume Next
@@ -684,43 +684,43 @@ End Function
 
 Private Sub SetLairInfo(tUpdatedLairInfo As LairInfoType)
 On Error GoTo error:
-Dim X As Long, sArr() As String, i As Integer
+Dim x As Long, sArr() As String, i As Integer
 
 If Len(tUpdatedLairInfo.sGroupIndex) < 5 Then Exit Sub
-X = GetLairInfoIndex(tUpdatedLairInfo.sGroupIndex)
+x = GetLairInfoIndex(tUpdatedLairInfo.sGroupIndex)
 
 'averages are for a single mob, averaged from all of the mobs in the list/index
 'the max regen is not taken into account (multiply by that for total average exp, for example)
-colLairs(X).sMobList = tUpdatedLairInfo.sMobList
-colLairs(X).nMobs = tUpdatedLairInfo.nMobs
-colLairs(X).nAvgExp = tUpdatedLairInfo.nAvgExp
-colLairs(X).nAvgDmg = tUpdatedLairInfo.nAvgDmg
-colLairs(X).nAvgHP = tUpdatedLairInfo.nAvgHP
-colLairs(X).nMaxRegen = tUpdatedLairInfo.nMaxRegen
+colLairs(x).sMobList = tUpdatedLairInfo.sMobList
+colLairs(x).nMobs = tUpdatedLairInfo.nMobs
+colLairs(x).nAvgExp = tUpdatedLairInfo.nAvgExp
+colLairs(x).nAvgDmg = tUpdatedLairInfo.nAvgDmg
+colLairs(x).nAvgHP = tUpdatedLairInfo.nAvgHP
+colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen
 
-If colLairs(X).nMaxRegen = 0 Then
-    sArr() = Split(colLairs(X).sGroupIndex, "-")
-    colLairs(X).nMaxRegen = Val(sArr(UBound(sArr())))
+If colLairs(x).nMaxRegen = 0 Then
+    sArr() = Split(colLairs(x).sGroupIndex, "-")
+    colLairs(x).nMaxRegen = Val(sArr(UBound(sArr())))
 End If
 
-If colLairs(X).nMaxRegen > 0 And colLairs(X).nAvgExp > 0 Then
-    If colLairs(X).nAvgHP + colLairs(X).nAvgDmg <= 0 Then
-        colLairs(X).nScriptValue = colLairs(X).nAvgExp * colLairs(X).nMaxRegen * 100
+If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
+    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
+        colLairs(x).nScriptValue = colLairs(x).nAvgExp * colLairs(x).nMaxRegen * 100
     Else
-        colLairs(X).nScriptValue = _
+        colLairs(x).nScriptValue = _
             Round( _
                     ( _
-                        (colLairs(X).nAvgExp * colLairs(X).nMaxRegen) / _
+                        (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
                         ( _
-                            (colLairs(X).nAvgHP * colLairs(X).nMaxRegen) + _
-                            (colLairs(X).nAvgDmg * 2 * ((colLairs(X).nMaxRegen * (colLairs(X).nMaxRegen + 1)) / 2)) _
+                            (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
+                            (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
                         ) _
                     ) _
                     * 100 _
                 )
     End If
 Else
-    colLairs(X).nScriptValue = 0
+    colLairs(x).nScriptValue = 0
 End If
 
 out:
@@ -732,7 +732,7 @@ Resume out:
 End Sub
 
 Private Sub LoadConfig(ByVal sFile As String)
-Dim sLine As String, X As Long, Y As Long, oLI As ListItem
+Dim sLine As String, x As Long, y As Long, oLI As ListItem
 Dim sTemp As String, sArray() As String, fso As FileSystemObject
 On Error GoTo error:
 
@@ -774,10 +774,10 @@ chkNoRooms.Value = ReadINI("Settings", "NoRooms", sFile)
 lvExludedRooms.ListItems.clear
 sLine = ReadINI("Settings", "ExcludedRooms", sFile)
 If Len(sLine) > 5 Then '1/1/1, = 6 chars
-    X = 0
-    Do While Not InStr(X + 1, sLine, ",") = 0
-        Y = InStr(X + 1, sLine, ",")
-        sTemp = Mid(sLine, X + 1, Y - X - 1)
+    x = 0
+    Do While Not InStr(x + 1, sLine, ",") = 0
+        y = InStr(x + 1, sLine, ",")
+        sTemp = Mid(sLine, x + 1, y - x - 1)
         sArray() = Split(sTemp, "/", 3)
         
         Set oLI = lvExludedRooms.ListItems.add
@@ -786,7 +786,7 @@ If Len(sLine) > 5 Then '1/1/1, = 6 chars
         oLI.ListSubItems.add 2, , sArray(2)
         
         Set oLI = Nothing
-        X = Y
+        x = y
     Loop
 End If
 
@@ -804,7 +804,7 @@ Resume out:
 End Sub
 Private Function SaveConfig(ByVal sFile As String, _
     Optional ByVal bPromptFile As Boolean) As Integer
-Dim sTemp As String, X As Integer
+Dim sTemp As String, x As Integer
 On Error GoTo error:
 
 If bPromptFile Then
@@ -844,12 +844,12 @@ Call WriteINI("Settings", "NoRooms", chkNoRooms.Value, sFile)
 
 sTemp = ""
 If lvExludedRooms.ListItems.Count > 0 Then
-    For X = 1 To lvExludedRooms.ListItems.Count
-        sTemp = sTemp & lvExludedRooms.ListItems(X).Text _
-            & "/" & lvExludedRooms.ListItems(X).ListSubItems(1).Text _
-            & "/" & lvExludedRooms.ListItems(X).ListSubItems(2).Text _
+    For x = 1 To lvExludedRooms.ListItems.Count
+        sTemp = sTemp & lvExludedRooms.ListItems(x).Text _
+            & "/" & lvExludedRooms.ListItems(x).ListSubItems(1).Text _
+            & "/" & lvExludedRooms.ListItems(x).ListSubItems(2).Text _
             & ","
-    Next X
+    Next x
     Call WriteINI("Settings", "ExcludedRooms", sTemp, sFile)
 Else
     Call WriteINI("Settings", "ExcludedRooms", "0", sFile)
@@ -887,7 +887,7 @@ bCheckSave = True
 End Sub
 
 Private Sub ExcludeRoomsEnable(ByVal bTrue As Boolean)
-Dim X As Integer
+Dim x As Integer
 
 On Error GoTo error:
 
@@ -903,9 +903,9 @@ If bTrue = True Then
     chkHideExcludedRooms.Enabled = True
     cmdHideHelp.Enabled = True
     
-    For X = 0 To 2
-        lblExRooms(X).Enabled = True
-    Next X
+    For x = 0 To 2
+        lblExRooms(x).Enabled = True
+    Next x
 Else
     txtFrom.Enabled = False
     txtTo.Enabled = False
@@ -918,9 +918,9 @@ Else
     chkHideExcludedRooms.Enabled = False
     cmdHideHelp.Enabled = False
     
-    For X = 0 To 2
-        lblExRooms(X).Enabled = False
-    Next X
+    For x = 0 To 2
+        lblExRooms(x).Enabled = False
+    Next x
 End If
 
 Exit Sub
@@ -987,15 +987,15 @@ bCheckSave = True
 End Sub
 
 Private Sub chkOnly_Click(Index As Integer)
-Dim bAction As Boolean, X As Integer
+Dim bAction As Boolean, x As Integer
 
 Select Case Index
     Case 0:
         If chkOnly(0).Value = 1 Then bAction = True
         
-        For X = 1 To 7
-            If Not X = 5 And Not X = 6 Then chkOnly(X).Enabled = bAction
-        Next X
+        For x = 1 To 7
+            If Not x = 5 And Not x = 6 Then chkOnly(x).Enabled = bAction
+        Next x
     Case 1: 'items
         If chkOnly(1).Value = 0 Then chkOnly(7).Value = 0
     Case 7: 'shops
@@ -1005,16 +1005,16 @@ End Select
 End Sub
 
 Private Sub cmdDefaultExcludeList_Click()
-Dim X As Integer, sMsg As String
+Dim x As Integer, sMsg As String
 On Error GoTo error:
 
 sMsg = "The default rooms to exclude are..."
-For X = 0 To UBound(nDefaultExcludeMap())
-    sMsg = sMsg & vbCrLf & sDefaultExcludeNote(X) & ": " & nDefaultExcludeMap(X) & "/" & nDefaultExcludeFrom(X)
-    If Not nDefaultExcludeFrom(X) = nDefaultExcludeTo(X) Then
-        sMsg = sMsg & "-" & nDefaultExcludeTo(X)
+For x = 0 To UBound(nDefaultExcludeMap())
+    sMsg = sMsg & vbCrLf & sDefaultExcludeNote(x) & ": " & nDefaultExcludeMap(x) & "/" & nDefaultExcludeFrom(x)
+    If Not nDefaultExcludeFrom(x) = nDefaultExcludeTo(x) Then
+        sMsg = sMsg & "-" & nDefaultExcludeTo(x)
     End If
-Next X
+Next x
 
 MsgBox sMsg, vbInformation
 
@@ -1047,53 +1047,53 @@ Private Sub cmdSaveConfig_Click()
 Call SaveConfig(sConfigFile, True)
 End Sub
 
-Private Sub AddToDefaultsArr(ByRef X As Integer, nAddMap As Long, nAddFrom As Long, nAddTo As Long, sNote As String)
-ReDim Preserve nDefaultExcludeMap(X)
-ReDim Preserve nDefaultExcludeFrom(X)
-ReDim Preserve nDefaultExcludeTo(X)
-ReDim Preserve sDefaultExcludeNote(X)
-nDefaultExcludeMap(X) = nAddMap
-nDefaultExcludeFrom(X) = nAddFrom
-nDefaultExcludeTo(X) = nAddTo
-sDefaultExcludeNote(X) = sNote
-X = X + 1
+Private Sub AddToDefaultsArr(ByRef x As Integer, nAddMap As Long, nAddFrom As Long, nAddTo As Long, sNote As String)
+ReDim Preserve nDefaultExcludeMap(x)
+ReDim Preserve nDefaultExcludeFrom(x)
+ReDim Preserve nDefaultExcludeTo(x)
+ReDim Preserve sDefaultExcludeNote(x)
+nDefaultExcludeMap(x) = nAddMap
+nDefaultExcludeFrom(x) = nAddFrom
+nDefaultExcludeTo(x) = nAddTo
+sDefaultExcludeNote(x) = sNote
+x = x + 1
 End Sub
 
 Private Sub AddDefaultExcludes()
-Dim X As Integer
+Dim x As Integer
 On Error GoTo error:
 
-X = 0
+x = 0
 
 ReDim nDefaultExcludeMap(0) As Long
 ReDim nDefaultExcludeFrom(0) As Long
 ReDim nDefaultExcludeTo(0) As Long
 ReDim sDefaultExcludeNote(0) As String
 
-Call AddToDefaultsArr(X, 1, 164, 164, "sysop support chamber")
-Call AddToDefaultsArr(X, 1, 238, 238, "sysop cheat room")
-Call AddToDefaultsArr(X, 1, 288, 288, "fake silver river room")
-Call AddToDefaultsArr(X, 1, 289, 289, "halls of training, entrance")
-Call AddToDefaultsArr(X, 1, 3347, 3347, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
+Call AddToDefaultsArr(x, 1, 288, 288, "fake silver river room")
+Call AddToDefaultsArr(x, 1, 289, 289, "halls of training, entrance")
+Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
 
-Call AddToDefaultsArr(X, 1, 2779, 2782, "sysop support module test rooms")
-Call AddToDefaultsArr(X, 1, 3343, 3346, "sysop support empty rooms")
-Call AddToDefaultsArr(X, 1, 3437, 3437, "sysop support rubbish room")
+Call AddToDefaultsArr(x, 1, 2779, 2782, "sysop support module test rooms")
+Call AddToDefaultsArr(x, 1, 3343, 3346, "sysop support empty rooms")
+Call AddToDefaultsArr(x, 1, 3437, 3437, "sysop support rubbish room")
 
-Call AddToDefaultsArr(X, 2, 2963, 2963, "mod test room, mod 1")
-Call AddToDefaultsArr(X, 3, 788, 788, "mod test room, mod 2")
-Call AddToDefaultsArr(X, 8, 1407, 1407, "mod test room, mod 3")
-Call AddToDefaultsArr(X, 6, 3275, 3275, "mod test room, mod 4")
-Call AddToDefaultsArr(X, 9, 1432, 1432, "mod test room, mod 5")
+Call AddToDefaultsArr(x, 2, 2963, 2963, "mod test room, mod 1")
+Call AddToDefaultsArr(x, 3, 788, 788, "mod test room, mod 2")
+Call AddToDefaultsArr(x, 8, 1407, 1407, "mod test room, mod 3")
+Call AddToDefaultsArr(x, 6, 3275, 3275, "mod test room, mod 4")
+Call AddToDefaultsArr(x, 9, 1432, 1432, "mod test room, mod 5")
 
-Call AddToDefaultsArr(X, 12, 2258, 2258, "mod test room, mod 6")
+Call AddToDefaultsArr(x, 12, 2258, 2258, "mod test room, mod 6")
 'Call AddToDefaultsArr(x, 12, 2381, 2381, "platform of stars")
 
-Call AddToDefaultsArr(X, 16, 2673, 2673, "mod test room, mod 7")
-Call AddToDefaultsArr(X, 15, 2055, 2055, "mod test room, mod 8")
+Call AddToDefaultsArr(x, 16, 2673, 2673, "mod test room, mod 7")
+Call AddToDefaultsArr(x, 15, 2055, 2055, "mod test room, mod 8")
 
-Call AddToDefaultsArr(X, 17, 2839, 2839, "mod test room, mod 9")
-Call AddToDefaultsArr(X, 17, 2867, 2867, "sysop training room")
+Call AddToDefaultsArr(x, 17, 2839, 2839, "mod test room, mod 9")
+Call AddToDefaultsArr(x, 17, 2867, 2867, "sysop training room")
 
 out:
 Exit Sub
@@ -1114,7 +1114,7 @@ End Sub
 
 Private Sub Form_Load()
 On Error Resume Next
-Dim fso As FileSystemObject, X As Integer
+Dim fso As FileSystemObject, x As Integer
 
 lvExludedRooms.ColumnHeaders.clear
 lvExludedRooms.ColumnHeaders.add , , "Map", 600
@@ -1269,7 +1269,7 @@ End Sub
 
 Private Sub cmdGo_Click()
 On Error GoTo error:
-Dim X As Long, Y As Long, sPath As String
+Dim x As Long, y As Long, sPath As String
 Dim sNewPath() As String
 Dim StartTime As Long, nTotalTime As Double, sTotalTime As String
 Dim nTmp As Integer, nStatus As Integer, frmForm As Form
@@ -1331,9 +1331,9 @@ End Select
 If InStr(1, sDataSource, "\") > 0 Then
     sNewPath = Split(sDataSource, "\")
     sExportPath = sNewPath(LBound(sNewPath()))
-    For X = LBound(sNewPath()) + 1 To UBound(sNewPath()) - 1
-        sExportPath = sExportPath & "\" & sNewPath(X)
-    Next X
+    For x = LBound(sNewPath()) + 1 To UBound(sNewPath()) - 1
+        sExportPath = sExportPath & "\" & sNewPath(x)
+    Next x
     Call WriteINI("Settings", "ExportPath", sConfigFile)
 End If
 Erase sNewPath()
@@ -1388,22 +1388,22 @@ If chkLegit.Value = 1 _
         ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count)
     End If
     
-    X = 0
+    x = 0
     If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
-        For X = 0 To UBound(nDefaultExcludeMap())
-            ExcludedRooms(1, X) = nDefaultExcludeMap(X)
-            ExcludedRooms(2, X) = nDefaultExcludeFrom(X)
-            ExcludedRooms(3, X) = nDefaultExcludeTo(X)
-        Next X
+        For x = 0 To UBound(nDefaultExcludeMap())
+            ExcludedRooms(1, x) = nDefaultExcludeMap(x)
+            ExcludedRooms(2, x) = nDefaultExcludeFrom(x)
+            ExcludedRooms(3, x) = nDefaultExcludeTo(x)
+        Next x
     End If
     
     If chkExcludeRooms.Value = 1 And lvExludedRooms.ListItems.Count > 0 Then
-        For Y = 1 To lvExludedRooms.ListItems.Count
-            ExcludedRooms(1, X) = Val(lvExludedRooms.ListItems(Y).Text)
-            ExcludedRooms(2, X) = Val(lvExludedRooms.ListItems(Y).ListSubItems(1).Text)
-            ExcludedRooms(3, X) = Val(lvExludedRooms.ListItems(Y).ListSubItems(2).Text)
-            X = X + 1
-        Next Y
+        For y = 1 To lvExludedRooms.ListItems.Count
+            ExcludedRooms(1, x) = Val(lvExludedRooms.ListItems(y).Text)
+            ExcludedRooms(2, x) = Val(lvExludedRooms.ListItems(y).ListSubItems(1).Text)
+            ExcludedRooms(3, x) = Val(lvExludedRooms.ListItems(y).ListSubItems(2).Text)
+            x = x + 1
+        Next y
     End If
 Else
     ReDim ExcludedRooms(1, 0)
@@ -1576,7 +1576,7 @@ Resume ReEnable:
 End Sub
 
 Private Function CalculateMonsterItemBonuses(nMonster As Long, nAbilities As Variant) As Integer
-Dim X As Integer, Y As Integer, nTest As Integer, nStatus As Integer
+Dim x As Integer, y As Integer, nTest As Integer, nStatus As Integer
 On Error GoTo error:
 
 If Not IsDimmed(nAbilities) Then Exit Function
@@ -1592,28 +1592,28 @@ End If
 
 If Monsterrec.WeaponNumber > 0 Then
     If GetItemLimit(Monsterrec.WeaponNumber) = 0 Then
-        For Y = LBound(nAbilities) To UBound(nAbilities)
-            nTest = ItemHasAbility(Monsterrec.WeaponNumber, nAbilities(Y))
+        For y = LBound(nAbilities) To UBound(nAbilities)
+            nTest = ItemHasAbility(Monsterrec.WeaponNumber, nAbilities(y))
             If nTest > 0 Then
                 CalculateMonsterItemBonuses = CalculateMonsterItemBonuses + nTest
             End If
-        Next Y
+        Next y
     End If
 End If
 
-For X = 0 To 9
-    If Monsterrec.ItemNumber(X) > 0 Then
-        If GetItemLimit(Monsterrec.ItemNumber(X)) = 0 Then
-            For Y = LBound(nAbilities) To UBound(nAbilities)
-                nTest = ItemHasAbility(Monsterrec.ItemNumber(X), nAbilities(Y))
+For x = 0 To 9
+    If Monsterrec.ItemNumber(x) > 0 Then
+        If GetItemLimit(Monsterrec.ItemNumber(x)) = 0 Then
+            For y = LBound(nAbilities) To UBound(nAbilities)
+                nTest = ItemHasAbility(Monsterrec.ItemNumber(x), nAbilities(y))
                 If nTest > 0 Then
-                    If Monsterrec.ItemDropPer(X) > 100 Then Monsterrec.ItemDropPer(X) = 100
-                    CalculateMonsterItemBonuses = CalculateMonsterItemBonuses + (nTest * (Monsterrec.ItemDropPer(X) / 100))
+                    If Monsterrec.ItemDropPer(x) > 100 Then Monsterrec.ItemDropPer(x) = 100
+                    CalculateMonsterItemBonuses = CalculateMonsterItemBonuses + (nTest * (Monsterrec.ItemDropPer(x) / 100))
                 End If
-            Next Y
+            Next y
         End If
     End If
-Next X
+Next x
 
 out:
 On Error Resume Next
@@ -1624,7 +1624,7 @@ Resume out:
 End Function
 
 Private Function CalculateMonsterAvgDmg(ByVal nMonster As Long) As Currency
-Dim nStatus As Integer, X As Integer, Y As Integer
+Dim nStatus As Integer, x As Integer, y As Integer
 Dim nPercent As Integer, sTemp As String, nTest As Integer
 Dim nDamageArr As Variant, nAccyArr As Variant
 Dim nItemDamageBonus As Integer, nItemAccyBonus As Integer
@@ -1655,172 +1655,172 @@ nAccyArr = Array(22, 105, 106) '22, 105, 106 = accuracy
 nItemDamageBonus = CalculateMonsterItemBonuses(nMonster, nDamageArr)
 nItemAccyBonus = CalculateMonsterItemBonuses(nMonster, nAccyArr)
 
-For X = 0 To 4
-    If Monsterrec.AttackType(X) > 0 And Monsterrec.AttackType(X) < 4 Then
-        sTemp = GetMonsterAttackName(Monsterrec.Number, X, 20)
+For x = 0 To 4
+    If Monsterrec.AttackType(x) > 0 And Monsterrec.AttackType(x) < 4 Then
+        sTemp = GetMonsterAttackName(Monsterrec.Number, x, 20)
         If InStr(1, sTemp, " you ", vbTextCompare) Then
             sTemp = Mid(sTemp, 1, InStr(1, sTemp, " you ", vbTextCompare))
         ElseIf Right(sTemp, 4) = " you" Then
             sTemp = Left(sTemp, Len(sTemp) - 4)
         End If
-        clsMonAtkSim.sAtkName(X) = Trim(sTemp)
-        clsMonAtkSim.nAtkType(X) = Monsterrec.AttackType(X)
-        clsMonAtkSim.nAtkEnergy(X) = Monsterrec.AttackEnergy(X)
-        clsMonAtkSim.nAtkChance(X) = Monsterrec.AttackPer(X)
+        clsMonAtkSim.sAtkName(x) = Trim(sTemp)
+        clsMonAtkSim.nAtkType(x) = Monsterrec.AttackType(x)
+        clsMonAtkSim.nAtkEnergy(x) = Monsterrec.AttackEnergy(x)
+        clsMonAtkSim.nAtkChance(x) = Monsterrec.AttackPer(x)
         
-        If Monsterrec.AttackType(X) = 2 Then 'spell
-            nStatus = GetSpell(Monsterrec.AttackAccuSpell(X))
+        If Monsterrec.AttackType(x) = 2 Then 'spell
+            nStatus = GetSpell(Monsterrec.AttackAccuSpell(x))
             If nStatus = 0 Then
                 If Spellrec.Target = 12 Then
-                    nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(X), 1) '1=damage
+                    nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 1) '1=damage
                     If nTest > -1 Then
                         'MsgBox "Attack #" & (x + 1) & " (" & txtAtkName(x).Text & ") has an area attack spell in a regular attack slot using ability 1 (damage) instead of 17 (damage-MR). " _
                             & "This is an error and MMUD will not cast this.  Area attack spells must use ability 17 (or possibly 8-drain?).  The min/max damage and energy cost has been zero'd out for the sim to reflect the game.", vbExclamation
-                        clsMonAtkSim.nAtkDuration(X) = 0
-                        clsMonAtkSim.nAtkMin(X) = 0
-                        clsMonAtkSim.nAtkMax(X) = 0
-                        clsMonAtkSim.nAtkEnergy(X) = 0
+                        clsMonAtkSim.nAtkDuration(x) = 0
+                        clsMonAtkSim.nAtkMin(x) = 0
+                        clsMonAtkSim.nAtkMax(x) = 0
+                        clsMonAtkSim.nAtkEnergy(x) = 0
                         GoTo next_attack_slot:
                     End If
                 End If
                 
-                clsMonAtkSim.nAtkResist(X) = Spellrec.TypeOfResists
-                clsMonAtkSim.nAtkDuration(X) = GetSpellDuration(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
-                clsMonAtkSim.nAtkMin(X) = 0
-                clsMonAtkSim.nAtkMax(X) = 0
+                clsMonAtkSim.nAtkResist(x) = Spellrec.TypeOfResists
+                clsMonAtkSim.nAtkDuration(x) = GetSpellDuration(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                clsMonAtkSim.nAtkMin(x) = 0
+                clsMonAtkSim.nAtkMax(x) = 0
                 
-                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(X), 1) '1=damage
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 1) '1=damage
                 If nTest >= 0 Then
-                    clsMonAtkSim.nAtkMRdmgResist(X) = 0 'NO MR resist
+                    clsMonAtkSim.nAtkMRdmgResist(x) = 0 'NO MR resist
                     If nTest > 0 Then
-                        clsMonAtkSim.nAtkMin(X) = nTest
-                        clsMonAtkSim.nAtkMax(X) = nTest
+                        clsMonAtkSim.nAtkMin(x) = nTest
+                        clsMonAtkSim.nAtkMax(x) = nTest
                     Else
-                        clsMonAtkSim.nAtkMin(X) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
-                        clsMonAtkSim.nAtkMax(X) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
+                        clsMonAtkSim.nAtkMin(x) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMax(x) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                     End If
                 End If
                 
-                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(X), 17) '17=damage
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 17) '17=damage
                 If nTest >= 0 Then
-                    clsMonAtkSim.nAtkMRdmgResist(X) = 1 'MR resist
+                    clsMonAtkSim.nAtkMRdmgResist(x) = 1 'MR resist
                     If nTest > 0 Then
-                        clsMonAtkSim.nAtkMin(X) = nTest
-                        clsMonAtkSim.nAtkMax(X) = nTest
+                        clsMonAtkSim.nAtkMin(x) = nTest
+                        clsMonAtkSim.nAtkMax(x) = nTest
                     Else
-                        clsMonAtkSim.nAtkMin(X) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
-                        clsMonAtkSim.nAtkMax(X) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
+                        clsMonAtkSim.nAtkMin(x) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMax(x) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                     End If
                 End If
                 
-                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(X), 8) '8=drain
+                nTest = SpellHasAbility(Monsterrec.AttackAccuSpell(x), 8) '8=drain
                 If nTest >= 0 Then
-                    clsMonAtkSim.nAtkMRdmgResist(X) = 0 'NO MR resist
+                    clsMonAtkSim.nAtkMRdmgResist(x) = 0 'NO MR resist
                     If nTest > 0 Then
-                        clsMonAtkSim.nAtkMin(X) = nTest
-                        clsMonAtkSim.nAtkMax(X) = nTest
+                        clsMonAtkSim.nAtkMin(x) = nTest
+                        clsMonAtkSim.nAtkMax(x) = nTest
                     Else
-                        clsMonAtkSim.nAtkMin(X) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
-                        clsMonAtkSim.nAtkMax(X) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(X), Monsterrec.AttackMaxHCastLvl(X))
+                        clsMonAtkSim.nAtkMin(x) = GetSpellMinDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
+                        clsMonAtkSim.nAtkMax(x) = GetSpellMaxDamage(Monsterrec.AttackAccuSpell(x), Monsterrec.AttackMaxHCastLvl(x))
                     End If
                 End If
                 
             Else
-                clsMonAtkSim.nAtkMin(X) = 0
-                clsMonAtkSim.nAtkMax(X) = 0
+                clsMonAtkSim.nAtkMin(x) = 0
+                clsMonAtkSim.nAtkMax(x) = 0
             End If
-            clsMonAtkSim.nAtkSuccess(X) = Monsterrec.AttackMinHCastPer(X)
+            clsMonAtkSim.nAtkSuccess(x) = Monsterrec.AttackMinHCastPer(x)
         Else
-            clsMonAtkSim.nAtkMin(X) = Monsterrec.AttackMinHCastPer(X) + nItemDamageBonus
-            clsMonAtkSim.nAtkMax(X) = Monsterrec.AttackMaxHCastLvl(X) + nItemDamageBonus
-            clsMonAtkSim.nAtkSuccess(X) = Monsterrec.AttackAccuSpell(X) + nItemAccyBonus
-            If Monsterrec.AttackHitSpell(X) > 0 Then
+            clsMonAtkSim.nAtkMin(x) = Monsterrec.AttackMinHCastPer(x) + nItemDamageBonus
+            clsMonAtkSim.nAtkMax(x) = Monsterrec.AttackMaxHCastLvl(x) + nItemDamageBonus
+            clsMonAtkSim.nAtkSuccess(x) = Monsterrec.AttackAccuSpell(x) + nItemAccyBonus
+            If Monsterrec.AttackHitSpell(x) > 0 Then
                 
-                nStatus = GetSpell(Monsterrec.AttackHitSpell(X))
+                nStatus = GetSpell(Monsterrec.AttackHitSpell(x))
                 If nStatus = 0 Then
-                    clsMonAtkSim.nAtkResist(X) = Spellrec.TypeOfResists
-                    clsMonAtkSim.nAtkDuration(X) = GetSpellDuration(Monsterrec.AttackHitSpell(X))
+                    clsMonAtkSim.nAtkResist(x) = Spellrec.TypeOfResists
+                    clsMonAtkSim.nAtkDuration(x) = GetSpellDuration(Monsterrec.AttackHitSpell(x))
                     
-                    If SpellHasAbility(Monsterrec.AttackHitSpell(X), 1) >= 0 Then
-                        clsMonAtkSim.nAtkMRdmgResist(X) = 0
-                        clsMonAtkSim.nAtkHitSpellMin(X) = GetSpellMinDamage(Monsterrec.AttackHitSpell(X))
-                        clsMonAtkSim.nAtkHitSpellMax(X) = GetSpellMaxDamage(Monsterrec.AttackHitSpell(X))
+                    If SpellHasAbility(Monsterrec.AttackHitSpell(x), 1) >= 0 Then
+                        clsMonAtkSim.nAtkMRdmgResist(x) = 0
+                        clsMonAtkSim.nAtkHitSpellMin(x) = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
+                        clsMonAtkSim.nAtkHitSpellMax(x) = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
                         
-                    ElseIf SpellHasAbility(Monsterrec.AttackHitSpell(X), 17) >= 0 Then
-                        clsMonAtkSim.nAtkMRdmgResist(X) = 1
-                        clsMonAtkSim.nAtkHitSpellMin(X) = GetSpellMinDamage(Monsterrec.AttackHitSpell(X))
-                        clsMonAtkSim.nAtkHitSpellMax(X) = GetSpellMaxDamage(Monsterrec.AttackHitSpell(X))
+                    ElseIf SpellHasAbility(Monsterrec.AttackHitSpell(x), 17) >= 0 Then
+                        clsMonAtkSim.nAtkMRdmgResist(x) = 1
+                        clsMonAtkSim.nAtkHitSpellMin(x) = GetSpellMinDamage(Monsterrec.AttackHitSpell(x))
+                        clsMonAtkSim.nAtkHitSpellMax(x) = GetSpellMaxDamage(Monsterrec.AttackHitSpell(x))
                         
                     Else
-                        clsMonAtkSim.nAtkHitSpellMin(X) = 0
-                        clsMonAtkSim.nAtkHitSpellMax(X) = 0
+                        clsMonAtkSim.nAtkHitSpellMin(x) = 0
+                        clsMonAtkSim.nAtkHitSpellMax(x) = 0
                     End If
                 End If
             End If
         End If
     End If
 next_attack_slot:
-Next X
+Next x
 
 nPercent = 0
-For X = 0 To 4
-    If Monsterrec.SpellNumber(X) > 0 Then
-        nStatus = GetSpell(Monsterrec.SpellNumber(X))
+For x = 0 To 4
+    If Monsterrec.SpellNumber(x) > 0 Then
+        nStatus = GetSpell(Monsterrec.SpellNumber(x))
         If nStatus = 0 Then
-            clsMonAtkSim.sBetweenRoundName(X) = ClipNull(Spellrec.Name)
-            clsMonAtkSim.nBetweenRoundResistType(X) = Spellrec.TypeOfResists
-            clsMonAtkSim.nBetweenRoundChance(X) = Monsterrec.SpellCastPer(X)
-            clsMonAtkSim.nBetweenRoundDuration(X) = GetSpellDuration(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
+            clsMonAtkSim.sBetweenRoundName(x) = ClipNull(Spellrec.Name)
+            clsMonAtkSim.nBetweenRoundResistType(x) = Spellrec.TypeOfResists
+            clsMonAtkSim.nBetweenRoundChance(x) = Monsterrec.SpellCastPer(x)
+            clsMonAtkSim.nBetweenRoundDuration(x) = GetSpellDuration(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
             
-            nTest = SpellHasAbility(Monsterrec.SpellNumber(X), 1) '1=damage
+            nTest = SpellHasAbility(Monsterrec.SpellNumber(x), 1) '1=damage
             If nTest >= 0 Then
-                clsMonAtkSim.nBetweenRoundResistDmgMR(X) = 0 'NO MR resist
+                clsMonAtkSim.nBetweenRoundResistDmgMR(x) = 0 'NO MR resist
                 If nTest > 0 Then
-                    clsMonAtkSim.nBetweenRoundMin(X) = nTest
-                    clsMonAtkSim.nBetweenRoundMax(X) = nTest
+                    clsMonAtkSim.nBetweenRoundMin(x) = nTest
+                    clsMonAtkSim.nBetweenRoundMax(x) = nTest
                 Else
-                    clsMonAtkSim.nBetweenRoundMin(X) = GetSpellMinDamage(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
-                    clsMonAtkSim.nBetweenRoundMax(X) = GetSpellMaxDamage(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
+                    clsMonAtkSim.nBetweenRoundMin(x) = GetSpellMinDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                    clsMonAtkSim.nBetweenRoundMax(x) = GetSpellMaxDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
                 End If
             End If
             
-            nTest = SpellHasAbility(Monsterrec.SpellNumber(X), 17) '17=damage-mr
+            nTest = SpellHasAbility(Monsterrec.SpellNumber(x), 17) '17=damage-mr
             If nTest >= 0 Then
-                clsMonAtkSim.nBetweenRoundResistDmgMR(X) = 1 'MR resist
+                clsMonAtkSim.nBetweenRoundResistDmgMR(x) = 1 'MR resist
                 If nTest > 0 Then
-                    clsMonAtkSim.nBetweenRoundMin(X) = nTest
-                    clsMonAtkSim.nBetweenRoundMax(X) = nTest
+                    clsMonAtkSim.nBetweenRoundMin(x) = nTest
+                    clsMonAtkSim.nBetweenRoundMax(x) = nTest
                 Else
-                    clsMonAtkSim.nBetweenRoundMin(X) = GetSpellMinDamage(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
-                    clsMonAtkSim.nBetweenRoundMax(X) = GetSpellMaxDamage(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
+                    clsMonAtkSim.nBetweenRoundMin(x) = GetSpellMinDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                    clsMonAtkSim.nBetweenRoundMax(x) = GetSpellMaxDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
                 End If
             End If
             
-            nTest = SpellHasAbility(Monsterrec.SpellNumber(X), 8) '8=drain
+            nTest = SpellHasAbility(Monsterrec.SpellNumber(x), 8) '8=drain
             If nTest >= 0 Then
-                clsMonAtkSim.nBetweenRoundResistDmgMR(X) = 0 'NO MR resist
+                clsMonAtkSim.nBetweenRoundResistDmgMR(x) = 0 'NO MR resist
                 If nTest > 0 Then
-                    clsMonAtkSim.nBetweenRoundMin(X) = nTest
-                    clsMonAtkSim.nBetweenRoundMax(X) = nTest
+                    clsMonAtkSim.nBetweenRoundMin(x) = nTest
+                    clsMonAtkSim.nBetweenRoundMax(x) = nTest
                 Else
-                    clsMonAtkSim.nBetweenRoundMin(X) = GetSpellMinDamage(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
-                    clsMonAtkSim.nBetweenRoundMax(X) = GetSpellMaxDamage(Monsterrec.SpellNumber(X), Monsterrec.SpellCastLvl(X))
+                    clsMonAtkSim.nBetweenRoundMin(x) = GetSpellMinDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
+                    clsMonAtkSim.nBetweenRoundMax(x) = GetSpellMaxDamage(Monsterrec.SpellNumber(x), Monsterrec.SpellCastLvl(x))
                 End If
             End If
         End If
     End If
-Next X
+Next x
 
-For X = 0 To 4
-    If Len(clsMonAtkSim.sAtkName(X)) > 0 Then
-        For Y = 0 To 4
-            If Y <> X And clsMonAtkSim.sAtkName(X) = clsMonAtkSim.sAtkName(Y) Then
-                clsMonAtkSim.sAtkName(X) = Trim(clsMonAtkSim.sAtkName(X)) & (X + 1)
-                clsMonAtkSim.sAtkName(Y) = Trim(clsMonAtkSim.sAtkName(Y)) & (Y + 1)
+For x = 0 To 4
+    If Len(clsMonAtkSim.sAtkName(x)) > 0 Then
+        For y = 0 To 4
+            If y <> x And clsMonAtkSim.sAtkName(x) = clsMonAtkSim.sAtkName(y) Then
+                clsMonAtkSim.sAtkName(x) = Trim(clsMonAtkSim.sAtkName(x)) & (x + 1)
+                clsMonAtkSim.sAtkName(y) = Trim(clsMonAtkSim.sAtkName(y)) & (y + 1)
             End If
-        Next Y
+        Next y
     End If
-Next X
+Next x
 
 clsMonAtkSim.RunSim
 
@@ -1835,7 +1835,7 @@ Resume out:
 End Function
 
 Private Sub VerifyOneRecordInDBs()
-Dim X As Integer
+Dim x As Integer
 On Error GoTo error:
 
 If chkOnly(0).Value = 1 Then
@@ -1851,12 +1851,12 @@ If chkOnly(0).Value = 1 Then
         tabShops.Fields("In Game") = 0
         tabShops.Fields("Assigned To") = Chr(0)
         
-        For X = 0 To 19
-            tabShops.Fields("Item-" & X) = 0
-            tabShops.Fields("Max-" & X) = 0
-            tabShops.Fields("Time-" & X) = 0
-            tabShops.Fields("Amount-" & X) = 0
-            tabShops.Fields("%-" & X) = 0
+        For x = 0 To 19
+            tabShops.Fields("Item-" & x) = 0
+            tabShops.Fields("Max-" & x) = 0
+            tabShops.Fields("Time-" & x) = 0
+            tabShops.Fields("Amount-" & x) = 0
+            tabShops.Fields("%-" & x) = 0
         Next
         
         tabShops.Update
@@ -1889,21 +1889,21 @@ If chkOnly(0).Value = 1 Then
         tabItems.Fields("Obtained From") = Chr(0)
         tabItems.Fields("References") = Chr(0)
         
-        For X = 0 To 9
-            tabItems.Fields("ClassRest-" & X) = 0
+        For x = 0 To 9
+            tabItems.Fields("ClassRest-" & x) = 0
         Next
         
-        For X = 0 To 9
-            tabItems.Fields("RaceRest-" & X) = 0
+        For x = 0 To 9
+            tabItems.Fields("RaceRest-" & x) = 0
         Next
         
-        For X = 0 To 9
-            tabItems.Fields("NegateSpell-" & X) = 0
+        For x = 0 To 9
+            tabItems.Fields("NegateSpell-" & x) = 0
         Next
         
-        For X = 0 To 19
-            tabItems.Fields("Abil-" & X) = 0
-            tabItems.Fields("AbilVal-" & X) = 0
+        For x = 0 To 19
+            tabItems.Fields("Abil-" & x) = 0
+            tabItems.Fields("AbilVal-" & x) = 0
         Next
     
         tabItems.Update
@@ -1943,30 +1943,30 @@ If chkOnly(0).Value = 1 Then
         tabMonsters.Fields("In Game") = 0
         tabMonsters.Fields("Summoned By") = Chr(0)
         
-        For X = 0 To 4
-            tabMonsters.Fields("AttName-" & X) = ""
-            tabMonsters.Fields("AttType-" & X) = 0
-            tabMonsters.Fields("AttAcc-" & X) = 0
-            tabMonsters.Fields("Att%-" & X) = 0
-            tabMonsters.Fields("AttTrue%-" & X) = 0
-            tabMonsters.Fields("AttMin-" & X) = 0
-            tabMonsters.Fields("AttMax-" & X) = 0
-            tabMonsters.Fields("AttEnergy-" & X) = 0
-            tabMonsters.Fields("AttHitSpell-" & X) = 0
-            tabMonsters.Fields("MidSpell-" & X) = 0
-            tabMonsters.Fields("MidSpell%-" & X) = 0
-            tabMonsters.Fields("MidSpellLVL-" & X) = 0
+        For x = 0 To 4
+            tabMonsters.Fields("AttName-" & x) = ""
+            tabMonsters.Fields("AttType-" & x) = 0
+            tabMonsters.Fields("AttAcc-" & x) = 0
+            tabMonsters.Fields("Att%-" & x) = 0
+            tabMonsters.Fields("AttTrue%-" & x) = 0
+            tabMonsters.Fields("AttMin-" & x) = 0
+            tabMonsters.Fields("AttMax-" & x) = 0
+            tabMonsters.Fields("AttEnergy-" & x) = 0
+            tabMonsters.Fields("AttHitSpell-" & x) = 0
+            tabMonsters.Fields("MidSpell-" & x) = 0
+            tabMonsters.Fields("MidSpell%-" & x) = 0
+            tabMonsters.Fields("MidSpellLVL-" & x) = 0
         Next
         
-        For X = 0 To 9
-            tabMonsters.Fields("DropItem-" & X) = 0
+        For x = 0 To 9
+            tabMonsters.Fields("DropItem-" & x) = 0
             'tabMonsters.Fields("DropItemUses-" & x) = Monsterrec.ItemUses(x)
-            tabMonsters.Fields("DropItem%-" & X) = 0
+            tabMonsters.Fields("DropItem%-" & x) = 0
         Next
         
-        For X = 0 To 9
-            tabMonsters.Fields("Abil-" & X) = 0
-            tabMonsters.Fields("AbilVal-" & X) = 0
+        For x = 0 To 9
+            tabMonsters.Fields("Abil-" & x) = 0
+            tabMonsters.Fields("AbilVal-" & x) = 0
         Next
         tabMonsters.Update
     End If
@@ -1999,9 +1999,9 @@ If chkOnly(0).Value = 1 Then
         tabSpells.Fields("Casted By") = Chr(0)
         tabSpells.Fields("Classes") = Chr(0)
         
-        For X = 0 To 9
-            tabSpells.Fields("Abil-" & X) = 0
-            tabSpells.Fields("AbilVal-" & X) = 0
+        For x = 0 To 9
+            tabSpells.Fields("Abil-" & x) = 0
+            tabSpells.Fields("AbilVal-" & x) = 0
         Next
     
         tabSpells.Update
@@ -2163,7 +2163,7 @@ If nYesNo = vbYes Then bStopExport = True
 End Sub
 Private Sub MarkSpellInGame(ByVal nNum As Long, Optional ByVal sFrom As String, _
     Optional bLearned As Boolean, Optional sClasses As String)
-Dim sTemp As String, sNewArr() As String, X As Long
+Dim sTemp As String, sNewArr() As String, x As Long
 
 Dim nYesNo As Integer
 On Error GoTo error:
@@ -2297,7 +2297,7 @@ If nYesNo = vbYes Then bStopExport = True
 End Sub
 
 Private Function IsExcludedRoom(nMap As Long, nRoom As Long, Optional bDefaultOnly As Boolean = False) As Boolean
-Dim X As Long, nMaxIterate As Long
+Dim x As Long, nMaxIterate As Long
 On Error GoTo error:
 
 IsExcludedRoom = False
@@ -2309,14 +2309,14 @@ If Not ExcludedRooms(1, 0) = -1 Then
         nMaxIterate = UBound(ExcludedRooms(), 2)
     End If
     
-    For X = 0 To nMaxIterate
-        If nMap = ExcludedRooms(1, X) Then
-            If nRoom >= ExcludedRooms(2, X) And nRoom <= ExcludedRooms(3, X) Then
+    For x = 0 To nMaxIterate
+        If nMap = ExcludedRooms(1, x) Then
+            If nRoom >= ExcludedRooms(2, x) And nRoom <= ExcludedRooms(3, x) Then
                 IsExcludedRoom = True
                 Exit Function
             End If
         End If
-    Next X
+    Next x
 End If
 
 out:
@@ -2328,7 +2328,7 @@ End Function
 
 Private Sub ScanRooms()
 On Error GoTo error:
-Dim nStatus As Integer, X As Integer, nRec As Long, Y As Integer ', nIndexExp As Double
+Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer ', nIndexExp As Double
 Dim tLairInfo As LairInfoType, nYesNo As Integer ', nMobsInIndex As Integer
 Dim sGroupIndex As String
 
@@ -2357,18 +2357,20 @@ Do While nStatus = 0 And bStopExport = False
     End If
     
     'mark items that are placed items as in the game
-    For X = 0 To 9
-        If Roomrec.PlacedItems(X) > 0 Then
-            Call MarkItemInGame(Roomrec.PlacedItems(X), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+    For x = 0 To 9
+        If Roomrec.PlacedItems(x) > 0 Then
+            Call MarkItemInGame(Roomrec.PlacedItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
         End If
     Next
     
-    'mark items that are hidden in room as in the game (some items are just always hidden cause they aren't getable)
-    '    For x = 0 To 14
-    '        If Not Roomrec.InvisItems(x) = 0 Then
-    '            Call MarkItemInGame(Roomrec.InvisItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
-    '        End If
-    '    Next
+    'mark sign items that are hidden in room as in the game (some items are just always hidden cause they aren't getable)
+    For x = 0 To 14
+        If Roomrec.InvisItems(x) > 0 Then
+            If GetItemTypeNumber(Roomrec.InvisItems(x)) = 3 Then 'sign
+                Call MarkItemInGame(Roomrec.InvisItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+            End If
+        End If
+    Next
     
     'mark shops that are assigned to a room as in game
     If Roomrec.Type = 1 And Roomrec.ShopNum > 0 Then
@@ -2392,21 +2394,21 @@ Do While nStatus = 0 And bStopExport = False
     End If
     
     'room exits
-    For X = 0 To 9
-        If Not Roomrec.RoomExit(X) = 0 Then
-            Select Case Roomrec.RoomType(X)
+    For x = 0 To 9
+        If Not Roomrec.RoomExit(x) = 0 Then
+            Select Case Roomrec.RoomType(x)
                 Case 2, 3, 17: 'ticket, item , key
-                    Call MarkItemInGame(Roomrec.Para1(X), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber, True, True)
+                    Call MarkItemInGame(Roomrec.Para1(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber, True, True)
                 Case 7, 11, 12: 'door, gate, remote act
-                    Call MarkItemInGame(Roomrec.Para4(X), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber, True, True)
+                    Call MarkItemInGame(Roomrec.Para4(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber, True, True)
                 Case 22: 'Cast
-                    Call MarkSpellInGame(Roomrec.Para1(X), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
-                    Call MarkSpellInGame(Roomrec.Para2(X), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+                    Call MarkSpellInGame(Roomrec.Para1(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+                    Call MarkSpellInGame(Roomrec.Para2(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
                 Case 24: 'Spell Trap
-                    Call MarkSpellInGame(Roomrec.Para1(X), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+                    Call MarkSpellInGame(Roomrec.Para1(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
             End Select
         End If
-    Next X
+    Next x
 
     'mark which group and indexs this room includes
     If Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 Then
@@ -2434,19 +2436,19 @@ Do While nStatus = 0 And bStopExport = False
                 tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
                 tLairInfo.nMaxRegen = Roomrec.MaxRegen
                 
-                For X = Roomrec.MinIndex To Roomrec.MaxIndex
-                    For Y = 0 To 14
-                        If Not MGIL(Roomrec.MonsterType, X).nNumber(Y) = 0 Then
-                            If GetMonsterRegen(MGIL(Roomrec.MonsterType, X).nNumber(Y)) = 0 Then
+                For x = Roomrec.MinIndex To Roomrec.MaxIndex
+                    For y = 0 To 14
+                        If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
+                            If GetMonsterRegen(MGIL(Roomrec.MonsterType, x).nNumber(y)) = 0 Then
                                 
-                                tLairInfo.sMobList = tLairInfo.sMobList & MGIL(Roomrec.MonsterType, X).nNumber(Y) & ","
-                                tLairInfo.nAvgExp = tLairInfo.nAvgExp + GetMonsterExp(MGIL(Roomrec.MonsterType, X).nNumber(Y))
+                                tLairInfo.sMobList = tLairInfo.sMobList & MGIL(Roomrec.MonsterType, x).nNumber(y) & ","
+                                tLairInfo.nAvgExp = tLairInfo.nAvgExp + GetMonsterExp(MGIL(Roomrec.MonsterType, x).nNumber(y))
                                 tLairInfo.nMobs = tLairInfo.nMobs + 1
                                 
                             End If
                         End If
-                    Next Y
-                Next X
+                    Next y
+                Next x
                 
                 If tLairInfo.nMobs > 0 Then
                     tLairInfo.sMobList = Left(tLairInfo.sMobList, Len(tLairInfo.sMobList) - 1)
@@ -2458,17 +2460,17 @@ Do While nStatus = 0 And bStopExport = False
         End If
         
         
-        For X = Roomrec.MinIndex To Roomrec.MaxIndex
-            If UBound(MonGroup(), 2) < X Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), X)
-            If Not MonGroup(Roomrec.MonsterType, X) = "" Then MonGroup(Roomrec.MonsterType, X) = MonGroup(Roomrec.MonsterType, X) & ","
+        For x = Roomrec.MinIndex To Roomrec.MaxIndex
+            If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
+            If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
             If Roomrec.Type = 3 And Roomrec.MaxRegen > 0 Then  'lair
             'If Roomrec.Type = 3 And nMobsInIndex > 0 Then  'lair
-                MonGroup(Roomrec.MonsterType, X) = MonGroup(Roomrec.MonsterType, X) & "[" & sGroupIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & sGroupIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
                 'MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Round(nIndexExp / nMobsInIndex) & "][" & nMobsInIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             Else
-                MonGroup(Roomrec.MonsterType, X) = MonGroup(Roomrec.MonsterType, X) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             End If
-        Next X
+        Next x
     End If
     
 Skip:
@@ -2678,7 +2680,7 @@ Call HandleError("GetMonsterName")
 End Function
 
 Private Sub ScanShops()
-Dim nStatus As Integer, X As Integer
+Dim nStatus As Integer, x As Integer
 
 '-------------------------------
 '       SHOPS
@@ -2705,16 +2707,16 @@ Do While nStatus = 0 And bStopExport = False
     If tabShops.Fields("In Game") = 0 Then GoTo skipshop:
     
     'mark items sold by shop as in game
-    For X = 0 To 19
-        If Not Shoprec.ShopItemNumber(X) = 0 Then
+    For x = 0 To 19
+        If Not Shoprec.ShopItemNumber(x) = 0 Then
             'if max stock is = 0 mark as sale only
-            If Shoprec.ShopMax(X) = 0 Then
-                Call MarkItemInGame(Shoprec.ShopItemNumber(X), "Shop(sell) #" & Shoprec.Number, True)
+            If Shoprec.ShopMax(x) = 0 Then
+                Call MarkItemInGame(Shoprec.ShopItemNumber(x), "Shop(sell) #" & Shoprec.Number, True)
             Else
-                If Shoprec.ShopRgnPercentage(X) = 0 Or Shoprec.ShopRgnNumber(X) = 0 Then
-                    Call MarkItemInGame(Shoprec.ShopItemNumber(X), "Shop(nogen) #" & Shoprec.Number, True)
+                If Shoprec.ShopRgnPercentage(x) = 0 Or Shoprec.ShopRgnNumber(x) = 0 Then
+                    Call MarkItemInGame(Shoprec.ShopItemNumber(x), "Shop(nogen) #" & Shoprec.Number, True)
                 Else
-                    Call MarkItemInGame(Shoprec.ShopItemNumber(X), "Shop #" & Shoprec.Number)
+                    Call MarkItemInGame(Shoprec.ShopItemNumber(x), "Shop #" & Shoprec.Number)
                 End If
             End If
         End If
@@ -2746,7 +2748,7 @@ End If
 End Sub
 
 Private Sub ScanMonsters()
-Dim nStatus As Integer, X As Integer
+Dim nStatus As Integer, x As Integer
 
 '-------------------------------
 '       MONSTERS
@@ -2770,7 +2772,7 @@ Do While nStatus = 0 And bStopExport = False
     If LCase(Left(Monsterrec.Name, 3)) = "sdf" Then GoTo skipmon:
     
     'if it's index is within the scanned rooms then it's in the game
-    If UBound(MonGroup(), 2) < X Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), Monsterrec.Index)
+    If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), Monsterrec.Index)
     If Not MonGroup(Monsterrec.Group, Monsterrec.Index) = "" Then
         Call MarkMonsterInGame(Monsterrec.Number, MonGroup(Monsterrec.Group, Monsterrec.Index)) '"Group(Lair): " &
     End If
@@ -2779,9 +2781,9 @@ Do While nStatus = 0 And bStopExport = False
     If MonsterInGame(Monsterrec.Number) = False Then GoTo skipmon:
     
     'check to see what items it drops and mark them as in game
-    For X = 0 To 9
-        If Not Monsterrec.ItemNumber(X) = 0 Then
-            Call MarkItemInGame(Monsterrec.ItemNumber(X), "Monster #" & Monsterrec.Number & "(" & Monsterrec.ItemDropPer(X) & "%)")
+    For x = 0 To 9
+        If Not Monsterrec.ItemNumber(x) = 0 Then
+            Call MarkItemInGame(Monsterrec.ItemNumber(x), "Monster #" & Monsterrec.Number & "(" & Monsterrec.ItemDropPer(x) & "%)")
         End If
     Next
 
@@ -2811,42 +2813,42 @@ Do While nStatus = 0 And bStopExport = False
         Call MarkSpellInGame(Monsterrec.DeathSpellNumber, "Monster #" & Monsterrec.Number)
     End If
     
-    For X = 0 To 9
-        Select Case Monsterrec.AbilityA(X)
+    For x = 0 To 9
+        Select Case Monsterrec.AbilityA(x)
             Case 0: 'nothing
             
             'summons monster?
             Case 12: 'summon
-                Call MarkMonsterInGame(Monsterrec.AbilityB(X), "Monster #" & Monsterrec.Number)
+                Call MarkMonsterInGame(Monsterrec.AbilityB(x), "Monster #" & Monsterrec.Number)
                 
             'learns any spells?
             Case 42: 'learnspell
-                Call MarkSpellInGame(Monsterrec.AbilityB(X), "Monster #" & Monsterrec.Number, True)
+                Call MarkSpellInGame(Monsterrec.AbilityB(x), "Monster #" & Monsterrec.Number, True)
             
             'casts any spells?
             Case 43, 151, 153: '43-castssp, 151-end cast, 153-killspell
-                Call MarkSpellInGame(Monsterrec.AbilityB(X), "Monster #" & Monsterrec.Number)
+                Call MarkSpellInGame(Monsterrec.AbilityB(x), "Monster #" & Monsterrec.Number)
             
             'calls any textblocks?
             Case 148, 155: '148-textblock, 155-deathtext
-                TBCommands(Monsterrec.AbilityB(X)) = True
-                Call MarkTBInGame(Monsterrec.AbilityB(X), "Monster #" & Monsterrec.Number)
+                TBCommands(Monsterrec.AbilityB(x)) = True
+                Call MarkTBInGame(Monsterrec.AbilityB(x), "Monster #" & Monsterrec.Number)
                 
         End Select
     
     Next
     
-    For X = 0 To 4
-        If Not Monsterrec.AttackType(X) = 0 Then
-            Call MarkSpellInGame(Monsterrec.AttackHitSpell(X), "Monster #" & Monsterrec.Number)
+    For x = 0 To 4
+        If Not Monsterrec.AttackType(x) = 0 Then
+            Call MarkSpellInGame(Monsterrec.AttackHitSpell(x), "Monster #" & Monsterrec.Number)
         End If
         
-        If Monsterrec.AttackType(X) = 2 Then
-            Call MarkSpellInGame(Monsterrec.AttackAccuSpell(X), "Monster #" & Monsterrec.Number)
+        If Monsterrec.AttackType(x) = 2 Then
+            Call MarkSpellInGame(Monsterrec.AttackAccuSpell(x), "Monster #" & Monsterrec.Number)
         End If
         
-        If Not Monsterrec.SpellNumber(X) = 0 Then
-            Call MarkSpellInGame(Monsterrec.SpellNumber(X), "Monster #" & Monsterrec.Number)
+        If Not Monsterrec.SpellNumber(x) = 0 Then
+            Call MarkSpellInGame(Monsterrec.SpellNumber(x), "Monster #" & Monsterrec.Number)
         End If
     Next
     
@@ -2876,7 +2878,7 @@ End If
 End Sub
 
 Private Sub ScanItems()
-Dim nStatus As Integer, X As Integer, sClasses As String
+Dim nStatus As Integer, x As Integer, sClasses As String
 
 '-------------------------------
 '       ITEMS
@@ -2907,50 +2909,50 @@ Do While nStatus = 0 And bStopExport = False
     End If
     
     sClasses = ""
-    For X = 0 To 9
-        If Itemrec.Class(X) > 0 Then
-            If InStr(1, sClasses, "(" & Itemrec.Class(X) & ")", vbTextCompare) = 0 Then
+    For x = 0 To 9
+        If Itemrec.Class(x) > 0 Then
+            If InStr(1, sClasses, "(" & Itemrec.Class(x) & ")", vbTextCompare) = 0 Then
                 If Not sClasses = "" Then sClasses = sClasses & ","
-                sClasses = sClasses & "(" & Itemrec.Class(X) & ")"
+                sClasses = sClasses & "(" & Itemrec.Class(x) & ")"
             End If
         End If
-    Next X
+    Next x
     If sClasses = "" Then sClasses = "(*)"
     
-    For X = 0 To 19
-        If Itemrec.AbilityA(X) > 0 And Itemrec.AbilityB(X) > 0 Then
-            Select Case Itemrec.AbilityA(X)
+    For x = 0 To 19
+        If Itemrec.AbilityA(x) > 0 And Itemrec.AbilityB(x) > 0 Then
+            Select Case Itemrec.AbilityA(x)
                 'summons monster?
                 Case 12: 'summon
-                    Call MarkMonsterInGame(Itemrec.AbilityB(X), "Item #" & Itemrec.Number)
+                    Call MarkMonsterInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number)
                     
                 'learns any spells?
                 Case 42: 'learnspell
-                    Call MarkSpellInGame(Itemrec.AbilityB(X), "Item #" & Itemrec.Number, True, sClasses)
+                    Call MarkSpellInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number, True, sClasses)
                 
                 'casts any spells?
                 Case 43: '43-castssp
                     If bContainer Then
-                        If UBound(SpellFromContainerRef()) < Itemrec.AbilityB(X) Then _
-                            ReDim Preserve SpellFromContainerRef(Itemrec.AbilityB(X))
-                        SpellFromContainerRef(Itemrec.AbilityB(X)) = True
+                        If UBound(SpellFromContainerRef()) < Itemrec.AbilityB(x) Then _
+                            ReDim Preserve SpellFromContainerRef(Itemrec.AbilityB(x))
+                        SpellFromContainerRef(Itemrec.AbilityB(x)) = True
                     End If
                     
                     'If Not bContainer Then
-                        Call MarkSpellInGame(Itemrec.AbilityB(X), "Item #" & Itemrec.Number)
+                        Call MarkSpellInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number)
                     'End If
                     
                 Case 151, 153: '151-end cast, 153-killspell
-                    Call MarkSpellInGame(Itemrec.AbilityB(X), "Item #" & Itemrec.Number)
+                    Call MarkSpellInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number)
                 
                 'calls any textblocks?
                 Case 148, 155: '148-textblock, 155-deathtext
-                    TBCommands(Itemrec.AbilityB(X)) = True
-                    Call MarkTBInGame(Itemrec.AbilityB(X), "Item #" & Itemrec.Number)
+                    TBCommands(Itemrec.AbilityB(x)) = True
+                    Call MarkTBInGame(Itemrec.AbilityB(x), "Item #" & Itemrec.Number)
                     
             End Select
         End If
-    Next X
+    Next x
 
     'mark read textblock as in game
     'commented out, no commands
@@ -2983,7 +2985,7 @@ End If
 
 End Sub
 Private Sub ScanSpells()
-Dim nStatus As Integer, X As Integer, y1 As Long, y2 As Long
+Dim nStatus As Integer, x As Integer, y1 As Long, y2 As Long
 Dim nNumber As Long
 
 '-------------------------------
@@ -3010,9 +3012,9 @@ Do While nStatus = 0 And bStopExport = False
     If SpellInGame(Spellrec.Number) = False Then GoTo skipspell:
     
     'check spell abilities for stuff
-    For X = 0 To 9
-        If Spellrec.AbilityA(X) > 0 Then
-            nNumber = Spellrec.AbilityB(X) 'this is because some spells have 0 for the abilityB and the number would be in the min/max
+    For x = 0 To 9
+        If Spellrec.AbilityA(x) > 0 Then
+            nNumber = Spellrec.AbilityB(x) 'this is because some spells have 0 for the abilityB and the number would be in the min/max
             If nNumber = 0 Then
                 y1 = Spellrec.Min
                 y2 = Spellrec.Max
@@ -3024,7 +3026,7 @@ Do While nStatus = 0 And bStopExport = False
             
             If y1 > 0 And y2 > 0 Then
                 For nNumber = y1 To y2
-                    Select Case Spellrec.AbilityA(X)
+                    Select Case Spellrec.AbilityA(x)
                         'summons monster?
                         Case 12: 'summon
                             Call MarkMonsterInGame(nNumber, "Spell #" & Spellrec.Number)
@@ -3055,7 +3057,7 @@ Do While nStatus = 0 And bStopExport = False
                 Next nNumber
             End If
         End If
-    Next X
+    Next x
 
 skipspell:
     nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
@@ -3285,13 +3287,13 @@ Loop
 End Sub
 
 Private Sub ScanGreets()
-Dim nStatus As Integer, X As Long, nRec As Long, nCurrentMonster As Long
+Dim nStatus As Integer, x As Long, nRec As Long, nCurrentMonster As Long
 
 '-------------------------------
 '       Greets
 '-------------------------------
 Dim nYesNo As Integer, sData As String, z As Long, nTBNumber As Long
-Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long, Y As Long
+Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long, y As Long
 Dim nMonsterSpells() As Currency, sMonsterSpellsClasses() As String
 
 On Error GoTo error:
@@ -3444,13 +3446,13 @@ End If
 End Sub
 
 Private Sub ScanContainers()
-Dim nStatus As Integer, X As Long, nRec As Long, nCurrentItem As Long
+Dim nStatus As Integer, x As Long, nRec As Long, nCurrentItem As Long
 
 '-------------------------------
 '       CONTAINERs
 '-------------------------------
 Dim nYesNo As Integer, nTBNumber As Long, sData As String, z As Long
-Dim nNest As Long, nChestItems() As Currency, nDataPos As Long, Y As Long, sLazyProgrammerTrashVar() As String
+Dim nNest As Long, nChestItems() As Currency, nDataPos As Long, y As Long, sLazyProgrammerTrashVar() As String
 Dim nDummyArray() As Currency '=bad programming is what this is
 
 On Error GoTo error:
@@ -3476,10 +3478,10 @@ Do While nStatus = 0 And bStopExport = False
     
     If Not Itemrec.Type = 8 Then GoTo skipitem: 'container
     
-    For X = 0 To 19
+    For x = 0 To 19
         
-        If Itemrec.AbilityA(X) = 43 And Itemrec.AbilityB(X) > 0 Then
-            nRec = Itemrec.AbilityB(X)
+        If Itemrec.AbilityA(x) = 43 And Itemrec.AbilityB(x) > 0 Then
+            nRec = Itemrec.AbilityB(x)
             nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, _
                 Len(Spelldatabuf), nRec, KEY_BUF_LEN, 0)
             If nStatus = 0 Then
@@ -3487,16 +3489,16 @@ Do While nStatus = 0 And bStopExport = False
                 
                 'Call MarkSpellInGame(Spellrec.Number, "Item #" & nCurrentItem)
                 
-                For Y = 0 To 9
-                    If Spellrec.AbilityA(Y) = 148 Then 'castsp
-                        If Spellrec.AbilityB(Y) = 0 Then
+                For y = 0 To 9
+                    If Spellrec.AbilityA(y) = 148 Then 'castsp
+                        If Spellrec.AbilityB(y) = 0 Then
                             If Spellrec.Min > 0 Then
                                 nTBNumber = Spellrec.Min
                             Else
                                 nTBNumber = Spellrec.Max
                             End If
                         Else
-                            nTBNumber = Spellrec.AbilityB(Y)
+                            nTBNumber = Spellrec.AbilityB(y)
                         End If
                         
                         TextblockKey.PartNum = 0
@@ -3547,10 +3549,10 @@ Do While nStatus = 0 And bStopExport = False
                             End If
                         End If
                     End If
-                Next Y
+                Next y
             End If
         End If
-    Next X
+    Next x
 
 skipitem:
     If Not nCurrentItem = Itemrec.Number Then
@@ -3595,7 +3597,7 @@ End Sub
 
 Private Sub GetTBItems(ByRef nReturnArray() As Currency, ByVal nTBNumber As Long, _
     ByRef nNest As Long, ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency, ByRef sReturnSpellsClasses() As String)
-Dim sData As String, nDataPos As Long, X As Long, Y As Long, nLineStart As Long
+Dim sData As String, nDataPos As Long, x As Long, y As Long, nLineStart As Long
 Dim sLine As String, nValue As Long, nPercent As Currency, sClassesTest As String, sNewArr() As String
 Dim nItemArray() As Currency, nStatus As Integer
 On Error GoTo error:
@@ -3632,81 +3634,81 @@ ReDim nItemArray(1 To 2, 0) '1=number, 2=percent
 
 'first we collect all the items
 Do While nDataPos < Len(sData)
-    X = InStr(nDataPos, sData, Chr(10))
-    If X <= 0 Then X = Len(sData)
-    sLine = LCase(Mid(sData, nDataPos, X - nDataPos))
+    x = InStr(nDataPos, sData, Chr(10))
+    If x <= 0 Then x = Len(sData)
+    sLine = LCase(Mid(sData, nDataPos, x - nDataPos))
     nLineStart = nDataPos
-    nDataPos = X + 1
+    nDataPos = x + 1
     
     'items not in game
     If TestItemFail(sData, nDataPos - 1) = True Then GoTo next_line:
         
-    Y = 1
+    y = 1
 check_give_again:
-    Y = InStr(Y, sLine, "giveitem ")
-    If Y > 0 Then
-        nValue = ExtractValueFromString(Mid(sLine, Y), "giveitem ")
+    y = InStr(y, sLine, "giveitem ")
+    If y > 0 Then
+        nValue = ExtractValueFromString(Mid(sLine, y), "giveitem ")
         
-        For X = 0 To UBound(nItemArray(), 2)
-            If nItemArray(1, X) = nValue Then
-                nItemArray(2, X) = nItemArray(2, X) + 1
-                X = -1
+        For x = 0 To UBound(nItemArray(), 2)
+            If nItemArray(1, x) = nValue Then
+                nItemArray(2, x) = nItemArray(2, x) + 1
+                x = -1
                 Exit For
             End If
-        Next X
-        If X >= 0 Then
-            X = UBound(nItemArray(), 2) + 1
-            ReDim Preserve nItemArray(1 To 2, X)
-            nItemArray(1, X) = nValue
-            nItemArray(2, X) = 1
+        Next x
+        If x >= 0 Then
+            x = UBound(nItemArray(), 2) + 1
+            ReDim Preserve nItemArray(1 To 2, x)
+            nItemArray(1, x) = nValue
+            nItemArray(2, x) = 1
         End If
-        Y = Y + 1
+        y = y + 1
         GoTo check_give_again:
     End If
     
     If bCheckSpells Then
-        Y = 1
+        y = 1
 check_spell_again:
-        Y = InStr(Y, sLine, "learnspell ")
-        If Y > 0 Then
-            nValue = ExtractValueFromString(Mid(sLine, Y), "learnspell ")
+        y = InStr(y, sLine, "learnspell ")
+        If y > 0 Then
+            nValue = ExtractValueFromString(Mid(sLine, y), "learnspell ")
             
-            For X = 0 To UBound(nReturnSpellArray())
-                If nReturnSpellArray(X) = nValue Then
-                    sClassesTest = CheckForClassRestriction(sData, nLineStart + Y)
+            For x = 0 To UBound(nReturnSpellArray())
+                If nReturnSpellArray(x) = nValue Then
+                    sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
                     If Not sClassesTest = "(*)" Then
-                        sNewArr = MergeStringArrays(StringOfNumbersToArray(sClassesTest), StringOfNumbersToArray(sReturnSpellsClasses(X)))
-                        sReturnSpellsClasses(X) = "(" & Join(sNewArr, "),(") & ")"
+                        sNewArr = MergeStringArrays(StringOfNumbersToArray(sClassesTest), StringOfNumbersToArray(sReturnSpellsClasses(x)))
+                        sReturnSpellsClasses(x) = "(" & Join(sNewArr, "),(") & ")"
                     Else
-                        sReturnSpellsClasses(X) = sClassesTest
+                        sReturnSpellsClasses(x) = sClassesTest
                     End If
-                    X = -1
+                    x = -1
                     Exit For
                 End If
-            Next X
-            If X >= 0 Then
-                X = UBound(nReturnSpellArray()) + 1
-                ReDim Preserve nReturnSpellArray(X)
-                ReDim Preserve sReturnSpellsClasses(X)
-                nReturnSpellArray(X) = nValue
+            Next x
+            If x >= 0 Then
+                x = UBound(nReturnSpellArray()) + 1
+                ReDim Preserve nReturnSpellArray(x)
+                ReDim Preserve sReturnSpellsClasses(x)
+                nReturnSpellArray(x) = nValue
                 
-                sClassesTest = CheckForClassRestriction(sData, nLineStart + Y)
-                sReturnSpellsClasses(X) = sClassesTest
+                sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
+                sReturnSpellsClasses(x) = sClassesTest
             End If
-            Y = Y + 1
+            y = y + 1
             GoTo check_spell_again:
         End If
     End If
     
-    Y = 1
+    y = 1
 check_random_again:
-    Y = InStr(Y, sLine, "random ")
-    If Y > 0 Then
-        nValue = ExtractValueFromString(Mid(sLine, Y), "random ")
+    y = InStr(y, sLine, "random ")
+    If y > 0 Then
+        nValue = ExtractValueFromString(Mid(sLine, y), "random ")
         If nValue > 0 Then
             Call GetRandomTBItems(nReturnArray(), nValue, nNest, 1, bCheckSpells, nReturnSpellArray(), sReturnSpellsClasses())
         End If
-        Y = Y + 1
+        y = y + 1
         GoTo check_random_again:
     End If
     
@@ -3715,30 +3717,30 @@ Loop
 
 'then we put the collected items into the chest array
 '...this is actually sort of unecessary i found out afterwards
-For Y = 0 To UBound(nItemArray(), 2)
-    If nItemArray(1, Y) > 0 Then
-        nPercent = nItemArray(2, Y)
+For y = 0 To UBound(nItemArray(), 2)
+    If nItemArray(1, y) > 0 Then
+        nPercent = nItemArray(2, y)
         
-        For X = 0 To UBound(nReturnArray(), 2)
-            If nReturnArray(1, X) = nItemArray(1, Y) Then
+        For x = 0 To UBound(nReturnArray(), 2)
+            If nReturnArray(1, x) = nItemArray(1, y) Then
                 'If nReturnArray(3, x) = 0 Then nReturnArray(3, x) = 1
-                nReturnArray(2, X) = nReturnArray(2, X) + _
-                    (nReturnArray(3, X) * nPercent)
-                nReturnArray(3, X) = nReturnArray(3, X) * (1 - nPercent)
-                X = -1
+                nReturnArray(2, x) = nReturnArray(2, x) + _
+                    (nReturnArray(3, x) * nPercent)
+                nReturnArray(3, x) = nReturnArray(3, x) * (1 - nPercent)
+                x = -1
                 Exit For
             End If
-        Next X
-        If X >= 0 Then
-            X = UBound(nReturnArray(), 2) + 1
-            ReDim Preserve nReturnArray(1 To 3, X)
-            nReturnArray(1, X) = nItemArray(1, Y)
-            nReturnArray(2, X) = nPercent
-            nReturnArray(3, X) = 1 - nReturnArray(2, X)
+        Next x
+        If x >= 0 Then
+            x = UBound(nReturnArray(), 2) + 1
+            ReDim Preserve nReturnArray(1 To 3, x)
+            nReturnArray(1, x) = nItemArray(1, y)
+            nReturnArray(2, x) = nPercent
+            nReturnArray(3, x) = 1 - nReturnArray(2, x)
         End If
         
     End If
-Next Y
+Next y
 
 nNest = nNest - 1
 
@@ -3754,7 +3756,7 @@ End Sub
 Private Sub GetRandomTBItems(ByRef nReturnArray() As Currency, ByVal nTBNumber As Long, _
     ByRef nNest As Long, ByVal nPercentMod As Currency, _
     ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency, ByRef sReturnSpellsClasses() As String)
-Dim sData As String, nDataPos As Long, X As Long, Y As Long, nLineStart As Long
+Dim sData As String, nDataPos As Long, x As Long, y As Long, nLineStart As Long
 Dim nPer1 As Long, nPer2 As Long, sLine As String, nValue As Long, nPercent As Currency
 Dim nItemArray() As Currency, nStatus As Integer, sClassesTest As String, sNewArr() As String
 On Error GoTo error:
@@ -3792,92 +3794,92 @@ ReDim nItemArray(1 To 2, 0) '1=number, 2=percent
 
 'first we collect all the items and total their %'s
 Do While nDataPos < Len(sData)
-    X = InStr(nDataPos, sData, ":")
-    If X > nDataPos Then
-        nPer1 = Val(Mid(sData, nDataPos, X - nDataPos))
+    x = InStr(nDataPos, sData, ":")
+    If x > nDataPos Then
+        nPer1 = Val(Mid(sData, nDataPos, x - nDataPos))
         nPercent = (nPer1 - nPer2) / 100
         nPer2 = nPer1
         
-        nDataPos = X + 1
+        nDataPos = x + 1
         
-        X = InStr(nDataPos, sData, Chr(10))
-        If X <= 0 Then X = Len(sData)
-        sLine = LCase(Mid(sData, nDataPos, X - nDataPos))
+        x = InStr(nDataPos, sData, Chr(10))
+        If x <= 0 Then x = Len(sData)
+        sLine = LCase(Mid(sData, nDataPos, x - nDataPos))
         nLineStart = nDataPos
-        nDataPos = X
+        nDataPos = x
         
-        Y = 1
+        y = 1
 check_give_again:
-        Y = InStr(Y, sLine, "giveitem ")
-        If Y > 0 Then
-            nValue = ExtractValueFromString(Mid(sLine, Y), "giveitem ")
+        y = InStr(y, sLine, "giveitem ")
+        If y > 0 Then
+            nValue = ExtractValueFromString(Mid(sLine, y), "giveitem ")
             
-            For X = 0 To UBound(nItemArray(), 2)
-                If nItemArray(1, X) = nValue Then
-                    nItemArray(2, X) = nItemArray(2, X) + nPercent
-                    X = -1
+            For x = 0 To UBound(nItemArray(), 2)
+                If nItemArray(1, x) = nValue Then
+                    nItemArray(2, x) = nItemArray(2, x) + nPercent
+                    x = -1
                     Exit For
                 End If
-            Next X
-            If X >= 0 Then
-                X = UBound(nItemArray(), 2) + 1
-                ReDim Preserve nItemArray(1 To 2, X)
-                nItemArray(1, X) = nValue
-                nItemArray(2, X) = nPercent
+            Next x
+            If x >= 0 Then
+                x = UBound(nItemArray(), 2) + 1
+                ReDim Preserve nItemArray(1 To 2, x)
+                nItemArray(1, x) = nValue
+                nItemArray(2, x) = nPercent
             End If
             
-            Y = Y + 1
+            y = y + 1
             GoTo check_give_again:
         End If
         
         If bCheckSpells Then
-            Y = 1
+            y = 1
 check_spell_again:
-            Y = InStr(Y, sLine, "learnspell ")
-            If Y > 0 Then
-                nValue = ExtractValueFromString(Mid(sLine, Y), "learnspell ")
+            y = InStr(y, sLine, "learnspell ")
+            If y > 0 Then
+                nValue = ExtractValueFromString(Mid(sLine, y), "learnspell ")
                 
-                For X = 0 To UBound(nReturnSpellArray())
-                    If nReturnSpellArray(X) = nValue Then
-                        sClassesTest = CheckForClassRestriction(sData, nLineStart + Y)
+                For x = 0 To UBound(nReturnSpellArray())
+                    If nReturnSpellArray(x) = nValue Then
+                        sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
                         If Not sClassesTest = "(*)" Then
-                            sNewArr = MergeStringArrays(StringOfNumbersToArray(sClassesTest), StringOfNumbersToArray(sReturnSpellsClasses(X)))
-                            sReturnSpellsClasses(X) = "(" & Join(sNewArr, "),(") & ")"
+                            sNewArr = MergeStringArrays(StringOfNumbersToArray(sClassesTest), StringOfNumbersToArray(sReturnSpellsClasses(x)))
+                            sReturnSpellsClasses(x) = "(" & Join(sNewArr, "),(") & ")"
                         Else
-                            sReturnSpellsClasses(X) = sClassesTest
+                            sReturnSpellsClasses(x) = sClassesTest
                         End If
-                        X = -1
+                        x = -1
                         Exit For
                     End If
-                Next X
-                If X >= 0 Then
-                    X = UBound(nReturnSpellArray()) + 1
-                    ReDim Preserve nReturnSpellArray(X)
-                    ReDim Preserve sReturnSpellsClasses(X)
-                    nReturnSpellArray(X) = nValue
+                Next x
+                If x >= 0 Then
+                    x = UBound(nReturnSpellArray()) + 1
+                    ReDim Preserve nReturnSpellArray(x)
+                    ReDim Preserve sReturnSpellsClasses(x)
+                    nReturnSpellArray(x) = nValue
                     
-                    sClassesTest = CheckForClassRestriction(sData, nLineStart + Y)
-                    sReturnSpellsClasses(X) = sClassesTest
+                    sClassesTest = CheckForClassRestriction(sData, nLineStart + y)
+                    sReturnSpellsClasses(x) = sClassesTest
                 End If
-                Y = Y + 1
+                y = y + 1
                 GoTo check_spell_again:
             End If
         End If
         
-        Y = 1
+        y = 1
 check_random_again:
-        Y = InStr(Y, sLine, "random ")
-        If Y > 0 Then
+        y = InStr(y, sLine, "random ")
+        If y > 0 Then
             
-            nValue = ExtractValueFromString(Mid(sLine, Y), "random ")
+            nValue = ExtractValueFromString(Mid(sLine, y), "random ")
             If nValue > 0 Then
                 Call GetRandomTBItems(nReturnArray(), nValue, nNest, (nPercent * nPercentMod), bCheckSpells, nReturnSpellArray(), sReturnSpellsClasses())
             End If
             
-            Y = Y + 1
+            y = y + 1
             GoTo check_random_again:
         End If
-    ElseIf X = 0 Then
+    ElseIf x = 0 Then
         Exit Do
     Else
         nDataPos = nDataPos + 1
@@ -3886,30 +3888,30 @@ Loop
 
 'then we put the collected items into the chest array
 '...this is actually sort of unecessary i found out afterwards
-For Y = 0 To UBound(nItemArray(), 2)
-    If nItemArray(1, Y) > 0 Then
-        nPercent = nItemArray(2, Y)
+For y = 0 To UBound(nItemArray(), 2)
+    If nItemArray(1, y) > 0 Then
+        nPercent = nItemArray(2, y)
         
-        For X = 0 To UBound(nReturnArray(), 2)
-            If nReturnArray(1, X) = nItemArray(1, Y) Then
+        For x = 0 To UBound(nReturnArray(), 2)
+            If nReturnArray(1, x) = nItemArray(1, y) Then
                 'If nReturnArray(3, x) = 0 Then nReturnArray(3, x) = 1
-                nReturnArray(2, X) = nReturnArray(2, X) + _
-                    (nReturnArray(3, X) * nPercent * nPercentMod)
-                nReturnArray(3, X) = nReturnArray(3, X) * (1 - nPercent)
-                X = -1
+                nReturnArray(2, x) = nReturnArray(2, x) + _
+                    (nReturnArray(3, x) * nPercent * nPercentMod)
+                nReturnArray(3, x) = nReturnArray(3, x) * (1 - nPercent)
+                x = -1
                 Exit For
             End If
-        Next X
-        If X >= 0 Then
-            X = UBound(nReturnArray(), 2) + 1
-            ReDim Preserve nReturnArray(1 To 3, X)
-            nReturnArray(1, X) = nItemArray(1, Y)
-            nReturnArray(2, X) = nPercent * nPercentMod
-            nReturnArray(3, X) = 1 - nReturnArray(2, X)
+        Next x
+        If x >= 0 Then
+            x = UBound(nReturnArray(), 2) + 1
+            ReDim Preserve nReturnArray(1 To 3, x)
+            nReturnArray(1, x) = nItemArray(1, y)
+            nReturnArray(2, x) = nPercent * nPercentMod
+            nReturnArray(3, x) = 1 - nReturnArray(2, x)
         End If
         
     End If
-Next Y
+Next y
 
 nNest = nNest - 1
 
@@ -3925,7 +3927,7 @@ End Sub
 
 Private Function CheckTBString(ByVal TBNumber As Long, ByVal WholeString As String, _
     ByVal StringToLookFor As String, RecordType As MarkType) As Boolean
-Dim X As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
+Dim x As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
 Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String, sClasses As String
 Dim bLearnSpell As Boolean, sChar As String, bItemFail As Boolean, bRandom As Boolean
 Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean, bCheckSpell As Boolean
@@ -3954,23 +3956,23 @@ End If
 
 CheckTBString = True
 
-X = 1
+x = 1
 checknext:
-If Not InStr(X, sWhole, sLook) = 0 Then
-    X = InStr(X, sWhole, sLook)
-    y1 = X + Len(sLook) 'len of string searching (to position y1 at first number)
+If Not InStr(x, sWhole, sLook) = 0 Then
+    x = InStr(x, sWhole, sLook)
+    y1 = x + Len(sLook) 'len of string searching (to position y1 at first number)
     y2 = 0
     
     If bTestSkill Then
-        X = InStr(y1, sWhole, " ") + 1 'position after the skill tested
-        If X = 1 Then X = y1: GoTo checknext:
-        X = InStr(X, sWhole, " ") + 1 'position after the amount of the skill test
-        If X = 1 Then X = y1: GoTo checknext:
+        x = InStr(y1, sWhole, " ") + 1 'position after the skill tested
+        If x = 1 Then x = y1: GoTo checknext:
+        x = InStr(x, sWhole, " ") + 1 'position after the amount of the skill test
+        If x = 1 Then x = y1: GoTo checknext:
         y2 = InStr(y1, sWhole, ":") 'check to make sure there was another command between these
-        If y2 > 0 And y2 < X Then X = y1: GoTo checknext:
+        If y2 > 0 And y2 < x Then x = y1: GoTo checknext:
         y2 = InStr(y1, sWhole, Chr(10)) 'check to make sure there was another command between these
-        If y2 > 0 And y2 < X Then X = y1: GoTo checknext:
-        y1 = X
+        If y2 > 0 And y2 < x Then x = y1: GoTo checknext:
+        y1 = x
         y2 = 0
     End If
     
@@ -3988,14 +3990,14 @@ nextnumber:
     
     If y2 = 0 Then
         'if there were no numbers after the string
-        X = y1
+        x = y1
         GoTo checknext:
     End If
     
     nNumber = Val(Mid(sWhole, y1, y2))
     
     If bCheckSpell Then
-        If nNumber = 0 Then X = y1: GoTo checknext:
+        If nNumber = 0 Then x = y1: GoTo checknext:
         
         y1 = y1 + y2 + 1 'len of string searching (to position y1 at first number)
         y2 = 0
@@ -4013,18 +4015,18 @@ nextnumber2:
         
         If y2 = 0 Then
             'if there were no numbers after the last number
-            X = y1
+            x = y1
             GoTo checknext:
         End If
         
         nNumber2 = Val(Mid(sWhole, y1, y2))
         
-        If nNumber2 = 0 Then X = y1: GoTo checknext:
+        If nNumber2 = 0 Then x = y1: GoTo checknext:
         If UBound(SpellInGame()) < nNumber Then ReDim Preserve SpellInGame(nNumber)
         
         If Not SpellInGame(nNumber) Then
             CheckTBString = False
-            X = y1
+            x = y1
             GoTo checknext:
         End If
         
@@ -4033,7 +4035,7 @@ nextnumber2:
     
 
     sSuffix = ""
-    bItemFail = TestItemFail(sWhole, X) 'test to make sure any items required for this block are in the game
+    bItemFail = TestItemFail(sWhole, x) 'test to make sure any items required for this block are in the game
     If bItemFail = False Then
         
         'tabTBInfo.Index = "pkTBInfo"
@@ -4045,7 +4047,7 @@ nextnumber2:
             
             If TBRandom(TBNumber) = True Then
             'If tabTBInfo.Fields("Random") = 1 Then
-                sSuffix = GetTBPercent(sWhole, X)
+                sSuffix = GetTBPercent(sWhole, x)
             End If
         'End If
         
@@ -4060,7 +4062,7 @@ nextnumber2:
                         'Text1.Text = Text1.Text & vbCrLf & "TB/Spell:" & TBNumber & "/" & nNumber
                         Call MarkSpellInGame(nNumber)
                     Else
-                        sClasses = CheckForClassRestriction(sWhole, X)
+                        sClasses = CheckForClassRestriction(sWhole, x)
                         Call MarkSpellInGame(nNumber, "Textblock #" & TBNumber & sSuffix, bLearnSpell, sClasses)
                     End If
                 Else
@@ -4108,7 +4110,7 @@ nextnumber2:
     Else
         CheckTBString = False
     End If
-    X = y1
+    x = y1
     GoTo checknext:
 End If
 
@@ -4116,18 +4118,18 @@ End Function
 
 Private Function GetTBPercent(ByVal sWholeData As String, ByVal nCurrentPosition As Long) As String
 Dim nPercent As Integer, nLastPercent As Integer, sTest As String, sChar As String
-Dim X As Integer, y1 As Integer, y2 As Integer
+Dim x As Integer, y1 As Integer, y2 As Integer
 
 'make sTest just the the part of the data up until the current position
 sTest = Mid(sWholeData, 1, nCurrentPosition - 1)
 
-X = 1
+x = 1
 NextLine:
 'move x to the position of the first linebreak before the current position
-If Not InStr(X, sTest, Chr(10)) = 0 Then
+If Not InStr(x, sTest, Chr(10)) = 0 Then
 
     'get the previous percent
-    y2 = InStr(X, sTest, ":")
+    y2 = InStr(x, sTest, ":")
     If y2 = 0 Then
         GetTBPercent = "(?%)"
         Exit Function
@@ -4150,11 +4152,11 @@ next_prev:
         nLastPercent = Val(Mid(sTest, y1 + 1, y2 - y1 + 1))
     End If
     
-    X = InStr(X, sTest, Chr(10)) + 1
+    x = InStr(x, sTest, Chr(10)) + 1
     GoTo NextLine:
 End If
 
-sTest = Mid(sWholeData, X, nCurrentPosition - X)
+sTest = Mid(sWholeData, x, nCurrentPosition - x)
 
 'get the percent for this one
 y2 = InStr(1, sTest, ":")
@@ -4195,24 +4197,24 @@ End Function
 
 Private Function TestItemFail(ByVal sWholeData As String, ByVal nCurrentPosition As Long) As Boolean
 Dim sLook As String, sChar As String, sTest As String
-Dim X As Integer, y1 As Integer, y2 As Integer, z As Integer, nItem As Long
+Dim x As Integer, y1 As Integer, y2 As Integer, z As Integer, nItem As Long
 
 'make sTest just the the part of the data up until the current position
 sTest = Mid(sWholeData, 1, nCurrentPosition - 1)
 
-X = 1
+x = 1
 NextLine:
 'move x to the position of the first linebreak
-If Not InStr(X, sTest, Chr(10)) = 0 Then
-    X = InStr(X, sTest, Chr(10)) + 1
+If Not InStr(x, sTest, Chr(10)) = 0 Then
+    x = InStr(x, sTest, Chr(10)) + 1
     GoTo NextLine:
 End If
 
-sTest = Mid(sWholeData, X, nCurrentPosition - X)
+sTest = Mid(sWholeData, x, nCurrentPosition - x)
 
 For z = 1 To 3
     
-    X = 1
+    x = 1
     'check for each type of item fail textblock
     Select Case z
         Case 1: sLook = "checkitem "
@@ -4224,18 +4226,18 @@ checknext:
     'if there is one of those strings in there before our current position,
     'see if there is a linebreak between the string and the current position
     '(which would mean it was in a different command string)
-    If Not InStr(X, sTest, sLook) = 0 Then
+    If Not InStr(x, sTest, sLook) = 0 Then
 
-        X = InStr(X, sTest, sLook) 'sets x to the position of the failed string
+        x = InStr(x, sTest, sLook) 'sets x to the position of the failed string
         
-        If z = 2 And X > 4 Then 'check for "failroomitem X" which we dont want to block
-            If Mid(sTest, X - 4, 4) = "fail" Then
-                X = X + 1
+        If z = 2 And x > 4 Then 'check for "failroomitem X" which we dont want to block
+            If Mid(sTest, x - 4, 4) = "fail" Then
+                x = x + 1
                 GoTo checknext:
             End If
         End If
         
-        y1 = X + Len(sLook) 'len of string searching (to position y1 at first number)
+        y1 = x + Len(sLook) 'len of string searching (to position y1 at first number)
         y2 = 0
 nextnumber:
         sChar = Mid(sTest, y1 + y2, 1)
@@ -4250,7 +4252,7 @@ nextnumber:
         
         If y2 = 0 Then
             'if there were no numbers after the string
-            X = y1
+            x = y1
             GoTo checknext:
         End If
         
@@ -4259,7 +4261,7 @@ nextnumber:
         'if the item is in the game then we're clear, check for any more matches
         If UBound(ItemInGame()) < nItem Then ReDim Preserve ItemInGame(nItem)
         If ItemInGame(nItem) Then
-            X = y1
+            x = y1
             GoTo checknext:
         Else
             'item not in game, line fails
@@ -4273,34 +4275,34 @@ End Function
 
 Private Function CheckForClassRestriction(ByVal sWholeData As String, ByVal nCurrentPosition As Long) As String
 Dim sLook As String, sChar As String, sTest As String
-Dim X As Integer, y1 As Integer, y2 As Integer, z As Integer, nClass As Long
+Dim x As Integer, y1 As Integer, y2 As Integer, z As Integer, nClass As Long
 
 'make sTest just the the part of the data up until the current position
 sTest = Mid(sWholeData, 1, nCurrentPosition - 1)
 
 CheckForClassRestriction = "(*)"
 
-X = 1
+x = 1
 NextLine:
 'move x to the position of the first linebreak
-If Not InStr(X, sTest, Chr(10)) = 0 Then
-    X = InStr(X, sTest, Chr(10)) + 1
+If Not InStr(x, sTest, Chr(10)) = 0 Then
+    x = InStr(x, sTest, Chr(10)) + 1
     GoTo NextLine:
 End If
 
-sTest = Mid(sWholeData, X, nCurrentPosition - X)
+sTest = Mid(sWholeData, x, nCurrentPosition - x)
 
-X = 1
+x = 1
 sLook = "class "
 
 checknext:
-If Not InStr(X, sTest, sLook) = 0 Then
+If Not InStr(x, sTest, sLook) = 0 Then
 
-    X = InStr(X, sTest, sLook) 'sets x to the position of the failed string
+    x = InStr(x, sTest, sLook) 'sets x to the position of the failed string
     
     'check to make sure this isn't part of another word
-    If X > 1 Then
-        sChar = Mid(sTest, X - 1, 1)
+    If x > 1 Then
+        sChar = Mid(sTest, x - 1, 1)
         Select Case sChar
             Case "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", _
                 "r", "s", "t", "u", "v", "w", "x", "y", "z":
@@ -4309,7 +4311,7 @@ If Not InStr(X, sTest, sLook) = 0 Then
         End Select
     End If
     
-    y1 = X + Len(sLook) 'len of string searching (to position y1 at first number)
+    y1 = x + Len(sLook) 'len of string searching (to position y1 at first number)
     y2 = 0
     
 nextnumber:
@@ -4325,7 +4327,7 @@ nextnumber:
     
     If y2 = 0 Then
         'if there were no numbers after the string
-        X = y1
+        x = y1
         GoTo checknext:
     End If
     
@@ -4335,11 +4337,11 @@ End If
 End Function
 
 Private Sub LocateRecords()
-Dim X As Integer
+Dim x As Integer
 
-X = 1
+x = 1
 lblPanel(1).Caption = ""
-lblPanel(0).Caption = "Cross Referencing (" & X & "/" & nPasses & ") ..."
+lblPanel(0).Caption = "Cross Referencing (" & x & "/" & nPasses & ") ..."
 DoEvents
 If bStopExport = True Then Exit Sub
 Call ScanRooms
@@ -4348,12 +4350,12 @@ DoEvents
 If bStopExport = True Then Exit Sub
 Call ScanShops
 
-X = 1
-Do While (X <= nPasses Or bSomethingMarkedInGame = True) And X < 20
+x = 1
+Do While (x <= nPasses Or bSomethingMarkedInGame = True) And x < 20
     bSomethingMarkedInGame = False
     
     If bStopExport = True Then Exit Sub
-    lblPanel(0).Caption = "Cross Referencing (" & X & "/" & nPasses & ") ..."
+    lblPanel(0).Caption = "Cross Referencing (" & x & "/" & nPasses & ") ..."
     DoEvents
     Call ScanMonsters
     If bStopExport = True Then Exit Sub
@@ -4367,7 +4369,7 @@ Do While (X <= nPasses Or bSomethingMarkedInGame = True) And X < 20
     Call ScanItems
     If bStopExport = True Then Exit Sub
     
-    X = X + 1
+    x = x + 1
 Loop
 
 DoEvents
@@ -4456,7 +4458,7 @@ End Sub
 
 Private Sub ExportItems()
 Dim nStatus As Integer, recnum As Long
-Dim X As Long
+Dim x As Long
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
@@ -4523,21 +4525,21 @@ Do While nStatus = 0 And bStopExport = False
     tabItems.Fields("Obtained From") = Chr(0)
     tabItems.Fields("References") = Chr(0)
     
-    For X = 0 To 9
-        tabItems.Fields("ClassRest-" & X) = Itemrec.Class(X)
+    For x = 0 To 9
+        tabItems.Fields("ClassRest-" & x) = Itemrec.Class(x)
     Next
     
-    For X = 0 To 9
-        tabItems.Fields("RaceRest-" & X) = Itemrec.Race(X)
+    For x = 0 To 9
+        tabItems.Fields("RaceRest-" & x) = Itemrec.Race(x)
     Next
     
-    For X = 0 To 9
-        tabItems.Fields("NegateSpell-" & X) = Itemrec.Negate(X * 2)
+    For x = 0 To 9
+        tabItems.Fields("NegateSpell-" & x) = Itemrec.Negate(x * 2)
     Next
     
-    For X = 0 To 19
-        tabItems.Fields("Abil-" & X) = Itemrec.AbilityA(X)
-        tabItems.Fields("AbilVal-" & X) = Itemrec.AbilityB(X)
+    For x = 0 To 19
+        tabItems.Fields("Abil-" & x) = Itemrec.AbilityA(x)
+        tabItems.Fields("AbilVal-" & x) = Itemrec.AbilityB(x)
     Next
     
     tabItems.Update
@@ -4551,7 +4553,7 @@ Loop
 
 End Sub
 Private Sub ExportSpells()
-Dim nStatus As Integer, recnum As Long, X As Integer
+Dim nStatus As Integer, recnum As Long, x As Integer
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
@@ -4619,9 +4621,9 @@ Do While nStatus = 0 And bStopExport = False
     tabSpells.Fields("Casted By") = Chr(0)
     tabSpells.Fields("Classes") = Chr(0)
     
-    For X = 0 To 9
-        tabSpells.Fields("Abil-" & X) = Spellrec.AbilityA(X)
-        tabSpells.Fields("AbilVal-" & X) = Spellrec.AbilityB(X)
+    For x = 0 To 9
+        tabSpells.Fields("Abil-" & x) = Spellrec.AbilityA(x)
+        tabSpells.Fields("AbilVal-" & x) = Spellrec.AbilityB(x)
     Next
 
     tabSpells.Update
@@ -4635,7 +4637,7 @@ Loop
 End Sub
 
 Private Sub ExportClasses()
-Dim nStatus As Integer, recnum As Long, X As Integer
+Dim nStatus As Integer, recnum As Long, x As Integer
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
@@ -4687,9 +4689,9 @@ Do While nStatus = 0 And bStopExport = False
     tabClasses.Fields("ArmourType") = Classrec.Armour
     tabClasses.Fields("CombatLVL") = Classrec.Combat
     
-    For X = 0 To 9
-        tabClasses.Fields("Abil-" & X) = Classrec.AbilityA(X)
-        tabClasses.Fields("AbilVal-" & X) = Classrec.AbilityB(X)
+    For x = 0 To 9
+        tabClasses.Fields("Abil-" & x) = Classrec.AbilityA(x)
+        tabClasses.Fields("AbilVal-" & x) = Classrec.AbilityB(x)
     Next
 
     tabClasses.Update
@@ -4702,7 +4704,7 @@ Loop
 
 End Sub
 Private Sub ExportRaces()
-Dim nStatus As Integer, recnum As Long, X As Integer
+Dim nStatus As Integer, recnum As Long, x As Integer
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
@@ -4761,9 +4763,9 @@ Do While nStatus = 0 And bStopExport = False
     tabRaces.Fields("ExpTable") = Racerec.ExpChart
     tabRaces.Fields("BaseCP") = Racerec.CP
     
-    For X = 0 To 9
-        tabRaces.Fields("Abil-" & X) = Racerec.AbilityA(X)
-        tabRaces.Fields("AbilVal-" & X) = Racerec.AbilityB(X)
+    For x = 0 To 9
+        tabRaces.Fields("Abil-" & x) = Racerec.AbilityA(x)
+        tabRaces.Fields("AbilVal-" & x) = Racerec.AbilityB(x)
     Next
 
     tabRaces.Update
@@ -4776,7 +4778,7 @@ Loop
 
 End Sub
 Private Sub ExportShops()
-Dim nStatus As Integer, recnum As Long, X As Long
+Dim nStatus As Integer, recnum As Long, x As Long
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
@@ -4828,20 +4830,20 @@ Do While nStatus = 0 And bStopExport = False
     tabShops.Fields("Assigned To") = Chr(0)
     
     If Shoprec.ShopType = 11 Then 'gang shop
-        For X = 0 To 19
-            tabShops.Fields("Item-" & X) = 0
-            tabShops.Fields("Max-" & X) = 0
-            tabShops.Fields("Time-" & X) = 0
-            tabShops.Fields("Amount-" & X) = 0
-            tabShops.Fields("%-" & X) = 0
+        For x = 0 To 19
+            tabShops.Fields("Item-" & x) = 0
+            tabShops.Fields("Max-" & x) = 0
+            tabShops.Fields("Time-" & x) = 0
+            tabShops.Fields("Amount-" & x) = 0
+            tabShops.Fields("%-" & x) = 0
         Next
     Else
-        For X = 0 To 19
-            tabShops.Fields("Item-" & X) = Shoprec.ShopItemNumber(X)
-            tabShops.Fields("Max-" & X) = Shoprec.ShopMax(X)
-            tabShops.Fields("Time-" & X) = Shoprec.ShopRgnTime(X)
-            tabShops.Fields("Amount-" & X) = Shoprec.ShopRgnNumber(X)
-            tabShops.Fields("%-" & X) = Shoprec.ShopRgnPercentage(X)
+        For x = 0 To 19
+            tabShops.Fields("Item-" & x) = Shoprec.ShopItemNumber(x)
+            tabShops.Fields("Max-" & x) = Shoprec.ShopMax(x)
+            tabShops.Fields("Time-" & x) = Shoprec.ShopRgnTime(x)
+            tabShops.Fields("Amount-" & x) = Shoprec.ShopRgnNumber(x)
+            tabShops.Fields("%-" & x) = Shoprec.ShopRgnPercentage(x)
         Next
     End If
     
@@ -4855,7 +4857,7 @@ Loop
 
 End Sub
 Private Sub ExportMonsters()
-Dim nStatus As Integer, recnum As Long, X As Long, sTemp As String, Y As Integer, z As Integer
+Dim nStatus As Integer, recnum As Long, x As Long, sTemp As String, y As Integer, z As Integer
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
@@ -4934,36 +4936,36 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("In Game") = IIf(bAllInGame, True, False)
     tabMonsters.Fields("Summoned By") = Chr(0)
     
-    For X = 0 To 4
-        tabMonsters.Fields("AttName-" & X) = GetMonsterAttackName(Monsterrec.Number, X, 49)
-        tabMonsters.Fields("AttType-" & X) = Monsterrec.AttackType(X)
-        tabMonsters.Fields("AttAcc-" & X) = Monsterrec.AttackAccuSpell(X)
-        tabMonsters.Fields("Att%-" & X) = Monsterrec.AttackPer(X)
+    For x = 0 To 4
+        tabMonsters.Fields("AttName-" & x) = GetMonsterAttackName(Monsterrec.Number, x, 49)
+        tabMonsters.Fields("AttType-" & x) = Monsterrec.AttackType(x)
+        tabMonsters.Fields("AttAcc-" & x) = Monsterrec.AttackAccuSpell(x)
+        tabMonsters.Fields("Att%-" & x) = Monsterrec.AttackPer(x)
         
-        If clsMonAtkSim.nStatAtkAttempted(X) > 0 And clsMonAtkSim.nTotalAttacks > 0 Then
-            tabMonsters.Fields("AttTrue%-" & X) = Round(clsMonAtkSim.nStatAtkAttempted(X) / clsMonAtkSim.nTotalAttacks, 3) * 100
+        If clsMonAtkSim.nStatAtkAttempted(x) > 0 And clsMonAtkSim.nTotalAttacks > 0 Then
+            tabMonsters.Fields("AttTrue%-" & x) = Round(clsMonAtkSim.nStatAtkAttempted(x) / clsMonAtkSim.nTotalAttacks, 3) * 100
         Else
-            tabMonsters.Fields("AttTrue%-" & X) = 0
+            tabMonsters.Fields("AttTrue%-" & x) = 0
         End If
         
-        tabMonsters.Fields("AttMin-" & X) = Monsterrec.AttackMinHCastPer(X)
-        tabMonsters.Fields("AttMax-" & X) = Monsterrec.AttackMaxHCastLvl(X)
-        tabMonsters.Fields("AttEnergy-" & X) = Monsterrec.AttackEnergy(X)
-        tabMonsters.Fields("AttHitSpell-" & X) = Monsterrec.AttackHitSpell(X)
-        tabMonsters.Fields("MidSpell-" & X) = Monsterrec.SpellNumber(X)
-        tabMonsters.Fields("MidSpell%-" & X) = Monsterrec.SpellCastPer(X)
-        tabMonsters.Fields("MidSpellLVL-" & X) = Monsterrec.SpellCastLvl(X)
+        tabMonsters.Fields("AttMin-" & x) = Monsterrec.AttackMinHCastPer(x)
+        tabMonsters.Fields("AttMax-" & x) = Monsterrec.AttackMaxHCastLvl(x)
+        tabMonsters.Fields("AttEnergy-" & x) = Monsterrec.AttackEnergy(x)
+        tabMonsters.Fields("AttHitSpell-" & x) = Monsterrec.AttackHitSpell(x)
+        tabMonsters.Fields("MidSpell-" & x) = Monsterrec.SpellNumber(x)
+        tabMonsters.Fields("MidSpell%-" & x) = Monsterrec.SpellCastPer(x)
+        tabMonsters.Fields("MidSpellLVL-" & x) = Monsterrec.SpellCastLvl(x)
     Next
     
-    For X = 0 To 9
-        tabMonsters.Fields("DropItem-" & X) = Monsterrec.ItemNumber(X)
+    For x = 0 To 9
+        tabMonsters.Fields("DropItem-" & x) = Monsterrec.ItemNumber(x)
         'tabMonsters.Fields("DropItemUses-" & x) = Monsterrec.ItemUses(x)
-        tabMonsters.Fields("DropItem%-" & X) = Monsterrec.ItemDropPer(X)
+        tabMonsters.Fields("DropItem%-" & x) = Monsterrec.ItemDropPer(x)
     Next
     
-    For X = 0 To 9
-        tabMonsters.Fields("Abil-" & X) = Monsterrec.AbilityA(X)
-        tabMonsters.Fields("AbilVal-" & X) = Monsterrec.AbilityB(X)
+    For x = 0 To 9
+        tabMonsters.Fields("Abil-" & x) = Monsterrec.AbilityA(x)
+        tabMonsters.Fields("AbilVal-" & x) = Monsterrec.AbilityB(x)
     Next
 
     tabMonsters.Update
@@ -4980,7 +4982,7 @@ On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, sDir As String, sTemp As String
 Dim sActionNum As String, sMonsters As String, nAction As Integer, nNumActions As Long
 Dim nTempMap As Long, nTempRoom As Long, sActions() As String, sNewActions() As String
-Dim X As Integer, Y As Integer, z As Integer
+Dim x As Integer, y As Integer, z As Integer
 Dim x2 As Integer, y2 As Integer, z2 As Integer
 
 If chkLegit.Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
@@ -5053,8 +5055,8 @@ Do While nStatus = 0 And bStopExport = False
         tabRooms.Fields("CMD") = 0
         tabRooms.Fields("Placed") = Chr(0)
 
-        For Y = 0 To 9
-                Select Case Y
+        For y = 0 To 9
+                Select Case y
                     Case 0: sDir = "N"
                     Case 1: sDir = "S"
                     Case 2: sDir = "E"
@@ -5068,7 +5070,7 @@ Do While nStatus = 0 And bStopExport = False
                 End Select
 
                 tabRooms.Fields(sDir) = Chr(0)
-        Next Y
+        Next y
         tabRooms.Fields("Lair") = Chr(0)
 
         GoTo excluded:
@@ -5086,9 +5088,9 @@ Do While nStatus = 0 And bStopExport = False
     tabRooms.Fields("CMD") = Roomrec.CmdText
     
     sTemp = ""
-    For X = 0 To 9
-        If Roomrec.PlacedItems(X) > 0 Then sTemp = sTemp & Roomrec.PlacedItems(X) & ","
-    Next X
+    For x = 0 To 9
+        If Roomrec.PlacedItems(x) > 0 Then sTemp = sTemp & Roomrec.PlacedItems(x) & ","
+    Next x
     tabRooms.Fields("Placed") = sTemp & Chr(0)
     sTemp = ""
     
@@ -5098,8 +5100,8 @@ Do While nStatus = 0 And bStopExport = False
     ReDim sNewActions(0 To 9)
     'action string for exit
     
-    For X = 0 To 9
-        Select Case X
+    For x = 0 To 9
+        Select Case x
             Case 0: sDir = "N"
             Case 1: sDir = "S"
             Case 2: sDir = "E"
@@ -5112,18 +5114,18 @@ Do While nStatus = 0 And bStopExport = False
             Case 9: sDir = "D"
         End Select
             
-        If Not Roomrec.RoomExit(X) = 0 Then
-            Select Case Roomrec.RoomType(X)
+        If Not Roomrec.RoomExit(x) = 0 Then
+            Select Case Roomrec.RoomType(x)
                 Case 0: 'Normal
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X)
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x)
                     
                 Case 1: 'Spell
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X)
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x)
                 
                 Case 2: 'Key
-                    sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Key: " & Roomrec.Para1(X)
-                    If Not Roomrec.Para3(X) = 0 Then
-                        sTemp = sTemp & " [or " & IIf(Roomrec.Para3(X) < 0, Abs(Roomrec.Para3(X) - 1), "any") _
+                    sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Key: " & Roomrec.Para1(x)
+                    If Not Roomrec.Para3(x) = 0 Then
+                        sTemp = sTemp & " [or " & IIf(Roomrec.Para3(x) < 0, Abs(Roomrec.Para3(x) - 1), "any") _
                             & " picklocks])"
                     Else
                         sTemp = sTemp & ")"
@@ -5131,16 +5133,16 @@ Do While nStatus = 0 And bStopExport = False
                     tabRooms.Fields(sDir) = sTemp
                     
                 Case 3: 'Item
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Item: " & Roomrec.Para1(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Item: " & Roomrec.Para1(x) & ")"
                     
                 Case 4: 'Toll
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Toll: " & Roomrec.Para1(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Toll: " & Roomrec.Para1(x) & ")"
             
                 Case 5: 'Action
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X)
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x)
                 
                 Case 6: 'Hidden
-                    Select Case Roomrec.Para1(X)
+                    Select Case Roomrec.Para1(x)
                         Case 0:
                             tabRooms.Fields(sDir) = 0 'error, no exit
                             GoTo nextexit:
@@ -5149,34 +5151,34 @@ Do While nStatus = 0 And bStopExport = False
                         Case 2, 4: 'searchable
                             sTemp = " (Hidden/Searchable)"
                         Case Else:
-                            If Not Roomrec.Para2(X) = 0 Then 'does it require more than 1 action?
-                                If Roomrec.Para2(X) < 0 Then
-                                    sTemp = " (Hidden/Needs " & Abs(Roomrec.Para2(X)) & " Actions, any order)"
+                            If Not Roomrec.Para2(x) = 0 Then 'does it require more than 1 action?
+                                If Roomrec.Para2(x) < 0 Then
+                                    sTemp = " (Hidden/Needs " & Abs(Roomrec.Para2(x)) & " Actions, any order)"
                                 Else
-                                    sTemp = " (Hidden/Needs " & Roomrec.Para2(X) & " Actions, specific order)"
+                                    sTemp = " (Hidden/Needs " & Roomrec.Para2(x) & " Actions, specific order)"
                                 End If
                             Else
                                 sTemp = " (Hidden/Unknown)"
                             End If
                             
                     End Select
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & sTemp
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & sTemp
                     
                 Case 7, 11: 'Door
-                    If Roomrec.Para4(X) <= 0 Then 'para 4 is key req
-                        sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Door"
+                    If Roomrec.Para4(x) <= 0 Then 'para 4 is key req
+                        sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Door"
                         
-                        If Not Roomrec.Para2(X) = 0 Then
-                            sTemp = sTemp & " [" & IIf(Roomrec.Para2(X) < 0, Abs(Roomrec.Para2(X) - 1), "any") _
+                        If Not Roomrec.Para2(x) = 0 Then
+                            sTemp = sTemp & " [" & IIf(Roomrec.Para2(x) < 0, Abs(Roomrec.Para2(x) - 1), "any") _
                                 & " picklocks/strength])"
                         Else
                             sTemp = sTemp & ")"
                         End If
                     Else
-                        sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Key: " & Roomrec.Para4(X)
+                        sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Key: " & Roomrec.Para4(x)
                         
-                        If Not Roomrec.Para2(X) = 0 Then
-                            sTemp = sTemp & " [or " & IIf(Roomrec.Para2(X) < 0, Abs(Roomrec.Para2(X) - 1), "any") _
+                        If Not Roomrec.Para2(x) = 0 Then
+                            sTemp = sTemp & " [or " & IIf(Roomrec.Para2(x) < 0, Abs(Roomrec.Para2(x) - 1), "any") _
                                 & " picklocks/strength])"
                         Else
                             sTemp = sTemp & ")"
@@ -5186,35 +5188,35 @@ Do While nStatus = 0 And bStopExport = False
                     tabRooms.Fields(sDir) = sTemp
                     
                 Case 8: 'Map Change
-                    tabRooms.Fields(sDir) = Roomrec.Para1(X) & "/" & Roomrec.RoomExit(X)
+                    tabRooms.Fields(sDir) = Roomrec.Para1(x) & "/" & Roomrec.RoomExit(x)
                     
                 Case 9: 'Trap
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Trap, " & Roomrec.Para1(X) & " damage)"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Trap, " & Roomrec.Para1(x) & " damage)"
                     
                 Case 10: 'Text
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Text: " & GetMessages(Roomrec.Para1(X), -1) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Text: " & GetMessages(Roomrec.Para1(x), -1) & ")"
                     
                 Case 12: 'Remote Action
                     
-                    If Roomrec.RoomNumber = Roomrec.RoomExit(X) Then
-                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(X) Mod 10, False) _
+                    If Roomrec.RoomNumber = Roomrec.RoomExit(x) Then
+                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(x) Mod 10, False) _
                             & " exit of this room]: "
                     Else
-                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(X) Mod 10, False) _
-                            & " exit of room " & Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & "]: "
+                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(x) Mod 10, False) _
+                            & " exit of room " & Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & "]: "
                     End If
                     
-                    sTemp = sTemp & GetMessages(Roomrec.Para1(X), -1)
+                    sTemp = sTemp & GetMessages(Roomrec.Para1(x), -1)
                     
-                    If Not Roomrec.Para4(X) = 0 Then sTemp = sTemp & " (Item: " & Roomrec.Para4(X) & ")"
+                    If Not Roomrec.Para4(x) = 0 Then sTemp = sTemp & " (Item: " & Roomrec.Para4(x) & ")"
                     
                     
-                    If Roomrec.Para2(X) > 9 And Roomrec.Para2(X) < 100 Then
-                        If Not Roomrec.RoomExit(X) = Roomrec.RoomNumber Then
+                    If Roomrec.Para2(x) > 9 And Roomrec.Para2(x) < 100 Then
+                        If Not Roomrec.RoomExit(x) = Roomrec.RoomNumber Then
                             nTempMap = Roomrec.MapNumber
                             nTempRoom = Roomrec.RoomNumber
                             
-                            nNumActions = GetTotalActions(Roomrec.MapNumber, Roomrec.RoomExit(X), Roomrec.Para2(X) Mod 10)
+                            nNumActions = GetTotalActions(Roomrec.MapNumber, Roomrec.RoomExit(x), Roomrec.Para2(x) Mod 10)
 
                             RoomKeyStruct.MapNum = nTempMap
                             RoomKeyStruct.RoomNum = nTempRoom
@@ -5227,23 +5229,23 @@ Do While nStatus = 0 And bStopExport = False
                                 Call RoomRowToStruct(Roomdatabuf.buf)
                             End If
                         Else
-                            If Roomrec.RoomType(Roomrec.Para2(X) Mod 10) = 6 Then 'hidden/action
-                                nNumActions = Abs(Roomrec.Para2(Roomrec.Para2(X) Mod 10))
+                            If Roomrec.RoomType(Roomrec.Para2(x) Mod 10) = 6 Then 'hidden/action
+                                nNumActions = Abs(Roomrec.Para2(Roomrec.Para2(x) Mod 10))
                             Else
                                 nNumActions = -1
                             End If
                         End If
                         
                         If nNumActions > 0 And nNumActions < 10 Then
-                            nAction = Fix(Roomrec.Para2(X) / 10)
+                            nAction = Fix(Roomrec.Para2(x) / 10)
                             
                             nAction = nNumActions - nAction + 1
                             
                             sTemp = "Action#" & nAction & " " & sTemp
                             
-                            sActions(X, nAction, 1) = Roomrec.RoomExit(X)
-                            sActions(X, nAction, 2) = sTemp
-                            sNewActions(X) = "open"
+                            sActions(x, nAction, 1) = Roomrec.RoomExit(x)
+                            sActions(x, nAction, 2) = sTemp
+                            sNewActions(x) = "open"
                         Else
                             sTemp = "Action " & sTemp
                             tabRooms.Fields(sDir) = sTemp
@@ -5254,53 +5256,53 @@ Do While nStatus = 0 And bStopExport = False
                     End If
                     
                 Case 13: 'Class
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Class: " & Roomrec.Para1(X) & " OK, " & Roomrec.Para2(X) & " NO)"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Class: " & Roomrec.Para1(x) & " OK, " & Roomrec.Para2(x) & " NO)"
                     
                 Case 14: 'Race
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Race: " & Roomrec.Para1(X) & " OK, " & Roomrec.Para2(X) & " NO)"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Race: " & Roomrec.Para1(x) & " OK, " & Roomrec.Para2(x) & " NO)"
                     
                 Case 15: 'Level
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Level: " & Roomrec.Para1(X) & " to " & Roomrec.Para2(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Level: " & Roomrec.Para1(x) & " to " & Roomrec.Para2(x) & ")"
                     
                 Case 16: 'Timed
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Timed: " & Roomrec.Para2(X) & "*5 minutes)"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Timed: " & Roomrec.Para2(x) & "*5 minutes)"
                     
                 Case 17: 'Ticket
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Ticket/Item: " & Roomrec.Para1(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Ticket/Item: " & Roomrec.Para1(x) & ")"
                     
                 Case 18: 'User Count
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Max Users: " & Roomrec.Para1(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Max Users: " & Roomrec.Para1(x) & ")"
                     
                 Case 19: 'Block Guard
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) '& " (Block Guard)"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) '& " (Block Guard)"
                     
                 Case 20: 'Alignment
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) _
-                        & " (Alignment: " & GetAlignmentValue(Roomrec.Para1(X)) & " to " _
-                        & GetAlignmentValue(Roomrec.Para2(X)) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) _
+                        & " (Alignment: " & GetAlignmentValue(Roomrec.Para1(x)) & " to " _
+                        & GetAlignmentValue(Roomrec.Para2(x)) & ")"
                     
                 Case 21: 'Delay
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) '& " (Delay?)"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) '& " (Delay?)"
                     
                 Case 22: 'Cast
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Cast: " & "pre-" & Roomrec.Para1(X) & ", post-" & Roomrec.Para2(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Cast: " & "pre-" & Roomrec.Para1(x) & ", post-" & Roomrec.Para2(x) & ")"
                     
                 Case 23: 'Ability
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Ability: " & Roomrec.Para1(X) & " w/value " & Roomrec.Para2(X) & " to " & Roomrec.Para3(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Ability: " & Roomrec.Para1(x) & " w/value " & Roomrec.Para2(x) & " to " & Roomrec.Para3(x) & ")"
                     
                 Case 24: 'Spell Trap
-                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(X) & " (Spell Trap: " & Roomrec.Para1(X) & ")"
+                    tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Spell Trap: " & Roomrec.Para1(x) & ")"
                     
             End Select
         Else
             tabRooms.Fields(sDir) = 0
         End If
 nextexit:
-    Next X
+    Next x
     
-    For X = 0 To 9
-        For Y = 0 To 9
-            nTempRoom = Val(sActions(X, Y, 1))
+    For x = 0 To 9
+        For y = 0 To 9
+            nTempRoom = Val(sActions(x, y, 1))
             If nTempRoom > 0 Then
                 z = 1 'action number
 nextaction:
@@ -5320,12 +5322,12 @@ foundaction:
                 GoTo nextaction:
 doneaction:
             End If
-        Next Y
-    Next X
+        Next y
+    Next x
     
-    For X = 0 To 9
-        If Not sNewActions(X) = "" Then
-            Select Case X
+    For x = 0 To 9
+        If Not sNewActions(x) = "" Then
+            Select Case x
                 Case 0: sDir = "N"
                 Case 1: sDir = "S"
                 Case 2: sDir = "E"
@@ -5337,9 +5339,9 @@ doneaction:
                 Case 8: sDir = "U"
                 Case 9: sDir = "D"
             End Select
-            tabRooms.Fields(sDir) = sNewActions(X)
+            tabRooms.Fields(sDir) = sNewActions(x)
         End If
-    Next X
+    Next x
     
     
     sMonsters = ""
@@ -5348,13 +5350,13 @@ doneaction:
         If UBound(MGIL(), 2) < Roomrec.MinIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MinIndex)
         If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex)
         
-        For X = Roomrec.MinIndex To Roomrec.MaxIndex
-            For Y = 0 To 14
-                If Not MGIL(Roomrec.MonsterType, X).nNumber(Y) = 0 Then
-                    sMonsters = sMonsters & MGIL(Roomrec.MonsterType, X).nNumber(Y) & ","
+        For x = Roomrec.MinIndex To Roomrec.MaxIndex
+            For y = 0 To 14
+                If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
+                    sMonsters = sMonsters & MGIL(Roomrec.MonsterType, x).nNumber(y) & ","
                 End If
-            Next Y
-        Next X
+            Next y
+        Next x
         
     End If
     
@@ -5426,7 +5428,7 @@ End Function
 Private Function CreateDatabase() As Integer
 On Error GoTo error:
 Dim sTemp As String, nYesNo As Integer, catDB As ADOX.Catalog
-Dim fso As FileSystemObject, X As Integer, nTemp As Integer, nTemp2 As Integer
+Dim fso As FileSystemObject, x As Integer, nTemp As Integer, nTemp2 As Integer
 
 CreateDatabase = 0
 
@@ -5512,7 +5514,7 @@ Dim pkSpells As New ADOX.Key
 Dim idxRooms As New ADOX.Index
 Dim pkTBInfo As New ADOX.Key
 Dim pkLairs As New ADOX.Key
-Dim X As Integer
+Dim x As Integer
 
 CreateTables = False
 
@@ -5596,9 +5598,9 @@ With tabNewClasses
     .Columns.Append "ArmourType", adInteger
     .Columns.Append "CombatLVL", adInteger
     
-    For X = 0 To 9
-        .Columns.Append CStr("Abil-" & X), adInteger
-        .Columns.Append CStr("AbilVal-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append CStr("Abil-" & x), adInteger
+        .Columns.Append CStr("AbilVal-" & x), adInteger
     Next
     
 End With
@@ -5625,9 +5627,9 @@ With tabNewRaces
     .Columns.Append "ExpTable", adInteger
     .Columns.Append "BaseCP", adInteger
     
-    For X = 0 To 9
-        .Columns.Append CStr("Abil-" & X), adInteger
-        .Columns.Append CStr("AbilVal-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append CStr("Abil-" & x), adInteger
+        .Columns.Append CStr("AbilVal-" & x), adInteger
     Next
     
 End With
@@ -5659,9 +5661,9 @@ With tabNewSpells
     .Columns.Append "DurIncLVLs", adInteger
     .Columns.Append "DurInc", adInteger
     
-    For X = 0 To 9
-        .Columns.Append CStr("Abil-" & X), adInteger
-        .Columns.Append CStr("AbilVal-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append CStr("Abil-" & x), adInteger
+        .Columns.Append CStr("AbilVal-" & x), adInteger
     Next
     
     .Columns.Append "Learnable", adInteger
@@ -5705,33 +5707,33 @@ With tabNewMonsters
     .Columns.Append "DeathSpell", adInteger
     .Columns.Append "CreateSpell", adInteger
 
-    For X = 0 To 4
-        .Columns.Append CStr("AttName-" & X), adVarWChar, 50
-        .Columns.Append CStr("AttType-" & X), adInteger
-        .Columns.Append CStr("AttAcc-" & X), adInteger
-        .Columns.Append CStr("Att%-" & X), adInteger
-        .Columns.Append CStr("AttTrue%-" & X), adDouble
-        .Columns.Append CStr("AttMin-" & X), adInteger
-        .Columns.Append CStr("AttMax-" & X), adInteger
-        .Columns.Append CStr("AttEnergy-" & X), adInteger
-        .Columns.Append CStr("AttHitSpell-" & X), adInteger
+    For x = 0 To 4
+        .Columns.Append CStr("AttName-" & x), adVarWChar, 50
+        .Columns.Append CStr("AttType-" & x), adInteger
+        .Columns.Append CStr("AttAcc-" & x), adInteger
+        .Columns.Append CStr("Att%-" & x), adInteger
+        .Columns.Append CStr("AttTrue%-" & x), adDouble
+        .Columns.Append CStr("AttMin-" & x), adInteger
+        .Columns.Append CStr("AttMax-" & x), adInteger
+        .Columns.Append CStr("AttEnergy-" & x), adInteger
+        .Columns.Append CStr("AttHitSpell-" & x), adInteger
     Next
     
-    For X = 0 To 4
-        .Columns.Append CStr("MidSpell-" & X), adInteger
-        .Columns.Append CStr("MidSpell%-" & X), adInteger
-        .Columns.Append CStr("MidSpellLVL-" & X), adInteger
+    For x = 0 To 4
+        .Columns.Append CStr("MidSpell-" & x), adInteger
+        .Columns.Append CStr("MidSpell%-" & x), adInteger
+        .Columns.Append CStr("MidSpellLVL-" & x), adInteger
     Next
     
-    For X = 0 To 9
-        .Columns.Append CStr("DropItem-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append CStr("DropItem-" & x), adInteger
         '.Columns.Append CStr("DropItemUses-" & x), adInteger
-        .Columns.Append CStr("DropItem%-" & X), adInteger
+        .Columns.Append CStr("DropItem%-" & x), adInteger
     Next
     
-    For X = 0 To 9
-        .Columns.Append CStr("Abil-" & X), adInteger
-        .Columns.Append CStr("AbilVal-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append CStr("Abil-" & x), adInteger
+        .Columns.Append CStr("AbilVal-" & x), adInteger
     Next
 
     .Columns.Append "In Game", adInteger
@@ -5766,21 +5768,21 @@ With tabNewItems
     .Columns.Append "Destroy On Death", adInteger
     .Columns.Append "Retain After Uses", adInteger
     
-    For X = 0 To 9
-        .Columns.Append ("ClassRest-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append ("ClassRest-" & x), adInteger
     Next
     
-    For X = 0 To 9
-        .Columns.Append ("RaceRest-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append ("RaceRest-" & x), adInteger
     Next
     
-    For X = 0 To 9
-        .Columns.Append ("NegateSpell-" & X), adInteger
+    For x = 0 To 9
+        .Columns.Append ("NegateSpell-" & x), adInteger
     Next
 
-    For X = 0 To 19
-        .Columns.Append ("Abil-" & X), adInteger
-        .Columns.Append ("AbilVal-" & X), adInteger
+    For x = 0 To 19
+        .Columns.Append ("Abil-" & x), adInteger
+        .Columns.Append ("AbilVal-" & x), adInteger
     Next
     
     .Columns.Append "In Game", adInteger
@@ -5801,12 +5803,12 @@ With tabNewShops
     .Columns.Append "Markup%", adInteger
     .Columns.Append "ClassRest", adInteger
     
-    For X = 0 To 19
-        .Columns.Append CStr("Item-" & X), adInteger
-        .Columns.Append CStr("Max-" & X), adInteger
-        .Columns.Append CStr("Time-" & X), adInteger
-        .Columns.Append CStr("Amount-" & X), adInteger
-        .Columns.Append CStr("%-" & X), adInteger
+    For x = 0 To 19
+        .Columns.Append CStr("Item-" & x), adInteger
+        .Columns.Append CStr("Max-" & x), adInteger
+        .Columns.Append CStr("Time-" & x), adInteger
+        .Columns.Append CStr("Amount-" & x), adInteger
+        .Columns.Append CStr("%-" & x), adInteger
     Next
     
     .Columns.Append "In Game", adInteger
