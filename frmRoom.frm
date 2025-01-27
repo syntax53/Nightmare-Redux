@@ -222,7 +222,7 @@ Begin VB.Form frmRoom
    End
    Begin TabDlg.SSTab SSTab1 
       Height          =   6375
-      Left            =   60
+      Left            =   0
       TabIndex        =   23
       Top             =   420
       Width           =   6075
@@ -638,24 +638,342 @@ Begin VB.Form frmRoom
       TabCaption(5)   =   "Other"
       TabPicture(5)   =   "frmRoom.frx":0956
       Tab(5).ControlEnabled=   0   'False
-      Tab(5).Control(0)=   "txtNote"
-      Tab(5).Control(1)=   "txtCurrentRoomMon(1)"
-      Tab(5).Control(2)=   "txtCurrentRoomMon(2)"
-      Tab(5).Control(3)=   "txtCurrentRoomMon(3)"
-      Tab(5).Control(4)=   "txtCurrentRoomMon(4)"
-      Tab(5).Control(5)=   "txtCurrentRoomMon(5)"
-      Tab(5).Control(6)=   "txtCurrentRoomMon(6)"
-      Tab(5).Control(7)=   "txtCurrentRoomMon(7)"
-      Tab(5).Control(8)=   "txtCurrentRoomMon(8)"
-      Tab(5).Control(9)=   "txtCurrentRoomMon(9)"
-      Tab(5).Control(10)=   "txtCurrentRoomMon(10)"
-      Tab(5).Control(11)=   "txtCurrentRoomMon(11)"
-      Tab(5).Control(12)=   "txtCurrentRoomMon(12)"
-      Tab(5).Control(13)=   "txtCurrentRoomMon(13)"
-      Tab(5).Control(14)=   "txtCurrentRoomMon(0)"
-      Tab(5).Control(15)=   "txtCurrentRoomMon(14)"
-      Tab(5).Control(16)=   "Label8"
-      Tab(5).ControlCount=   17
+      Tab(5).Control(0)=   "cmdRoomUnknownsNote"
+      Tab(5).Control(1)=   "txtRoomUnknowns(29)"
+      Tab(5).Control(2)=   "txtRoomUnknowns(28)"
+      Tab(5).Control(3)=   "txtRoomUnknowns(27)"
+      Tab(5).Control(4)=   "txtRoomUnknowns(26)"
+      Tab(5).Control(5)=   "txtRoomUnknowns(25)"
+      Tab(5).Control(6)=   "txtRoomUnknowns(24)"
+      Tab(5).Control(7)=   "txtRoomUnknowns(23)"
+      Tab(5).Control(8)=   "txtRoomUnknowns(22)"
+      Tab(5).Control(9)=   "txtRoomUnknowns(21)"
+      Tab(5).Control(10)=   "txtRoomUnknowns(20)"
+      Tab(5).Control(11)=   "txtRoomUnknowns(19)"
+      Tab(5).Control(12)=   "txtRoomUnknowns(18)"
+      Tab(5).Control(13)=   "txtRoomUnknowns(17)"
+      Tab(5).Control(14)=   "txtRoomUnknowns(16)"
+      Tab(5).Control(15)=   "txtRoomUnknowns(15)"
+      Tab(5).Control(16)=   "txtRoomUnknowns(14)"
+      Tab(5).Control(17)=   "txtRoomUnknowns(13)"
+      Tab(5).Control(18)=   "txtRoomUnknowns(12)"
+      Tab(5).Control(19)=   "txtRoomUnknowns(11)"
+      Tab(5).Control(20)=   "txtRoomUnknowns(10)"
+      Tab(5).Control(21)=   "txtRoomUnknowns(9)"
+      Tab(5).Control(22)=   "txtRoomUnknowns(8)"
+      Tab(5).Control(23)=   "txtRoomUnknowns(7)"
+      Tab(5).Control(24)=   "txtRoomUnknowns(6)"
+      Tab(5).Control(25)=   "txtRoomUnknowns(5)"
+      Tab(5).Control(26)=   "txtRoomUnknowns(4)"
+      Tab(5).Control(27)=   "txtRoomUnknowns(3)"
+      Tab(5).Control(28)=   "txtRoomUnknowns(2)"
+      Tab(5).Control(29)=   "txtRoomUnknowns(1)"
+      Tab(5).Control(30)=   "txtRoomUnknowns(0)"
+      Tab(5).Control(31)=   "txtNote"
+      Tab(5).Control(32)=   "txtCurrentRoomMon(1)"
+      Tab(5).Control(33)=   "txtCurrentRoomMon(2)"
+      Tab(5).Control(34)=   "txtCurrentRoomMon(3)"
+      Tab(5).Control(35)=   "txtCurrentRoomMon(4)"
+      Tab(5).Control(36)=   "txtCurrentRoomMon(5)"
+      Tab(5).Control(37)=   "txtCurrentRoomMon(6)"
+      Tab(5).Control(38)=   "txtCurrentRoomMon(7)"
+      Tab(5).Control(39)=   "txtCurrentRoomMon(8)"
+      Tab(5).Control(40)=   "txtCurrentRoomMon(9)"
+      Tab(5).Control(41)=   "txtCurrentRoomMon(10)"
+      Tab(5).Control(42)=   "txtCurrentRoomMon(11)"
+      Tab(5).Control(43)=   "txtCurrentRoomMon(12)"
+      Tab(5).Control(44)=   "txtCurrentRoomMon(13)"
+      Tab(5).Control(45)=   "txtCurrentRoomMon(0)"
+      Tab(5).Control(46)=   "txtCurrentRoomMon(14)"
+      Tab(5).Control(47)=   "lblRoomUnknowns(29)"
+      Tab(5).Control(48)=   "lblRoomUnknowns(28)"
+      Tab(5).Control(49)=   "lblRoomUnknowns(27)"
+      Tab(5).Control(50)=   "lblRoomUnknowns(26)"
+      Tab(5).Control(51)=   "lblRoomUnknowns(25)"
+      Tab(5).Control(52)=   "lblRoomUnknowns(24)"
+      Tab(5).Control(53)=   "lblRoomUnknowns(23)"
+      Tab(5).Control(54)=   "lblRoomUnknowns(22)"
+      Tab(5).Control(55)=   "lblRoomUnknowns(21)"
+      Tab(5).Control(56)=   "lblRoomUnknowns(20)"
+      Tab(5).Control(57)=   "lblRoomUnknowns(19)"
+      Tab(5).Control(58)=   "lblRoomUnknowns(18)"
+      Tab(5).Control(59)=   "lblRoomUnknowns(17)"
+      Tab(5).Control(60)=   "lblRoomUnknowns(16)"
+      Tab(5).Control(61)=   "lblRoomUnknowns(15)"
+      Tab(5).Control(62)=   "lblRoomUnknowns(14)"
+      Tab(5).Control(63)=   "lblRoomUnknowns(13)"
+      Tab(5).Control(64)=   "lblRoomUnknowns(12)"
+      Tab(5).Control(65)=   "lblRoomUnknowns(11)"
+      Tab(5).Control(66)=   "lblRoomUnknowns(10)"
+      Tab(5).Control(67)=   "lblRoomUnknowns(9)"
+      Tab(5).Control(68)=   "lblRoomUnknowns(8)"
+      Tab(5).Control(69)=   "lblRoomUnknowns(7)"
+      Tab(5).Control(70)=   "lblRoomUnknowns(6)"
+      Tab(5).Control(71)=   "lblRoomUnknowns(5)"
+      Tab(5).Control(72)=   "lblRoomUnknowns(4)"
+      Tab(5).Control(73)=   "lblRoomUnknowns(3)"
+      Tab(5).Control(74)=   "lblRoomUnknowns(2)"
+      Tab(5).Control(75)=   "lblRoomUnknowns(1)"
+      Tab(5).Control(76)=   "lblRoomUnknowns(0)"
+      Tab(5).Control(77)=   "Label8"
+      Tab(5).ControlCount=   78
+      Begin VB.CommandButton cmdRoomUnknownsNote 
+         Caption         =   "Note"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   -74460
+         TabIndex        =   520
+         Top             =   5880
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   29
+         Left            =   -70200
+         TabIndex        =   518
+         Top             =   5880
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   28
+         Left            =   -71040
+         TabIndex        =   516
+         Top             =   5880
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   27
+         Left            =   -71880
+         TabIndex        =   514
+         Top             =   5880
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   26
+         Left            =   -72720
+         TabIndex        =   512
+         Top             =   5880
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   25
+         Left            =   -73560
+         TabIndex        =   510
+         Top             =   5880
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   24
+         Left            =   -70200
+         TabIndex        =   508
+         Top             =   5340
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   23
+         Left            =   -71040
+         TabIndex        =   506
+         Top             =   5340
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   22
+         Left            =   -71880
+         TabIndex        =   504
+         Top             =   5340
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   21
+         Left            =   -72720
+         TabIndex        =   502
+         Top             =   5340
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   20
+         Left            =   -73560
+         TabIndex        =   500
+         Top             =   5340
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   19
+         Left            =   -70200
+         TabIndex        =   498
+         Top             =   4740
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   18
+         Left            =   -71040
+         TabIndex        =   496
+         Top             =   4740
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   17
+         Left            =   -71880
+         TabIndex        =   494
+         Top             =   4740
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   16
+         Left            =   -72720
+         TabIndex        =   492
+         Top             =   4740
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   15
+         Left            =   -73560
+         TabIndex        =   490
+         Top             =   4740
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   14
+         Left            =   -70200
+         TabIndex        =   488
+         Top             =   4200
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   13
+         Left            =   -71040
+         TabIndex        =   486
+         Top             =   4200
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   12
+         Left            =   -71880
+         TabIndex        =   484
+         Top             =   4200
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   11
+         Left            =   -72720
+         TabIndex        =   482
+         Top             =   4200
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   10
+         Left            =   -73560
+         TabIndex        =   480
+         Top             =   4200
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   9
+         Left            =   -70200
+         TabIndex        =   478
+         Top             =   3600
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   8
+         Left            =   -71040
+         TabIndex        =   476
+         Top             =   3600
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   7
+         Left            =   -71880
+         TabIndex        =   474
+         Top             =   3600
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   6
+         Left            =   -72720
+         TabIndex        =   472
+         Top             =   3600
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   5
+         Left            =   -73560
+         TabIndex        =   470
+         Top             =   3600
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   4
+         Left            =   -70200
+         TabIndex        =   468
+         Top             =   3060
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   3
+         Left            =   -71040
+         TabIndex        =   466
+         Top             =   3060
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   2
+         Left            =   -71880
+         TabIndex        =   464
+         Top             =   3060
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   1
+         Left            =   -72720
+         TabIndex        =   462
+         Top             =   3060
+         Width           =   735
+      End
+      Begin VB.TextBox txtRoomUnknowns 
+         Height          =   285
+         Index           =   0
+         Left            =   -73560
+         TabIndex        =   460
+         Top             =   3060
+         Width           =   735
+      End
       Begin VB.Frame Frame4 
          Caption         =   "Visible Coins"
          Height          =   2295
@@ -2199,13 +2517,13 @@ Begin VB.Form frmRoom
       Begin VB.TextBox txtNote 
          BackColor       =   &H8000000F&
          BorderStyle     =   0  'None
-         Height          =   2295
+         Height          =   1875
          Left            =   -73980
          Locked          =   -1  'True
          MultiLine       =   -1  'True
          TabIndex        =   262
          Text            =   "frmRoom.frx":0972
-         Top             =   1080
+         Top             =   840
          Width           =   4935
       End
       Begin VB.TextBox txtCurrentRoomMon 
@@ -3802,6 +4120,576 @@ Begin VB.Form frmRoom
          Top             =   4500
          Width           =   2295
       End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   29
+         Left            =   -70200
+         TabIndex        =   519
+         Top             =   5640
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   28
+         Left            =   -71040
+         TabIndex        =   517
+         Top             =   5640
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   27
+         Left            =   -71880
+         TabIndex        =   515
+         Top             =   5640
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   26
+         Left            =   -72720
+         TabIndex        =   513
+         Top             =   5640
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   25
+         Left            =   -73560
+         TabIndex        =   511
+         Top             =   5640
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   24
+         Left            =   -70200
+         TabIndex        =   509
+         Top             =   5100
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   23
+         Left            =   -71040
+         TabIndex        =   507
+         Top             =   5100
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   22
+         Left            =   -71880
+         TabIndex        =   505
+         Top             =   5100
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   21
+         Left            =   -72720
+         TabIndex        =   503
+         Top             =   5100
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   20
+         Left            =   -73560
+         TabIndex        =   501
+         Top             =   5100
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   19
+         Left            =   -70200
+         TabIndex        =   499
+         Top             =   4500
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   18
+         Left            =   -71040
+         TabIndex        =   497
+         Top             =   4500
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   17
+         Left            =   -71880
+         TabIndex        =   495
+         Top             =   4500
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   16
+         Left            =   -72720
+         TabIndex        =   493
+         Top             =   4500
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   15
+         Left            =   -73560
+         TabIndex        =   491
+         Top             =   4500
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   14
+         Left            =   -70200
+         TabIndex        =   489
+         Top             =   3960
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   13
+         Left            =   -71040
+         TabIndex        =   487
+         Top             =   3960
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   12
+         Left            =   -71880
+         TabIndex        =   485
+         Top             =   3960
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   11
+         Left            =   -72720
+         TabIndex        =   483
+         Top             =   3960
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   10
+         Left            =   -73560
+         TabIndex        =   481
+         Top             =   3960
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   9
+         Left            =   -70200
+         TabIndex        =   479
+         Top             =   3360
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   8
+         Left            =   -71040
+         TabIndex        =   477
+         Top             =   3360
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   7
+         Left            =   -71880
+         TabIndex        =   475
+         Top             =   3360
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   6
+         Left            =   -72720
+         TabIndex        =   473
+         Top             =   3360
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   5
+         Left            =   -73560
+         TabIndex        =   471
+         Top             =   3360
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   4
+         Left            =   -70200
+         TabIndex        =   469
+         Top             =   2820
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   3
+         Left            =   -71040
+         TabIndex        =   467
+         Top             =   2820
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   2
+         Left            =   -71880
+         TabIndex        =   465
+         Top             =   2820
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   1
+         Left            =   -72720
+         TabIndex        =   463
+         Top             =   2820
+         Width           =   705
+      End
+      Begin VB.Label lblRoomUnknowns 
+         AutoSize        =   -1  'True
+         Caption         =   "Unknown"
+         BeginProperty Font 
+            Name            =   "Arial Narrow"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Index           =   0
+         Left            =   -73560
+         TabIndex        =   461
+         Top             =   2820
+         Width           =   705
+      End
       Begin VB.Label Label7 
          Alignment       =   2  'Center
          Caption         =   "Hover over the para description for a full description.  If any of these are wrong tell me!"
@@ -4758,6 +5646,14 @@ Exit Sub
 error:
 Call HandleError("cmdGotoFirstLastMapRoom_Click")
 Resume out:
+End Sub
+
+Private Sub cmdRoomUnknownsNote_Click()
+MsgBox "Two things..." _
+    & vbCrLf & vbCrLf & "#1) These values are not saved." _
+    & vbCrLf & vbCrLf & "#2) The values themselves could be incorrect as assumptions have been made to whether values are 1-byte, 2-byte, or 4-byte values. " _
+    & "i.e. FFFF in the DB could be read as two 1-byte values of 255(FF) or one 2-byte value of 65535(FFFF)." _
+    , vbInformation + vbOKOnly
 End Sub
 
 Private Sub Form_Load()
@@ -5803,6 +6699,26 @@ For x = 0 To 9
     txtPlacedItems(x).Text = Roomrec.PlacedItems(x)
     'txtPlacedItemsName(X).Text = GetItemName(Roomrec.PlacedItems(X))
 Next
+
+For x = 0 To 14
+    lblRoomUnknowns(x).Caption = "nothing1-" & x: txtRoomUnknowns(x).Text = Roomrec.nothing1(x)
+Next x
+
+x = 15:  lblRoomUnknowns(x).Caption = "NewSpot": txtRoomUnknowns(x).Text = Roomrec.NewSpot
+x = 16:  lblRoomUnknowns(x).Caption = "ByNumber": txtRoomUnknowns(x).Text = Roomrec.ByNumber
+x = 17:  lblRoomUnknowns(x).Caption = "nothing4": txtRoomUnknowns(x).Text = Roomrec.nothing4
+x = 18:  lblRoomUnknowns(x).Caption = "nothing5": txtRoomUnknowns(x).Text = Roomrec.nothing5
+x = 19:  lblRoomUnknowns(x).Caption = "unknown69": txtRoomUnknowns(x).Text = Roomrec.unknown69
+x = 20:  lblRoomUnknowns(x).Caption = "nothing9": txtRoomUnknowns(x).Text = Roomrec.nothing9
+x = 21:  lblRoomUnknowns(x).Caption = "nothing10": txtRoomUnknowns(x).Text = Roomrec.nothing10
+x = 22:  lblRoomUnknowns(x).Caption = "Nothing11": txtRoomUnknowns(x).Text = Roomrec.Nothing11
+x = 23:  lblRoomUnknowns(x).Caption = "Nothing12-0": txtRoomUnknowns(x).Text = Roomrec.Nothing12(0)
+x = 24:  lblRoomUnknowns(x).Caption = "Nothing12-1": txtRoomUnknowns(x).Text = Roomrec.Nothing12(1)
+x = 25:  lblRoomUnknowns(x).Caption = "Something1": txtRoomUnknowns(x).Text = Roomrec.Something1
+x = 26:  lblRoomUnknowns(x).Caption = "unknown70": txtRoomUnknowns(x).Text = Roomrec.unknown70
+x = 27:  lblRoomUnknowns(x).Caption = "unknown71": txtRoomUnknowns(x).Text = Roomrec.unknown71
+x = 28:  lblRoomUnknowns(x).Caption = "": txtRoomUnknowns(x).Text = ""
+x = 29:  lblRoomUnknowns(x).Caption = "": txtRoomUnknowns(x).Text = ""
 
 Exit Sub
 error:

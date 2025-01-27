@@ -579,7 +579,8 @@ Public Type UserRecType
     MaxENC As Integer                       '180
     CurrentENC As Integer                   '182
     Energy(2) As Integer                    '188 (3 elements × 2 bytes each = 6 bytes)
-    unknown1(1) As Integer                  '192 (2 elements × 2 bytes each = 4 bytes)
+    unknown1 As Integer                     '190
+    SomeSortOfFlag As Integer               '192
     MagicRes As Integer                     '194
     MagicRes2 As Integer                    '196
     MapNumber As Long                       '200

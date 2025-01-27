@@ -1236,6 +1236,33 @@ Call HandleError("GetMonsterRegen")
 Resume out:
 End Function
 
+Public Function GetItemTypeNumber(ByVal nItemNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nItemNumber = 0 Then
+    GetItemTypeNumber = -1
+Else
+    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nItemNumber, Len(nItemNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetItemTypeNumber = -1
+        Else
+            MsgBox "Function GetItemTypeNumber, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+        End If
+    Else
+        ItemRowToStruct Itemdatabuf.buf
+        GetItemTypeNumber = Itemrec.Type
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetItemTypeNumber")
+Resume out:
+End Function
+
 Public Function GetItemName(ByVal nItemNumber As Long) As String
 Dim nStatus As Integer
 On Error GoTo error:
@@ -1314,6 +1341,60 @@ out:
 Exit Function
 error:
 Call HandleError("GetRaceName")
+Resume out:
+End Function
+
+Public Function GetClassMinHP(ByVal nClassNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nClassNumber = 0 Then
+    GetClassMinHP = 0
+Else
+    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nClassNumber, Len(nClassNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetClassMinHP = 0
+        Else
+            MsgBox "Function GetClassMinHP, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+        End If
+    Else
+        ClassRowToStruct Classdatabuf.buf
+        GetClassMinHP = Classrec.MinHp
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetClassMinHP")
+Resume out:
+End Function
+
+Public Function GetClassMaxHP(ByVal nClassNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nClassNumber = 0 Then
+    GetClassMaxHP = 0
+Else
+    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nClassNumber, Len(nClassNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetClassMaxHP = 0
+        Else
+            MsgBox "Function GetClassMaxHP, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+        End If
+    Else
+        ClassRowToStruct Classdatabuf.buf
+        GetClassMaxHP = Classrec.MaxHP
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetClassMaxHP")
 Resume out:
 End Function
 

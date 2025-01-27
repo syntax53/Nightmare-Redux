@@ -227,36 +227,37 @@ Begin VB.Form frmUser
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
          Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "Label76(0)"
-         Tab(6).Control(1)=   "Label76(1)"
-         Tab(6).Control(2)=   "Label76(2)"
-         Tab(6).Control(3)=   "Label76(3)"
-         Tab(6).Control(4)=   "Label76(4)"
-         Tab(6).Control(5)=   "Label76(5)"
-         Tab(6).Control(6)=   "Label76(6)"
-         Tab(6).Control(7)=   "Label76(7)"
-         Tab(6).Control(8)=   "Label76(8)"
-         Tab(6).Control(9)=   "Label76(9)"
-         Tab(6).Control(10)=   "Label76(10)"
-         Tab(6).Control(11)=   "Label76(11)"
-         Tab(6).Control(12)=   "Label76(12)"
-         Tab(6).Control(13)=   "txtSuicide"
-         Tab(6).Control(14)=   "txtGang"
-         Tab(6).Control(15)=   "txtRunic"
-         Tab(6).Control(16)=   "txtPlatinum"
-         Tab(6).Control(17)=   "txtGold"
-         Tab(6).Control(18)=   "txtSilver"
-         Tab(6).Control(19)=   "txtCopper"
-         Tab(6).Control(20)=   "txtBroadcastChan"
-         Tab(6).Control(21)=   "txtEvilPoints"
-         Tab(6).Control(22)=   "txtMaxEncum"
-         Tab(6).Control(23)=   "txtCurrentEncum"
-         Tab(6).Control(24)=   "txtTitle"
-         Tab(6).Control(25)=   "Frame4"
-         Tab(6).Control(26)=   "chkEdited"
-         Tab(6).Control(27)=   "txtHitPointRolls"
-         Tab(6).Control(28)=   "cmdUserHitPointRollQ"
-         Tab(6).ControlCount=   29
+         Tab(6).Control(0)=   "cmdUserHitPointMax"
+         Tab(6).Control(1)=   "cmdUserHitPointRollQ"
+         Tab(6).Control(2)=   "txtHitPointRolls"
+         Tab(6).Control(3)=   "chkEdited"
+         Tab(6).Control(4)=   "Frame4"
+         Tab(6).Control(5)=   "txtTitle"
+         Tab(6).Control(6)=   "txtCurrentEncum"
+         Tab(6).Control(7)=   "txtMaxEncum"
+         Tab(6).Control(8)=   "txtEvilPoints"
+         Tab(6).Control(9)=   "txtBroadcastChan"
+         Tab(6).Control(10)=   "txtCopper"
+         Tab(6).Control(11)=   "txtSilver"
+         Tab(6).Control(12)=   "txtGold"
+         Tab(6).Control(13)=   "txtPlatinum"
+         Tab(6).Control(14)=   "txtRunic"
+         Tab(6).Control(15)=   "txtGang"
+         Tab(6).Control(16)=   "txtSuicide"
+         Tab(6).Control(17)=   "Label76(12)"
+         Tab(6).Control(18)=   "Label76(11)"
+         Tab(6).Control(19)=   "Label76(10)"
+         Tab(6).Control(20)=   "Label76(9)"
+         Tab(6).Control(21)=   "Label76(8)"
+         Tab(6).Control(22)=   "Label76(7)"
+         Tab(6).Control(23)=   "Label76(6)"
+         Tab(6).Control(24)=   "Label76(5)"
+         Tab(6).Control(25)=   "Label76(4)"
+         Tab(6).Control(26)=   "Label76(3)"
+         Tab(6).Control(27)=   "Label76(2)"
+         Tab(6).Control(28)=   "Label76(1)"
+         Tab(6).Control(29)=   "Label76(0)"
+         Tab(6).ControlCount=   30
          TabCaption(7)   =   "???"
          TabPicture(7)   =   "frmUser.frx":098E
          Tab(7).ControlEnabled=   0   'False
@@ -363,13 +364,21 @@ Begin VB.Form frmUser
          Tab(7).Control(100)=   "lblUserUnknowns(1)"
          Tab(7).Control(101)=   "lblUserUnknowns(0)"
          Tab(7).ControlCount=   102
+         Begin VB.CommandButton cmdUserHitPointMax 
+            Caption         =   "Max"
+            Height          =   255
+            Left            =   -69180
+            TabIndex        =   591
+            Top             =   1380
+            Width           =   615
+         End
          Begin VB.CommandButton cmdUserHitPointRollQ 
             Caption         =   "?"
             Height          =   315
-            Left            =   -68940
+            Left            =   -68520
             TabIndex        =   578
-            Top             =   1320
-            Width           =   375
+            Top             =   1680
+            Width           =   195
          End
          Begin VB.TextBox txtHitPointRolls 
             Height          =   315
@@ -913,17 +922,32 @@ Begin VB.Form frmUser
          End
          Begin VB.Frame Frame4 
             Caption         =   "Spells Casted on User"
-            Height          =   3255
+            Height          =   3315
             Left            =   -74880
             TabIndex        =   391
-            Top             =   1560
+            Top             =   1500
             Width           =   4455
+            Begin VB.CommandButton cmdSomeFlagQ 
+               Caption         =   "?"
+               Height          =   315
+               Left            =   2040
+               TabIndex        =   594
+               Top             =   180
+               Width           =   195
+            End
+            Begin VB.TextBox txtSomeSortOfFlag 
+               Height          =   285
+               Left            =   240
+               TabIndex        =   592
+               Top             =   240
+               Width           =   615
+            End
             Begin VB.CommandButton cmdEditSpellCasted 
                Height          =   135
                Index           =   9
                Left            =   60
                TabIndex        =   442
-               Top             =   2940
+               Top             =   3000
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -931,7 +955,7 @@ Begin VB.Form frmUser
                Index           =   8
                Left            =   60
                TabIndex        =   437
-               Top             =   2700
+               Top             =   2760
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -939,7 +963,7 @@ Begin VB.Form frmUser
                Index           =   7
                Left            =   60
                TabIndex        =   432
-               Top             =   2460
+               Top             =   2520
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -947,7 +971,7 @@ Begin VB.Form frmUser
                Index           =   6
                Left            =   60
                TabIndex        =   427
-               Top             =   2220
+               Top             =   2280
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -955,7 +979,7 @@ Begin VB.Form frmUser
                Index           =   5
                Left            =   60
                TabIndex        =   422
-               Top             =   1980
+               Top             =   2040
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -963,7 +987,7 @@ Begin VB.Form frmUser
                Index           =   4
                Left            =   60
                TabIndex        =   417
-               Top             =   1740
+               Top             =   1800
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -971,7 +995,7 @@ Begin VB.Form frmUser
                Index           =   3
                Left            =   60
                TabIndex        =   412
-               Top             =   1500
+               Top             =   1560
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -979,7 +1003,7 @@ Begin VB.Form frmUser
                Index           =   2
                Left            =   60
                TabIndex        =   407
-               Top             =   1260
+               Top             =   1320
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -987,7 +1011,7 @@ Begin VB.Form frmUser
                Index           =   1
                Left            =   60
                TabIndex        =   402
-               Top             =   1020
+               Top             =   1080
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -995,7 +1019,7 @@ Begin VB.Form frmUser
                Index           =   0
                Left            =   60
                TabIndex        =   397
-               Top             =   780
+               Top             =   840
                Width           =   135
             End
             Begin VB.CommandButton cmdClearSpellsCasted 
@@ -1003,7 +1027,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   3000
                TabIndex        =   392
-               Top             =   180
+               Top             =   210
                Width           =   1335
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1012,7 +1036,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   398
-               Top             =   720
+               Top             =   780
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1024,7 +1048,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   399
                TabStop         =   0   'False
-               Top             =   720
+               Top             =   780
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1033,7 +1057,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   403
-               Top             =   960
+               Top             =   1020
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1045,7 +1069,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   404
                TabStop         =   0   'False
-               Top             =   960
+               Top             =   1020
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1054,7 +1078,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   408
-               Top             =   1200
+               Top             =   1260
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1066,7 +1090,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   409
                TabStop         =   0   'False
-               Top             =   1200
+               Top             =   1260
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1075,7 +1099,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   413
-               Top             =   1440
+               Top             =   1500
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1087,7 +1111,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   414
                TabStop         =   0   'False
-               Top             =   1440
+               Top             =   1500
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1096,7 +1120,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   418
-               Top             =   1680
+               Top             =   1740
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1108,7 +1132,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   419
                TabStop         =   0   'False
-               Top             =   1680
+               Top             =   1740
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1117,7 +1141,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   423
-               Top             =   1920
+               Top             =   1980
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1129,7 +1153,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   424
                TabStop         =   0   'False
-               Top             =   1920
+               Top             =   1980
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1138,7 +1162,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   428
-               Top             =   2160
+               Top             =   2220
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1150,7 +1174,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   429
                TabStop         =   0   'False
-               Top             =   2160
+               Top             =   2220
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1159,7 +1183,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   433
-               Top             =   2400
+               Top             =   2460
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1171,7 +1195,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   434
                TabStop         =   0   'False
-               Top             =   2400
+               Top             =   2460
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1180,7 +1204,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   438
-               Top             =   2640
+               Top             =   2700
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1192,7 +1216,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   439
                TabStop         =   0   'False
-               Top             =   2640
+               Top             =   2700
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -1201,7 +1225,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   443
-               Top             =   2880
+               Top             =   2940
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -1213,7 +1237,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   444
                TabStop         =   0   'False
-               Top             =   2880
+               Top             =   2940
                Width           =   2295
             End
             Begin VB.TextBox txtSpellValue 
@@ -1221,7 +1245,7 @@ Begin VB.Form frmUser
                Index           =   0
                Left            =   3105
                TabIndex        =   400
-               Top             =   720
+               Top             =   780
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1229,7 +1253,7 @@ Begin VB.Form frmUser
                Index           =   0
                Left            =   3690
                TabIndex        =   401
-               Top             =   720
+               Top             =   780
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1237,7 +1261,7 @@ Begin VB.Form frmUser
                Index           =   1
                Left            =   3105
                TabIndex        =   405
-               Top             =   960
+               Top             =   1020
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1245,7 +1269,7 @@ Begin VB.Form frmUser
                Index           =   1
                Left            =   3690
                TabIndex        =   406
-               Top             =   960
+               Top             =   1020
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1253,7 +1277,7 @@ Begin VB.Form frmUser
                Index           =   2
                Left            =   3105
                TabIndex        =   410
-               Top             =   1200
+               Top             =   1260
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1261,7 +1285,7 @@ Begin VB.Form frmUser
                Index           =   2
                Left            =   3690
                TabIndex        =   411
-               Top             =   1200
+               Top             =   1260
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1269,7 +1293,7 @@ Begin VB.Form frmUser
                Index           =   3
                Left            =   3105
                TabIndex        =   415
-               Top             =   1440
+               Top             =   1500
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1277,7 +1301,7 @@ Begin VB.Form frmUser
                Index           =   3
                Left            =   3690
                TabIndex        =   416
-               Top             =   1440
+               Top             =   1500
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1285,7 +1309,7 @@ Begin VB.Form frmUser
                Index           =   4
                Left            =   3105
                TabIndex        =   420
-               Top             =   1680
+               Top             =   1740
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1293,7 +1317,7 @@ Begin VB.Form frmUser
                Index           =   4
                Left            =   3690
                TabIndex        =   421
-               Top             =   1680
+               Top             =   1740
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1301,7 +1325,7 @@ Begin VB.Form frmUser
                Index           =   5
                Left            =   3105
                TabIndex        =   425
-               Top             =   1920
+               Top             =   1980
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1309,7 +1333,7 @@ Begin VB.Form frmUser
                Index           =   5
                Left            =   3690
                TabIndex        =   426
-               Top             =   1920
+               Top             =   1980
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1317,7 +1341,7 @@ Begin VB.Form frmUser
                Index           =   6
                Left            =   3105
                TabIndex        =   430
-               Top             =   2160
+               Top             =   2220
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1325,7 +1349,7 @@ Begin VB.Form frmUser
                Index           =   6
                Left            =   3690
                TabIndex        =   431
-               Top             =   2160
+               Top             =   2220
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1333,7 +1357,7 @@ Begin VB.Form frmUser
                Index           =   7
                Left            =   3105
                TabIndex        =   435
-               Top             =   2400
+               Top             =   2460
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1341,7 +1365,7 @@ Begin VB.Form frmUser
                Index           =   7
                Left            =   3690
                TabIndex        =   436
-               Top             =   2400
+               Top             =   2460
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1349,7 +1373,7 @@ Begin VB.Form frmUser
                Index           =   8
                Left            =   3105
                TabIndex        =   440
-               Top             =   2640
+               Top             =   2700
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1357,7 +1381,7 @@ Begin VB.Form frmUser
                Index           =   8
                Left            =   3690
                TabIndex        =   441
-               Top             =   2640
+               Top             =   2700
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -1365,7 +1389,7 @@ Begin VB.Form frmUser
                Index           =   9
                Left            =   3105
                TabIndex        =   445
-               Top             =   2880
+               Top             =   2940
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -1373,15 +1397,25 @@ Begin VB.Form frmUser
                Index           =   9
                Left            =   3690
                TabIndex        =   446
-               Top             =   2880
+               Top             =   2940
                Width           =   615
+            End
+            Begin VB.Label Label76 
+               AutoSize        =   -1  'True
+               Caption         =   " <-- Poison flag?"
+               Height          =   195
+               Index           =   13
+               Left            =   840
+               TabIndex        =   593
+               Top             =   255
+               Width           =   1920
             End
             Begin VB.Label Label32 
                Caption         =   "Spell#"
                Height          =   255
                Left            =   240
                TabIndex        =   393
-               Top             =   480
+               Top             =   540
                Width           =   495
             End
             Begin VB.Label Label33 
@@ -1389,7 +1423,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   840
                TabIndex        =   394
-               Top             =   480
+               Top             =   540
                Width           =   1215
             End
             Begin VB.Label Label34 
@@ -1397,7 +1431,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   3120
                TabIndex        =   395
-               Top             =   480
+               Top             =   540
                Width           =   495
             End
             Begin VB.Label Label35 
@@ -1405,7 +1439,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   3720
                TabIndex        =   396
-               Top             =   480
+               Top             =   540
                Width           =   615
             End
          End
@@ -7937,6 +7971,10 @@ MsgBox "Paste a capture of a character's ""stat"" output.  Class, Race, Level, E
     & "in MMUD Explorer and click ""Copy Only Stats"" and paste that here as well.", vbInformation
 End Sub
 
+Private Sub cmdSomeFlagQ_Click()
+MsgBox "Observed a value of 78 here that indicated the the character was poisoned.  It caused the character to take damage and not be able to rest.  It could be a bitmask or something.", vbInformation
+End Sub
+
 Private Sub cmdSpellEditor_GotFocus()
 'Call SelectAll(cmdSpellEditor)
 
@@ -8052,6 +8090,23 @@ Exit Sub
 error:
 Call HandleError("cmdUserExport_Click")
 Resume out:
+End Sub
+
+Private Sub cmdUserHitPointMax_Click()
+On Error GoTo error:
+
+'Max = [(Class Max Range minus Class Min Range) x Level]
+txtHitPointRolls.Text = GetClassMaxHP(cmbClasses.ItemData(cmbClasses.ListIndex)) * Val(txtLevel.Text)
+
+If Val(txtHitPointRolls.Text) > 255 Then txtHitPointRolls.Text = 255
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdUserHitPointMax_Click")
+Resume out:
+
 End Sub
 
 Private Sub cmdUserHitPointRollQ_Click()
@@ -8434,6 +8489,8 @@ For x = 0 To 9
     txtSpellRounds(x).Text = 0
 Next
 
+txtSomeSortOfFlag.Text = 0
+
 Exit Sub
 error:
 Call HandleError
@@ -8810,6 +8867,8 @@ For x = 0 To 9
     txtSpellRounds(x).Text = SInt2UInt(Userrec.SpellRoundsLeft(x))
 Next
 
+txtSomeSortOfFlag.Text = Userrec.SomeSortOfFlag
+
 For x = 0 To 19
     txtMapTrail(x).Text = Userrec.LastMap(x)
     txtRoomTrail(x).Text = Userrec.LastRoom(x)
@@ -8820,8 +8879,8 @@ Next
 'x = 0: lblUserUnknowns(x).Caption = "AAAAA": txtUserUnknowns(x).Text = Userrec.AAAAA
 
 If optUserUnknowns(0).Value = True Then
-    x = 0:  lblUserUnknowns(x).Caption = "unkwn1(0)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown1(0))
-    x = 1:  lblUserUnknowns(x).Caption = "unkwn1(1)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown1(1))
+    x = 0:  lblUserUnknowns(x).Caption = "unkwn1": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown1)
+    x = 1:  lblUserUnknowns(x).Caption = "": txtUserUnknowns(x).Text = "" 'moved to "SomeSortOfFlag"
     x = 2:  lblUserUnknowns(x).Caption = "unkwn2(0)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown2(0))
     x = 3:  lblUserUnknowns(x).Caption = "unkwn2(1)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown2(1))
     x = 4:  lblUserUnknowns(x).Caption = "unkwn3(0)": txtUserUnknowns(x).Text = Userrec.unknown3(0)
@@ -9435,7 +9494,6 @@ Dim x As Integer
 'Userrec.unknown13(x) = 0
 
 'DoEvents
-'Userrec.unknown12e = 80
 Call CheckWornItems
 
 Userrec.FirstName = Trim(RemoveCharacter(txtFirstName.Text, " ")) & Chr(0)
@@ -9507,6 +9565,8 @@ For x = 0 To 9
     Userrec.SpellValue(x) = UInt2SInt(Val(txtSpellValue(x).Text))
     Userrec.SpellRoundsLeft(x) = UInt2SInt(Val(txtSpellRounds(x).Text))
 Next
+
+Userrec.SomeSortOfFlag = Val(txtSomeSortOfFlag.Text)
 
 For x = 0 To 19
     Userrec.LastMap(x) = ULong2SLong(Val(txtMapTrail(x).Text))

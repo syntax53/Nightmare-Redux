@@ -11,6 +11,8 @@ v1.8.3 ()
 -UP: update attack sim to change how dodge percentage is shown to refelect how it's checked after the AC check
 -UP: added the average hit for each attack to the monster attack simulator
 -UP: room 12/2381 platform of stars removed from exclusion list on mme export
+-UP: utilizing the "reset user interactable" fields on database record room exports will no longer remove hidden sign items.
+-UP: added display of some unknown room values to the other tab
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  
