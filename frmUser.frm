@@ -177,13 +177,15 @@ Begin VB.Form frmUser
          Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "Frame7"
          Tab(0).Control(1).Enabled=   0   'False
-         Tab(0).Control(2)=   "cmdPasteChar"
+         Tab(0).Control(2)=   "cmdReviveChar"
          Tab(0).Control(2).Enabled=   0   'False
-         Tab(0).Control(3)=   "cmdPasteStatQ"
+         Tab(0).Control(3)=   "cmdCalcExp"
          Tab(0).Control(3).Enabled=   0   'False
-         Tab(0).Control(4)=   "cmdCalcExp"
+         Tab(0).Control(4)=   "cmdPasteStatQ"
          Tab(0).Control(4).Enabled=   0   'False
-         Tab(0).ControlCount=   5
+         Tab(0).Control(5)=   "cmdPasteChar"
+         Tab(0).Control(5).Enabled=   0   'False
+         Tab(0).ControlCount=   6
          TabCaption(1)   =   "Inven."
          TabPicture(1)   =   "frmUser.frx":08E6
          Tab(1).ControlEnabled=   0   'False
@@ -261,109 +263,170 @@ Begin VB.Form frmUser
          TabCaption(7)   =   "???"
          TabPicture(7)   =   "frmUser.frx":098E
          Tab(7).ControlEnabled=   0   'False
-         Tab(7).Control(0)=   "cmdUserUnknownsNote"
-         Tab(7).Control(1)=   "optUserUnknowns(2)"
-         Tab(7).Control(2)=   "optUserUnknowns(1)"
-         Tab(7).Control(3)=   "optUserUnknowns(0)"
-         Tab(7).Control(4)=   "txtUserUnknowns(48)"
-         Tab(7).Control(5)=   "txtUserUnknowns(47)"
-         Tab(7).Control(6)=   "txtUserUnknowns(46)"
-         Tab(7).Control(7)=   "txtUserUnknowns(45)"
-         Tab(7).Control(8)=   "txtUserUnknowns(44)"
-         Tab(7).Control(9)=   "txtUserUnknowns(43)"
-         Tab(7).Control(10)=   "txtUserUnknowns(42)"
-         Tab(7).Control(11)=   "txtUserUnknowns(41)"
-         Tab(7).Control(12)=   "txtUserUnknowns(40)"
-         Tab(7).Control(13)=   "txtUserUnknowns(39)"
-         Tab(7).Control(14)=   "txtUserUnknowns(38)"
-         Tab(7).Control(15)=   "txtUserUnknowns(37)"
-         Tab(7).Control(16)=   "txtUserUnknowns(36)"
-         Tab(7).Control(17)=   "txtUserUnknowns(35)"
-         Tab(7).Control(18)=   "txtUserUnknowns(34)"
-         Tab(7).Control(19)=   "txtUserUnknowns(33)"
-         Tab(7).Control(20)=   "txtUserUnknowns(32)"
-         Tab(7).Control(21)=   "txtUserUnknowns(31)"
-         Tab(7).Control(22)=   "txtUserUnknowns(30)"
-         Tab(7).Control(23)=   "txtUserUnknowns(29)"
-         Tab(7).Control(24)=   "txtUserUnknowns(28)"
-         Tab(7).Control(25)=   "txtUserUnknowns(27)"
-         Tab(7).Control(26)=   "txtUserUnknowns(26)"
-         Tab(7).Control(27)=   "txtUserUnknowns(25)"
-         Tab(7).Control(28)=   "txtUserUnknowns(24)"
-         Tab(7).Control(29)=   "txtUserUnknowns(23)"
-         Tab(7).Control(30)=   "txtUserUnknowns(22)"
-         Tab(7).Control(31)=   "txtUserUnknowns(21)"
-         Tab(7).Control(32)=   "txtUserUnknowns(20)"
-         Tab(7).Control(33)=   "txtUserUnknowns(19)"
-         Tab(7).Control(34)=   "txtUserUnknowns(18)"
-         Tab(7).Control(35)=   "txtUserUnknowns(17)"
-         Tab(7).Control(36)=   "txtUserUnknowns(16)"
-         Tab(7).Control(37)=   "txtUserUnknowns(15)"
-         Tab(7).Control(38)=   "txtUserUnknowns(14)"
-         Tab(7).Control(39)=   "txtUserUnknowns(13)"
-         Tab(7).Control(40)=   "txtUserUnknowns(12)"
-         Tab(7).Control(41)=   "txtUserUnknowns(11)"
-         Tab(7).Control(42)=   "txtUserUnknowns(10)"
-         Tab(7).Control(43)=   "txtUserUnknowns(9)"
-         Tab(7).Control(44)=   "txtUserUnknowns(8)"
-         Tab(7).Control(45)=   "txtUserUnknowns(7)"
-         Tab(7).Control(46)=   "txtUserUnknowns(6)"
-         Tab(7).Control(47)=   "txtUserUnknowns(5)"
-         Tab(7).Control(48)=   "txtUserUnknowns(4)"
-         Tab(7).Control(49)=   "txtUserUnknowns(3)"
-         Tab(7).Control(50)=   "txtUserUnknowns(2)"
-         Tab(7).Control(51)=   "txtUserUnknowns(1)"
-         Tab(7).Control(52)=   "txtUserUnknowns(0)"
-         Tab(7).Control(53)=   "lblUserUnknowns(48)"
-         Tab(7).Control(54)=   "lblUserUnknowns(47)"
-         Tab(7).Control(55)=   "lblUserUnknowns(46)"
-         Tab(7).Control(56)=   "lblUserUnknowns(45)"
-         Tab(7).Control(57)=   "lblUserUnknowns(44)"
-         Tab(7).Control(58)=   "lblUserUnknowns(43)"
-         Tab(7).Control(59)=   "lblUserUnknowns(42)"
-         Tab(7).Control(60)=   "lblUserUnknowns(41)"
-         Tab(7).Control(61)=   "lblUserUnknowns(40)"
-         Tab(7).Control(62)=   "lblUserUnknowns(39)"
-         Tab(7).Control(63)=   "lblUserUnknowns(38)"
-         Tab(7).Control(64)=   "lblUserUnknowns(37)"
-         Tab(7).Control(65)=   "lblUserUnknowns(36)"
-         Tab(7).Control(66)=   "lblUserUnknowns(35)"
-         Tab(7).Control(67)=   "lblUserUnknowns(34)"
-         Tab(7).Control(68)=   "lblUserUnknowns(33)"
-         Tab(7).Control(69)=   "lblUserUnknowns(32)"
-         Tab(7).Control(70)=   "lblUserUnknowns(31)"
-         Tab(7).Control(71)=   "lblUserUnknowns(30)"
-         Tab(7).Control(72)=   "lblUserUnknowns(29)"
-         Tab(7).Control(73)=   "lblUserUnknowns(28)"
-         Tab(7).Control(74)=   "lblUserUnknowns(27)"
-         Tab(7).Control(75)=   "lblUserUnknowns(26)"
-         Tab(7).Control(76)=   "lblUserUnknowns(25)"
-         Tab(7).Control(77)=   "lblUserUnknowns(24)"
-         Tab(7).Control(78)=   "lblUserUnknowns(23)"
-         Tab(7).Control(79)=   "lblUserUnknowns(22)"
-         Tab(7).Control(80)=   "lblUserUnknowns(21)"
-         Tab(7).Control(81)=   "lblUserUnknowns(20)"
-         Tab(7).Control(82)=   "lblUserUnknowns(19)"
-         Tab(7).Control(83)=   "lblUserUnknowns(18)"
-         Tab(7).Control(84)=   "lblUserUnknowns(17)"
-         Tab(7).Control(85)=   "lblUserUnknowns(16)"
-         Tab(7).Control(86)=   "lblUserUnknowns(15)"
-         Tab(7).Control(87)=   "lblUserUnknowns(14)"
-         Tab(7).Control(88)=   "lblUserUnknowns(13)"
-         Tab(7).Control(89)=   "lblUserUnknowns(12)"
-         Tab(7).Control(90)=   "lblUserUnknowns(11)"
-         Tab(7).Control(91)=   "lblUserUnknowns(10)"
-         Tab(7).Control(92)=   "lblUserUnknowns(9)"
-         Tab(7).Control(93)=   "lblUserUnknowns(8)"
-         Tab(7).Control(94)=   "lblUserUnknowns(7)"
-         Tab(7).Control(95)=   "lblUserUnknowns(6)"
-         Tab(7).Control(96)=   "lblUserUnknowns(5)"
-         Tab(7).Control(97)=   "lblUserUnknowns(4)"
-         Tab(7).Control(98)=   "lblUserUnknowns(3)"
-         Tab(7).Control(99)=   "lblUserUnknowns(2)"
-         Tab(7).Control(100)=   "lblUserUnknowns(1)"
-         Tab(7).Control(101)=   "lblUserUnknowns(0)"
+         Tab(7).Control(0)=   "lblUserUnknowns(0)"
+         Tab(7).Control(1)=   "lblUserUnknowns(1)"
+         Tab(7).Control(2)=   "lblUserUnknowns(2)"
+         Tab(7).Control(3)=   "lblUserUnknowns(3)"
+         Tab(7).Control(4)=   "lblUserUnknowns(4)"
+         Tab(7).Control(5)=   "lblUserUnknowns(5)"
+         Tab(7).Control(6)=   "lblUserUnknowns(6)"
+         Tab(7).Control(7)=   "lblUserUnknowns(7)"
+         Tab(7).Control(8)=   "lblUserUnknowns(8)"
+         Tab(7).Control(9)=   "lblUserUnknowns(9)"
+         Tab(7).Control(10)=   "lblUserUnknowns(10)"
+         Tab(7).Control(11)=   "lblUserUnknowns(11)"
+         Tab(7).Control(12)=   "lblUserUnknowns(12)"
+         Tab(7).Control(13)=   "lblUserUnknowns(13)"
+         Tab(7).Control(14)=   "lblUserUnknowns(14)"
+         Tab(7).Control(15)=   "lblUserUnknowns(15)"
+         Tab(7).Control(16)=   "lblUserUnknowns(16)"
+         Tab(7).Control(17)=   "lblUserUnknowns(17)"
+         Tab(7).Control(18)=   "lblUserUnknowns(18)"
+         Tab(7).Control(19)=   "lblUserUnknowns(19)"
+         Tab(7).Control(20)=   "lblUserUnknowns(20)"
+         Tab(7).Control(21)=   "lblUserUnknowns(21)"
+         Tab(7).Control(22)=   "lblUserUnknowns(22)"
+         Tab(7).Control(23)=   "lblUserUnknowns(23)"
+         Tab(7).Control(24)=   "lblUserUnknowns(24)"
+         Tab(7).Control(25)=   "lblUserUnknowns(25)"
+         Tab(7).Control(26)=   "lblUserUnknowns(26)"
+         Tab(7).Control(27)=   "lblUserUnknowns(27)"
+         Tab(7).Control(28)=   "lblUserUnknowns(28)"
+         Tab(7).Control(29)=   "lblUserUnknowns(29)"
+         Tab(7).Control(30)=   "lblUserUnknowns(30)"
+         Tab(7).Control(31)=   "lblUserUnknowns(31)"
+         Tab(7).Control(32)=   "lblUserUnknowns(32)"
+         Tab(7).Control(33)=   "lblUserUnknowns(33)"
+         Tab(7).Control(34)=   "lblUserUnknowns(34)"
+         Tab(7).Control(35)=   "lblUserUnknowns(35)"
+         Tab(7).Control(36)=   "lblUserUnknowns(36)"
+         Tab(7).Control(37)=   "lblUserUnknowns(37)"
+         Tab(7).Control(38)=   "lblUserUnknowns(38)"
+         Tab(7).Control(39)=   "lblUserUnknowns(39)"
+         Tab(7).Control(40)=   "lblUserUnknowns(40)"
+         Tab(7).Control(41)=   "lblUserUnknowns(41)"
+         Tab(7).Control(42)=   "lblUserUnknowns(42)"
+         Tab(7).Control(43)=   "lblUserUnknowns(43)"
+         Tab(7).Control(44)=   "lblUserUnknowns(44)"
+         Tab(7).Control(45)=   "lblUserUnknowns(45)"
+         Tab(7).Control(46)=   "lblUserUnknowns(46)"
+         Tab(7).Control(47)=   "lblUserUnknowns(47)"
+         Tab(7).Control(48)=   "lblUserUnknowns(48)"
+         Tab(7).Control(49)=   "txtUserUnknowns(0)"
+         Tab(7).Control(50)=   "txtUserUnknowns(1)"
+         Tab(7).Control(51)=   "txtUserUnknowns(2)"
+         Tab(7).Control(52)=   "txtUserUnknowns(3)"
+         Tab(7).Control(53)=   "txtUserUnknowns(4)"
+         Tab(7).Control(54)=   "txtUserUnknowns(5)"
+         Tab(7).Control(55)=   "txtUserUnknowns(6)"
+         Tab(7).Control(56)=   "txtUserUnknowns(7)"
+         Tab(7).Control(57)=   "txtUserUnknowns(8)"
+         Tab(7).Control(58)=   "txtUserUnknowns(9)"
+         Tab(7).Control(59)=   "txtUserUnknowns(10)"
+         Tab(7).Control(60)=   "txtUserUnknowns(11)"
+         Tab(7).Control(61)=   "txtUserUnknowns(12)"
+         Tab(7).Control(62)=   "txtUserUnknowns(13)"
+         Tab(7).Control(63)=   "txtUserUnknowns(14)"
+         Tab(7).Control(64)=   "txtUserUnknowns(15)"
+         Tab(7).Control(65)=   "txtUserUnknowns(16)"
+         Tab(7).Control(66)=   "txtUserUnknowns(17)"
+         Tab(7).Control(67)=   "txtUserUnknowns(18)"
+         Tab(7).Control(68)=   "txtUserUnknowns(19)"
+         Tab(7).Control(69)=   "txtUserUnknowns(20)"
+         Tab(7).Control(70)=   "txtUserUnknowns(21)"
+         Tab(7).Control(71)=   "txtUserUnknowns(22)"
+         Tab(7).Control(72)=   "txtUserUnknowns(23)"
+         Tab(7).Control(73)=   "txtUserUnknowns(24)"
+         Tab(7).Control(74)=   "txtUserUnknowns(25)"
+         Tab(7).Control(75)=   "txtUserUnknowns(26)"
+         Tab(7).Control(76)=   "txtUserUnknowns(27)"
+         Tab(7).Control(77)=   "txtUserUnknowns(28)"
+         Tab(7).Control(78)=   "txtUserUnknowns(29)"
+         Tab(7).Control(79)=   "txtUserUnknowns(30)"
+         Tab(7).Control(80)=   "txtUserUnknowns(31)"
+         Tab(7).Control(81)=   "txtUserUnknowns(32)"
+         Tab(7).Control(82)=   "txtUserUnknowns(33)"
+         Tab(7).Control(83)=   "txtUserUnknowns(34)"
+         Tab(7).Control(84)=   "txtUserUnknowns(35)"
+         Tab(7).Control(85)=   "txtUserUnknowns(36)"
+         Tab(7).Control(86)=   "txtUserUnknowns(37)"
+         Tab(7).Control(87)=   "txtUserUnknowns(38)"
+         Tab(7).Control(88)=   "txtUserUnknowns(39)"
+         Tab(7).Control(89)=   "txtUserUnknowns(40)"
+         Tab(7).Control(90)=   "txtUserUnknowns(41)"
+         Tab(7).Control(91)=   "txtUserUnknowns(42)"
+         Tab(7).Control(92)=   "txtUserUnknowns(43)"
+         Tab(7).Control(93)=   "txtUserUnknowns(44)"
+         Tab(7).Control(94)=   "txtUserUnknowns(45)"
+         Tab(7).Control(95)=   "txtUserUnknowns(46)"
+         Tab(7).Control(96)=   "txtUserUnknowns(47)"
+         Tab(7).Control(97)=   "txtUserUnknowns(48)"
+         Tab(7).Control(98)=   "optUserUnknowns(0)"
+         Tab(7).Control(99)=   "optUserUnknowns(1)"
+         Tab(7).Control(100)=   "optUserUnknowns(2)"
+         Tab(7).Control(101)=   "cmdUserUnknownsNote"
          Tab(7).ControlCount=   102
+         Begin VB.CommandButton cmdPasteChar 
+            Caption         =   "&Paste Stats"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   5100
+            TabIndex        =   13
+            Top             =   720
+            Width           =   1575
+         End
+         Begin VB.CommandButton cmdPasteStatQ 
+            Caption         =   "?"
+            Height          =   315
+            Left            =   6240
+            TabIndex        =   469
+            Top             =   420
+            Width           =   435
+         End
+         Begin VB.CommandButton cmdCalcExp 
+            Caption         =   "Calc E&xp"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   3660
+            TabIndex        =   471
+            Top             =   720
+            Width           =   1455
+         End
+         Begin VB.CommandButton cmdReviveChar 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Revive Character"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   3660
+            Style           =   1  'Graphical
+            TabIndex        =   595
+            Top             =   420
+            Width           =   2595
+         End
          Begin VB.CommandButton cmdUserHitPointMax 
             Caption         =   "Max"
             Height          =   255
@@ -825,23 +888,6 @@ Begin VB.Form frmUser
             Top             =   900
             Width           =   735
          End
-         Begin VB.CommandButton cmdCalcExp 
-            Caption         =   "Calc E&xperience"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   315
-            Left            =   3660
-            TabIndex        =   471
-            Top             =   720
-            Width           =   2595
-         End
          Begin VB.CheckBox chkEdited 
             Caption         =   "EDITED Flag"
             BeginProperty Font 
@@ -858,14 +904,6 @@ Begin VB.Form frmUser
             TabIndex        =   470
             Top             =   4380
             Width           =   1515
-         End
-         Begin VB.CommandButton cmdPasteStatQ 
-            Caption         =   "?"
-            Height          =   315
-            Left            =   6360
-            TabIndex        =   469
-            Top             =   420
-            Width           =   315
          End
          Begin VB.TextBox txtCurrRoomDisp 
             BackColor       =   &H8000000F&
@@ -902,23 +940,6 @@ Begin VB.Form frmUser
             TabIndex        =   300
             Top             =   480
             Width           =   2415
-         End
-         Begin VB.CommandButton cmdPasteChar 
-            Caption         =   "&Paste Stats"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   315
-            Left            =   3660
-            TabIndex        =   13
-            Top             =   420
-            Width           =   2595
          End
          Begin VB.Frame Frame4 
             Caption         =   "Spells Casted on User"
@@ -3638,17 +3659,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   825
                TabIndex        =   50
                Top             =   1860
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtMaxMana 
                Appearance      =   0  'Flat
@@ -3658,17 +3679,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   1680
                TabIndex        =   52
                Top             =   1860
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtMaxHP 
                Appearance      =   0  'Flat
@@ -3678,17 +3699,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   1680
                TabIndex        =   48
                Top             =   1500
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtCurrentHP 
                Alignment       =   1  'Right Justify
@@ -3699,17 +3720,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   825
                TabIndex        =   46
                Top             =   1500
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtExperience 
                Appearance      =   0  'Flat
@@ -7966,9 +7987,71 @@ End Sub
 
 
 Private Sub cmdPasteStatQ_Click()
-MsgBox "Paste a capture of a character's ""stat"" output.  Class, Race, Level, Exp, " _
+MsgBox "Revive will set HP and Mana to full and then present choices for other stuff." _
+    & vbCrLf & vbCrLf & "Paste: Paste a capture of a character's ""stat"" output.  Class, Race, Level, Exp, " _
     & "Lives, CP, HP, Mana, and the six stats will be pasted.  NOTE: You can also setup a character " _
     & "in MMUD Explorer and click ""Copy Only Stats"" and paste that here as well.", vbInformation
+End Sub
+
+Private Sub cmdReviveChar_Click()
+On Error GoTo error:
+Dim x As Integer, y As Long, sTemp As String, MapRoom As RoomExitType
+
+txtCurrentHP.Text = Val(txtMaxHP.Text)
+txtCurrentMana.Text = Val(txtMaxMana.Text)
+
+If Val(txtLives.Text) < 9 Then
+    x = MsgBox("Reset Lives?", vbYesNo + vbDefaultButton2 + vbQuestion)
+    If x = vbYes Then txtLives.Text = 9
+End If
+
+y = Val(txtSomeSortOfFlag.Text)
+If y = 0 Then
+    For x = 0 To 9
+        If txtSpellNumber(x).Text > 0 Then y = 1: Exit For
+    Next x
+End If
+If y > 0 Then
+    SSTab3.Tab = 6
+    DoEvents
+    x = MsgBox("Reset Auras?", vbYesNo + vbDefaultButton2 + vbQuestion)
+    If x = vbYes Then Call cmdClearSpellsCasted_Click
+End If
+
+If Val(txtCurrentMap.Text) <> 1 Or Val(txtCurrentRoom.Text) <> 2189 Then 'halls
+    SSTab3.Tab = 4
+    DoEvents
+    sTemp = InputBox("Move user?" _
+        & vbCrLf & "-Enter 1-19: move them that many rooms back" _
+        & vbCrLf & "-Enter 99: teleport them to the halls of the dead" _
+        & vbCrLf & "-Enter Map/Room: Set Map/Room. Example: 1/2189" _
+        & vbCrLf & vbCrLf & "Enter 0 or cancel to leave it alone.", , 0)
+    If InStr(1, sTemp, "/", vbTextCompare) Then
+        MapRoom = ExtractMapRoom(sTemp)
+        txtCurrentMap.Text = MapRoom.Map
+        txtCurrentRoom.Text = MapRoom.Room
+    ElseIf Val(sTemp) > 19 Then
+        txtCurrentMap.Text = 1
+        txtCurrentRoom.Text = 2189
+    ElseIf Val(sTemp) > 0 Then
+        txtCurrentMap.Text = txtMapTrail(Val(sTemp)).Text
+        txtCurrentRoom.Text = txtRoomTrail(Val(sTemp)).Text
+    End If
+End If
+
+SSTab3.Tab = 0
+cmdReviveChar.SetFocus
+DoEvents
+
+MsgBox "Done. You still need to save.", vbInformation
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdReviveChar_Click")
+Resume out:
+
 End Sub
 
 Private Sub cmdSomeFlagQ_Click()
@@ -9176,7 +9259,7 @@ Private Sub txtMaxHP_GotFocus()
 Call SelectAll(txtMaxHP)
 End Sub
 
-Private Sub txtMaxMana_Change()
+Private Sub txtMaxMana_GotFocus()
 Call SelectAll(txtMaxMana)
 End Sub
 
