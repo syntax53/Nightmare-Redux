@@ -4097,10 +4097,25 @@ Begin VB.Form frmMonsterAttackSim
       TabIndex        =   205
       Top             =   3480
       Width           =   5295
+      Begin VB.CommandButton cmdAlwaysDodgeQ 
+         Caption         =   "?"
+         Height          =   315
+         Left            =   4920
+         TabIndex        =   234
+         Top             =   540
+         Width           =   255
+      End
+      Begin VB.CheckBox chkAlwaysDodge 
+         Height          =   255
+         Left            =   4500
+         TabIndex        =   232
+         Top             =   600
+         Width           =   315
+      End
       Begin VB.CommandButton cmdMRNote 
          Caption         =   "!"
          Height          =   315
-         Left            =   3600
+         Left            =   3060
          TabIndex        =   225
          Top             =   480
          Width           =   195
@@ -4126,16 +4141,16 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         Left            =   1140
+         Left            =   840
          TabIndex        =   212
          Top             =   480
-         Width           =   735
+         Width           =   615
       End
       Begin VB.CheckBox chkUserAntiMagic 
          Height          =   255
-         Left            =   4380
+         Left            =   3660
          TabIndex        =   215
-         Top             =   480
+         Top             =   600
          Width           =   255
       End
       Begin VB.TextBox txtUserMR 
@@ -4159,10 +4174,10 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         Left            =   2820
+         Left            =   2400
          TabIndex        =   214
          Top             =   480
-         Width           =   735
+         Width           =   675
       End
       Begin VB.TextBox txtUserDodge 
          Alignment       =   2  'Center
@@ -4185,7 +4200,7 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   345
-         Left            =   1980
+         Left            =   1560
          TabIndex        =   213
          Top             =   480
          Width           =   735
@@ -4211,15 +4226,25 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         Left            =   300
+         Left            =   120
          TabIndex        =   211
          Top             =   480
-         Width           =   735
+         Width           =   615
+      End
+      Begin VB.Label lblAlwaysDodge 
+         Alignment       =   2  'Center
+         AutoSize        =   -1  'True
+         Caption         =   "MegaMUD Dodge"
+         Height          =   390
+         Left            =   4200
+         TabIndex        =   233
+         Top             =   180
+         Width           =   855
+         WordWrap        =   -1  'True
       End
       Begin VB.Label lblAntiMagic 
          Alignment       =   2  'Center
-         AutoSize        =   -1  'True
-         Caption         =   "Anti-Magic"
+         Caption         =   "Anti- Magic"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -4229,11 +4254,11 @@ Begin VB.Form frmMonsterAttackSim
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   195
-         Left            =   3930
+         Height          =   435
+         Left            =   3420
          TabIndex        =   210
-         Top             =   240
-         Width           =   1155
+         Top             =   180
+         Width           =   675
          WordWrap        =   -1  'True
       End
       Begin VB.Label Label1 
@@ -4251,10 +4276,10 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   195
          Index           =   4
-         Left            =   1230
+         Left            =   930
          TabIndex        =   207
          Top             =   240
-         Width           =   555
+         Width           =   435
       End
       Begin VB.Label Label1 
          Alignment       =   2  'Center
@@ -4271,10 +4296,10 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   195
          Index           =   3
-         Left            =   2850
+         Left            =   2430
          TabIndex        =   209
          Top             =   240
-         Width           =   660
+         Width           =   600
       End
       Begin VB.Label Label1 
          Alignment       =   2  'Center
@@ -4291,10 +4316,10 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   195
          Index           =   2
-         Left            =   360
+         Left            =   180
          TabIndex        =   206
          Top             =   240
-         Width           =   615
+         Width           =   495
       End
       Begin VB.Label Label1 
          Alignment       =   2  'Center
@@ -4311,7 +4336,7 @@ Begin VB.Form frmMonsterAttackSim
          EndProperty
          Height          =   195
          Index           =   1
-         Left            =   1980
+         Left            =   1560
          TabIndex        =   208
          Top             =   240
          Width           =   705
@@ -4820,6 +4845,13 @@ Private Sub cmbRefresh_Click()
 Call RefreshMonsters
 End Sub
 
+Private Sub cmdAlwaysDodgeQ_Click()
+MsgBox "MME can now calculate true dodge value. The value you see in MegaMUD is likely less than the character's actual dodge value. " _
+    & "This is because dodge is checked after the AC check and determined to be a hit. This is compounded by different mobs with different accuracy causing the reported dodge value to fluctuate." _
+    & vbCrLf & vbCrLf _
+    & "This option will cause dodge to be checked before AC and match what MegaMUD sees. You can use this if the MegaMUD dodge value is all you know or what you want to go by.", vbInformation
+End Sub
+
 Private Sub cmdBetweenRoundSpellGoto_Click(Index As Integer)
 On Error GoTo error:
 If Val(txtBetweenSpellNumber(Index).Text) <= 0 Then Exit Sub
@@ -5013,6 +5045,7 @@ clsMonAtkSim.nUserDR = Val(txtUserDR.Text)
 clsMonAtkSim.nUserDodge = Val(txtUserDodge.Text)
 clsMonAtkSim.nUserMR = Val(txtUserMR.Text)
 clsMonAtkSim.nUserAntiMagic = chkUserAntiMagic.Value
+If chkAlwaysDodge.Value = 1 Then clsMonAtkSim.bDodgeBeforeAC = True
 
 txtCombatLog.Text = ""
 
@@ -5100,7 +5133,8 @@ Set clsMonAtkSim.cProgressBar = ProgressBar
 
 SSTab1.TabCaption(0) = "Between" & vbCrLf & "Round Spells"
 SSTab1.TabCaption(1) = "Attack" & vbCrLf & "Statistics"
-
+lblAlwaysDodge.Caption = "MegaMUD" & vbCrLf & "Dodge"
+lblAntiMagic.Caption = "Anti" & vbCrLf & "Magic"
 lblHitSpell.Caption = "Hit Spell" & vbCrLf & "Min - Max"
 
 txtUserAC.Text = ReadINI("Options", "MonSim-UserAC")
@@ -5109,6 +5143,7 @@ txtUserDodge.Text = ReadINI("Options", "MonSim-UserDodge")
 txtUserMR.Text = ReadINI("Options", "MonSim-UserMR", , 50)
 chkUserAntiMagic.Value = ReadINI("Options", "MonSim-UserAntiMagic", , 0)
 chkDynamicRounds.Value = ReadINI("Options", "MonSim-DynamicRounds", , 1)
+chkAlwaysDodge.Value = ReadINI("Options", "MonSim-AlwaysDodge", , 0)
 
 Call chkDynamicRounds_Click
 
@@ -5179,9 +5214,18 @@ Call WriteINI("Options", "MonSim-UserDodge", txtUserDodge.Text)
 Call WriteINI("Options", "MonSim-UserMR", txtUserMR.Text)
 Call WriteINI("Options", "MonSim-UserAntiMagic", chkUserAntiMagic.Value)
 Call WriteINI("Options", "MonSim-DynamicRounds", chkDynamicRounds.Value)
+Call WriteINI("Options", "MonSim-AlwaysDodge", chkAlwaysDodge.Value)
 
 Call WriteINI("Windows", "MonSim-Left", Me.Left)
 Call WriteINI("Windows", "MonSim-Top", Me.Top)
+End Sub
+
+Private Sub lblAlwaysDodge_Click()
+If chkAlwaysDodge.Value = 0 Then
+    chkAlwaysDodge.Value = 1
+Else
+    chkAlwaysDodge.Value = 0
+End If
 End Sub
 
 Private Sub lblAntiMagic_Click()

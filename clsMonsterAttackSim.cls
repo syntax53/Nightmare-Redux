@@ -42,6 +42,7 @@ Private m_nUserDR As Long
 Private m_nUserDodge As Long
 Private m_nUserMR As Long
 Private m_nUserAntiMagic As Integer
+Private m_bDodgeBeforeAC As Boolean
 
 Private m_nEnergyPerRound As Integer
 Private m_nNumberOfRounds As Long
@@ -82,6 +83,14 @@ Private nActiveBetweenSpells_Ticks(0 To 4) As Integer
 Private nActiveBetweenSpells_DurationLeft(0 To 4) As Currency
 Private nActiveBetweenSpells_Value(0 To 4) As Integer
 Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
+
+Public Property Let bDodgeBeforeAC(ByVal vData As Boolean)
+    m_bDodgeBeforeAC = vData
+End Property
+
+Public Property Get bDodgeBeforeAC() As Boolean
+    bDodgeBeforeAC = m_bDodgeBeforeAC
+End Property
 
 Public Property Let bHideEnergyInfo(ByVal vData As Boolean)
     m_bHideEnergyInfo = vData
@@ -255,6 +264,8 @@ Dim nDamage As Long, nMaxDamage As Long, nMaxAttempts As Integer, nMaxDPE As Cur
 Dim nEnergyForAttack As Long, nEnergyRemaining As Long, nDamagePerEnergy As Currency
 On Error GoTo error:
 
+GetMaxDamage = 0
+
 bNothingToSim = True: x = 0
 Do While x <= 4 And bNothingToSim
     If m_nAtkMin(x) > 0 Then bNothingToSim = False
@@ -382,7 +393,7 @@ Dim nRemainingEnergy As Long, nEnergyUsed As Integer, bShowHitSpell As Boolean
 Dim nDR_DamageResisted As Currency, nMR_Reduction As Currency
 Dim bAttackHit As Boolean, bDodged As Boolean, bGlanced As Boolean, bResisted As Boolean
 Dim nLastAttackType As Integer, nLastAttackEnergy As Integer, nAttack_AdjSuccessChance As Currency
-Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer
+Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer, nAdjustedDodgeValue As Integer
 Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOriginalDamage As Currency
 Dim bSepShown As Boolean, bDurSpellApplied As Boolean, bNothingToSim As Boolean
 Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
@@ -532,7 +543,11 @@ For nRound = 1 To m_nNumberOfRounds
                     If m_nAtkType(nAttack) <> 2 Then 'not spell
                         If m_nUserAC > 0 Then
                             '=((AC*AC)/100)/((ACCY*ACCY)/140)=fail %
-                            nAttack_AdjSuccessChance = Round(1 - (((m_nUserAC * m_nUserAC) / 100) / ((nAttack_AdjSuccessChance * nAttack_AdjSuccessChance) / 140)), 2) * 100
+                            If nAttack_AdjSuccessChance <> 0 Then
+                                nAttack_AdjSuccessChance = Round(1 - (((m_nUserAC * m_nUserAC) / 100) / ((nAttack_AdjSuccessChance * nAttack_AdjSuccessChance) / 140)), 2) * 100
+                            Else
+                                nAttack_AdjSuccessChance = 0
+                            End If
                         Else
                             nAttack_AdjSuccessChance = 99
                         End If
@@ -541,14 +556,30 @@ For nRound = 1 To m_nNumberOfRounds
                         If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
                     End If
                     
-                    nRoll_HitChance = Me.RandomNumber(1, 100)
-                    If nRoll_HitChance <= nAttack_AdjSuccessChance Then
-                        bAttackHit = True
-                        If m_nAtkType(nAttack) <> 2 And m_nUserDodge > 0 Then
-                            nRoll_DodgeChance = Me.RandomNumber(1, 100)
-                            If nRoll_DodgeChance <= m_nUserDodge Then
-                                bAttackHit = False: bDodged = True
-                                m_nStatAtkAttemptDodgedOrResisted(nAttack) = m_nStatAtkAttemptDodgedOrResisted(nAttack) + 1
+                    'this will allow the dodge percentage to match what players see in megamud
+                    If m_bDodgeBeforeAC And m_nUserDodge > 0 And m_nAtkType(nAttack) <> 2 Then
+                        nRoll_DodgeChance = Me.RandomNumber(1, 100)
+                        If nRoll_DodgeChance <= m_nUserDodge Then
+                            bAttackHit = False: bDodged = True
+                            m_nStatAtkAttemptDodgedOrResisted(nAttack) = m_nStatAtkAttemptDodgedOrResisted(nAttack) + 1
+                        End If
+                    End If
+                    
+                    If m_bDodgeBeforeAC = False Or bDodged = False Then
+                        nRoll_HitChance = Me.RandomNumber(1, 100)
+                        If nRoll_HitChance <= nAttack_AdjSuccessChance Then
+                            bAttackHit = True
+                            If m_nAtkType(nAttack) <> 2 And m_nUserDodge > 0 And m_bDodgeBeforeAC = False And m_nAtkSuccess(nAttack) >= 8 Then
+                                
+                                nAdjustedDodgeValue = Fix((m_nUserDodge * 10) / (m_nAtkSuccess(nAttack) / 8))
+                                If nAdjustedDodgeValue > 95 Then nAdjustedDodgeValue = 95
+                                
+                                nRoll_DodgeChance = Me.RandomNumber(1, 100)
+                                If nRoll_DodgeChance <= nAdjustedDodgeValue Then
+                                    bAttackHit = False: bDodged = True
+                                    m_nStatAtkAttemptDodgedOrResisted(nAttack) = m_nStatAtkAttemptDodgedOrResisted(nAttack) + 1
+                                End If
+                                
                             End If
                         End If
                     End If
@@ -1095,6 +1126,7 @@ m_nUserDR = 0
 m_nUserDodge = 0
 m_nUserMR = 0
 m_nUserAntiMagic = 0
+m_bDodgeBeforeAC = False
 
 m_nEnergyPerRound = 0
 m_nNumberOfRounds = 0
