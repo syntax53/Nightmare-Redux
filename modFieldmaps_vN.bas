@@ -567,7 +567,8 @@ Public Type UserRecType
     MaxENC As Integer                   '55
     CurrentENC As Integer               '56
     Energy(2) As Integer                '59
-    unknown1(1) As Integer  'unknown -- seems like it's 125 for everyone    '61
+    unknown1 As Integer
+    SomeSortOfFlag As Integer
     MagicRes As Integer                 '62
     MagicRes2 As Integer                '63
     MapNumber As Long                   '64
@@ -627,7 +628,12 @@ Public Type UserRecType
     unknown12a(7) As Integer
     bEDITED As Byte
     unknown12c As Byte
-    unknown12d(29) As Integer        'unknown
+    
+    'unknown12d(29) As Integer        'update 2025.02.22:
+    unknown12d(18) As Integer               '1828 (19 elements × 2 bytes each = 38 bytes)
+    HitPointRolls As Byte                   '1829
+    unknown12e As Byte                      '1830
+    unknown12f(9) As Integer                '1850 (10 elements × 2 bytes each = 20 bytes)
     
     Ability(29) As Integer
     AbilityModifier(29) As Integer
@@ -649,7 +655,7 @@ Public Type UserRecType
     unknown15(3) As Long
 End Type
 Const UserDataBufSize = 2028
-Public UserFldMap(0 To 739) As FieldMap
+Public UserFldMap(0 To 740) As FieldMap
 Public Type UserDatabufType
     buf(1 To UserDataBufSize) As Byte
 End Type
@@ -1535,7 +1541,7 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_BYTE, 1
     
     'AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 '10
+    AddField Map, ctr, FLD_INTEGER, 2 '10       'unknown12d(18)0
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -1545,7 +1551,7 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 '20
+    AddField Map, ctr, FLD_INTEGER, 2 '20       'unknown12d(18)10
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -1553,8 +1559,11 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2           'unknown12d(18)
+    
+    AddField Map, ctr, FLD_BYTE, 1 'HitPointRolls As Byte
+    AddField Map, ctr, FLD_BYTE, 1 'unknown12e As Byte
+    'AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2 '30
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
