@@ -229,36 +229,36 @@ Begin VB.Form frmUser
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
          Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "cmdUserHitPointMax"
-         Tab(6).Control(1)=   "cmdUserHitPointRollQ"
-         Tab(6).Control(2)=   "txtHitPointRolls"
-         Tab(6).Control(3)=   "chkEdited"
-         Tab(6).Control(4)=   "Frame4"
-         Tab(6).Control(5)=   "txtTitle"
-         Tab(6).Control(6)=   "txtCurrentEncum"
-         Tab(6).Control(7)=   "txtMaxEncum"
-         Tab(6).Control(8)=   "txtEvilPoints"
-         Tab(6).Control(9)=   "txtBroadcastChan"
-         Tab(6).Control(10)=   "txtCopper"
-         Tab(6).Control(11)=   "txtSilver"
-         Tab(6).Control(12)=   "txtGold"
-         Tab(6).Control(13)=   "txtPlatinum"
-         Tab(6).Control(14)=   "txtRunic"
-         Tab(6).Control(15)=   "txtGang"
-         Tab(6).Control(16)=   "txtSuicide"
-         Tab(6).Control(17)=   "Label76(12)"
-         Tab(6).Control(18)=   "Label76(11)"
-         Tab(6).Control(19)=   "Label76(10)"
-         Tab(6).Control(20)=   "Label76(9)"
-         Tab(6).Control(21)=   "Label76(8)"
-         Tab(6).Control(22)=   "Label76(7)"
-         Tab(6).Control(23)=   "Label76(6)"
-         Tab(6).Control(24)=   "Label76(5)"
-         Tab(6).Control(25)=   "Label76(4)"
-         Tab(6).Control(26)=   "Label76(3)"
-         Tab(6).Control(27)=   "Label76(2)"
-         Tab(6).Control(28)=   "Label76(1)"
-         Tab(6).Control(29)=   "Label76(0)"
+         Tab(6).Control(0)=   "Label76(0)"
+         Tab(6).Control(1)=   "Label76(1)"
+         Tab(6).Control(2)=   "Label76(2)"
+         Tab(6).Control(3)=   "Label76(3)"
+         Tab(6).Control(4)=   "Label76(4)"
+         Tab(6).Control(5)=   "Label76(5)"
+         Tab(6).Control(6)=   "Label76(6)"
+         Tab(6).Control(7)=   "Label76(7)"
+         Tab(6).Control(8)=   "Label76(8)"
+         Tab(6).Control(9)=   "Label76(9)"
+         Tab(6).Control(10)=   "Label76(10)"
+         Tab(6).Control(11)=   "Label76(11)"
+         Tab(6).Control(12)=   "Label76(12)"
+         Tab(6).Control(13)=   "txtSuicide"
+         Tab(6).Control(14)=   "txtGang"
+         Tab(6).Control(15)=   "txtRunic"
+         Tab(6).Control(16)=   "txtPlatinum"
+         Tab(6).Control(17)=   "txtGold"
+         Tab(6).Control(18)=   "txtSilver"
+         Tab(6).Control(19)=   "txtCopper"
+         Tab(6).Control(20)=   "txtBroadcastChan"
+         Tab(6).Control(21)=   "txtEvilPoints"
+         Tab(6).Control(22)=   "txtMaxEncum"
+         Tab(6).Control(23)=   "txtCurrentEncum"
+         Tab(6).Control(24)=   "txtTitle"
+         Tab(6).Control(25)=   "Frame4"
+         Tab(6).Control(26)=   "chkEdited"
+         Tab(6).Control(27)=   "txtHitPointRolls"
+         Tab(6).Control(28)=   "cmdUserHitPointRollQ"
+         Tab(6).Control(29)=   "cmdUserHitPointMax"
          Tab(6).ControlCount=   30
          TabCaption(7)   =   "???"
          TabPicture(7)   =   "frmUser.frx":098E
@@ -8963,7 +8963,7 @@ Next
 
 If optUserUnknowns(0).Value = True Then
     x = 0:  lblUserUnknowns(x).Caption = "unkwn1": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown1)
-    x = 1:  lblUserUnknowns(x).Caption = "": txtUserUnknowns(x).Text = "" 'moved to "SomeSortOfFlag"
+    x = 1:  lblUserUnknowns(x).Caption = "Bitmask1": txtUserUnknowns(x).Text = Userrec.Bitmask1
     x = 2:  lblUserUnknowns(x).Caption = "unkwn2(0)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown2(0))
     x = 3:  lblUserUnknowns(x).Caption = "unkwn2(1)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown2(1))
     x = 4:  lblUserUnknowns(x).Caption = "unkwn3(0)": txtUserUnknowns(x).Text = Userrec.unknown3(0)
@@ -8981,7 +8981,7 @@ If optUserUnknowns(0).Value = True Then
     x = 16: lblUserUnknowns(x).Caption = "unkwn13c": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13c)
     x = 17: lblUserUnknowns(x).Caption = "unkwn13d": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13d)
     x = 18: lblUserUnknowns(x).Caption = "unkwn13e": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13e)
-    x = 19: lblUserUnknowns(x).Caption = "unkwn13f": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13f)
+    x = 19: lblUserUnknowns(x).Caption = "AC(BLUR)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13f)
     x = 20: lblUserUnknowns(x).Caption = "unkwn13g": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13g)
     x = 21: lblUserUnknowns(x).Caption = "unkwn14": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown14)
     x = 22: lblUserUnknowns(x).Caption = "nothn2": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing2)
@@ -8996,9 +8996,12 @@ If optUserUnknowns(0).Value = True Then
     x = 31: lblUserUnknowns(x).Caption = "nothn9": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing9)
     x = 32: lblUserUnknowns(x).Caption = "nothn10": txtUserUnknowns(x).Text = SLong2ULong(Userrec.nothing10)
     
-    For x = 0 To 15
+    For x = 0 To 12
         lblUserUnknowns(x + 33).Caption = "unkwn9(" & x & ")": txtUserUnknowns(x + 33).Text = SInt2UInt(Userrec.unknown9(x))
     Next x
+    x = 46:  lblUserUnknowns(x).Caption = "Bitmask2": txtUserUnknowns(x).Text = Userrec.Bitmask2
+    x = 47:  lblUserUnknowns(x).Caption = "TestFlag1": txtUserUnknowns(x).Text = Userrec.TestFlag1
+    x = 48:  lblUserUnknowns(x).Caption = "TestFlag2": txtUserUnknowns(x).Text = Userrec.TestFlag2
     
 ElseIf optUserUnknowns(1).Value = True Then 'set2
     counter = 0
@@ -9010,16 +9013,22 @@ ElseIf optUserUnknowns(1).Value = True Then 'set2
         lblUserUnknowns(counter).Caption = "unkwn11(" & x & ")": txtUserUnknowns(counter).Text = Userrec.unknown11(x)
         counter = counter + 1
     Next x
-    For x = 0 To 7
+    For x = 0 To 3
         lblUserUnknowns(counter).Caption = "unkwn12a(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown12a(x))
         counter = counter + 1
     Next x
     For x = 0 To 8
         lblUserUnknowns(counter).Caption = "unkwn13(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown13(x))
+        If x = 2 Then lblUserUnknowns(counter).Caption = "movemnt?"
         counter = counter + 1
     Next x
     For x = 0 To 3
         lblUserUnknowns(counter).Caption = "unkwn15(" & x & ")": txtUserUnknowns(counter).Text = SLong2ULong(Userrec.unknown15(x))
+        counter = counter + 1
+    Next x
+    For x = 0 To 5
+        lblUserUnknowns(counter).Caption = "unkwn9a(" & x & ")": txtUserUnknowns(counter).Text = SLong2ULong(Userrec.unknown9a(x))
+        If x = 4 Then lblUserUnknowns(counter).Caption = "partyrank"
         counter = counter + 1
     Next x
     
@@ -9031,6 +9040,8 @@ ElseIf optUserUnknowns(2).Value = True Then 'set3
     counter = 0
     For x = 0 To 18
         lblUserUnknowns(counter).Caption = "unkwn12d(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown12d(x))
+        If x = 5 Then lblUserUnknowns(counter).Caption = "Encum %"
+        If x = 6 Then lblUserUnknowns(counter).Caption = "AccyAbl22"
         counter = counter + 1
     Next x
     
@@ -9041,6 +9052,14 @@ ElseIf optUserUnknowns(2).Value = True Then 'set3
         lblUserUnknowns(counter).Caption = "unkwn12f(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown12f(x))
         counter = counter + 1
     Next x
+    
+    For x = 0 To 7
+        lblUserUnknowns(counter).Caption = "UFlags(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.SomeUserFlags(x))
+        If x = 1 Then lblUserUnknowns(counter).Caption = "StatusMask"
+        counter = counter + 1
+    Next x
+    
+    
     
     For counter = counter To 48
         lblUserUnknowns(counter).Caption = "": txtUserUnknowns(counter).Text = ""

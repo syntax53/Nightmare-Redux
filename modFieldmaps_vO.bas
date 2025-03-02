@@ -63,26 +63,26 @@ Public ClassPosBlock As ClassPosBlockType
 Public ClassKeyNum As Integer
 Public ClassKeyBuffer As String * 255
 Public Type ClassRecType
-    Number     As Integer
-    Name       As String * 29
-    AfterName  As Byte
-    MinHp      As Integer
-    MaxHP      As Integer
-    Exp        As Integer
-    nothing1   As Integer
-    nothing2   As Integer
-    nothing3   As Integer
-    AbilityA(9)   As Integer
-    MagicType  As Integer
-    MagicLvL   As Integer
-    Weapon     As Integer
-    Armour     As Integer
-    Combat     As Integer
-    AbilityB(9)   As Integer
-    nothing4   As Integer
-    nothing5   As Integer
-    Nothing6   As Integer
-    TitleText  As Long
+    Number     As Integer       '2
+    Name       As String * 29   '31
+    AfterName  As Byte          '32
+    MinHp      As Integer       '34
+    MaxHP      As Integer       '36
+    Exp        As Integer       '38
+    nothing1   As Integer       '40
+    nothing2   As Integer       '42
+    nothing3   As Integer       '44
+    AbilityA(9)   As Integer    '64
+    MagicType  As Integer       '66
+    MagicLvL   As Integer       '68
+    Weapon     As Integer       '70
+    Armour     As Integer       '72
+    Combat     As Integer       '74
+    AbilityB(9)   As Integer    '94
+    nothing4   As Integer       '96
+    nothing5   As Integer       '98
+    Nothing6   As Integer       '100
+    TitleText  As Long          '104
 End Type
 Const ClassDataBufSize = 156
 Public ClassFldMap(0 To 37) As FieldMap
@@ -630,22 +630,39 @@ Public Type UserRecType
     unknown7(19) As Integer                 '1700 (20 elements × 2 bytes each = 40 bytes)
     unknown8 As Integer                     '1702
     LivesRemaining As Integer               '1704
-    unknown9(15) As Integer                 '1736 (16 elements × 2 bytes each = 32 bytes)
+    unknown9a(5) As Byte                    '1705
+    'unknown9a(1) As Byte                   '1706
+    'unknown9a(2) As Byte                   '1707
+    'unknown9a(3) As Byte                   '1708
+    'unknown9a(4) As Byte                   '1709 current rank in the party (1=front/0=mid or none/2=back) - 2025.03.01
+    'unknown9a(5) As Byte                   '1710
+    unknown9(12) As Integer                 '1736 (13 elements × 2 bytes each = 26 bytes)
     GangName As String * 19                 '1755
     AfterGangName As Byte                   '1756
     unknown11(5) As Byte                    '1762 (6 elements × 1 byte each = 6 bytes)
     CPRemaining As Integer                  '1764
     SuicidePassword As String * 8           '1772
-    unknown12a(7) As Integer                '1788 (8 elements × 2 bytes each = 16 bytes)
+    unknown12a(3) As Integer                '1774
+    'unknown12a(1) As Integer               '1776
+    'unknown12a(2) As Integer               '1778
+    'unknown12a(3) As Integer               '1780
+    SomeUserFlags(7) As Byte                '1781
+    'SomeUserFlags(1) as Byte               '1782 'referenced in _move_player_to_fighter -- reduces accy ... blind?
+    'SomeUserFlags(2) as Byte               '1783
+    'SomeUserFlags(3) as Byte               '1784
+    'SomeUserFlags(4) as Byte               '1785
+    'SomeUserFlags(5) as Byte               '1786
+    'SomeUserFlags(6) as Byte               '1787
+    'SomeUserFlags(7) as Byte               '1788
     bEDITED As Byte                         '1789
     unknown12c As Byte                      '1790
-    'unknown12d(0)                          '1792
+    unknown12d(18) As Integer               '1792
     'unknown12d(1)                          '1794
     'unknown12d(2)                          '1796
     'unknown12d(3)                          '1798
     'unknown12d(4)                          '1800
-    'unknown12d(5)                          '1802 CURRENT_ENCUM_PERCENTAGE - 2025.01.12
-    'unknown12d(6)                          '1804
+    'unknown12d(5)                          '1802 CURRENT ENCUMBRANCE AS A PERCENTAGE - 2025.01.12
+    'unknown12d(6)                          '1804 CUMULATIVE ACCURACY FROM ABILITY 22 (auras and items) - 2025.03.01
     'unknown12d(7)                          '1806
     'unknown12d(8)                          '1808
     'unknown12d(9)                          '1810
@@ -658,7 +675,6 @@ Public Type UserRecType
     'unknown12d(16)                         '1824
     'unknown12d(17)                         '1826
     'unknown12d(18)                         '1828
-    unknown12d(18) As Integer               '1828 (19 elements × 2 bytes each = 38 bytes)
     HitPointRolls As Byte                   '1829
     unknown12e As Byte                      '1830
     unknown12f(9) As Integer                '1850 (10 elements × 2 bytes each = 20 bytes)
@@ -669,10 +685,18 @@ Public Type UserRecType
     unknown13c As Integer                   '1976
     unknown13d As Integer                   '1978
     unknown13e As Integer                   '1980
-    unknown13f As Integer                   '1982
+    unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ABIL 10
     unknown13g As Integer                   '1984
     CharLife As Long                        '1988
-    unknown13(8) As Integer                 '2006 (9 elements × 2 bytes each = 18 bytes)
+    unknown13(8) As Integer                 '1990 (9 elements × 2 bytes each = 18 bytes)
+    'unknown13(1) As Integer                '1992
+    'unknown13(2) As Integer                '1994 'THESE SHOULD BE BYTES... 1993 = SOME BITMASK RELATED TO MOVEMENT IMPEDANCE OR STEALTH?
+    'unknown13(3) As Integer                '1996
+    'unknown13(4) As Integer                '1998
+    'unknown13(5) As Integer                '2000
+    'unknown13(6) As Integer                '2002
+    'unknown13(7) As Integer                '2004
+    'unknown13(8) As Integer                '2006
     Bitmask1 As Byte                        '2007
     Bitmask2 As Byte                        '2008
     TestFlag1 As Byte                       '2009
@@ -682,7 +706,7 @@ Public Type UserRecType
 End Type
 
 Const UserDataBufSize = 2028
-Public UserFldMap(0 To 740) As FieldMap
+Public UserFldMap(0 To 747) As FieldMap
 Public Type UserDatabufType
     buf(1 To UserDataBufSize) As Byte
 End Type
@@ -1505,7 +1529,7 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 4
     AddField Map, ctr, FLD_INTEGER, 4
     AddField Map, ctr, FLD_INTEGER, 4 'worn item 20
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 1
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown7 1
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -1524,25 +1548,28 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 20
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown7 20
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown8
     AddField Map, ctr, FLD_INTEGER, 2 'lives remaining
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 1
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 1
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 2
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 3
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 4
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 5
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 6
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 1
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 5
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 10
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 10
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 16
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 13
     AddField Map, ctr, FLD_STRING, 19 'gang name
     AddField Map, ctr, FLD_INTEGER, 1 'after gang name
     AddField Map, ctr, FLD_INTEGER, 1 'unknown 1
@@ -1553,18 +1580,20 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 1 'unknown 6
     AddField Map, ctr, FLD_INTEGER, 2 'cps
     AddField Map, ctr, FLD_STRING, 8 'suicide
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 1
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 0
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 1
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 3
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 1
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 2
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 3
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 4
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 5
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 6
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 7
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 8
     AddField Map, ctr, FLD_BYTE, 1 'bEDITED As Byte
     AddField Map, ctr, FLD_BYTE, 1 'unknown12c As Byte
-    
     AddField Map, ctr, FLD_INTEGER, 2 'unknown12d(18)0
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
