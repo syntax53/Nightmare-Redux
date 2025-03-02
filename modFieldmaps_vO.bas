@@ -681,11 +681,11 @@ Public Type UserRecType
     Ability(29) As Integer                  '1910 (30 elements × 2 bytes each = 60 bytes)
     AbilityModifier(29) As Integer          '1970 (30 elements × 2 bytes each = 60 bytes)
     unknown13a As Integer                   '1972
-    unknown13b As Integer                   '1974
+    unknown13b As Integer                   '1974 'TOTAL CRITS FROM ABILITY 58 - these should all be bytes!
     unknown13c As Integer                   '1976
     unknown13d As Integer                   '1978
     unknown13e As Integer                   '1980
-    unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ABIL 10
+    unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ABIL 10 - these should all be bytes!
     unknown13g As Integer                   '1984
     CharLife As Long                        '1988
     unknown13(8) As Integer                 '1990 (9 elements × 2 bytes each = 18 bytes)
