@@ -611,6 +611,9 @@ Private Type LairInfoType
     nAvgExp As Currency
     nAvgDmg As Currency
     nAvgHP As Long
+    nAvgAC As Integer
+    nAvgDR As Integer
+    nAvgMR As Integer
     nScriptValue As Currency
 End Type
 Dim colLairs() As LairInfoType
@@ -625,6 +628,9 @@ Private Type MonsterStats
     Exp As Currency
     Damage As Long
     HP As Long
+    AC As Integer
+    DR As Integer
+    MR As Integer
     GameLimit As Integer
     Regen As Integer
     ScriptValue As Long
@@ -671,6 +677,9 @@ GetLairInfo.nMobs = colLairs(x).nMobs
 GetLairInfo.nAvgExp = colLairs(x).nAvgExp
 GetLairInfo.nAvgDmg = colLairs(x).nAvgDmg
 GetLairInfo.nAvgHP = colLairs(x).nAvgHP
+GetLairInfo.nAvgAC = colLairs(x).nAvgAC
+GetLairInfo.nAvgDR = colLairs(x).nAvgDR
+GetLairInfo.nAvgMR = colLairs(x).nAvgMR
 GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
 GetLairInfo.nScriptValue = colLairs(x).nScriptValue
 
@@ -696,6 +705,9 @@ colLairs(x).nMobs = tUpdatedLairInfo.nMobs
 colLairs(x).nAvgExp = tUpdatedLairInfo.nAvgExp
 colLairs(x).nAvgDmg = tUpdatedLairInfo.nAvgDmg
 colLairs(x).nAvgHP = tUpdatedLairInfo.nAvgHP
+colLairs(x).nAvgAC = tUpdatedLairInfo.nAvgAC
+colLairs(x).nAvgDR = tUpdatedLairInfo.nAvgDR
+colLairs(x).nAvgMR = tUpdatedLairInfo.nAvgMR
 colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen
 
 If colLairs(x).nMaxRegen = 0 Then
@@ -2519,13 +2531,16 @@ Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Currency, tLairInf
 Dim nLairMobDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
 Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer, nAvgLairExp As Currency
 Dim iLair As Long, iMonster As Integer, arrMonsters() As String, tMonsterStats As MonsterStats
-
+Dim nLairMobAC As Long, nLairMobDR As Long, nLairMobMR As Long
 'calculate lair damage and script value now that monsters have had their damage calculated
 For iLair = 0 To UBound(colLairs())
     If colLairs(iLair).nMobs > 0 Then
         
         nLairMobDamage = 0
         nLairMobHP = 0
+        nLairMobAC = 0
+        nLairMobDR = 0
+        nLairMobMR = 0
         
         arrMonsters() = Split(colLairs(iLair).sMobList, ",")
         For iMonster = 0 To UBound(arrMonsters())
@@ -2533,11 +2548,17 @@ For iLair = 0 To UBound(colLairs())
                 tMonsterStats = MDB_GetMonsterScriptValue(Val(arrMonsters(iMonster)))
                 nLairMobDamage = nLairMobDamage + tMonsterStats.Damage
                 nLairMobHP = nLairMobHP + tMonsterStats.HP
+                nLairMobAC = nLairMobAC + tMonsterStats.AC
+                nLairMobDR = nLairMobDR + tMonsterStats.DR
+                nLairMobMR = nLairMobMR + tMonsterStats.MR
             End If
         Next iMonster
         
         colLairs(iLair).nAvgDmg = Round(nLairMobDamage / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgHP = Round(nLairMobHP / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgAC = Round(nLairMobAC / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgDR = Round(nLairMobDR / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgMR = Round(nLairMobMR / colLairs(iLair).nMobs)
         
         Call SetLairInfo(colLairs(iLair))
     End If
@@ -2672,6 +2693,9 @@ If Not tabMonsters.NoMatch = True Then
     MDB_GetMonsterScriptValue.Regen = tabMonsters.Fields("RegenTime")
     MDB_GetMonsterScriptValue.GameLimit = tabMonsters.Fields("GameLimit")
     MDB_GetMonsterScriptValue.ScriptValue = tabMonsters.Fields("ScriptValue")
+    MDB_GetMonsterScriptValue.AC = tabMonsters.Fields("ArmourClass")
+    MDB_GetMonsterScriptValue.DR = tabMonsters.Fields("DamageResist")
+    MDB_GetMonsterScriptValue.MR = tabMonsters.Fields("MagicRes")
 End If
 
 Exit Function
@@ -4446,6 +4470,9 @@ For iLair = 0 To UBound(colLairs())
         tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
         tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmg
         tabLairs.Fields("AvgHP") = colLairs(iLair).nAvgHP
+        tabLairs.Fields("AvgAC") = colLairs(iLair).nAvgAC
+        tabLairs.Fields("AvgDR") = colLairs(iLair).nAvgDR
+        tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
         tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
         tabLairs.Update
     End If
@@ -5580,6 +5607,9 @@ With tabNewLairs
     .Columns.Append "AvgExp", adDouble
     .Columns.Append "AvgDmg", adInteger
     .Columns.Append "AvgHP", adDouble
+    .Columns.Append "AvgAC", adInteger
+    .Columns.Append "AvgDR", adInteger
+    .Columns.Append "AvgMR", adInteger
     .Columns.Append "ScriptValue", adDouble
 End With
 catNewDB.Tables.Append tabNewLairs
