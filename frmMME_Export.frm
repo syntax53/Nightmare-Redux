@@ -4473,7 +4473,7 @@ For iLair = 0 To UBound(colLairs())
         tabLairs.Fields("AvgAC") = colLairs(iLair).nAvgAC
         tabLairs.Fields("AvgDR") = colLairs(iLair).nAvgDR
         tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
-        tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
+        'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
         tabLairs.Update
     End If
 Next iLair
@@ -5610,7 +5610,7 @@ With tabNewLairs
     .Columns.Append "AvgAC", adInteger
     .Columns.Append "AvgDR", adInteger
     .Columns.Append "AvgMR", adInteger
-    .Columns.Append "ScriptValue", adDouble
+    '.Columns.Append "ScriptValue", adDouble
 End With
 catNewDB.Tables.Append tabNewLairs
 
