@@ -412,20 +412,20 @@ Public Type RoomRecType
     Para2(9)            As Integer              '944
     Para3(9)            As Long                 '984
     Para4(9)            As Long                 '1024
-    CurrentRoomMon(14)  As Long              '1054             '***I_THROUGH_N*** (comment for n)
-    'CurrentRoomMon(14)  As Integer              '1054          '***I_THROUGH_N*** (UNcomment for n)
-    Type                As Integer              '1056
-    NewSpot             As Integer                             '***I_THROUGH_N*** (comment for n)
-    ShopNum             As Long              '1058
-    nothing1(14)        As Integer                 '1090
-    MinIndex            As Integer              '1092
-    MaxIndex            As Integer              '1094
-    ByNumber            As Long              '1100
-    dontknow            As Integer
-    Light               As Integer              '1102
-    GangHouseNumber     As Integer              '1104
+    CurrentRoomMon(14)  As Long                 '1084             '***I_THROUGH_N*** (comment for n)
+    'CurrentRoomMon(14)  As Integer                   '1054       '***I_THROUGH_N*** (UNcomment for n)
+    Type                As Integer              '1086
+    NewSpot             As Integer              '1088             '***I_THROUGH_N*** (comment for n)
+    ShopNum             As Long                 '1092
+    nothing1(14)        As Integer              '1122
+    MinIndex            As Integer              '1124
+    MaxIndex            As Integer              '1126
+    ByNumber            As Long                 '1130
+    dontknow            As Integer              '1132
+    Light               As Integer              '
+    GangHouseNumber     As Integer              '
     RoomItems(16)       As Long
-    RoomItemUses(16)    As Integer              ' -9
+    RoomItemUses(16)    As Integer              '
     nothing4            As Integer
     InvisItems(14)      As Long
     InvisItemUses(14)   As Integer              ' -8

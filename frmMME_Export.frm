@@ -708,7 +708,7 @@ colLairs(x).nAvgHP = tUpdatedLairInfo.nAvgHP
 colLairs(x).nAvgAC = tUpdatedLairInfo.nAvgAC
 colLairs(x).nAvgDR = tUpdatedLairInfo.nAvgDR
 colLairs(x).nAvgMR = tUpdatedLairInfo.nAvgMR
-colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen
+colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen 'only used in nmr to calculate an average script value for mobs against their lairs
 
 If colLairs(x).nMaxRegen = 0 Then
     sArr() = Split(colLairs(x).sGroupIndex, "-")
@@ -4451,7 +4451,7 @@ End Sub
 
 Private Sub ExportLairs()
 On Error GoTo error:
-Dim iLair As Long
+Dim iLair As Long, sArr() As String
 
 tryagain:
 If tabLairs.RecordCount <> 0 Then
@@ -4460,21 +4460,27 @@ If tabLairs.RecordCount <> 0 Then
     GoTo tryagain:
 End If
 
+tabLairs.Index = "pkLairs"
+
 For iLair = 0 To UBound(colLairs())
-    If colLairs(iLair).nMobs > 0 Then
-        tabLairs.AddNew
-        tabLairs.Fields("GroupIndex") = colLairs(iLair).sGroupIndex
-        tabLairs.Fields("MobList") = colLairs(iLair).sMobList
-        tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
-        tabLairs.Fields("MaxRegen") = colLairs(iLair).nMaxRegen
-        tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
-        tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmg
-        tabLairs.Fields("AvgHP") = colLairs(iLair).nAvgHP
-        tabLairs.Fields("AvgAC") = colLairs(iLair).nAvgAC
-        tabLairs.Fields("AvgDR") = colLairs(iLair).nAvgDR
-        tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
-        'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
-        tabLairs.Update
+    sArr() = Split(colLairs(iLair).sGroupIndex, "-", , vbTextCompare)
+    If colLairs(iLair).nMobs > 0 And UBound(sArr()) = 3 Then
+        tabLairs.Seek "=", sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+        If tabLairs.NoMatch = True Then
+            tabLairs.AddNew
+            tabLairs.Fields("GroupIndex") = sArr(0) & "-" & sArr(1) & "-" & sArr(2) 'colLairs(iLair).sGroupIndex
+            tabLairs.Fields("MobList") = colLairs(iLair).sMobList
+            tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
+            'tabLairs.Fields("MaxRegen") = colLairs(iLair).nMaxRegen
+            tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
+            tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmg
+            tabLairs.Fields("AvgHP") = colLairs(iLair).nAvgHP
+            tabLairs.Fields("AvgAC") = colLairs(iLair).nAvgAC
+            tabLairs.Fields("AvgDR") = colLairs(iLair).nAvgDR
+            tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
+            'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
+            tabLairs.Update
+        End If
     End If
 Next iLair
 
@@ -5603,7 +5609,7 @@ With tabNewLairs
     .Columns.Append "GroupIndex", adVarWChar
     .Columns.Append "MobList", adVarWChar
     .Columns.Append "Mobs", adInteger
-    .Columns.Append "MaxRegen", adInteger
+    '.Columns.Append "MaxRegen", adInteger
     .Columns.Append "AvgExp", adDouble
     .Columns.Append "AvgDmg", adInteger
     .Columns.Append "AvgHP", adDouble
