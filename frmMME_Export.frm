@@ -19,7 +19,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "Additional Options"
       Height          =   555
       Left            =   4080
-      TabIndex        =   28
+      TabIndex        =   11
       Top             =   1380
       Width           =   1335
    End
@@ -27,7 +27,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "ReadMe"
       Height          =   315
       Left            =   2280
-      TabIndex        =   27
+      TabIndex        =   43
       Top             =   4260
       Width           =   975
    End
@@ -35,7 +35,7 @@ Begin VB.Form frmMME_Export
       Height          =   285
       Left            =   120
       MaxLength       =   254
-      TabIndex        =   24
+      TabIndex        =   10
       Text            =   "http://www.mudinfo.net/mmudexp.php"
       Top             =   1620
       Width           =   3795
@@ -44,7 +44,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "&Save Config ..."
       Height          =   435
       Left            =   4080
-      TabIndex        =   12
+      TabIndex        =   5
       Top             =   780
       Width           =   1335
    End
@@ -52,7 +52,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "&Load Config ..."
       Height          =   435
       Left            =   4080
-      TabIndex        =   11
+      TabIndex        =   2
       Top             =   180
       Width           =   1335
    End
@@ -61,7 +61,7 @@ Begin VB.Form frmMME_Export
       Height          =   315
       Left            =   120
       Locked          =   -1  'True
-      TabIndex        =   10
+      TabIndex        =   1
       Top             =   300
       Width           =   3795
    End
@@ -81,24 +81,24 @@ Begin VB.Form frmMME_Export
    End
    Begin VB.TextBox txtCustom 
       Height          =   285
-      Left            =   1860
+      Left            =   120
       MaxLength       =   20
-      TabIndex        =   3
+      TabIndex        =   7
       Top             =   960
-      Width           =   2055
+      Width           =   1875
    End
    Begin VB.TextBox txtDBVersion 
       Height          =   285
-      Left            =   120
+      Left            =   2220
       MaxLength       =   20
-      TabIndex        =   2
+      TabIndex        =   8
       Top             =   960
-      Width           =   1575
+      Width           =   1695
    End
    Begin MSComctlLib.ProgressBar ProgressBar 
       Height          =   315
       Left            =   60
-      TabIndex        =   6
+      TabIndex        =   45
       Top             =   4740
       Visible         =   0   'False
       Width           =   5400
@@ -112,7 +112,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "&Close"
       Height          =   495
       Left            =   4020
-      TabIndex        =   1
+      TabIndex        =   44
       Top             =   4140
       Width           =   1335
    End
@@ -120,7 +120,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "&Export to MME"
       Height          =   495
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   42
       Top             =   4140
       Width           =   1395
    End
@@ -137,7 +137,7 @@ Begin VB.Form frmMME_Export
       EndProperty
       Height          =   1995
       Left            =   120
-      TabIndex        =   13
+      TabIndex        =   27
       Top             =   2040
       Width           =   5235
       Begin VB.CommandButton cmdHideHelp 
@@ -154,7 +154,7 @@ Begin VB.Form frmMME_Export
          EndProperty
          Height          =   225
          Left            =   1200
-         TabIndex        =   44
+         TabIndex        =   31
          Top             =   750
          Width           =   255
       End
@@ -163,7 +163,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Left            =   180
-         TabIndex        =   43
+         TabIndex        =   32
          Top             =   780
          Width           =   1095
       End
@@ -171,7 +171,7 @@ Begin VB.Form frmMME_Export
          Caption         =   "Enable"
          Height          =   195
          Left            =   180
-         TabIndex        =   40
+         TabIndex        =   28
          Top             =   300
          Width           =   1335
       End
@@ -180,14 +180,14 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Left            =   180
-         TabIndex        =   26
+         TabIndex        =   29
          Top             =   540
          Width           =   1095
       End
       Begin MSComctlLib.ListView lvExludedRooms 
          Height          =   1635
          Left            =   2700
-         TabIndex        =   23
+         TabIndex        =   41
          Top             =   240
          Width           =   2415
          _ExtentX        =   4260
@@ -209,7 +209,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   285
          Left            =   900
-         TabIndex        =   21
+         TabIndex        =   39
          Text            =   "1"
          Top             =   1560
          Width           =   615
@@ -219,7 +219,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   435
          Left            =   1680
-         TabIndex        =   18
+         TabIndex        =   40
          Top             =   1440
          Width           =   855
       End
@@ -228,7 +228,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   315
          Left            =   1680
-         TabIndex        =   17
+         TabIndex        =   35
          Top             =   960
          Width           =   855
       End
@@ -237,7 +237,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   555
          Left            =   1680
-         TabIndex        =   16
+         TabIndex        =   30
          Top             =   240
          Width           =   855
       End
@@ -245,7 +245,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   315
          Left            =   900
-         TabIndex        =   15
+         TabIndex        =   37
          Text            =   "2"
          Top             =   1200
          Width           =   615
@@ -254,7 +254,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   315
          Left            =   180
-         TabIndex        =   14
+         TabIndex        =   36
          Text            =   "1"
          Top             =   1200
          Width           =   615
@@ -274,7 +274,7 @@ Begin VB.Form frmMME_Export
          Height          =   315
          Index           =   2
          Left            =   180
-         TabIndex        =   22
+         TabIndex        =   38
          Top             =   1560
          Width           =   615
       End
@@ -284,7 +284,7 @@ Begin VB.Form frmMME_Export
          Height          =   195
          Index           =   1
          Left            =   900
-         TabIndex        =   20
+         TabIndex        =   34
          Top             =   1020
          Width           =   555
       End
@@ -294,7 +294,7 @@ Begin VB.Form frmMME_Export
          Height          =   195
          Index           =   0
          Left            =   180
-         TabIndex        =   19
+         TabIndex        =   33
          Top             =   1020
          Width           =   735
       End
@@ -303,42 +303,60 @@ Begin VB.Form frmMME_Export
       Caption         =   "Special Export Options"
       Height          =   1995
       Left            =   120
-      TabIndex        =   29
+      TabIndex        =   12
       Top             =   2040
       Visible         =   0   'False
       Width           =   5235
+      Begin VB.CheckBox chkLegit 
+         Caption         =   "Disable Kai Auto-Learning"
+         Height          =   255
+         Index           =   2
+         Left            =   240
+         TabIndex        =   15
+         Top             =   1080
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkLegit 
+         Caption         =   "For GreaterMUD Engine"
+         Height          =   255
+         Index           =   1
+         Left            =   240
+         TabIndex        =   14
+         Top             =   720
+         Width           =   2175
+      End
       Begin VB.CommandButton cmdDefaultExcludeList 
          Caption         =   "List"
          Height          =   255
-         Left            =   1680
-         TabIndex        =   42
-         Top             =   960
-         Width           =   795
+         Left            =   1800
+         TabIndex        =   25
+         Top             =   1680
+         Width           =   735
       End
       Begin VB.CheckBox chkExcludeDefault 
          Caption         =   "Exclude Default ""Not in game"" Rooms"
          Height          =   495
          Left            =   240
-         TabIndex        =   41
-         Top             =   660
+         TabIndex        =   16
+         Top             =   1380
          Value           =   1  'Checked
-         Width           =   2175
+         Width           =   2535
       End
       Begin VB.CommandButton cmdQ 
          Caption         =   "Help"
-         Height          =   375
-         Left            =   180
-         TabIndex        =   39
-         Top             =   1440
-         Width           =   1095
+         Height          =   255
+         Left            =   1860
+         TabIndex        =   26
+         Top             =   360
+         Width           =   675
       End
       Begin VB.CheckBox chkOnly 
          Caption         =   "Shops"
          Enabled         =   0   'False
          Height          =   195
          Index           =   7
-         Left            =   4020
-         TabIndex        =   38
+         Left            =   4140
+         TabIndex        =   23
          Top             =   1260
          Width           =   975
       End
@@ -355,18 +373,18 @@ Begin VB.Form frmMME_Export
          EndProperty
          Height          =   255
          Index           =   0
-         Left            =   2700
-         TabIndex        =   37
+         Left            =   3000
+         TabIndex        =   17
          Top             =   300
-         Width           =   2355
+         Width           =   1815
       End
       Begin VB.CheckBox chkOnly 
          Caption         =   "Races"
          Enabled         =   0   'False
          Height          =   195
          Index           =   6
-         Left            =   4020
-         TabIndex        =   36
+         Left            =   4140
+         TabIndex        =   21
          Top             =   960
          Value           =   1  'Checked
          Width           =   975
@@ -376,8 +394,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   5
-         Left            =   4020
-         TabIndex        =   35
+         Left            =   4140
+         TabIndex        =   19
          Top             =   660
          Value           =   1  'Checked
          Width           =   975
@@ -387,8 +405,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   4
-         Left            =   2700
-         TabIndex        =   34
+         Left            =   3000
+         TabIndex        =   24
          Top             =   1560
          Width           =   1215
       End
@@ -397,8 +415,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   3
-         Left            =   2700
-         TabIndex        =   33
+         Left            =   3000
+         TabIndex        =   22
          Top             =   1260
          Width           =   1215
       End
@@ -407,8 +425,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   2
-         Left            =   2700
-         TabIndex        =   32
+         Left            =   3000
+         TabIndex        =   20
          Top             =   960
          Width           =   1215
       End
@@ -417,16 +435,17 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   1
-         Left            =   2700
-         TabIndex        =   31
+         Left            =   3000
+         TabIndex        =   18
          Top             =   660
          Width           =   1215
       End
       Begin VB.CheckBox chkLegit 
          Caption         =   """Legit"" Export"
          Height          =   255
+         Index           =   0
          Left            =   240
-         TabIndex        =   30
+         TabIndex        =   13
          Top             =   360
          Width           =   1395
       End
@@ -446,7 +465,7 @@ Begin VB.Form frmMME_Export
       Height          =   195
       Index           =   1
       Left            =   120
-      TabIndex        =   25
+      TabIndex        =   9
       Top             =   1380
       Width           =   2370
    End
@@ -465,7 +484,7 @@ Begin VB.Form frmMME_Export
       Height          =   195
       Index           =   1
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   0
       Top             =   60
       Width           =   1500
    End
@@ -477,7 +496,7 @@ Begin VB.Form frmMME_Export
       Height          =   255
       Index           =   1
       Left            =   2640
-      TabIndex        =   8
+      TabIndex        =   47
       Top             =   5160
       Width           =   2895
    End
@@ -489,7 +508,7 @@ Begin VB.Form frmMME_Export
       Height          =   255
       Index           =   0
       Left            =   -60
-      TabIndex        =   7
+      TabIndex        =   46
       Top             =   5160
       Width           =   2715
    End
@@ -507,14 +526,14 @@ Begin VB.Form frmMME_Export
       EndProperty
       Height          =   195
       Index           =   0
-      Left            =   1860
-      TabIndex        =   5
+      Left            =   120
+      TabIndex        =   3
       Top             =   720
       Width           =   1815
    End
    Begin VB.Label Label1 
       AutoSize        =   -1  'True
-      Caption         =   "Dat Version"
+      Caption         =   "Dat Version/Realm"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -526,10 +545,29 @@ Begin VB.Form frmMME_Export
       EndProperty
       Height          =   195
       Index           =   0
-      Left            =   120
+      Left            =   2220
       TabIndex        =   4
       Top             =   720
-      Width           =   1005
+      Width           =   1785
+   End
+   Begin VB.Label Label1 
+      AutoSize        =   -1  'True
+      Caption         =   " - "
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   13.5
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   360
+      Index           =   2
+      Left            =   1970
+      TabIndex        =   6
+      Top             =   900
+      Width           =   300
    End
 End
 Attribute VB_Name = "frmMME_Export"
@@ -779,7 +817,9 @@ If Not sLine = "0" Then txtUpdateURL.Text = sLine
 
 chkExcludeRooms.Value = ReadINI("Settings", "EnableExcludeRooms", sFile)
 chkHideExcludedRooms.Value = ReadINI("Settings", "HideExcludedRooms", sFile)
-chkLegit.Value = ReadINI("Settings", "Legit", sFile)
+chkLegit(0).Value = ReadINI("Settings", "Legit", sFile, 0)
+chkLegit(1).Value = ReadINI("Settings", "Gmud", sFile, 0)
+chkLegit(2).Value = ReadINI("Settings", "DisableKai", sFile, 0)
 chkExcludeDefault.Value = ReadINI("Settings", "ExcludeDefault", sFile, "1")
 chkNoRooms.Value = ReadINI("Settings", "NoRooms", sFile)
 
@@ -845,7 +885,9 @@ Else
 End If
 
 Call WriteINI("Settings", "CustomName", txtCustom.Text, sFile)
-Call WriteINI("Settings", "Legit", chkLegit.Value, sFile)
+Call WriteINI("Settings", "Legit", chkLegit(0).Value, sFile)
+Call WriteINI("Settings", "Gmud", chkLegit(1).Value, sFile)
+Call WriteINI("Settings", "DisableKai", chkLegit(2).Value, sFile)
 Call WriteINI("Settings", "ExcludeDefault", chkExcludeDefault.Value, sFile)
 Call WriteINI("Settings", "DB_Ver", txtDBVersion.Text, sFile)
 Call WriteINI("Settings", "UpdateURL", txtUpdateURL.Text, sFile)
@@ -945,16 +987,7 @@ Private Sub chkHideExcludedRooms_Click()
 bCheckSave = True
 End Sub
 
-Private Sub chkLegit_Click()
 
-If chkLegit.Value = 1 Then
-    Call EnableLegit(True)
-Else
-    Call EnableLegit(False)
-End If
-
-bCheckSave = True
-End Sub
 
 Private Sub EnableLegit(ByVal bTrue As Boolean)
 On Error GoTo error:
@@ -994,6 +1027,24 @@ Exit Sub
 error:
 Call HandleError("EnableLegit")
 End Sub
+
+Private Sub chkLegit_Click(Index As Integer)
+If Index = 0 Then
+    If chkLegit(Index).Value = 1 Then
+        chkLegit(1).Value = 0
+        Call EnableLegit(True)
+    Else
+        Call EnableLegit(False)
+    End If
+ElseIf Index = 1 Then
+    If chkLegit(Index).Value = 1 Then
+        chkLegit(0).Value = 0
+    End If
+End If
+
+bCheckSave = True
+End Sub
+
 Private Sub chkNoRooms_Click()
 bCheckSave = True
 End Sub
@@ -1050,9 +1101,9 @@ End Sub
 
 Private Sub cmdQ_Click()
 MsgBox "If you export only one or more databases, no cross-referencing will be done." _
-    & "  This is for people who want get info on records and wish to use MME's style of viewing/copying stats without taking the time to compile a full MME file." _
-    & vbCrLf & vbCrLf & "The 'Legit Export' option is basically just for me (syntax) when " _
-    & "I make the default data files to post on MME's website.", vbInformation
+    & " This is for people who want get info on records and wish to use MME's style of viewing/copying stats without taking the time to compile a full MME file." _
+    & vbCrLf & vbCrLf & "The 'Legit Export' option is just for me (syntax) when I make the default data files to post on MME's website." _
+    & vbCrLf & vbCrLf & "The 'For GreaterMUD Engine' option will direct MME to adjust its settings and be more compatible with GreaterMUD engine-based systems.", vbInformation
 End Sub
 
 Private Sub cmdSaveConfig_Click()
@@ -1302,7 +1353,9 @@ txtDBVersion.Enabled = False
 txtCustom.Enabled = False
 cmdSelectConfig.Enabled = False
 cmdSaveConfig.Enabled = False
-chkLegit.Enabled = False
+chkLegit(0).Enabled = False
+chkLegit(1).Enabled = False
+chkLegit(2).Enabled = False
 cmdNote.Enabled = False
 Call ExcludeRoomsEnable(False)
 chkExcludeRooms.Enabled = False
@@ -1390,18 +1443,18 @@ Erase SpellFromContainerRef()
 Erase TBFromBadSource()
 ReDim MonGroup(39, 9999)
 
-If chkLegit.Value = 1 _
+If chkLegit(0).Value = 1 _
     Or chkExcludeDefault.Value = 1 _
     Or (chkExcludeRooms.Value = 1 And lvExludedRooms.ListItems.Count > 0) Then
     
-    If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
+    If chkLegit(0).Value = 1 Or chkExcludeDefault.Value = 1 Then
         ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count + UBound(nDefaultExcludeMap()))
     Else
         ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count)
     End If
     
     x = 0
-    If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
+    If chkLegit(0).Value = 1 Or chkExcludeDefault.Value = 1 Then
         For x = 0 To UBound(nDefaultExcludeMap())
             ExcludedRooms(1, x) = nDefaultExcludeMap(x)
             ExcludedRooms(2, x) = nDefaultExcludeFrom(x)
@@ -1562,19 +1615,18 @@ cmdCancel.Caption = "&Close"
 cmdGo.Enabled = True
 cmdNote.Enabled = True
 txtDBVersion.Enabled = True
-chkLegit.Enabled = True
+chkLegit(0).Enabled = True
+chkLegit(1).Enabled = True
+chkLegit(2).Enabled = True
 txtConfigFile.Enabled = True
 cmdAddtlOptions.Enabled = True
-'txtCustom.Enabled = True
 cmdSelectConfig.Enabled = True
 cmdSaveConfig.Enabled = True
-'If chkLegit.Value = 0 Then Call ExcludeRoomsEnable(True)
-If chkLegit.Value = 1 Then
+If chkLegit(0).Value = 1 Then
     Call EnableLegit(True)
 Else
     Call EnableLegit(False)
 End If
-'txtUpdateURL.Enabled = True
 
 Set frmForm = Nothing
 Exit Sub
@@ -4431,9 +4483,22 @@ tabInfo.Fields("Dat File Version") = txtDBVersion.Text
 
 tabInfo.Fields("Date") = Date
 tabInfo.Fields("Time") = Time
-tabInfo.Fields("Legit") = chkLegit.Value
 
-If chkLegit.Value = 1 Then
+If chkLegit(0).Value = 1 Then
+    tabInfo.Fields("Legit") = 1
+ElseIf chkLegit(1).Value = 1 Then
+    tabInfo.Fields("Legit") = 2
+Else
+    tabInfo.Fields("Legit") = 0
+End If
+
+If chkLegit(2).Value = 1 Then
+    tabInfo.Fields("DisableKai") = 1
+Else
+    tabInfo.Fields("DisableKai") = 0
+End If
+
+If chkLegit(0).Value = 1 Then
     tabInfo.Fields("UpdateURL") = "http://www.mudinfo.net/mmudexp.php"
     tabInfo.Fields("Custom") = "Default"
 Else
@@ -5018,7 +5083,7 @@ Dim nTempMap As Long, nTempRoom As Long, sActions() As String, sNewActions() As 
 Dim x As Integer, y As Integer, z As Integer
 Dim x2 As Integer, y2 As Integer, z2 As Integer
 
-If chkLegit.Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
+If chkLegit(0).Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
 
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
@@ -5862,6 +5927,7 @@ With tabNewInfo
     .Columns.Append "Time", adVarWChar
     .Columns.Append "Custom", adVarWChar
     .Columns.Append "Legit", adInteger
+    .Columns.Append "DisableKai", adInteger
     .Columns.Append "UpdateURL", adVarWChar
 End With
 catNewDB.Tables.Append tabNewInfo
@@ -6147,7 +6213,7 @@ If Not nStatus = 0 Then
 Else
     DBStatRowToStruct DBStatDatabuf.buf
     CalcTotalRecords = CalcTotalRecords + (DBStat.nRecords * _
-        IIf(chkLegit.Value = 0 And chkNoRooms.Value = 1 And chkExcludeRooms.Value = 1, 1, 2))
+        IIf(chkLegit(0).Value = 0 And chkNoRooms.Value = 1 And chkExcludeRooms.Value = 1, 1, 2))
 End If
 
 nStatus = BTRCALL(BSTAT, TextblockPosBlock, DBStatDatabuf, Len(TextblockDataBuf), 0, KEY_BUF_LEN, 0)
