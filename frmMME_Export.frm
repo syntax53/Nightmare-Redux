@@ -5461,7 +5461,7 @@ doneaction:
     If sMonsters = "" Then
         sMonsters = Chr(0)
     Else
-        sMonsters = "(Max " & Roomrec.MaxRegen & "): " & sMonsters
+        sMonsters = "(Max " & Roomrec.MaxRegen & "): " & sMonsters & "[" & Roomrec.MonsterType & "-" & Roomrec.MinIndex & "-" & Roomrec.MaxIndex & "-" & Roomrec.MaxRegen & "]"
     End If
     tabRooms.Fields("Lair") = sMonsters
 
