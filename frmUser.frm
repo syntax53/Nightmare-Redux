@@ -9059,6 +9059,10 @@ ElseIf optUserUnknowns(2).Value = True Then 'set3
         counter = counter + 1
     Next x
     
+    For x = 0 To 2
+        lblUserUnknowns(counter).Caption = "Energy(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.Energy(x))
+        counter = counter + 1
+    Next x
     
     
     For counter = counter To 48

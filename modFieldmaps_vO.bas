@@ -578,7 +578,9 @@ Public Type UserRecType
     CurrentHP As Integer                    '178
     MaxENC As Integer                       '180
     CurrentENC As Integer                   '182
-    Energy(2) As Integer                    '188 (3 elements × 2 bytes each = 6 bytes)
+    Energy(2) As Integer                    '184 -
+    'Energy(1) As Integer                   '186 -
+    'Energy(2) As Integer                   '188 - remai
     unknown1 As Integer                     '190
     SomeSortOfFlag As Integer               '192
     MagicRes As Integer                     '194
@@ -606,7 +608,7 @@ Public Type UserRecType
     LastRoom(19) As Long                    '1520 (20 elements × 4 bytes each = 80 bytes)
     nothing8 As Integer                     '1522
     BroadcastChan As Integer                '1524
-    unknown5 As Long                        '1528
+    unknown5 As Long                        '1528 'FLAG FOR HIDDEN?? 2025.03.12
     Perception As Integer                   '1530
     Stealth As Integer                      '1532
     MartialArts As Integer                  '1534
