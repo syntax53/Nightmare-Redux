@@ -318,31 +318,31 @@ Public Type ItemRecType
     WornOn          As Integer                  '922
     Accuracy        As Integer                  '924
     DR              As Integer                  '926
-    Gettable        As Byte
+    Gettable        As Byte                     '927
     unknown12       As Byte                     '928
     ReqStr          As Integer                  '930
-    unknown13a(6)   As Integer
-    OpenRunic       As Long
-    OpenPlatinum    As Long
-    OpenGold        As Long
-    OpenSilver      As Long
-    OpenCopper      As Long
-    unknown13b(12)   As Integer                  '980 +60  '29 -- changes the numbers here 6-19-03
-    Speed           As Integer                  '982
-    unknown14       As Integer                  '984
-    AbilityB(19)    As Integer                  '1024 +40
-    unknown15       As Integer                  '1026
-    HitMsg          As Long
-    MissMsg         As Long
-    ReadTB          As Long
-    DistructMsg     As Long                     '1042
-    unknown16(5)    As Integer                  '1054 +12
-    NotDroppable    As Byte
-    CostType        As Byte
-    RetainAfterUses As Byte
-    Robable       As Byte
-    DestroyOnDeath  As Byte
-    unknown19       As Byte                     '1060
+    unknown13a(6)   As Integer                  '944 + 14
+    OpenRunic       As Long                     '948
+    OpenPlatinum    As Long                     '952
+    OpenGold        As Long                     '956
+    OpenSilver      As Long                     '960
+    OpenCopper      As Long                     '964
+    unknown13b(12)  As Integer                  '990 +26
+    Speed           As Integer                  '992
+    unknown14       As Integer                  '994
+    AbilityB(19)    As Integer                  '1034 +40
+    unknown15       As Integer                  '1036
+    HitMsg          As Long                     '1040
+    MissMsg         As Long                     '1044
+    ReadTB          As Long                     '1048
+    DistructMsg     As Long                     '1052
+    unknown16(5)    As Integer                  '1064 +12
+    NotDroppable    As Byte                     '1065
+    CostType        As Byte                     '1066
+    RetainAfterUses As Byte                     '1067
+    Robable         As Byte                     '1068
+    DestroyOnDeath  As Byte                     '1069
+    unknown19       As Byte                     '1070
     'unknown20(1)   As Byte
 End Type
 Const ItemDataBufSize = 1072 '1948 '1072
@@ -580,7 +580,7 @@ Public Type UserRecType
     CurrentENC As Integer                   '182
     Energy(2) As Integer                    '184 -
     'Energy(1) As Integer                   '186 -
-    'Energy(2) As Integer                   '188 - remai
+    'Energy(2) As Integer                   '188 - remaining?
     unknown1 As Integer                     '190
     SomeSortOfFlag As Integer               '192
     MagicRes As Integer                     '194
@@ -667,7 +667,7 @@ Public Type UserRecType
     'unknown12d(6)                          '1804 CUMULATIVE ACCURACY FROM ABILITY 22 (auras and items) - 2025.03.01
     'unknown12d(7)                          '1806
     'unknown12d(8)                          '1808
-    'unknown12d(9)                          '1810
+    'unknown12d(9)                          '1810 something referenced here for crits 2025.03.12
     'unknown12d(10)                         '1812
     'unknown12d(11)                         '1814
     'unknown12d(12)                         '1816
@@ -691,10 +691,10 @@ Public Type UserRecType
     unknown13g As Integer                   '1984
     CharLife As Long                        '1988
     unknown13(8) As Integer                 '1990 (9 elements × 2 bytes each = 18 bytes)
-    'unknown13(1) As Integer                '1992
-    'unknown13(2) As Integer                '1994 'THESE SHOULD BE BYTES... 1993 = SOME BITMASK RELATED TO MOVEMENT IMPEDANCE OR STEALTH?
+    'unknown13(1) As Integer                '1992 'gets set to a timestamp in ljngame_polling
+    'unknown13(2) As Integer                '1994 'SOME BITMASK RELATED TO MOVEMENT IMPEDANCE OR STEALTH?
     'unknown13(3) As Integer                '1996
-    'unknown13(4) As Integer                '1998
+    'unknown13(4) As Integer                '1998 'this may be a 4-byte long
     'unknown13(5) As Integer                '2000
     'unknown13(6) As Integer                '2002
     'unknown13(7) As Integer                '2004

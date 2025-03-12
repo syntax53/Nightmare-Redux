@@ -59,4 +59,4 @@ frmMonsterIndex = 260, 260, 2058, 1005, C, 416, 416, 1972, 1262, C
 frmRoomControlRoomList = 156, 156, 1954, 901, C, 0, 0, 1556, 846, C
 clsMonsterAttackSim = 130, 130, 1876, 1010, C
 frmMonsterItemDropPct = 52, 52, 979, 548, C, 26, 26, 953, 522, C
-modFieldmaps_vO = 26, 26, 1582, 898, C
+modFieldmaps_vO = 26, 26, 1582, 898, Z
