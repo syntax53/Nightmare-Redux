@@ -608,7 +608,7 @@ Public Type UserRecType
     LastRoom(19) As Long                    '1520 (20 elements × 4 bytes each = 80 bytes)
     nothing8 As Integer                     '1522
     BroadcastChan As Integer                '1524
-    unknown5 As Long                        '1528 'FLAG FOR HIDDEN?? 2025.03.12
+    unknown5 As Long                        '1528 'may be a bunch of bytes, flag for hiding (0x5f6==1526): *(uint8_t*)((char*)arg2 + 0x5f6) = 1;
     Perception As Integer                   '1530
     Stealth As Integer                      '1532
     MartialArts As Integer                  '1534
@@ -648,7 +648,7 @@ Public Type UserRecType
     'unknown12a(1) As Integer               '1776
     'unknown12a(2) As Integer               '1778
     'unknown12a(3) As Integer               '1780
-    SomeUserFlags(7) As Byte                '1781
+    SomeUserFlags(7) As Byte                '1781 'flag sneaking (0x6f4==1780): *(uint16_t*)((char*)arg1 + 0x6f4) |= 4;
     'SomeUserFlags(1) as Byte               '1782 'referenced in _move_player_to_fighter -- reduces accy ... blind?
     'SomeUserFlags(2) as Byte               '1783
     'SomeUserFlags(3) as Byte               '1784
