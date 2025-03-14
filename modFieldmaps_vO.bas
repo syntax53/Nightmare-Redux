@@ -665,8 +665,8 @@ Public Type UserRecType
     'unknown12d(4)                          '1800
     'unknown12d(5)                          '1802 CURRENT ENCUMBRANCE AS A PERCENTAGE - 2025.01.12
     'unknown12d(6)                          '1804 CUMULATIVE ACCURACY FROM ABILITY 22 (auras and items) - 2025.03.01
-    'unknown12d(7)                          '1806
-    'unknown12d(8)                          '1808
+    'unknown12d(7)                          '1806 CUMULATIVE AC FROM Ability 2
+    'unknown12d(8)                          '1808 CUMULATIVE MAX DAMAGE from ability 4
     'unknown12d(9)                          '1810 something referenced here for crits 2025.03.12
     'unknown12d(10)                         '1812
     'unknown12d(11)                         '1814
@@ -684,9 +684,9 @@ Public Type UserRecType
     AbilityModifier(29) As Integer          '1970 (30 elements × 2 bytes each = 60 bytes)
     unknown13a As Integer                   '1972
     unknown13b As Integer                   '1974 'TOTAL CRITS FROM ABILITY 58 - these should all be bytes!
-    unknown13c As Integer                   '1976
-    unknown13d As Integer                   '1978
-    unknown13e As Integer                   '1980
+    unknown13c As Integer                   '1976 'TOTAL DR FROM ABILITY 7
+    unknown13d As Integer                   '1978 'TOTAL FROM AlterDRpercent ABIL 99
+    unknown13e As Integer                   '1980 'TOTAL SPEED ability 87
     unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ABIL 10 - these should all be bytes!
     unknown13g As Integer                   '1984
     CharLife As Long                        '1988

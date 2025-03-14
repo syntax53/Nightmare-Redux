@@ -692,30 +692,30 @@ Begin VB.Form frmItem
          TabCaption(1)   =   "Desc/Msg/Cash"
          TabPicture(1)   =   "frmItem.frx":0C0B
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "Frame2"
+         Tab(1).Control(0)=   "Frame6"
          Tab(1).Control(1)=   "Frame5"
-         Tab(1).Control(2)=   "Frame6"
+         Tab(1).Control(2)=   "Frame2"
          Tab(1).ControlCount=   3
          TabCaption(2)   =   "Race/Class/Negate"
          TabPicture(2)   =   "frmItem.frx":0C27
          Tab(2).ControlEnabled=   0   'False
-         Tab(2).Control(0)=   "Frame3"
+         Tab(2).Control(0)=   "Frame1"
          Tab(2).Control(1)=   "Frame4"
-         Tab(2).Control(2)=   "Frame1"
+         Tab(2).Control(2)=   "Frame3"
          Tab(2).ControlCount=   3
          TabCaption(3)   =   "Abilities p1"
          TabPicture(3)   =   "frmItem.frx":0C43
          Tab(3).ControlEnabled=   0   'False
-         Tab(3).Control(0)=   "Label8"
+         Tab(3).Control(0)=   "cmdAbilsClear(0)"
          Tab(3).Control(1)=   "frmAbilities(0)"
-         Tab(3).Control(2)=   "cmdAbilsClear(0)"
+         Tab(3).Control(2)=   "Label8"
          Tab(3).ControlCount=   3
          TabCaption(4)   =   "Abilities p2"
          TabPicture(4)   =   "frmItem.frx":0C5F
          Tab(4).ControlEnabled=   0   'False
-         Tab(4).Control(0)=   "cmdAbilsClear(1)"
+         Tab(4).Control(0)=   "Label9"
          Tab(4).Control(1)=   "frmAbilities(1)"
-         Tab(4).Control(2)=   "Label9"
+         Tab(4).Control(2)=   "cmdAbilsClear(1)"
          Tab(4).ControlCount=   3
          Begin VB.CommandButton cmdAbilsClear 
             Caption         =   "Clear"
@@ -3263,7 +3263,7 @@ For j = 0 To 9
     Call ExpandCombo(cmbFilter(j), HeightOnly, TripleWidth, fraFilter2.hwnd)
 Next j
 
-For j = 5 To 9
+For j = 5 To 8
     cmbFilterAbilityGL(j).ListIndex = 0
 Next j
 
