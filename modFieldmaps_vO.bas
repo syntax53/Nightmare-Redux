@@ -160,55 +160,52 @@ Public Monsterdatabuf As MonsterDatabufType
 Public MonsterPosBlock As MonsterPosBlockType
 Public MonsterKeyBuffer As String * 255
 Public Type MonsterRecType
-    Number          As Long      '4
+    Number          As Long         '4
     EmptySpace      As String * 50  '54
     Name            As String * 29  '83
     nothing1        As Byte         '84
     Group           As Integer      '86
     nothingXX1      As Integer      '88
     ExpMulti        As Long         '92
-    'nothingXX2      As Integer
-    Index           As Integer
-    nothingXX3      As Integer
-    Something2      As Long
-    WeaponNumber    As Long         '105
-    DR              As Integer
-    AC              As Integer
-    Something3      As Integer
-    Follow          As Integer
-    MR              As Integer
+    Index           As Integer      '94
+    nothingXX3      As Integer      '96
+    Something2      As Long         '100
+    WeaponNumber    As Long         '104
+    DR              As Integer      '106
+    AC              As Integer      '108
+    Something3      As Integer      '110
+    Follow          As Integer      '112
+    MR              As Integer      '114
     BSDefence       As Integer      '116
-    Experience      As Long
-    'nothingXX4      As Integer
-    Hitpoints       As Integer
-    Energy          As Integer
+    Experience      As Long         '120
+    Hitpoints       As Integer      '122
+    Energy          As Integer      '124
     HPRegen         As Integer      '126
     AbilityA(9)     As Integer      '146
     AbilityB(9)     As Integer      '166
-    GameLimit       As Integer
-    Active          As Integer
-    Type            As Integer
+    GameLimit       As Integer      '168
+    Active          As Integer      '170
+    Type            As Integer      '172
     nothing2        As Byte         '173
-    Undead          As Byte
-    Alignment       As Integer
-    nothing3        As Integer
-    RegenTime       As Integer
-    DateKilled      As Integer
-    TimeKilled      As Integer
-    'Nothing6        As Integer      '186
-    MoveMsg         As Long
-    DeathMsg        As Long         '194
-    ItemNumber(9)   As Long         '234
-    ItemUses(9)     As Integer      '254
-    ItemDropPer(9)  As Byte         '264
-    nothing9        As Integer
-    Runic           As Long
-    Platinum        As Long
-    Gold            As Long
-    Silver          As Long
-    Copper          As Long
+    Undead          As Byte         '174
+    Alignment       As Integer      '176
+    nothing3        As Integer      '178
+    RegenTime       As Integer      '180
+    DateKilled      As Integer      '182
+    TimeKilled      As Integer      '184
+    MoveMsg         As Long         '188
+    DeathMsg        As Long         '192
+    ItemNumber(9)   As Long         '232
+    ItemUses(9)     As Integer      '252
+    ItemDropPer(9)  As Byte         '262
+    nothing9        As Integer      '264
+    Runic           As Long         '268
+    Platinum        As Long         '272
+    Gold            As Long         '276
+    Silver          As Long         '278
+    Copper          As Long         '282
     GreetTxt        As Long         '286
-    CharmLvL        As Integer
+    CharmLvL        As Integer      '288
     Nothing16       As Integer      '290
     DescTxt         As Long         '294
     AttackType(4)   As Byte         '299
@@ -216,42 +213,41 @@ Public Type MonsterRecType
     AttackAccuSpell(4) As Integer   '310
     AttackPer(4)    As Byte         '315
     Nothing17           As Byte     '316
-    AttackMinHCastPer(4) As Integer
-    AttackMaxHCastLvl(4) As Integer '326
-    Nothing18           As Integer  '328
-    AttackHitMsg(4)       As Long
-    AttackDodgeMsg(4)     As Long
-    AttackMissMsg(4)      As Long   '388
-    AttackEnergy(4)       As Integer    '398
-    Nothing19           As Integer  '400
-    TalkTxt             As Long     '404
-    CharmRes            As Integer
+    AttackMinHCastPer(4) As Integer '326
+    AttackMaxHCastLvl(4) As Integer '336
+    Nothing18           As Integer  '338
+    AttackHitMsg(4)       As Long   '358
+    AttackDodgeMsg(4)     As Long   '378
+    AttackMissMsg(4)      As Long   '398
+    AttackEnergy(4)       As Integer '408
+    Nothing19           As Integer  '410
+    TalkTxt             As Long     '414
+    CharmRes            As Integer  '416
     Nothing21           As Integer  '408
-    AttackHitSpell(4)     As Integer    '418
-    DeathSpellNumber    As Integer
-    Nothing23           As Integer
-    Nothing24           As Integer
-    Nothing25           As Integer
-    Nothing26           As Integer
-    Nothing27           As Integer
-    Nothing28           As Integer
-    Nothing29           As Integer
+    AttackHitSpell(4)     As Integer '418
+    DeathSpellNumber    As Integer  '420
+    Nothing23           As Integer  '422
+    Nothing24           As Integer  '424
+    Nothing25           As Integer  '426
+    Nothing26           As Integer  '428
+    Nothing27           As Integer  '430
+    Nothing28           As Integer  '432
+    Nothing29           As Integer  '424
     CreateSpellNumber   As Integer  '436
-    SpellNumber(4)        As Integer    '446
-    SpellCastPer(4)       As Byte
+    SpellNumber(4)        As Integer '446
+    SpellCastPer(4)       As Byte   '451
     SpellCastLvl(4)       As Byte   '456
-    DescLine1       As String * 70
-    nothing10       As Byte
-    DescLine2       As String * 70
-    Nothing11       As Byte
-    DescLine3       As String * 70
-    Nothing12       As Byte
-    DescLine4       As String * 70
-    Nothing13       As Byte
-    Gender          As Byte
-    Nothing14       As Byte
-    Nothing15       As Integer  'section total: buf 300, 300+454=744 .. fields 184
-          
+    DescLine1       As String * 70  '526
+    nothing10       As Byte         '527
+    DescLine2       As String * 70  '597
+    Nothing11       As Byte         '598
+    DescLine3       As String * 70  '668
+    Nothing12       As Byte         '669
+    DescLine4       As String * 70  '739
+    Nothing13       As Byte         '740
+    Gender          As Byte         '741
+    Nothing14       As Byte         '742
+    Nothing15       As Integer      '744 section total: buf 300, 300+454=744 .. fields 184
 End Type
 Const MonsterDataBufSize = 756
 Public MonsterFldMap(0 To 184) As FieldMap
@@ -574,14 +570,14 @@ Public Type UserRecType
     'Stat(10) As Integer                     '172 AGI CUR
     'Stat(11) As Integer                     '174 CHA CUR
     Stat(11) As Integer                     '174 (12 elements × 2 bytes each = 24 bytes)
-    MaxHP As Integer                        '176
-    CurrentHP As Integer                    '178
+    MaxHP As Integer                        '176 - (defaults to 20 (\x14\x00\x00\x00) hardcoded in dll @ data_482cc8)
+    CurrentHP As Integer                    '178 - (defaults to 20 (\x14\x00\x00\x00) hardcoded in dll @ data_482cc8)
     MaxENC As Integer                       '180
     CurrentENC As Integer                   '182
-    Energy(2) As Integer                    '184 -
-    'Energy(1) As Integer                   '186 -
-    'Energy(2) As Integer                   '188 - remaining?
-    unknown1 As Integer                     '190
+    Energy(2) As Integer                    '184 - 0 NEVER USED??? energy start? - hardcoded 1000 (\xe8\x03\x00\x00) from dll @ data_482cd0 in __builtin_memcpy(&data_482cc8, "\x14\x00\x00\x00\xe8\x03\x00\x00\xe8\x03\x00\x00\x7d\x00\x00\x00\x05\x00\x00\x00", 0x14);
+    'Energy(1) As Integer                   '186 - 1 energy per round? - hardcoded 1000 (\xe8\x03\x00\x00) from dll @ data_482cd0 in __builtin_memcpy(&data_482cc8, "\x14\x00\x00\x00\xe8\x03\x00\x00\xe8\x03\x00\x00\x7d\x00\x00\x00\x05\x00\x00\x00", 0x14);
+    'Energy(2) As Integer                   '188 - 2 energy remaining
+    unknown1 As Integer                     '190 - NEVER USED??? hardcoded 125 (\x7d\x00\x00\x00) from dll @ data_482cd4 in __builtin_memcpy(&data_482cc8, "\x14\x00\x00\x00\xe8\x03\x00\x00\xe8\x03\x00\x00\x7d\x00\x00\x00\x05\x00\x00\x00", 0x14);
     SomeSortOfFlag As Integer               '192
     MagicRes As Integer                     '194
     MagicRes2 As Integer                    '196
@@ -658,15 +654,32 @@ Public Type UserRecType
     'SomeUserFlags(7) as Byte               '1788
     bEDITED As Byte                         '1789
     unknown12c As Byte                      '1790
-    unknown12d(18) As Integer               '1792
+    unknown12d(18) As Integer               '1792   'unknown12d(0) and unknown12d(1) -- referenced in dll as userrecord + 0x700
+                                                    'Bit 00 (mask 0x0001): Room Display Detail
+                                                    'Bit 01 (mask 0x0002): PVP Combat Notification/Interruption
+                                                    'Bit 02 (mask 0x0004): I think... 1 == CAN cast between round spell.  0 == already cast between round spell.
+                                                    'Bit 03 (mask 0x0008): Gift Acceptance
+                                                    'Bit 04 (mask 0x0010): Evil Warning/Interruption
+                                                    'Bit 05 (mask 0x0020): Telepath Blocking
+                                                    'Bit 06 (mask 0x0040): set just after "dark cloud"
+                                                    'Bit 07 (mask 0x0080):
+                                                    '
+                                                    'Bit 08 (mask 0x0100): Response Verbosity
+                                                    'Bit 09 (mask 0x0200):
+                                                    'Bit 10 (mask 0x0400): Keep Setting on Death/Reroll
+                                                    'Bit 11 (mask 0x0800): Message Style (Technical vs. Fantasy)
+                                                    'Bit 12 (mask 0x1000):
+                                                    'Bit 13 (mask 0x2000):
+                                                    'Bit 14 (mask 0x3000):
+                                                    'Bit 15 (mask 0x8000): reference to having a character but not paid on the bbs
     'unknown12d(1)                          '1794
     'unknown12d(2)                          '1796
     'unknown12d(3)                          '1798
     'unknown12d(4)                          '1800
     'unknown12d(5)                          '1802 CURRENT ENCUMBRANCE AS A PERCENTAGE - 2025.01.12
-    'unknown12d(6)                          '1804 CUMULATIVE ACCURACY FROM ABILITY 22 (auras and items) - 2025.03.01
-    'unknown12d(7)                          '1806 CUMULATIVE AC FROM Ability 2
-    'unknown12d(8)                          '1808 CUMULATIVE MAX DAMAGE from ability 4
+    'unknown12d(6)                          '1804 TOTAL ACCURACY FROM ability 22 (auras and items) - 2025.03.01
+    'unknown12d(7)                          '1806 TOTAL AC FROM ability 2
+    'unknown12d(8)                          '1808 TOTAL MAX DAMAGE from ability 4
     'unknown12d(9)                          '1810 something referenced here for crits 2025.03.12
     'unknown12d(10)                         '1812
     'unknown12d(11)                         '1814
@@ -675,7 +688,7 @@ Public Type UserRecType
     'unknown12d(14)                         '1820
     'unknown12d(15)                         '1822
     'unknown12d(16)                         '1824
-    'unknown12d(17)                         '1826
+    'unknown12d(17)                         '1826 something related to a transition in evil points at one point?
     'unknown12d(18)                         '1828
     HitPointRolls As Byte                   '1829
     unknown12e As Byte                      '1830
@@ -683,14 +696,14 @@ Public Type UserRecType
     Ability(29) As Integer                  '1910 (30 elements × 2 bytes each = 60 bytes)
     AbilityModifier(29) As Integer          '1970 (30 elements × 2 bytes each = 60 bytes)
     unknown13a As Integer                   '1972
-    unknown13b As Integer                   '1974 'TOTAL CRITS FROM ABILITY 58 - these should all be bytes!
-    unknown13c As Integer                   '1976 'TOTAL DR FROM ABILITY 7
-    unknown13d As Integer                   '1978 'TOTAL FROM AlterDRpercent ABIL 99
-    unknown13e As Integer                   '1980 'TOTAL SPEED ability 87
-    unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ABIL 10 - these should all be bytes!
-    unknown13g As Integer                   '1984
+    unknown13b As Integer                   '1974 'TOTAL CRITS FROM ability 58
+    unknown13c As Integer                   '1976 'TOTAL DR FROM ability 7
+    unknown13d As Integer                   '1978 'TOTAL AlterDRpercent FROM ability 99
+    unknown13e As Integer                   '1980 'TOTAL SPEED FROM ability 87
+    unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ability 10
+    unknown13g As Integer                   '1984 'TOTAL "DefenseModifier" FROM ability 104
     CharLife As Long                        '1988
-    unknown13(8) As Integer                 '1990 (9 elements × 2 bytes each = 18 bytes)
+    unknown13(8) As Integer                 '1990 '_energy_update_character sets unknown13(0) to 0 if ENCUM_PCT > 66
     'unknown13(1) As Integer                '1992 'gets set to a timestamp in ljngame_polling
     'unknown13(2) As Integer                '1994 'SOME BITMASK RELATED TO MOVEMENT IMPEDANCE OR STEALTH?
     'unknown13(3) As Integer                '1996
@@ -698,7 +711,7 @@ Public Type UserRecType
     'unknown13(5) As Integer                '2000
     'unknown13(6) As Integer                '2002
     'unknown13(7) As Integer                '2004
-    'unknown13(8) As Integer                '2006
+    'unknown13(8) As Integer                '2006 'flags/bitmask here 0x20 = class stealth, 0x40 = race stealth, 0x60 = race+class stealth
     Bitmask1 As Byte                        '2007
     Bitmask2 As Byte                        '2008
     TestFlag1 As Byte                       '2009

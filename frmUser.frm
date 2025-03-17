@@ -7410,7 +7410,7 @@ If x > 0 Then
     x = x + 1
     
     If x <= Len(sSearch) Then
-        txtCp.Text = GetNextNumbers(x, sSearch)
+        txtCP.Text = GetNextNumbers(x, sSearch)
     End If
 End If
 
@@ -8253,7 +8253,7 @@ For iMatch = 0 To UBound(tMatches())
         Case "CurrentMana": txtCurrentMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "SpellCasting": txtSpellcasting.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "LivesRemaining": If bImportDeets Then txtLives.Text = Trim(tMatches(iMatch).sSubMatches(1))
-        Case "CPRemaining": txtCp.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CPRemaining": txtCP.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Perception": txtPerception.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Thievery": txtThievery.Text = Trim(tMatches(iMatch).sSubMatches(1))
         Case "Traps": txtTraps.Text = Trim(tMatches(iMatch).sSubMatches(1))
@@ -8907,7 +8907,7 @@ txtMaxMana.Text = Userrec.MaxMana
 txtCurrentMana.Text = Userrec.CurrentMana
 txtSpellcasting.Text = Userrec.SpellCasting
 txtLives.Text = Userrec.LivesRemaining
-txtCp.Text = Userrec.CPRemaining
+txtCP.Text = Userrec.CPRemaining
 txtPerception.Text = Userrec.Perception
 txtStealth.Text = Userrec.Stealth
 txtThievery.Text = Userrec.Thievery
@@ -8982,7 +8982,7 @@ If optUserUnknowns(0).Value = True Then
     x = 17: lblUserUnknowns(x).Caption = "A99-DR%": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13d)
     x = 18: lblUserUnknowns(x).Caption = "A87-Speed": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13e)
     x = 19: lblUserUnknowns(x).Caption = "A10-ACBlur": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13f)
-    x = 20: lblUserUnknowns(x).Caption = "unkwn13g": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13g)
+    x = 20: lblUserUnknowns(x).Caption = "A104-Dfnse": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13g)
     x = 21: lblUserUnknowns(x).Caption = "unkwn14": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown14)
     x = 22: lblUserUnknowns(x).Caption = "nothn2": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing2)
     x = 23: lblUserUnknowns(x).Caption = "nothn3": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing3)
@@ -9020,6 +9020,7 @@ ElseIf optUserUnknowns(1).Value = True Then 'set2
     For x = 0 To 8
         lblUserUnknowns(counter).Caption = "unkwn13(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown13(x))
         If x = 2 Then lblUserUnknowns(counter).Caption = "movemnt?"
+        If x = 8 Then lblUserUnknowns(counter).Caption = "StealthFlgs"
         counter = counter + 1
     Next x
     For x = 0 To 3
@@ -9108,7 +9109,7 @@ Call SelectAll(txtCopper)
 End Sub
 
 Private Sub txtCP_GotFocus()
-Call SelectAll(txtCp)
+Call SelectAll(txtCP)
 
 End Sub
 
@@ -9640,7 +9641,7 @@ Userrec.MaxMana = Val(txtMaxMana.Text)
 Userrec.CurrentMana = Val(txtCurrentMana.Text)
 Userrec.SpellCasting = Val(txtSpellcasting.Text)
 Userrec.LivesRemaining = Val(txtLives.Text)
-Userrec.CPRemaining = Val(txtCp.Text)
+Userrec.CPRemaining = Val(txtCP.Text)
 Userrec.Perception = Val(txtPerception.Text)
 Userrec.Stealth = Val(txtStealth.Text)
 Userrec.Thievery = Val(txtThievery.Text)
