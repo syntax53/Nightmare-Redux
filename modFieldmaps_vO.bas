@@ -100,49 +100,48 @@ Public Spelldatabuf As SpellDatabufType
 Public SpellPosBlock As SpellPosBlockType
 Public SpellKeyBuffer As String * 255
 Public Type SpellRecType
-    Number As Integer
-    Name As String * 29
-    AfterName  As Byte
-    DescA As String * 50
-    AfterDescA As Byte
-    DescB As String * 50
-    AfterDescB As Byte
-    N01 As Integer
-    CastMsgA As Long
-    N02(10) As Integer
-    LevelCap As Byte
-    N03 As Byte
-    MsgStyle As Byte
-    N04(2) As Byte
-    AbilityB(9) As Integer
-    Energy As Integer
-    Level As Integer
-    Min As Integer
-    Max As Integer
-    SpellType As Integer
-    TypeOfResists As Integer
-    Difficulty As Integer
-    UNDEFINED01 As Integer
-    Target As Integer
-    duration As Integer
-    TypeOfAttack As Integer
-    UNDEFINED02 As Integer
-    ResistAbility As Integer
-    MageryA As Integer
-    AbilityA(9) As Integer
-    CastMsgB As Long
-    'N05 As Integer
-    Mana As Integer
-    MaxIncrease As Byte
-    LVLSMaxIncr As Byte
-    MageryB As Integer
-    MinIncrease As Byte 'u3
-    LVLSMinIncr As Byte 'u4
-    DurIncrease As Byte 'u5
-    LVLSDurIncr As Byte 'u6
-    ShortName As String * 5
-    AfterShortName As Byte
-    N06 As Long
+    Number As Integer           '2
+    Name As String * 29         '31
+    AfterName  As Byte          '32
+    DescA As String * 50        '82
+    AfterDescA As Byte          '83
+    DescB As String * 50        '133
+    AfterDescB As Byte          '134
+    N01 As Integer              '136
+    CastMsgA As Long            '140
+    N02(10) As Integer          '162
+    LevelCap As Byte            '163
+    N03 As Byte                 '164
+    MsgStyle As Byte            '165
+    N04(2) As Byte              '168
+    AbilityB(9) As Integer      '188
+    Energy As Integer           '190
+    Level As Integer            '192
+    Min As Integer              '194
+    Max As Integer              '196
+    SpellType As Integer        '198
+    TypeOfResists As Integer    '200
+    Difficulty As Integer       '202
+    UNDEFINED01 As Integer      '204
+    Target As Integer           '206
+    duration As Integer         '208
+    TypeOfAttack As Integer     '210
+    UNDEFINED02 As Integer      '212
+    ResistAbility As Integer    '214
+    MageryA As Integer          '216
+    AbilityA(9) As Integer      '236
+    CastMsgB As Long            '240
+    Mana As Integer             '242
+    MaxIncrease As Byte         '243
+    LVLSMaxIncr As Byte         '244
+    MageryB As Integer          '246
+    MinIncrease As Byte         '247 u3
+    LVLSMinIncr As Byte         '248 u4
+    DurIncrease As Byte         '249 u5
+    LVLSDurIncr As Byte         '250 u6
+    ShortName As String * 5     '255
+    AfterShortName As Byte      '256
+    N06 As Long                 '260
 End Type
 Const SpellDataBufSize = 260
 Public SpellFldMap(0 To 74) As FieldMap
