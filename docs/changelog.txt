@@ -6,14 +6,15 @@ v1.8.3 ()
 -UP: added display of all of the unknown users values on a tab
 -UP: Added monster game limit, script values, lair exp fields for MME export
 -UP: completely reworked script/lair value calculations to be more based on the lair composition of all monsters that regen in the lair.  lair table now created during mme export with lair information (avg damage, exp, max regen, etc) to be used in MME.  monsters and lairs have pre-calculated script values.
--UP: sped up some of the slow progressbars
+-NOTE: script value will likely be phased out in a future MME version
+-UP: sped up some of the slow progress bars
 -UP: fixed some positioning of elements bleeding off the edges of the windows on most of the editors
--UP: update to the previous save list in settings so that it doesn't create duplicates
+-UP: list of recent database locations in settings should no longer create duplicates
 -UP: update attack sim to allow for true dodge value (as computed in MME v1.9.2) or megamud's value
 -UP: added the average hit for each attack to the monster attack simulator
 -UP: room 12/2381 platform of stars removed from exclusion list on mme export
--UP: utilizing the "reset user interactable" fields on database record room exports will no longer remove hidden sign items.
 -UP: added display of some unknown room values to the other tab
+-FIX: utilizing the "reset user intractable" fields on database record room exports will no longer remove hidden sign items.
 
 v1.8.2 (12/30/2021)
 ------------------------------------------  
@@ -31,7 +32,7 @@ v1.8.1 (5/20/2016)
 -UP: increased length of monster summon field on MME export (more accurate LAIR 
 counts in new MME)  
 -UP: adjustments to monster attack sim for accuracy  
--FIX: area attack durations spells being ignored by monster attack sim  
+-FIX: area attack duration spells being ignored by monster attack sim  
 
 
 v1.8 (05/09/2016)  

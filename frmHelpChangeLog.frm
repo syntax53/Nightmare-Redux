@@ -11,13 +11,6 @@ Begin VB.Form frmHelpChangeLog
    MDIChild        =   -1  'True
    ScaleHeight     =   6420
    ScaleWidth      =   9360
-   Begin VB.ListBox List1 
-      Height          =   255
-      Left            =   1800
-      TabIndex        =   1
-      Top             =   1800
-      Width           =   135
-   End
    Begin VB.TextBox Text1 
       BeginProperty Font 
          Name            =   "Courier New"
