@@ -33,6 +33,8 @@ Public Const FLAGS = SWP_NOMOVE Or SWP_NOSIZE
 Public Const HWND_TOPMOST = -1
 Public Const HWND_NOTOPMOST = -2
 
+Public Const GWL_HWNDPARENT = -8
+
 Private Const CB_SETDROPPEDWIDTH = &H160
 Private Const CB_GETDROPPEDWIDTH = &H15F
 Private Const DT_CALCRECT = &H400
@@ -205,6 +207,7 @@ Public Declare Function SendMessageLong Lib "user32" Alias _
 Private Declare Function CreateRectRgn Lib "gdi32" (ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal y2 As Long) As Long
 Private Declare Function CombineRgn Lib "gdi32" (ByVal hDestRgn As Long, ByVal hSrcRgn1 As Long, ByVal hSrcRgn2 As Long, ByVal nCombineMode As Long) As Long
 Private Declare Function SetWindowRgn Lib "user32" (ByVal hwnd As Long, ByVal hRgn As Long, ByVal bRedraw As Long) As Long
+Public Declare Function SetWindowLong Lib "user32.dll" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
 Public Declare Function WinHelpString Lib "user32" Alias "WinHelpA" (ByVal hwnd As Long, ByVal lpHelpFile As String, ByVal wCommand As enm_wCommand, ByVal strData As String) As Long
 Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
 Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long

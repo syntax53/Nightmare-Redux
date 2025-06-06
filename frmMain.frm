@@ -510,6 +510,8 @@ On Error GoTo error:
 Dim nTmp As Integer
 Dim fso As FileSystemObject
 
+Call SetWindowLong(Me.hwnd, GWL_HWNDPARENT, 0)
+
 sAppVersion = "v" & App.Major & "." & App.Minor _
     & IIf(App.Revision > 0, "." & App.Revision, "") _
     & IIf(WorksWithN = True, "n", "")
