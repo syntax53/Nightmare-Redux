@@ -4,7 +4,7 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmMonsterAttackSim 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Monster Attack Simulator"
-   ClientHeight    =   7875
+   ClientHeight    =   8235
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   15450
@@ -13,14 +13,14 @@ Begin VB.Form frmMonsterAttackSim
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   7875
+   ScaleHeight     =   8235
    ScaleWidth      =   15450
    Begin VB.CheckBox chkCombatMaxRoundOnly 
       Caption         =   "Show combat log only for max round seen."
       Height          =   195
       Left            =   11160
       TabIndex        =   224
-      Top             =   6180
+      Top             =   6540
       Width           =   3435
    End
    Begin VB.CheckBox chkDynamicRounds 
@@ -39,7 +39,7 @@ Begin VB.Form frmMonsterAttackSim
       Left            =   13500
       TabIndex        =   221
       ToolTipText     =   "This will run the sim in 1,000 round increments untl the change in result is < 0.001%"
-      Top             =   6600
+      Top             =   6900
       Value           =   1  'Checked
       Width           =   1335
    End
@@ -4158,11 +4158,28 @@ Begin VB.Form frmMonsterAttackSim
    End
    Begin VB.Frame fraResults 
       Caption         =   "Results"
-      Height          =   1575
+      Height          =   1875
       Left            =   10080
       TabIndex        =   216
       Top             =   4500
       Width           =   5295
+      Begin VB.Label lblResultsAttBreakdown 
+         Alignment       =   2  'Center
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   120
+         TabIndex        =   241
+         Top             =   780
+         Width           =   5055
+      End
       Begin VB.Label lblResultsMaxRound 
          Alignment       =   2  'Center
          BeginProperty Font 
@@ -4175,10 +4192,10 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   180
+         Left            =   120
          TabIndex        =   218
-         Top             =   960
-         Width           =   4875
+         Top             =   1320
+         Width           =   5055
       End
       Begin VB.Label lblResultsAvgDmg 
          Alignment       =   2  'Center
@@ -4192,10 +4209,10 @@ Begin VB.Form frmMonsterAttackSim
             Strikethrough   =   0   'False
          EndProperty
          Height          =   435
-         Left            =   180
+         Left            =   120
          TabIndex        =   217
-         Top             =   300
-         Width           =   4875
+         Top             =   240
+         Width           =   5055
       End
    End
    Begin VB.CommandButton cmdSim 
@@ -4213,7 +4230,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   495
       Left            =   10260
       TabIndex        =   222
-      Top             =   7020
+      Top             =   7320
       Width           =   4875
    End
    Begin VB.Frame fraChar 
@@ -4493,7 +4510,7 @@ Begin VB.Form frmMonsterAttackSim
       Left            =   12240
       TabIndex        =   220
       Text            =   "2000"
-      Top             =   6540
+      Top             =   6840
       Width           =   915
    End
    Begin VB.TextBox txtMonsterEnergy 
@@ -4533,7 +4550,7 @@ Begin VB.Form frmMonsterAttackSim
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   3915
+      Height          =   4275
       Left            =   60
       Locked          =   -1  'True
       MultiLine       =   -1  'True
@@ -4565,7 +4582,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   255
       Left            =   60
       TabIndex        =   223
-      Top             =   7560
+      Top             =   7920
       Width           =   15315
       _ExtentX        =   27014
       _ExtentY        =   450
@@ -4588,7 +4605,7 @@ Begin VB.Form frmMonsterAttackSim
       Height          =   195
       Left            =   10440
       TabIndex        =   219
-      Top             =   6600
+      Top             =   6900
       Width           =   1605
       WordWrap        =   -1  'True
    End
@@ -5047,6 +5064,7 @@ On Error GoTo error:
 
 lblResultsAvgDmg.Caption = ""
 lblResultsMaxRound.Caption = ""
+lblResultsAttBreakdown.Caption = ""
 If Val(txtMonsterEnergy.Text) < 0 Or Val(txtMonsterEnergy.Text) > 9999 Then txtMonsterEnergy.Text = 1000
 If Val(txtNumRounds.Text) < 0 Or Val(txtNumRounds.Text) > 500000 Then txtNumRounds.Text = 500000
 
@@ -5182,8 +5200,8 @@ txtCombatLog.Text = clsMonAtkSim.sCombatLog
 
 If clsMonAtkSim.nTotalAttacks > 0 And clsMonAtkSim.nNumberOfRounds > 0 Then
     lblResultsAvgDmg.Caption = "AVG Dmg/Rnd: " & Round(clsMonAtkSim.nTotalDamage / clsMonAtkSim.nNumberOfRounds, 1)
-    'lblResultsMaxRound.Caption = "Max/Seen: " & clsMonAtkSim.GetMaxDamage & "/" & clsMonAtkSim.nMaxRoundDamage
-    lblResultsMaxRound.Caption = "Phys/Mag: " & clsMonAtkSim.nAverageDamagePhys & "/" & clsMonAtkSim.nAverageDamageSpell
+    lblResultsMaxRound.Caption = "Max/Seen: " & clsMonAtkSim.GetMaxDamage & "/" & clsMonAtkSim.nMaxRoundDamage
+    lblResultsAttBreakdown.Caption = "Physical/Spell: " & Round(clsMonAtkSim.nAverageDamagePhys) & "/" & Round(clsMonAtkSim.nAverageDamageSpell)
     
     For x = 0 To 4
         If clsMonAtkSim.nAtkType(x) > 0 Then
