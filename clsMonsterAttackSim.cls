@@ -62,6 +62,7 @@ Private m_nAverageDamageSpell As Currency
 Private m_nMaxEnergyPerRound As Long
 Private m_bHideEnergyInfo As Boolean
 
+Private m_bGreaterMUD As Boolean
 Private m_bDynamicCalc As Boolean
 Private m_nDynamicCalcDifference As Currency
 Private m_bUseCPU As Boolean
@@ -131,6 +132,14 @@ End Property
 
 Public Property Get nAverageDamageSpell() As Currency
     nAverageDamageSpell = m_nAverageDamageSpell
+End Property
+
+Public Property Let bGreaterMUD(ByVal vData As Boolean)
+    m_bGreaterMUD = vData
+End Property
+
+Public Property Get bGreaterMUD() As Boolean
+    bGreaterMUD = m_bGreaterMUD
 End Property
 
 Public Property Let nDynamicCalcDifference(ByVal vData As Currency)
@@ -405,6 +414,7 @@ Resume out:
 End Function
 
 Public Sub RunSim()
+On Error GoTo error:
 Dim nRound As Long, nAttempt As Integer, nAttack As Integer, x As Integer
 Dim nRemainingEnergy As Long, nEnergyUsed As Integer, bShowHitSpell As Boolean
 Dim nDR_DamageResisted As Currency, nMR_Reduction As Currency
@@ -415,9 +425,6 @@ Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOri
 Dim bSepShown As Boolean, bDurSpellApplied As Boolean, bNothingToSim As Boolean
 Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
 Dim sMaxRoundCombatLog As String, sHitSpellName As String
-Dim nResistRatio As Currency
-
-On Error GoTo error:
 
 Randomize
 If m_bDynamicCalc Then m_nNumberOfRounds = 100000
@@ -582,9 +589,14 @@ For nRound = 1 To m_nNumberOfRounds
                         Else
                             nAttack_AdjSuccessChance = 99
                         End If
-                        'PHYSICAL ATTACKS = 9% MIN HIT CHANCE, 99% MAX
-                        If nAttack_AdjSuccessChance < 9 Then nAttack_AdjSuccessChance = 9
-                        If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
+                        
+                        'PHYSICAL ATTACKS = 9% MIN HIT CHANCE (stock), 99% MAX
+						If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
+                        If m_bGreaterMUD Then
+                            If nAttack_AdjSuccessChance < 2 Then nAttack_AdjSuccessChance = 2 'paramud is 2%
+                        Else
+                            If nAttack_AdjSuccessChance < 9 Then nAttack_AdjSuccessChance = 9
+                        End If
                     End If
                     
                     'this will allow the dodge percentage to match what players see in megamud
@@ -1342,6 +1354,10 @@ End Property
 Public Property Get nStatHitSpell_AtkDmgResisted(ByVal Index As Integer) As Currency
     nStatHitSpell_AtkDmgResisted = m_nStatHitSpell_AtkDmgResisted(Index)
 End Property
+
+'Public Property Let nStatAtkTotalDamage(ByVal Index As Integer, ByVal vData As Currency)
+'    'm_nStatAtkTotalDamage(Index) = vData															
+'End Property
 
 Public Property Get nStatAtkTotalDamage(ByVal Index As Integer) As Currency
     nStatAtkTotalDamage = m_nStatAtkTotalDamage(Index)
