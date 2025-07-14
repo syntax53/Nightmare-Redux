@@ -666,10 +666,11 @@ Private Type LairInfoType
     nMobs As Integer
     nMaxRegen As Integer
     nAvgExp As Currency
+    nAvgDmg As Currency
     nAvgDmgPhys As Currency
     nAvgDmgSpell As Currency
-    nAvgDmgSpellResist As Integer
-    nAvgDmgSpellResistAM As Integer
+'    nAvgDmgSpellResist As Integer
+'    nAvgDmgSpellResistAM As Integer
     nAvgHP As Long
     nAvgAC As Integer
     nAvgDR As Integer
@@ -689,8 +690,8 @@ Private Type MonsterStats
     Exp As Currency
     DamagePhys As Long
     DamageSpell As Long
-    DamageSpellResist As Integer
-    DamageSpellResistAM As Integer
+'    DamageSpellResist As Integer
+'    DamageSpellResistAM As Integer
     HP As Long
     AC As Integer
     DR As Integer
@@ -704,8 +705,8 @@ End Type
 Private Type MonsterSimResults
     nAvgDmgPhys As Currency
     nAvgDmgSpell As Currency
-    nAvgDmgSpellResist As Integer
-    nAvgDmgSpellResistAM As Integer
+'    nAvgDmgSpellResist As Integer
+'    nAvgDmgSpellResistAM As Integer
 End Type
 
 Private Enum MarkType
@@ -749,8 +750,9 @@ GetLairInfo.nMobs = colLairs(x).nMobs
 GetLairInfo.nAvgExp = colLairs(x).nAvgExp
 GetLairInfo.nAvgDmgPhys = colLairs(x).nAvgDmgPhys
 GetLairInfo.nAvgDmgSpell = colLairs(x).nAvgDmgSpell
-GetLairInfo.nAvgDmgSpellResist = colLairs(x).nAvgDmgSpellResist
-GetLairInfo.nAvgDmgSpellResistAM = colLairs(x).nAvgDmgSpellResistAM
+GetLairInfo.nAvgDmg = colLairs(x).nAvgDmgPhys + colLairs(x).nAvgDmgSpell
+'GetLairInfo.nAvgDmgSpellResist = colLairs(x).nAvgDmgSpellResist
+'GetLairInfo.nAvgDmgSpellResistAM = colLairs(x).nAvgDmgSpellResistAM
 GetLairInfo.nAvgHP = colLairs(x).nAvgHP
 GetLairInfo.nAvgAC = colLairs(x).nAvgAC
 GetLairInfo.nAvgDR = colLairs(x).nAvgDR
@@ -781,8 +783,9 @@ colLairs(x).nMobs = tUpdatedLairInfo.nMobs
 colLairs(x).nAvgExp = tUpdatedLairInfo.nAvgExp
 colLairs(x).nAvgDmgPhys = tUpdatedLairInfo.nAvgDmgPhys
 colLairs(x).nAvgDmgSpell = tUpdatedLairInfo.nAvgDmgSpell
-colLairs(x).nAvgDmgSpellResist = tUpdatedLairInfo.nAvgDmgSpellResist
-colLairs(x).nAvgDmgSpellResistAM = tUpdatedLairInfo.nAvgDmgSpellResistAM
+colLairs(x).nAvgDmg = tUpdatedLairInfo.nAvgDmgPhys + tUpdatedLairInfo.nAvgDmgSpell
+'colLairs(x).nAvgDmgSpellResist = tUpdatedLairInfo.nAvgDmgSpellResist
+'colLairs(x).nAvgDmgSpellResistAM = tUpdatedLairInfo.nAvgDmgSpellResistAM
 colLairs(x).nAvgHP = tUpdatedLairInfo.nAvgHP
 colLairs(x).nAvgAC = tUpdatedLairInfo.nAvgAC
 colLairs(x).nAvgDR = tUpdatedLairInfo.nAvgDR
@@ -796,7 +799,7 @@ If colLairs(x).nMaxRegen = 0 Then
 End If
 
 If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
-    If colLairs(x).nAvgHP + colLairs(x).nAvgDmgPhys + colLairs(x).nAvgDmgSpell <= 0 Then
+    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
         colLairs(x).nScriptValue = colLairs(x).nAvgExp * colLairs(x).nMaxRegen * 100
     Else
         colLairs(x).nScriptValue = _
@@ -805,7 +808,7 @@ If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
                         (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
                         ( _
                             (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
-                            ((colLairs(x).nAvgDmgPhys + colLairs(x).nAvgDmgSpell) * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
+                            (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
                         ) _
                     ) _
                     * 100 _
@@ -1943,7 +1946,8 @@ Next x
 
 clsMonAtkSim.RunSim
 
-CalculateMonsterAvgDmg.nAvgDmgPhys = clsMonAtkSim.nAverageDamage
+CalculateMonsterAvgDmg.nAvgDmgPhys = clsMonAtkSim.nAverageDamagePhys
+CalculateMonsterAvgDmg.nAvgDmgSpell = clsMonAtkSim.nAverageDamageSpell
 
 out:
 On Error Resume Next
@@ -2048,8 +2052,8 @@ If chkOnly(0).Value = 1 Then
         tabMonsters.Fields("AvgDmg") = 0 '2025.06.05 retaining for backwards compatibility for now
         tabMonsters.Fields("AvgDmgPhys") = 0
         tabMonsters.Fields("AvgDmgSpell") = 0
-        tabMonsters.Fields("AvgDmgSpellResist") = 0
-        tabMonsters.Fields("AvgDmgSpellResistAM") = 0
+'        tabMonsters.Fields("AvgDmgSpellResist") = 0
+'        tabMonsters.Fields("AvgDmgSpellResistAM") = 0
         tabMonsters.Fields("GreetTXT") = 0
         tabMonsters.Fields("HPRegen") = 0
         tabMonsters.Fields("CharmLvL") = 0
@@ -2665,8 +2669,8 @@ For iLair = 0 To UBound(colLairs())
                 tMonsterStats = MDB_GetMonsterScriptValue(Val(arrMonsters(iMonster)))
                 nLairMobPhysDamage = nLairMobPhysDamage + tMonsterStats.DamagePhys
                 nLairMobMagDamage = nLairMobPhysDamage + tMonsterStats.DamageSpell
-                nLairMobMagDamageResist = nLairMobMagDamageResist + tMonsterStats.DamageSpellResist
-                nLairMobMagDamageResistAM = nLairMobMagDamageResistAM + tMonsterStats.DamageSpellResistAM
+'                nLairMobMagDamageResist = nLairMobMagDamageResist + tMonsterStats.DamageSpellResist
+'                nLairMobMagDamageResistAM = nLairMobMagDamageResistAM + tMonsterStats.DamageSpellResistAM
                 nLairMobHP = nLairMobHP + tMonsterStats.HP
                 nLairMobAC = nLairMobAC + tMonsterStats.AC
                 nLairMobDR = nLairMobDR + tMonsterStats.DR
@@ -2677,8 +2681,9 @@ For iLair = 0 To UBound(colLairs())
         
         colLairs(iLair).nAvgDmgPhys = Round(nLairMobPhysDamage / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgDmgSpell = Round(nLairMobMagDamage / colLairs(iLair).nMobs)
-        colLairs(iLair).nAvgDmgSpellResist = Round(nLairMobMagDamageResist / colLairs(iLair).nMobs)
-        colLairs(iLair).nAvgDmgSpellResistAM = Round(nLairMobMagDamageResistAM / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgDmg = colLairs(iLair).nAvgDmgPhys + colLairs(iLair).nAvgDmgSpell
+'        colLairs(iLair).nAvgDmgSpellResist = Round(nLairMobMagDamageResist / colLairs(iLair).nMobs)
+'        colLairs(iLair).nAvgDmgSpellResistAM = Round(nLairMobMagDamageResistAM / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgHP = Round(nLairMobHP / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgAC = Round(nLairMobAC / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgDR = Round(nLairMobDR / colLairs(iLair).nMobs)
@@ -2815,8 +2820,8 @@ If tabMonsters.NoMatch = False Then
     MDB_GetMonsterScriptValue.Exp = nExp
     MDB_GetMonsterScriptValue.DamagePhys = tabMonsters.Fields("AvgDmgPhys")
     MDB_GetMonsterScriptValue.DamageSpell = tabMonsters.Fields("AvgDmgSpell")
-    MDB_GetMonsterScriptValue.DamageSpellResist = tabMonsters.Fields("AvgDmgSpellResist")
-    MDB_GetMonsterScriptValue.DamageSpellResistAM = tabMonsters.Fields("AvgDmgSpellResistAM")
+'    MDB_GetMonsterScriptValue.DamageSpellResist = tabMonsters.Fields("AvgDmgSpellResist")
+'    MDB_GetMonsterScriptValue.DamageSpellResistAM = tabMonsters.Fields("AvgDmgSpellResistAM")
     MDB_GetMonsterScriptValue.HP = tabMonsters.Fields("HP")
     MDB_GetMonsterScriptValue.Regen = tabMonsters.Fields("RegenTime")
     MDB_GetMonsterScriptValue.GameLimit = tabMonsters.Fields("GameLimit")
@@ -4622,8 +4627,9 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
             tabLairs.Fields("AvgDmgPhys") = colLairs(iLair).nAvgDmgPhys
             tabLairs.Fields("AvgDmgSpell") = colLairs(iLair).nAvgDmgSpell
-            tabLairs.Fields("AvgDmgSpellResist") = colLairs(iLair).nAvgDmgSpellResist
-            tabLairs.Fields("AvgDmgSpellResistAM") = colLairs(iLair).nAvgDmgSpellResistAM
+            tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmgPhys + colLairs(iLair).nAvgDmgSpell
+'            tabLairs.Fields("AvgDmgSpellResist") = colLairs(iLair).nAvgDmgSpellResist
+'            tabLairs.Fields("AvgDmgSpellResistAM") = colLairs(iLair).nAvgDmgSpellResistAM
             tabLairs.Fields("AvgHP") = colLairs(iLair).nAvgHP
             tabLairs.Fields("AvgAC") = colLairs(iLair).nAvgAC
             tabLairs.Fields("AvgDR") = colLairs(iLair).nAvgDR
@@ -5106,8 +5112,8 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("AvgDmg") = tMSR.nAvgDmgPhys + tMSR.nAvgDmgSpell
     tabMonsters.Fields("AvgDmgPhys") = tMSR.nAvgDmgPhys
     tabMonsters.Fields("AvgDmgSpell") = tMSR.nAvgDmgSpell
-    tabMonsters.Fields("AvgDmgSpellResist") = tMSR.nAvgDmgSpellResist
-    tabMonsters.Fields("AvgDmgSpellResistAM") = tMSR.nAvgDmgSpellResistAM
+'    tabMonsters.Fields("AvgDmgSpellResist") = tMSR.nAvgDmgSpellResist
+'    tabMonsters.Fields("AvgDmgSpellResistAM") = tMSR.nAvgDmgSpellResistAM
     tabMonsters.Fields("GreetTXT") = Monsterrec.GreetTxt
     tabMonsters.Fields("HPRegen") = Monsterrec.HPRegen
     tabMonsters.Fields("CharmLvL") = Monsterrec.CharmLvL
@@ -5770,10 +5776,11 @@ With tabNewLairs
     .Columns.Append "Mobs", adInteger
     '.Columns.Append "MaxRegen", adInteger
     .Columns.Append "AvgExp", adDouble
+    .Columns.Append "AvgDmg", adDouble
     .Columns.Append "AvgDmgPhys", adDouble
     .Columns.Append "AvgDmgSpell", adDouble
-    .Columns.Append "AvgDmgSpellResist", adInteger
-    .Columns.Append "AvgDmgSpellResistAM", adInteger
+'    .Columns.Append "AvgDmgSpellResist", adInteger
+'    .Columns.Append "AvgDmgSpellResistAM", adInteger
     .Columns.Append "AvgHP", adDouble
     .Columns.Append "AvgAC", adInteger
     .Columns.Append "AvgDR", adInteger
@@ -5891,8 +5898,8 @@ With tabNewMonsters
     .Columns.Append "AvgDmg", adDouble
     .Columns.Append "AvgDmgPhys", adDouble
     .Columns.Append "AvgDmgSpell", adDouble
-    .Columns.Append "AvgDmgSpellResist", adDouble
-    .Columns.Append "AvgDmgSpellResistAM", adDouble
+'    .Columns.Append "AvgDmgSpellResist", adDouble
+'    .Columns.Append "AvgDmgSpellResistAM", adDouble
     .Columns.Append "GreetTXT", adInteger
     .Columns.Append "HPRegen", adInteger
     .Columns.Append "CharmLVL", adInteger
