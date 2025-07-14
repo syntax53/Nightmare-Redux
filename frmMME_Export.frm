@@ -5104,6 +5104,10 @@ Do While nStatus = 0 And bStopExport = False
     
     tMSR = CalculateMonsterAvgDmg(Monsterrec.Number)
     tabMonsters.Fields("AvgDmg") = tMSR.nAvgDmgPhys + tMSR.nAvgDmgSpell
+    tabMonsters.Fields("AvgDmgPhys") = tMSR.nAvgDmgPhys
+    tabMonsters.Fields("AvgDmgSpell") = tMSR.nAvgDmgSpell
+    tabMonsters.Fields("AvgDmgSpellResist") = tMSR.nAvgDmgSpellResist
+    tabMonsters.Fields("AvgDmgSpellResistAM") = tMSR.nAvgDmgSpellResistAM
     tabMonsters.Fields("GreetTXT") = Monsterrec.GreetTxt
     tabMonsters.Fields("HPRegen") = Monsterrec.HPRegen
     tabMonsters.Fields("CharmLvL") = Monsterrec.CharmLvL
