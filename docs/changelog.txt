@@ -5,6 +5,7 @@ v1.8.3 ()
 -NEW: Revive Character button on user tab to simplify a rescue
 -UP: added display of all of the unknown users values on a tab
 -UP: Added monster game limit, bs defense, and lair exp fields for MME export
+-UP: Added room delay to export and for lair info
 -UP: completely reworked script/lair value calculations to be more based on the lair composition of all monsters that regen in the lair.  lair table now created during mme export with lair information (avg damage, exp, max regen, etc) to be used in MME.  monsters and lairs have pre-calculated script values.
 -NOTE: script value will likely be phased out in a future MME version
 -UP: sped up some of the slow progress bars

@@ -677,6 +677,8 @@ Private Type LairInfoType
     nAvgMR As Integer
     nAvgDodge As Integer
     nScriptValue As Currency
+    nAvgDelay As Integer
+    nTotalLairs As Long
 End Type
 Dim colLairs() As LairInfoType
 
@@ -688,6 +690,7 @@ End Type
 
 Private Type MonsterStats
     Exp As Currency
+    Damage As Long
     DamagePhys As Long
     DamageSpell As Long
 '    DamageSpellResist As Integer
@@ -703,6 +706,7 @@ Private Type MonsterStats
 End Type
 
 Private Type MonsterSimResults
+    nAvgDmgTotal As Currency
     nAvgDmgPhys As Currency
     nAvgDmgSpell As Currency
 '    nAvgDmgSpellResist As Integer
@@ -750,7 +754,7 @@ GetLairInfo.nMobs = colLairs(x).nMobs
 GetLairInfo.nAvgExp = colLairs(x).nAvgExp
 GetLairInfo.nAvgDmgPhys = colLairs(x).nAvgDmgPhys
 GetLairInfo.nAvgDmgSpell = colLairs(x).nAvgDmgSpell
-GetLairInfo.nAvgDmg = colLairs(x).nAvgDmgPhys + colLairs(x).nAvgDmgSpell
+GetLairInfo.nAvgDmg = colLairs(x).nAvgDmg
 'GetLairInfo.nAvgDmgSpellResist = colLairs(x).nAvgDmgSpellResist
 'GetLairInfo.nAvgDmgSpellResistAM = colLairs(x).nAvgDmgSpellResistAM
 GetLairInfo.nAvgHP = colLairs(x).nAvgHP
@@ -759,7 +763,9 @@ GetLairInfo.nAvgDR = colLairs(x).nAvgDR
 GetLairInfo.nAvgMR = colLairs(x).nAvgMR
 GetLairInfo.nAvgDodge = colLairs(x).nAvgDodge
 GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
+GetLairInfo.nAvgDelay = colLairs(x).nAvgDelay
 GetLairInfo.nScriptValue = colLairs(x).nScriptValue
+GetLairInfo.nTotalLairs = colLairs(x).nTotalLairs
 
 out:
 On Error Resume Next
@@ -771,8 +777,8 @@ End Function
 
 Private Sub SetLairInfo(tUpdatedLairInfo As LairInfoType)
 On Error GoTo error:
-Dim x As Long, sArr() As String, i As Integer
 
+Dim x As Long, sArr() As String, i As Integer
 If Len(tUpdatedLairInfo.sGroupIndex) < 5 Then Exit Sub
 x = GetLairInfoIndex(tUpdatedLairInfo.sGroupIndex)
 
@@ -783,7 +789,7 @@ colLairs(x).nMobs = tUpdatedLairInfo.nMobs
 colLairs(x).nAvgExp = tUpdatedLairInfo.nAvgExp
 colLairs(x).nAvgDmgPhys = tUpdatedLairInfo.nAvgDmgPhys
 colLairs(x).nAvgDmgSpell = tUpdatedLairInfo.nAvgDmgSpell
-colLairs(x).nAvgDmg = tUpdatedLairInfo.nAvgDmgPhys + tUpdatedLairInfo.nAvgDmgSpell
+colLairs(x).nAvgDmg = tUpdatedLairInfo.nAvgDmg
 'colLairs(x).nAvgDmgSpellResist = tUpdatedLairInfo.nAvgDmgSpellResist
 'colLairs(x).nAvgDmgSpellResistAM = tUpdatedLairInfo.nAvgDmgSpellResistAM
 colLairs(x).nAvgHP = tUpdatedLairInfo.nAvgHP
@@ -792,6 +798,8 @@ colLairs(x).nAvgDR = tUpdatedLairInfo.nAvgDR
 colLairs(x).nAvgMR = tUpdatedLairInfo.nAvgMR
 colLairs(x).nAvgDodge = tUpdatedLairInfo.nAvgDodge
 colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen 'only used in nmr to calculate an average script value for mobs against their lairs
+colLairs(x).nAvgDelay = tUpdatedLairInfo.nAvgDelay
+colLairs(x).nTotalLairs = tUpdatedLairInfo.nTotalLairs
 
 If colLairs(x).nMaxRegen = 0 Then
     sArr() = Split(colLairs(x).sGroupIndex, "-")
@@ -1945,7 +1953,10 @@ For x = 0 To 4
 Next x
 
 clsMonAtkSim.RunSim
-
+'If nMonster = 53 Then
+'    Debug.Print 53
+'End If
+CalculateMonsterAvgDmg.nAvgDmgTotal = clsMonAtkSim.nAverageDamage
 CalculateMonsterAvgDmg.nAvgDmgPhys = clsMonAtkSim.nAverageDamagePhys
 CalculateMonsterAvgDmg.nAvgDmgSpell = clsMonAtkSim.nAverageDamageSpell
 
@@ -2049,8 +2060,8 @@ If chkOnly(0).Value = 1 Then
         
         tabMonsters.Fields("HP") = 0
         tabMonsters.Fields("Energy") = 0
-        tabMonsters.Fields("AvgDmg") = 0 '2025.06.05 retaining for backwards compatibility for now
-        tabMonsters.Fields("AvgDmgPhys") = 0
+        tabMonsters.Fields("AvgDmg") = 0
+        tabMonsters.Fields("AvgDmgPhys") = 0 '2025.06.05
         tabMonsters.Fields("AvgDmgSpell") = 0
 '        tabMonsters.Fields("AvgDmgSpellResist") = 0
 '        tabMonsters.Fields("AvgDmgSpellResistAM") = 0
@@ -2545,7 +2556,7 @@ Do While nStatus = 0 And bStopExport = False
 '        nIndexExp = 0
         
         sGroupIndex = CStr(Roomrec.MonsterType) & "-" & CStr(Roomrec.MinIndex) & "-" & CStr(Roomrec.MaxIndex)
-        
+
         If Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then 'lair
 '            For x = Roomrec.MinIndex To Roomrec.MaxIndex
 '                For y = 0 To 14
@@ -2563,6 +2574,8 @@ Do While nStatus = 0 And bStopExport = False
                 'this is just to reset the variable by getting blank values and intiating the array element at the same time
                 tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
                 tLairInfo.nMaxRegen = Roomrec.MaxRegen
+                tLairInfo.nAvgDelay = Roomrec.Delay
+                tLairInfo.nTotalLairs = 1
                 
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
                     For y = 0 To 14
@@ -2583,7 +2596,11 @@ Do While nStatus = 0 And bStopExport = False
                     tLairInfo.nAvgExp = Round(tLairInfo.nAvgExp / tLairInfo.nMobs)
                     Call SetLairInfo(tLairInfo)
                 End If
-                
+            Else
+                tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
+                tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + Roomrec.Delay
+                tLairInfo.nTotalLairs = tLairInfo.nTotalLairs + 1
+                Call SetLairInfo(tLairInfo)
             End If
         End If
         
@@ -2644,19 +2661,20 @@ Private Sub CalculateScriptValue()
 On Error GoTo error:
 Dim sRegexLairPattern As String, tMatches() As RegexMatches, sRoomKey As String, sGroupIndex As String
 Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Currency, tLairInfo As LairInfoType
-Dim nLairMobPhysDamage As Currency, nLairMobMagDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
+Dim nLairMobAvgDmg As Currency, nLairMobPhysDamage As Currency, nLairMobMagDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
 Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer, nAvgLairExp As Currency
 Dim iLair As Long, iMonster As Integer, arrMonsters() As String, tMonsterStats As MonsterStats
 Dim nLairMobAC As Long, nLairMobDR As Long, nLairMobMR As Long, nLairMobDodge As Long
-Dim nLairMobMagDamageResist As Integer, nLairMobMagDamageResistAM As Integer
+'Dim nLairMobMagDamageResist As Integer, nLairMobMagDamageResistAM As Integer
 'calculate lair damage and script value now that monsters have had their damage calculated
 For iLair = 0 To UBound(colLairs())
     If colLairs(iLair).nMobs > 0 Then
         
+        nLairMobAvgDmg = 0
         nLairMobPhysDamage = 0
         nLairMobMagDamage = 0
-        nLairMobMagDamageResist = 0
-        nLairMobMagDamageResistAM = 0
+'        nLairMobMagDamageResist = 0
+'        nLairMobMagDamageResistAM = 0
         nLairMobHP = 0
         nLairMobAC = 0
         nLairMobDR = 0
@@ -2667,8 +2685,9 @@ For iLair = 0 To UBound(colLairs())
         For iMonster = 0 To UBound(arrMonsters())
             If Val(arrMonsters(iMonster)) > 0 Then
                 tMonsterStats = MDB_GetMonsterScriptValue(Val(arrMonsters(iMonster)))
+                nLairMobAvgDmg = nLairMobAvgDmg + tMonsterStats.Damage
                 nLairMobPhysDamage = nLairMobPhysDamage + tMonsterStats.DamagePhys
-                nLairMobMagDamage = nLairMobPhysDamage + tMonsterStats.DamageSpell
+                nLairMobMagDamage = nLairMobMagDamage + tMonsterStats.DamageSpell
 '                nLairMobMagDamageResist = nLairMobMagDamageResist + tMonsterStats.DamageSpellResist
 '                nLairMobMagDamageResistAM = nLairMobMagDamageResistAM + tMonsterStats.DamageSpellResistAM
                 nLairMobHP = nLairMobHP + tMonsterStats.HP
@@ -2681,7 +2700,7 @@ For iLair = 0 To UBound(colLairs())
         
         colLairs(iLair).nAvgDmgPhys = Round(nLairMobPhysDamage / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgDmgSpell = Round(nLairMobMagDamage / colLairs(iLair).nMobs)
-        colLairs(iLair).nAvgDmg = colLairs(iLair).nAvgDmgPhys + colLairs(iLair).nAvgDmgSpell
+        colLairs(iLair).nAvgDmg = Round(nLairMobAvgDmg / colLairs(iLair).nMobs)
 '        colLairs(iLair).nAvgDmgSpellResist = Round(nLairMobMagDamageResist / colLairs(iLair).nMobs)
 '        colLairs(iLair).nAvgDmgSpellResistAM = Round(nLairMobMagDamageResistAM / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgHP = Round(nLairMobHP / colLairs(iLair).nMobs)
@@ -2689,6 +2708,10 @@ For iLair = 0 To UBound(colLairs())
         colLairs(iLair).nAvgDR = Round(nLairMobDR / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgMR = Round(nLairMobMR / colLairs(iLair).nMobs)
         colLairs(iLair).nAvgDodge = Round(nLairMobDodge / colLairs(iLair).nMobs)
+        
+        If colLairs(iLair).nTotalLairs > 0 And colLairs(iLair).nAvgDelay > 0 Then
+            colLairs(iLair).nAvgDelay = Round(colLairs(iLair).nAvgDelay / colLairs(iLair).nTotalLairs)
+        End If
         
         Call SetLairInfo(colLairs(iLair))
     End If
@@ -2818,6 +2841,7 @@ If tabMonsters.NoMatch = False Then
          nExp = nExp * tabMonsters.Fields("ExpMulti")
     End If
     MDB_GetMonsterScriptValue.Exp = nExp
+    MDB_GetMonsterScriptValue.Damage = tabMonsters.Fields("AvgDmg")
     MDB_GetMonsterScriptValue.DamagePhys = tabMonsters.Fields("AvgDmgPhys")
     MDB_GetMonsterScriptValue.DamageSpell = tabMonsters.Fields("AvgDmgSpell")
 '    MDB_GetMonsterScriptValue.DamageSpellResist = tabMonsters.Fields("AvgDmgSpellResist")
@@ -4623,11 +4647,12 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Fields("GroupIndex") = sArr(0) & "-" & sArr(1) & "-" & sArr(2) 'colLairs(iLair).sGroupIndex
             tabLairs.Fields("MobList") = colLairs(iLair).sMobList
             tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
+            tabLairs.Fields("AvgDelay") = colLairs(iLair).nAvgDelay
             'tabLairs.Fields("MaxRegen") = colLairs(iLair).nMaxRegen
             tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
             tabLairs.Fields("AvgDmgPhys") = colLairs(iLair).nAvgDmgPhys
             tabLairs.Fields("AvgDmgSpell") = colLairs(iLair).nAvgDmgSpell
-            tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmgPhys + colLairs(iLair).nAvgDmgSpell
+            tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmg
 '            tabLairs.Fields("AvgDmgSpellResist") = colLairs(iLair).nAvgDmgSpellResist
 '            tabLairs.Fields("AvgDmgSpellResistAM") = colLairs(iLair).nAvgDmgSpellResistAM
             tabLairs.Fields("AvgHP") = colLairs(iLair).nAvgHP
@@ -5109,7 +5134,7 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("Energy") = Monsterrec.Energy
     
     tMSR = CalculateMonsterAvgDmg(Monsterrec.Number)
-    tabMonsters.Fields("AvgDmg") = tMSR.nAvgDmgPhys + tMSR.nAvgDmgSpell
+    tabMonsters.Fields("AvgDmg") = tMSR.nAvgDmgTotal
     tabMonsters.Fields("AvgDmgPhys") = tMSR.nAvgDmgPhys
     tabMonsters.Fields("AvgDmgSpell") = tMSR.nAvgDmgSpell
 '    tabMonsters.Fields("AvgDmgSpellResist") = tMSR.nAvgDmgSpellResist
@@ -5252,7 +5277,8 @@ Do While nStatus = 0 And bStopExport = False
         tabRooms.Fields("NPC") = 0
         tabRooms.Fields("CMD") = 0
         tabRooms.Fields("Placed") = Chr(0)
-
+        tabRooms.Fields("Delay") = 0
+        
         For y = 0 To 9
                 Select Case y
                     Case 0: sDir = "N"
@@ -5284,6 +5310,7 @@ Do While nStatus = 0 And bStopExport = False
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("NPC") = Roomrec.PermNPC
     tabRooms.Fields("CMD") = Roomrec.CmdText
+    tabRooms.Fields("Delay") = Roomrec.Delay
     
     sTemp = ""
     For x = 0 To 9
@@ -5744,6 +5771,7 @@ With tabNewRooms
     .Columns.Append "CMD", adInteger
     .Columns.Append "Spell", adInteger
     .Columns.Append "Lair", adVarWChar
+    .Columns.Append "Delay", adInteger
     .Columns.Append "Placed", adVarWChar
     .Columns.Append "N", adVarWChar
     .Columns.Append "S", adVarWChar
@@ -5774,6 +5802,7 @@ With tabNewLairs
     .Columns.Append "GroupIndex", adVarWChar
     .Columns.Append "MobList", adVarWChar
     .Columns.Append "Mobs", adInteger
+    .Columns.Append "AvgDelay", adInteger
     '.Columns.Append "MaxRegen", adInteger
     .Columns.Append "AvgExp", adDouble
     .Columns.Append "AvgDmg", adDouble
