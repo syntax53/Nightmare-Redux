@@ -2574,7 +2574,11 @@ Do While nStatus = 0 And bStopExport = False
                 'this is just to reset the variable by getting blank values and intiating the array element at the same time
                 tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
                 tLairInfo.nMaxRegen = Roomrec.MaxRegen
-                tLairInfo.nAvgDelay = Roomrec.Delay
+                If Roomrec.Delay = 0 Then
+                    tLairInfo.nAvgDelay = 5
+                Else
+                    tLairInfo.nAvgDelay = Roomrec.Delay
+                End If
                 tLairInfo.nTotalLairs = 1
                 
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
@@ -2598,7 +2602,11 @@ Do While nStatus = 0 And bStopExport = False
                 End If
             Else
                 tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
-                tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + Roomrec.Delay
+                If Roomrec.Delay = 0 Then
+                    tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + 5
+                Else
+                    tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + Roomrec.Delay
+                End If
                 tLairInfo.nTotalLairs = tLairInfo.nTotalLairs + 1
                 Call SetLairInfo(tLairInfo)
             End If
@@ -5310,7 +5318,11 @@ Do While nStatus = 0 And bStopExport = False
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("NPC") = Roomrec.PermNPC
     tabRooms.Fields("CMD") = Roomrec.CmdText
-    tabRooms.Fields("Delay") = Roomrec.Delay
+    If Roomrec.Delay = 0 Then
+        tabRooms.Fields("Delay") = 5
+    Else
+        tabRooms.Fields("Delay") = Roomrec.Delay
+    End If
     
     sTemp = ""
     For x = 0 To 9
