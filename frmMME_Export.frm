@@ -618,7 +618,6 @@ Dim tabTempRS As Recordset
 Dim nMonsterPossy() As Currency
 Dim nMonsterSpawnChance() As Currency
 Dim nMonsterAVGLairExp() As Currency
-Dim nAveragePossSpawns As Currency
 Dim nAverageMobsPerLair As Currency
 Dim nTheoreticalAvgMaxLairsPerRegenPeriod As Integer 'max 1-mob lairs you can clear in 3 minutes (average lair regen of 3 minutes divided by average round of 5 seconds = 36 lairs)
 
@@ -664,7 +663,7 @@ Private Type LairInfoType
     sGroupIndex As String
     sMobList As String
     nMobs As Integer
-    nMaxRegen As Integer
+'    nMaxRegen As Integer
     nAvgExp As Currency
     nAvgDmg As Currency
     nAvgDmgPhys As Currency
@@ -679,8 +678,17 @@ Private Type LairInfoType
     nScriptValue As Currency
     nAvgDelay As Integer
     nTotalLairs As Long
+    sLairRoomNumbers As String
+    sNonLairRooms As String
 End Type
 Dim colLairs() As LairInfoType
+
+'Dim dictNONLairInfo As New Dictionary
+'Private Type NONLairInfoType
+'    sGroupIndex As String
+'    sNonLairRooms As String
+'End Type
+'Dim colNONLairs() As NONLairInfoType
 
 Private Type RoomExitType
     Map As Long
@@ -762,10 +770,12 @@ GetLairInfo.nAvgAC = colLairs(x).nAvgAC
 GetLairInfo.nAvgDR = colLairs(x).nAvgDR
 GetLairInfo.nAvgMR = colLairs(x).nAvgMR
 GetLairInfo.nAvgDodge = colLairs(x).nAvgDodge
-GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
+'GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
 GetLairInfo.nAvgDelay = colLairs(x).nAvgDelay
 GetLairInfo.nScriptValue = colLairs(x).nScriptValue
 GetLairInfo.nTotalLairs = colLairs(x).nTotalLairs
+GetLairInfo.sLairRoomNumbers = colLairs(x).sLairRoomNumbers
+GetLairInfo.sNonLairRooms = colLairs(x).sNonLairRooms
 
 out:
 On Error Resume Next
@@ -797,34 +807,36 @@ colLairs(x).nAvgAC = tUpdatedLairInfo.nAvgAC
 colLairs(x).nAvgDR = tUpdatedLairInfo.nAvgDR
 colLairs(x).nAvgMR = tUpdatedLairInfo.nAvgMR
 colLairs(x).nAvgDodge = tUpdatedLairInfo.nAvgDodge
-colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen 'only used in nmr to calculate an average script value for mobs against their lairs
+'colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen 'only used in nmr to calculate an average script value for mobs against their lairs
 colLairs(x).nAvgDelay = tUpdatedLairInfo.nAvgDelay
 colLairs(x).nTotalLairs = tUpdatedLairInfo.nTotalLairs
+colLairs(x).sLairRoomNumbers = tUpdatedLairInfo.sLairRoomNumbers
+colLairs(x).sNonLairRooms = tUpdatedLairInfo.sNonLairRooms
 
-If colLairs(x).nMaxRegen = 0 Then
-    sArr() = Split(colLairs(x).sGroupIndex, "-")
-    colLairs(x).nMaxRegen = Val(sArr(UBound(sArr())))
-End If
-
-If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
-    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
-        colLairs(x).nScriptValue = colLairs(x).nAvgExp * colLairs(x).nMaxRegen * 100
-    Else
-        colLairs(x).nScriptValue = _
-            Round( _
-                    ( _
-                        (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
-                        ( _
-                            (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
-                            (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
-                        ) _
-                    ) _
-                    * 100 _
-                )
-    End If
-Else
-    colLairs(x).nScriptValue = 0
-End If
+'If colLairs(x).nMaxRegen = 0 Then
+'    sArr() = Split(colLairs(x).sGroupIndex, "-")
+'    colLairs(x).nMaxRegen = Val(sArr(UBound(sArr())))
+'End If
+'
+'If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
+'    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
+'        colLairs(x).nScriptValue = colLairs(x).nAvgExp * colLairs(x).nMaxRegen * 100
+'    Else
+'        colLairs(x).nScriptValue = _
+'            Round( _
+'                    ( _
+'                        (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
+'                        ( _
+'                            (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
+'                            (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
+'                        ) _
+'                    ) _
+'                    * 100 _
+'                )
+'    End If
+'Else
+'    colLairs(x).nScriptValue = 0
+'End If
 
 out:
 On Error Resume Next
@@ -1436,6 +1448,7 @@ Set dictLairInfo = Nothing
 Set dictLairInfo = New Dictionary
 dictLairInfo.CompareMode = vbTextCompare
 ReDim colLairs(0)
+'ReDim colNONLairs(0)
 
 nTmp = CreateDatabase
 Select Case nTmp
@@ -2469,7 +2482,7 @@ Private Sub ScanRooms()
 On Error GoTo error:
 Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer ', nIndexExp As Double
 Dim tLairInfo As LairInfoType, nYesNo As Integer ', nMobsInIndex As Integer
-Dim sGroupIndex As String
+Dim sGroupIndex As String ', tNONLairInfo As NONLairInfoType
 
 '-------------------------------
 '       ROOMS
@@ -2552,35 +2565,11 @@ Do While nStatus = 0 And bStopExport = False
     'mark which group and indexs this room includes
     If Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 Then
         
-'        nMobsInIndex = 0
-'        nIndexExp = 0
-        
         sGroupIndex = CStr(Roomrec.MonsterType) & "-" & CStr(Roomrec.MinIndex) & "-" & CStr(Roomrec.MaxIndex)
-
+        tLairInfo = GetLairInfo(sGroupIndex) ' & "-" & CStr(Roomrec.MaxRegen)
+        
         If Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then 'lair
-'            For x = Roomrec.MinIndex To Roomrec.MaxIndex
-'                For y = 0 To 14
-'                    If MGIL(Roomrec.MonsterType, x).nNumber(y) > 0 Then
-'                        If GetMonsterRegen(MGIL(Roomrec.MonsterType, x).nNumber(y)) = 0 Then
-'                            nMobsInIndex = nMobsInIndex + 1
-'                            nIndexExp = nIndexExp + GetMonsterExp(MGIL(Roomrec.MonsterType, x).nNumber(y))
-'                        End If
-'                    End If
-'                Next y
-'            Next x
-            
-            If Not dictLairInfo.Exists(sGroupIndex & "-" & CStr(Roomrec.MaxRegen)) Then
-                
-                'this is just to reset the variable by getting blank values and intiating the array element at the same time
-                tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
-                tLairInfo.nMaxRegen = Roomrec.MaxRegen
-                If Roomrec.Delay = 0 Then
-                    tLairInfo.nAvgDelay = 5
-                Else
-                    tLairInfo.nAvgDelay = Roomrec.Delay
-                End If
-                tLairInfo.nTotalLairs = 1
-                
+            If tLairInfo.nMobs = 0 Then
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
                     For y = 0 To 14
                         If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
@@ -2598,21 +2587,33 @@ Do While nStatus = 0 And bStopExport = False
                 If tLairInfo.nMobs > 0 Then
                     tLairInfo.sMobList = Left(tLairInfo.sMobList, Len(tLairInfo.sMobList) - 1)
                     tLairInfo.nAvgExp = Round(tLairInfo.nAvgExp / tLairInfo.nMobs)
-                    Call SetLairInfo(tLairInfo)
+                    'Call SetLairInfo(tLairInfo)
                 End If
+            End If
+            
+            If Roomrec.Delay = 0 Then
+                tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + 5
             Else
-                tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(Roomrec.MaxRegen))
-                If Roomrec.Delay = 0 Then
-                    tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + 5
-                Else
-                    tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + Roomrec.Delay
-                End If
-                tLairInfo.nTotalLairs = tLairInfo.nTotalLairs + 1
-                Call SetLairInfo(tLairInfo)
+                tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + Roomrec.Delay
+            End If
+            
+            tLairInfo.nTotalLairs = tLairInfo.nTotalLairs + 1
+            
+            If Len(tLairInfo.sLairRoomNumbers) = 0 Then
+                tLairInfo.sLairRoomNumbers = "," & Roomrec.RoomNumber & ","
+            ElseIf InStr(1, tLairInfo.sLairRoomNumbers, "," & Roomrec.RoomNumber & ",", vbTextCompare) = 0 Then
+                tLairInfo.sLairRoomNumbers = tLairInfo.sLairRoomNumbers & Roomrec.RoomNumber & ","
+            End If
+        Else
+            If Len(tLairInfo.sNonLairRooms) = 0 Then
+                tLairInfo.sNonLairRooms = "," & Roomrec.RoomNumber & "." & Roomrec.MapNumber & ","
+            ElseIf InStr(1, tLairInfo.sNonLairRooms, "," & Roomrec.RoomNumber & "." & Roomrec.MapNumber & ",", vbTextCompare) = 0 Then
+                tLairInfo.sNonLairRooms = tLairInfo.sNonLairRooms & Roomrec.RoomNumber & "." & Roomrec.MapNumber & ","
             End If
         End If
         
-        
+        Call SetLairInfo(tLairInfo)
+                
         For x = Roomrec.MinIndex To Roomrec.MaxIndex
             If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
             If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
@@ -2765,10 +2766,10 @@ If Not tabTempRS.EOF Then
                 End Select
                 
                 If nMaxRegen > 0 And Len(sGroupIndex) > 4 Then
-                    tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(nMaxRegen))
+                    tLairInfo = GetLairInfo(sGroupIndex) '& "-" & CStr(nMaxRegen)
                     nAvgLairExp = nAvgLairExp + (tLairInfo.nAvgExp * nMaxRegen)
                     nMobScriptValue = nMobScriptValue + tLairInfo.nScriptValue
-                    nMobsTotal = nMobsTotal + tLairInfo.nMaxRegen
+                    nMobsTotal = nMobsTotal + nMaxRegen 'tLairInfo.nMaxRegen
                 ElseIf nMaxRegen > 0 Then
                     nMobsTotal = nMobsTotal + nMaxRegen
                 End If
@@ -4635,7 +4636,8 @@ End Sub
 
 Private Sub ExportLairs()
 On Error GoTo error:
-Dim iLair As Long, sArr() As String
+Dim iLair As Long, sArr() As String, sGroupIndex As String, nRoomNumberGap As Double
+Dim nNonLairs As Long, nLairsToRooms As Double ', tNONLairInfo As NONLairInfoType
 
 tryagain:
 If tabLairs.RecordCount <> 0 Then
@@ -4648,11 +4650,16 @@ tabLairs.Index = "pkLairs"
 
 For iLair = 0 To UBound(colLairs())
     sArr() = Split(colLairs(iLair).sGroupIndex, "-", , vbTextCompare)
-    If colLairs(iLair).nMobs > 0 And UBound(sArr()) = 3 Then
-        tabLairs.Seek "=", sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+    If colLairs(iLair).nMobs > 0 And UBound(sArr()) = 2 Then
+        nNonLairs = 0
+        nLairsToRooms = 0
+        nRoomNumberGap = 0
+        
+        sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+        tabLairs.Seek "=", sGroupIndex
         If tabLairs.NoMatch = True Then
             tabLairs.AddNew
-            tabLairs.Fields("GroupIndex") = sArr(0) & "-" & sArr(1) & "-" & sArr(2) 'colLairs(iLair).sGroupIndex
+            tabLairs.Fields("GroupIndex") = sGroupIndex
             tabLairs.Fields("MobList") = colLairs(iLair).sMobList
             tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
             tabLairs.Fields("AvgDelay") = colLairs(iLair).nAvgDelay
@@ -4669,6 +4676,34 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
             tabLairs.Fields("AvgDodge") = colLairs(iLair).nAvgDodge
             'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
+'            If tabLairs.Fields("GroupIndex") = "11-10-12" Then
+'                Debug.Print 1
+'            End If
+
+            If Len(colLairs(iLair).sNonLairRooms) > 0 Then
+                colLairs(iLair).sNonLairRooms = Mid(colLairs(iLair).sNonLairRooms, 2, Len(colLairs(iLair).sNonLairRooms) - 2)
+                sArr() = Split(colLairs(iLair).sNonLairRooms, ",")
+                nNonLairs = UBound(sArr) + 1
+            End If
+            
+            If colLairs(iLair).nTotalLairs > 0 And nNonLairs > 0 Then
+                nLairsToRooms = Round(nNonLairs / colLairs(iLair).nTotalLairs, 2)
+                If nLairsToRooms < 1 Then nLairsToRooms = 1 + nLairsToRooms
+            End If
+            
+            If Len(colLairs(iLair).sLairRoomNumbers) > 0 Then
+                colLairs(iLair).sLairRoomNumbers = Mid(colLairs(iLair).sLairRoomNumbers, 2, Len(colLairs(iLair).sLairRoomNumbers) - 2)
+                nRoomNumberGap = CalcAvgGap(colLairs(iLair).sLairRoomNumbers)
+            End If
+            
+            If nLairsToRooms > 0 And nLairsToRooms < nRoomNumberGap Then
+                tabLairs.Fields("AvgWalk") = nLairsToRooms
+            ElseIf nRoomNumberGap > 0 Then
+                tabLairs.Fields("AvgWalk") = nRoomNumberGap
+            Else
+                tabLairs.Fields("AvgWalk") = nLairsToRooms
+            End If
+            
             tabLairs.Update
         End If
     End If
@@ -5582,7 +5617,7 @@ doneaction:
     
     
     sMonsters = ""
-    If Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 And Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then '3=lair
+    If Roomrec.MaxRegen > 0 And Roomrec.Type = 3 And Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 Then   '3=lair
         
         If UBound(MGIL(), 2) < Roomrec.MinIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MinIndex)
         If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex)
@@ -5812,9 +5847,10 @@ DoEvents
 With tabNewLairs
     .Name = "Lairs"
     .Columns.Append "GroupIndex", adVarWChar
+    .Columns.Append "AvgWalk", adDouble
+    .Columns.Append "AvgDelay", adInteger
     .Columns.Append "MobList", adVarWChar
     .Columns.Append "Mobs", adInteger
-    .Columns.Append "AvgDelay", adInteger
     '.Columns.Append "MaxRegen", adInteger
     .Columns.Append "AvgExp", adDouble
     .Columns.Append "AvgDmg", adDouble
@@ -6506,5 +6542,193 @@ Call SelectAll(txtUpdateURL)
 
 End Sub
 
+Public Function CalcAvgGap(ByVal sRooms As String, Optional ByVal bExcludeOutliers As Boolean = True) As Double
+    
+    If Val(sRooms) < 1 Then Exit Function
+    
+    Dim arrRooms() As String
+    arrRooms = Split(sRooms, ",")
+    If UBound(arrRooms) = 0 Then
+        CalcAvgGap = 1
+        Exit Function
+    End If
+    
+    Dim i As Long, n As Long
+    n = UBound(arrRooms) - LBound(arrRooms) + 1
+    
+    ' Convert to numeric array
+    Dim arrNums() As Double
+    ReDim arrNums(0 To n - 1)
+    For i = 0 To n - 1
+        arrNums(i) = CDbl(Trim$(arrRooms(i)))
+    Next i
+    
+    ' Sort the room numbers
+    QuickSort arrNums, 0, n - 1
+    
+    ' Build the gaps array
+    Dim arrGaps() As Double
+    ReDim arrGaps(0 To n - 2)
+    For i = 0 To n - 2
+        arrGaps(i) = arrNums(i + 1) - arrNums(i)
+        If arrGaps(i) < 0 Then arrGaps(i) = 0
+    Next i
+    
+    ' Compute average, with or without outlier exclusion
+    If Not bExcludeOutliers Then
+        CalcAvgGap = Round(AverageOfArray(arrGaps), 2)
+    Else
+        ' Compute median and MAD
+        Dim med As Double, mad As Double, thresh As Double
+        med = GetMedian(arrGaps)
+        mad = GetMedianAbsDev(arrGaps, med)
+        thresh = med + 3 * mad
+        
+        ' Sum only gaps = threshold
+        Dim sum As Double, cnt As Long
+        For i = LBound(arrGaps) To UBound(arrGaps)
+            If arrGaps(i) <= thresh Then
+                sum = sum + arrGaps(i)
+                cnt = cnt + 1
+            End If
+        Next i
+        If cnt > 0 Then
+            CalcAvgGap = Round(sum / cnt, 2)
+        Else
+            CalcAvgGap = 0
+        End If
+    End If
+
+End Function
+
+'–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+' Helpers
+'–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+' Simple average of a 0-based array:
+Private Function AverageOfArray(a() As Double) As Double
+    Dim s As Double, i As Long
+    For i = LBound(a) To UBound(a)
+        s = s + a(i)
+    Next i
+    AverageOfArray = s / (UBound(a) - LBound(a) + 1)
+End Function
+
+' Compute median of a 0-based array (makes a copy and sorts it):
+Private Function GetMedian(vals() As Double) As Double
+    Dim tmp() As Double
+    tmp = vals
+    QuickSort tmp, LBound(tmp), UBound(tmp)
+    
+    Dim cnt As Long
+    cnt = UBound(tmp) - LBound(tmp) + 1
+    
+    If cnt Mod 2 = 1 Then
+        GetMedian = tmp(LBound(tmp) + cnt \ 2)
+    Else
+        GetMedian = ( _
+          tmp(LBound(tmp) + cnt \ 2 - 1) + _
+          tmp(LBound(tmp) + cnt \ 2) _
+        ) / 2
+    End If
+End Function
+
+' Compute median absolute deviation:
+Private Function GetMedianAbsDev(vals() As Double, medianValue As Double) As Double
+    Dim devs() As Double
+    ReDim devs(LBound(vals) To UBound(vals))
+    
+    Dim i As Long
+    For i = LBound(vals) To UBound(vals)
+        devs(i) = Abs(vals(i) - medianValue)
+    Next i
+    
+    GetMedianAbsDev = GetMedian(devs)
+End Function
+
+' In-place QuickSort for a() As Double
+Private Sub QuickSort(a() As Double, ByVal first As Long, ByVal last As Long)
+    Dim i As Long, j As Long
+    Dim pivot As Double, tmp As Double
+    
+    i = first
+    j = last
+    pivot = a((first + last) \ 2)
+    
+    Do While i <= j
+        Do While a(i) < pivot
+            i = i + 1
+        Loop
+        Do While a(j) > pivot
+            j = j - 1
+        Loop
+        If i <= j Then
+            tmp = a(i)
+            a(i) = a(j)
+            a(j) = tmp
+            i = i + 1
+            j = j - 1
+        End If
+    Loop
+    
+    If first < j Then QuickSort a, first, j
+    If i < last Then QuickSort a, i, last
+End Sub
 
 
+'Private Function GetNONLairInfoIndex(sGroupIndex As String) As Long
+'On Error GoTo error:
+'If Len(sGroupIndex) < 1 Then Exit Function
+'
+'If dictNONLairInfo.Exists(sGroupIndex) Then
+'    GetNONLairInfoIndex = Val(dictNONLairInfo.Item(sGroupIndex))
+'Else
+'    GetNONLairInfoIndex = UBound(colNONLairs()) + 1
+'    ReDim Preserve colNONLairs(GetNONLairInfoIndex)
+'    dictNONLairInfo.add sGroupIndex, GetNONLairInfoIndex
+'    colNONLairs(GetNONLairInfoIndex).sGroupIndex = sGroupIndex
+'End If
+'
+'out:
+'On Error Resume Next
+'Exit Function
+'error:
+'Call HandleError("GetNONLairInfoIndex")
+'Resume out:
+'End Function
+'
+'Private Function GetNONLairInfo(sGroupIndex As String) As NONLairInfoType
+'On Error GoTo error:
+'Dim x As Long
+'
+'If Len(sGroupIndex) < 5 Then Exit Function
+'x = GetNONLairInfoIndex(sGroupIndex)
+'
+'GetNONLairInfo.sGroupIndex = colNONLairs(x).sGroupIndex
+'GetNONLairInfo.sNonLairRooms = colNONLairs(x).sNonLairRooms
+'
+'out:
+'On Error Resume Next
+'Exit Function
+'error:
+'Call HandleError("GetNONLairInfo")
+'Resume out:
+'End Function
+'
+'Private Sub SetNONLairInfo(tUpdatedNONLairInfo As NONLairInfoType)
+'On Error GoTo error:
+'
+'Dim x As Long, sArr() As String, i As Integer
+'If Len(tUpdatedNONLairInfo.sGroupIndex) < 5 Then Exit Sub
+'x = GetNONLairInfoIndex(tUpdatedNONLairInfo.sGroupIndex)
+'
+'colNONLairs(x).sGroupIndex = tUpdatedNONLairInfo.sGroupIndex
+'colNONLairs(x).sNonLairRooms = tUpdatedNONLairInfo.sNonLairRooms
+'
+'out:
+'On Error Resume Next
+'Exit Sub
+'error:
+'Call HandleError("SetNONLairInfo")
+'Resume out:
+'End Sub
