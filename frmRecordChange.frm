@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Begin VB.Form frmRecordChange 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Record Number Changer"
@@ -2203,7 +2203,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If tabRooms.Fields("Para1 " & x) > 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (key/item/ticket): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (key/item/ticket): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2213,7 +2213,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If tabRooms.Fields("Para4 " & x) > 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para4 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para4 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (door/gate/remote): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (door/gate/remote): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para4 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2264,7 +2264,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If Not tabRooms.Fields("Para1 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (spell): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (spell): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2273,7 +2273,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If Not tabRooms.Fields("Para4 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para4 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para4 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (spell): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (spell): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para4 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2283,7 +2283,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If Not tabRooms.Fields("Para1 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (cast): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (cast): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2292,7 +2292,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If Not tabRooms.Fields("Para2 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para2 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para2 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (cast): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (cast): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para2 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2302,7 +2302,7 @@ Do Until tabRooms.EOF Or bCancelProcess
                                 If Not tabRooms.Fields("Para1 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (spell trap): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (spell trap): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2330,7 +2330,7 @@ recheck_room:
                             If tabRooms.Fields("Type " & x) <> 8 Then
                                 For y = 0 To UBound(ChangeList(), 2) 'check to see if the number matches any changes
                                     If tabRooms.Fields("Exit " & x) >= ChangeList(1, y) And tabRooms.Fields("Exit " & x) <= ChangeList(2, y) Then
-                                        ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & ": " & tabRooms.Fields("Exit " & x) & " --> " & (ChangeList(3, y) + (tabRooms.Fields("Exit " & x) - ChangeList(1, y)))
+                                        ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & ": " & tabRooms.Fields("Exit " & x) & " --> " & (ChangeList(3, y) + (tabRooms.Fields("Exit " & x) - ChangeList(1, y)))
                                         tabRooms.Fields("Exit " & x) = (ChangeList(3, y) + (tabRooms.Fields("Exit " & x) - ChangeList(1, y)))
                                     End If 'end if exit = change record
                                 Next y 'next change record
@@ -2425,7 +2425,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (action/timed): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (action/timed): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2438,7 +2438,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para2 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para2 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (item/ticket): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (item/ticket): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para2 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2447,7 +2447,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para3 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para3 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (item/ticket): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (item/ticket): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para3 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2459,7 +2459,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (remote): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (remote): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2468,7 +2468,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para3 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para3 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (remote): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (remote): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para3 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2480,7 +2480,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (text): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (text): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2489,7 +2489,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para2 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para2 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (text): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (text): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para2 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2498,7 +2498,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para3 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para3 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (text): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (text): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para3 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2513,7 +2513,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para3 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para3 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (spell/class/race/level): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (spell/class/race/level): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para3 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2528,7 +2528,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para3 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para3 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (hidden/trap/cast/spell): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (hidden/trap/cast/spell): " & tabRooms.Fields("Para3 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para3 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para3 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2537,7 +2537,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para4 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para4 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (hidden/trap/cast/spell): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (hidden/trap/cast/spell): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para4 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2549,7 +2549,7 @@ recheck_room:
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para4 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para4 " & x) <= ChangeList(2, y) Then
                                             ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") _
-                                                & " -- Exit " & GetRoomExits(x, False) & " (ability): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
+                                                & " -- Exit " & GetFriendlyRoomExit(x, False) & " (ability): " & tabRooms.Fields("Para4 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para4 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para4 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2568,7 +2568,7 @@ recheck_room:
                                 If Not tabRooms.Fields("Para1 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (class-ok): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (class-ok): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2577,7 +2577,7 @@ recheck_room:
                                 If Not tabRooms.Fields("Para2 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para2 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para2 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (class-no): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (class-no): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para2 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2594,7 +2594,7 @@ recheck_room:
                                 If Not tabRooms.Fields("Para1 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para1 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para1 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (race-ok): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (race-ok): " & tabRooms.Fields("Para1 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para1 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para1 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y
@@ -2603,7 +2603,7 @@ recheck_room:
                                 If Not tabRooms.Fields("Para2 " & x) = 0 Then
                                     For y = 0 To UBound(ChangeList(), 2)
                                         If tabRooms.Fields("Para2 " & x) >= ChangeList(1, y) And tabRooms.Fields("Para2 " & x) <= ChangeList(2, y) Then
-                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetRoomExits(x, False) & " (race-no): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
+                                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- Exit " & GetFriendlyRoomExit(x, False) & " (race-no): " & tabRooms.Fields("Para2 " & x) & " to " & (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                             tabRooms.Fields("Para2 " & x) = (ChangeList(3, y) + (tabRooms.Fields("Para2 " & x) - ChangeList(1, y)))
                                         End If
                                     Next y

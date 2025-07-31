@@ -28,12 +28,6 @@ Do While x - 1 > 0 'gets where the map number starts
     x = x - 1
 Loop
 
-'For i = 1 To Len(sExit) - 1 'gets where the first number is
-'    Select Case Mid(sExit, i, 1)
-'        Case "1", "2", "3", "4", "5", "6", "7", "8", "9": Exit For
-'    End Select
-'Next
-
 x = InStr(1, sExit, "/")
 If x = 0 Then Exit Function
 If x = Len(sExit) Then Exit Function
@@ -1059,43 +1053,45 @@ Resume out:
 
 End Function
 
-Public Function GetRoomExits(ByVal Number As Integer, Optional LongForm As Boolean) As String
+Public Function GetFriendlyRoomExit(ByVal Number As Integer, Optional LongForm As Boolean) As String
 On Error GoTo error:
 
 If LongForm = False Then
     Select Case Number
-        Case 5: GetRoomExits = "NW"
-        Case 0: GetRoomExits = "N"
-        Case 4: GetRoomExits = "NE"
-        Case 3: GetRoomExits = "W"
-        Case 2: GetRoomExits = "E"
-        Case 7: GetRoomExits = "SW"
-        Case 1: GetRoomExits = "S"
-        Case 6: GetRoomExits = "SE"
-        Case 8: GetRoomExits = "U"
-        Case 9: GetRoomExits = "D"
+        Case 5: GetFriendlyRoomExit = "NW"
+        Case 0: GetFriendlyRoomExit = "N"
+        Case 4: GetFriendlyRoomExit = "NE"
+        Case 3: GetFriendlyRoomExit = "W"
+        Case 2: GetFriendlyRoomExit = "E"
+        Case 7: GetFriendlyRoomExit = "SW"
+        Case 1: GetFriendlyRoomExit = "S"
+        Case 6: GetFriendlyRoomExit = "SE"
+        Case 8: GetFriendlyRoomExit = "U"
+        Case 9: GetFriendlyRoomExit = "D"
     End Select
 Else
     Select Case Number
-        Case 5: GetRoomExits = "northwest"
-        Case 0: GetRoomExits = "north"
-        Case 4: GetRoomExits = "northeast"
-        Case 3: GetRoomExits = "west"
-        Case 2: GetRoomExits = "east"
-        Case 7: GetRoomExits = "southwest"
-        Case 1: GetRoomExits = "south"
-        Case 6: GetRoomExits = "southeast"
-        Case 8: GetRoomExits = "up"
-        Case 9: GetRoomExits = "down"
+        Case 5: GetFriendlyRoomExit = "northwest"
+        Case 0: GetFriendlyRoomExit = "north"
+        Case 4: GetFriendlyRoomExit = "northeast"
+        Case 3: GetFriendlyRoomExit = "west"
+        Case 2: GetFriendlyRoomExit = "east"
+        Case 7: GetFriendlyRoomExit = "southwest"
+        Case 1: GetFriendlyRoomExit = "south"
+        Case 6: GetFriendlyRoomExit = "southeast"
+        Case 8: GetFriendlyRoomExit = "up"
+        Case 9: GetFriendlyRoomExit = "down"
     End Select
 End If
 
 out:
 Exit Function
 error:
-Call HandleError("GetRoomExits")
+Call HandleError("GetFriendlyRoomExit")
 Resume out:
 End Function
+
+
 Public Function GetRoomName(ByVal MapNum As Long, ByVal RoomNum As Long) As String
 Dim nStatus As Integer
 
@@ -1118,6 +1114,56 @@ error:
 Call HandleError("GetRoomName")
 Resume out:
 
+End Function
+
+Public Function GetRoomExits(ByVal MapNum As Long, ByVal RoomNum As Long) As RoomExitType()
+Dim nStatus As Integer, x As Long, arrReturn() As RoomExitType
+On Error GoTo error:
+
+ReDim arrReturn(9)
+GetRoomExits = arrReturn
+
+RoomKeyStruct.MapNum = MapNum
+RoomKeyStruct.RoomNum = RoomNum
+
+nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyStruct, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then GoTo out:
+
+RoomRowToStruct Roomdatabuf.buf
+
+For x = 0 To 9
+    If Roomrec.RoomExit(x) > 0 Then
+        Select Case Roomrec.RoomType(x)
+            Case 6: 'Hidden
+                If Roomrec.Para1(x) = 0 Then GoTo nextexit: 'error, no exit
+                arrReturn(x).Map = Roomrec.MapNumber
+                arrReturn(x).Room = Roomrec.RoomExit(x)
+
+            Case 8: 'Map Change
+                If Roomrec.Para1(x) > 0 Then
+                    arrReturn(x).Map = Roomrec.Para1(x)
+                    arrReturn(x).Room = Roomrec.RoomExit(x)
+                End If
+
+            Case 12: '12-remote action
+                'no action
+                
+            Case Else:
+                arrReturn(x).Map = Roomrec.MapNumber
+                arrReturn(x).Room = Roomrec.RoomExit(x)
+
+        End Select
+    End If
+nextexit:
+Next x
+
+GetRoomExits = arrReturn
+
+out:
+Exit Function
+error:
+Call HandleError("GetRoomExits")
+Resume out:
 End Function
 
 Public Function GetTotalActions(ByVal MapNum As Long, ByVal RoomNum As Long, _

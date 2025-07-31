@@ -651,7 +651,7 @@ Dim TBFromBadSource() As Boolean
 Dim nNewMax As Integer
 Dim MaxValue As Double
 Dim nScaleCount As Integer
-Dim nScale As Integer
+Dim nProgressScale As Integer
 
 Dim nDefaultExcludeMap() As Long
 Dim nDefaultExcludeFrom() As Long
@@ -689,12 +689,12 @@ Dim colLairs() As LairInfoType
 '    sNonLairRooms As String
 'End Type
 'Dim colNONLairs() As NONLairInfoType
-
-Private Type RoomExitType
-    Map As Long
-    Room As Long
-    ExitType As String
-End Type
+'
+'Private Type RoomExitType
+'    Map As Long
+'    Room As Long
+'    ExitType As String
+'End Type
 
 Private Type MonsterStats
     Exp As Currency
@@ -1237,6 +1237,8 @@ Call HandleError("AddDefaultExcludes")
 Resume out:
 End Sub
 
+
+
 'Private Sub cmdAddtlOptions_Click()
 'If fraSpecial.Visible Then
 '    fraSpecial.Visible = False
@@ -1492,18 +1494,18 @@ End If
 
 MaxValue = CalcTotalRecords
 
-nScale = 1
-Do While (nScale < 100 And (MaxValue / nScale) > 100) Or (MaxValue / nScale) > MaxInt
-    nScale = nScale + 1
+nProgressScale = 1
+Do While (nProgressScale < 100 And (MaxValue / nProgressScale) > 100) Or (MaxValue / nProgressScale) > MaxInt
+    nProgressScale = nProgressScale + 1
 Loop
-MaxValue = Fix((MaxValue / nScale))
+MaxValue = Fix((MaxValue / nProgressScale))
 
 nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
 ProgressBar.Max = MaxValue
 ProgressBar.Visible = True
-nProgressInterval = nScale
+nProgressInterval = nProgressScale
 
 Erase MonGroup()
 Erase MonsterInGame()
@@ -2483,6 +2485,7 @@ On Error GoTo error:
 Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer ', nIndexExp As Double
 Dim tLairInfo As LairInfoType, nYesNo As Integer ', nMobsInIndex As Integer
 Dim sGroupIndex As String ', tNONLairInfo As NONLairInfoType
+Dim nTempLairCount As Long
 
 '-------------------------------
 '       ROOMS
@@ -2569,6 +2572,14 @@ Do While nStatus = 0 And bStopExport = False
         tLairInfo = GetLairInfo(sGroupIndex) ' & "-" & CStr(Roomrec.MaxRegen)
         
         If Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then 'lair
+            
+            If nTempLairCount >= nProgressScale Then
+                ProgressBar.Max = ProgressBar.Max + 1
+                nTempLairCount = 0
+            Else
+                nTempLairCount = nTempLairCount + 1
+            End If
+            
             If tLairInfo.nMobs = 0 Then
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
                     For y = 0 To 14
@@ -2600,15 +2611,15 @@ Do While nStatus = 0 And bStopExport = False
             tLairInfo.nTotalLairs = tLairInfo.nTotalLairs + 1
             
             If Len(tLairInfo.sLairRoomNumbers) = 0 Then
-                tLairInfo.sLairRoomNumbers = "," & Roomrec.RoomNumber & ","
-            ElseIf InStr(1, tLairInfo.sLairRoomNumbers, "," & Roomrec.RoomNumber & ",", vbTextCompare) = 0 Then
-                tLairInfo.sLairRoomNumbers = tLairInfo.sLairRoomNumbers & Roomrec.RoomNumber & ","
+                tLairInfo.sLairRoomNumbers = "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
+            ElseIf InStr(1, tLairInfo.sLairRoomNumbers, "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ",", vbTextCompare) = 0 Then
+                tLairInfo.sLairRoomNumbers = tLairInfo.sLairRoomNumbers & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
             End If
         Else
             If Len(tLairInfo.sNonLairRooms) = 0 Then
-                tLairInfo.sNonLairRooms = "," & Roomrec.RoomNumber & "." & Roomrec.MapNumber & ","
-            ElseIf InStr(1, tLairInfo.sNonLairRooms, "," & Roomrec.RoomNumber & "." & Roomrec.MapNumber & ",", vbTextCompare) = 0 Then
-                tLairInfo.sNonLairRooms = tLairInfo.sNonLairRooms & Roomrec.RoomNumber & "." & Roomrec.MapNumber & ","
+                tLairInfo.sNonLairRooms = "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
+            ElseIf InStr(1, tLairInfo.sNonLairRooms, "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ",", vbTextCompare) = 0 Then
+                tLairInfo.sNonLairRooms = tLairInfo.sNonLairRooms & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
             End If
         End If
         
@@ -4636,15 +4647,21 @@ End Sub
 
 Private Sub ExportLairs()
 On Error GoTo error:
-Dim iLair As Long, sArr() As String, sGroupIndex As String, nRoomNumberGap As Double
+Dim iLair As Long, sArr() As String, sGroupIndex As String, nRoomNumberGap As Double, x As Long, y As Long
 Dim nNonLairs As Long, nLairsToRooms As Double ', tNONLairInfo As NONLairInfoType
-
+Dim arrNonLairs() As RoomExitType, arrLairs() As RoomExitType, reTemp As RoomExitType
+Dim nWalkTotal As Long, nWalkCount As Long, arrChainedRooms() As RoomExitType, nGroup As Long, nMinIndex As Long, nMaxIndex As Long
 tryagain:
 If tabLairs.RecordCount <> 0 Then
     tabLairs.MoveFirst
     tabLairs.Delete
     GoTo tryagain:
 End If
+
+ReDim arrNonLairs(0)
+ReDim arrLairs(0)
+nWalkTotal = 0
+nWalkCount = 0
 
 tabLairs.Index = "pkLairs"
 
@@ -4655,11 +4672,16 @@ For iLair = 0 To UBound(colLairs())
         nLairsToRooms = 0
         nRoomNumberGap = 0
         
+        nGroup = Val(sArr(0))
+        nMinIndex = Val(sArr(1))
+        nMaxIndex = Val(sArr(2))
         sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+        
         tabLairs.Seek "=", sGroupIndex
         If tabLairs.NoMatch = True Then
             tabLairs.AddNew
             tabLairs.Fields("GroupIndex") = sGroupIndex
+            tabLairs.Fields("TotalLairs") = colLairs(iLair).nTotalLairs
             tabLairs.Fields("MobList") = colLairs(iLair).sMobList
             tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
             tabLairs.Fields("AvgDelay") = colLairs(iLair).nAvgDelay
@@ -4676,7 +4698,8 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
             tabLairs.Fields("AvgDodge") = colLairs(iLair).nAvgDodge
             'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
-'            If tabLairs.Fields("GroupIndex") = "11-10-12" Then
+            
+'            If tabLairs.Fields("GroupIndex") = "20-1-1" Then
 '                Debug.Print 1
 '            End If
 
@@ -4684,18 +4707,44 @@ For iLair = 0 To UBound(colLairs())
                 colLairs(iLair).sNonLairRooms = Mid(colLairs(iLair).sNonLairRooms, 2, Len(colLairs(iLair).sNonLairRooms) - 2)
                 sArr() = Split(colLairs(iLair).sNonLairRooms, ",")
                 nNonLairs = UBound(sArr) + 1
+                
+                If UBound(sArr) > 0 Then ReDim Preserve arrNonLairs(UBound(sArr))
+                For x = 0 To UBound(sArr)
+                    reTemp = ExtractMapRoom(sArr(x))
+                    If reTemp.Map > 0 And reTemp.Room > 0 Then arrNonLairs(x) = reTemp
+                Next x
             End If
             
             If colLairs(iLair).nTotalLairs > 0 And nNonLairs > 0 Then
-                nLairsToRooms = Round(nNonLairs / colLairs(iLair).nTotalLairs, 2)
+                nLairsToRooms = Round((nNonLairs + colLairs(iLair).nTotalLairs) / colLairs(iLair).nTotalLairs, 2)
                 If nLairsToRooms < 1 Then nLairsToRooms = 1 + nLairsToRooms
             End If
             
             If Len(colLairs(iLair).sLairRoomNumbers) > 0 Then
                 colLairs(iLair).sLairRoomNumbers = Mid(colLairs(iLair).sLairRoomNumbers, 2, Len(colLairs(iLair).sLairRoomNumbers) - 2)
-                nRoomNumberGap = CalcAvgGap(colLairs(iLair).sLairRoomNumbers)
+'                nRoomNumberGap = CalcAvgGap(colLairs(iLair).sLairRoomNumbers)
+                
+                sArr() = Split(colLairs(iLair).sLairRoomNumbers, ",")
+                If UBound(sArr) > 0 Then ReDim Preserve arrLairs(UBound(sArr))
+                For x = 0 To UBound(sArr)
+                    reTemp = ExtractMapRoom(sArr(x))
+                    If reTemp.Map > 0 And reTemp.Room > 0 Then arrLairs(x) = reTemp
+                Next x
             End If
             
+            If UBound(arrLairs) > 0 Then
+                For x = 0 To UBound(arrLairs)
+                    ReDim arrChainedRooms(0)
+                    arrChainedRooms(0) = arrLairs(x)
+                    y = GetWalkToNextLair(arrLairs(x), arrLairs, arrNonLairs, arrChainedRooms, 1)
+                    If y > 0 Then
+                        nWalkTotal = nWalkTotal + y
+                        nWalkCount = nWalkCount + 1
+                    End If
+                Next x
+                If nWalkCount > 0 Then nRoomNumberGap = Round(nWalkTotal / nWalkCount, 2)
+            End If
+                        
             If nLairsToRooms > 0 And nLairsToRooms < nRoomNumberGap Then
                 tabLairs.Fields("AvgWalk") = nLairsToRooms
             ElseIf nRoomNumberGap > 0 Then
@@ -4707,12 +4756,94 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Update
         End If
     End If
+    Call IncreaseProgressBar
 Next iLair
 
 Exit Sub
 error:
 Call HandleError("ExportLairs")
 End Sub
+
+Private Function GetWalkToNextLair(tStartRoom As RoomExitType, aLairs() As RoomExitType, aNonLairs() As RoomExitType, _
+    ByRef aChainedRooms() As RoomExitType, ByVal nDepth As Long) As Long
+Dim x As Long, y As Long, tRoom As RoomExitType, tExits() As RoomExitType
+Dim nTotal As Long, nCount As Long, nResult As Long, tQueuedRooms() As RoomExitType, nQueue As Long
+On Error GoTo error:
+
+If nDepth > 100 Then Exit Function
+If tStartRoom.Map = 0 Or tStartRoom.Room = 0 Then Exit Function
+
+If nDepth > 1 Then
+    x = UBound(aChainedRooms) + 1
+    ReDim Preserve aChainedRooms(x)
+    aChainedRooms(x) = tStartRoom
+End If
+
+nQueue = -1
+ReDim tQueuedRooms(0)
+
+tExits = GetRoomExits(tStartRoom.Map, tStartRoom.Room)
+For x = 0 To 9
+    If tExits(x).Map > 0 And tExits(x).Room > 0 Then
+        If RoomInRoomArray(tExits(x), aChainedRooms) = False Then
+            If RoomInRoomArray(tExits(x), aLairs) = True Then
+                'GetWalkToNextLair = nDepth
+                'Exit Function
+                nTotal = nTotal + nDepth
+                nCount = nCount + 1
+                y = UBound(aChainedRooms) + 1
+                ReDim Preserve aChainedRooms(y)
+                aChainedRooms(y) = tExits(x)
+            ElseIf RoomInRoomArray(tExits(x), aNonLairs) = True Then
+                nQueue = nQueue + 1
+                If nQueue > 0 Then ReDim Preserve tQueuedRooms(nQueue)
+                tQueuedRooms(nQueue) = tExits(x)
+            End If
+        End If
+    End If
+Next x
+
+If nQueue >= 0 Then
+    For x = 0 To nQueue
+        nResult = GetWalkToNextLair(tQueuedRooms(nQueue), aLairs, aNonLairs, aChainedRooms, nDepth + 1)
+        If nResult > 0 Then
+            'GetWalkToNextLair = nResult
+            'Exit Function
+            nTotal = nTotal + nResult
+            nCount = nCount + 1
+            y = UBound(aChainedRooms) + 1
+            ReDim Preserve aChainedRooms(y)
+            aChainedRooms(y) = tQueuedRooms(nQueue)
+        End If
+    Next x
+End If
+
+If nTotal > 0 And nCount > 0 Then GetWalkToNextLair = Round(nTotal / nCount, 2)
+
+out:
+Exit Function
+error:
+Call HandleError("GetAverageWalk")
+Resume out:
+End Function
+
+Private Function RoomInRoomArray(reNeedle As RoomExitType, reHaystack() As RoomExitType) As Boolean
+On Error GoTo error:
+Dim x As Long
+
+For x = 0 To UBound(reHaystack)
+    If reNeedle.Map = reHaystack(x).Map And reNeedle.Room = reHaystack(x).Room Then
+        RoomInRoomArray = True
+        Exit Function
+    End If
+Next x
+
+out:
+Exit Function
+error:
+Call HandleError("RoomInRoomArray")
+Resume out:
+End Function
 
 Private Sub ExportItems()
 Dim nStatus As Integer, recnum As Long
@@ -5471,10 +5602,10 @@ Do While nStatus = 0 And bStopExport = False
                 Case 12: 'Remote Action
                     
                     If Roomrec.RoomNumber = Roomrec.RoomExit(x) Then
-                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(x) Mod 10, False) _
+                        sTemp = "[on the " & GetFriendlyRoomExit(Roomrec.Para2(x) Mod 10, False) _
                             & " exit of this room]: "
                     Else
-                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(x) Mod 10, False) _
+                        sTemp = "[on the " & GetFriendlyRoomExit(Roomrec.Para2(x) Mod 10, False) _
                             & " exit of room " & Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & "]: "
                     End If
                     
@@ -5847,11 +5978,11 @@ DoEvents
 With tabNewLairs
     .Name = "Lairs"
     .Columns.Append "GroupIndex", adVarWChar
-    .Columns.Append "AvgWalk", adDouble
-    .Columns.Append "AvgDelay", adInteger
     .Columns.Append "MobList", adVarWChar
     .Columns.Append "Mobs", adInteger
-    '.Columns.Append "MaxRegen", adInteger
+    .Columns.Append "TotalLairs", adInteger
+    .Columns.Append "AvgDelay", adInteger
+    .Columns.Append "AvgWalk", adDouble
     .Columns.Append "AvgExp", adDouble
     .Columns.Append "AvgDmg", adDouble
     .Columns.Append "AvgDmgPhys", adDouble
@@ -6486,10 +6617,10 @@ End Sub
 Private Sub IncreaseProgressBar(Optional ByVal nAmount As Integer = 1)
 On Error Resume Next
 
-If nScale > 0 Then
-    nAmount = nAmount / nScale
+If nProgressScale > 0 Then
+    nAmount = nAmount / nProgressScale
     If nAmount < 1 Then nAmount = 1
-    If nScaleCount + nAmount >= nScale Then
+    If nScaleCount + nAmount >= nProgressScale Then
         If ProgressBar.Value + nScaleCount + nAmount < ProgressBar.Max Then
             ProgressBar.Value = ProgressBar.Value + nScaleCount + nAmount
         Else
@@ -6541,139 +6672,139 @@ Private Sub txtUpdateURL_GotFocus()
 Call SelectAll(txtUpdateURL)
 
 End Sub
-
-Public Function CalcAvgGap(ByVal sRooms As String, Optional ByVal bExcludeOutliers As Boolean = True) As Double
-    
-    If Val(sRooms) < 1 Then Exit Function
-    
-    Dim arrRooms() As String
-    arrRooms = Split(sRooms, ",")
-    If UBound(arrRooms) = 0 Then
-        CalcAvgGap = 1
-        Exit Function
-    End If
-    
-    Dim i As Long, n As Long
-    n = UBound(arrRooms) - LBound(arrRooms) + 1
-    
-    ' Convert to numeric array
-    Dim arrNums() As Double
-    ReDim arrNums(0 To n - 1)
-    For i = 0 To n - 1
-        arrNums(i) = CDbl(Trim$(arrRooms(i)))
-    Next i
-    
-    ' Sort the room numbers
-    QuickSort arrNums, 0, n - 1
-    
-    ' Build the gaps array
-    Dim arrGaps() As Double
-    ReDim arrGaps(0 To n - 2)
-    For i = 0 To n - 2
-        arrGaps(i) = arrNums(i + 1) - arrNums(i)
-        If arrGaps(i) < 0 Then arrGaps(i) = 0
-    Next i
-    
-    ' Compute average, with or without outlier exclusion
-    If Not bExcludeOutliers Then
-        CalcAvgGap = Round(AverageOfArray(arrGaps), 2)
-    Else
-        ' Compute median and MAD
-        Dim med As Double, mad As Double, thresh As Double
-        med = GetMedian(arrGaps)
-        mad = GetMedianAbsDev(arrGaps, med)
-        thresh = med + 3 * mad
-        
-        ' Sum only gaps = threshold
-        Dim sum As Double, cnt As Long
-        For i = LBound(arrGaps) To UBound(arrGaps)
-            If arrGaps(i) <= thresh Then
-                sum = sum + arrGaps(i)
-                cnt = cnt + 1
-            End If
-        Next i
-        If cnt > 0 Then
-            CalcAvgGap = Round(sum / cnt, 2)
-        Else
-            CalcAvgGap = 0
-        End If
-    End If
-
-End Function
-
-'–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-' Helpers
-'–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-
-' Simple average of a 0-based array:
-Private Function AverageOfArray(a() As Double) As Double
-    Dim s As Double, i As Long
-    For i = LBound(a) To UBound(a)
-        s = s + a(i)
-    Next i
-    AverageOfArray = s / (UBound(a) - LBound(a) + 1)
-End Function
-
-' Compute median of a 0-based array (makes a copy and sorts it):
-Private Function GetMedian(vals() As Double) As Double
-    Dim tmp() As Double
-    tmp = vals
-    QuickSort tmp, LBound(tmp), UBound(tmp)
-    
-    Dim cnt As Long
-    cnt = UBound(tmp) - LBound(tmp) + 1
-    
-    If cnt Mod 2 = 1 Then
-        GetMedian = tmp(LBound(tmp) + cnt \ 2)
-    Else
-        GetMedian = ( _
-          tmp(LBound(tmp) + cnt \ 2 - 1) + _
-          tmp(LBound(tmp) + cnt \ 2) _
-        ) / 2
-    End If
-End Function
-
-' Compute median absolute deviation:
-Private Function GetMedianAbsDev(vals() As Double, medianValue As Double) As Double
-    Dim devs() As Double
-    ReDim devs(LBound(vals) To UBound(vals))
-    
-    Dim i As Long
-    For i = LBound(vals) To UBound(vals)
-        devs(i) = Abs(vals(i) - medianValue)
-    Next i
-    
-    GetMedianAbsDev = GetMedian(devs)
-End Function
-
-' In-place QuickSort for a() As Double
-Private Sub QuickSort(a() As Double, ByVal first As Long, ByVal last As Long)
-    Dim i As Long, j As Long
-    Dim pivot As Double, tmp As Double
-    
-    i = first
-    j = last
-    pivot = a((first + last) \ 2)
-    
-    Do While i <= j
-        Do While a(i) < pivot
-            i = i + 1
-        Loop
-        Do While a(j) > pivot
-            j = j - 1
-        Loop
-        If i <= j Then
-            tmp = a(i)
-            a(i) = a(j)
-            a(j) = tmp
-            i = i + 1
-            j = j - 1
-        End If
-    Loop
-    
-    If first < j Then QuickSort a, first, j
-    If i < last Then QuickSort a, i, last
-End Sub
+'
+'Public Function CalcAvgGap(ByVal sRooms As String, Optional ByVal bExcludeOutliers As Boolean = True) As Double
+'
+'    If Val(sRooms) < 1 Then Exit Function
+'
+'    Dim arrRooms() As String
+'    arrRooms = Split(sRooms, ",")
+'    If UBound(arrRooms) = 0 Then
+'        CalcAvgGap = 1
+'        Exit Function
+'    End If
+'
+'    Dim i As Long, n As Long
+'    n = UBound(arrRooms) - LBound(arrRooms) + 1
+'
+'    ' Convert to numeric array
+'    Dim arrNums() As Double
+'    ReDim arrNums(0 To n - 1)
+'    For i = 0 To n - 1
+'        arrNums(i) = CDbl(Trim$(arrRooms(i)))
+'    Next i
+'
+'    ' Sort the room numbers
+'    QuickSort arrNums, 0, n - 1
+'
+'    ' Build the gaps array
+'    Dim arrGaps() As Double
+'    ReDim arrGaps(0 To n - 2)
+'    For i = 0 To n - 2
+'        arrGaps(i) = arrNums(i + 1) - arrNums(i)
+'        If arrGaps(i) < 0 Then arrGaps(i) = 0
+'    Next i
+'
+'    ' Compute average, with or without outlier exclusion
+'    If Not bExcludeOutliers Then
+'        CalcAvgGap = Round(AverageOfArray(arrGaps), 2)
+'    Else
+'        ' Compute median and MAD
+'        Dim med As Double, mad As Double, thresh As Double
+'        med = GetMedian(arrGaps)
+'        mad = GetMedianAbsDev(arrGaps, med)
+'        thresh = med + 3 * mad
+'
+'        ' Sum only gaps = threshold
+'        Dim sum As Double, cnt As Long
+'        For i = LBound(arrGaps) To UBound(arrGaps)
+'            If arrGaps(i) <= thresh Then
+'                sum = sum + arrGaps(i)
+'                cnt = cnt + 1
+'            End If
+'        Next i
+'        If cnt > 0 Then
+'            CalcAvgGap = Round(sum / cnt, 2)
+'        Else
+'            CalcAvgGap = 0
+'        End If
+'    End If
+'
+'End Function
+'
+''–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+'' Helpers
+''–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+'
+'' Simple average of a 0-based array:
+'Private Function AverageOfArray(a() As Double) As Double
+'    Dim S As Double, i As Long
+'    For i = LBound(a) To UBound(a)
+'        S = S + a(i)
+'    Next i
+'    AverageOfArray = S / (UBound(a) - LBound(a) + 1)
+'End Function
+'
+'' Compute median of a 0-based array (makes a copy and sorts it):
+'Private Function GetMedian(vals() As Double) As Double
+'    Dim tmp() As Double
+'    tmp = vals
+'    QuickSort tmp, LBound(tmp), UBound(tmp)
+'
+'    Dim cnt As Long
+'    cnt = UBound(tmp) - LBound(tmp) + 1
+'
+'    If cnt Mod 2 = 1 Then
+'        GetMedian = tmp(LBound(tmp) + cnt \ 2)
+'    Else
+'        GetMedian = ( _
+'          tmp(LBound(tmp) + cnt \ 2 - 1) + _
+'          tmp(LBound(tmp) + cnt \ 2) _
+'        ) / 2
+'    End If
+'End Function
+'
+'' Compute median absolute deviation:
+'Private Function GetMedianAbsDev(vals() As Double, medianValue As Double) As Double
+'    Dim devs() As Double
+'    ReDim devs(LBound(vals) To UBound(vals))
+'
+'    Dim i As Long
+'    For i = LBound(vals) To UBound(vals)
+'        devs(i) = Abs(vals(i) - medianValue)
+'    Next i
+'
+'    GetMedianAbsDev = GetMedian(devs)
+'End Function
+'
+'' In-place QuickSort for a() As Double
+'Private Sub QuickSort(a() As Double, ByVal first As Long, ByVal last As Long)
+'    Dim i As Long, j As Long
+'    Dim pivot As Double, tmp As Double
+'
+'    i = first
+'    j = last
+'    pivot = a((first + last) \ 2)
+'
+'    Do While i <= j
+'        Do While a(i) < pivot
+'            i = i + 1
+'        Loop
+'        Do While a(j) > pivot
+'            j = j - 1
+'        Loop
+'        If i <= j Then
+'            tmp = a(i)
+'            a(i) = a(j)
+'            a(j) = tmp
+'            i = i + 1
+'            j = j - 1
+'        End If
+'    Loop
+'
+'    If first < j Then QuickSort a, first, j
+'    If i < last Then QuickSort a, i, last
+'End Sub
 
 
 'Private Function GetNONLairInfoIndex(sGroupIndex As String) As Long
