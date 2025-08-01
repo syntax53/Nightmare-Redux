@@ -1116,7 +1116,7 @@ Resume out:
 
 End Function
 
-Public Function GetRoomExits(ByVal MapNum As Long, ByVal RoomNum As Long) As RoomExitType()
+Public Function GetRoomExits(ByVal MapNum As Long, ByVal RoomNum As Long, Optional ByVal bForLairs As Boolean) As RoomExitType()
 Dim nStatus As Integer, x As Long, arrReturn() As RoomExitType
 On Error GoTo error:
 
@@ -1133,26 +1133,18 @@ RoomRowToStruct Roomdatabuf.buf
 
 For x = 0 To 9
     If Roomrec.RoomExit(x) > 0 Then
-        Select Case Roomrec.RoomType(x)
-            Case 6: 'Hidden
-                If Roomrec.Para1(x) = 0 Then GoTo nextexit: 'error, no exit
-                arrReturn(x).Map = Roomrec.MapNumber
-                arrReturn(x).Room = Roomrec.RoomExit(x)
-
-            Case 8: 'Map Change
-                If Roomrec.Para1(x) > 0 Then
-                    arrReturn(x).Map = Roomrec.Para1(x)
-                    arrReturn(x).Room = Roomrec.RoomExit(x)
-                End If
-
-            Case 12: '12-remote action
-                'no action
-                
-            Case Else:
-                arrReturn(x).Map = Roomrec.MapNumber
-                arrReturn(x).Room = Roomrec.RoomExit(x)
-
-        End Select
+        If Roomrec.RoomType(x) = 12 Then GoTo nextexit: '12=remote action
+        If Roomrec.RoomType(x) = 6 And Roomrec.Para1(x) = 0 Then GoTo nextexit: 'hidden but error
+        If Roomrec.RoomType(x) = 8 Then  'map change
+            If Roomrec.Para1(x) < 1 Then GoTo nextexit:
+            If bForLairs Then GoTo nextexit:
+            arrReturn(x).Map = Roomrec.Para1(x)
+        Else
+            arrReturn(x).Map = Roomrec.MapNumber
+        End If
+        
+        arrReturn(x).Room = Roomrec.RoomExit(x)
+        If bForLairs Then arrReturn(x).ExitType = Roomrec.MonsterType & "-" & Roomrec.MinIndex & "-" & Roomrec.MaxIndex
     End If
 nextexit:
 Next x
@@ -1163,6 +1155,33 @@ out:
 Exit Function
 error:
 Call HandleError("GetRoomExits")
+Resume out:
+End Function
+
+Public Function IsRoomLair(ByVal MapNum As Long, ByVal RoomNum As Long, Optional ByVal nGroup As Integer, _
+    Optional ByVal nMinIndex As Integer, Optional ByVal nMaxIndex As Integer) As Boolean
+Dim nStatus As Integer, x As Long
+On Error GoTo error:
+
+RoomKeyStruct.MapNum = MapNum
+RoomKeyStruct.RoomNum = RoomNum
+
+nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyStruct, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then GoTo out:
+
+RoomRowToStruct Roomdatabuf.buf
+
+If Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 And Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then 'lair
+    If nGroup > 0 And Roomrec.MonsterType <> nGroup Then Exit Function
+    If nMinIndex > 0 And Roomrec.MinIndex < nMinIndex Then Exit Function
+    If nMaxIndex > 0 And Roomrec.MaxIndex > nMaxIndex Then Exit Function
+    IsRoomLair = True
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("IsRoomLair")
 Resume out:
 End Function
 

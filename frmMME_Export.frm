@@ -615,10 +615,10 @@ Dim tabLairs As Recordset
 Dim tabTBInfo As Recordset
 Dim tabTempRS As Recordset
 
-Dim nMonsterPossy() As Currency
-Dim nMonsterSpawnChance() As Currency
-Dim nMonsterAVGLairExp() As Currency
-Dim nAverageMobsPerLair As Currency
+'Dim nMonsterPossy() As Currency
+'Dim nMonsterSpawnChance() As Currency
+'Dim nMonsterAVGLairExp() As Currency
+'Dim nAverageMobsPerLair As Currency
 Dim nTheoreticalAvgMaxLairsPerRegenPeriod As Integer 'max 1-mob lairs you can clear in 3 minutes (average lair regen of 3 minutes divided by average round of 5 seconds = 36 lairs)
 
 Dim nProgressInterval As Integer
@@ -648,7 +648,7 @@ Dim TBFromBadSource() As Boolean
 'called from an item container opening.  and i believe this indicates that these textblocks only execute
 'other textblocks by design.  mushy memory ftl.
 
-Dim nNewMax As Integer
+'Dim nNewMax As Integer
 Dim MaxValue As Double
 Dim nScaleCount As Integer
 Dim nProgressScale As Integer
@@ -788,7 +788,7 @@ End Function
 Private Sub SetLairInfo(tUpdatedLairInfo As LairInfoType)
 On Error GoTo error:
 
-Dim x As Long, sArr() As String, i As Integer
+Dim x As Long ', sArr() As String ', i As Integer
 If Len(tUpdatedLairInfo.sGroupIndex) < 5 Then Exit Sub
 x = GetLairInfoIndex(tUpdatedLairInfo.sGroupIndex)
 
@@ -1251,7 +1251,7 @@ End Sub
 
 Private Sub Form_Load()
 On Error Resume Next
-Dim fso As FileSystemObject, x As Integer
+Dim fso As FileSystemObject ', x As Integer
 
 lvExludedRooms.ColumnHeaders.clear
 lvExludedRooms.ColumnHeaders.add , , "Map", 600
@@ -1406,7 +1406,7 @@ End Sub
 
 Private Sub cmdGo_Click()
 On Error GoTo error:
-Dim x As Long, y As Long, sPath As String
+Dim x As Long, y As Long ', sPath As String
 Dim sNewPath() As String
 Dim StartTime As Long, nTotalTime As Double, sTotalTime As String
 Dim nTmp As Integer, nStatus As Integer, frmForm As Form
@@ -1498,7 +1498,7 @@ nProgressScale = 1
 Do While (nProgressScale < 100 And (MaxValue / nProgressScale) > 100) Or (MaxValue / nProgressScale) > MaxInt
     nProgressScale = nProgressScale + 1
 Loop
-MaxValue = Fix((MaxValue / nProgressScale))
+MaxValue = Fix((MaxValue / nProgressScale)) * 1.25
 
 nScaleCount = 1
 ProgressBar.Value = 0
@@ -2317,7 +2317,7 @@ If nYesNo = vbYes Then bStopExport = True
 End Sub
 Private Sub MarkSpellInGame(ByVal nNum As Long, Optional ByVal sFrom As String, _
     Optional bLearned As Boolean, Optional sClasses As String)
-Dim sTemp As String, sNewArr() As String, x As Long
+Dim sTemp As String, sNewArr() As String ', x As Long
 
 Dim nYesNo As Integer
 On Error GoTo error:
@@ -2679,7 +2679,7 @@ End Sub
 
 Private Sub CalculateScriptValue()
 On Error GoTo error:
-Dim sRegexLairPattern As String, tMatches() As RegexMatches, sRoomKey As String, sGroupIndex As String
+Dim sRegexLairPattern As String, tMatches() As RegexMatches, sGroupIndex As String ', sRoomKey As String
 Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Currency, tLairInfo As LairInfoType
 Dim nLairMobAvgDmg As Currency, nLairMobPhysDamage As Currency, nLairMobMagDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
 Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer, nAvgLairExp As Currency
@@ -2687,6 +2687,10 @@ Dim iLair As Long, iMonster As Integer, arrMonsters() As String, tMonsterStats A
 Dim nLairMobAC As Long, nLairMobDR As Long, nLairMobMR As Long, nLairMobDodge As Long
 'Dim nLairMobMagDamageResist As Integer, nLairMobMagDamageResistAM As Integer
 'calculate lair damage and script value now that monsters have had their damage calculated
+
+lblPanel(1).Caption = "Calculating Script Value..."
+DoEvents
+
 For iLair = 0 To UBound(colLairs())
     If colLairs(iLair).nMobs > 0 Then
         
@@ -2826,7 +2830,7 @@ Resume out:
 End Sub
 
 Private Function MDB_GetRoomLairMobs(ByVal nMap As Long, ByVal nRoom As Long) As String
-Dim tExit As RoomExitType, sName As String
+Dim tExit As RoomExitType ', sName As String
 
 MDB_GetRoomLairMobs = ""
 tExit.Map = nMap
@@ -3494,13 +3498,13 @@ Loop
 End Sub
 
 Private Sub ScanGreets()
-Dim nStatus As Integer, x As Long, nRec As Long, nCurrentMonster As Long
+Dim nStatus As Integer, nCurrentMonster As Long ', x As Long, nRec As Long
 
 '-------------------------------
 '       Greets
 '-------------------------------
 Dim nYesNo As Integer, sData As String, z As Long, nTBNumber As Long
-Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long, y As Long
+Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long ', y As Long
 Dim nMonsterSpells() As Currency, sMonsterSpellsClasses() As String
 
 On Error GoTo error:
@@ -3509,6 +3513,7 @@ nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf
 If Not nStatus = 0 Then Exit Sub
 
 lblPanel(1).Caption = "Scanning Greets (" & 0 & ")"
+DoEvents
 
 Do While nStatus = 0 And bStopExport = False
     MonsterRowToStruct Monsterdatabuf.buf
@@ -4482,7 +4487,7 @@ End Function
 
 Private Function CheckForClassRestriction(ByVal sWholeData As String, ByVal nCurrentPosition As Long) As String
 Dim sLook As String, sChar As String, sTest As String
-Dim x As Integer, y1 As Integer, y2 As Integer, z As Integer, nClass As Long
+Dim x As Integer, y1 As Integer, y2 As Integer ', z As Integer, nClass As Long
 
 'make sTest just the the part of the data up until the current position
 sTest = Mid(sWholeData, 1, nCurrentPosition - 1)
@@ -4647,10 +4652,12 @@ End Sub
 
 Private Sub ExportLairs()
 On Error GoTo error:
-Dim iLair As Long, sArr() As String, sGroupIndex As String, nRoomNumberGap As Double, x As Long, y As Long
+Dim iLair As Long, sArr() As String, sGroupIndex As String, nWalkDistance As Double, x As Long ', y As Long
 Dim nNonLairs As Long, nLairsToRooms As Double ', tNONLairInfo As NONLairInfoType
-Dim arrNonLairs() As RoomExitType, arrLairs() As RoomExitType, reTemp As RoomExitType
-Dim nWalkTotal As Long, nWalkCount As Long, arrChainedRooms() As RoomExitType, nGroup As Long, nMinIndex As Long, nMaxIndex As Long
+Dim arrLairs() As RoomExitType, reTemp As RoomExitType 'arrNonLairs() As RoomExitType,
+Dim nWalkTotal As Long, nWalkCount As Long, arrChainedRooms() As RoomExitType
+Dim nGroup As Integer, nMinIndex As Integer, nMaxIndex As Integer
+Dim nRefGroup As Integer, nRET() As Long ', nRefMinIndex As Integer, nRefMaxIndex As Integer
 tryagain:
 If tabLairs.RecordCount <> 0 Then
     tabLairs.MoveFirst
@@ -4658,25 +4665,27 @@ If tabLairs.RecordCount <> 0 Then
     GoTo tryagain:
 End If
 
-ReDim arrNonLairs(0)
-ReDim arrLairs(0)
-nWalkTotal = 0
-nWalkCount = 0
-
 tabLairs.Index = "pkLairs"
+
+lblPanel(1).Caption = "Exporting Lairs..."
+DoEvents
 
 For iLair = 0 To UBound(colLairs())
     sArr() = Split(colLairs(iLair).sGroupIndex, "-", , vbTextCompare)
     If colLairs(iLair).nMobs > 0 And UBound(sArr()) = 2 Then
+        
+        ReDim arrNonLairs(0)
+        ReDim arrLairs(0)
+        nWalkTotal = 0
+        nWalkCount = 0
         nNonLairs = 0
         nLairsToRooms = 0
-        nRoomNumberGap = 0
+        nWalkDistance = 0
         
         nGroup = Val(sArr(0))
         nMinIndex = Val(sArr(1))
         nMaxIndex = Val(sArr(2))
         sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
-        
         tabLairs.Seek "=", sGroupIndex
         If tabLairs.NoMatch = True Then
             tabLairs.AddNew
@@ -4699,8 +4708,8 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Fields("AvgDodge") = colLairs(iLair).nAvgDodge
             'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
             
-'            If tabLairs.Fields("GroupIndex") = "20-1-1" Then
-'                Debug.Print 1
+'            If tabLairs.Fields("GroupIndex") = "11-10-13" Then
+'                Debug.Print tabLairs.Fields("GroupIndex")
 '            End If
 
             If Len(colLairs(iLair).sNonLairRooms) > 0 Then
@@ -4708,24 +4717,23 @@ For iLair = 0 To UBound(colLairs())
                 sArr() = Split(colLairs(iLair).sNonLairRooms, ",")
                 nNonLairs = UBound(sArr) + 1
                 
-                If UBound(sArr) > 0 Then ReDim Preserve arrNonLairs(UBound(sArr))
-                For x = 0 To UBound(sArr)
-                    reTemp = ExtractMapRoom(sArr(x))
-                    If reTemp.Map > 0 And reTemp.Room > 0 Then arrNonLairs(x) = reTemp
-                Next x
+'                If UBound(sArr) > 0 Then ReDim arrNonLairs(UBound(sArr))
+'                For x = 0 To UBound(sArr)
+'                    reTemp = ExtractMapRoom(sArr(x))
+'                    If reTemp.Map > 0 And reTemp.Room > 0 Then arrNonLairs(x) = reTemp
+'                Next x
             End If
             
             If colLairs(iLair).nTotalLairs > 0 And nNonLairs > 0 Then
                 nLairsToRooms = Round((nNonLairs + colLairs(iLair).nTotalLairs) / colLairs(iLair).nTotalLairs, 2)
-                If nLairsToRooms < 1 Then nLairsToRooms = 1 + nLairsToRooms
             End If
             
             If Len(colLairs(iLair).sLairRoomNumbers) > 0 Then
                 colLairs(iLair).sLairRoomNumbers = Mid(colLairs(iLair).sLairRoomNumbers, 2, Len(colLairs(iLair).sLairRoomNumbers) - 2)
-'                nRoomNumberGap = CalcAvgGap(colLairs(iLair).sLairRoomNumbers)
+'                nWalkDistance = CalcAvgGap(colLairs(iLair).sLairRoomNumbers)
                 
                 sArr() = Split(colLairs(iLair).sLairRoomNumbers, ",")
-                If UBound(sArr) > 0 Then ReDim Preserve arrLairs(UBound(sArr))
+                If UBound(sArr) > 0 Then ReDim arrLairs(UBound(sArr))
                 For x = 0 To UBound(sArr)
                     reTemp = ExtractMapRoom(sArr(x))
                     If reTemp.Map > 0 And reTemp.Room > 0 Then arrLairs(x) = reTemp
@@ -4734,21 +4742,29 @@ For iLair = 0 To UBound(colLairs())
             
             If UBound(arrLairs) > 0 Then
                 For x = 0 To UBound(arrLairs)
+                    
+                    nRefGroup = nGroup
+                    'nRefMinIndex = nMinIndex
+                    'nRefMaxIndex = nMaxIndex
                     ReDim arrChainedRooms(0)
                     arrChainedRooms(0) = arrLairs(x)
-                    y = GetWalkToNextLair(arrLairs(x), arrLairs, arrNonLairs, arrChainedRooms, 1)
-                    If y > 0 Then
-                        nWalkTotal = nWalkTotal + y
-                        nWalkCount = nWalkCount + 1
+                    
+                    nRET = GetLairWalk(arrLairs(x), arrLairs, arrChainedRooms, nRefGroup, 1)  'nRefMinIndex, nRefMaxIndex,
+                    If UBound(nRET) = 1 Then
+                        If nRET(1) > 0 Then
+                            'nRet(0):total walk, nRet(1):count
+                            nWalkTotal = nWalkTotal + (nRET(0) / nRET(1))
+                            nWalkCount = nWalkCount + 1
+                        End If
                     End If
                 Next x
-                If nWalkCount > 0 Then nRoomNumberGap = Round(nWalkTotal / nWalkCount, 2)
+                If nWalkCount > 0 Then nWalkDistance = Round(nWalkTotal / nWalkCount, 2)
             End If
                         
-            If nLairsToRooms > 0 And nLairsToRooms < nRoomNumberGap Then
+            If nLairsToRooms > 0 And nLairsToRooms < nWalkDistance Then
                 tabLairs.Fields("AvgWalk") = nLairsToRooms
-            ElseIf nRoomNumberGap > 0 Then
-                tabLairs.Fields("AvgWalk") = nRoomNumberGap
+            ElseIf nWalkDistance > 0 Then
+                tabLairs.Fields("AvgWalk") = nWalkDistance
             Else
                 tabLairs.Fields("AvgWalk") = nLairsToRooms
             End If
@@ -4764,61 +4780,76 @@ error:
 Call HandleError("ExportLairs")
 End Sub
 
-Private Function GetWalkToNextLair(tStartRoom As RoomExitType, aLairs() As RoomExitType, aNonLairs() As RoomExitType, _
-    ByRef aChainedRooms() As RoomExitType, ByVal nDepth As Long) As Long
-Dim x As Long, y As Long, tRoom As RoomExitType, tExits() As RoomExitType
-Dim nTotal As Long, nCount As Long, nResult As Long, tQueuedRooms() As RoomExitType, nQueue As Long
+Private Function GetLairWalk(tStartRoom As RoomExitType, _
+    ByRef aLairs() As RoomExitType, ByRef aChainedRooms() As RoomExitType, _
+    ByRef nMatchGroup As Integer, _
+    ByVal nDepth As Long) As Long() 'ByRef nMatchMinIndex As Integer, ByRef nMatchMaxIndex As Integer,
+Dim x As Long, y As Long, tExits() As RoomExitType
+Dim nTotal As Long, nCount As Long, tQueuedRooms() As RoomExitType, nQueue As Long
+Dim sArr() As String, nGroup As Integer, nMinIndex As Integer, nMaxIndex As Integer
+Dim nResult() As Long, nReturn() As Long
 On Error GoTo error:
 
-If nDepth > 100 Then Exit Function
-If tStartRoom.Map = 0 Or tStartRoom.Room = 0 Then Exit Function
+ReDim nReturn(1)
+GetLairWalk = nReturn
 
-If nDepth > 1 Then
-    x = UBound(aChainedRooms) + 1
-    ReDim Preserve aChainedRooms(x)
-    aChainedRooms(x) = tStartRoom
-End If
+If nDepth > 99 Then Exit Function
+If tStartRoom.Map = 0 Or tStartRoom.Room = 0 Then Exit Function
 
 nQueue = -1
 ReDim tQueuedRooms(0)
 
-tExits = GetRoomExits(tStartRoom.Map, tStartRoom.Room)
+tExits = GetRoomExits(tStartRoom.Map, tStartRoom.Room, True)
 For x = 0 To 9
     If tExits(x).Map > 0 And tExits(x).Room > 0 Then
+        
+        sArr() = Split(tExits(x).ExitType, "-", , vbTextCompare)
+        If UBound(sArr) <> 2 Then GoTo nextexit:
+        nGroup = Val(sArr(0))
+        nMinIndex = Val(sArr(1))
+        nMaxIndex = Val(sArr(2))
+        
+        If nMatchGroup > 0 And nMatchGroup <> nGroup Then GoTo nextexit:
+'        If nMatchMinIndex > 0 And nMatchMaxIndex > 0 Then
+'            If nMinIndex > (nMatchMaxIndex + 2) Then GoTo nextexit:
+'            If nMaxIndex < (nMatchMinIndex - 2) Then GoTo nextexit:
+'            If nMatchMinIndex > nMinIndex Then nMatchMinIndex = nMinIndex
+'            If nMatchMaxIndex < nMaxIndex Then nMatchMaxIndex = nMaxIndex
+'        End If
+        
         If RoomInRoomArray(tExits(x), aChainedRooms) = False Then
-            If RoomInRoomArray(tExits(x), aLairs) = True Then
-                'GetWalkToNextLair = nDepth
-                'Exit Function
+            If IsRoomLair(tExits(x).Map, tExits(x).Room) Then
                 nTotal = nTotal + nDepth
                 nCount = nCount + 1
-                y = UBound(aChainedRooms) + 1
-                ReDim Preserve aChainedRooms(y)
-                aChainedRooms(y) = tExits(x)
-            ElseIf RoomInRoomArray(tExits(x), aNonLairs) = True Then
+            Else
                 nQueue = nQueue + 1
                 If nQueue > 0 Then ReDim Preserve tQueuedRooms(nQueue)
                 tQueuedRooms(nQueue) = tExits(x)
             End If
+            
+            y = UBound(aChainedRooms) + 1
+            ReDim Preserve aChainedRooms(y)
+            aChainedRooms(y) = tExits(x)
         End If
     End If
+nextexit:
 Next x
 
 If nQueue >= 0 Then
     For x = 0 To nQueue
-        nResult = GetWalkToNextLair(tQueuedRooms(nQueue), aLairs, aNonLairs, aChainedRooms, nDepth + 1)
-        If nResult > 0 Then
-            'GetWalkToNextLair = nResult
-            'Exit Function
-            nTotal = nTotal + nResult
-            nCount = nCount + 1
-            y = UBound(aChainedRooms) + 1
-            ReDim Preserve aChainedRooms(y)
-            aChainedRooms(y) = tQueuedRooms(nQueue)
+        nResult = GetLairWalk(tQueuedRooms(x), aLairs, aChainedRooms, nMatchGroup, nDepth + 1) 'nMatchMinIndex, nMatchMaxIndex,
+        If UBound(nResult) = 1 Then
+            nTotal = nTotal + nResult(0)
+            nCount = nCount + nResult(1)
         End If
     Next x
 End If
 
-If nTotal > 0 And nCount > 0 Then GetWalkToNextLair = Round(nTotal / nCount, 2)
+If nTotal > 0 And nCount > 0 Then
+    nReturn(0) = nTotal
+    nReturn(1) = nCount
+    GetLairWalk = nReturn
+End If
 
 out:
 Exit Function
@@ -5246,7 +5277,7 @@ Loop
 
 End Sub
 Private Sub ExportMonsters()
-Dim nStatus As Integer, recnum As Long, x As Long, sTemp As String, y As Integer, z As Integer
+Dim nStatus As Integer, recnum As Long, x As Long ', sTemp As String, y As Integer, z As Integer
 Dim tMSR As MonsterSimResults
 
 recnum = 1
@@ -5377,10 +5408,10 @@ End Sub
 Private Sub ExportRooms()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, sDir As String, sTemp As String
-Dim sActionNum As String, sMonsters As String, nAction As Integer, nNumActions As Long
+Dim sMonsters As String, nAction As Integer, nNumActions As Long 'sActionNum As String,
 Dim nTempMap As Long, nTempRoom As Long, sActions() As String, sNewActions() As String
 Dim x As Integer, y As Integer, z As Integer
-Dim x2 As Integer, y2 As Integer, z2 As Integer
+Dim x2 As Integer, y2 As Integer ', z2 As Integer
 
 If chkLegit(0).Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
 
@@ -5831,7 +5862,7 @@ End Function
 Private Function CreateDatabase() As Integer
 On Error GoTo error:
 Dim sTemp As String, nYesNo As Integer, catDB As ADOX.Catalog
-Dim fso As FileSystemObject, x As Integer, nTemp As Integer, nTemp2 As Integer
+Dim fso As FileSystemObject ', x As Integer, nTemp As Integer, nTemp2 As Integer
 
 CreateDatabase = 0
 
