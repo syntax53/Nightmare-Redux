@@ -749,11 +749,17 @@ Call HandleError("GetLairInfoIndex")
 Resume out:
 End Function
 
-Private Function GetLairInfo(sGroupIndex As String) As LairInfoType
+Private Function GetLairInfo(ByVal sGroupIndex As String) As LairInfoType
 On Error GoTo error:
-Dim x As Long
+Dim x As Long, nMaxRegen As Integer, sArr() As String
 
 If Len(sGroupIndex) < 5 Then Exit Function
+
+sArr() = Split(sGroupIndex, "-", , vbTextCompare)
+If UBound(sArr) > 2 Then
+    sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+    nMaxRegen = Val(sArr(3))
+End If
 x = GetLairInfoIndex(sGroupIndex)
 
 GetLairInfo.sGroupIndex = colLairs(x).sGroupIndex
@@ -777,6 +783,25 @@ GetLairInfo.nTotalLairs = colLairs(x).nTotalLairs
 GetLairInfo.sLairRoomNumbers = colLairs(x).sLairRoomNumbers
 GetLairInfo.sNonLairRooms = colLairs(x).sNonLairRooms
 
+If nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
+    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
+        colLairs(x).nScriptValue = colLairs(x).nAvgExp * nMaxRegen * 100
+    Else
+        colLairs(x).nScriptValue = _
+            Round( _
+                    ( _
+                        (colLairs(x).nAvgExp * nMaxRegen) / _
+                        ( _
+                            (colLairs(x).nAvgHP * nMaxRegen) + _
+                            (colLairs(x).nAvgDmg * 2 * ((nMaxRegen * (nMaxRegen + 1)) / 2)) _
+                        ) _
+                    ) _
+                    * 100 _
+                )
+    End If
+Else
+    colLairs(x).nScriptValue = 0
+End If
 out:
 On Error Resume Next
 Exit Function
@@ -788,9 +813,17 @@ End Function
 Private Sub SetLairInfo(tUpdatedLairInfo As LairInfoType)
 On Error GoTo error:
 
-Dim x As Long ', sArr() As String ', i As Integer
+Dim x As Long, sArr() As String, sGroupIndex As String, nMaxRegen As Integer
 If Len(tUpdatedLairInfo.sGroupIndex) < 5 Then Exit Sub
-x = GetLairInfoIndex(tUpdatedLairInfo.sGroupIndex)
+
+sArr() = Split(tUpdatedLairInfo.sGroupIndex, "-", , vbTextCompare)
+If UBound(sArr) > 2 Then
+    sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+    nMaxRegen = Val(sArr(3))
+Else
+    sGroupIndex = tUpdatedLairInfo.sGroupIndex
+End If
+x = GetLairInfoIndex(sGroupIndex)
 
 'averages are for a single mob, averaged from all of the mobs in the list/index
 'the max regen is not taken into account (multiply by that for total average exp, for example)
@@ -1498,7 +1531,7 @@ nProgressScale = 1
 Do While (nProgressScale < 100 And (MaxValue / nProgressScale) > 100) Or (MaxValue / nProgressScale) > MaxInt
     nProgressScale = nProgressScale + 1
 Loop
-MaxValue = Fix((MaxValue / nProgressScale)) * 1.25
+MaxValue = Fix((MaxValue / nProgressScale)) * 1.2
 
 nScaleCount = 1
 ProgressBar.Value = 0
@@ -2781,7 +2814,7 @@ If Not tabTempRS.EOF Then
                 End Select
                 
                 If nMaxRegen > 0 And Len(sGroupIndex) > 4 Then
-                    tLairInfo = GetLairInfo(sGroupIndex) '& "-" & CStr(nMaxRegen)
+                    tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(nMaxRegen))
                     nAvgLairExp = nAvgLairExp + (tLairInfo.nAvgExp * nMaxRegen)
                     nMobScriptValue = nMobScriptValue + tLairInfo.nScriptValue
                     nMobsTotal = nMobsTotal + nMaxRegen 'tLairInfo.nMaxRegen
@@ -4694,7 +4727,7 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Fields("MobList") = colLairs(iLair).sMobList
             tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
             tabLairs.Fields("AvgDelay") = colLairs(iLair).nAvgDelay
-            'tabLairs.Fields("MaxRegen") = colLairs(iLair).nMaxRegen
+'            tabLairs.Fields("MaxRegen") = colLairs(iLair).nMaxRegen
             tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
             tabLairs.Fields("AvgDmgPhys") = colLairs(iLair).nAvgDmgPhys
             tabLairs.Fields("AvgDmgSpell") = colLairs(iLair).nAvgDmgSpell
@@ -4772,7 +4805,9 @@ For iLair = 0 To UBound(colLairs())
             tabLairs.Update
         End If
     End If
+    
     Call IncreaseProgressBar
+    
 Next iLair
 
 Exit Sub
