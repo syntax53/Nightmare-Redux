@@ -1238,30 +1238,29 @@ ReDim nDefaultExcludeFrom(0) As Long
 ReDim nDefaultExcludeTo(0) As Long
 ReDim sDefaultExcludeNote(0) As String
 
-Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
-Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
 Call AddToDefaultsArr(x, 1, 288, 288, "fake silver river room")
 Call AddToDefaultsArr(x, 1, 289, 289, "halls of training, entrance")
-Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 2306, 2306, "small house, attic")
+Call AddToDefaultsArr(x, 4, 1, 1, "silvermere property office")
 
+Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
+Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
 Call AddToDefaultsArr(x, 1, 2779, 2782, "sysop support module test rooms")
 Call AddToDefaultsArr(x, 1, 3343, 3346, "sysop support empty rooms")
 Call AddToDefaultsArr(x, 1, 3437, 3437, "sysop support rubbish room")
+Call AddToDefaultsArr(x, 17, 2867, 2867, "sysop training room")
 
 Call AddToDefaultsArr(x, 2, 2963, 2963, "mod test room, mod 1")
 Call AddToDefaultsArr(x, 3, 788, 788, "mod test room, mod 2")
 Call AddToDefaultsArr(x, 8, 1407, 1407, "mod test room, mod 3")
 Call AddToDefaultsArr(x, 6, 3275, 3275, "mod test room, mod 4")
 Call AddToDefaultsArr(x, 9, 1432, 1432, "mod test room, mod 5")
-
 Call AddToDefaultsArr(x, 12, 2258, 2258, "mod test room, mod 6")
-'Call AddToDefaultsArr(x, 12, 2381, 2381, "platform of stars")
-
 Call AddToDefaultsArr(x, 16, 2673, 2673, "mod test room, mod 7")
 Call AddToDefaultsArr(x, 15, 2055, 2055, "mod test room, mod 8")
-
 Call AddToDefaultsArr(x, 17, 2839, 2839, "mod test room, mod 9")
-Call AddToDefaultsArr(x, 17, 2867, 2867, "sysop training room")
+
 
 out:
 Exit Sub

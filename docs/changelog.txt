@@ -15,6 +15,7 @@ v1.8.3 ()
 -UP: added between round spell average damage to attack sim
 -UP: added the average hit for each attack to the monster attack simulator
 -UP: room 12/2381 platform of stars removed from exclusion list on mme export
+-UP: rooms 1/2306 (small house, attic) and 4/1 (silvermere property office) added to exclusion list
 -UP: added display of some unknown room values to the other tab
 -FIX: utilizing the "reset user intractable" fields on database record room exports will no longer remove hidden sign items.
 
