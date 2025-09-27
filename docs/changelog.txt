@@ -1,4 +1,4 @@
-v1.8.3 ()
+v1.8.3 (09/27/2025)
 ------------------------------------------  
 -NEW: Can now import and export users from clipboard using a proprietary text format
 -NEW: additional user field for hit point rolls that play into a character's maximum HP
