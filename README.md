@@ -1,5 +1,26 @@
 Nightmare Redux is an editor for the game MajorMUD(r).  
 
+v1.8.3 (09/27/2025)
+------------------------------------------  
+-NEW: Can now import and export users from clipboard using a proprietary text format
+-NEW: additional user field for hit point rolls that play into a character's maximum HP
+-NEW: Revive Character button on user tab to simplify a rescue
+-UP: added display of all of the unknown users values on a tab
+-UP: Added monster game limit, bs defense, and lair exp fields for MME export
+-UP: Added room delay to export and for lair info
+-UP: completely reworked script/lair value calculations to be more based on the lair composition of all monsters that regen in the lair.  lair table now created during mme export with lair information (avg damage, exp, max regen, etc) to be used in MME.  monsters and lairs have pre-calculated script values.
+-NOTE: script value will likely be phased out in a future MME version
+-UP: sped up some of the slow progress bars
+-UP: fixed some positioning of elements bleeding off the edges of the windows on most of the editors
+-UP: list of recent database locations in settings should no longer create duplicates
+-UP: update attack sim to allow for true dodge value (as computed in MME v1.9.2) or megamud's value
+-UP: added between round spell average damage to attack sim
+-UP: added the average hit for each attack to the monster attack simulator
+-UP: room 12/2381 platform of stars removed from exclusion list on mme export
+-UP: rooms 1/2306 (small house, attic) and 4/1 (silvermere property office) added to exclusion list
+-UP: added display of some unknown room values to the other tab
+-FIX: utilizing the "reset user intractable" fields on database record room exports will no longer remove hidden sign items.
+
 v1.8.2 (12/30/2021)  
 ------------------------------------------  
 -NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info.  this will allow you to do things like set the minimum drop percentage to 50% for items dropped by monsters that regen greater than 7 days, for example  
