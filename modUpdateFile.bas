@@ -44,7 +44,7 @@ Else
     
     Call frmProgressBar.SetRange(CalcTotalRecords)
     
-    frmProgressBar.lblNOTE.Visible = True
+    'frmProgressBar.lblNote.Visible = True
     frmProgressBar.lblPanel(0).Caption = ""
     frmProgressBar.lblPanel(1).Caption = ""
     frmProgressBar.Show
@@ -683,7 +683,7 @@ End If
 frmMain.Enabled = True
 frmMain.WindowState = InitialWindowState
 
-frmProgressBar.lblNOTE.Visible = False
+'frmProgressBar.lblNote.Visible = False
 Unload frmProgressBar
 
 End Sub

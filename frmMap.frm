@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmMap 
    AutoRedraw      =   -1  'True
    BackColor       =   &H00000000&
@@ -21656,7 +21656,7 @@ For x = 0 To 9
         Select Case Roomrec.RoomType(x)
             Case 8: 'map change
                 sExits = sExits & IIf(sExits = "", "", vbCrLf) _
-                    & GetRoomExits(x, False) & ":" & "Map Change to map " & Roomrec.Para1(x)
+                    & GetFriendlyRoomExit(x, False) & ":" & "Map Change to map " & Roomrec.Para1(x)
                 ActivatedCell = ActivateCell(Cell, x, Roomrec.RoomType(x))
                 If ActivatedCell = -1 Then GoTo Skip:
                 If chkFollowMapChanges.Value = 1 Then
@@ -21667,7 +21667,7 @@ For x = 0 To 9
                 
             Case 6: 'hidden
                 sExits = sExits & IIf(sExits = "", "", vbCrLf) _
-                    & GetRoomExits(x, False) & ": "
+                    & GetFriendlyRoomExit(x, False) & ": "
                 Select Case Roomrec.Para1(x)
                     Case 1: 'passable
                         sExits = sExits & " (Hidden/Passable)"
@@ -21694,7 +21694,7 @@ For x = 0 To 9
             
             Case 10: 'text
                 sExits = sExits & IIf(sExits = "", "", vbCrLf) _
-                    & GetRoomExits(x, False) & ": " & GetMessages(Roomrec.Para1(x), -1)
+                    & GetFriendlyRoomExit(x, False) & ": " & GetMessages(Roomrec.Para1(x), -1)
                 
                 ActivatedCell = ActivateCell(Cell, x, Roomrec.RoomType(x))
                 If ActivatedCell = -1 Then GoTo Skip:
@@ -21704,7 +21704,7 @@ For x = 0 To 9
                 
             Case 12: 'remote action
                 sExits = sExits & IIf(sExits = "", "", vbCrLf) _
-                    & GetRoomExits(x, False) & ": Remote Action"
+                    & GetFriendlyRoomExit(x, False) & ": Remote Action"
                 If chkMarkCMD.Value = 1 Then
                     If sRemote = "" Then
                         sRemote = vbCrLf & vbCrLf & "Remote Actions: " & vbCrLf
@@ -21734,9 +21734,9 @@ For x = 0 To 9
                             Case Is > 9:
                                 sRemoteEffect = ", action #1"
                         End Select
-                        sRemoteEffect = GetRoomExits(nRemote Mod 10, True) & sRemoteEffect
+                        sRemoteEffect = GetFriendlyRoomExit(nRemote Mod 10, True) & sRemoteEffect
                     Else
-                        sRemoteEffect = GetRoomExits(nRemote, True)
+                        sRemoteEffect = GetFriendlyRoomExit(nRemote, True)
                     End If
                     
                     
@@ -21755,7 +21755,7 @@ For x = 0 To 9
             Case Else:
                 If Roomrec.RoomType(x) > 0 Then
                     sExits = sExits & IIf(sExits = "", "", vbCrLf) _
-                        & GetRoomExits(x, False) & ": " & GetRoomExitType(Roomrec.RoomType(x))
+                        & GetFriendlyRoomExit(x, False) & ": " & GetRoomExitType(Roomrec.RoomType(x))
                 End If
                 ActivatedCell = ActivateCell(Cell, x, Roomrec.RoomType(x))
                 If ActivatedCell = -1 Then GoTo Skip:
@@ -21817,7 +21817,7 @@ If chkNoTooltips.Value = 0 Then
                 If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex)
                 
                 For x = Roomrec.MinIndex To Roomrec.MaxIndex
-                    For y = 0 To 10 '20
+                    For y = 0 To 14
                         If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
                             If sMonsters = "" Then
                                 sMonsters = "Also here: "

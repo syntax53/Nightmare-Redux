@@ -1,18 +1,138 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmUser 
    Caption         =   "User Editor"
    ClientHeight    =   5430
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   10320
+   ClientWidth     =   17325
    Icon            =   "frmUser.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   5430
-   ScaleWidth      =   10320
+   ScaleWidth      =   17325
+   Begin VB.Frame framImport 
+      Caption         =   "Import"
+      Height          =   5295
+      Left            =   10260
+      TabIndex        =   579
+      Top             =   60
+      Visible         =   0   'False
+      Width           =   6915
+      Begin VB.CheckBox chkImportDeets 
+         Caption         =   "Import Lives, Suicide, Channel, Cash"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   590
+         Top             =   1620
+         Width           =   3195
+      End
+      Begin VB.CheckBox chkImportRooms 
+         Caption         =   "Import Rooms"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   589
+         Top             =   1980
+         Width           =   1875
+      End
+      Begin VB.CommandButton cmdImportGo 
+         Caption         =   "Cancel"
+         Height          =   435
+         Index           =   1
+         Left            =   2520
+         TabIndex        =   588
+         Top             =   4620
+         Width           =   1575
+      End
+      Begin VB.CommandButton cmdImportGo 
+         Caption         =   "Import from Clipboard"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   675
+         Index           =   0
+         Left            =   2520
+         TabIndex        =   587
+         Top             =   3780
+         Width           =   1575
+      End
+      Begin VB.CheckBox chkImportClearAbils 
+         Caption         =   "Clear Abilities First"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   586
+         Top             =   3420
+         Width           =   1875
+      End
+      Begin VB.CheckBox chkImportClearKeys 
+         Caption         =   "Clear Keys First"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   585
+         Top             =   3060
+         Width           =   1875
+      End
+      Begin VB.CheckBox chkImportClearSpells 
+         Caption         =   "Clear Spells First"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   584
+         Top             =   2340
+         Value           =   1  'Checked
+         Width           =   1875
+      End
+      Begin VB.CheckBox chkImportClearItems 
+         Caption         =   "Clear Items First"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   583
+         Top             =   2700
+         Value           =   1  'Checked
+         Width           =   1875
+      End
+      Begin VB.CheckBox chkImportGang 
+         Caption         =   "Import Gang Name"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   582
+         Top             =   1260
+         Width           =   1875
+      End
+      Begin VB.CheckBox chkImportName 
+         Caption         =   "Import Character Name"
+         Height          =   195
+         Left            =   2640
+         TabIndex        =   580
+         Top             =   900
+         Width           =   2295
+      End
+      Begin VB.Label Label36 
+         Alignment       =   2  'Center
+         Caption         =   "Character Import"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   18
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Left            =   120
+         TabIndex        =   581
+         Top             =   300
+         Width           =   6615
+      End
+   End
    Begin VB.Frame framNav 
       BorderStyle     =   0  'None
       Height          =   5295
@@ -20,6 +140,24 @@ Begin VB.Form frmUser
       TabIndex        =   3
       Top             =   60
       Width           =   6915
+      Begin VB.CommandButton cmdUserImport 
+         Caption         =   "Import"
+         Height          =   255
+         Left            =   2760
+         TabIndex        =   473
+         ToolTipText     =   "Import User from TXT"
+         Top             =   0
+         Width           =   795
+      End
+      Begin VB.CommandButton cmdUserExport 
+         Caption         =   "Export"
+         Height          =   255
+         Left            =   1980
+         TabIndex        =   472
+         ToolTipText     =   "Export User to TXT"
+         Top             =   0
+         Width           =   735
+      End
       Begin TabDlg.SSTab SSTab3 
          Height          =   4935
          Left            =   0
@@ -29,8 +167,8 @@ Begin VB.Form frmUser
          _ExtentX        =   12091
          _ExtentY        =   8705
          _Version        =   393216
-         Tabs            =   7
-         TabsPerRow      =   7
+         Tabs            =   8
+         TabsPerRow      =   8
          TabHeight       =   520
          TabCaption(0)   =   "Stats"
          TabPicture(0)   =   "frmUser.frx":08CA
@@ -39,18 +177,20 @@ Begin VB.Form frmUser
          Tab(0).Control(0).Enabled=   0   'False
          Tab(0).Control(1)=   "Frame7"
          Tab(0).Control(1).Enabled=   0   'False
-         Tab(0).Control(2)=   "cmdPasteChar"
+         Tab(0).Control(2)=   "cmdReviveChar"
          Tab(0).Control(2).Enabled=   0   'False
-         Tab(0).Control(3)=   "cmdPasteStatQ"
+         Tab(0).Control(3)=   "cmdCalcExp"
          Tab(0).Control(3).Enabled=   0   'False
-         Tab(0).Control(4)=   "cmdCalcExp"
+         Tab(0).Control(4)=   "cmdPasteStatQ"
          Tab(0).Control(4).Enabled=   0   'False
-         Tab(0).ControlCount=   5
+         Tab(0).Control(5)=   "cmdPasteChar"
+         Tab(0).Control(5).Enabled=   0   'False
+         Tab(0).ControlCount=   6
          TabCaption(1)   =   "Inven."
          TabPicture(1)   =   "frmUser.frx":08E6
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "frmKeys"
-         Tab(1).Control(1)=   "frmItems"
+         Tab(1).Control(0)=   "frmItems"
+         Tab(1).Control(1)=   "frmKeys"
          Tab(1).ControlCount=   2
          TabCaption(2)   =   "Spellbk."
          TabPicture(2)   =   "frmUser.frx":0902
@@ -77,47 +217,182 @@ Begin VB.Form frmUser
          TabCaption(5)   =   "Worn"
          TabPicture(5)   =   "frmUser.frx":0956
          Tab(5).ControlEnabled=   0   'False
-         Tab(5).Control(0)=   "cmdPasteItems(2)"
-         Tab(5).Control(1)=   "cmdEditWeapon"
-         Tab(5).Control(2)=   "cmdClearWorn"
+         Tab(5).Control(0)=   "Label75"
+         Tab(5).Control(1)=   "txtWeaponNumber"
+         Tab(5).Control(2)=   "txtWeaponName"
+         Tab(5).Control(2).Enabled=   0   'False
          Tab(5).Control(3)=   "Frame5"
-         Tab(5).Control(4)=   "txtWeaponName"
-         Tab(5).Control(4).Enabled=   0   'False
-         Tab(5).Control(5)=   "txtWeaponNumber"
-         Tab(5).Control(6)=   "Label75"
+         Tab(5).Control(4)=   "cmdClearWorn"
+         Tab(5).Control(5)=   "cmdEditWeapon"
+         Tab(5).Control(6)=   "cmdPasteItems(2)"
          Tab(5).ControlCount=   7
          TabCaption(6)   =   "Misc"
          TabPicture(6)   =   "frmUser.frx":0972
          Tab(6).ControlEnabled=   0   'False
-         Tab(6).Control(0)=   "chkEdited"
-         Tab(6).Control(1)=   "Frame4"
-         Tab(6).Control(2)=   "txtTitle"
-         Tab(6).Control(3)=   "txtCurrentEncum"
-         Tab(6).Control(4)=   "txtMaxEncum"
-         Tab(6).Control(5)=   "txtEvilPoints"
-         Tab(6).Control(6)=   "txtBroadcastChan"
-         Tab(6).Control(7)=   "txtCopper"
-         Tab(6).Control(8)=   "txtSilver"
-         Tab(6).Control(9)=   "txtGold"
-         Tab(6).Control(10)=   "txtPlatinum"
-         Tab(6).Control(11)=   "txtRunic"
-         Tab(6).Control(12)=   "txtGang"
+         Tab(6).Control(0)=   "Label76(0)"
+         Tab(6).Control(1)=   "Label76(1)"
+         Tab(6).Control(2)=   "Label76(2)"
+         Tab(6).Control(3)=   "Label76(3)"
+         Tab(6).Control(4)=   "Label76(4)"
+         Tab(6).Control(5)=   "Label76(5)"
+         Tab(6).Control(6)=   "Label76(6)"
+         Tab(6).Control(7)=   "Label76(7)"
+         Tab(6).Control(8)=   "Label76(8)"
+         Tab(6).Control(9)=   "Label76(9)"
+         Tab(6).Control(10)=   "Label76(10)"
+         Tab(6).Control(11)=   "Label76(11)"
+         Tab(6).Control(12)=   "Label76(12)"
          Tab(6).Control(13)=   "txtSuicide"
-         Tab(6).Control(14)=   "Label76(11)"
-         Tab(6).Control(15)=   "Label76(10)"
-         Tab(6).Control(16)=   "Label76(9)"
-         Tab(6).Control(17)=   "Label76(8)"
-         Tab(6).Control(18)=   "Label76(7)"
-         Tab(6).Control(19)=   "Label76(6)"
-         Tab(6).Control(20)=   "Label76(5)"
-         Tab(6).Control(21)=   "Label76(4)"
-         Tab(6).Control(22)=   "Label76(3)"
-         Tab(6).Control(23)=   "Label76(2)"
-         Tab(6).Control(24)=   "Label76(1)"
-         Tab(6).Control(25)=   "Label76(0)"
-         Tab(6).ControlCount=   26
+         Tab(6).Control(14)=   "txtGang"
+         Tab(6).Control(15)=   "txtRunic"
+         Tab(6).Control(16)=   "txtPlatinum"
+         Tab(6).Control(17)=   "txtGold"
+         Tab(6).Control(18)=   "txtSilver"
+         Tab(6).Control(19)=   "txtCopper"
+         Tab(6).Control(20)=   "txtBroadcastChan"
+         Tab(6).Control(21)=   "txtEvilPoints"
+         Tab(6).Control(22)=   "txtMaxEncum"
+         Tab(6).Control(23)=   "txtCurrentEncum"
+         Tab(6).Control(24)=   "txtTitle"
+         Tab(6).Control(25)=   "Frame4"
+         Tab(6).Control(26)=   "chkEdited"
+         Tab(6).Control(27)=   "txtHitPointRolls"
+         Tab(6).Control(28)=   "cmdUserHitPointRollQ"
+         Tab(6).Control(29)=   "cmdUserHitPointMax"
+         Tab(6).ControlCount=   30
+         TabCaption(7)   =   "???"
+         TabPicture(7)   =   "frmUser.frx":098E
+         Tab(7).ControlEnabled=   0   'False
+         Tab(7).Control(0)=   "lblUserUnknowns(0)"
+         Tab(7).Control(1)=   "lblUserUnknowns(1)"
+         Tab(7).Control(2)=   "lblUserUnknowns(2)"
+         Tab(7).Control(3)=   "lblUserUnknowns(3)"
+         Tab(7).Control(4)=   "lblUserUnknowns(4)"
+         Tab(7).Control(5)=   "lblUserUnknowns(5)"
+         Tab(7).Control(6)=   "lblUserUnknowns(6)"
+         Tab(7).Control(7)=   "lblUserUnknowns(7)"
+         Tab(7).Control(8)=   "lblUserUnknowns(8)"
+         Tab(7).Control(9)=   "lblUserUnknowns(9)"
+         Tab(7).Control(10)=   "lblUserUnknowns(10)"
+         Tab(7).Control(11)=   "lblUserUnknowns(11)"
+         Tab(7).Control(12)=   "lblUserUnknowns(12)"
+         Tab(7).Control(13)=   "lblUserUnknowns(13)"
+         Tab(7).Control(14)=   "lblUserUnknowns(14)"
+         Tab(7).Control(15)=   "lblUserUnknowns(15)"
+         Tab(7).Control(16)=   "lblUserUnknowns(16)"
+         Tab(7).Control(17)=   "lblUserUnknowns(17)"
+         Tab(7).Control(18)=   "lblUserUnknowns(18)"
+         Tab(7).Control(19)=   "lblUserUnknowns(19)"
+         Tab(7).Control(20)=   "lblUserUnknowns(20)"
+         Tab(7).Control(21)=   "lblUserUnknowns(21)"
+         Tab(7).Control(22)=   "lblUserUnknowns(22)"
+         Tab(7).Control(23)=   "lblUserUnknowns(23)"
+         Tab(7).Control(24)=   "lblUserUnknowns(24)"
+         Tab(7).Control(25)=   "lblUserUnknowns(25)"
+         Tab(7).Control(26)=   "lblUserUnknowns(26)"
+         Tab(7).Control(27)=   "lblUserUnknowns(27)"
+         Tab(7).Control(28)=   "lblUserUnknowns(28)"
+         Tab(7).Control(29)=   "lblUserUnknowns(29)"
+         Tab(7).Control(30)=   "lblUserUnknowns(30)"
+         Tab(7).Control(31)=   "lblUserUnknowns(31)"
+         Tab(7).Control(32)=   "lblUserUnknowns(32)"
+         Tab(7).Control(33)=   "lblUserUnknowns(33)"
+         Tab(7).Control(34)=   "lblUserUnknowns(34)"
+         Tab(7).Control(35)=   "lblUserUnknowns(35)"
+         Tab(7).Control(36)=   "lblUserUnknowns(36)"
+         Tab(7).Control(37)=   "lblUserUnknowns(37)"
+         Tab(7).Control(38)=   "lblUserUnknowns(38)"
+         Tab(7).Control(39)=   "lblUserUnknowns(39)"
+         Tab(7).Control(40)=   "lblUserUnknowns(40)"
+         Tab(7).Control(41)=   "lblUserUnknowns(41)"
+         Tab(7).Control(42)=   "lblUserUnknowns(42)"
+         Tab(7).Control(43)=   "lblUserUnknowns(43)"
+         Tab(7).Control(44)=   "lblUserUnknowns(44)"
+         Tab(7).Control(45)=   "lblUserUnknowns(45)"
+         Tab(7).Control(46)=   "lblUserUnknowns(46)"
+         Tab(7).Control(47)=   "lblUserUnknowns(47)"
+         Tab(7).Control(48)=   "lblUserUnknowns(48)"
+         Tab(7).Control(49)=   "txtUserUnknowns(0)"
+         Tab(7).Control(50)=   "txtUserUnknowns(1)"
+         Tab(7).Control(51)=   "txtUserUnknowns(2)"
+         Tab(7).Control(52)=   "txtUserUnknowns(3)"
+         Tab(7).Control(53)=   "txtUserUnknowns(4)"
+         Tab(7).Control(54)=   "txtUserUnknowns(5)"
+         Tab(7).Control(55)=   "txtUserUnknowns(6)"
+         Tab(7).Control(56)=   "txtUserUnknowns(7)"
+         Tab(7).Control(57)=   "txtUserUnknowns(8)"
+         Tab(7).Control(58)=   "txtUserUnknowns(9)"
+         Tab(7).Control(59)=   "txtUserUnknowns(10)"
+         Tab(7).Control(60)=   "txtUserUnknowns(11)"
+         Tab(7).Control(61)=   "txtUserUnknowns(12)"
+         Tab(7).Control(62)=   "txtUserUnknowns(13)"
+         Tab(7).Control(63)=   "txtUserUnknowns(14)"
+         Tab(7).Control(64)=   "txtUserUnknowns(15)"
+         Tab(7).Control(65)=   "txtUserUnknowns(16)"
+         Tab(7).Control(66)=   "txtUserUnknowns(17)"
+         Tab(7).Control(67)=   "txtUserUnknowns(18)"
+         Tab(7).Control(68)=   "txtUserUnknowns(19)"
+         Tab(7).Control(69)=   "txtUserUnknowns(20)"
+         Tab(7).Control(70)=   "txtUserUnknowns(21)"
+         Tab(7).Control(71)=   "txtUserUnknowns(22)"
+         Tab(7).Control(72)=   "txtUserUnknowns(23)"
+         Tab(7).Control(73)=   "txtUserUnknowns(24)"
+         Tab(7).Control(74)=   "txtUserUnknowns(25)"
+         Tab(7).Control(75)=   "txtUserUnknowns(26)"
+         Tab(7).Control(76)=   "txtUserUnknowns(27)"
+         Tab(7).Control(77)=   "txtUserUnknowns(28)"
+         Tab(7).Control(78)=   "txtUserUnknowns(29)"
+         Tab(7).Control(79)=   "txtUserUnknowns(30)"
+         Tab(7).Control(80)=   "txtUserUnknowns(31)"
+         Tab(7).Control(81)=   "txtUserUnknowns(32)"
+         Tab(7).Control(82)=   "txtUserUnknowns(33)"
+         Tab(7).Control(83)=   "txtUserUnknowns(34)"
+         Tab(7).Control(84)=   "txtUserUnknowns(35)"
+         Tab(7).Control(85)=   "txtUserUnknowns(36)"
+         Tab(7).Control(86)=   "txtUserUnknowns(37)"
+         Tab(7).Control(87)=   "txtUserUnknowns(38)"
+         Tab(7).Control(88)=   "txtUserUnknowns(39)"
+         Tab(7).Control(89)=   "txtUserUnknowns(40)"
+         Tab(7).Control(90)=   "txtUserUnknowns(41)"
+         Tab(7).Control(91)=   "txtUserUnknowns(42)"
+         Tab(7).Control(92)=   "txtUserUnknowns(43)"
+         Tab(7).Control(93)=   "txtUserUnknowns(44)"
+         Tab(7).Control(94)=   "txtUserUnknowns(45)"
+         Tab(7).Control(95)=   "txtUserUnknowns(46)"
+         Tab(7).Control(96)=   "txtUserUnknowns(47)"
+         Tab(7).Control(97)=   "txtUserUnknowns(48)"
+         Tab(7).Control(98)=   "optUserUnknowns(0)"
+         Tab(7).Control(99)=   "optUserUnknowns(1)"
+         Tab(7).Control(100)=   "optUserUnknowns(2)"
+         Tab(7).Control(101)=   "cmdUserUnknownsNote"
+         Tab(7).ControlCount=   102
+         Begin VB.CommandButton cmdPasteChar 
+            Caption         =   "&Paste Stats"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   5100
+            TabIndex        =   13
+            Top             =   720
+            Width           =   1575
+         End
+         Begin VB.CommandButton cmdPasteStatQ 
+            Caption         =   "?"
+            Height          =   315
+            Left            =   6240
+            TabIndex        =   469
+            Top             =   420
+            Width           =   435
+         End
          Begin VB.CommandButton cmdCalcExp 
-            Caption         =   "Calc E&xperience"
+            Caption         =   "Calc E&xp"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
                Size            =   8.25
@@ -131,7 +406,486 @@ Begin VB.Form frmUser
             Left            =   3660
             TabIndex        =   471
             Top             =   720
+            Width           =   1455
+         End
+         Begin VB.CommandButton cmdReviveChar 
+            Caption         =   "Revive Character"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   3660
+            Style           =   1  'Graphical
+            TabIndex        =   595
+            Top             =   420
             Width           =   2595
+         End
+         Begin VB.CommandButton cmdUserHitPointMax 
+            Caption         =   "Max"
+            Height          =   255
+            Left            =   -69180
+            TabIndex        =   591
+            Top             =   1380
+            Width           =   615
+         End
+         Begin VB.CommandButton cmdUserHitPointRollQ 
+            Caption         =   "?"
+            Height          =   315
+            Left            =   -68520
+            TabIndex        =   578
+            Top             =   1680
+            Width           =   195
+         End
+         Begin VB.TextBox txtHitPointRolls 
+            Height          =   315
+            Left            =   -69180
+            MaxLength       =   5
+            TabIndex        =   576
+            Top             =   1680
+            Width           =   615
+         End
+         Begin VB.CommandButton cmdUserUnknownsNote 
+            Caption         =   "Note"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   -71940
+            TabIndex        =   575
+            Top             =   360
+            Width           =   735
+         End
+         Begin VB.OptionButton optUserUnknowns 
+            Caption         =   "Set 3"
+            Height          =   315
+            Index           =   2
+            Left            =   -72840
+            TabIndex        =   574
+            Top             =   360
+            Width           =   735
+         End
+         Begin VB.OptionButton optUserUnknowns 
+            Caption         =   "Set 2"
+            Height          =   315
+            Index           =   1
+            Left            =   -73740
+            TabIndex        =   573
+            Top             =   360
+            Width           =   735
+         End
+         Begin VB.OptionButton optUserUnknowns 
+            Caption         =   "Set 1"
+            Height          =   315
+            Index           =   0
+            Left            =   -74640
+            TabIndex        =   572
+            Top             =   360
+            Value           =   -1  'True
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   48
+            Left            =   -69240
+            TabIndex        =   564
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   47
+            Left            =   -70140
+            TabIndex        =   563
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   46
+            Left            =   -71040
+            TabIndex        =   562
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   45
+            Left            =   -71940
+            TabIndex        =   561
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   44
+            Left            =   -72840
+            TabIndex        =   560
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   43
+            Left            =   -73740
+            TabIndex        =   559
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   42
+            Left            =   -74640
+            TabIndex        =   558
+            Top             =   4500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   41
+            Left            =   -69240
+            TabIndex        =   550
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   40
+            Left            =   -70140
+            TabIndex        =   549
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   39
+            Left            =   -71040
+            TabIndex        =   548
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   38
+            Left            =   -71940
+            TabIndex        =   547
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   37
+            Left            =   -72840
+            TabIndex        =   546
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   36
+            Left            =   -73740
+            TabIndex        =   545
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   35
+            Left            =   -74640
+            TabIndex        =   544
+            Top             =   3900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   34
+            Left            =   -69240
+            TabIndex        =   536
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   33
+            Left            =   -70140
+            TabIndex        =   535
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   32
+            Left            =   -71040
+            TabIndex        =   534
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   31
+            Left            =   -71940
+            TabIndex        =   533
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   30
+            Left            =   -72840
+            TabIndex        =   532
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   29
+            Left            =   -73740
+            TabIndex        =   531
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   28
+            Left            =   -74640
+            TabIndex        =   530
+            Top             =   3300
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   27
+            Left            =   -69240
+            TabIndex        =   522
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   26
+            Left            =   -70140
+            TabIndex        =   521
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   25
+            Left            =   -71040
+            TabIndex        =   520
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   24
+            Left            =   -71940
+            TabIndex        =   519
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   23
+            Left            =   -72840
+            TabIndex        =   518
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   22
+            Left            =   -73740
+            TabIndex        =   517
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   21
+            Left            =   -74640
+            TabIndex        =   516
+            Top             =   2700
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   20
+            Left            =   -69240
+            TabIndex        =   508
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   19
+            Left            =   -70140
+            TabIndex        =   507
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   18
+            Left            =   -71040
+            TabIndex        =   506
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   17
+            Left            =   -71940
+            TabIndex        =   505
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   16
+            Left            =   -72840
+            TabIndex        =   504
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   15
+            Left            =   -73740
+            TabIndex        =   503
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   14
+            Left            =   -74640
+            TabIndex        =   502
+            Top             =   2100
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   13
+            Left            =   -69240
+            TabIndex        =   487
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   12
+            Left            =   -70140
+            TabIndex        =   486
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   11
+            Left            =   -71040
+            TabIndex        =   485
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   10
+            Left            =   -71940
+            TabIndex        =   484
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   9
+            Left            =   -72840
+            TabIndex        =   483
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   8
+            Left            =   -73740
+            TabIndex        =   482
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   7
+            Left            =   -74640
+            TabIndex        =   481
+            Top             =   1500
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   6
+            Left            =   -69240
+            TabIndex        =   480
+            Top             =   900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   5
+            Left            =   -70140
+            TabIndex        =   479
+            Top             =   900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   4
+            Left            =   -71040
+            TabIndex        =   478
+            Top             =   900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   3
+            Left            =   -71940
+            TabIndex        =   477
+            Top             =   900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   2
+            Left            =   -72840
+            TabIndex        =   476
+            Top             =   900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   1
+            Left            =   -73740
+            TabIndex        =   475
+            Top             =   900
+            Width           =   735
+         End
+         Begin VB.TextBox txtUserUnknowns 
+            Height          =   285
+            Index           =   0
+            Left            =   -74640
+            TabIndex        =   474
+            Top             =   900
+            Width           =   735
          End
          Begin VB.CheckBox chkEdited 
             Caption         =   "EDITED Flag"
@@ -149,14 +903,6 @@ Begin VB.Form frmUser
             TabIndex        =   470
             Top             =   4380
             Width           =   1515
-         End
-         Begin VB.CommandButton cmdPasteStatQ 
-            Caption         =   "?"
-            Height          =   315
-            Left            =   6360
-            TabIndex        =   469
-            Top             =   420
-            Width           =   315
          End
          Begin VB.TextBox txtCurrRoomDisp 
             BackColor       =   &H8000000F&
@@ -194,36 +940,34 @@ Begin VB.Form frmUser
             Top             =   480
             Width           =   2415
          End
-         Begin VB.CommandButton cmdPasteChar 
-            Caption         =   "&Paste Stats"
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   315
-            Left            =   3660
-            TabIndex        =   13
-            Top             =   420
-            Width           =   2595
-         End
          Begin VB.Frame Frame4 
             Caption         =   "Spells Casted on User"
-            Height          =   3255
+            Height          =   3315
             Left            =   -74880
             TabIndex        =   391
-            Top             =   1560
+            Top             =   1500
             Width           =   4455
+            Begin VB.CommandButton cmdSomeFlagQ 
+               Caption         =   "?"
+               Height          =   315
+               Left            =   2040
+               TabIndex        =   594
+               Top             =   180
+               Width           =   195
+            End
+            Begin VB.TextBox txtSomeSortOfFlag 
+               Height          =   285
+               Left            =   240
+               TabIndex        =   592
+               Top             =   240
+               Width           =   615
+            End
             Begin VB.CommandButton cmdEditSpellCasted 
                Height          =   135
                Index           =   9
                Left            =   60
                TabIndex        =   442
-               Top             =   2940
+               Top             =   3000
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -231,7 +975,7 @@ Begin VB.Form frmUser
                Index           =   8
                Left            =   60
                TabIndex        =   437
-               Top             =   2700
+               Top             =   2760
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -239,7 +983,7 @@ Begin VB.Form frmUser
                Index           =   7
                Left            =   60
                TabIndex        =   432
-               Top             =   2460
+               Top             =   2520
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -247,7 +991,7 @@ Begin VB.Form frmUser
                Index           =   6
                Left            =   60
                TabIndex        =   427
-               Top             =   2220
+               Top             =   2280
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -255,7 +999,7 @@ Begin VB.Form frmUser
                Index           =   5
                Left            =   60
                TabIndex        =   422
-               Top             =   1980
+               Top             =   2040
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -263,7 +1007,7 @@ Begin VB.Form frmUser
                Index           =   4
                Left            =   60
                TabIndex        =   417
-               Top             =   1740
+               Top             =   1800
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -271,7 +1015,7 @@ Begin VB.Form frmUser
                Index           =   3
                Left            =   60
                TabIndex        =   412
-               Top             =   1500
+               Top             =   1560
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -279,7 +1023,7 @@ Begin VB.Form frmUser
                Index           =   2
                Left            =   60
                TabIndex        =   407
-               Top             =   1260
+               Top             =   1320
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -287,7 +1031,7 @@ Begin VB.Form frmUser
                Index           =   1
                Left            =   60
                TabIndex        =   402
-               Top             =   1020
+               Top             =   1080
                Width           =   135
             End
             Begin VB.CommandButton cmdEditSpellCasted 
@@ -295,7 +1039,7 @@ Begin VB.Form frmUser
                Index           =   0
                Left            =   60
                TabIndex        =   397
-               Top             =   780
+               Top             =   840
                Width           =   135
             End
             Begin VB.CommandButton cmdClearSpellsCasted 
@@ -303,7 +1047,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   3000
                TabIndex        =   392
-               Top             =   180
+               Top             =   210
                Width           =   1335
             End
             Begin VB.TextBox txtSpellNumber 
@@ -312,7 +1056,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   398
-               Top             =   720
+               Top             =   780
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -324,7 +1068,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   399
                TabStop         =   0   'False
-               Top             =   720
+               Top             =   780
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -333,7 +1077,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   403
-               Top             =   960
+               Top             =   1020
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -345,7 +1089,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   404
                TabStop         =   0   'False
-               Top             =   960
+               Top             =   1020
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -354,7 +1098,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   408
-               Top             =   1200
+               Top             =   1260
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -366,7 +1110,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   409
                TabStop         =   0   'False
-               Top             =   1200
+               Top             =   1260
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -375,7 +1119,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   413
-               Top             =   1440
+               Top             =   1500
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -387,7 +1131,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   414
                TabStop         =   0   'False
-               Top             =   1440
+               Top             =   1500
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -396,7 +1140,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   418
-               Top             =   1680
+               Top             =   1740
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -408,7 +1152,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   419
                TabStop         =   0   'False
-               Top             =   1680
+               Top             =   1740
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -417,7 +1161,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   423
-               Top             =   1920
+               Top             =   1980
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -429,7 +1173,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   424
                TabStop         =   0   'False
-               Top             =   1920
+               Top             =   1980
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -438,7 +1182,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   428
-               Top             =   2160
+               Top             =   2220
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -450,7 +1194,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   429
                TabStop         =   0   'False
-               Top             =   2160
+               Top             =   2220
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -459,7 +1203,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   433
-               Top             =   2400
+               Top             =   2460
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -471,7 +1215,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   434
                TabStop         =   0   'False
-               Top             =   2400
+               Top             =   2460
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -480,7 +1224,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   438
-               Top             =   2640
+               Top             =   2700
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -492,7 +1236,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   439
                TabStop         =   0   'False
-               Top             =   2640
+               Top             =   2700
                Width           =   2295
             End
             Begin VB.TextBox txtSpellNumber 
@@ -501,7 +1245,7 @@ Begin VB.Form frmUser
                Left            =   240
                MaxLength       =   5
                TabIndex        =   443
-               Top             =   2880
+               Top             =   2940
                Width           =   615
             End
             Begin VB.TextBox txtSpellName 
@@ -513,7 +1257,7 @@ Begin VB.Form frmUser
                MaxLength       =   28
                TabIndex        =   444
                TabStop         =   0   'False
-               Top             =   2880
+               Top             =   2940
                Width           =   2295
             End
             Begin VB.TextBox txtSpellValue 
@@ -521,7 +1265,7 @@ Begin VB.Form frmUser
                Index           =   0
                Left            =   3105
                TabIndex        =   400
-               Top             =   720
+               Top             =   780
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -529,7 +1273,7 @@ Begin VB.Form frmUser
                Index           =   0
                Left            =   3690
                TabIndex        =   401
-               Top             =   720
+               Top             =   780
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -537,7 +1281,7 @@ Begin VB.Form frmUser
                Index           =   1
                Left            =   3105
                TabIndex        =   405
-               Top             =   960
+               Top             =   1020
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -545,7 +1289,7 @@ Begin VB.Form frmUser
                Index           =   1
                Left            =   3690
                TabIndex        =   406
-               Top             =   960
+               Top             =   1020
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -553,7 +1297,7 @@ Begin VB.Form frmUser
                Index           =   2
                Left            =   3105
                TabIndex        =   410
-               Top             =   1200
+               Top             =   1260
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -561,7 +1305,7 @@ Begin VB.Form frmUser
                Index           =   2
                Left            =   3690
                TabIndex        =   411
-               Top             =   1200
+               Top             =   1260
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -569,7 +1313,7 @@ Begin VB.Form frmUser
                Index           =   3
                Left            =   3105
                TabIndex        =   415
-               Top             =   1440
+               Top             =   1500
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -577,7 +1321,7 @@ Begin VB.Form frmUser
                Index           =   3
                Left            =   3690
                TabIndex        =   416
-               Top             =   1440
+               Top             =   1500
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -585,7 +1329,7 @@ Begin VB.Form frmUser
                Index           =   4
                Left            =   3105
                TabIndex        =   420
-               Top             =   1680
+               Top             =   1740
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -593,7 +1337,7 @@ Begin VB.Form frmUser
                Index           =   4
                Left            =   3690
                TabIndex        =   421
-               Top             =   1680
+               Top             =   1740
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -601,7 +1345,7 @@ Begin VB.Form frmUser
                Index           =   5
                Left            =   3105
                TabIndex        =   425
-               Top             =   1920
+               Top             =   1980
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -609,7 +1353,7 @@ Begin VB.Form frmUser
                Index           =   5
                Left            =   3690
                TabIndex        =   426
-               Top             =   1920
+               Top             =   1980
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -617,7 +1361,7 @@ Begin VB.Form frmUser
                Index           =   6
                Left            =   3105
                TabIndex        =   430
-               Top             =   2160
+               Top             =   2220
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -625,7 +1369,7 @@ Begin VB.Form frmUser
                Index           =   6
                Left            =   3690
                TabIndex        =   431
-               Top             =   2160
+               Top             =   2220
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -633,7 +1377,7 @@ Begin VB.Form frmUser
                Index           =   7
                Left            =   3105
                TabIndex        =   435
-               Top             =   2400
+               Top             =   2460
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -641,7 +1385,7 @@ Begin VB.Form frmUser
                Index           =   7
                Left            =   3690
                TabIndex        =   436
-               Top             =   2400
+               Top             =   2460
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -649,7 +1393,7 @@ Begin VB.Form frmUser
                Index           =   8
                Left            =   3105
                TabIndex        =   440
-               Top             =   2640
+               Top             =   2700
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -657,7 +1401,7 @@ Begin VB.Form frmUser
                Index           =   8
                Left            =   3690
                TabIndex        =   441
-               Top             =   2640
+               Top             =   2700
                Width           =   615
             End
             Begin VB.TextBox txtSpellValue 
@@ -665,7 +1409,7 @@ Begin VB.Form frmUser
                Index           =   9
                Left            =   3105
                TabIndex        =   445
-               Top             =   2880
+               Top             =   2940
                Width           =   615
             End
             Begin VB.TextBox txtSpellRounds 
@@ -673,15 +1417,25 @@ Begin VB.Form frmUser
                Index           =   9
                Left            =   3690
                TabIndex        =   446
-               Top             =   2880
+               Top             =   2940
                Width           =   615
+            End
+            Begin VB.Label Label76 
+               AutoSize        =   -1  'True
+               Caption         =   " <-- Poison flag?"
+               Height          =   195
+               Index           =   13
+               Left            =   840
+               TabIndex        =   593
+               Top             =   255
+               Width           =   1920
             End
             Begin VB.Label Label32 
                Caption         =   "Spell#"
                Height          =   255
                Left            =   240
                TabIndex        =   393
-               Top             =   480
+               Top             =   540
                Width           =   495
             End
             Begin VB.Label Label33 
@@ -689,7 +1443,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   840
                TabIndex        =   394
-               Top             =   480
+               Top             =   540
                Width           =   1215
             End
             Begin VB.Label Label34 
@@ -697,7 +1451,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   3120
                TabIndex        =   395
-               Top             =   480
+               Top             =   540
                Width           =   495
             End
             Begin VB.Label Label35 
@@ -705,7 +1459,7 @@ Begin VB.Form frmUser
                Height          =   255
                Left            =   3720
                TabIndex        =   396
-               Top             =   480
+               Top             =   540
                Width           =   615
             End
          End
@@ -2363,9 +3117,9 @@ Begin VB.Form frmUser
             End
             Begin VB.ListBox lstSpells 
                Height          =   3375
-               ItemData        =   "frmUser.frx":098E
+               ItemData        =   "frmUser.frx":09AA
                Left            =   120
-               List            =   "frmUser.frx":0995
+               List            =   "frmUser.frx":09B1
                TabIndex        =   103
                Top             =   540
                Width           =   6015
@@ -2454,9 +3208,9 @@ Begin VB.Form frmUser
             End
             Begin VB.ListBox lstKeys 
                Height          =   1035
-               ItemData        =   "frmUser.frx":09B5
+               ItemData        =   "frmUser.frx":09D1
                Left            =   120
-               List            =   "frmUser.frx":09BC
+               List            =   "frmUser.frx":09D8
                TabIndex        =   93
                Top             =   480
                Width           =   6015
@@ -2545,9 +3299,9 @@ Begin VB.Form frmUser
             End
             Begin VB.ListBox lstItems 
                Height          =   1620
-               ItemData        =   "frmUser.frx":09D5
+               ItemData        =   "frmUser.frx":09F1
                Left            =   120
-               List            =   "frmUser.frx":09DC
+               List            =   "frmUser.frx":09F8
                TabIndex        =   83
                Top             =   480
                Width           =   6015
@@ -2904,17 +3658,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   825
                TabIndex        =   50
                Top             =   1860
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtMaxMana 
                Appearance      =   0  'Flat
@@ -2924,17 +3678,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   1680
                TabIndex        =   52
                Top             =   1860
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtMaxHP 
                Appearance      =   0  'Flat
@@ -2944,17 +3698,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   1680
                TabIndex        =   48
                Top             =   1500
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtCurrentHP 
                Alignment       =   1  'Right Justify
@@ -2965,17 +3719,17 @@ Begin VB.Form frmUser
                   Name            =   "MS Sans Serif"
                   Size            =   9.75
                   Charset         =   0
-                  Weight          =   400
+                  Weight          =   700
                   Underline       =   0   'False
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
                ForeColor       =   &H00FFFF00&
-               Height          =   255
+               Height          =   315
                Left            =   825
                TabIndex        =   46
                Top             =   1500
-               Width           =   615
+               Width           =   675
             End
             Begin VB.TextBox txtExperience 
                Appearance      =   0  'Flat
@@ -3276,9 +4030,9 @@ Begin VB.Form frmUser
                EndProperty
                ForeColor       =   &H00FFFF00&
                Height          =   360
-               ItemData        =   "frmUser.frx":09F6
+               ItemData        =   "frmUser.frx":0A12
                Left            =   840
-               List            =   "frmUser.frx":09F8
+               List            =   "frmUser.frx":0A14
                Style           =   2  'Dropdown List
                TabIndex        =   20
                Top             =   1080
@@ -3669,18 +4423,18 @@ Begin VB.Form frmUser
                Strikethrough   =   0   'False
             EndProperty
             TabCaption(0)   =   "Page 1"
-            TabPicture(0)   =   "frmUser.frx":09FA
+            TabPicture(0)   =   "frmUser.frx":0A16
             Tab(0).ControlEnabled=   -1  'True
             Tab(0).Control(0)=   "frmAblilities"
             Tab(0).Control(0).Enabled=   0   'False
             Tab(0).ControlCount=   1
             TabCaption(1)   =   "Page 2"
-            TabPicture(1)   =   "frmUser.frx":0A16
+            TabPicture(1)   =   "frmUser.frx":0A32
             Tab(1).ControlEnabled=   0   'False
             Tab(1).Control(0)=   "Frame2"
             Tab(1).ControlCount=   1
             TabCaption(2)   =   "Page 3"
-            TabPicture(2)   =   "frmUser.frx":0A32
+            TabPicture(2)   =   "frmUser.frx":0A4E
             Tab(2).ControlEnabled=   0   'False
             Tab(2).Control(0)=   "Frame3"
             Tab(2).ControlCount=   1
@@ -5081,6 +5835,957 @@ Begin VB.Form frmUser
             End
          End
          Begin VB.Label Label76 
+            AutoSize        =   -1  'True
+            Caption         =   "Hit Point Rolls"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   435
+            Index           =   12
+            Left            =   -70020
+            TabIndex        =   577
+            Top             =   1605
+            Width           =   870
+            WordWrap        =   -1  'True
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   48
+            Left            =   -69240
+            TabIndex        =   571
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   47
+            Left            =   -70140
+            TabIndex        =   570
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   46
+            Left            =   -71040
+            TabIndex        =   569
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   45
+            Left            =   -71940
+            TabIndex        =   568
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   44
+            Left            =   -72840
+            TabIndex        =   567
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   43
+            Left            =   -73740
+            TabIndex        =   566
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   42
+            Left            =   -74640
+            TabIndex        =   565
+            Top             =   4260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   41
+            Left            =   -69240
+            TabIndex        =   557
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   40
+            Left            =   -70140
+            TabIndex        =   556
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   39
+            Left            =   -71040
+            TabIndex        =   555
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   38
+            Left            =   -71940
+            TabIndex        =   554
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   37
+            Left            =   -72840
+            TabIndex        =   553
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   36
+            Left            =   -73740
+            TabIndex        =   552
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   35
+            Left            =   -74640
+            TabIndex        =   551
+            Top             =   3660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   34
+            Left            =   -69240
+            TabIndex        =   543
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   33
+            Left            =   -70140
+            TabIndex        =   542
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   32
+            Left            =   -71040
+            TabIndex        =   541
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   31
+            Left            =   -71940
+            TabIndex        =   540
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   30
+            Left            =   -72840
+            TabIndex        =   539
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   29
+            Left            =   -73740
+            TabIndex        =   538
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   28
+            Left            =   -74640
+            TabIndex        =   537
+            Top             =   3060
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   27
+            Left            =   -69240
+            TabIndex        =   529
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   26
+            Left            =   -70140
+            TabIndex        =   528
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   25
+            Left            =   -71040
+            TabIndex        =   527
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   24
+            Left            =   -71940
+            TabIndex        =   526
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   23
+            Left            =   -72840
+            TabIndex        =   525
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   22
+            Left            =   -73740
+            TabIndex        =   524
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   21
+            Left            =   -74640
+            TabIndex        =   523
+            Top             =   2460
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   20
+            Left            =   -69240
+            TabIndex        =   515
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   19
+            Left            =   -70140
+            TabIndex        =   514
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   18
+            Left            =   -71040
+            TabIndex        =   513
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   17
+            Left            =   -71940
+            TabIndex        =   512
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   16
+            Left            =   -72840
+            TabIndex        =   511
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   15
+            Left            =   -73740
+            TabIndex        =   510
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   14
+            Left            =   -74640
+            TabIndex        =   509
+            Top             =   1860
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   13
+            Left            =   -69240
+            TabIndex        =   501
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   12
+            Left            =   -70140
+            TabIndex        =   500
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   11
+            Left            =   -71040
+            TabIndex        =   499
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   10
+            Left            =   -71940
+            TabIndex        =   498
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   9
+            Left            =   -72840
+            TabIndex        =   497
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   8
+            Left            =   -73740
+            TabIndex        =   496
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   7
+            Left            =   -74640
+            TabIndex        =   495
+            Top             =   1260
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   6
+            Left            =   -69240
+            TabIndex        =   494
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   5
+            Left            =   -70140
+            TabIndex        =   493
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   4
+            Left            =   -71040
+            TabIndex        =   492
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   3
+            Left            =   -71940
+            TabIndex        =   491
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   2
+            Left            =   -72840
+            TabIndex        =   490
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   1
+            Left            =   -73740
+            TabIndex        =   489
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblUserUnknowns 
+            AutoSize        =   -1  'True
+            Caption         =   "Unknown"
+            BeginProperty Font 
+               Name            =   "Arial Narrow"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   225
+            Index           =   0
+            Left            =   -74640
+            TabIndex        =   488
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label Label76 
             Caption         =   "/"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -5347,10 +7052,10 @@ Begin VB.Form frmUser
       Begin VB.CommandButton cmdDiscard 
          Caption         =   "Dis&card"
          Height          =   255
-         Left            =   5880
+         Left            =   5940
          TabIndex        =   8
          Top             =   0
-         Width           =   975
+         Width           =   915
       End
       Begin VB.CommandButton cmdDelete 
          Caption         =   "&Delete"
@@ -5358,7 +7063,7 @@ Begin VB.Form frmUser
          Left            =   960
          TabIndex        =   5
          Top             =   0
-         Width           =   975
+         Width           =   855
       End
       Begin VB.CommandButton cmdSave 
          Caption         =   "&Save"
@@ -5369,21 +7074,21 @@ Begin VB.Form frmUser
          Width           =   1035
       End
       Begin VB.CommandButton cmdCopy 
-         Caption         =   "Cop&y"
+         Caption         =   "Duplicate"
          Height          =   255
          Left            =   0
          TabIndex        =   4
          Top             =   0
-         Width           =   975
+         Width           =   915
       End
       Begin VB.CheckBox chkAutoSave 
          Caption         =   "Auto-Save"
          Height          =   195
-         Left            =   3600
+         Left            =   3720
          TabIndex        =   6
          ToolTipText     =   "Turn this on to auto-save users when switching records (carefule if using live dats!)"
          Top             =   15
-         Width           =   1215
+         Width           =   1095
       End
    End
    Begin VB.TextBox txtSearch 
@@ -5455,12 +7160,16 @@ Dim bLoaded As Boolean
 'Dim bDontSetup As Boolean
 Dim sCurrentRecord As String * 30
 
+Private Sub Check1_Click()
+
+End Sub
+
 'Private Declare Function CalcExpNeeded Lib "lltmmudxp" (ByVal Level As Integer, ByVal Chart As Integer) As Currency
 
 
 Private Sub chkNoRoomNames_Click()
 
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 For x = 0 To 19
@@ -5469,14 +7178,14 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("chkNoRoomNames_Click")
 Resume out:
 End Sub
 
 Private Sub cmdAbilsClear_Click()
 Dim x As Integer
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 29
     txtAbilityA(x).Text = 0
@@ -5485,14 +7194,14 @@ Next x
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdAbilsClear_Click")
 Resume out:
 
 End Sub
 
 Private Sub cmdCalcExp_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 frmExpCalc.Show
 frmExpCalc.SetFocus
@@ -5501,24 +7210,31 @@ Call frmExpCalc.CalcBy(cmbClasses.ListIndex, cmbRaces.ListIndex, Val(txtLevel.Te
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("cmdCalcExp_Click")
 Resume out:
 End Sub
 
+Private Sub cmdImportGo_Click(Index As Integer)
+txtSearch.Enabled = True
+lvDatabase.Enabled = True
+framImport.Visible = False
+If Index = 0 Then Call ImportFromClipboard
+End Sub
+
 Private Sub cmdPasteChar_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
 Call PasteCharacter
 
 Exit Sub
 
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub PasteCharacter()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer, sSearch As String, x As Long, y As Integer, x2 As Integer
 Dim sRaceName As String, sClassName As String, sChar As String
 Dim sStr As String
@@ -5694,7 +7410,7 @@ If x > 0 Then
     x = x + 1
     
     If x <= Len(sSearch) Then
-        txtCp.Text = GetNextNumbers(x, sSearch)
+        txtCP.Text = GetNextNumbers(x, sSearch)
     End If
 End If
 
@@ -5721,14 +7437,14 @@ End If
 canceled:
 Me.Enabled = True
 Exit Sub
-Error:
+error:
 Call HandleError
 Me.Enabled = True
 End Sub
 
 Private Function GetNextNumbers(ByVal nStart As Long, sSearchString As String) As String
 Dim y As Long, sChar As String
-On Error GoTo Error:
+On Error GoTo error:
 
 y = nStart
 Do Until y > Len(sSearchString)
@@ -5748,12 +7464,12 @@ End If
 out:
 On Error Resume Next
 Exit Function
-Error:
+error:
 Call HandleError("GetNextNumbers")
 Resume out:
 End Function
 Private Sub PasteItems()
-On Error GoTo Error:
+On Error GoTo error:
 Dim sSearch As String, sText As String, sChar As String, x As Integer, y As Integer, x2 As Integer
 Dim nStatus As Integer, sAmount As String, bResult As Boolean, nMaxSItems As Integer
 Dim nCurKey As Integer, nCurItem As Integer, nCurWorn As Integer
@@ -6062,19 +7778,20 @@ For x = 0 To nMaxSItems
 Next x
 
 Call LoadUserItems(True)
+Call CheckWornItems
 
 canceled:
 Me.MousePointer = vbDefault
 Me.Enabled = True
 Unload frmUserSelectItem
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume canceled:
 End Sub
 
 Private Sub PasteSpells()
-On Error GoTo Error:
+On Error GoTo error:
 Dim sSearch As String, sText As String, sChar As String, x As Integer, y As Integer, x2 As Integer
 Dim nStatus As Integer, bResult As Boolean, nMaxSSpells As Integer, nCurSpell As Integer
 Dim sSpells(0 To 199) As String, nOrigMatch As Long
@@ -6254,7 +7971,7 @@ Me.MousePointer = vbDefault
 Me.Enabled = True
 Unload frmUserSelectItem
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume canceled:
 End Sub
@@ -6269,24 +7986,405 @@ End Sub
 
 
 Private Sub cmdPasteStatQ_Click()
-MsgBox "Paste a capture of a character's ""stat"" output.  Class, Race, Level, Exp, " _
+MsgBox "Revive will set HP and Mana to full and then present choices for other stuff." _
+    & vbCrLf & vbCrLf & "Paste: Paste a capture of a character's ""stat"" output.  Class, Race, Level, Exp, " _
     & "Lives, CP, HP, Mana, and the six stats will be pasted.  NOTE: You can also setup a character " _
     & "in MMUD Explorer and click ""Copy Only Stats"" and paste that here as well.", vbInformation
 End Sub
 
-Private Sub cmdSpellEditor_GotFocus()
-Call SelectAll(cmdSpellEditor)
+Private Sub cmdReviveChar_Click()
+On Error GoTo error:
+Dim x As Integer, y As Long, sTemp As String, MapRoom As RoomExitType
+
+txtCurrentHP.Text = Val(txtMaxHP.Text)
+txtCurrentMana.Text = Val(txtMaxMana.Text)
+
+If Val(txtLives.Text) < 9 Then
+    x = MsgBox("Reset Lives?", vbYesNo + vbDefaultButton2 + vbQuestion)
+    If x = vbYes Then txtLives.Text = 9
+End If
+
+y = Val(txtSomeSortOfFlag.Text)
+If y = 0 Then
+    For x = 0 To 9
+        If txtSpellNumber(x).Text > 0 Then y = 1: Exit For
+    Next x
+End If
+If y > 0 Then
+    SSTab3.Tab = 6
+    DoEvents
+    x = MsgBox("Reset Auras?", vbYesNo + vbDefaultButton2 + vbQuestion)
+    If x = vbYes Then Call cmdClearSpellsCasted_Click
+End If
+
+If Val(txtCurrentMap.Text) <> 1 Or Val(txtCurrentRoom.Text) <> 2189 Then 'halls
+    SSTab3.Tab = 4
+    DoEvents
+    sTemp = InputBox("Move user?" _
+        & vbCrLf & "-Enter 1-19: move them that many rooms back" _
+        & vbCrLf & "-Enter 99: teleport them to the halls of the dead" _
+        & vbCrLf & "-Enter Map/Room in the format of 1/2189" _
+        & vbCrLf & vbCrLf & "Enter 0 or cancel to leave them alone.", , 0)
+    If InStr(1, sTemp, "/", vbTextCompare) Then
+        MapRoom = ExtractMapRoom(sTemp)
+        txtCurrentMap.Text = MapRoom.Map
+        txtCurrentRoom.Text = MapRoom.Room
+    ElseIf Val(sTemp) = 99 Then
+        txtCurrentMap.Text = 1
+        txtCurrentRoom.Text = 2189
+    ElseIf Val(sTemp) > 0 Then
+        txtCurrentMap.Text = txtMapTrail(Val(sTemp)).Text
+        txtCurrentRoom.Text = txtRoomTrail(Val(sTemp)).Text
+    End If
+End If
+
+SSTab3.Tab = 0
+cmdReviveChar.SetFocus
+DoEvents
+
+MsgBox "Done. You still need to save.", vbInformation
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdReviveChar_Click")
+Resume out:
 
 End Sub
 
+Private Sub cmdSomeFlagQ_Click()
+MsgBox "Observed a value of 78 here that indicated the the character was poisoned.  It caused the character to take damage and not be able to rest.  It could be a bitmask or something.", vbInformation
+End Sub
+
+Private Sub cmdSpellEditor_GotFocus()
+'Call SelectAll(cmdSpellEditor)
+
+End Sub
+
+Private Sub cmdUserExport_Click()
+On Error GoTo error:
+Dim x As Integer, sTemp(1 To 3) As String, nStatus As Integer
+Dim sExportText As String
+
+nStatus = BTRCALL(BGETEQUAL, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal sCurrentRecord, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then
+    MsgBox "Error on save, BGETQUAL: " & BtrieveErrorCode(nStatus)
+    Exit Sub
+Else
+    UserRowToStruct Userdatabuf.buf
+End If
+
+sExportText = AutoAppendString(sExportText, "BBSName:" & ClipNull(Userrec.BBSName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "FirstName:" & ClipNull(Userrec.FirstName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "LastName:" & ClipNull(Userrec.LastName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Race:" & Userrec.Race, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Class:" & Userrec.Class, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Experience:" & (SLong2ULong(Userrec.BillionsOfExperience) * 1000000000#) + SLong2ULong(Userrec.MillionsOfExperience), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Level:" & SInt2UInt(Userrec.Level), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Title:" & ClipNull(Userrec.Title), vbCrLf)
+sExportText = AutoAppendString(sExportText, "EvilPoints:" & Userrec.EvilPoints, vbCrLf)
+sExportText = AutoAppendString(sExportText, "GangName:" & ClipNull(Userrec.GangName), vbCrLf)
+sExportText = AutoAppendString(sExportText, "SuicidePassword:" & ClipNull(Userrec.SuicidePassword), vbCrLf)
+sExportText = AutoAppendString(sExportText, "BroadcastChan:" & Userrec.BroadcastChan, vbCrLf)
+sExportText = AutoAppendString(sExportText, "bEDITED:" & Userrec.bEDITED, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Runic:" & SLong2ULong(Userrec.Runic), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Platinum:" & SLong2ULong(Userrec.Platinum), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Gold:" & SLong2ULong(Userrec.Gold), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Silver:" & SLong2ULong(Userrec.Silver), vbCrLf)
+sExportText = AutoAppendString(sExportText, "Copper:" & SLong2ULong(Userrec.Copper), vbCrLf)
+
+sExportText = AutoAppendString(sExportText, "MaxHP:" & Userrec.MaxHP, vbCrLf)
+sExportText = AutoAppendString(sExportText, "CurrentHP:" & Userrec.CurrentHP, vbCrLf)
+sExportText = AutoAppendString(sExportText, "HPRolls:" & Userrec.HitPointRolls, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MaxMana:" & Userrec.MaxMana, vbCrLf)
+sExportText = AutoAppendString(sExportText, "CurrentMana:" & Userrec.CurrentMana, vbCrLf)
+sExportText = AutoAppendString(sExportText, "SpellCasting:" & Userrec.SpellCasting, vbCrLf)
+sExportText = AutoAppendString(sExportText, "LivesRemaining:" & Userrec.LivesRemaining, vbCrLf)
+sExportText = AutoAppendString(sExportText, "CPRemaining:" & Userrec.CPRemaining, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Perception:" & Userrec.Perception, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Thievery:" & Userrec.Thievery, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Traps:" & Userrec.Traps, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Picklocks:" & Userrec.Picklocks, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Tracking:" & Userrec.Tracking, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MartialArts:" & Userrec.MartialArts, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MagicRes:" & Userrec.MagicRes, vbCrLf)
+sExportText = AutoAppendString(sExportText, "Stealth:" & Userrec.Stealth, vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 11
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.Stat(x))
+Next
+sExportText = AutoAppendString(sExportText, "STATS:" & sTemp(1), vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 29
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.Ability(x) & "|" & Userrec.AbilityModifier(x))
+Next x
+sExportText = AutoAppendString(sExportText, "ABILS:" & sTemp(1), vbCrLf)
+
+
+sExportText = AutoAppendString(sExportText, "CurrentENC:" & SInt2UInt(Userrec.CurrentENC), vbCrLf)
+sExportText = AutoAppendString(sExportText, "MaxENC:" & SInt2UInt(Userrec.MaxENC), vbCrLf)
+sExportText = AutoAppendString(sExportText, "WeaponHand:" & Userrec.WeaponHand, vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 19
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.WornItem(x))
+Next x
+sExportText = AutoAppendString(sExportText, "WORN:" & sTemp(1), vbCrLf)
+
+sTemp(1) = ""
+sTemp(2) = ""
+sTemp(3) = ""
+For x = 0 To 99
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.Item(x) & "|" & Userrec.ItemUses(x))
+    If x < 50 Then sTemp(2) = AutoAppendString(sTemp(2), Userrec.Key(x) & "|" & Userrec.KeyUses(x))
+    sTemp(3) = AutoAppendString(sTemp(3), Userrec.Spell(x))
+Next x
+
+sExportText = AutoAppendString(sExportText, "ITEMS:" & sTemp(1), vbCrLf)
+sExportText = AutoAppendString(sExportText, "KEYS:" & sTemp(2), vbCrLf)
+sExportText = AutoAppendString(sExportText, "SPELLS:" & sTemp(3), vbCrLf)
+
+sTemp(1) = ""
+For x = 0 To 9
+    sTemp(1) = AutoAppendString(sTemp(1), SInt2UInt(Userrec.SpellCasted(x)) & "|" & SInt2UInt(Userrec.SpellValue(x)) & "|" & SInt2UInt(Userrec.SpellRoundsLeft(x)))
+Next x
+sExportText = AutoAppendString(sExportText, "AURAS:" & sTemp(1), vbCrLf)
+
+sExportText = AutoAppendString(sExportText, "RoomNum:" & Userrec.RoomNum, vbCrLf)
+sExportText = AutoAppendString(sExportText, "MapNumber:" & Userrec.MapNumber, vbCrLf)
+sTemp(1) = ""
+For x = 0 To 19
+    sTemp(1) = AutoAppendString(sTemp(1), Userrec.LastMap(x) & "|" & Userrec.LastRoom(x))
+Next x
+sExportText = AutoAppendString(sExportText, "ROOMS:" & sTemp(1), vbCrLf)
+
+Clipboard.clear
+Clipboard.SetText sExportText
+
+MsgBox "Data copied to clipboard.", vbOKOnly + vbInformation, "Export User"
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdUserExport_Click")
+Resume out:
+End Sub
+
+Private Sub cmdUserHitPointMax_Click()
+On Error GoTo error:
+
+'Max = [(Class Max Range minus Class Min Range) x Level]
+txtHitPointRolls.Text = GetClassMaxHP(cmbClasses.ItemData(cmbClasses.ListIndex)) * Val(txtLevel.Text)
+
+If Val(txtHitPointRolls.Text) > 255 Then txtHitPointRolls.Text = 255
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("cmdUserHitPointMax_Click")
+Resume out:
+
+End Sub
+
+Private Sub cmdUserHitPointRollQ_Click()
+MsgBox "This is the cummulative value of the random rolls of additional hitpoints when leveling, added to hitpoint calculation for maxmimum HP. " _
+    & "MMUD makes sure this value is in range of what's allowed. Max = [(Class Max Range minus Class Min Range) x Level].  Max value = 255." _
+    & vbCrLf & vbCrLf & "Note that a value of 255 will rollover upon levling and reset back to the minimum.", vbInformation + vbOKOnly
+End Sub
+
+Private Sub cmdUserImport_Click()
+txtSearch.Enabled = False
+lvDatabase.Enabled = False
+framImport.Visible = True
+End Sub
+
+Private Sub ImportFromClipboard()
+On Error GoTo error:
+Dim x As Integer, y As Integer, sSubMatches() As String, sSubValues() As String
+Dim sImportText As String, iMatch As Integer, iSubMatch As Integer, nValue As Long
+Dim tMatches() As RegexMatches, sRegexPattern As String
+Dim bWriteName As Integer, bWriteGang As Integer, bImportRooms As Boolean
+Dim bImportDeets As Boolean
+
+sImportText = Trim(Clipboard.GetText)
+If Len(sImportText) = 0 Then Exit Sub
+
+sRegexPattern = "^([^\r\n:]+):([^\r\n]+|)$"
+tMatches() = RegExpFindv2(sImportText, sRegexPattern, False, True, True)
+If UBound(tMatches()) = 0 And Len(tMatches(0).sFullMatch) = 0 Then Exit Sub
+
+If chkImportRooms.Value = 1 Then bImportRooms = True
+If chkImportDeets.Value = 1 Then bImportDeets = True
+If chkImportName.Value = 1 Then bWriteName = True
+If chkImportName.Value = 1 Then bWriteGang = True
+If chkImportClearItems.Value = 1 Then
+    Call cmdClearAllItem_Click
+    Call cmdClearWorn_Click
+End If
+If chkImportClearKeys.Value = 1 Then Call cmdClearAllKey_Click
+If chkImportClearSpells.Value = 1 Then
+    Call cmdClearAllSpell_Click
+    Call cmdClearSpellsCasted_Click
+End If
+If chkImportClearAbils.Value = 1 Then Call cmdAbilsClear_Click
+
+For iMatch = 0 To UBound(tMatches())
+    If UBound(tMatches(iMatch).sSubMatches()) = 0 Then GoTo skip_match
+    
+    Select Case tMatches(iMatch).sSubMatches(0)
+        Case "FirstName": If bWriteName Then txtFirstName.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "LastName": If bWriteName Then txtLastName.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Experience": txtExperience.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Level": txtLevel.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Title": txtTitle.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "GangName": If bWriteGang Then txtGang.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "SuicidePassword": If bImportDeets Then txtSuicide.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "EvilPoints": txtEvilPoints.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "BroadcastChan": If bImportDeets Then txtBroadcastChan.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MaxHP": txtMaxHP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CurrentHP": txtCurrentHP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MaxMana": txtMaxMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "HPRolls": txtHitPointRolls.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CurrentMana": txtCurrentMana.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "SpellCasting": txtSpellcasting.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "LivesRemaining": If bImportDeets Then txtLives.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CPRemaining": txtCP.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Perception": txtPerception.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Thievery": txtThievery.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Traps": txtTraps.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Picklocks": txtPicklocks.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Tracking": txtTracking.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MartialArts": txtMartialArts.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MagicRes": txtMagicResistance.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Stealth": txtStealth.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "WeaponHand": txtWeaponNumber.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "RoomNum": If bImportRooms Then txtCurrentRoom.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MapNumber": If bImportRooms Then txtCurrentMap.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "CurrentENC": txtCurrentEncum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "MaxENC": txtMaxEncum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Runic": If bImportDeets Then txtRunic.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Platinum": If bImportDeets Then txtPlatinum.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Gold": If bImportDeets Then txtGold.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Silver": If bImportDeets Then txtSilver.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        Case "Copper": If bImportDeets Then txtCopper.Text = Trim(tMatches(iMatch).sSubMatches(1))
+        
+        Case "bEDITED":
+            nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
+            If nValue > 0 Then
+                chkEdited.Value = 1
+            Else
+                chkEdited.Value = 0
+            End If
+            
+        Case "Race":
+            nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
+            If nValue > cmbRaces.ListCount - 1 Then
+                MsgBox "Race not found.", vbOKOnly + vbInformation
+                Call Add2RaceArray(nValue)
+                cmbRaces.clear
+                For x = 0 To UBound(Races)
+                    cmbRaces.AddItem Races(x).Name
+                Next x
+            End If
+            cmbRaces.ListIndex = nValue
+            
+        Case "Class":
+            nValue = Val(Trim(tMatches(iMatch).sSubMatches(1)))
+            If nValue > cmbClasses.ListCount - 1 Then
+                MsgBox "Class not found.", vbOKOnly + vbInformation
+                Call Add2ClassArray(nValue)
+                cmbClasses.clear
+                For x = 0 To UBound(Classes)
+                    cmbClasses.AddItem Classes(x).Name
+                Next x
+            End If
+            cmbClasses.ListIndex = nValue
+            
+        Case "STATS", "WORN", "SPELLS":
+            sSubMatches() = Split(Trim(tMatches(iMatch).sSubMatches(1)), ",")
+            For x = 0 To UBound(sSubMatches())
+                Select Case tMatches(iMatch).sSubMatches(0)
+                    Case "STATS": txtStat(x).Text = sSubMatches(x)
+                    Case "WORN": txtWornItem(x).Text = sSubMatches(x)
+                    Case "SPELLS": UserSpell(x) = Val(sSubMatches(x))
+                End Select
+            Next x
+            
+        Case "ABILS", "ITEMS", "KEYS", "ROOMS":
+            sSubMatches() = Split(Trim(tMatches(iMatch).sSubMatches(1)), ",")
+            For x = 0 To UBound(sSubMatches())
+                sSubValues() = Split(sSubMatches(x), "|")
+                If UBound(sSubValues()) = 1 Then
+                    Select Case tMatches(iMatch).sSubMatches(0)
+                        Case "ABILS":
+                            txtAbilityA(x).Text = sSubValues(0)
+                            txtAbilityB(x).Text = sSubValues(1)
+                        Case "ITEMS":
+                            UserItem(x) = sSubValues(0)
+                            UserItemUses(x) = sSubValues(1)
+                         Case "KEYS":
+                            UserKey(x) = sSubValues(0)
+                            UserKeyUses(x) = sSubValues(1)
+                        Case "ROOMS":
+                            If bImportRooms Then
+                                txtMapTrail(x).Text = sSubValues(0)
+                                txtRoomTrail(x).Text = sSubValues(1)
+                            End If
+                    End Select
+                End If
+            Next x
+        
+        Case "AURAS":
+            sSubMatches() = Split(Trim(tMatches(iMatch).sSubMatches(1)), ",")
+            For x = 0 To UBound(sSubMatches())
+                sSubValues() = Split(sSubMatches(x), "|")
+                If UBound(sSubValues()) = 2 Then
+                    txtSpellNumber(x).Text = sSubValues(0)
+                    txtSpellValue(x).Text = sSubValues(1)
+                    txtSpellRounds(x).Text = sSubValues(2)
+                End If
+            Next x
+        
+    End Select
+    
+skip_match:
+Next iMatch
+
+Call LoadUserItems(True)
+Call CheckWornItems
+
+MsgBox "Done. Save if happy, discard if not.", vbOKOnly + vbInformation, "Import User"
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("ImportFromClipboard")
+Resume out:
+End Sub
+
+Private Sub cmdUserUnknownsNote_Click()
+MsgBox "Three things..." _
+    & vbCrLf & vbCrLf & "#1) These values are not saved." _
+    & vbCrLf & vbCrLf & "#2) Clicking a different set will reload the selected character and lose any changes to the other tabs if auto-save is off." _
+    & vbCrLf & vbCrLf & "#3) The values themselves could be incorrect as assumptions have been made to whether values are 1-byte, 2-byte, or 4-byte values. " _
+    & "i.e. FFFF in the DB could be read as two 1-byte values of 255(FF) or one 2-byte value of 65535(FFFF)." _
+    , vbInformation + vbOKOnly
+End Sub
+
 Private Sub Form_Load()
-On Error GoTo Error:
+On Error GoTo error:
 Dim nStatus As Integer
 bLoaded = False
 
 With EL1
     .FormInQuestion = Me
-    .MINHEIGHT = 385 + (TITLEBAR_OFFSET / 10)
+    .MINHEIGHT = 385 + (TITLEBAR_OFFSET / 10) + 12
     .MINWIDTH = 690
     .CenterOnLoad = False
     .EnableLimiter = True
@@ -6319,7 +8417,7 @@ txtSearch.SetFocus
 If ReadINI("Windows", "UserMaxed") = "1" Then Me.WindowState = vbMaximized
 
 Exit Sub
-Error:
+error:
 Call HandleError
 Resume Next
 End Sub
@@ -6327,7 +8425,7 @@ End Sub
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Private Sub LoadUsers()
-On Error GoTo Error:
+On Error GoTo error:
 Dim oLI As ListItem, x As Integer
 Dim nStatus As Integer
 
@@ -6379,7 +8477,7 @@ lvDatabase.refresh
 Set oLI = Nothing
 
 Exit Sub
-Error:
+error:
 Call HandleError("LoadUsers")
 Set oLI = Nothing
 
@@ -6387,7 +8485,7 @@ End Sub
 Private Sub AddUser2LV(lv As ListView)
 Dim oLI As ListItem
     
-On Error GoTo Error:
+On Error GoTo error:
 
     Set oLI = lv.ListItems.add()
     oLI.Text = ClipNull(Userrec.FirstName, Len(Userrec.FirstName))
@@ -6405,7 +8503,7 @@ On Error GoTo Error:
 Set oLI = Nothing
 
 Exit Sub
-Error:
+error:
 Call HandleError("AddUser2LV")
 End Sub
 
@@ -6415,7 +8513,7 @@ End Sub
 Private Sub cmdClearAllItem_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 99
     UserItem(x) = 0
@@ -6423,15 +8521,16 @@ For x = 0 To 99
 Next
 
 Call LoadUserItems(True)
+Call CheckWornItems
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdClearAllKey_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 49
     UserKey(x) = 0
@@ -6441,14 +8540,14 @@ Next
 Call LoadUserItems(True)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdClearAllSpell_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 99
     UserSpell(x) = 0
@@ -6457,14 +8556,14 @@ Next
 Call LoadUserItems(True)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdClearSpellsCasted_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 For x = 0 To 9
     txtSpellNumber(x).Text = 0
@@ -6473,15 +8572,17 @@ For x = 0 To 9
     txtSpellRounds(x).Text = 0
 Next
 
+txtSomeSortOfFlag.Text = 0
+
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdClearWorn_Click()
 Dim x As Integer
 
-On Error GoTo Error:
+On Error GoTo error:
 
 txtWeaponNumber.Text = 0
 
@@ -6491,13 +8592,13 @@ Next
 
 
 Exit Sub
-Error:
+error:
 Call HandleError
 
 End Sub
 
 Private Sub cmdCopy_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, nStatus As Integer, BBSName As String, FirstName As String, temp As String
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
@@ -6569,14 +8670,14 @@ End If
 Form_Load
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdDiscard_Click()
 Dim nStatus As Integer, BBSName As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If lvDatabase.ListItems.Count = 0 Then Exit Sub
 
@@ -6593,7 +8694,7 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -6601,8 +8702,9 @@ Private Sub Form_Resize()
 On Error Resume Next
 If Me.WindowState = vbMinimized Then Exit Sub
 framNav.Left = Me.Width - framNav.Width - 200
+framImport.Left = Me.Width - framImport.Width - 250
 lvDatabase.Width = framNav.Left - 175
-lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET
+lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET - 200
 End Sub
 
 Private Sub lblName_GotFocus(Index As Integer)
@@ -6639,37 +8741,37 @@ End If
 End Sub
 
 Private Sub lstItems_DblClick()
-On Error GoTo Error:
+On Error GoTo error:
 
 cmdEditItem_Click
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lstKeys_DblClick()
-On Error GoTo Error:
+On Error GoTo error:
 
 cmdEditKey_Click
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lstSpells_DblClick()
-On Error GoTo Error:
+On Error GoTo error:
 
 cmdEditSpell_Click
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub lvDatabase_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-On Error GoTo Error:
+On Error GoTo error:
 
 Dim nSort As ListDataType
 Select Case ColumnHeader.Index
@@ -6679,11 +8781,15 @@ End Select
 SortListView lvDatabase, ColumnHeader.Index, nSort, lvDatabase.SortOrder
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 
+
+Private Sub optUserUnknowns_Click(Index As Integer)
+Call lvDatabase_ItemClick(lvDatabase.SelectedItem)
+End Sub
 
 Private Sub txtAbilityA_Change(Index As Integer)
 
@@ -6711,7 +8817,7 @@ End Sub
 Public Sub lvDatabase_ItemClick(ByVal Item As MSComctlLib.ListItem)
 Dim nStatus As Integer, BBSName As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bLoaded = True And chkAutoSave.Value = 1 Then saverecord (sCurrentRecord)
 
@@ -6730,12 +8836,12 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub DispUserInfo(row() As Byte)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, counter As Integer, temp As String
 
 Me.MousePointer = 11
@@ -6743,7 +8849,7 @@ Me.MousePointer = 11
 UserRowToStruct row()
 
 'bDontSetup = True
-'Text1 = Userrec.CharLife 'And &H80
+'txtUserUnknowns = Userrec.CharLife 'And &H80
 ''Text2 = Userrec.TestFlag2 'And &H80
 ''Text3 = Userrec.TestFlag3 'And &H80
 '
@@ -6801,7 +8907,7 @@ txtMaxMana.Text = Userrec.MaxMana
 txtCurrentMana.Text = Userrec.CurrentMana
 txtSpellcasting.Text = Userrec.SpellCasting
 txtLives.Text = Userrec.LivesRemaining
-txtCp.Text = Userrec.CPRemaining
+txtCP.Text = Userrec.CPRemaining
 txtPerception.Text = Userrec.Perception
 txtStealth.Text = Userrec.Stealth
 txtThievery.Text = Userrec.Thievery
@@ -6827,6 +8933,8 @@ txtCurrentMap.Text = Userrec.MapNumber
 txtWeaponNumber.Text = Userrec.WeaponHand
 'txtWeaponName.Text = GetItemName(Userrec.WeaponHand)
 
+txtHitPointRolls.Text = Userrec.HitPointRolls
+
 For x = 0 To 11
     txtStat(x).Text = Userrec.Stat(x)
 Next
@@ -6842,18 +8950,137 @@ For x = 0 To 9
     txtSpellRounds(x).Text = SInt2UInt(Userrec.SpellRoundsLeft(x))
 Next
 
+txtSomeSortOfFlag.Text = Userrec.SomeSortOfFlag
+
 For x = 0 To 19
     txtMapTrail(x).Text = Userrec.LastMap(x)
     txtRoomTrail(x).Text = Userrec.LastRoom(x)
     txtWornItem(x).Text = Userrec.WornItem(x)
 Next
 
+'49 total (base 0 = 48 max index)
+'x = 0: lblUserUnknowns(x).Caption = "AAAAA": txtUserUnknowns(x).Text = Userrec.AAAAA
+    
+If optUserUnknowns(0).Value = True Then
+    x = 0:  lblUserUnknowns(x).Caption = "unkwn1": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown1)
+    x = 1:  lblUserUnknowns(x).Caption = "Bitmask1": txtUserUnknowns(x).Text = Userrec.Bitmask1
+    x = 2:  lblUserUnknowns(x).Caption = "unkwn2(0)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown2(0))
+    x = 3:  lblUserUnknowns(x).Caption = "unkwn2(1)": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown2(1))
+    x = 4:  lblUserUnknowns(x).Caption = "unkwn3(0)": txtUserUnknowns(x).Text = Userrec.unknown3(0)
+    x = 5:  lblUserUnknowns(x).Caption = "unkwn3(1)": txtUserUnknowns(x).Text = Userrec.unknown3(1)
+    x = 6:  lblUserUnknowns(x).Caption = "unkwn4(0)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.unknown4(0))
+    x = 7:  lblUserUnknowns(x).Caption = "unkwn4(1)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.unknown4(1))
+    x = 8:  lblUserUnknowns(x).Caption = "unkwn4(2)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.unknown4(2))
+    x = 9:  lblUserUnknowns(x).Caption = "unkwn4(3)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.unknown4(3))
+    x = 10: lblUserUnknowns(x).Caption = "unkwn5": txtUserUnknowns(x).Text = SLong2ULong(Userrec.unknown5)
+    x = 11: lblUserUnknowns(x).Caption = "unkwn6": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown6)
+    x = 12: lblUserUnknowns(x).Caption = "unkwn8": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown8)
+    x = 13: lblUserUnknowns(x).Caption = "unkwn12c": txtUserUnknowns(x).Text = Userrec.unknown12c
+    x = 14: lblUserUnknowns(x).Caption = "unkwn13a": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13a)
+    x = 15: lblUserUnknowns(x).Caption = "A58-Crits": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13b)
+    x = 16: lblUserUnknowns(x).Caption = "A7-DR": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13c)
+    x = 17: lblUserUnknowns(x).Caption = "A99-DR%": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13d)
+    x = 18: lblUserUnknowns(x).Caption = "A87-Speed": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13e)
+    x = 19: lblUserUnknowns(x).Caption = "A10-ACBlur": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13f)
+    x = 20: lblUserUnknowns(x).Caption = "A104-Dfnse": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown13g)
+    x = 21: lblUserUnknowns(x).Caption = "unkwn14": txtUserUnknowns(x).Text = SInt2UInt(Userrec.unknown14)
+    x = 22: lblUserUnknowns(x).Caption = "nothn2": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing2)
+    x = 23: lblUserUnknowns(x).Caption = "nothn3": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing3)
+    x = 24: lblUserUnknowns(x).Caption = "nothn4": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing4)
+    x = 25: lblUserUnknowns(x).Caption = "nothn5": txtUserUnknowns(x).Text = Userrec.nothing5
+    x = 26: lblUserUnknowns(x).Caption = "nothn6": txtUserUnknowns(x).Text = SInt2UInt(Userrec.Nothing6)
+    x = 27: lblUserUnknowns(x).Caption = "nothn7(0)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.nothing7(0))
+    x = 28: lblUserUnknowns(x).Caption = "nothn7(1)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.nothing7(1))
+    x = 29: lblUserUnknowns(x).Caption = "nothn7(2)": txtUserUnknowns(x).Text = SLong2ULong(Userrec.nothing7(2))
+    x = 30: lblUserUnknowns(x).Caption = "nothn8": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing8)
+    x = 31: lblUserUnknowns(x).Caption = "nothn9": txtUserUnknowns(x).Text = SInt2UInt(Userrec.nothing9)
+    x = 32: lblUserUnknowns(x).Caption = "nothn10": txtUserUnknowns(x).Text = SLong2ULong(Userrec.nothing10)
+    
+    For x = 0 To 12
+        lblUserUnknowns(x + 33).Caption = "unkwn9(" & x & ")": txtUserUnknowns(x + 33).Text = SInt2UInt(Userrec.unknown9(x))
+    Next x
+    x = 46:  lblUserUnknowns(x).Caption = "Bitmask2": txtUserUnknowns(x).Text = Userrec.Bitmask2
+    x = 47:  lblUserUnknowns(x).Caption = "TestFlag1": txtUserUnknowns(x).Text = Userrec.TestFlag1
+    x = 48:  lblUserUnknowns(x).Caption = "TestFlag2": txtUserUnknowns(x).Text = Userrec.TestFlag2
+    
+ElseIf optUserUnknowns(1).Value = True Then 'set2
+    counter = 0
+    For x = 0 To 19
+        lblUserUnknowns(counter).Caption = "unkwn7(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown7(x))
+        counter = counter + 1
+    Next x
+    For x = 0 To 5
+        lblUserUnknowns(counter).Caption = "unkwn11(" & x & ")": txtUserUnknowns(counter).Text = Userrec.unknown11(x)
+        counter = counter + 1
+    Next x
+    For x = 0 To 3
+        lblUserUnknowns(counter).Caption = "unkwn12a(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown12a(x))
+        counter = counter + 1
+    Next x
+    For x = 0 To 8
+        lblUserUnknowns(counter).Caption = "unkwn13(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown13(x))
+        If x = 2 Then lblUserUnknowns(counter).Caption = "movemnt?"
+        If x = 8 Then lblUserUnknowns(counter).Caption = "StealthFlgs"
+        counter = counter + 1
+    Next x
+    For x = 0 To 3
+        lblUserUnknowns(counter).Caption = "unkwn15(" & x & ")": txtUserUnknowns(counter).Text = SLong2ULong(Userrec.unknown15(x))
+        counter = counter + 1
+    Next x
+    For x = 0 To 5
+        lblUserUnknowns(counter).Caption = "unkwn9a(" & x & ")": txtUserUnknowns(counter).Text = SLong2ULong(Userrec.unknown9a(x))
+        If x = 4 Then lblUserUnknowns(counter).Caption = "partyrank"
+        counter = counter + 1
+    Next x
+    
+    For counter = counter To 48
+        lblUserUnknowns(counter).Caption = "": txtUserUnknowns(counter).Text = ""
+    Next counter
+    
+ElseIf optUserUnknowns(2).Value = True Then 'set3
+    counter = 0
+    For x = 0 To 18
+        lblUserUnknowns(counter).Caption = "unkwn12d(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown12d(x))
+        If x = 5 Then lblUserUnknowns(counter).Caption = "Encum %"
+        If x = 6 Then lblUserUnknowns(counter).Caption = "A22-Accy"
+        If x = 7 Then lblUserUnknowns(counter).Caption = "A2-AC"
+        If x = 8 Then lblUserUnknowns(counter).Caption = "A4-MaxDam"
+        counter = counter + 1
+    Next x
+    
+    lblUserUnknowns(counter).Caption = "unkwn12e": txtUserUnknowns(counter).Text = Userrec.unknown12e
+    counter = counter + 1
+    
+    For x = 0 To 9
+        lblUserUnknowns(counter).Caption = "unkwn12f(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.unknown12f(x))
+        counter = counter + 1
+    Next x
+    
+    For x = 0 To 7
+        lblUserUnknowns(counter).Caption = "UFlags(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.SomeUserFlags(x))
+        If x = 1 Then lblUserUnknowns(counter).Caption = "StatusMask"
+        counter = counter + 1
+    Next x
+    
+    For x = 0 To 2
+        lblUserUnknowns(counter).Caption = "Energy(" & x & ")": txtUserUnknowns(counter).Text = SInt2UInt(Userrec.Energy(x))
+        counter = counter + 1
+    Next x
+    
+    
+    For counter = counter To 48
+        lblUserUnknowns(counter).Caption = "": txtUserUnknowns(counter).Text = ""
+    Next counter
+    
+End If
+
 Call LoadUserItems(False)
+Call CheckWornItems
 
 'bDontSetup = False
 Me.MousePointer = 0
 Exit Sub
-Error:
+error:
 Me.MousePointer = 0
 Call HandleError
 MsgBox "Warning, record was not completely displayed." & vbCrLf _
@@ -6882,7 +9109,7 @@ Call SelectAll(txtCopper)
 End Sub
 
 Private Sub txtCP_GotFocus()
-Call SelectAll(txtCp)
+Call SelectAll(txtCP)
 
 End Sub
 
@@ -6891,9 +9118,17 @@ Call SelectAll(txtCurrentEncum)
 
 End Sub
 
+Private Sub txtCurrentHP_GotFocus()
+Call SelectAll(txtCurrentHP)
+End Sub
+
+Private Sub txtCurrentMana_GotFocus()
+Call SelectAll(txtCurrentMana)
+End Sub
+
 Private Sub txtCurrentMap_Change()
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtCurrentMap.Text) > 0 And Val(txtCurrentRoom.Text) > 0 Then
     txtCurrRoomDisp.Text = GetRoomName(Val(txtCurrentMap.Text), _
@@ -6904,7 +9139,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtCurrentMap_Change")
 Resume out:
 
@@ -6953,6 +9188,10 @@ End Sub
 Private Sub txtGold_GotFocus()
 Call SelectAll(txtGold)
 
+End Sub
+
+Private Sub txtHitPointRolls_GotFocus()
+Call SelectAll(txtHitPointRolls)
 End Sub
 
 Private Sub txtLastName_GotFocus()
@@ -7015,7 +9254,7 @@ Call SelectAll(txtLives)
 End Sub
 
 Private Sub txtMapTrail_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtMapTrail(Index)) > 0 And Val(txtRoomTrail(Index)) > 0 _
     And chkNoRoomNames.Value = 0 Then
@@ -7027,7 +9266,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtMapTrail_Change")
 Resume out:
 End Sub
@@ -7042,13 +9281,21 @@ Call SelectAll(txtMaxEncum)
 
 End Sub
 
+Private Sub txtMaxHP_GotFocus()
+Call SelectAll(txtMaxHP)
+End Sub
+
+Private Sub txtMaxMana_GotFocus()
+Call SelectAll(txtMaxMana)
+End Sub
+
 Private Sub txtPlatinum_GotFocus()
 Call SelectAll(txtPlatinum)
 
 End Sub
 
 Private Sub txtRoomTrail_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 If Val(txtMapTrail(Index)) > 0 And Val(txtRoomTrail(Index)) > 0 _
     And chkNoRoomNames.Value = 0 Then
@@ -7060,7 +9307,7 @@ End If
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtRoomTrail_Change")
 Resume out:
 End Sub
@@ -7083,7 +9330,7 @@ End Sub
 Private Sub txtSearch_KeyUp(KeyCode As Integer, Shift As Integer)
 Dim i As Long, SearchStart As Long, SearchAgain As Boolean, SelectText As String, temp As String
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If KeyCode = vbKeyUp Then Exit Sub
 If KeyCode = vbKeyLeft Then Exit Sub
@@ -7126,12 +9373,12 @@ For i = SearchStart To lvDatabase.ListItems.Count
 Next
 
 Exit Sub
-Error:
+error:
 Call HandleError
 
 End Sub
 Private Sub cmdEditItem_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim ItemNum As Long, ItemUses As Integer, temp As String, nTmp As Integer
 
 temp = InputBox("Enter new Item Number (0 for none)", "Changing inventory item #" & lstItems.ListIndex, UserItem(lstItems.ListIndex))
@@ -7148,15 +9395,47 @@ UserItem(lstItems.ListIndex) = ItemNum
 UserItemUses(lstItems.ListIndex) = ItemUses
 
 Call LoadUserItems(True)
+Call CheckWornItems
 
 lstItems.ListIndex = nTmp
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
+
+Private Sub CheckWornItems()
+On Error GoTo error:
+Dim x As Integer, y As Integer, bItemFound As Boolean
+
+For x = 0 To 19
+    If Val(txtWornItem(x).Text) > 0 Then
+        bItemFound = False
+        For y = 0 To 99
+            If UserItem(y) = Val(txtWornItem(x).Text) Then bItemFound = True
+        Next y
+        If bItemFound = False Then txtWornItem(x).Text = 0
+    End If
+Next x
+
+If Val(txtWeaponNumber.Text) > 0 Then
+    bItemFound = False
+    For y = 0 To 99
+        If UserItem(y) = Val(txtWeaponNumber.Text) Then bItemFound = True
+    Next y
+    If bItemFound = False Then txtWeaponNumber.Text = 0
+End If
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("CheckWornItems")
+Resume out:
+End Sub
+
 Private Sub LoadUserItems(RefreshOnly As Boolean)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 If RefreshOnly Then GoTo refresh:
@@ -7199,12 +9478,12 @@ lstSpells.ListIndex = 0
 lstKeys.ListIndex = 0
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditKey_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim KeyNum As Long, KeyUses As Integer, temp As String, nTmp As Integer
 
 temp = InputBox("Enter new Key number (0 for none)", "Changing inventory Key #" & lstKeys.ListIndex, UserKey(lstKeys.ListIndex))
@@ -7224,11 +9503,11 @@ Call LoadUserItems(True)
 
 lstKeys.ListIndex = nTmp
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdEditSpell_Click()
-On Error GoTo Error:
+On Error GoTo error:
 Dim SpellNum As Integer, temp As String, nTmp As Integer
 
 temp = InputBox("Enter new Spell number (0 for none)", "Changing spellbook #" & lstSpells.ListIndex, UserSpell(lstSpells.ListIndex))
@@ -7243,12 +9522,12 @@ Call LoadUserItems(True)
 
 lstSpells.ListIndex = nTmp
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub saverecord(ByVal sRecord As String)
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer, nStatus As Integer
 
 nStatus = BTRCALL(BGETEQUAL, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal sRecord, KEY_BUF_LEN, 0)
@@ -7269,25 +9548,25 @@ Else
 End If
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdSave_Click()
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 Call saverecord(sCurrentRecord)
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdDelete_Click()
 Dim nStatus As Integer
 Dim nDelete As Integer, BBSName As String, temp As Long
 
-On Error GoTo Error:
+On Error GoTo error:
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 
@@ -7328,11 +9607,11 @@ End If
 
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub FormValuesToRecord()
-On Error GoTo Error:
+On Error GoTo error:
 Dim x As Integer
 
 'Userrec.Bitmask1 = Val(Text4.Text)
@@ -7340,6 +9619,8 @@ Dim x As Integer
 'Userrec.unknown13(x) = 0
 
 'DoEvents
+Call CheckWornItems
+
 Userrec.FirstName = Trim(RemoveCharacter(txtFirstName.Text, " ")) & Chr(0)
 Userrec.LastName = Trim(RemoveCharacter(txtLastName.Text, " ")) & Chr(0)
 Userrec.Race = cmbRaces.ListIndex
@@ -7360,7 +9641,7 @@ Userrec.MaxMana = Val(txtMaxMana.Text)
 Userrec.CurrentMana = Val(txtCurrentMana.Text)
 Userrec.SpellCasting = Val(txtSpellcasting.Text)
 Userrec.LivesRemaining = Val(txtLives.Text)
-Userrec.CPRemaining = Val(txtCp.Text)
+Userrec.CPRemaining = Val(txtCP.Text)
 Userrec.Perception = Val(txtPerception.Text)
 Userrec.Stealth = Val(txtStealth.Text)
 Userrec.Thievery = Val(txtThievery.Text)
@@ -7386,6 +9667,9 @@ Userrec.RoomNum = ULong2SLong(Val(txtCurrentRoom.Text))
 Userrec.MapNumber = ULong2SLong(Val(txtCurrentMap.Text))
 Userrec.WeaponHand = ULong2SLong(Val(txtWeaponNumber.Text))
 
+If Val(txtHitPointRolls.Text) > 255 Then txtHitPointRolls.Text = 255
+Userrec.HitPointRolls = Val(txtHitPointRolls.Text)
+
 If chkEdited.Value = 0 Then
     Userrec.bEDITED = 0
 Else
@@ -7407,6 +9691,8 @@ For x = 0 To 9
     Userrec.SpellRoundsLeft(x) = UInt2SInt(Val(txtSpellRounds(x).Text))
 Next
 
+Userrec.SomeSortOfFlag = Val(txtSomeSortOfFlag.Text)
+
 For x = 0 To 19
     Userrec.LastMap(x) = ULong2SLong(Val(txtMapTrail(x).Text))
     Userrec.LastRoom(x) = ULong2SLong(Val(txtRoomTrail(x).Text))
@@ -7425,86 +9711,86 @@ For x = 0 To 49
 Next
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 Private Sub cmdEditCurrentRoom_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmRoom.GotoRoom(Val(txtCurrentMap.Text), Val(txtCurrentRoom.Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditSpellCasted_Click(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmSpell.GotoSpell(Val(txtSpellNumber(Index).Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditWeapon_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(Val(txtWeaponNumber.Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdEditWornItem_Click(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(Val(txtWornItem(Index).Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdGotoRoom_Click(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmRoom.GotoRoom(Val(txtMapTrail(Index).Text), Val(txtRoomTrail(Index).Text))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdItemEditor_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(UserItem(lstItems.ListIndex))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdItemEditorKey_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmItem.GotoItem(UserKey(lstKeys.ListIndex))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
 Private Sub cmdSpellEditor_Click()
-On Error GoTo Error:
+On Error GoTo error:
 
     Call frmSpell.GotoSpell(UserSpell(lstSpells.ListIndex))
 
 Exit Sub
-Error:
+error:
 Call HandleError
 End Sub
 
@@ -7514,13 +9800,13 @@ Call SelectAll(txtSilver)
 End Sub
 
 Private Sub txtSpellNumber_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 txtSpellName(Index).Text = GetSpellName(Val(txtSpellNumber(Index).Text))
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtSpellNumber_Change")
 Resume out:
 End Sub
@@ -7551,13 +9837,13 @@ Call SelectAll(txtTitle)
 End Sub
 
 Private Sub txtWeaponNumber_Change()
-On Error GoTo Error:
+On Error GoTo error:
 
 txtWeaponName.Text = GetItemName(Val(txtWeaponNumber.Text))
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtWeaponNumber_Change")
 Resume out:
 End Sub
@@ -7568,13 +9854,13 @@ Call SelectAll(txtWeaponNumber)
 End Sub
 
 Private Sub txtWornItem_Change(Index As Integer)
-On Error GoTo Error:
+On Error GoTo error:
 
 txtWornItemName(Index).Text = GetItemName(Val(txtWornItem(Index).Text))
 
 out:
 Exit Sub
-Error:
+error:
 Call HandleError("txtWornItem_Change")
 Resume out:
 End Sub

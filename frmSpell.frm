@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Begin VB.Form frmSpell 
    Caption         =   "Spell Editor"
@@ -1904,8 +1904,8 @@ DoEvents
 
 With EL1
     .FormInQuestion = Me
-    .MINHEIGHT = 425 + (TITLEBAR_OFFSET / 10)
-    .MINWIDTH = 755
+    .MINHEIGHT = 425 + (TITLEBAR_OFFSET / 10) + 12
+    .MINWIDTH = 755 + 12
     .CenterOnLoad = False
     .EnableLimiter = True
 End With
@@ -2393,9 +2393,9 @@ End Sub
 Private Sub Form_Resize()
 On Error Resume Next
 If Me.WindowState = vbMinimized Then Exit Sub
-framNav.Left = Me.Width - framNav.Width - 200
+framNav.Left = Me.Width - framNav.Width - 200 - 100
 lvDatabase.Width = framNav.Left - 175
-lvDatabase.Height = Me.Height - 1325 - TITLEBAR_OFFSET
+lvDatabase.Height = Me.Height - 1325 - TITLEBAR_OFFSET - 150
 End Sub
 
 Private Sub lblName_GotFocus(Index As Integer)

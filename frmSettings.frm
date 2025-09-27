@@ -481,6 +481,7 @@ End Sub
 Private Sub cmdSave_Click()
 Dim fso As FileSystemObject, fldr1 As Folder, sStr As String
 Dim x As Integer, sPS(1 To 5) As String, sPStmp(1 To 5) As String
+Dim sSaveText As String, y As Integer
 
 On Error GoTo error:
 
@@ -509,17 +510,20 @@ Call WriteINI("Settings", "TaskBarDelay", _
 For x = 1 To 5
     sPStmp(x) = ReadINI("Settings", "PS" & x)
 Next
-For x = 1 To 4 '4 default
-    sPS(x + 1) = sPStmp(x)
+
+sSaveText = sStr & ";" & cmbVersion.ListIndex & ";" & txtDatCallLetters.Text & ";"
+
+sPS(1) = sSaveText
+y = 2
+For x = 1 To 5
+    If sPStmp(x) <> sSaveText And y <= 5 Then
+        sPS(y) = sPStmp(x)
+        y = y + 1
+    End If
 Next
-
-sPS(1) = sStr & ";" & cmbVersion.ListIndex & ";" & txtDatCallLetters.Text & ";" '& chkAutoCompile.value & ";"
-
-If Not sPS(1) = sPS(2) Then
-    For x = 1 To 5
-        Call WriteINI("Settings", "PS" & x, sPS(x))
-    Next
-End If
+For x = 1 To 5
+    Call WriteINI("Settings", "PS" & x, sPS(x))
+Next
 
 If bReload Then
     Call ReloadApp

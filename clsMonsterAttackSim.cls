@@ -37,21 +37,32 @@ Private m_nStatAtkDmgResisted(0 To 4) As Currency
 Private m_nStatAtkAttemptDodgedOrResisted(0 To 4) As Currency
 Private m_nStatAtkTotalDamage(0 To 4) As Currency
 
+Private m_nStatHitSpell_AtkDmgResisted(0 To 4) As Currency
+Private m_nStatHitSpell_AtkTotalDamage(0 To 4) As Currency
+Private m_nStatBetweenRound_AtkDmgResisted(0 To 4) As Currency
+Private m_nStatBetweenRound_AtkTotalDamage(0 To 4) As Currency
+
 Private m_nUserAC As Long
 Private m_nUserDR As Long
 Private m_nUserDodge As Long
 Private m_nUserMR As Long
 Private m_nUserAntiMagic As Integer
+Private m_bDodgeBeforeAC As Boolean
 
 Private m_nEnergyPerRound As Integer
 Private m_nNumberOfRounds As Long
 Private m_nTotalAttacks As Currency
 Private m_nTotalDamage As Currency
+Private m_nTotalDamagePhys As Currency
+Private m_nTotalDamageSpell As Currency
 Private m_nMaxRoundDamage As Currency
 Private m_nAverageDamage As Currency
+Private m_nAverageDamagePhys As Currency
+Private m_nAverageDamageSpell As Currency
 Private m_nMaxEnergyPerRound As Long
 Private m_bHideEnergyInfo As Boolean
 
+Private m_bGreaterMUD As Boolean
 Private m_bDynamicCalc As Boolean
 Private m_nDynamicCalcDifference As Currency
 Private m_bUseCPU As Boolean
@@ -83,6 +94,14 @@ Private nActiveBetweenSpells_DurationLeft(0 To 4) As Currency
 Private nActiveBetweenSpells_Value(0 To 4) As Integer
 Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
 
+Public Property Let bDodgeBeforeAC(ByVal vData As Boolean)
+    m_bDodgeBeforeAC = vData
+End Property
+
+Public Property Get bDodgeBeforeAC() As Boolean
+    bDodgeBeforeAC = m_bDodgeBeforeAC
+End Property
+
 Public Property Let bHideEnergyInfo(ByVal vData As Boolean)
     m_bHideEnergyInfo = vData
 End Property
@@ -105,6 +124,22 @@ End Property
 
 Public Property Get nAverageDamage() As Currency
     nAverageDamage = m_nAverageDamage
+End Property
+
+Public Property Get nAverageDamagePhys() As Currency
+    nAverageDamagePhys = m_nAverageDamagePhys
+End Property
+
+Public Property Get nAverageDamageSpell() As Currency
+    nAverageDamageSpell = m_nAverageDamageSpell
+End Property
+
+Public Property Let bGreaterMUD(ByVal vData As Boolean)
+    m_bGreaterMUD = vData
+End Property
+
+Public Property Get bGreaterMUD() As Boolean
+    bGreaterMUD = m_bGreaterMUD
 End Property
 
 Public Property Let nDynamicCalcDifference(ByVal vData As Currency)
@@ -255,6 +290,8 @@ Dim nDamage As Long, nMaxDamage As Long, nMaxAttempts As Integer, nMaxDPE As Cur
 Dim nEnergyForAttack As Long, nEnergyRemaining As Long, nDamagePerEnergy As Currency
 On Error GoTo error:
 
+GetMaxDamage = 0
+
 bNothingToSim = True: x = 0
 Do While x <= 4 And bNothingToSim
     If m_nAtkMin(x) > 0 Then bNothingToSim = False
@@ -377,17 +414,17 @@ Resume out:
 End Function
 
 Public Sub RunSim()
+On Error GoTo error:
 Dim nRound As Long, nAttempt As Integer, nAttack As Integer, x As Integer
 Dim nRemainingEnergy As Long, nEnergyUsed As Integer, bShowHitSpell As Boolean
 Dim nDR_DamageResisted As Currency, nMR_Reduction As Currency
 Dim bAttackHit As Boolean, bDodged As Boolean, bGlanced As Boolean, bResisted As Boolean
 Dim nLastAttackType As Integer, nLastAttackEnergy As Integer, nAttack_AdjSuccessChance As Currency
-Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer
+Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer, nAdjustedDodgeValue As Integer
 Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOriginalDamage As Currency
 Dim bSepShown As Boolean, bDurSpellApplied As Boolean, bNothingToSim As Boolean
 Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
 Dim sMaxRoundCombatLog As String, sHitSpellName As String
-On Error GoTo error:
 
 Randomize
 If m_bDynamicCalc Then m_nNumberOfRounds = 100000
@@ -396,6 +433,8 @@ If m_nNumberOfRounds < 1 Then Exit Sub
 If m_nEnergyPerRound < 1 Then Exit Sub
 m_nTotalAttacks = 0
 m_nTotalDamage = 0
+m_nTotalDamagePhys = 0
+m_nTotalDamageSpell = 0
 m_nMaxRoundDamage = 0
 m_nMaxEnergyPerRound = 0
 
@@ -439,8 +478,13 @@ For nRound = 1 To m_nNumberOfRounds
                 
                 nRoundDamage = nRoundDamage + nActiveAtkSpells_Value(x)
                 m_nTotalDamage = m_nTotalDamage + nActiveAtkSpells_Value(x)
+                m_nTotalDamageSpell = m_nTotalDamageSpell + nActiveAtkSpells_Value(x)
                 m_nStatAtkTotalDamage(x) = m_nStatAtkTotalDamage(x) + nActiveAtkSpells_Value(x)
                 m_nStatAtkDmgResisted(x) = m_nStatAtkDmgResisted(x) + (nActiveAtkSpells_ValueOriginal(x) - nActiveAtkSpells_Value(x))
+                
+                'added 2025.06.05
+                m_nStatHitSpell_AtkDmgResisted(x) = m_nStatHitSpell_AtkDmgResisted(x) + (nActiveAtkSpells_ValueOriginal(x) - nActiveAtkSpells_Value(x))
+                m_nStatHitSpell_AtkTotalDamage(x) = m_nStatHitSpell_AtkTotalDamage(x) + nActiveAtkSpells_Value(x)
                 
                 If Not bSepShown Then
                     Call AddToCombatLog("")
@@ -466,10 +510,15 @@ For nRound = 1 To m_nNumberOfRounds
         ' between round spell durations
         '============================================================================
         If nActiveBetweenSpells_DurationLeft(x) > 0 Then
-            If nActiveBetweenSpells_Ticks(x) = 3 Then '15 seconds has based, second tick goes off
+            If nActiveBetweenSpells_Ticks(x) = 3 Then '15 seconds has passed, second tick goes off
                 
                 nRoundDamage = nRoundDamage + nActiveBetweenSpells_Value(x)
                 m_nTotalDamage = m_nTotalDamage + nActiveBetweenSpells_Value(x)
+                m_nTotalDamageSpell = m_nTotalDamageSpell + nActiveBetweenSpells_Value(x)
+                 
+                'added 2025.06.05
+                m_nStatBetweenRound_AtkDmgResisted(x) = m_nStatBetweenRound_AtkDmgResisted(x) + (nActiveBetweenSpells_ValueOriginal(x) - nActiveBetweenSpells_Value(x))
+                m_nStatBetweenRound_AtkTotalDamage(x) = m_nStatBetweenRound_AtkTotalDamage(x) + nActiveBetweenSpells_Value(x)
                 
                 If Not bSepShown Then
                     Call AddToCombatLog("")
@@ -532,23 +581,48 @@ For nRound = 1 To m_nNumberOfRounds
                     If m_nAtkType(nAttack) <> 2 Then 'not spell
                         If m_nUserAC > 0 Then
                             '=((AC*AC)/100)/((ACCY*ACCY)/140)=fail %
-                            nAttack_AdjSuccessChance = Round(1 - (((m_nUserAC * m_nUserAC) / 100) / ((nAttack_AdjSuccessChance * nAttack_AdjSuccessChance) / 140)), 2) * 100
+                            If nAttack_AdjSuccessChance <> 0 Then
+                                nAttack_AdjSuccessChance = Round(1 - (((m_nUserAC * m_nUserAC) / 100) / ((nAttack_AdjSuccessChance * nAttack_AdjSuccessChance) / 140)), 2) * 100
+                            Else
+                                nAttack_AdjSuccessChance = 0
+                            End If
                         Else
                             nAttack_AdjSuccessChance = 99
                         End If
-                        'PHYSICAL ATTACKS = 9% MIN HIT CHANCE, 99% MAX
-                        If nAttack_AdjSuccessChance < 9 Then nAttack_AdjSuccessChance = 9
-                        If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
+                        
+                        'PHYSICAL ATTACKS = 9% MIN HIT CHANCE (stock), 99% MAX
+						If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
+                        If m_bGreaterMUD Then
+                            If nAttack_AdjSuccessChance < 2 Then nAttack_AdjSuccessChance = 2 'paramud is 2%
+                        Else
+                            If nAttack_AdjSuccessChance < 9 Then nAttack_AdjSuccessChance = 9
+                        End If
                     End If
                     
-                    nRoll_HitChance = Me.RandomNumber(1, 100)
-                    If nRoll_HitChance <= nAttack_AdjSuccessChance Then
-                        bAttackHit = True
-                        If m_nAtkType(nAttack) <> 2 And m_nUserDodge > 0 Then
-                            nRoll_DodgeChance = Me.RandomNumber(1, 100)
-                            If nRoll_DodgeChance <= m_nUserDodge Then
-                                bAttackHit = False: bDodged = True
-                                m_nStatAtkAttemptDodgedOrResisted(nAttack) = m_nStatAtkAttemptDodgedOrResisted(nAttack) + 1
+                    'this will allow the dodge percentage to match what players see in megamud
+                    If m_bDodgeBeforeAC And m_nUserDodge > 0 And m_nAtkType(nAttack) <> 2 Then
+                        nRoll_DodgeChance = Me.RandomNumber(1, 100)
+                        If nRoll_DodgeChance <= m_nUserDodge Then
+                            bAttackHit = False: bDodged = True
+                            m_nStatAtkAttemptDodgedOrResisted(nAttack) = m_nStatAtkAttemptDodgedOrResisted(nAttack) + 1
+                        End If
+                    End If
+                    
+                    If m_bDodgeBeforeAC = False Or bDodged = False Then
+                        nRoll_HitChance = Me.RandomNumber(1, 100)
+                        If nRoll_HitChance <= nAttack_AdjSuccessChance Then
+                            bAttackHit = True
+                            If m_nAtkType(nAttack) <> 2 And m_nUserDodge > 0 And m_bDodgeBeforeAC = False And m_nAtkSuccess(nAttack) >= 8 Then
+                                
+                                nAdjustedDodgeValue = Fix((m_nUserDodge * 10) / (m_nAtkSuccess(nAttack) / 8))
+                                If nAdjustedDodgeValue > 95 Then nAdjustedDodgeValue = 95
+                                
+                                nRoll_DodgeChance = Me.RandomNumber(1, 100)
+                                If nRoll_DodgeChance <= nAdjustedDodgeValue Then
+                                    bAttackHit = False: bDodged = True
+                                    m_nStatAtkAttemptDodgedOrResisted(nAttack) = m_nStatAtkAttemptDodgedOrResisted(nAttack) + 1
+                                End If
+                                
                             End If
                         End If
                     End If
@@ -688,6 +762,12 @@ For nRound = 1 To m_nNumberOfRounds
                             
                             nRoundDamage = nRoundDamage + nDamage + nHitSpellDamage
                             m_nTotalDamage = m_nTotalDamage + nDamage + nHitSpellDamage
+                            m_nTotalDamageSpell = m_nTotalDamageSpell + nHitSpellDamage
+                            If m_nAtkType(nAttack) = 2 Then 'spell
+                                m_nTotalDamageSpell = m_nTotalDamageSpell + nDamage
+                            Else
+                                m_nTotalDamagePhys = m_nTotalDamagePhys + nDamage
+                            End If
                             
                             nRemainingEnergy = nRemainingEnergy - m_nAtkEnergy(nAttack)
                             
@@ -810,6 +890,8 @@ next_round:
             Call AddToCombatLog("[between round] " & m_sBetweenRoundName(x) & " for " & Round(nDamage))
             nRoundDamage = nRoundDamage + nDamage
             m_nTotalDamage = m_nTotalDamage + nDamage
+            m_nTotalDamageSpell = m_nTotalDamageSpell + nDamage
+            m_nStatBetweenRound_AtkTotalDamage(x) = m_nStatBetweenRound_AtkTotalDamage(x) + nDamage
             GoTo duration_ticks:
         End If
     Next x
@@ -825,8 +907,13 @@ duration_ticks:
                 
             nRoundDamage = nRoundDamage + nActiveAtkSpells_Value(x)
             m_nTotalDamage = m_nTotalDamage + nActiveAtkSpells_Value(x)
+            m_nTotalDamageSpell = m_nTotalDamageSpell + nActiveAtkSpells_Value(x)
             m_nStatAtkTotalDamage(x) = m_nStatAtkTotalDamage(x) + nActiveAtkSpells_Value(x)
             m_nStatAtkDmgResisted(x) = m_nStatAtkDmgResisted(x) + (nActiveAtkSpells_ValueOriginal(x) - nActiveAtkSpells_Value(x))
+            
+            'added 2025.06.05
+            m_nStatHitSpell_AtkDmgResisted(x) = m_nStatHitSpell_AtkDmgResisted(x) + (nActiveAtkSpells_ValueOriginal(x) - nActiveAtkSpells_Value(x))
+            m_nStatHitSpell_AtkTotalDamage(x) = m_nStatHitSpell_AtkTotalDamage(x) + nActiveAtkSpells_Value(x)
             
             If Not bSepShown Then
                 Call AddToCombatLog("")
@@ -857,6 +944,11 @@ duration_ticks:
                 
             nRoundDamage = nRoundDamage + nActiveBetweenSpells_Value(x)
             m_nTotalDamage = m_nTotalDamage + nActiveBetweenSpells_Value(x)
+            m_nTotalDamageSpell = m_nTotalDamageSpell + nActiveBetweenSpells_Value(x)
+            
+            'added 2025.06.05
+            m_nStatBetweenRound_AtkDmgResisted(x) = m_nStatBetweenRound_AtkDmgResisted(x) + (nActiveBetweenSpells_ValueOriginal(x) - nActiveBetweenSpells_Value(x))
+            m_nStatBetweenRound_AtkTotalDamage(x) = m_nStatBetweenRound_AtkTotalDamage(x) + nActiveBetweenSpells_Value(x)
             
             If Not bSepShown Then
                 Call AddToCombatLog("")
@@ -924,6 +1016,8 @@ Next nRound
 end_sim:
 If nRound > 0 Then
     m_nAverageDamage = Round(m_nTotalDamage / nRound, 1)
+    m_nAverageDamagePhys = Round(m_nTotalDamagePhys / nRound, 1)
+    m_nAverageDamageSpell = Round(m_nTotalDamageSpell / nRound, 1)
 End If
 
 If m_bCombatLogMaxRoundOnly Then m_sCombatLog = sMaxRoundCombatLog
@@ -1095,6 +1189,7 @@ m_nUserDR = 0
 m_nUserDodge = 0
 m_nUserMR = 0
 m_nUserAntiMagic = 0
+m_bDodgeBeforeAC = False
 
 m_nEnergyPerRound = 0
 m_nNumberOfRounds = 0
@@ -1125,6 +1220,10 @@ For x = 0 To 4
     m_nStatAtkDmgResisted(x) = 0
     m_nStatAtkAttemptDodgedOrResisted(x) = 0
     m_nStatAtkTotalDamage(x) = 0
+    m_nStatHitSpell_AtkDmgResisted(x) = 0
+    m_nStatHitSpell_AtkTotalDamage(x) = 0
+    m_nStatBetweenRound_AtkDmgResisted(x) = 0
+    m_nStatBetweenRound_AtkTotalDamage(x) = 0
     
     m_sBetweenRoundName(x) = ""
     m_nBetweenRoundMin(x) = 0
@@ -1152,10 +1251,12 @@ For x = 0 To 4
     nActiveAtkSpells_Ticks(x) = 0
     nActiveAtkSpells_DurationLeft(x) = 0
     nActiveAtkSpells_Value(x) = 0
+    nActiveAtkSpells_ValueOriginal(x) = 0
     
     nActiveBetweenSpells_Ticks(x) = 0
     nActiveBetweenSpells_DurationLeft(x) = 0
     nActiveBetweenSpells_Value(x) = 0
+    nActiveBetweenSpells_ValueOriginal(x) = 0
 Next x
 
 out:
@@ -1238,41 +1339,57 @@ Public Property Get nUserAC() As Integer
     nUserAC = m_nUserAC
 End Property
 
-Public Property Let nStatAtkTotalDamage(ByVal Index As Integer, ByVal vData As Currency)
-    m_nStatAtkTotalDamage(Index) = vData
+Public Property Get nStatBetweenRound_AtkTotalDamage(ByVal Index As Integer) As Currency
+    nStatBetweenRound_AtkTotalDamage = m_nStatBetweenRound_AtkTotalDamage(Index)
 End Property
+
+Public Property Get nStatBetweenRound_AtkDmgResisted(ByVal Index As Integer) As Currency
+    nStatBetweenRound_AtkDmgResisted = m_nStatBetweenRound_AtkDmgResisted(Index)
+End Property
+
+Public Property Get nStatHitSpell_AtkTotalDamage(ByVal Index As Integer) As Currency
+    nStatHitSpell_AtkTotalDamage = m_nStatHitSpell_AtkTotalDamage(Index)
+End Property
+
+Public Property Get nStatHitSpell_AtkDmgResisted(ByVal Index As Integer) As Currency
+    nStatHitSpell_AtkDmgResisted = m_nStatHitSpell_AtkDmgResisted(Index)
+End Property
+
+'Public Property Let nStatAtkTotalDamage(ByVal Index As Integer, ByVal vData As Currency)
+'    'm_nStatAtkTotalDamage(Index) = vData															
+'End Property
 
 Public Property Get nStatAtkTotalDamage(ByVal Index As Integer) As Currency
     nStatAtkTotalDamage = m_nStatAtkTotalDamage(Index)
 End Property
 
-Public Property Let nStatAtkAttemptDodgedOrResisted(ByVal Index As Integer, ByVal vData As Currency)
-    m_nStatAtkAttemptDodgedOrResisted(Index) = vData
-End Property
+'Public Property Let nStatAtkAttemptDodgedOrResisted(ByVal Index As Integer, ByVal vData As Currency)
+'    m_nStatAtkAttemptDodgedOrResisted(Index) = vData
+'End Property
 
 Public Property Get nStatAtkAttemptDodgedOrResisted(ByVal Index As Integer) As Currency
     nStatAtkAttemptDodgedOrResisted = m_nStatAtkAttemptDodgedOrResisted(Index)
 End Property
 
-Public Property Let nStatAtkDmgResisted(ByVal Index As Integer, ByVal vData As Currency)
-    m_nStatAtkDmgResisted(Index) = vData
-End Property
+'Public Property Let nStatAtkDmgResisted(ByVal Index As Integer, ByVal vData As Currency)
+'    m_nStatAtkDmgResisted(Index) = vData
+'End Property
 
 Public Property Get nStatAtkDmgResisted(ByVal Index As Integer) As Currency
     nStatAtkDmgResisted = m_nStatAtkDmgResisted(Index)
 End Property
 
-Public Property Let nStatAtkHits(ByVal Index As Integer, ByVal vData As Currency)
-    m_nStatAtkHits(Index) = vData
-End Property
+'Public Property Let nStatAtkHits(ByVal Index As Integer, ByVal vData As Currency)
+'    m_nStatAtkHits(Index) = vData
+'End Property
 
 Public Property Get nStatAtkHits(ByVal Index As Integer) As Currency
     nStatAtkHits = m_nStatAtkHits(Index)
 End Property
 
-Public Property Let nStatAtkAttempted(ByVal Index As Integer, ByVal vData As Currency)
-    m_nStatAtkAttempted(Index) = vData
-End Property
+'Public Property Let nStatAtkAttempted(ByVal Index As Integer, ByVal vData As Currency)
+'    m_nStatAtkAttempted(Index) = vData
+'End Property
 
 Public Property Get nStatAtkAttempted(ByVal Index As Integer) As Currency
     nStatAtkAttempted = m_nStatAtkAttempted(Index)

@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmClass 
    Caption         =   "Class Editor"
    ClientHeight    =   5205
@@ -904,8 +904,8 @@ bLoaded = False
 
 With EL1
     .FormInQuestion = Me
-    .MINHEIGHT = 375 + (TITLEBAR_OFFSET / 10)
-    .MINWIDTH = 445
+    .MINHEIGHT = 375 + (TITLEBAR_OFFSET / 10) + 12
+    .MINWIDTH = 445 + 12
     .CenterOnLoad = False
     .EnableLimiter = True
 End With
@@ -1089,9 +1089,9 @@ End Sub
 Private Sub Form_Resize()
 On Error Resume Next
 If Me.WindowState = vbMinimized Then Exit Sub
-framNav.Left = Me.Width - framNav.Width - 220
+framNav.Left = Me.Width - framNav.Width - 220 - 100
 lvDatabase.Width = framNav.Left - 100
-lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET
+lvDatabase.Height = Me.Height - 925 - TITLEBAR_OFFSET - 150
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

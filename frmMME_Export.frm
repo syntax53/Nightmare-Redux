@@ -4,7 +4,7 @@ Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmMME_Export 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Export to MMUD Explorer"
-   ClientHeight    =   5385
+   ClientHeight    =   7440
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   5490
@@ -13,38 +13,30 @@ Begin VB.Form frmMME_Export
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
-   ScaleHeight     =   5385
+   ScaleHeight     =   7440
    ScaleWidth      =   5490
-   Begin VB.CommandButton cmdAddtlOptions 
-      Caption         =   "Additional Options"
-      Height          =   555
-      Left            =   4080
-      TabIndex        =   28
-      Top             =   1380
-      Width           =   1335
-   End
    Begin VB.CommandButton cmdNote 
       Caption         =   "ReadMe"
       Height          =   315
-      Left            =   2280
-      TabIndex        =   27
-      Top             =   4260
+      Left            =   2220
+      TabIndex        =   42
+      Top             =   6360
       Width           =   975
    End
    Begin VB.TextBox txtUpdateURL 
       Height          =   285
       Left            =   120
       MaxLength       =   254
-      TabIndex        =   24
-      Text            =   "http://www.mudinfo.net/mmudexp.php"
+      TabIndex        =   10
+      Text            =   "https://www.mudinfo.net/mmudexp.php"
       Top             =   1620
-      Width           =   3795
+      Width           =   5235
    End
    Begin VB.CommandButton cmdSaveConfig 
       Caption         =   "&Save Config ..."
       Height          =   435
       Left            =   4080
-      TabIndex        =   12
+      TabIndex        =   5
       Top             =   780
       Width           =   1335
    End
@@ -52,7 +44,7 @@ Begin VB.Form frmMME_Export
       Caption         =   "&Load Config ..."
       Height          =   435
       Left            =   4080
-      TabIndex        =   11
+      TabIndex        =   2
       Top             =   180
       Width           =   1335
    End
@@ -61,7 +53,7 @@ Begin VB.Form frmMME_Export
       Height          =   315
       Left            =   120
       Locked          =   -1  'True
-      TabIndex        =   10
+      TabIndex        =   1
       Top             =   300
       Width           =   3795
    End
@@ -81,28 +73,28 @@ Begin VB.Form frmMME_Export
    End
    Begin VB.TextBox txtCustom 
       Height          =   285
-      Left            =   1860
+      Left            =   120
       MaxLength       =   20
-      TabIndex        =   3
+      TabIndex        =   7
       Top             =   960
-      Width           =   2055
+      Width           =   1875
    End
    Begin VB.TextBox txtDBVersion 
       Height          =   285
-      Left            =   120
+      Left            =   2220
       MaxLength       =   20
-      TabIndex        =   2
+      TabIndex        =   8
       Top             =   960
-      Width           =   1575
+      Width           =   1695
    End
    Begin MSComctlLib.ProgressBar ProgressBar 
       Height          =   315
-      Left            =   60
-      TabIndex        =   6
-      Top             =   4740
+      Left            =   120
+      TabIndex        =   44
+      Top             =   6840
       Visible         =   0   'False
-      Width           =   5400
-      _ExtentX        =   9525
+      Width           =   5280
+      _ExtentX        =   9313
       _ExtentY        =   556
       _Version        =   393216
       Appearance      =   1
@@ -112,19 +104,19 @@ Begin VB.Form frmMME_Export
       Caption         =   "&Close"
       Height          =   495
       Left            =   4020
-      TabIndex        =   1
-      Top             =   4140
+      TabIndex        =   43
+      Top             =   6240
       Width           =   1335
    End
    Begin VB.CommandButton cmdGo 
       Caption         =   "&Export to MME"
       Height          =   495
       Left            =   120
-      TabIndex        =   0
-      Top             =   4140
+      TabIndex        =   41
+      Top             =   6240
       Width           =   1395
    End
-   Begin VB.Frame fraRooms 
+   Begin VB.Frame fraExcludeRooms 
       Caption         =   "Exclude Rooms"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
@@ -137,8 +129,8 @@ Begin VB.Form frmMME_Export
       EndProperty
       Height          =   1995
       Left            =   120
-      TabIndex        =   13
-      Top             =   2040
+      TabIndex        =   26
+      Top             =   4140
       Width           =   5235
       Begin VB.CommandButton cmdHideHelp 
          Caption         =   "?"
@@ -154,7 +146,7 @@ Begin VB.Form frmMME_Export
          EndProperty
          Height          =   225
          Left            =   1200
-         TabIndex        =   44
+         TabIndex        =   30
          Top             =   750
          Width           =   255
       End
@@ -163,7 +155,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Left            =   180
-         TabIndex        =   43
+         TabIndex        =   31
          Top             =   780
          Width           =   1095
       End
@@ -171,7 +163,7 @@ Begin VB.Form frmMME_Export
          Caption         =   "Enable"
          Height          =   195
          Left            =   180
-         TabIndex        =   40
+         TabIndex        =   27
          Top             =   300
          Width           =   1335
       End
@@ -180,14 +172,14 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Left            =   180
-         TabIndex        =   26
+         TabIndex        =   28
          Top             =   540
          Width           =   1095
       End
       Begin MSComctlLib.ListView lvExludedRooms 
          Height          =   1635
          Left            =   2700
-         TabIndex        =   23
+         TabIndex        =   40
          Top             =   240
          Width           =   2415
          _ExtentX        =   4260
@@ -209,7 +201,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   285
          Left            =   900
-         TabIndex        =   21
+         TabIndex        =   38
          Text            =   "1"
          Top             =   1560
          Width           =   615
@@ -219,7 +211,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   435
          Left            =   1680
-         TabIndex        =   18
+         TabIndex        =   39
          Top             =   1440
          Width           =   855
       End
@@ -228,7 +220,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   315
          Left            =   1680
-         TabIndex        =   17
+         TabIndex        =   34
          Top             =   960
          Width           =   855
       End
@@ -237,7 +229,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   555
          Left            =   1680
-         TabIndex        =   16
+         TabIndex        =   29
          Top             =   240
          Width           =   855
       End
@@ -245,7 +237,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   315
          Left            =   900
-         TabIndex        =   15
+         TabIndex        =   36
          Text            =   "2"
          Top             =   1200
          Width           =   615
@@ -254,7 +246,7 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   315
          Left            =   180
-         TabIndex        =   14
+         TabIndex        =   35
          Text            =   "1"
          Top             =   1200
          Width           =   615
@@ -274,7 +266,7 @@ Begin VB.Form frmMME_Export
          Height          =   315
          Index           =   2
          Left            =   180
-         TabIndex        =   22
+         TabIndex        =   37
          Top             =   1560
          Width           =   615
       End
@@ -284,7 +276,7 @@ Begin VB.Form frmMME_Export
          Height          =   195
          Index           =   1
          Left            =   900
-         TabIndex        =   20
+         TabIndex        =   33
          Top             =   1020
          Width           =   555
       End
@@ -294,51 +286,96 @@ Begin VB.Form frmMME_Export
          Height          =   195
          Index           =   0
          Left            =   180
-         TabIndex        =   19
+         TabIndex        =   32
          Top             =   1020
          Width           =   735
       End
    End
-   Begin VB.Frame fraSpecial 
-      Caption         =   "Special Export Options"
+   Begin VB.Frame fraOptions 
+      Caption         =   "Export Options"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   1995
       Left            =   120
-      TabIndex        =   29
+      TabIndex        =   11
       Top             =   2040
-      Visible         =   0   'False
       Width           =   5235
+      Begin VB.CommandButton cmdQ 
+         Caption         =   "?"
+         Height          =   255
+         Index           =   2
+         Left            =   2460
+         TabIndex        =   48
+         Top             =   1080
+         Width           =   315
+      End
       Begin VB.CommandButton cmdDefaultExcludeList 
          Caption         =   "List"
          Height          =   255
+         Left            =   1800
+         TabIndex        =   25
+         Top             =   1680
+         Width           =   735
+      End
+      Begin VB.CommandButton cmdQ 
+         Caption         =   "Help"
+         Height          =   255
+         Index           =   1
          Left            =   1680
-         TabIndex        =   42
-         Top             =   960
-         Width           =   795
+         TabIndex        =   47
+         Top             =   350
+         Width           =   615
+      End
+      Begin VB.CheckBox chkLegit 
+         Caption         =   "Disable Kai Auto-Learning"
+         Height          =   255
+         Index           =   2
+         Left            =   240
+         TabIndex        =   20
+         Top             =   1080
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkLegit 
+         Caption         =   "For GreaterMUD Engine"
+         Height          =   255
+         Index           =   1
+         Left            =   240
+         TabIndex        =   17
+         Top             =   720
+         Width           =   2175
       End
       Begin VB.CheckBox chkExcludeDefault 
          Caption         =   "Exclude Default ""Not in game"" Rooms"
          Height          =   495
          Left            =   240
-         TabIndex        =   41
-         Top             =   660
+         TabIndex        =   23
+         Top             =   1380
          Value           =   1  'Checked
-         Width           =   2175
+         Width           =   2655
       End
       Begin VB.CommandButton cmdQ 
          Caption         =   "Help"
-         Height          =   375
-         Left            =   180
-         TabIndex        =   39
-         Top             =   1440
-         Width           =   1095
+         Height          =   255
+         Index           =   0
+         Left            =   4560
+         TabIndex        =   14
+         Top             =   180
+         Width           =   555
       End
       Begin VB.CheckBox chkOnly 
          Caption         =   "Shops"
          Enabled         =   0   'False
          Height          =   195
          Index           =   7
-         Left            =   4020
-         TabIndex        =   38
+         Left            =   4140
+         TabIndex        =   22
          Top             =   1260
          Width           =   975
       End
@@ -355,18 +392,18 @@ Begin VB.Form frmMME_Export
          EndProperty
          Height          =   255
          Index           =   0
-         Left            =   2700
-         TabIndex        =   37
+         Left            =   3000
+         TabIndex        =   12
          Top             =   300
-         Width           =   2355
+         Width           =   1815
       End
       Begin VB.CheckBox chkOnly 
          Caption         =   "Races"
          Enabled         =   0   'False
          Height          =   195
          Index           =   6
-         Left            =   4020
-         TabIndex        =   36
+         Left            =   4140
+         TabIndex        =   19
          Top             =   960
          Value           =   1  'Checked
          Width           =   975
@@ -376,8 +413,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   5
-         Left            =   4020
-         TabIndex        =   35
+         Left            =   4140
+         TabIndex        =   16
          Top             =   660
          Value           =   1  'Checked
          Width           =   975
@@ -387,8 +424,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   4
-         Left            =   2700
-         TabIndex        =   34
+         Left            =   3000
+         TabIndex        =   24
          Top             =   1560
          Width           =   1215
       End
@@ -397,8 +434,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   3
-         Left            =   2700
-         TabIndex        =   33
+         Left            =   3000
+         TabIndex        =   21
          Top             =   1260
          Width           =   1215
       End
@@ -407,8 +444,8 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   2
-         Left            =   2700
-         TabIndex        =   32
+         Left            =   3000
+         TabIndex        =   18
          Top             =   960
          Width           =   1215
       End
@@ -417,23 +454,24 @@ Begin VB.Form frmMME_Export
          Enabled         =   0   'False
          Height          =   195
          Index           =   1
-         Left            =   2700
-         TabIndex        =   31
+         Left            =   3000
+         TabIndex        =   15
          Top             =   660
          Width           =   1215
       End
       Begin VB.CheckBox chkLegit 
          Caption         =   """Legit"" Export"
          Height          =   255
+         Index           =   0
          Left            =   240
-         TabIndex        =   30
+         TabIndex        =   13
          Top             =   360
          Width           =   1395
       End
    End
    Begin VB.Label Label2 
       AutoSize        =   -1  'True
-      Caption         =   "Database Update Webpage"
+      Caption         =   "Update Webpage (Help > Check for Updates in MME)"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -446,9 +484,9 @@ Begin VB.Form frmMME_Export
       Height          =   195
       Index           =   1
       Left            =   120
-      TabIndex        =   25
+      TabIndex        =   9
       Top             =   1380
-      Width           =   2370
+      Width           =   4560
    End
    Begin VB.Label Label1 
       AutoSize        =   -1  'True
@@ -465,7 +503,7 @@ Begin VB.Form frmMME_Export
       Height          =   195
       Index           =   1
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   0
       Top             =   60
       Width           =   1500
    End
@@ -476,9 +514,9 @@ Begin VB.Form frmMME_Export
       ForeColor       =   &H80000008&
       Height          =   255
       Index           =   1
-      Left            =   2640
-      TabIndex        =   8
-      Top             =   5160
+      Left            =   2700
+      TabIndex        =   46
+      Top             =   7200
       Width           =   2895
    End
    Begin VB.Label lblPanel 
@@ -488,9 +526,9 @@ Begin VB.Form frmMME_Export
       ForeColor       =   &H80000008&
       Height          =   255
       Index           =   0
-      Left            =   -60
-      TabIndex        =   7
-      Top             =   5160
+      Left            =   0
+      TabIndex        =   45
+      Top             =   7200
       Width           =   2715
    End
    Begin VB.Label Label2 
@@ -507,14 +545,14 @@ Begin VB.Form frmMME_Export
       EndProperty
       Height          =   195
       Index           =   0
-      Left            =   1860
-      TabIndex        =   5
+      Left            =   120
+      TabIndex        =   3
       Top             =   720
       Width           =   1815
    End
    Begin VB.Label Label1 
       AutoSize        =   -1  'True
-      Caption         =   "Dat Version"
+      Caption         =   "Dat Version/Realm"
       BeginProperty Font 
          Name            =   "MS Sans Serif"
          Size            =   8.25
@@ -526,10 +564,29 @@ Begin VB.Form frmMME_Export
       EndProperty
       Height          =   195
       Index           =   0
-      Left            =   120
+      Left            =   2220
       TabIndex        =   4
       Top             =   720
-      Width           =   1005
+      Width           =   1785
+   End
+   Begin VB.Label Label1 
+      AutoSize        =   -1  'True
+      Caption         =   " - "
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   13.5
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   360
+      Index           =   2
+      Left            =   1970
+      TabIndex        =   6
+      Top             =   900
+      Width           =   300
    End
 End
 Attribute VB_Name = "frmMME_Export"
@@ -554,7 +611,15 @@ Dim tabInfo As Recordset
 Dim tabMonsters As Recordset
 Dim tabShops As Recordset
 Dim tabRooms As Recordset
+Dim tabLairs As Recordset
 Dim tabTBInfo As Recordset
+Dim tabTempRS As Recordset
+
+'Dim nMonsterPossy() As Currency
+'Dim nMonsterSpawnChance() As Currency
+'Dim nMonsterAVGLairExp() As Currency
+'Dim nAverageMobsPerLair As Currency
+Dim nTheoreticalAvgMaxLairsPerRegenPeriod As Integer 'max 1-mob lairs you can clear in 3 minutes (average lair regen of 3 minutes divided by average round of 5 seconds = 36 lairs)
 
 Dim nProgressInterval As Integer
 Dim nProgressCount As Integer
@@ -583,15 +648,78 @@ Dim TBFromBadSource() As Boolean
 'called from an item container opening.  and i believe this indicates that these textblocks only execute
 'other textblocks by design.  mushy memory ftl.
 
-Dim nNewMax As Integer
+'Dim nNewMax As Integer
 Dim MaxValue As Double
 Dim nScaleCount As Integer
-Dim nScale As Integer
+Dim nProgressScale As Integer
 
 Dim nDefaultExcludeMap() As Long
 Dim nDefaultExcludeFrom() As Long
 Dim nDefaultExcludeTo() As Long
 Dim sDefaultExcludeNote() As String
+
+Dim dictLairInfo As New Dictionary
+Private Type LairInfoType
+    sGroupIndex As String
+    sMobList As String
+    nMobs As Integer
+'    nMaxRegen As Integer
+    nAvgExp As Currency
+    nAvgDmg As Currency
+    nAvgDmgPhys As Currency
+    nAvgDmgSpell As Currency
+'    nAvgDmgSpellResist As Integer
+'    nAvgDmgSpellResistAM As Integer
+    nAvgHP As Long
+    nAvgAC As Integer
+    nAvgDR As Integer
+    nAvgMR As Integer
+    nAvgDodge As Integer
+    nScriptValue As Currency
+    nAvgDelay As Integer
+    nTotalLairs As Long
+    sLairRoomNumbers As String
+    sNonLairRooms As String
+End Type
+Dim colLairs() As LairInfoType
+
+'Dim dictNONLairInfo As New Dictionary
+'Private Type NONLairInfoType
+'    sGroupIndex As String
+'    sNonLairRooms As String
+'End Type
+'Dim colNONLairs() As NONLairInfoType
+'
+'Private Type RoomExitType
+'    Map As Long
+'    Room As Long
+'    ExitType As String
+'End Type
+
+Private Type MonsterStats
+    Exp As Currency
+    Damage As Long
+    DamagePhys As Long
+    DamageSpell As Long
+'    DamageSpellResist As Integer
+'    DamageSpellResistAM As Integer
+    HP As Long
+    AC As Integer
+    DR As Integer
+    MR As Integer
+    Dodge As Integer
+    GameLimit As Integer
+    Regen As Integer
+    ScriptValue As Long
+End Type
+
+Private Type MonsterSimResults
+    nAvgDmgTotal As Currency
+    nAvgDmgPhys As Currency
+    nAvgDmgSpell As Currency
+'    nAvgDmgSpellResist As Integer
+'    nAvgDmgSpellResistAM As Integer
+End Type
 
 Private Enum MarkType
     Spell = 0
@@ -599,6 +727,157 @@ Private Enum MarkType
     Monster = 2
     TextBlock = 3
 End Enum
+
+Private Function GetLairInfoIndex(sGroupIndex As String) As Long
+On Error GoTo error:
+If Len(sGroupIndex) < 1 Then Exit Function
+
+If dictLairInfo.Exists(sGroupIndex) Then
+    GetLairInfoIndex = Val(dictLairInfo.Item(sGroupIndex))
+Else
+    GetLairInfoIndex = UBound(colLairs()) + 1
+    ReDim Preserve colLairs(GetLairInfoIndex)
+    dictLairInfo.add sGroupIndex, GetLairInfoIndex
+    colLairs(GetLairInfoIndex).sGroupIndex = sGroupIndex
+End If
+
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetLairInfoIndex")
+Resume out:
+End Function
+
+Private Function GetLairInfo(ByVal sGroupIndex As String) As LairInfoType
+On Error GoTo error:
+Dim x As Long, nMaxRegen As Integer, sArr() As String
+
+If Len(sGroupIndex) < 5 Then Exit Function
+
+sArr() = Split(sGroupIndex, "-", , vbTextCompare)
+If UBound(sArr) > 2 Then
+    sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+    nMaxRegen = Val(sArr(3))
+End If
+x = GetLairInfoIndex(sGroupIndex)
+
+GetLairInfo.sGroupIndex = colLairs(x).sGroupIndex
+GetLairInfo.sMobList = colLairs(x).sMobList
+GetLairInfo.nMobs = colLairs(x).nMobs
+GetLairInfo.nAvgExp = colLairs(x).nAvgExp
+GetLairInfo.nAvgDmgPhys = colLairs(x).nAvgDmgPhys
+GetLairInfo.nAvgDmgSpell = colLairs(x).nAvgDmgSpell
+GetLairInfo.nAvgDmg = colLairs(x).nAvgDmg
+'GetLairInfo.nAvgDmgSpellResist = colLairs(x).nAvgDmgSpellResist
+'GetLairInfo.nAvgDmgSpellResistAM = colLairs(x).nAvgDmgSpellResistAM
+GetLairInfo.nAvgHP = colLairs(x).nAvgHP
+GetLairInfo.nAvgAC = colLairs(x).nAvgAC
+GetLairInfo.nAvgDR = colLairs(x).nAvgDR
+GetLairInfo.nAvgMR = colLairs(x).nAvgMR
+GetLairInfo.nAvgDodge = colLairs(x).nAvgDodge
+'GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
+GetLairInfo.nAvgDelay = colLairs(x).nAvgDelay
+GetLairInfo.nScriptValue = colLairs(x).nScriptValue
+GetLairInfo.nTotalLairs = colLairs(x).nTotalLairs
+GetLairInfo.sLairRoomNumbers = colLairs(x).sLairRoomNumbers
+GetLairInfo.sNonLairRooms = colLairs(x).sNonLairRooms
+
+If nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
+    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
+        colLairs(x).nScriptValue = colLairs(x).nAvgExp * nMaxRegen * 100
+    Else
+        colLairs(x).nScriptValue = _
+            Round( _
+                    ( _
+                        (colLairs(x).nAvgExp * nMaxRegen) / _
+                        ( _
+                            (colLairs(x).nAvgHP * nMaxRegen) + _
+                            (colLairs(x).nAvgDmg * 2 * ((nMaxRegen * (nMaxRegen + 1)) / 2)) _
+                        ) _
+                    ) _
+                    * 100 _
+                )
+    End If
+Else
+    colLairs(x).nScriptValue = 0
+End If
+out:
+On Error Resume Next
+Exit Function
+error:
+Call HandleError("GetLairInfo")
+Resume out:
+End Function
+
+Private Sub SetLairInfo(tUpdatedLairInfo As LairInfoType)
+On Error GoTo error:
+
+Dim x As Long, sArr() As String, sGroupIndex As String, nMaxRegen As Integer
+If Len(tUpdatedLairInfo.sGroupIndex) < 5 Then Exit Sub
+
+sArr() = Split(tUpdatedLairInfo.sGroupIndex, "-", , vbTextCompare)
+If UBound(sArr) > 2 Then
+    sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+    nMaxRegen = Val(sArr(3))
+Else
+    sGroupIndex = tUpdatedLairInfo.sGroupIndex
+End If
+x = GetLairInfoIndex(sGroupIndex)
+
+'averages are for a single mob, averaged from all of the mobs in the list/index
+'the max regen is not taken into account (multiply by that for total average exp, for example)
+colLairs(x).sMobList = tUpdatedLairInfo.sMobList
+colLairs(x).nMobs = tUpdatedLairInfo.nMobs
+colLairs(x).nAvgExp = tUpdatedLairInfo.nAvgExp
+colLairs(x).nAvgDmgPhys = tUpdatedLairInfo.nAvgDmgPhys
+colLairs(x).nAvgDmgSpell = tUpdatedLairInfo.nAvgDmgSpell
+colLairs(x).nAvgDmg = tUpdatedLairInfo.nAvgDmg
+'colLairs(x).nAvgDmgSpellResist = tUpdatedLairInfo.nAvgDmgSpellResist
+'colLairs(x).nAvgDmgSpellResistAM = tUpdatedLairInfo.nAvgDmgSpellResistAM
+colLairs(x).nAvgHP = tUpdatedLairInfo.nAvgHP
+colLairs(x).nAvgAC = tUpdatedLairInfo.nAvgAC
+colLairs(x).nAvgDR = tUpdatedLairInfo.nAvgDR
+colLairs(x).nAvgMR = tUpdatedLairInfo.nAvgMR
+colLairs(x).nAvgDodge = tUpdatedLairInfo.nAvgDodge
+'colLairs(x).nMaxRegen = tUpdatedLairInfo.nMaxRegen 'only used in nmr to calculate an average script value for mobs against their lairs
+colLairs(x).nAvgDelay = tUpdatedLairInfo.nAvgDelay
+colLairs(x).nTotalLairs = tUpdatedLairInfo.nTotalLairs
+colLairs(x).sLairRoomNumbers = tUpdatedLairInfo.sLairRoomNumbers
+colLairs(x).sNonLairRooms = tUpdatedLairInfo.sNonLairRooms
+
+'If colLairs(x).nMaxRegen = 0 Then
+'    sArr() = Split(colLairs(x).sGroupIndex, "-")
+'    colLairs(x).nMaxRegen = Val(sArr(UBound(sArr())))
+'End If
+'
+'If colLairs(x).nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
+'    If colLairs(x).nAvgHP + colLairs(x).nAvgDmg <= 0 Then
+'        colLairs(x).nScriptValue = colLairs(x).nAvgExp * colLairs(x).nMaxRegen * 100
+'    Else
+'        colLairs(x).nScriptValue = _
+'            Round( _
+'                    ( _
+'                        (colLairs(x).nAvgExp * colLairs(x).nMaxRegen) / _
+'                        ( _
+'                            (colLairs(x).nAvgHP * colLairs(x).nMaxRegen) + _
+'                            (colLairs(x).nAvgDmg * 2 * ((colLairs(x).nMaxRegen * (colLairs(x).nMaxRegen + 1)) / 2)) _
+'                        ) _
+'                    ) _
+'                    * 100 _
+'                )
+'    End If
+'Else
+'    colLairs(x).nScriptValue = 0
+'End If
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("SetLairInfo")
+Resume out:
+End Sub
 
 Private Sub LoadConfig(ByVal sFile As String)
 Dim sLine As String, x As Long, y As Long, oLI As ListItem
@@ -636,7 +915,9 @@ If Not sLine = "0" Then txtUpdateURL.Text = sLine
 
 chkExcludeRooms.Value = ReadINI("Settings", "EnableExcludeRooms", sFile)
 chkHideExcludedRooms.Value = ReadINI("Settings", "HideExcludedRooms", sFile)
-chkLegit.Value = ReadINI("Settings", "Legit", sFile)
+chkLegit(0).Value = ReadINI("Settings", "Legit", sFile, 0)
+chkLegit(1).Value = ReadINI("Settings", "Gmud", sFile, 0)
+chkLegit(2).Value = ReadINI("Settings", "DisableKai", sFile, 0)
 chkExcludeDefault.Value = ReadINI("Settings", "ExcludeDefault", sFile, "1")
 chkNoRooms.Value = ReadINI("Settings", "NoRooms", sFile)
 
@@ -702,7 +983,9 @@ Else
 End If
 
 Call WriteINI("Settings", "CustomName", txtCustom.Text, sFile)
-Call WriteINI("Settings", "Legit", chkLegit.Value, sFile)
+Call WriteINI("Settings", "Legit", chkLegit(0).Value, sFile)
+Call WriteINI("Settings", "Gmud", chkLegit(1).Value, sFile)
+Call WriteINI("Settings", "DisableKai", chkLegit(2).Value, sFile)
 Call WriteINI("Settings", "ExcludeDefault", chkExcludeDefault.Value, sFile)
 Call WriteINI("Settings", "DB_Ver", txtDBVersion.Text, sFile)
 Call WriteINI("Settings", "UpdateURL", txtUpdateURL.Text, sFile)
@@ -802,16 +1085,7 @@ Private Sub chkHideExcludedRooms_Click()
 bCheckSave = True
 End Sub
 
-Private Sub chkLegit_Click()
 
-If chkLegit.Value = 1 Then
-    Call EnableLegit(True)
-Else
-    Call EnableLegit(False)
-End If
-
-bCheckSave = True
-End Sub
 
 Private Sub EnableLegit(ByVal bTrue As Boolean)
 On Error GoTo error:
@@ -819,7 +1093,7 @@ On Error GoTo error:
 If bTrue Then
     txtCustom.Enabled = False
     txtUpdateURL.Enabled = False
-    fraRooms.Enabled = False
+    fraExcludeRooms.Enabled = False
     
     chkExcludeRooms.Value = 0
     Call ExcludeRoomsEnable(False)
@@ -831,7 +1105,7 @@ If bTrue Then
 Else
     txtCustom.Enabled = True
     txtUpdateURL.Enabled = True
-    fraRooms.Enabled = True
+    fraExcludeRooms.Enabled = True
     
     chkExcludeRooms.Enabled = True
     
@@ -851,6 +1125,24 @@ Exit Sub
 error:
 Call HandleError("EnableLegit")
 End Sub
+
+Private Sub chkLegit_Click(Index As Integer)
+If Index = 0 Then
+    If chkLegit(Index).Value = 1 Then
+        chkLegit(1).Value = 0
+        Call EnableLegit(True)
+    Else
+        Call EnableLegit(False)
+    End If
+ElseIf Index = 1 Then
+    If chkLegit(Index).Value = 1 Then
+        chkLegit(0).Value = 0
+    End If
+End If
+
+bCheckSave = True
+End Sub
+
 Private Sub chkNoRooms_Click()
 bCheckSave = True
 End Sub
@@ -905,11 +1197,18 @@ MsgBox "Excluded rooms will still export the room names so monsters/shops/regen 
     & "save export time for personal exports).", vbInformation
 End Sub
 
-Private Sub cmdQ_Click()
-MsgBox "If you export only one or more databases, no cross-referencing will be done." _
-    & "  This is for people who want get info on records and wish to use MME's style of viewing/copying stats without taking the time to compile a full MME file." _
-    & vbCrLf & vbCrLf & "The 'Legit Export' option is basically just for me (syntax) when " _
-    & "I make the default data files to post on MME's website.", vbInformation
+Private Sub cmdQ_Click(Index As Integer)
+
+If Index = 0 Then
+    MsgBox "If you export only one or more databases, no cross-referencing will be done." _
+        & " You could use this for quick exports or to more selectively add records to a file. But again, no cross-referencing will be done.", vbInformation
+ElseIf Index = 1 Then
+    MsgBox "The 'Legit Export' option is just for me (syntax) when I make the default data files to post on MME's website." _
+        & vbCrLf & vbCrLf & "The 'For GreaterMUD Engine' option will direct MME to adjust its settings to be more compatible with GreaterMUD engine-based systems.", vbInformation
+ElseIf Index = 2 Then
+    MsgBox "Utilize the disable kai learning option if you have that disabled in the dll for this realm. This will instruct MME to not consider those spells as auto-learned.", vbInformation
+End If
+
 End Sub
 
 Private Sub cmdSaveConfig_Click()
@@ -939,30 +1238,29 @@ ReDim nDefaultExcludeFrom(0) As Long
 ReDim nDefaultExcludeTo(0) As Long
 ReDim sDefaultExcludeNote(0) As String
 
-Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
-Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
 Call AddToDefaultsArr(x, 1, 288, 288, "fake silver river room")
 Call AddToDefaultsArr(x, 1, 289, 289, "halls of training, entrance")
-Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 2306, 2306, "small house, attic")
+Call AddToDefaultsArr(x, 4, 1, 1, "silvermere property office")
 
+Call AddToDefaultsArr(x, 1, 164, 164, "sysop support chamber")
+Call AddToDefaultsArr(x, 1, 238, 238, "sysop cheat room")
+Call AddToDefaultsArr(x, 1, 3347, 3347, "sysop support chamber")
 Call AddToDefaultsArr(x, 1, 2779, 2782, "sysop support module test rooms")
 Call AddToDefaultsArr(x, 1, 3343, 3346, "sysop support empty rooms")
 Call AddToDefaultsArr(x, 1, 3437, 3437, "sysop support rubbish room")
+Call AddToDefaultsArr(x, 17, 2867, 2867, "sysop training room")
 
 Call AddToDefaultsArr(x, 2, 2963, 2963, "mod test room, mod 1")
 Call AddToDefaultsArr(x, 3, 788, 788, "mod test room, mod 2")
 Call AddToDefaultsArr(x, 8, 1407, 1407, "mod test room, mod 3")
 Call AddToDefaultsArr(x, 6, 3275, 3275, "mod test room, mod 4")
 Call AddToDefaultsArr(x, 9, 1432, 1432, "mod test room, mod 5")
-
 Call AddToDefaultsArr(x, 12, 2258, 2258, "mod test room, mod 6")
-Call AddToDefaultsArr(x, 12, 2381, 2381, "platform of stars")
-
 Call AddToDefaultsArr(x, 16, 2673, 2673, "mod test room, mod 7")
 Call AddToDefaultsArr(x, 15, 2055, 2055, "mod test room, mod 8")
-
 Call AddToDefaultsArr(x, 17, 2839, 2839, "mod test room, mod 9")
-Call AddToDefaultsArr(x, 17, 2867, 2867, "sysop training room")
+
 
 out:
 Exit Sub
@@ -971,24 +1269,28 @@ Call HandleError("AddDefaultExcludes")
 Resume out:
 End Sub
 
-Private Sub cmdAddtlOptions_Click()
-If fraSpecial.Visible Then
-    fraSpecial.Visible = False
-    fraRooms.Visible = True
-Else
-    fraSpecial.Visible = True
-    fraRooms.Visible = False
-End If
-End Sub
+
+
+'Private Sub cmdAddtlOptions_Click()
+'If fraSpecial.Visible Then
+'    fraSpecial.Visible = False
+'    fraExcludeRooms.Visible = True
+'Else
+'    fraSpecial.Visible = True
+'    fraExcludeRooms.Visible = False
+'End If
+'End Sub
 
 Private Sub Form_Load()
 On Error Resume Next
-Dim fso As FileSystemObject, x As Integer
+Dim fso As FileSystemObject ', x As Integer
 
 lvExludedRooms.ColumnHeaders.clear
 lvExludedRooms.ColumnHeaders.add , , "Map", 600
 lvExludedRooms.ColumnHeaders.add , , "From", 700
 lvExludedRooms.ColumnHeaders.add , , "To", 700
+
+nTheoreticalAvgMaxLairsPerRegenPeriod = 36
 
 Set fso = CreateObject("Scripting.FileSystemObject")
 
@@ -1136,7 +1438,7 @@ End Sub
 
 Private Sub cmdGo_Click()
 On Error GoTo error:
-Dim x As Long, y As Long, sPath As String
+Dim x As Long, y As Long ', sPath As String
 Dim sNewPath() As String
 Dim StartTime As Long, nTotalTime As Double, sTotalTime As String
 Dim nTmp As Integer, nStatus As Integer, frmForm As Form
@@ -1155,15 +1457,19 @@ txtConfigFile.Enabled = False
 cmdGo.Enabled = False
 txtDBVersion.Enabled = False
 txtCustom.Enabled = False
+txtUpdateURL.Enabled = False
 cmdSelectConfig.Enabled = False
 cmdSaveConfig.Enabled = False
-chkLegit.Enabled = False
-cmdNote.Enabled = False
-Call ExcludeRoomsEnable(False)
-chkExcludeRooms.Enabled = False
-txtUpdateURL.Enabled = False
+'chkLegit(0).Enabled = False
+'chkLegit(1).Enabled = False
+'chkLegit(2).Enabled = False
+cmdNote.Enabled = False 'readme
+'Call ExcludeRoomsEnable(False)
+'chkExcludeRooms.Enabled = False
+fraExcludeRooms.Enabled = False
+fraOptions.Enabled = False
 cmdCancel.Caption = "&Cancel"
-cmdAddtlOptions.Enabled = False
+'cmdAddtlOptions.Enabled = False
 
 Call LockMenus
 Timer1.Enabled = True
@@ -1171,6 +1477,12 @@ bStopExport = False
 
 StartTime = Timer
 DoEvents
+
+Set dictLairInfo = Nothing
+Set dictLairInfo = New Dictionary
+dictLairInfo.CompareMode = vbTextCompare
+ReDim colLairs(0)
+'ReDim colNONLairs(0)
 
 nTmp = CreateDatabase
 Select Case nTmp
@@ -1212,23 +1524,20 @@ If bUpdateExistingADB Then
     End If
 End If
 
-MaxValue = CalcTotalRecords '* 5
-nScale = 0
-x = 2
-Do While MaxValue > MaxInt
-    If MaxValue / x < MaxInt Then
-        nScale = x
-        MaxValue = MaxInt - 1
-    Else
-        x = x + 2
-    End If
+MaxValue = CalcTotalRecords
+
+nProgressScale = 1
+Do While (nProgressScale < 100 And (MaxValue / nProgressScale) > 100) Or (MaxValue / nProgressScale) > MaxInt
+    nProgressScale = nProgressScale + 1
 Loop
+MaxValue = Fix((MaxValue / nProgressScale)) * 1.2
 
 nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
 ProgressBar.Max = MaxValue
 ProgressBar.Visible = True
+nProgressInterval = nProgressScale
 
 Erase MonGroup()
 Erase MonsterInGame()
@@ -1241,27 +1550,20 @@ Erase ExcludedRooms()
 
 Erase SpellFromContainerRef()
 Erase TBFromBadSource()
-'ReDim MonGroup(39, 9999)
-'ReDim MonsterInGame(2000)
-'ReDim SpellInGame(2000)
-'ReDim ItemInGame(2500)
-'ReDim TBScanned(15000, 10)
-'ReDim TBRandom(15000, 10)
 ReDim MonGroup(39, 9999)
 
-
-If chkLegit.Value = 1 _
+If chkLegit(0).Value = 1 _
     Or chkExcludeDefault.Value = 1 _
     Or (chkExcludeRooms.Value = 1 And lvExludedRooms.ListItems.Count > 0) Then
     
-    If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
+    If chkLegit(0).Value = 1 Or chkExcludeDefault.Value = 1 Then
         ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count + UBound(nDefaultExcludeMap()))
     Else
         ReDim ExcludedRooms(1 To 3, lvExludedRooms.ListItems.Count)
     End If
     
     x = 0
-    If chkLegit.Value = 1 Or chkExcludeDefault.Value = 1 Then
+    If chkLegit(0).Value = 1 Or chkExcludeDefault.Value = 1 Then
         For x = 0 To UBound(nDefaultExcludeMap())
             ExcludedRooms(1, x) = nDefaultExcludeMap(x)
             ExcludedRooms(2, x) = nDefaultExcludeFrom(x)
@@ -1357,6 +1659,15 @@ If bStopExport Then GoTo canceled:
 DoEvents
 If chkOnly(0).Value = 0 Then Call LocateRecords
 If bStopExport Then GoTo canceled:
+
+DoEvents
+If (chkOnly(0).Value = 0) Or (chkOnly(2).Value = 1 And chkOnly(4).Value = 1) Then
+    Call CalculateScriptValue
+    If bStopExport Then GoTo canceled:
+    Call ExportLairs
+End If
+If bStopExport Then GoTo canceled:
+
 DoEvents
 If chkOnly(0).Value = 0 Then Call FillTextblockCommands
 If bStopExport Then GoTo canceled:
@@ -1413,19 +1724,23 @@ cmdCancel.Caption = "&Close"
 cmdGo.Enabled = True
 cmdNote.Enabled = True
 txtDBVersion.Enabled = True
-chkLegit.Enabled = True
+chkLegit(0).Enabled = True
+chkLegit(1).Enabled = True
+chkLegit(2).Enabled = True
 txtConfigFile.Enabled = True
-cmdAddtlOptions.Enabled = True
-'txtCustom.Enabled = True
+'cmdAddtlOptions.Enabled = True
 cmdSelectConfig.Enabled = True
 cmdSaveConfig.Enabled = True
-'If chkLegit.Value = 0 Then Call ExcludeRoomsEnable(True)
-If chkLegit.Value = 1 Then
+txtCustom.Enabled = True
+txtUpdateURL.Enabled = True
+fraExcludeRooms.Enabled = True
+fraOptions.Enabled = True
+
+If chkLegit(0).Value = 1 Then
     Call EnableLegit(True)
 Else
     Call EnableLegit(False)
 End If
-'txtUpdateURL.Enabled = True
 
 Set frmForm = Nothing
 Exit Sub
@@ -1435,7 +1750,6 @@ Call HandleError("cmdGo_Click")
 On Error Resume Next
 Call CloseDB(True)
 Resume ReEnable:
-
 End Sub
 
 Private Function CalculateMonsterItemBonuses(nMonster As Long, nAbilities As Variant) As Integer
@@ -1486,7 +1800,7 @@ Call HandleError("CalculateMonsterItemBonuses")
 Resume out:
 End Function
 
-Private Function CalculateMonsterAvgDmg(ByVal nMonster As Long) As Currency
+Private Function CalculateMonsterAvgDmg(ByVal nMonster As Long) As MonsterSimResults
 Dim nStatus As Integer, x As Integer, y As Integer
 Dim nPercent As Integer, sTemp As String, nTest As Integer
 Dim nDamageArr As Variant, nAccyArr As Variant
@@ -1686,8 +2000,12 @@ For x = 0 To 4
 Next x
 
 clsMonAtkSim.RunSim
-
-CalculateMonsterAvgDmg = clsMonAtkSim.nAverageDamage
+'If nMonster = 53 Then
+'    Debug.Print 53
+'End If
+CalculateMonsterAvgDmg.nAvgDmgTotal = clsMonAtkSim.nAverageDamage
+CalculateMonsterAvgDmg.nAvgDmgPhys = clsMonAtkSim.nAverageDamagePhys
+CalculateMonsterAvgDmg.nAvgDmgSpell = clsMonAtkSim.nAverageDamageSpell
 
 out:
 On Error Resume Next
@@ -1780,6 +2098,7 @@ If chkOnly(0).Value = 1 Then
         tabMonsters.Fields("DamageResist") = 0
         tabMonsters.Fields("Follow%") = 0
         tabMonsters.Fields("MagicRes") = 0
+        tabMonsters.Fields("BSDefense") = 0
         tabMonsters.Fields("EXP") = 0
         
         If eDatFileVersion >= v111j Then
@@ -1789,6 +2108,10 @@ If chkOnly(0).Value = 1 Then
         tabMonsters.Fields("HP") = 0
         tabMonsters.Fields("Energy") = 0
         tabMonsters.Fields("AvgDmg") = 0
+        tabMonsters.Fields("AvgDmgPhys") = 0 '2025.06.05
+        tabMonsters.Fields("AvgDmgSpell") = 0
+'        tabMonsters.Fields("AvgDmgSpellResist") = 0
+'        tabMonsters.Fields("AvgDmgSpellResistAM") = 0
         tabMonsters.Fields("GreetTXT") = 0
         tabMonsters.Fields("HPRegen") = 0
         tabMonsters.Fields("CharmLvL") = 0
@@ -2026,7 +2349,7 @@ If nYesNo = vbYes Then bStopExport = True
 End Sub
 Private Sub MarkSpellInGame(ByVal nNum As Long, Optional ByVal sFrom As String, _
     Optional bLearned As Boolean, Optional sClasses As String)
-Dim sTemp As String, sNewArr() As String, x As Long
+Dim sTemp As String, sNewArr() As String ', x As Long
 
 Dim nYesNo As Integer
 On Error GoTo error:
@@ -2190,13 +2513,15 @@ Resume out:
 End Function
 
 Private Sub ScanRooms()
-Dim nStatus As Integer, x As Integer, nRec As Long
+On Error GoTo error:
+Dim nStatus As Integer, x As Integer, nRec As Long, y As Integer ', nIndexExp As Double
+Dim tLairInfo As LairInfoType, nYesNo As Integer ', nMobsInIndex As Integer
+Dim sGroupIndex As String ', tNONLairInfo As NONLairInfoType
+Dim nTempLairCount As Long
 
 '-------------------------------
 '       ROOMS
 '-------------------------------
-Dim nYesNo As Integer
-On Error GoTo error:
 
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then Exit Sub
@@ -2225,12 +2550,14 @@ Do While nStatus = 0 And bStopExport = False
         End If
     Next
     
-    'mark items that are hidden in room as in the game (some items are just always hidden cause they aren't getable)
-    '    For x = 0 To 14
-    '        If Not Roomrec.InvisItems(x) = 0 Then
-    '            Call MarkItemInGame(Roomrec.InvisItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
-    '        End If
-    '    Next
+    'mark sign items that are hidden in room as in the game (some items are just always hidden cause they aren't getable)
+    For x = 0 To 14
+        If Roomrec.InvisItems(x) > 0 Then
+            If GetItemTypeNumber(Roomrec.InvisItems(x)) = 3 Then 'sign
+                Call MarkItemInGame(Roomrec.InvisItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+            End If
+        End If
+    Next
     
     'mark shops that are assigned to a room as in game
     If Roomrec.Type = 1 And Roomrec.ShopNum > 0 Then
@@ -2271,12 +2598,72 @@ Do While nStatus = 0 And bStopExport = False
     Next x
 
     'mark which group and indexs this room includes
-    If Roomrec.MinIndex > 0 And Roomrec.MaxIndex > 0 Then
+    If Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 Then
+        
+        sGroupIndex = CStr(Roomrec.MonsterType) & "-" & CStr(Roomrec.MinIndex) & "-" & CStr(Roomrec.MaxIndex)
+        tLairInfo = GetLairInfo(sGroupIndex) ' & "-" & CStr(Roomrec.MaxRegen)
+        
+        If Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then 'lair
+            
+            If nTempLairCount >= nProgressScale Then
+                ProgressBar.Max = ProgressBar.Max + 1
+                nTempLairCount = 0
+            Else
+                nTempLairCount = nTempLairCount + 1
+            End If
+            
+            If tLairInfo.nMobs = 0 Then
+                For x = Roomrec.MinIndex To Roomrec.MaxIndex
+                    For y = 0 To 14
+                        If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
+                            If GetMonsterRegen(MGIL(Roomrec.MonsterType, x).nNumber(y)) = 0 Then
+                                
+                                tLairInfo.sMobList = tLairInfo.sMobList & MGIL(Roomrec.MonsterType, x).nNumber(y) & ","
+                                tLairInfo.nAvgExp = tLairInfo.nAvgExp + GetMonsterExp(MGIL(Roomrec.MonsterType, x).nNumber(y))
+                                tLairInfo.nMobs = tLairInfo.nMobs + 1
+                                
+                            End If
+                        End If
+                    Next y
+                Next x
+                
+                If tLairInfo.nMobs > 0 Then
+                    tLairInfo.sMobList = Left(tLairInfo.sMobList, Len(tLairInfo.sMobList) - 1)
+                    tLairInfo.nAvgExp = Round(tLairInfo.nAvgExp / tLairInfo.nMobs)
+                    'Call SetLairInfo(tLairInfo)
+                End If
+            End If
+            
+            If Roomrec.Delay = 0 Then
+                tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + 5
+            Else
+                tLairInfo.nAvgDelay = tLairInfo.nAvgDelay + Roomrec.Delay
+            End If
+            
+            tLairInfo.nTotalLairs = tLairInfo.nTotalLairs + 1
+            
+            If Len(tLairInfo.sLairRoomNumbers) = 0 Then
+                tLairInfo.sLairRoomNumbers = "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
+            ElseIf InStr(1, tLairInfo.sLairRoomNumbers, "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ",", vbTextCompare) = 0 Then
+                tLairInfo.sLairRoomNumbers = tLairInfo.sLairRoomNumbers & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
+            End If
+        Else
+            If Len(tLairInfo.sNonLairRooms) = 0 Then
+                tLairInfo.sNonLairRooms = "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
+            ElseIf InStr(1, tLairInfo.sNonLairRooms, "," & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ",", vbTextCompare) = 0 Then
+                tLairInfo.sNonLairRooms = tLairInfo.sNonLairRooms & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ","
+            End If
+        End If
+        
+        Call SetLairInfo(tLairInfo)
+                
         For x = Roomrec.MinIndex To Roomrec.MaxIndex
             If UBound(MonGroup(), 2) < x Then ReDim Preserve MonGroup(UBound(MonGroup(), 1), x)
             If Not MonGroup(Roomrec.MonsterType, x) = "" Then MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & ","
-            If Roomrec.Type = 3 Then 'lair
-                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+            If Roomrec.Type = 3 And Roomrec.MaxRegen > 0 Then  'lair
+            'If Roomrec.Type = 3 And nMobsInIndex > 0 Then  'lair
+                MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & sGroupIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+                'MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "[" & Round(nIndexExp / nMobsInIndex) & "][" & nMobsInIndex & "][" & Roomrec.MaxRegen & "]Group(lair): " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             Else
                 MonGroup(Roomrec.MonsterType, x) = MonGroup(Roomrec.MonsterType, x) & "Group: " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
             End If
@@ -2321,6 +2708,219 @@ Else
 End If
 
 End Sub
+
+Private Sub CalculateScriptValue()
+On Error GoTo error:
+Dim sRegexLairPattern As String, tMatches() As RegexMatches, sGroupIndex As String ', sRoomKey As String
+Dim nLairs As Long, nMaxRegen As Integer, nMaxLairsPerHour As Currency, tLairInfo As LairInfoType
+Dim nLairMobAvgDmg As Currency, nLairMobPhysDamage As Currency, nLairMobMagDamage As Currency, nLairMobHP As Currency, nLairPCT As Currency
+Dim nMobScriptValue As Currency, nMobsTotal As Long, nPossy As Integer, nAvgLairExp As Currency
+Dim iLair As Long, iMonster As Integer, arrMonsters() As String, tMonsterStats As MonsterStats
+Dim nLairMobAC As Long, nLairMobDR As Long, nLairMobMR As Long, nLairMobDodge As Long
+'Dim nLairMobMagDamageResist As Integer, nLairMobMagDamageResistAM As Integer
+'calculate lair damage and script value now that monsters have had their damage calculated
+
+lblPanel(1).Caption = "Calculating Script Value..."
+DoEvents
+
+For iLair = 0 To UBound(colLairs())
+    If colLairs(iLair).nMobs > 0 Then
+        
+        nLairMobAvgDmg = 0
+        nLairMobPhysDamage = 0
+        nLairMobMagDamage = 0
+'        nLairMobMagDamageResist = 0
+'        nLairMobMagDamageResistAM = 0
+        nLairMobHP = 0
+        nLairMobAC = 0
+        nLairMobDR = 0
+        nLairMobMR = 0
+        nLairMobDodge = 0
+        
+        arrMonsters() = Split(colLairs(iLair).sMobList, ",")
+        For iMonster = 0 To UBound(arrMonsters())
+            If Val(arrMonsters(iMonster)) > 0 Then
+                tMonsterStats = MDB_GetMonsterScriptValue(Val(arrMonsters(iMonster)))
+                nLairMobAvgDmg = nLairMobAvgDmg + tMonsterStats.Damage
+                nLairMobPhysDamage = nLairMobPhysDamage + tMonsterStats.DamagePhys
+                nLairMobMagDamage = nLairMobMagDamage + tMonsterStats.DamageSpell
+'                nLairMobMagDamageResist = nLairMobMagDamageResist + tMonsterStats.DamageSpellResist
+'                nLairMobMagDamageResistAM = nLairMobMagDamageResistAM + tMonsterStats.DamageSpellResistAM
+                nLairMobHP = nLairMobHP + tMonsterStats.HP
+                nLairMobAC = nLairMobAC + tMonsterStats.AC
+                nLairMobDR = nLairMobDR + tMonsterStats.DR
+                nLairMobMR = nLairMobMR + tMonsterStats.MR
+                nLairMobDodge = nLairMobDodge + tMonsterStats.Dodge
+            End If
+        Next iMonster
+        
+        colLairs(iLair).nAvgDmgPhys = Round(nLairMobPhysDamage / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgDmgSpell = Round(nLairMobMagDamage / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgDmg = Round(nLairMobAvgDmg / colLairs(iLair).nMobs)
+'        colLairs(iLair).nAvgDmgSpellResist = Round(nLairMobMagDamageResist / colLairs(iLair).nMobs)
+'        colLairs(iLair).nAvgDmgSpellResistAM = Round(nLairMobMagDamageResistAM / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgHP = Round(nLairMobHP / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgAC = Round(nLairMobAC / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgDR = Round(nLairMobDR / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgMR = Round(nLairMobMR / colLairs(iLair).nMobs)
+        colLairs(iLair).nAvgDodge = Round(nLairMobDodge / colLairs(iLair).nMobs)
+        
+        If colLairs(iLair).nTotalLairs > 0 And colLairs(iLair).nAvgDelay > 0 Then
+            colLairs(iLair).nAvgDelay = Round(colLairs(iLair).nAvgDelay / colLairs(iLair).nTotalLairs)
+        End If
+        
+        Call SetLairInfo(colLairs(iLair))
+    End If
+Next iLair
+
+Set tabTempRS = DB.OpenRecordset( _
+    "SELECT [Number],[Summoned By] FROM Monsters WHERE [RegenTime]=0 AND [Summoned By] Like ""*(lair)*""", dbOpenSnapshot)
+
+sRegexLairPattern = "\[([\d\-]+)\]\[(\d+)\]Group\(lair\): (\d+)\/(\d+)"
+
+If Not tabTempRS.EOF Then
+    tabTempRS.MoveFirst
+    Do While Not tabTempRS.EOF
+        nMobsTotal = 0
+        nLairs = 0
+        nPossy = 0
+        nAvgLairExp = 0
+        nMobScriptValue = 0
+        tMatches() = RegExpFindv2(tabTempRS.Fields("Summoned By"), sRegexLairPattern)
+        If UBound(tMatches()) > 0 Or Len(tMatches(0).sFullMatch) > 0 Then
+            
+            nLairs = UBound(tMatches()) + 1
+            For iLair = 0 To UBound(tMatches())
+                'nMap = 0
+                'nRoom = 0
+                nMaxRegen = 0
+                sGroupIndex = ""
+                
+                Select Case UBound(tMatches(iLair).sSubMatches())
+                    Case 0: 'error
+                    Case 1: 'map/room only
+                        'nMap = tMatches(iLair).sSubMatches(0)
+                        'nRoom = tMatches(iLair).sSubMatches(1)
+                    Case 2: '+max regen
+                        nMaxRegen = Val(tMatches(iLair).sSubMatches(0))
+                        'nMap = tMatches(iLair).sSubMatches(1)
+                        'nRoom = tMatches(iLair).sSubMatches(2)
+                    Case 3: '+group-min-max
+                        sGroupIndex = tMatches(iLair).sSubMatches(0)
+                        nMaxRegen = Val(tMatches(iLair).sSubMatches(1))
+                        'nMap = tMatches(iLair).sSubMatches(2)
+                        'nRoom = tMatches(iLair).sSubMatches(3)
+                End Select
+                
+                If nMaxRegen > 0 And Len(sGroupIndex) > 4 Then
+                    tLairInfo = GetLairInfo(sGroupIndex & "-" & CStr(nMaxRegen))
+                    nAvgLairExp = nAvgLairExp + (tLairInfo.nAvgExp * nMaxRegen)
+                    nMobScriptValue = nMobScriptValue + tLairInfo.nScriptValue
+                    nMobsTotal = nMobsTotal + nMaxRegen 'tLairInfo.nMaxRegen
+                ElseIf nMaxRegen > 0 Then
+                    nMobsTotal = nMobsTotal + nMaxRegen
+                End If
+            Next iLair
+
+            nMobScriptValue = Round(nMobScriptValue / nLairs)
+            
+            nPossy = Round(nMobsTotal / nLairs, 1) 'average number of monsters per lair
+            nMaxLairsPerHour = nTheoreticalAvgMaxLairsPerRegenPeriod
+            If nPossy > 1 Then nMaxLairsPerHour = Round((nMaxLairsPerHour / nPossy) + 1, 2)
+            If nLairs < nMaxLairsPerHour Then
+                nLairPCT = Round(nLairs / nMaxLairsPerHour, 2)
+                nMobScriptValue = Round(nMobScriptValue * nLairPCT)
+            End If
+            
+            If nMobScriptValue >= 1 Or nAvgLairExp > 0 Then
+                tabMonsters.Index = "pkMonsters"
+                tabMonsters.Seek "=", tabTempRS.Fields("Number")
+                If Not tabMonsters.NoMatch = True Then
+                    tabMonsters.Edit
+                    tabMonsters.Fields("AvgLairExp") = Round(nAvgLairExp / nLairs)
+                    tabMonsters.Fields("ScriptValue") = nMobScriptValue
+                    tabMonsters.Update
+                End If
+            End If
+        End If
+        
+        tabTempRS.MoveNext
+    Loop
+    
+    tabTempRS.MoveLast
+    
+    tabTempRS.Close
+    Set tabTempRS = Nothing
+End If
+
+out:
+On Error Resume Next
+Exit Sub
+error:
+Call HandleError("CalculateScriptValue")
+Resume out:
+End Sub
+
+Private Function MDB_GetRoomLairMobs(ByVal nMap As Long, ByVal nRoom As Long) As String
+Dim tExit As RoomExitType ', sName As String
+
+MDB_GetRoomLairMobs = ""
+tExit.Map = nMap
+tExit.Room = nRoom
+If tExit.Map = 0 Or tExit.Room = 0 Then Exit Function
+If tabRooms.RecordCount = 0 Then Exit Function
+
+tabRooms.Index = "idxRooms"
+tabRooms.Seek "=", tExit.Map, tExit.Room
+If tabRooms.NoMatch = False Then
+    MDB_GetRoomLairMobs = tabRooms.Fields("Lair")
+    If Right(MDB_GetRoomLairMobs, 1) = "," Then MDB_GetRoomLairMobs = Left(MDB_GetRoomLairMobs, Len(MDB_GetRoomLairMobs) - 1)
+    If InStr(1, MDB_GetRoomLairMobs, ":", vbTextCompare) Then
+        MDB_GetRoomLairMobs = Mid(MDB_GetRoomLairMobs, InStr(1, MDB_GetRoomLairMobs, ":", vbTextCompare) + 2)
+    End If
+End If
+
+End Function
+
+Private Function MDB_GetMonsterScriptValue(ByVal nNum As Long) As MonsterStats
+On Error GoTo error:
+Dim nExp As Currency, x As Integer
+
+If nNum = 0 Then Exit Function
+If tabMonsters.RecordCount = 0 Then Exit Function
+
+tabMonsters.Index = "pkMonsters"
+tabMonsters.Seek "=", nNum
+If tabMonsters.NoMatch = False Then
+    nExp = tabMonsters.Fields("EXP")
+    If eDatFileVersion >= v111j Then
+         nExp = nExp * tabMonsters.Fields("ExpMulti")
+    End If
+    MDB_GetMonsterScriptValue.Exp = nExp
+    MDB_GetMonsterScriptValue.Damage = tabMonsters.Fields("AvgDmg")
+    MDB_GetMonsterScriptValue.DamagePhys = tabMonsters.Fields("AvgDmgPhys")
+    MDB_GetMonsterScriptValue.DamageSpell = tabMonsters.Fields("AvgDmgSpell")
+'    MDB_GetMonsterScriptValue.DamageSpellResist = tabMonsters.Fields("AvgDmgSpellResist")
+'    MDB_GetMonsterScriptValue.DamageSpellResistAM = tabMonsters.Fields("AvgDmgSpellResistAM")
+    MDB_GetMonsterScriptValue.HP = tabMonsters.Fields("HP")
+    MDB_GetMonsterScriptValue.Regen = tabMonsters.Fields("RegenTime")
+    MDB_GetMonsterScriptValue.GameLimit = tabMonsters.Fields("GameLimit")
+    MDB_GetMonsterScriptValue.ScriptValue = tabMonsters.Fields("ScriptValue")
+    MDB_GetMonsterScriptValue.AC = tabMonsters.Fields("ArmourClass")
+    MDB_GetMonsterScriptValue.DR = tabMonsters.Fields("DamageResist")
+    MDB_GetMonsterScriptValue.MR = tabMonsters.Fields("MagicRes")
+    For x = 0 To 9
+        Select Case tabMonsters.Fields("Abil-" & x)
+            Case 34: 'dodge
+                MDB_GetMonsterScriptValue.Dodge = tabMonsters.Fields("AbilVal-" & x)
+        End Select
+    Next
+End If
+
+Exit Function
+error:
+Call HandleError("GetMonsterName")
+End Function
 
 Private Sub ScanShops()
 Dim nStatus As Integer, x As Integer
@@ -2930,13 +3530,13 @@ Loop
 End Sub
 
 Private Sub ScanGreets()
-Dim nStatus As Integer, x As Long, nRec As Long, nCurrentMonster As Long
+Dim nStatus As Integer, nCurrentMonster As Long ', x As Long, nRec As Long
 
 '-------------------------------
 '       Greets
 '-------------------------------
 Dim nYesNo As Integer, sData As String, z As Long, nTBNumber As Long
-Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long, y As Long
+Dim nNest As Long, nMonsterItems() As Currency, nDataPos As Long ', y As Long
 Dim nMonsterSpells() As Currency, sMonsterSpellsClasses() As String
 
 On Error GoTo error:
@@ -2945,6 +3545,7 @@ nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf
 If Not nStatus = 0 Then Exit Sub
 
 lblPanel(1).Caption = "Scanning Greets (" & 0 & ")"
+DoEvents
 
 Do While nStatus = 0 And bStopExport = False
     MonsterRowToStruct Monsterdatabuf.buf
@@ -3640,10 +4241,6 @@ nextnumber:
     nNumber = Val(Mid(sWhole, y1, y2))
     
     If bCheckSpell Then
-        If nNumber = 711 Then
-            Debug.Print 1
-        End If
-        
         If nNumber = 0 Then x = y1: GoTo checknext:
         
         y1 = y1 + y2 + 1 'len of string searching (to position y1 at first number)
@@ -3922,7 +4519,7 @@ End Function
 
 Private Function CheckForClassRestriction(ByVal sWholeData As String, ByVal nCurrentPosition As Long) As String
 Dim sLook As String, sChar As String, sTest As String
-Dim x As Integer, y1 As Integer, y2 As Integer, z As Integer, nClass As Long
+Dim x As Integer, y1 As Integer, y2 As Integer ', z As Integer, nClass As Long
 
 'make sTest just the the part of the data up until the current position
 sTest = Mid(sWholeData, 1, nCurrentPosition - 1)
@@ -4054,9 +4651,22 @@ tabInfo.Fields("Dat File Version") = txtDBVersion.Text
 
 tabInfo.Fields("Date") = Date
 tabInfo.Fields("Time") = Time
-tabInfo.Fields("Legit") = chkLegit.Value
 
-If chkLegit.Value = 1 Then
+If chkLegit(0).Value = 1 Then
+    tabInfo.Fields("Legit") = 1
+ElseIf chkLegit(1).Value = 1 Then
+    tabInfo.Fields("Legit") = 2
+Else
+    tabInfo.Fields("Legit") = 0
+End If
+
+If chkLegit(2).Value = 1 Then
+    tabInfo.Fields("DisableKai") = 1
+Else
+    tabInfo.Fields("DisableKai") = 0
+End If
+
+If chkLegit(0).Value = 1 Then
     tabInfo.Fields("UpdateURL") = "http://www.mudinfo.net/mmudexp.php"
     tabInfo.Fields("Custom") = "Default"
 Else
@@ -4071,6 +4681,234 @@ Exit Sub
 error:
 Call HandleError("ExportVersionInfo")
 End Sub
+
+Private Sub ExportLairs()
+On Error GoTo error:
+Dim iLair As Long, sArr() As String, sGroupIndex As String, nWalkDistance As Double, x As Long ', y As Long
+Dim nNonLairs As Long, nLairsToRooms As Double ', tNONLairInfo As NONLairInfoType
+Dim arrLairs() As RoomExitType, reTemp As RoomExitType 'arrNonLairs() As RoomExitType,
+Dim nWalkTotal As Long, nWalkCount As Long, arrChainedRooms() As RoomExitType
+Dim nGroup As Integer, nMinIndex As Integer, nMaxIndex As Integer
+Dim nRefGroup As Integer, nRET() As Long ', nRefMinIndex As Integer, nRefMaxIndex As Integer
+tryagain:
+If tabLairs.RecordCount <> 0 Then
+    tabLairs.MoveFirst
+    tabLairs.Delete
+    GoTo tryagain:
+End If
+
+tabLairs.Index = "pkLairs"
+
+lblPanel(1).Caption = "Exporting Lairs..."
+DoEvents
+
+For iLair = 0 To UBound(colLairs())
+    sArr() = Split(colLairs(iLair).sGroupIndex, "-", , vbTextCompare)
+    If colLairs(iLair).nMobs > 0 And UBound(sArr()) = 2 Then
+        
+        ReDim arrNonLairs(0)
+        ReDim arrLairs(0)
+        nWalkTotal = 0
+        nWalkCount = 0
+        nNonLairs = 0
+        nLairsToRooms = 0
+        nWalkDistance = 0
+        
+        nGroup = Val(sArr(0))
+        nMinIndex = Val(sArr(1))
+        nMaxIndex = Val(sArr(2))
+        sGroupIndex = sArr(0) & "-" & sArr(1) & "-" & sArr(2)
+        tabLairs.Seek "=", sGroupIndex
+        If tabLairs.NoMatch = True Then
+            tabLairs.AddNew
+            tabLairs.Fields("GroupIndex") = sGroupIndex
+            tabLairs.Fields("TotalLairs") = colLairs(iLair).nTotalLairs
+            tabLairs.Fields("MobList") = colLairs(iLair).sMobList
+            tabLairs.Fields("Mobs") = colLairs(iLair).nMobs
+            tabLairs.Fields("AvgDelay") = colLairs(iLair).nAvgDelay
+'            tabLairs.Fields("MaxRegen") = colLairs(iLair).nMaxRegen
+            tabLairs.Fields("AvgExp") = colLairs(iLair).nAvgExp
+            tabLairs.Fields("AvgDmgPhys") = colLairs(iLair).nAvgDmgPhys
+            tabLairs.Fields("AvgDmgSpell") = colLairs(iLair).nAvgDmgSpell
+            tabLairs.Fields("AvgDmg") = colLairs(iLair).nAvgDmg
+'            tabLairs.Fields("AvgDmgSpellResist") = colLairs(iLair).nAvgDmgSpellResist
+'            tabLairs.Fields("AvgDmgSpellResistAM") = colLairs(iLair).nAvgDmgSpellResistAM
+            tabLairs.Fields("AvgHP") = colLairs(iLair).nAvgHP
+            tabLairs.Fields("AvgAC") = colLairs(iLair).nAvgAC
+            tabLairs.Fields("AvgDR") = colLairs(iLair).nAvgDR
+            tabLairs.Fields("AvgMR") = colLairs(iLair).nAvgMR
+            tabLairs.Fields("AvgDodge") = colLairs(iLair).nAvgDodge
+            'tabLairs.Fields("ScriptValue") = colLairs(iLair).nScriptValue
+            
+'            If tabLairs.Fields("GroupIndex") = "11-10-13" Then
+'                Debug.Print tabLairs.Fields("GroupIndex")
+'            End If
+
+            If Len(colLairs(iLair).sNonLairRooms) > 0 Then
+                colLairs(iLair).sNonLairRooms = Mid(colLairs(iLair).sNonLairRooms, 2, Len(colLairs(iLair).sNonLairRooms) - 2)
+                sArr() = Split(colLairs(iLair).sNonLairRooms, ",")
+                nNonLairs = UBound(sArr) + 1
+                
+'                If UBound(sArr) > 0 Then ReDim arrNonLairs(UBound(sArr))
+'                For x = 0 To UBound(sArr)
+'                    reTemp = ExtractMapRoom(sArr(x))
+'                    If reTemp.Map > 0 And reTemp.Room > 0 Then arrNonLairs(x) = reTemp
+'                Next x
+            End If
+            
+            If colLairs(iLair).nTotalLairs > 0 And nNonLairs > 0 Then
+                nLairsToRooms = Round((nNonLairs + colLairs(iLair).nTotalLairs) / colLairs(iLair).nTotalLairs, 2)
+            End If
+            
+            If Len(colLairs(iLair).sLairRoomNumbers) > 0 Then
+                colLairs(iLair).sLairRoomNumbers = Mid(colLairs(iLair).sLairRoomNumbers, 2, Len(colLairs(iLair).sLairRoomNumbers) - 2)
+'                nWalkDistance = CalcAvgGap(colLairs(iLair).sLairRoomNumbers)
+                
+                sArr() = Split(colLairs(iLair).sLairRoomNumbers, ",")
+                If UBound(sArr) > 0 Then ReDim arrLairs(UBound(sArr))
+                For x = 0 To UBound(sArr)
+                    reTemp = ExtractMapRoom(sArr(x))
+                    If reTemp.Map > 0 And reTemp.Room > 0 Then arrLairs(x) = reTemp
+                Next x
+            End If
+            
+            If UBound(arrLairs) > 0 Then
+                For x = 0 To UBound(arrLairs)
+                    
+                    nRefGroup = nGroup
+                    'nRefMinIndex = nMinIndex
+                    'nRefMaxIndex = nMaxIndex
+                    ReDim arrChainedRooms(0)
+                    arrChainedRooms(0) = arrLairs(x)
+                    
+                    nRET = GetLairWalk(arrLairs(x), arrLairs, arrChainedRooms, nRefGroup, 1)  'nRefMinIndex, nRefMaxIndex,
+                    If UBound(nRET) = 1 Then
+                        If nRET(1) > 0 Then
+                            'nRet(0):total walk, nRet(1):count
+                            nWalkTotal = nWalkTotal + (nRET(0) / nRET(1))
+                            nWalkCount = nWalkCount + 1
+                        End If
+                    End If
+                Next x
+                If nWalkCount > 0 Then nWalkDistance = Round(nWalkTotal / nWalkCount, 2)
+            End If
+                        
+            If nLairsToRooms > 0 And nLairsToRooms < nWalkDistance Then
+                tabLairs.Fields("AvgWalk") = nLairsToRooms
+            ElseIf nWalkDistance > 0 Then
+                tabLairs.Fields("AvgWalk") = nWalkDistance
+            Else
+                tabLairs.Fields("AvgWalk") = nLairsToRooms
+            End If
+            
+            tabLairs.Update
+        End If
+    End If
+    
+    Call IncreaseProgressBar
+    
+Next iLair
+
+Exit Sub
+error:
+Call HandleError("ExportLairs")
+End Sub
+
+Private Function GetLairWalk(tStartRoom As RoomExitType, _
+    ByRef aLairs() As RoomExitType, ByRef aChainedRooms() As RoomExitType, _
+    ByRef nMatchGroup As Integer, _
+    ByVal nDepth As Long) As Long() 'ByRef nMatchMinIndex As Integer, ByRef nMatchMaxIndex As Integer,
+Dim x As Long, y As Long, tExits() As RoomExitType
+Dim nTotal As Long, nCount As Long, tQueuedRooms() As RoomExitType, nQueue As Long
+Dim sArr() As String, nGroup As Integer, nMinIndex As Integer, nMaxIndex As Integer
+Dim nResult() As Long, nReturn() As Long
+On Error GoTo error:
+
+ReDim nReturn(1)
+GetLairWalk = nReturn
+
+If nDepth > 99 Then Exit Function
+If tStartRoom.Map = 0 Or tStartRoom.Room = 0 Then Exit Function
+
+nQueue = -1
+ReDim tQueuedRooms(0)
+
+tExits = GetRoomExits(tStartRoom.Map, tStartRoom.Room, True)
+For x = 0 To 9
+    If tExits(x).Map > 0 And tExits(x).Room > 0 Then
+        
+        sArr() = Split(tExits(x).ExitType, "-", , vbTextCompare)
+        If UBound(sArr) <> 2 Then GoTo nextexit:
+        nGroup = Val(sArr(0))
+        nMinIndex = Val(sArr(1))
+        nMaxIndex = Val(sArr(2))
+        
+        If nMatchGroup > 0 And nMatchGroup <> nGroup Then GoTo nextexit:
+'        If nMatchMinIndex > 0 And nMatchMaxIndex > 0 Then
+'            If nMinIndex > (nMatchMaxIndex + 2) Then GoTo nextexit:
+'            If nMaxIndex < (nMatchMinIndex - 2) Then GoTo nextexit:
+'            If nMatchMinIndex > nMinIndex Then nMatchMinIndex = nMinIndex
+'            If nMatchMaxIndex < nMaxIndex Then nMatchMaxIndex = nMaxIndex
+'        End If
+        
+        If RoomInRoomArray(tExits(x), aChainedRooms) = False Then
+            If IsRoomLair(tExits(x).Map, tExits(x).Room) Then
+                nTotal = nTotal + nDepth
+                nCount = nCount + 1
+            Else
+                nQueue = nQueue + 1
+                If nQueue > 0 Then ReDim Preserve tQueuedRooms(nQueue)
+                tQueuedRooms(nQueue) = tExits(x)
+            End If
+            
+            y = UBound(aChainedRooms) + 1
+            ReDim Preserve aChainedRooms(y)
+            aChainedRooms(y) = tExits(x)
+        End If
+    End If
+nextexit:
+Next x
+
+If nQueue >= 0 Then
+    For x = 0 To nQueue
+        nResult = GetLairWalk(tQueuedRooms(x), aLairs, aChainedRooms, nMatchGroup, nDepth + 1) 'nMatchMinIndex, nMatchMaxIndex,
+        If UBound(nResult) = 1 Then
+            nTotal = nTotal + nResult(0)
+            nCount = nCount + nResult(1)
+        End If
+    Next x
+End If
+
+If nTotal > 0 And nCount > 0 Then
+    nReturn(0) = nTotal
+    nReturn(1) = nCount
+    GetLairWalk = nReturn
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetAverageWalk")
+Resume out:
+End Function
+
+Private Function RoomInRoomArray(reNeedle As RoomExitType, reHaystack() As RoomExitType) As Boolean
+On Error GoTo error:
+Dim x As Long
+
+For x = 0 To UBound(reHaystack)
+    If reNeedle.Map = reHaystack(x).Map And reNeedle.Room = reHaystack(x).Room Then
+        RoomInRoomArray = True
+        Exit Function
+    End If
+Next x
+
+out:
+Exit Function
+error:
+Call HandleError("RoomInRoomArray")
+Resume out:
+End Function
 
 Private Sub ExportItems()
 Dim nStatus As Integer, recnum As Long
@@ -4473,7 +5311,8 @@ Loop
 
 End Sub
 Private Sub ExportMonsters()
-Dim nStatus As Integer, recnum As Long, x As Long, sTemp As String, y As Integer, z As Integer
+Dim nStatus As Integer, recnum As Long, x As Long ', sTemp As String, y As Integer, z As Integer
+Dim tMSR As MonsterSimResults
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
@@ -4521,6 +5360,7 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("DamageResist") = Monsterrec.DR
     tabMonsters.Fields("Follow%") = Monsterrec.Follow
     tabMonsters.Fields("MagicRes") = Monsterrec.MR
+    tabMonsters.Fields("BSDefense") = Monsterrec.BSDefence
     tabMonsters.Fields("EXP") = SLong2ULong(Monsterrec.Experience)
     
     If eDatFileVersion >= v111j Then
@@ -4531,7 +5371,13 @@ Do While nStatus = 0 And bStopExport = False
     
     tabMonsters.Fields("HP") = Monsterrec.Hitpoints
     tabMonsters.Fields("Energy") = Monsterrec.Energy
-    tabMonsters.Fields("AvgDmg") = CalculateMonsterAvgDmg(Monsterrec.Number)
+    
+    tMSR = CalculateMonsterAvgDmg(Monsterrec.Number)
+    tabMonsters.Fields("AvgDmg") = tMSR.nAvgDmgTotal
+    tabMonsters.Fields("AvgDmgPhys") = tMSR.nAvgDmgPhys
+    tabMonsters.Fields("AvgDmgSpell") = tMSR.nAvgDmgSpell
+'    tabMonsters.Fields("AvgDmgSpellResist") = tMSR.nAvgDmgSpellResist
+'    tabMonsters.Fields("AvgDmgSpellResistAM") = tMSR.nAvgDmgSpellResistAM
     tabMonsters.Fields("GreetTXT") = Monsterrec.GreetTxt
     tabMonsters.Fields("HPRegen") = Monsterrec.HPRegen
     tabMonsters.Fields("CharmLvL") = Monsterrec.CharmLvL
@@ -4539,6 +5385,9 @@ Do While nStatus = 0 And bStopExport = False
     tabMonsters.Fields("Undead") = Monsterrec.Undead
     tabMonsters.Fields("Align") = Monsterrec.Alignment
     tabMonsters.Fields("RegenTime") = Monsterrec.RegenTime
+    tabMonsters.Fields("GameLimit") = Monsterrec.GameLimit
+    tabMonsters.Fields("AvgLairExp") = 0
+    tabMonsters.Fields("ScriptValue") = 0
     tabMonsters.Fields("R") = Monsterrec.Runic
     tabMonsters.Fields("P") = Monsterrec.Platinum
     tabMonsters.Fields("G") = Monsterrec.Gold
@@ -4593,12 +5442,12 @@ End Sub
 Private Sub ExportRooms()
 On Error GoTo error:
 Dim nStatus As Integer, recnum As Long, sDir As String, sTemp As String
-Dim sActionNum As String, sMonsters As String, nAction As Integer, nNumActions As Long
+Dim sMonsters As String, nAction As Integer, nNumActions As Long 'sActionNum As String,
 Dim nTempMap As Long, nTempRoom As Long, sActions() As String, sNewActions() As String
 Dim x As Integer, y As Integer, z As Integer
-Dim x2 As Integer, y2 As Integer, z2 As Integer
+Dim x2 As Integer, y2 As Integer ', z2 As Integer
 
-If chkLegit.Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
+If chkLegit(0).Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
 
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
@@ -4667,7 +5516,8 @@ Do While nStatus = 0 And bStopExport = False
         tabRooms.Fields("NPC") = 0
         tabRooms.Fields("CMD") = 0
         tabRooms.Fields("Placed") = Chr(0)
-
+        tabRooms.Fields("Delay") = 0
+        
         For y = 0 To 9
                 Select Case y
                     Case 0: sDir = "N"
@@ -4699,6 +5549,11 @@ Do While nStatus = 0 And bStopExport = False
     tabRooms.Fields("Spell") = Roomrec.Spell
     tabRooms.Fields("NPC") = Roomrec.PermNPC
     tabRooms.Fields("CMD") = Roomrec.CmdText
+    If Roomrec.Delay = 0 Then
+        tabRooms.Fields("Delay") = 5
+    Else
+        tabRooms.Fields("Delay") = Roomrec.Delay
+    End If
     
     sTemp = ""
     For x = 0 To 9
@@ -4798,8 +5653,6 @@ Do While nStatus = 0 And bStopExport = False
                         End If
                     End If
                     
-                    
-                    
                     tabRooms.Fields(sDir) = sTemp
                     
                 Case 8: 'Map Change
@@ -4811,34 +5664,13 @@ Do While nStatus = 0 And bStopExport = False
                 Case 10: 'Text
                     tabRooms.Fields(sDir) = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Text: " & GetMessages(Roomrec.Para1(x), -1) & ")"
                     
-' moved to door               Case 11: 'Gate
-'                    If Roomrec.Para4(x) = 0 Then 'para 4 is key req
-'                        sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Gate"
-'
-'                        If Not Roomrec.Para2(x) = 0 Then
-'                            sTemp = sTemp & " [" & Abs(Roomrec.Para2(x)) & " picklocks])"
-'                        Else
-'                            sTemp = sTemp & ")"
-'                        End If
-'                    Else
-'                        sTemp = Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & " (Key: " & Roomrec.Para4(x)
-'
-'                        If Not Roomrec.Para2(x) = 0 Then
-'                            sTemp = sTemp & " [or " & Abs(Roomrec.Para2(x)) & " picklocks])"
-'                        Else
-'                            sTemp = sTemp & ")"
-'                        End If
-'                    End If
-'
-'                    tabRooms.Fields(sDir) = sTemp
-                    
                 Case 12: 'Remote Action
                     
                     If Roomrec.RoomNumber = Roomrec.RoomExit(x) Then
-                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(x) Mod 10, False) _
+                        sTemp = "[on the " & GetFriendlyRoomExit(Roomrec.Para2(x) Mod 10, False) _
                             & " exit of this room]: "
                     Else
-                        sTemp = "[on the " & GetRoomExits(Roomrec.Para2(x) Mod 10, False) _
+                        sTemp = "[on the " & GetFriendlyRoomExit(Roomrec.Para2(x) Mod 10, False) _
                             & " exit of room " & Roomrec.MapNumber & "/" & Roomrec.RoomExit(x) & "]: "
                     End If
                     
@@ -4981,32 +5813,27 @@ doneaction:
     
     
     sMonsters = ""
-    If Not Roomrec.MaxIndex = 0 And Roomrec.Type = 3 Then '3=lair
+    If Roomrec.MaxRegen > 0 And Roomrec.Type = 3 And Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 Then   '3=lair
+        
         If UBound(MGIL(), 2) < Roomrec.MinIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MinIndex)
         If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex)
         
         For x = Roomrec.MinIndex To Roomrec.MaxIndex
-            For y = 0 To 10 '20
+            For y = 0 To 14
                 If Not MGIL(Roomrec.MonsterType, x).nNumber(y) = 0 Then
-                    If sMonsters = "" Then
-                        sMonsters = "(Max " & Roomrec.MaxRegen & "): "
-                    End If
                     sMonsters = sMonsters & MGIL(Roomrec.MonsterType, x).nNumber(y) & ","
                 End If
             Next y
         Next x
+        
     End If
-    If sMonsters = "" Then sMonsters = Chr(0)
+    
+    If sMonsters = "" Then
+        sMonsters = Chr(0)
+    Else
+        sMonsters = "(Max " & Roomrec.MaxRegen & "): " & sMonsters & "[" & Roomrec.MonsterType & "-" & Roomrec.MinIndex & "-" & Roomrec.MaxIndex & "-" & Roomrec.MaxRegen & "]"
+    End If
     tabRooms.Fields("Lair") = sMonsters
-
-'    For x = 0 To 9
-'        tabRooms.Fields("Exit " & x) = Roomrec.RoomExit(x)
-'        tabRooms.Fields("Type " & x) = Roomrec.RoomType(x)
-'        tabRooms.Fields("Para1 " & x) = Roomrec.Para1(x)
-'        tabRooms.Fields("Para2 " & x) = Roomrec.Para2(x)
-'        tabRooms.Fields("Para3 " & x) = Roomrec.Para3(x)
-'        tabRooms.Fields("Para4 " & x) = Roomrec.Para4(x)
-'    Next
 
 excluded:
 
@@ -5069,7 +5896,7 @@ End Function
 Private Function CreateDatabase() As Integer
 On Error GoTo error:
 Dim sTemp As String, nYesNo As Integer, catDB As ADOX.Catalog
-Dim fso As FileSystemObject, x As Integer, nTemp As Integer, nTemp2 As Integer
+Dim fso As FileSystemObject ', x As Integer, nTemp As Integer, nTemp2 As Integer
 
 CreateDatabase = 0
 
@@ -5138,11 +5965,13 @@ Set catDB = Nothing
 End Function
 
 Private Function CreateTables() As Boolean
+
 On Error GoTo error:
 Dim catNewDB As ADOX.Catalog
 Dim tabNewMonsters As ADOX.Table, tabNewSpells As ADOX.Table, tabNewShops As ADOX.Table
 Dim tabNewClasses As ADOX.Table, tabNewRaces As ADOX.Table, tabNewItems As ADOX.Table
 Dim tabNewInfo As ADOX.Table, tabNewRooms As ADOX.Table, tabNewTBInfo As ADOX.Table
+Dim tabNewLairs As ADOX.Table
 
 Dim pkClasses As New ADOX.Key
 Dim pkRaces As New ADOX.Key
@@ -5150,22 +5979,24 @@ Dim pkItems As New ADOX.Key
 Dim pkMonsters As New ADOX.Key
 Dim pkShops As New ADOX.Key
 Dim pkSpells As New ADOX.Key
-Dim pkTBInfo As New ADOX.Key
 Dim idxRooms As New ADOX.Index
+Dim pkTBInfo As New ADOX.Key
+Dim pkLairs As New ADOX.Key
 Dim x As Integer
 
 CreateTables = False
 
 Set catNewDB = New ADOX.Catalog
-Set tabNewRaces = New ADOX.Table
 Set tabNewClasses = New ADOX.Table
-Set tabNewSpells = New ADOX.Table
-Set tabNewShops = New ADOX.Table
-Set tabNewMonsters = New ADOX.Table
+Set tabNewRaces = New ADOX.Table
 Set tabNewItems = New ADOX.Table
-Set tabNewInfo = New ADOX.Table
+Set tabNewMonsters = New ADOX.Table
+Set tabNewShops = New ADOX.Table
+Set tabNewSpells = New ADOX.Table
 Set tabNewRooms = New ADOX.Table
 Set tabNewTBInfo = New ADOX.Table
+Set tabNewInfo = New ADOX.Table
+Set tabNewLairs = New ADOX.Table
 
 'open the database
 catNewDB.ActiveConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" & "Data Source=" & sDataSource
@@ -5183,6 +6014,7 @@ With tabNewRooms
     .Columns.Append "CMD", adInteger
     .Columns.Append "Spell", adInteger
     .Columns.Append "Lair", adVarWChar
+    .Columns.Append "Delay", adInteger
     .Columns.Append "Placed", adVarWChar
     .Columns.Append "N", adVarWChar
     .Columns.Append "S", adVarWChar
@@ -5206,6 +6038,30 @@ With tabNewRooms
 
 End With
 catNewDB.Tables.Append tabNewRooms
+
+DoEvents
+With tabNewLairs
+    .Name = "Lairs"
+    .Columns.Append "GroupIndex", adVarWChar
+    .Columns.Append "MobList", adVarWChar
+    .Columns.Append "Mobs", adInteger
+    .Columns.Append "TotalLairs", adInteger
+    .Columns.Append "AvgDelay", adInteger
+    .Columns.Append "AvgWalk", adDouble
+    .Columns.Append "AvgExp", adDouble
+    .Columns.Append "AvgDmg", adDouble
+    .Columns.Append "AvgDmgPhys", adDouble
+    .Columns.Append "AvgDmgSpell", adDouble
+'    .Columns.Append "AvgDmgSpellResist", adInteger
+'    .Columns.Append "AvgDmgSpellResistAM", adInteger
+    .Columns.Append "AvgHP", adDouble
+    .Columns.Append "AvgAC", adInteger
+    .Columns.Append "AvgDR", adInteger
+    .Columns.Append "AvgMR", adInteger
+    .Columns.Append "AvgDodge", adInteger
+    '.Columns.Append "ScriptValue", adDouble
+End With
+catNewDB.Tables.Append tabNewLairs
 
 DoEvents
 With tabNewClasses
@@ -5307,11 +6163,16 @@ With tabNewMonsters
     .Columns.Append "DamageResist", adInteger
     .Columns.Append "Follow%", adInteger
     .Columns.Append "MagicRes", adInteger
+    .Columns.Append "BSDefense", adInteger
     .Columns.Append "EXP", adDouble
     If eDatFileVersion >= v111j Then .Columns.Append "ExpMulti", adDouble
     .Columns.Append "HP", adInteger
     .Columns.Append "Energy", adInteger
     .Columns.Append "AvgDmg", adDouble
+    .Columns.Append "AvgDmgPhys", adDouble
+    .Columns.Append "AvgDmgSpell", adDouble
+'    .Columns.Append "AvgDmgSpellResist", adDouble
+'    .Columns.Append "AvgDmgSpellResistAM", adDouble
     .Columns.Append "GreetTXT", adInteger
     .Columns.Append "HPRegen", adInteger
     .Columns.Append "CharmLVL", adInteger
@@ -5319,6 +6180,9 @@ With tabNewMonsters
     .Columns.Append "Undead", adInteger
     .Columns.Append "Align", adInteger
     .Columns.Append "RegenTime", adInteger
+    .Columns.Append "GameLimit", adInteger
+    .Columns.Append "AvgLairExp", adDouble
+    .Columns.Append "ScriptValue", adDouble
     .Columns.Append "R", adInteger
     .Columns.Append "P", adInteger
     .Columns.Append "G", adInteger
@@ -5446,6 +6310,7 @@ With tabNewInfo
     .Columns.Append "Time", adVarWChar
     .Columns.Append "Custom", adVarWChar
     .Columns.Append "Legit", adInteger
+    .Columns.Append "DisableKai", adInteger
     .Columns.Append "UpdateURL", adVarWChar
 End With
 catNewDB.Tables.Append tabNewInfo
@@ -5537,6 +6402,16 @@ With pkTBInfo
 End With
 
 DoEvents
+With pkLairs
+    .Name = "pkLairs"
+    .Type = adKeyPrimary
+    .RelatedTable = "Lairs"
+    .Columns.Append "GroupIndex"
+    .Columns("GroupIndex").RelatedColumn = "GroupIndex"
+    .UpdateRule = adRINone
+End With
+
+DoEvents
 With idxRooms
     .Name = "idxRooms"
     .Columns.Append "Map Number"
@@ -5552,6 +6427,7 @@ tabNewSpells.Keys.Append pkSpells
 tabNewShops.Keys.Append pkShops
 tabNewTBInfo.Keys.Append pkTBInfo
 tabNewRooms.Indexes.Append idxRooms
+tabNewLairs.Keys.Append pkLairs
 
 DoEvents
 
@@ -5567,6 +6443,7 @@ Set pkSpells = Nothing
 Set pkItems = Nothing
 Set idxRooms = Nothing
 Set pkTBInfo = Nothing
+Set pkLairs = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewInfo = Nothing
@@ -5577,6 +6454,7 @@ Set tabNewShops = Nothing
 Set tabNewItems = Nothing
 Set tabNewMonsters = Nothing
 Set tabNewRooms = Nothing
+Set tabNewLairs = Nothing
 
 Set catNewDB = Nothing
 
@@ -5594,6 +6472,7 @@ Set pkSpells = Nothing
 Set pkItems = Nothing
 Set idxRooms = Nothing
 Set pkTBInfo = Nothing
+Set pkLairs = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewClasses = Nothing
@@ -5604,6 +6483,7 @@ Set tabNewItems = Nothing
 Set tabNewMonsters = Nothing
 Set tabNewInfo = Nothing
 Set tabNewRooms = Nothing
+Set tabNewLairs = Nothing
 
 Set catNewDB = Nothing
 End Function
@@ -5648,6 +6528,7 @@ Set tabClasses = Nothing
 Set tabInfo = Nothing
 Set tabRooms = Nothing
 Set tabTBInfo = Nothing
+Set tabLairs = Nothing
 
 Set DB = Nothing
 
@@ -5715,7 +6596,7 @@ If Not nStatus = 0 Then
 Else
     DBStatRowToStruct DBStatDatabuf.buf
     CalcTotalRecords = CalcTotalRecords + (DBStat.nRecords * _
-        IIf(chkLegit.Value = 0 And chkNoRooms.Value = 1 And chkExcludeRooms.Value = 1, 1, 2))
+        IIf(chkLegit(0).Value = 0 And chkNoRooms.Value = 1 And chkExcludeRooms.Value = 1, 1, 2))
 End If
 
 nStatus = BTRCALL(BSTAT, TextblockPosBlock, DBStatDatabuf, Len(TextblockDataBuf), 0, KEY_BUF_LEN, 0)
@@ -5747,6 +6628,7 @@ Set tabShops = DB.OpenRecordset("Shops")
 Set tabInfo = DB.OpenRecordset("Info")
 Set tabRooms = DB.OpenRecordset("Rooms")
 Set tabTBInfo = DB.OpenRecordset("TBInfo")
+Set tabLairs = DB.OpenRecordset("Lairs")
 
 Exit Sub
 error:
@@ -5767,6 +6649,7 @@ tabMonsters.Close
 tabShops.Close
 tabRooms.Close
 tabTBInfo.Close
+tabLairs.Close
 
 DB.Close
 
@@ -5799,10 +6682,10 @@ End Sub
 Private Sub IncreaseProgressBar(Optional ByVal nAmount As Integer = 1)
 On Error Resume Next
 
-If nScale > 0 Then
-    nAmount = nAmount / nScale
+If nProgressScale > 0 Then
+    nAmount = nAmount / nProgressScale
     If nAmount < 1 Then nAmount = 1
-    If nScaleCount + nAmount >= nScale Then
+    If nScaleCount + nAmount >= nProgressScale Then
         If ProgressBar.Value + nScaleCount + nAmount < ProgressBar.Max Then
             ProgressBar.Value = ProgressBar.Value + nScaleCount + nAmount
         Else
@@ -5855,5 +6738,59 @@ Call SelectAll(txtUpdateURL)
 
 End Sub
 
-
-
+'Private Function GetNONLairInfoIndex(sGroupIndex As String) As Long
+'On Error GoTo error:
+'If Len(sGroupIndex) < 1 Then Exit Function
+'
+'If dictNONLairInfo.Exists(sGroupIndex) Then
+'    GetNONLairInfoIndex = Val(dictNONLairInfo.Item(sGroupIndex))
+'Else
+'    GetNONLairInfoIndex = UBound(colNONLairs()) + 1
+'    ReDim Preserve colNONLairs(GetNONLairInfoIndex)
+'    dictNONLairInfo.add sGroupIndex, GetNONLairInfoIndex
+'    colNONLairs(GetNONLairInfoIndex).sGroupIndex = sGroupIndex
+'End If
+'
+'out:
+'On Error Resume Next
+'Exit Function
+'error:
+'Call HandleError("GetNONLairInfoIndex")
+'Resume out:
+'End Function
+'
+'Private Function GetNONLairInfo(sGroupIndex As String) As NONLairInfoType
+'On Error GoTo error:
+'Dim x As Long
+'
+'If Len(sGroupIndex) < 5 Then Exit Function
+'x = GetNONLairInfoIndex(sGroupIndex)
+'
+'GetNONLairInfo.sGroupIndex = colNONLairs(x).sGroupIndex
+'GetNONLairInfo.sNonLairRooms = colNONLairs(x).sNonLairRooms
+'
+'out:
+'On Error Resume Next
+'Exit Function
+'error:
+'Call HandleError("GetNONLairInfo")
+'Resume out:
+'End Function
+'
+'Private Sub SetNONLairInfo(tUpdatedNONLairInfo As NONLairInfoType)
+'On Error GoTo error:
+'
+'Dim x As Long, sArr() As String, i As Integer
+'If Len(tUpdatedNONLairInfo.sGroupIndex) < 5 Then Exit Sub
+'x = GetNONLairInfoIndex(tUpdatedNONLairInfo.sGroupIndex)
+'
+'colNONLairs(x).sGroupIndex = tUpdatedNONLairInfo.sGroupIndex
+'colNONLairs(x).sNonLairRooms = tUpdatedNONLairInfo.sNonLairRooms
+'
+'out:
+'On Error Resume Next
+'Exit Sub
+'error:
+'Call HandleError("SetNONLairInfo")
+'Resume out:
+'End Sub

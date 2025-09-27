@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmMonsterIndex 
    Caption         =   "Monster Group / Index List"
    ClientHeight    =   5400
@@ -230,7 +230,7 @@ Do While nStatus = 0 And Not bCancel
     If UBound(MGIL(), 2) < Monsterrec.Index Then ReDim Preserve MGIL(UBound(MGIL(), 1), Monsterrec.Index)
     'If UBound(MGIL(), 3) < Monsterrec.Number Then ReDim Preserve MGIL(UBound(MGIL(), 1), UBound(MGIL(), 2), Monsterrec.Number)
     
-    For x = 0 To 10 '20
+    For x = 0 To 14
         If MGIL(Monsterrec.Group, Monsterrec.Index).nNumber(x) = 0 Then
             MGIL(Monsterrec.Group, Monsterrec.Index).nNumber(x) = Monsterrec.Number
             'MGIL(Monsterrec.Group, Monsterrec.Index).sName(x) = ClipNull(Monsterrec.Name)
@@ -250,38 +250,6 @@ Call HandleError
 
 End Sub
 
-'Private Sub ScanRooms()
-'Dim nStatus As Integer, nRec As Long, x As Integer
-'
-'nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-'If Not nStatus = 0 Then
-'    MsgBox "Rooms: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
-'    Exit Sub
-'End If
-'
-'Do While nStatus = 0 And Not bCancel
-'    RoomRowToStruct Roomdatabuf.buf
-'
-'    nRec = nRec + 1
-'    frmProgressBar.lblPanel(1).Caption = nRec
-'    Call frmProgressBar.IncreaseProgress
-'
-'    If Roomrec.MinIndex < 0 Or Roomrec.MaxIndex < 0 Then GoTo Skip:
-'
-'    If UBound(MGIL(), 2) < Roomrec.MinIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MinIndex, UBound(MGIL(), 3))
-'    If UBound(MGIL(), 2) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex, UBound(MGIL(), 3))
-'    If UBound(MGIL(), 3) < Roomrec.MaxIndex Then ReDim Preserve MGIL(UBound(MGIL(), 1), Roomrec.MaxIndex, UBound(MGIL(), 3))
-'
-''    For x = Roomrec.MinIndex To Roomrec.MaxIndex
-''        MGIL(Roomrec.MonsterType, x).Used = True
-''    Next x
-'
-'Skip:
-'    nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
-'    If Not bUseCPU Then DoEvents
-'Loop
-'
-'End Sub
 
 Private Sub CreateList()
 Dim oLI As ListItem, x As Integer, y As Integer, z As Integer, sMonsters As String
@@ -294,12 +262,15 @@ For x = LBound(MGIL(), 1) To UBound(MGIL(), 1) 'group
         
         sMonsters = ""
         
-        For z = 0 To 10 '20 'monsters within
+        For z = 0 To 14
             If Not MGIL(x, y).nNumber(z) = 0 Then
                 If Not sMonsters = "" Then sMonsters = sMonsters & ", "
                 '& "(" & z & ")"
                 sMonsters = sMonsters & GetMonsterName(MGIL(x, y).nNumber(z)) & "(" & MGIL(x, y).nNumber(z) & ")"
-                If z = 20 Then sMonsters = sMonsters & " + More"
+            End If
+            If Len(sMonsters) > 220 Then
+                sMonsters = sMonsters & "... + More"
+                Exit For
             End If
         Next z
         
@@ -312,37 +283,6 @@ For x = LBound(MGIL(), 1) To UBound(MGIL(), 1) 'group
         If bCancel Then Exit Sub
     Next y
 Next x
-
-'nStatus = BTRCALL(BGETFIRST, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-'If Not nStatus = 0 Then
-'    MsgBox "Monsters: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
-'    Exit Sub
-'End If
-
-'Do While nStatus = 0 And Not bCancel
-'    MonsterRowToStruct Monsterdatabuf.buf
-'
-'    frmProgressBar.lblPanel(1).Caption = Monsterrec.Number
-'    Call frmProgressBar.IncreaseProgress
-'
-'    'no name, skip
-'    sName = ClipNull(Monsterrec.Name)
-'    If sName = "" Then GoTo Skip:
-'
-'    If UBound(MGIL(), 2) < Monsterrec.Index Then ReDim Preserve MGIL(UBound(MGIL(), 1), Monsterrec.Index, UBound(MGIL(), 3))
-'
-'    'add it
-'    Set oLI = lvMonsterIndex.ListItems.add()
-'    oLI.Text = Monsterrec.Number
-'
-'    oLI.ListSubItems.add (1), "Name", sName
-'    oLI.ListSubItems.add (2), "GroupIndex", GetMonGroupName(Monsterrec.Group) & "/" & Monsterrec.Index
-'    'oLI.ListSubItems.add (3), "MapRoom", MGIL(Monsterrec.Group, Monsterrec.Index)
-'
-'Skip:
-'    nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
-'    If Not bUseCPU Then DoEvents
-'Loop
 
 Set oLI = Nothing
 

@@ -63,26 +63,26 @@ Public ClassPosBlock As ClassPosBlockType
 Public ClassKeyNum As Integer
 Public ClassKeyBuffer As String * 255
 Public Type ClassRecType
-    Number     As Integer
-    Name       As String * 29
-    AfterName  As Byte
-    MinHp      As Integer
-    MaxHP      As Integer
-    Exp        As Integer
-    nothing1   As Integer
-    nothing2   As Integer
-    nothing3   As Integer
-    AbilityA(9)   As Integer
-    MagicType  As Integer
-    MagicLvL   As Integer
-    Weapon     As Integer
-    Armour     As Integer
-    Combat     As Integer
-    AbilityB(9)   As Integer
-    nothing4   As Integer
-    nothing5   As Integer
-    Nothing6   As Integer
-    TitleText  As Long
+    Number     As Integer       '2
+    Name       As String * 29   '31
+    AfterName  As Byte          '32
+    MinHp      As Integer       '34
+    MaxHP      As Integer       '36
+    Exp        As Integer       '38
+    nothing1   As Integer       '40
+    nothing2   As Integer       '42
+    nothing3   As Integer       '44
+    AbilityA(9)   As Integer    '64
+    MagicType  As Integer       '66
+    MagicLvL   As Integer       '68
+    Weapon     As Integer       '70
+    Armour     As Integer       '72
+    Combat     As Integer       '74
+    AbilityB(9)   As Integer    '94
+    nothing4   As Integer       '96
+    nothing5   As Integer       '98
+    Nothing6   As Integer       '100
+    TitleText  As Long          '104
 End Type
 Const ClassDataBufSize = 156
 Public ClassFldMap(0 To 37) As FieldMap
@@ -100,49 +100,48 @@ Public Spelldatabuf As SpellDatabufType
 Public SpellPosBlock As SpellPosBlockType
 Public SpellKeyBuffer As String * 255
 Public Type SpellRecType
-    Number As Integer
-    Name As String * 29
-    AfterName  As Byte
-    DescA As String * 50
-    AfterDescA As Byte
-    DescB As String * 50
-    AfterDescB As Byte
-    N01 As Integer
-    CastMsgA As Long
-    N02(10) As Integer
-    LevelCap As Byte
-    N03 As Byte
-    MsgStyle As Byte
-    N04(2) As Byte
-    AbilityB(9) As Integer
-    Energy As Integer
-    Level As Integer
-    Min As Integer
-    Max As Integer
-    SpellType As Integer
-    TypeOfResists As Integer
-    Difficulty As Integer
-    UNDEFINED01 As Integer
-    Target As Integer
-    duration As Integer
-    TypeOfAttack As Integer
-    UNDEFINED02 As Integer
-    ResistAbility As Integer
-    MageryA As Integer
-    AbilityA(9) As Integer
-    CastMsgB As Long
-    'N05 As Integer
-    Mana As Integer
-    MaxIncrease As Byte
-    LVLSMaxIncr As Byte
-    MageryB As Integer
-    MinIncrease As Byte 'u3
-    LVLSMinIncr As Byte 'u4
-    DurIncrease As Byte 'u5
-    LVLSDurIncr As Byte 'u6
-    ShortName As String * 5
-    AfterShortName As Byte
-    N06 As Long
+    Number As Integer           '2
+    Name As String * 29         '31
+    AfterName  As Byte          '32
+    DescA As String * 50        '82
+    AfterDescA As Byte          '83
+    DescB As String * 50        '133
+    AfterDescB As Byte          '134
+    N01 As Integer              '136
+    CastMsgA As Long            '140
+    N02(10) As Integer          '162
+    LevelCap As Byte            '163
+    N03 As Byte                 '164
+    MsgStyle As Byte            '165
+    N04(2) As Byte              '168
+    AbilityB(9) As Integer      '188
+    Energy As Integer           '190
+    Level As Integer            '192
+    Min As Integer              '194
+    Max As Integer              '196
+    SpellType As Integer        '198
+    TypeOfResists As Integer    '200
+    Difficulty As Integer       '202
+    UNDEFINED01 As Integer      '204
+    Target As Integer           '206
+    duration As Integer         '208
+    TypeOfAttack As Integer     '210
+    UNDEFINED02 As Integer      '212
+    ResistAbility As Integer    '214
+    MageryA As Integer          '216
+    AbilityA(9) As Integer      '236
+    CastMsgB As Long            '240
+    Mana As Integer             '242
+    MaxIncrease As Byte         '243
+    LVLSMaxIncr As Byte         '244
+    MageryB As Integer          '246
+    MinIncrease As Byte         '247 u3
+    LVLSMinIncr As Byte         '248 u4
+    DurIncrease As Byte         '249 u5
+    LVLSDurIncr As Byte         '250 u6
+    ShortName As String * 5     '255
+    AfterShortName As Byte      '256
+    N06 As Long                 '260
 End Type
 Const SpellDataBufSize = 260
 Public SpellFldMap(0 To 74) As FieldMap
@@ -160,55 +159,52 @@ Public Monsterdatabuf As MonsterDatabufType
 Public MonsterPosBlock As MonsterPosBlockType
 Public MonsterKeyBuffer As String * 255
 Public Type MonsterRecType
-    Number          As Long      '4
+    Number          As Long         '4
     EmptySpace      As String * 50  '54
     Name            As String * 29  '83
-    nothing1        As Byte
-    Group           As Integer
-    nothingXX1      As Integer
-    ExpMulti        As Long
-    'nothingXX2      As Integer
-    Index           As Integer
-    nothingXX3      As Integer
-    Something2      As Long
-    WeaponNumber    As Long         '105
-    DR              As Integer
-    AC              As Integer
-    Something3      As Integer
-    Follow          As Integer
-    MR              As Integer
+    nothing1        As Byte         '84
+    Group           As Integer      '86
+    nothingXX1      As Integer      '88
+    ExpMulti        As Long         '92
+    Index           As Integer      '94
+    nothingXX3      As Integer      '96
+    Something2      As Long         '100
+    WeaponNumber    As Long         '104
+    DR              As Integer      '106
+    AC              As Integer      '108
+    Something3      As Integer      '110
+    Follow          As Integer      '112
+    MR              As Integer      '114
     BSDefence       As Integer      '116
-    Experience      As Long
-    'nothingXX4      As Integer
-    Hitpoints       As Integer
-    Energy          As Integer
+    Experience      As Long         '120
+    Hitpoints       As Integer      '122
+    Energy          As Integer      '124
     HPRegen         As Integer      '126
     AbilityA(9)     As Integer      '146
     AbilityB(9)     As Integer      '166
-    GameLimit       As Integer
-    Active          As Integer
-    Type            As Integer
+    GameLimit       As Integer      '168
+    Active          As Integer      '170
+    Type            As Integer      '172
     nothing2        As Byte         '173
-    Undead          As Byte
-    Alignment       As Integer
-    nothing3        As Integer
-    RegenTime       As Integer
-    DateKilled      As Integer
-    TimeKilled      As Integer
-    'Nothing6        As Integer      '186
-    MoveMsg         As Long
-    DeathMsg        As Long         '194
-    ItemNumber(9)   As Long         '234
-    ItemUses(9)     As Integer      '254
-    ItemDropPer(9)  As Byte         '264
-    nothing9        As Integer
-    Runic           As Long
-    Platinum        As Long
-    Gold            As Long
-    Silver          As Long
-    Copper          As Long
+    Undead          As Byte         '174
+    Alignment       As Integer      '176
+    nothing3        As Integer      '178
+    RegenTime       As Integer      '180
+    DateKilled      As Integer      '182
+    TimeKilled      As Integer      '184
+    MoveMsg         As Long         '188
+    DeathMsg        As Long         '192
+    ItemNumber(9)   As Long         '232
+    ItemUses(9)     As Integer      '252
+    ItemDropPer(9)  As Byte         '262
+    nothing9        As Integer      '264
+    Runic           As Long         '268
+    Platinum        As Long         '272
+    Gold            As Long         '276
+    Silver          As Long         '278
+    Copper          As Long         '282
     GreetTxt        As Long         '286
-    CharmLvL        As Integer
+    CharmLvL        As Integer      '288
     Nothing16       As Integer      '290
     DescTxt         As Long         '294
     AttackType(4)   As Byte         '299
@@ -216,42 +212,41 @@ Public Type MonsterRecType
     AttackAccuSpell(4) As Integer   '310
     AttackPer(4)    As Byte         '315
     Nothing17           As Byte     '316
-    AttackMinHCastPer(4) As Integer
-    AttackMaxHCastLvl(4) As Integer '326
-    Nothing18           As Integer  '328
-    AttackHitMsg(4)       As Long
-    AttackDodgeMsg(4)     As Long
-    AttackMissMsg(4)      As Long   '388
-    AttackEnergy(4)       As Integer    '398
-    Nothing19           As Integer  '400
-    TalkTxt             As Long     '404
-    CharmRes            As Integer
+    AttackMinHCastPer(4) As Integer '326
+    AttackMaxHCastLvl(4) As Integer '336
+    Nothing18           As Integer  '338
+    AttackHitMsg(4)       As Long   '358
+    AttackDodgeMsg(4)     As Long   '378
+    AttackMissMsg(4)      As Long   '398
+    AttackEnergy(4)       As Integer '408
+    Nothing19           As Integer  '410
+    TalkTxt             As Long     '414
+    CharmRes            As Integer  '416
     Nothing21           As Integer  '408
-    AttackHitSpell(4)     As Integer    '418
-    DeathSpellNumber    As Integer
-    Nothing23           As Integer
-    Nothing24           As Integer
-    Nothing25           As Integer
-    Nothing26           As Integer
-    Nothing27           As Integer
-    Nothing28           As Integer
-    Nothing29           As Integer
+    AttackHitSpell(4)     As Integer '418
+    DeathSpellNumber    As Integer  '420
+    Nothing23           As Integer  '422
+    Nothing24           As Integer  '424
+    Nothing25           As Integer  '426
+    Nothing26           As Integer  '428
+    Nothing27           As Integer  '430
+    Nothing28           As Integer  '432
+    Nothing29           As Integer  '424
     CreateSpellNumber   As Integer  '436
-    SpellNumber(4)        As Integer    '446
-    SpellCastPer(4)       As Byte
+    SpellNumber(4)        As Integer '446
+    SpellCastPer(4)       As Byte   '451
     SpellCastLvl(4)       As Byte   '456
-    DescLine1       As String * 70
-    nothing10       As Byte
-    DescLine2       As String * 70
-    Nothing11       As Byte
-    DescLine3       As String * 70
-    Nothing12       As Byte
-    DescLine4       As String * 70
-    Nothing13       As Byte
-    Gender          As Byte
-    Nothing14       As Byte
-    Nothing15       As Integer  'section total: buf 300, 300+454=744 .. fields 184
-          
+    DescLine1       As String * 70  '526
+    nothing10       As Byte         '527
+    DescLine2       As String * 70  '597
+    Nothing11       As Byte         '598
+    DescLine3       As String * 70  '668
+    Nothing12       As Byte         '669
+    DescLine4       As String * 70  '739
+    Nothing13       As Byte         '740
+    Gender          As Byte         '741
+    Nothing14       As Byte         '742
+    Nothing15       As Integer      '744 section total: buf 300, 300+454=744 .. fields 184
 End Type
 Const MonsterDataBufSize = 756
 Public MonsterFldMap(0 To 184) As FieldMap
@@ -318,31 +313,31 @@ Public Type ItemRecType
     WornOn          As Integer                  '922
     Accuracy        As Integer                  '924
     DR              As Integer                  '926
-    Gettable        As Byte
+    Gettable        As Byte                     '927
     unknown12       As Byte                     '928
     ReqStr          As Integer                  '930
-    unknown13a(6)   As Integer
-    OpenRunic       As Long
-    OpenPlatinum    As Long
-    OpenGold        As Long
-    OpenSilver      As Long
-    OpenCopper      As Long
-    unknown13b(12)   As Integer                  '980 +60  '29 -- changes the numbers here 6-19-03
-    Speed           As Integer                  '982
-    unknown14       As Integer                  '984
-    AbilityB(19)    As Integer                  '1024 +40
-    unknown15       As Integer                  '1026
-    HitMsg          As Long
-    MissMsg         As Long
-    ReadTB          As Long
-    DistructMsg     As Long                     '1042
-    unknown16(5)    As Integer                  '1054 +12
-    NotDroppable    As Byte
-    CostType        As Byte
-    RetainAfterUses As Byte
-    Robable       As Byte
-    DestroyOnDeath  As Byte
-    unknown19       As Byte                     '1060
+    unknown13a(6)   As Integer                  '944 + 14
+    OpenRunic       As Long                     '948
+    OpenPlatinum    As Long                     '952
+    OpenGold        As Long                     '956
+    OpenSilver      As Long                     '960
+    OpenCopper      As Long                     '964
+    unknown13b(12)  As Integer                  '990 +26
+    Speed           As Integer                  '992
+    unknown14       As Integer                  '994
+    AbilityB(19)    As Integer                  '1034 +40
+    unknown15       As Integer                  '1036
+    HitMsg          As Long                     '1040
+    MissMsg         As Long                     '1044
+    ReadTB          As Long                     '1048
+    DistructMsg     As Long                     '1052
+    unknown16(5)    As Integer                  '1064 +12
+    NotDroppable    As Byte                     '1065
+    CostType        As Byte                     '1066
+    RetainAfterUses As Byte                     '1067
+    Robable         As Byte                     '1068
+    DestroyOnDeath  As Byte                     '1069
+    unknown19       As Byte                     '1070
     'unknown20(1)   As Byte
 End Type
 Const ItemDataBufSize = 1072 '1948 '1072
@@ -412,20 +407,20 @@ Public Type RoomRecType
     Para2(9)            As Integer              '944
     Para3(9)            As Long                 '984
     Para4(9)            As Long                 '1024
-    CurrentRoomMon(14)  As Long              '1054             '***I_THROUGH_N*** (comment for n)
-    'CurrentRoomMon(14)  As Integer              '1054          '***I_THROUGH_N*** (UNcomment for n)
-    Type                As Integer              '1056
-    NewSpot             As Integer                             '***I_THROUGH_N*** (comment for n)
-    ShopNum             As Long              '1058
-    nothing1(14)        As Integer                 '1090
-    MinIndex            As Integer              '1092
-    MaxIndex            As Integer              '1094
-    ByNumber            As Long              '1100
-    dontknow            As Integer
-    Light               As Integer              '1102
-    GangHouseNumber     As Integer              '1104
+    CurrentRoomMon(14)  As Long                 '1084             '***I_THROUGH_N*** (comment for n)
+    'CurrentRoomMon(14)  As Integer                   '1054       '***I_THROUGH_N*** (UNcomment for n)
+    Type                As Integer              '1086
+    NewSpot             As Integer              '1088             '***I_THROUGH_N*** (comment for n)
+    ShopNum             As Long                 '1092
+    nothing1(14)        As Integer              '1122
+    MinIndex            As Integer              '1124
+    MaxIndex            As Integer              '1126
+    ByNumber            As Long                 '1130
+    dontknow            As Integer              '1132
+    Light               As Integer              '
+    GangHouseNumber     As Integer              '
     RoomItems(16)       As Long
-    RoomItemUses(16)    As Integer              ' -9
+    RoomItemUses(16)    As Integer              '
     nothing4            As Integer
     InvisItems(14)      As Long
     InvisItemUses(14)   As Integer              ' -8
@@ -548,108 +543,184 @@ Public Userdatabuf As UserDatabufType
 Public UserPosBlock As UserPosBlockType
 Public UserKeyBuffer As String * 255
 Public Type UserRecType
-    BBSName As String * 30              '1
-    FirstName As String * 10            '2
-    AfterFirstName As Byte              '3
-    LastName As String * 18             '4
-    AfterLastName As Byte               '5
-    NotExperience As Long               '6
-    SpellCasted(9) As Integer           '16
-    SpellValue(9) As Integer            '26
-    SpellRoundsLeft(9) As Integer       '36
-    Title As String * 20                '37
-    Race As Integer                     '38
-    Class As Integer                    '39
-    Level As Integer                    '40
-    Stat(11) As Integer                 '52
-    MaxHP As Integer                    '53
-    CurrentHP As Integer                '54
-    MaxENC As Integer                   '55
-    CurrentENC As Integer               '56
-    Energy(2) As Integer                '59
-    unknown1(1) As Integer  'unknown -- seems like it's 125 for everyone    '61
-    MagicRes As Integer                 '62
-    MagicRes2 As Integer                '63
-    MapNumber As Long                   '64
-    RoomNum As Long                     '65
-    nothing2 As Integer                 '66
-    unknown2(1) As Integer  'unknown    '68
-    nothing3 As Integer                 '69
-    unknown3(1) As Byte     'unknown    '71
-    nothing4 As Integer                 '72
-    Item(99) As Long                    '172
-    ItemUses(99) As Integer             '272
-    nothing5 As Long        'always 32(hex) '273
-    Key(49) As Long
-    KeyUses(49) As Integer
-    unknown4(3) As Long     'unknown
-    BillionsOfExperience As Long
-    MillionsOfExperience As Long
-    Nothing6 As Integer     'always 64(hex)
-    Spell(99) As Integer
-    EvilPoints As Integer
-    nothing7(2) As Long
-    LastMap(19) As Long
-    LastRoom(19) As Long
-    nothing8 As Integer
-    BroadcastChan As Integer
-    unknown5 As Long        'seems to always be 513
-    Perception As Integer
-    Stealth As Integer
-    MartialArts As Integer
-    Thievery As Integer
-    MaxMana As Integer
-    CurrentMana As Integer
-    SpellCasting As Integer
-    Traps As Integer
-    unknown6 As Integer      'some ppl this value is the same as traps, some it's close to it
-    Picklocks As Integer
-    Tracking As Integer
-    nothing9 As Integer
-    Runic As Long
-    Platinum As Long
-    Gold As Long
-    Silver As Long
-    Copper As Long
-    WeaponHand As Long
-    nothing10 As Long
-    WornItem(19) As Long
-    unknown7(19) As Integer 'unknown
-    unknown8 As Integer
-    LivesRemaining As Integer
-    unknown9(15) As Integer  'unknown
-    GangName As String * 19
-    AfterGangName As Byte
-    unknown11(5) As Byte    'unknown
-    CPRemaining As Integer
-    SuicidePassword As String * 8
-    
-    unknown12a(7) As Integer
-    bEDITED As Byte
-    unknown12c As Byte
-    unknown12d(29) As Integer        'unknown
-    
-    Ability(29) As Integer
-    AbilityModifier(29) As Integer
-    unknown13a As Integer
-    unknown13b As Integer
-    unknown13c As Integer
-    unknown13d As Integer
-    unknown13e As Integer
-    unknown13f As Integer
-    unknown13g As Integer
-    CharLife As Long
-    unknown13(8) As Integer 'unknowns
-    Bitmask1 As Byte
-    Bitmask2 As Byte
-    TestFlag1 As Byte
-    TestFlag2 As Byte
-    'TestFlag3 As Integer
-    unknown14 As Integer
-    unknown15(3) As Long
+    BBSName As String * 30                  '30
+    FirstName As String * 10                '40
+    AfterFirstName As Byte                  '41
+    LastName As String * 18                 '59
+    AfterLastName As Byte                   '60
+    NotExperience As Long                   '64
+    SpellCasted(9) As Integer               '84  (10 elements × 2 bytes each = 20 bytes)
+    SpellValue(9) As Integer                '104 (10 elements × 2 bytes each = 20 bytes)
+    SpellRoundsLeft(9) As Integer           '124 (10 elements × 2 bytes each = 20 bytes)
+    Title As String * 20                    '144
+    Race As Integer                         '146
+    Class As Integer                        '148
+    Level As Integer                        '150
+    'Stat(0) As Integer                      '152 INT SET
+    'Stat(1) As Integer                      '154 WIS SET
+    'Stat(2) As Integer                      '156 STR SET
+    'Stat(3) As Integer                      '158 HEA SET
+    'Stat(4) As Integer                      '160 AGI SET
+    'Stat(5) As Integer                      '162 CHA SET
+    'Stat(6) As Integer                      '164 INT CUR
+    'Stat(7) As Integer                      '166 WIS CUR
+    'Stat(8) As Integer                      '168 STR CUR
+    'Stat(9) As Integer                      '170 HEA CUR
+    'Stat(10) As Integer                     '172 AGI CUR
+    'Stat(11) As Integer                     '174 CHA CUR
+    Stat(11) As Integer                     '174 (12 elements × 2 bytes each = 24 bytes)
+    MaxHP As Integer                        '176 - (defaults to 20 (\x14\x00\x00\x00) hardcoded in dll @ data_482cc8)
+    CurrentHP As Integer                    '178 - (defaults to 20 (\x14\x00\x00\x00) hardcoded in dll @ data_482cc8)
+    MaxENC As Integer                       '180
+    CurrentENC As Integer                   '182
+    Energy(2) As Integer                    '184 - 0 NEVER USED??? energy start? - hardcoded 1000 (\xe8\x03\x00\x00) from dll @ data_482cd0 in __builtin_memcpy(&data_482cc8, "\x14\x00\x00\x00\xe8\x03\x00\x00\xe8\x03\x00\x00\x7d\x00\x00\x00\x05\x00\x00\x00", 0x14);
+    'Energy(1) As Integer                   '186 - 1 energy per round? - hardcoded 1000 (\xe8\x03\x00\x00) from dll @ data_482cd0 in __builtin_memcpy(&data_482cc8, "\x14\x00\x00\x00\xe8\x03\x00\x00\xe8\x03\x00\x00\x7d\x00\x00\x00\x05\x00\x00\x00", 0x14);
+    'Energy(2) As Integer                   '188 - 2 energy remaining
+    unknown1 As Integer                     '190 - NEVER USED??? hardcoded 125 (\x7d\x00\x00\x00) from dll @ data_482cd4 in __builtin_memcpy(&data_482cc8, "\x14\x00\x00\x00\xe8\x03\x00\x00\xe8\x03\x00\x00\x7d\x00\x00\x00\x05\x00\x00\x00", 0x14);
+    SomeSortOfFlag As Integer               '192
+    MagicRes As Integer                     '194
+    MagicRes2 As Integer                    '196
+    MapNumber As Long                       '200
+    RoomNum As Long                         '204
+    nothing2 As Integer                     '206
+    unknown2(1) As Integer                  '210 (2 elements × 2 bytes each = 4 bytes)
+    nothing3 As Integer                     '212
+    unknown3(1) As Byte                     '214 (2 elements × 1 byte each = 2 bytes)
+    nothing4 As Integer                     '216
+    Item(99) As Long                        '616 (100 elements × 4 bytes each = 400 bytes)
+    ItemUses(99) As Integer                 '816 (100 elements × 2 bytes each = 200 bytes)
+    nothing5 As Long                        '820
+    Key(49) As Long                         '1020 (50 elements × 4 bytes each = 200 bytes)
+    KeyUses(49) As Integer                  '1120 (50 elements × 2 bytes each = 100 bytes)
+    unknown4(3) As Long                     '1136 (4 elements × 4 bytes each = 16 bytes)
+    BillionsOfExperience As Long            '1140
+    MillionsOfExperience As Long            '1144
+    Nothing6 As Integer                     '1146
+    Spell(99) As Integer                    '1346 (100 elements × 2 bytes each = 200 bytes)
+    EvilPoints As Integer                   '1348
+    nothing7(2) As Long                     '1360 (3 elements × 4 bytes each = 12 bytes)
+    LastMap(19) As Long                     '1440 (20 elements × 4 bytes each = 80 bytes)
+    LastRoom(19) As Long                    '1520 (20 elements × 4 bytes each = 80 bytes)
+    nothing8 As Integer                     '1522
+    BroadcastChan As Integer                '1524
+    unknown5 As Long                        '1528 'may be a bunch of bytes, flag for hiding (0x5f6==1526): *(uint8_t*)((char*)arg2 + 0x5f6) = 1;
+    Perception As Integer                   '1530
+    Stealth As Integer                      '1532
+    MartialArts As Integer                  '1534
+    Thievery As Integer                     '1536
+    MaxMana As Integer                      '1538
+    CurrentMana As Integer                  '1540
+    SpellCasting As Integer                 '1542
+    Traps As Integer                        '1544
+    unknown6 As Integer                     '1546
+    Picklocks As Integer                    '1548
+    Tracking As Integer                     '1550
+    nothing9 As Integer                     '1552
+    Runic As Long                           '1556
+    Platinum As Long                        '1560
+    Gold As Long                            '1564
+    Silver As Long                          '1568
+    Copper As Long                          '1572
+    WeaponHand As Long                      '1576
+    nothing10 As Long                       '1580
+    WornItem(19) As Long                    '1660 (20 elements × 4 bytes each = 80 bytes)
+    unknown7(19) As Integer                 '1700 (20 elements × 2 bytes each = 40 bytes)
+    unknown8 As Integer                     '1702
+    LivesRemaining As Integer               '1704
+    unknown9a(5) As Byte                    '1705
+    'unknown9a(1) As Byte                   '1706
+    'unknown9a(2) As Byte                   '1707
+    'unknown9a(3) As Byte                   '1708
+    'unknown9a(4) As Byte                   '1709 current rank in the party (1=front/0=mid or none/2=back) - 2025.03.01
+    'unknown9a(5) As Byte                   '1710
+    unknown9(12) As Integer                 '1736 (13 elements × 2 bytes each = 26 bytes)
+    GangName As String * 19                 '1755
+    AfterGangName As Byte                   '1756
+    unknown11(5) As Byte                    '1762 (6 elements × 1 byte each = 6 bytes)
+    CPRemaining As Integer                  '1764
+    SuicidePassword As String * 8           '1772
+    unknown12a(3) As Integer                '1774
+    'unknown12a(1) As Integer               '1776
+    'unknown12a(2) As Integer               '1778
+    'unknown12a(3) As Integer               '1780
+    SomeUserFlags(7) As Byte                '1781 'flag sneaking (0x6f4==1780): *(uint16_t*)((char*)arg1 + 0x6f4) |= 4;
+    'SomeUserFlags(1) as Byte               '1782 'referenced in _move_player_to_fighter -- reduces accy ... blind?
+    'SomeUserFlags(2) as Byte               '1783
+    'SomeUserFlags(3) as Byte               '1784
+    'SomeUserFlags(4) as Byte               '1785
+    'SomeUserFlags(5) as Byte               '1786
+    'SomeUserFlags(6) as Byte               '1787
+    'SomeUserFlags(7) as Byte               '1788
+    bEDITED As Byte                         '1789
+    unknown12c As Byte                      '1790
+    unknown12d(18) As Integer               '1792   'unknown12d(0) and unknown12d(1) -- referenced in dll as userrecord + 0x700
+                                                    'Bit 00 (mask 0x0001): Room Display Detail
+                                                    'Bit 01 (mask 0x0002): PVP Combat Notification/Interruption
+                                                    'Bit 02 (mask 0x0004): I think... 1 == CAN cast between round spell.  0 == already cast between round spell.
+                                                    'Bit 03 (mask 0x0008): Gift Acceptance
+                                                    'Bit 04 (mask 0x0010): Evil Warning/Interruption
+                                                    'Bit 05 (mask 0x0020): Telepath Blocking
+                                                    'Bit 06 (mask 0x0040): set just after "dark cloud"
+                                                    'Bit 07 (mask 0x0080):
+                                                    '
+                                                    'Bit 08 (mask 0x0100): Response Verbosity
+                                                    'Bit 09 (mask 0x0200):
+                                                    'Bit 10 (mask 0x0400): Keep Setting on Death/Reroll
+                                                    'Bit 11 (mask 0x0800): Message Style (Technical vs. Fantasy)
+                                                    'Bit 12 (mask 0x1000):
+                                                    'Bit 13 (mask 0x2000):
+                                                    'Bit 14 (mask 0x3000):
+                                                    'Bit 15 (mask 0x8000): reference to having a character but not paid on the bbs
+    'unknown12d(1)                          '1794
+    'unknown12d(2)                          '1796
+    'unknown12d(3)                          '1798
+    'unknown12d(4)                          '1800
+    'unknown12d(5)                          '1802 CURRENT ENCUMBRANCE AS A PERCENTAGE - 2025.01.12
+    'unknown12d(6)                          '1804 TOTAL ACCURACY FROM ability 22 (auras and items) - 2025.03.01
+    'unknown12d(7)                          '1806 TOTAL AC FROM ability 2
+    'unknown12d(8)                          '1808 TOTAL MAX DAMAGE from ability 4
+    'unknown12d(9)                          '1810 something referenced here for crits 2025.03.12
+    'unknown12d(10)                         '1812
+    'unknown12d(11)                         '1814
+    'unknown12d(12)                         '1816
+    'unknown12d(13)                         '1818
+    'unknown12d(14)                         '1820
+    'unknown12d(15)                         '1822
+    'unknown12d(16)                         '1824
+    'unknown12d(17)                         '1826 something related to a transition in evil points at one point?
+    'unknown12d(18)                         '1828
+    HitPointRolls As Byte                   '1829
+    unknown12e As Byte                      '1830
+    unknown12f(9) As Integer                '1850 (10 elements × 2 bytes each = 20 bytes)
+    Ability(29) As Integer                  '1910 (30 elements × 2 bytes each = 60 bytes)
+    AbilityModifier(29) As Integer          '1970 (30 elements × 2 bytes each = 60 bytes)
+    unknown13a As Integer                   '1972
+    unknown13b As Integer                   '1974 'TOTAL CRITS FROM ability 58
+    unknown13c As Integer                   '1976 'TOTAL DR FROM ability 7
+    unknown13d As Integer                   '1978 'TOTAL AlterDRpercent FROM ability 99
+    unknown13e As Integer                   '1980 'TOTAL SPEED FROM ability 87
+    unknown13f As Integer                   '1982 'TOTAL AC/BLUR FROM ability 10
+    unknown13g As Integer                   '1984 'TOTAL "DefenseModifier" FROM ability 104
+    CharLife As Long                        '1988
+    unknown13(8) As Integer                 '1990 '_energy_update_character sets unknown13(0) to 0 if ENCUM_PCT > 66
+    'unknown13(1) As Integer                '1992 'gets set to a timestamp in ljngame_polling
+    'unknown13(2) As Integer                '1994 'SOME BITMASK RELATED TO MOVEMENT IMPEDANCE OR STEALTH?
+    'unknown13(3) As Integer                '1996
+    'unknown13(4) As Integer                '1998 'this may be a 4-byte long
+    'unknown13(5) As Integer                '2000
+    'unknown13(6) As Integer                '2002
+    'unknown13(7) As Integer                '2004
+    'unknown13(8) As Integer                '2006 'flags/bitmask here 0x20 = class stealth, 0x40 = race stealth, 0x60 = race+class stealth
+    Bitmask1 As Byte                        '2007
+    Bitmask2 As Byte                        '2008
+    TestFlag1 As Byte                       '2009
+    TestFlag2 As Byte                       '2010
+    unknown14 As Integer                    '2012
+    unknown15(3) As Long                    '2028 (4 elements × 4 bytes each = 16 bytes)
 End Type
+
 Const UserDataBufSize = 2028
-Public UserFldMap(0 To 739) As FieldMap
+Public UserFldMap(0 To 747) As FieldMap
 Public Type UserDatabufType
     buf(1 To UserDataBufSize) As Byte
 End Type
@@ -922,7 +993,17 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2   '8                      '79-80
     AddField Map, ctr, FLD_INTEGER, 2   '9                      '81-82
     AddField Map, ctr, FLD_INTEGER, 2   'splcast 10             '83-84
-    AddField Map, ctr, FLD_INTEGER, 2   'splval 1               '85
+    AddField Map, ctr, FLD_INTEGER, 2   'splval 1               '85-86
+    AddField Map, ctr, FLD_INTEGER, 2   '2 88
+    AddField Map, ctr, FLD_INTEGER, 2   '3 90
+    AddField Map, ctr, FLD_INTEGER, 2   '4 92
+    AddField Map, ctr, FLD_INTEGER, 2   '5 94
+    AddField Map, ctr, FLD_INTEGER, 2   '6 96
+    AddField Map, ctr, FLD_INTEGER, 2   '7 98
+    AddField Map, ctr, FLD_INTEGER, 2   '8 100
+    AddField Map, ctr, FLD_INTEGER, 2   '9 102
+    AddField Map, ctr, FLD_INTEGER, 2   'splval 104
+    AddField Map, ctr, FLD_INTEGER, 2   'splround 1             '105-106
     AddField Map, ctr, FLD_INTEGER, 2   '2
     AddField Map, ctr, FLD_INTEGER, 2   '3
     AddField Map, ctr, FLD_INTEGER, 2   '4
@@ -931,22 +1012,12 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2   '7
     AddField Map, ctr, FLD_INTEGER, 2   '8
     AddField Map, ctr, FLD_INTEGER, 2   '9
-    AddField Map, ctr, FLD_INTEGER, 2   'splval 10
-    AddField Map, ctr, FLD_INTEGER, 2   'splround 1             '105
-    AddField Map, ctr, FLD_INTEGER, 2   '2
-    AddField Map, ctr, FLD_INTEGER, 2   '3
-    AddField Map, ctr, FLD_INTEGER, 2   '4
-    AddField Map, ctr, FLD_INTEGER, 2   '5
-    AddField Map, ctr, FLD_INTEGER, 2   '6
-    AddField Map, ctr, FLD_INTEGER, 2   '7
-    AddField Map, ctr, FLD_INTEGER, 2   '8
-    AddField Map, ctr, FLD_INTEGER, 2   '9
-    AddField Map, ctr, FLD_INTEGER, 2   'splround 10            '125
-    AddField Map, ctr, FLD_STRING, 20   'title                  '127
-    AddField Map, ctr, FLD_INTEGER, 2   'Race                   '147
-    AddField Map, ctr, FLD_INTEGER, 2   'Class                  '149
-    AddField Map, ctr, FLD_INTEGER, 2   'Level                  '151
-    AddField Map, ctr, FLD_INTEGER, 2   'Stat1                  '153
+    AddField Map, ctr, FLD_INTEGER, 2   'splround 10            '123-124
+    AddField Map, ctr, FLD_STRING, 20   'title                  '125-145
+    AddField Map, ctr, FLD_INTEGER, 2   'Race                   '147-148
+    AddField Map, ctr, FLD_INTEGER, 2   'Class                  '149-150
+    AddField Map, ctr, FLD_INTEGER, 2   'Level                  '151-152
+    AddField Map, ctr, FLD_INTEGER, 2   'Stat1                  '153-154
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -1472,7 +1543,7 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 4
     AddField Map, ctr, FLD_INTEGER, 4
     AddField Map, ctr, FLD_INTEGER, 4 'worn item 20
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 1
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown7 1
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -1491,25 +1562,28 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 20
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown7 20
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown8
     AddField Map, ctr, FLD_INTEGER, 2 'lives remaining
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 1
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 1
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 2
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 3
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 4
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 5
+    AddField Map, ctr, FLD_INTEGER, 1 'unknown9A 6
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 1
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 5
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 10
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 10
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 16
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown9 13
     AddField Map, ctr, FLD_STRING, 19 'gang name
     AddField Map, ctr, FLD_INTEGER, 1 'after gang name
     AddField Map, ctr, FLD_INTEGER, 1 'unknown 1
@@ -1520,7 +1594,21 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 1 'unknown 6
     AddField Map, ctr, FLD_INTEGER, 2 'cps
     AddField Map, ctr, FLD_STRING, 8 'suicide
-    AddField Map, ctr, FLD_INTEGER, 2 'unknown 1
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 0
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 1
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12a 3
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 1
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 2
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 3
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 4
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 5
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 6
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 7
+    AddField Map, ctr, FLD_INTEGER, 1 'SomeUserFlags 8
+    AddField Map, ctr, FLD_BYTE, 1 'bEDITED As Byte
+    AddField Map, ctr, FLD_BYTE, 1 'unknown12c As Byte
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12d(18)0
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
@@ -1528,35 +1616,22 @@ Sub AddUserFieldMap(Map() As FieldMap, ByRef ctr As Integer)
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12d(18)10
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2
+    AddField Map, ctr, FLD_INTEGER, 2 'unknown12d(18)
     
+    AddField Map, ctr, FLD_BYTE, 1 'HitPointRolls As Byte
+    AddField Map, ctr, FLD_BYTE, 1 'unknown12e As Byte
     
-    'bEDITED As Byte
-    'unknown12c As Byte
-    AddField Map, ctr, FLD_BYTE, 1
-    AddField Map, ctr, FLD_BYTE, 1
-    
-    'AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 '10
     AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 '20
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2
-    AddField Map, ctr, FLD_INTEGER, 2 '30
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2
     AddField Map, ctr, FLD_INTEGER, 2

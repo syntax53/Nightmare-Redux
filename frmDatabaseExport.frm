@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "mscomctl.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form frmDatabaseExport 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Exporter"
@@ -1032,6 +1032,9 @@ Dim bCheckSave As Boolean
 Dim nScale As Integer
 Dim nScaleCount As Long
 
+Dim nProgressInterval As Integer
+Dim nProgressCount As Integer
+
 Dim bUpdateExistingADB As Boolean
 Dim sDataSource As String
 Dim MessagesTextfile As String
@@ -1050,36 +1053,50 @@ Dim sExportPath As String
 Dim sConfigFile As String
 
 Private Sub SetRange(ByVal MaxValue As Double)
-Dim nNewMax As Integer
+'Dim nNewMax As Integer
 
-nScale = 0
-
-If MaxValue > MaxInt Then
-    If MaxValue / 2 < MaxInt Then
-        nScale = 2
-        nNewMax = MaxValue / 2
-    ElseIf MaxValue / 4 < MaxInt Then
-        nScale = 4
-        nNewMax = MaxValue / 4
-    ElseIf MaxValue / 8 < MaxInt Then
-        nScale = 8
-        nNewMax = MaxValue / 8
-    ElseIf MaxValue / 10 < MaxInt Then
-        nScale = 10
-        nNewMax = MaxValue / 10
-    Else
-        MaxValue = MaxInt
-    End If
-Else
-    nNewMax = MaxValue
-End If
-
-nNewMax = Fix(nNewMax)
+nScale = 1
+Do While (nScale < 100 And (MaxValue / nScale) > 100) Or (MaxValue / nScale) > MaxInt
+    nScale = nScale + 1
+Loop
+MaxValue = Fix((MaxValue / nScale))
 
 nScaleCount = 1
 ProgressBar.Value = 0
 ProgressBar.Min = 0
-ProgressBar.Max = nNewMax
+ProgressBar.Max = MaxValue
+ProgressBar.Visible = True
+nProgressInterval = nScale
+
+
+'nScale = 0
+'
+'If MaxValue > MaxInt Then
+'    If MaxValue / 2 < MaxInt Then
+'        nScale = 2
+'        nNewMax = MaxValue / 2
+'    ElseIf MaxValue / 4 < MaxInt Then
+'        nScale = 4
+'        nNewMax = MaxValue / 4
+'    ElseIf MaxValue / 8 < MaxInt Then
+'        nScale = 8
+'        nNewMax = MaxValue / 8
+'    ElseIf MaxValue / 10 < MaxInt Then
+'        nScale = 10
+'        nNewMax = MaxValue / 10
+'    Else
+'        MaxValue = MaxInt
+'    End If
+'Else
+'    nNewMax = MaxValue
+'End If
+'
+'nNewMax = Fix(nNewMax)
+'
+'nScaleCount = 1
+'ProgressBar.Value = 0
+'ProgressBar.Min = 0
+'ProgressBar.Max = nNewMax
 End Sub
 
 Private Sub chkActions_Click()
@@ -1277,7 +1294,12 @@ Select Case cmbDB.ListIndex
                 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
                 If nStatus = 0 Then
                     Do While nStatus = 0
-                        Call IncreaseProgressBar
+                        If nProgressCount >= nProgressInterval Then
+                            Call IncreaseProgressBar(nProgressCount)
+                            nProgressCount = 1
+                        Else
+                            nProgressCount = nProgressCount + 1
+                        End If
                         RoomRowToStruct Roomdatabuf.buf
                         If Roomrec.MapNumber = Val(txtMap.Text) Then
                             nRET = Roomrec.RoomNumber
@@ -1293,7 +1315,12 @@ Select Case cmbDB.ListIndex
                 nStatus = BTRCALL(BGETLAST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
                 If nStatus = 0 Then
                     Do While nStatus = 0
-                        Call IncreaseProgressBar
+                        If nProgressCount >= nProgressInterval Then
+                            Call IncreaseProgressBar(nProgressCount)
+                            nProgressCount = 1
+                        Else
+                            nProgressCount = nProgressCount + 1
+                        End If
                         RoomRowToStruct Roomdatabuf.buf
                         If Roomrec.MapNumber = Val(txtMap.Text) Then
                             nRET = Roomrec.RoomNumber
@@ -1439,7 +1466,12 @@ Do While tabRooms.EOF = False
         nLastRoom = tabRooms.Fields("Room Number")
     End If
     tabRooms.MoveNext
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 Loop
 
@@ -1497,7 +1529,12 @@ Do While Not tabTable.EOF
     Else
         nLast = tabTable.Fields("Number")
     End If
-    Call IncreaseProgressBar
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
     tabTable.MoveNext
 Loop
@@ -1593,6 +1630,9 @@ Dim fso As FileSystemObject
 Set fso = CreateObject("Scripting.FileSystemObject")
 
 bCheckSave = False
+
+nProgressCount = 1
+nProgressInterval = 10
 
 cmbDB.clear
 cmbDB.AddItem "Classes", 0
@@ -2134,8 +2174,14 @@ Do While nStatus = 0 And Not bStopExport
     nStatus = BTRCALL(BGETNEXT, BankPosBlock, BankDatabuf, Len(BankDatabuf), ByVal BankKeyBuffer, KEY_BUF_LEN, 0)
     
     recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+        stsStatusBar.Panels(2).Text = recnum
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -2216,7 +2262,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextTextblock:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -2245,10 +2296,16 @@ GotoNextTextblock:
     Else
         nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2287,7 +2344,7 @@ part_check:
     nLastRec(0) = TextblockRec.Number
     nLastRec(1) = TextblockRec.PartNum
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     
     If bUpdateExistingADB = True Then
         If tabTextblocks.RecordCount = 0 Then
@@ -2334,7 +2391,13 @@ part_check:
                 If TextblockRec.Number > nLastRecNum Then
                     'now out of range
 GotoNextTextblock_access:
-                    Call IncreaseProgressBar
+                    If nProgressCount >= nProgressInterval Then
+                        Call IncreaseProgressBar(nProgressCount)
+                        nProgressCount = 1
+                        stsStatusBar.Panels(2).Text = nRecnum
+                    Else
+                        nProgressCount = nProgressCount + 1
+                    End If
                     
                     If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess
                     nCurrenListItem = nCurrenListItem + 1
@@ -2349,7 +2412,12 @@ GotoNextTextblock_access:
                     If Not nStatus = 0 Then GoTo GotoNextTextblock_access:
                 Else
                     nRecnum = nRecnum + 1
-                    Call IncreaseProgressBar
+                    If nProgressCount >= nProgressInterval Then
+                        Call IncreaseProgressBar(nProgressCount)
+                        nProgressCount = 1
+                    Else
+                        nProgressCount = nProgressCount + 1
+                    End If
                 End If
             Else
                 'new part
@@ -2358,7 +2426,12 @@ GotoNextTextblock_access:
     Else
         nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
     If Not bUseCPU Then DoEvents
@@ -2434,7 +2507,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextMessage:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -2456,10 +2534,16 @@ GotoNextMessage:
     Else
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2509,7 +2593,12 @@ Do While nStatus = 0 And Not bStopExport
    
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextMessageAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -2531,10 +2620,16 @@ GotoNextMessageAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2676,7 +2771,12 @@ Do While nStatus = 0 And Not bStopExport
     ts.WriteLine ("")
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextItem:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -2698,10 +2798,15 @@ GotoNextItem:
     Else
         nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2802,7 +2907,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextItemAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -2824,10 +2934,15 @@ GotoNextItemAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -2843,7 +2958,7 @@ Private Sub ExportRooms(format As String)
 Dim nStatus As Integer, x As Integer
 Dim fso As FileSystemObject, ts As TextStream
 Dim nRecnum As Long, nLastRecNum As Long, nMap As Long
-Dim nListNum As Integer, nCurrenListItem As Long
+Dim nListNum As Integer, nCurrenListItem As Long, bResetSlot As Boolean
 
 nListNum = 8
 
@@ -2997,7 +3112,12 @@ Do While nStatus = 0 And Not bStopExport
 
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextRoom:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo Finished
@@ -3017,10 +3137,15 @@ GotoNextRoom:
     Else
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
-
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 
@@ -3101,10 +3226,22 @@ Do While nStatus = 0 And Not bStopExport
             tabRooms.Fields("Room Item " & x & " USES") = 0
         Next
         For x = 0 To 14
-            tabRooms.Fields("Hidden Item " & x) = 0
-            tabRooms.Fields("Hidden Item " & x & " QTY") = 0
-            tabRooms.Fields("Hidden Item " & x & " USES") = 0
             tabRooms.Fields("CurrentRoomMon " & x) = 0
+            
+            bResetSlot = True
+            If Roomrec.InvisItems(x) > 0 Then
+                If GetItemTypeNumber(Roomrec.InvisItems(x)) = 3 Then bResetSlot = False
+            End If
+            
+            If bResetSlot Then
+                tabRooms.Fields("Hidden Item " & x) = 0
+                tabRooms.Fields("Hidden Item " & x & " QTY") = 0
+                tabRooms.Fields("Hidden Item " & x & " USES") = 0
+            Else
+                tabRooms.Fields("Hidden Item " & x) = Roomrec.InvisItems(x)
+                tabRooms.Fields("Hidden Item " & x & " QTY") = Roomrec.InvisItemQty(x)
+                tabRooms.Fields("Hidden Item " & x & " USES") = Roomrec.InvisItemUses(x)
+            End If
         Next
     Else
         tabRooms.Fields("Runic") = Roomrec.Runic
@@ -3146,7 +3283,12 @@ Do While nStatus = 0 And Not bStopExport
         
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextRoomAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         If nRecnum = nLastRecNum Then
             If nCurrenListItem = lvList(nListNum).ListItems.Count Then GoTo FinishedAccess:
@@ -3166,10 +3308,15 @@ GotoNextRoomAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
 
-    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3279,7 +3426,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextSpell:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -3301,10 +3453,15 @@ GotoNextSpell:
     Else
         nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3387,7 +3544,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextSpellAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -3409,10 +3571,15 @@ GotoNextSpellAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3466,8 +3633,14 @@ Do While nStatus = 0 And Not bStopExport
     nStatus = BTRCALL(BGETNEXT, ActionPosBlock, ActionDatabuf, Len(ActionDatabuf), ByVal ActionKeyBuffer, KEY_BUF_LEN, 0)
     
     recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+        stsStatusBar.Panels(2).Text = recnum
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3494,8 +3667,14 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct ActionDatabuf.buf, ActionFldMap, Actionrec, LenB(Actionrec)
         
     recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+        stsStatusBar.Panels(2).Text = recnum
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     
     If bUpdateExistingADB = True Then
         If tabActions.RecordCount = 0 Then
@@ -3624,7 +3803,12 @@ Do While nStatus = 0 And Not bStopExport
 
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextClass:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -3646,10 +3830,16 @@ GotoNextClass:
     Else
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3712,7 +3902,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextClassAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -3734,10 +3929,16 @@ GotoNextClassAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3835,7 +4036,12 @@ Do While nStatus = 0 And Not bStopExport
 
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextRace:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -3857,10 +4063,16 @@ GotoNextRace:
     Else
         nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -3929,7 +4141,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextRaceAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -3951,10 +4168,16 @@ GotoNextRaceAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, RacePosBlock, Racedatabuf, Len(Racedatabuf), ByVal RaceKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4048,7 +4271,12 @@ Do While nStatus = 0 And Not bStopExport
 
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextShop:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -4070,10 +4298,16 @@ GotoNextShop:
     Else
         nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4149,7 +4383,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextShopAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -4171,10 +4410,16 @@ GotoNextShopAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, ShopPosBlock, Shopdatabuf, Len(Shopdatabuf), ByVal ShopKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4349,7 +4594,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextMonster:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -4371,10 +4621,16 @@ GotoNextMonster:
     Else
         nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4517,7 +4773,12 @@ Do While nStatus = 0 And Not bStopExport
     
     If chkExportAll(nListNum).Value = 0 Then
 GotoNextMonsterAccess:
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
         
         nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
@@ -4539,10 +4800,16 @@ GotoNextMonsterAccess:
     Else
         nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
         nRecnum = nRecnum + 1
-        Call IncreaseProgressBar
+        If nProgressCount >= nProgressInterval Then
+            Call IncreaseProgressBar(nProgressCount)
+            nProgressCount = 1
+            stsStatusBar.Panels(2).Text = nRecnum
+        Else
+            nProgressCount = nProgressCount + 1
+        End If
     End If
     
-    stsStatusBar.Panels(2).Text = nRecnum
+    
     If Not bUseCPU Then DoEvents
 Loop
 If Not nStatus = 0 And Not nStatus = 9 Then
@@ -4600,7 +4867,7 @@ If Not nStatus = 0 Then
     Exit Sub
 End If
 
-ts.Write ("BBS Name" & vbTab & "First Name" & vbTab & "Last Name" & vbTab & "Race" & vbTab & "Class" & vbTab & "LVL" & vbTab & "EXP" & vbTab & "Max HP" & vbTab & "HP" & vbTab & "Max Mana" & vbTab & "Mana" & vbTab & "SC" & vbTab & "Lives" & vbTab & "CP" & vbTab)
+ts.Write ("BBS Name" & vbTab & "First Name" & vbTab & "Last Name" & vbTab & "Race" & vbTab & "Class" & vbTab & "LVL" & vbTab & "EXP" & vbTab & "Max HP" & vbTab & "HP" & vbTab & "HPRolls" & vbTab & "Max Mana" & vbTab & "Mana" & vbTab & "SC" & vbTab & "Lives" & vbTab & "CP" & vbTab)
 ts.Write ("Perception" & vbTab & "Stealth" & vbTab & "Thievery" & vbTab & "Traps" & vbTab & "Picklocks" & vbTab & "Tracking" & vbTab & "MA" & vbTab & "MR" & vbTab & "MR2" & vbTab & "Broadcast" & vbTab & "Runic" & vbTab & "Platinum" & vbTab & "Gold" & vbTab & "Silver" & vbTab & "Copper" & vbTab)
 ts.Write ("Max ENC" & vbTab & "ENC" & vbTab & "EPs" & vbTab & "Gang" & vbTab & "Suicide Pass" & vbTab & "Title" & vbTab & "Room" & vbTab & "Map" & vbTab & "Weapon" & vbTab)
 
@@ -4638,6 +4905,7 @@ Do While nStatus = 0 And Not bStopExport
     ts.Write (((SLong2ULong(Userrec.BillionsOfExperience) * 1000000000#) + SLong2ULong(Userrec.MillionsOfExperience)) & vbTab)
     ts.Write (Userrec.MaxHP & vbTab)
     ts.Write (Userrec.CurrentHP & vbTab)
+    ts.Write (Userrec.HitPointRolls & vbTab)
     ts.Write (Userrec.MaxMana & vbTab)
     ts.Write (Userrec.CurrentMana & vbTab)
     ts.Write (Userrec.SpellCasting & vbTab)
@@ -4727,8 +4995,14 @@ Do While nStatus = 0 And Not bStopExport
     nStatus = BTRCALL(BGETNEXT, UserPosBlock, Userdatabuf, Len(Userdatabuf), ByVal UserKeyBuffer, KEY_BUF_LEN, 0)
     
     recnum = recnum + 1
-    stsStatusBar.Panels(2).Text = recnum
-    IncreaseProgressBar
+    
+    If nProgressCount >= nProgressInterval Then
+        Call IncreaseProgressBar(nProgressCount)
+        nProgressCount = 1
+        stsStatusBar.Panels(2).Text = recnum
+    Else
+        nProgressCount = nProgressCount + 1
+    End If
     If Not bUseCPU Then DoEvents
 
 Loop
@@ -4967,20 +5241,40 @@ Exit Function
 error:
 Call HandleError("CalcTotalRecords")
 End Function
-Private Sub IncreaseProgressBar()
+Private Sub IncreaseProgressBar(Optional ByVal nAmount As Integer = 1)
 On Error Resume Next
-'If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
 
 If nScale > 0 Then
-    If nScaleCount = nScale Then
-        If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
-        nScaleCount = 1
+    nAmount = nAmount / nScale
+    If nAmount < 1 Then nAmount = 1
+    If nScaleCount + nAmount >= nScale Then
+        If ProgressBar.Value + nScaleCount + nAmount < ProgressBar.Max Then
+            ProgressBar.Value = ProgressBar.Value + nScaleCount + nAmount
+        Else
+            ProgressBar.Value = ProgressBar.Max
+        End If
+        nScaleCount = 0
     Else
-        nScaleCount = nScaleCount + 1
+        nScaleCount = nScaleCount + nAmount
     End If
 Else
-    If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
+    If ProgressBar.Value + nAmount < ProgressBar.Max Then
+        ProgressBar.Value = ProgressBar.Value + nAmount
+    Else
+        ProgressBar.Value = ProgressBar.Max
+    End If
 End If
+
+'If nScale > 0 Then
+'    If nScaleCount = nScale Then
+'        If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
+'        nScaleCount = 1
+'    Else
+'        nScaleCount = nScaleCount + 1
+'    End If
+'Else
+'    If ProgressBar.Value + 1 < ProgressBar.Max Then ProgressBar.Value = ProgressBar.Value + 1
+'End If
 
 End Sub
 

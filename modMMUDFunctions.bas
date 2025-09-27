@@ -28,12 +28,6 @@ Do While x - 1 > 0 'gets where the map number starts
     x = x - 1
 Loop
 
-'For i = 1 To Len(sExit) - 1 'gets where the first number is
-'    Select Case Mid(sExit, i, 1)
-'        Case "1", "2", "3", "4", "5", "6", "7", "8", "9": Exit For
-'    End Select
-'Next
-
 x = InStr(1, sExit, "/")
 If x = 0 Then Exit Function
 If x = Len(sExit) Then Exit Function
@@ -1059,43 +1053,45 @@ Resume out:
 
 End Function
 
-Public Function GetRoomExits(ByVal Number As Integer, Optional LongForm As Boolean) As String
+Public Function GetFriendlyRoomExit(ByVal Number As Integer, Optional LongForm As Boolean) As String
 On Error GoTo error:
 
 If LongForm = False Then
     Select Case Number
-        Case 5: GetRoomExits = "NW"
-        Case 0: GetRoomExits = "N"
-        Case 4: GetRoomExits = "NE"
-        Case 3: GetRoomExits = "W"
-        Case 2: GetRoomExits = "E"
-        Case 7: GetRoomExits = "SW"
-        Case 1: GetRoomExits = "S"
-        Case 6: GetRoomExits = "SE"
-        Case 8: GetRoomExits = "U"
-        Case 9: GetRoomExits = "D"
+        Case 5: GetFriendlyRoomExit = "NW"
+        Case 0: GetFriendlyRoomExit = "N"
+        Case 4: GetFriendlyRoomExit = "NE"
+        Case 3: GetFriendlyRoomExit = "W"
+        Case 2: GetFriendlyRoomExit = "E"
+        Case 7: GetFriendlyRoomExit = "SW"
+        Case 1: GetFriendlyRoomExit = "S"
+        Case 6: GetFriendlyRoomExit = "SE"
+        Case 8: GetFriendlyRoomExit = "U"
+        Case 9: GetFriendlyRoomExit = "D"
     End Select
 Else
     Select Case Number
-        Case 5: GetRoomExits = "northwest"
-        Case 0: GetRoomExits = "north"
-        Case 4: GetRoomExits = "northeast"
-        Case 3: GetRoomExits = "west"
-        Case 2: GetRoomExits = "east"
-        Case 7: GetRoomExits = "southwest"
-        Case 1: GetRoomExits = "south"
-        Case 6: GetRoomExits = "southeast"
-        Case 8: GetRoomExits = "up"
-        Case 9: GetRoomExits = "down"
+        Case 5: GetFriendlyRoomExit = "northwest"
+        Case 0: GetFriendlyRoomExit = "north"
+        Case 4: GetFriendlyRoomExit = "northeast"
+        Case 3: GetFriendlyRoomExit = "west"
+        Case 2: GetFriendlyRoomExit = "east"
+        Case 7: GetFriendlyRoomExit = "southwest"
+        Case 1: GetFriendlyRoomExit = "south"
+        Case 6: GetFriendlyRoomExit = "southeast"
+        Case 8: GetFriendlyRoomExit = "up"
+        Case 9: GetFriendlyRoomExit = "down"
     End Select
 End If
 
 out:
 Exit Function
 error:
-Call HandleError("GetRoomExits")
+Call HandleError("GetFriendlyRoomExit")
 Resume out:
 End Function
+
+
 Public Function GetRoomName(ByVal MapNum As Long, ByVal RoomNum As Long) As String
 Dim nStatus As Integer
 
@@ -1118,6 +1114,75 @@ error:
 Call HandleError("GetRoomName")
 Resume out:
 
+End Function
+
+Public Function GetRoomExits(ByVal MapNum As Long, ByVal RoomNum As Long, Optional ByVal bForLairs As Boolean) As RoomExitType()
+Dim nStatus As Integer, x As Long, arrReturn() As RoomExitType
+On Error GoTo error:
+
+ReDim arrReturn(9)
+GetRoomExits = arrReturn
+
+RoomKeyStruct.MapNum = MapNum
+RoomKeyStruct.RoomNum = RoomNum
+
+nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyStruct, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then GoTo out:
+
+RoomRowToStruct Roomdatabuf.buf
+
+For x = 0 To 9
+    If Roomrec.RoomExit(x) > 0 Then
+        If Roomrec.RoomType(x) = 12 Then GoTo nextexit: '12=remote action
+        If Roomrec.RoomType(x) = 6 And Roomrec.Para1(x) = 0 Then GoTo nextexit: 'hidden but error
+        If Roomrec.RoomType(x) = 8 Then  'map change
+            If Roomrec.Para1(x) < 1 Then GoTo nextexit:
+            If bForLairs Then GoTo nextexit:
+            arrReturn(x).Map = Roomrec.Para1(x)
+        Else
+            arrReturn(x).Map = Roomrec.MapNumber
+        End If
+        
+        arrReturn(x).Room = Roomrec.RoomExit(x)
+        If bForLairs Then arrReturn(x).ExitType = Roomrec.MonsterType & "-" & Roomrec.MinIndex & "-" & Roomrec.MaxIndex
+    End If
+nextexit:
+Next x
+
+GetRoomExits = arrReturn
+
+out:
+Exit Function
+error:
+Call HandleError("GetRoomExits")
+Resume out:
+End Function
+
+Public Function IsRoomLair(ByVal MapNum As Long, ByVal RoomNum As Long, Optional ByVal nGroup As Integer, _
+    Optional ByVal nMinIndex As Integer, Optional ByVal nMaxIndex As Integer) As Boolean
+Dim nStatus As Integer, x As Long
+On Error GoTo error:
+
+RoomKeyStruct.MapNum = MapNum
+RoomKeyStruct.RoomNum = RoomNum
+
+nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyStruct, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then GoTo out:
+
+RoomRowToStruct Roomdatabuf.buf
+
+If Roomrec.MinIndex <= Roomrec.MaxIndex And Roomrec.MaxIndex > 0 And Roomrec.MaxRegen > 0 And Roomrec.Type = 3 Then 'lair
+    If nGroup > 0 And Roomrec.MonsterType <> nGroup Then Exit Function
+    If nMinIndex > 0 And Roomrec.MinIndex < nMinIndex Then Exit Function
+    If nMaxIndex > 0 And Roomrec.MaxIndex > nMaxIndex Then Exit Function
+    IsRoomLair = True
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("IsRoomLair")
+Resume out:
 End Function
 
 Public Function GetTotalActions(ByVal MapNum As Long, ByVal RoomNum As Long, _
@@ -1177,6 +1242,90 @@ error:
 Call HandleError("GetMonsterName")
 Resume out:
 
+End Function
+
+Public Function GetMonsterExp(ByVal nMonsterNumber As Long) As Double
+Dim nStatus As Integer
+
+On Error GoTo error:
+
+If nMonsterNumber = 0 Then
+    GetMonsterExp = 0
+Else
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonsterNumber, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetMonsterExp = 0
+        Else
+            GetMonsterExp = -1
+        End If
+    Else
+        MonsterRowToStruct Monsterdatabuf.buf
+        If eDatFileVersion >= v111j Then
+            GetMonsterExp = (Monsterrec.Experience * Monsterrec.ExpMulti)
+        Else
+            GetMonsterExp = Monsterrec.Experience
+        End If
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetMonsterExp")
+Resume out:
+End Function
+
+Public Function GetMonsterRegen(ByVal nMonsterNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nMonsterNumber = 0 Then
+    GetMonsterRegen = -1
+    Exit Function
+Else
+    nStatus = BTRCALL(BGETEQUAL, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), nMonsterNumber, KEY_BUF_LEN, 0)
+    If Not nStatus = 0 Then
+        GetMonsterRegen = -1
+        Exit Function
+    Else
+        MonsterRowToStruct Monsterdatabuf.buf
+        GetMonsterRegen = Monsterrec.RegenTime
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetMonsterRegen")
+Resume out:
+End Function
+
+Public Function GetItemTypeNumber(ByVal nItemNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nItemNumber = 0 Then
+    GetItemTypeNumber = -1
+Else
+    nStatus = BTRCALL(BGETEQUAL, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), nItemNumber, Len(nItemNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetItemTypeNumber = -1
+        Else
+            MsgBox "Function GetItemTypeNumber, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+        End If
+    Else
+        ItemRowToStruct Itemdatabuf.buf
+        GetItemTypeNumber = Itemrec.Type
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetItemTypeNumber")
+Resume out:
 End Function
 
 Public Function GetItemName(ByVal nItemNumber As Long) As String
@@ -1257,6 +1406,60 @@ out:
 Exit Function
 error:
 Call HandleError("GetRaceName")
+Resume out:
+End Function
+
+Public Function GetClassMinHP(ByVal nClassNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nClassNumber = 0 Then
+    GetClassMinHP = 0
+Else
+    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nClassNumber, Len(nClassNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetClassMinHP = 0
+        Else
+            MsgBox "Function GetClassMinHP, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+        End If
+    Else
+        ClassRowToStruct Classdatabuf.buf
+        GetClassMinHP = Classrec.MinHp
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetClassMinHP")
+Resume out:
+End Function
+
+Public Function GetClassMaxHP(ByVal nClassNumber As Long) As Integer
+Dim nStatus As Integer
+On Error GoTo error:
+
+If nClassNumber = 0 Then
+    GetClassMaxHP = 0
+Else
+    nStatus = BTRCALL(BGETEQUAL, ClassPosBlock, Classdatabuf, Len(Classdatabuf), nClassNumber, Len(nClassNumber), 0)
+    If Not nStatus = 0 Then
+        If nStatus = 4 Then
+            GetClassMaxHP = 0
+        Else
+            MsgBox "Function GetClassMaxHP, BGETEQUAL, Error: " & BtrieveErrorCode(nStatus)
+        End If
+    Else
+        ClassRowToStruct Classdatabuf.buf
+        GetClassMaxHP = Classrec.MaxHP
+    End If
+End If
+
+out:
+Exit Function
+error:
+Call HandleError("GetClassMaxHP")
 Resume out:
 End Function
 
@@ -1800,7 +2003,7 @@ Do While nStatus = 0
     If UBound(MGIL(), 2) < Monsterrec.Index Then ReDim Preserve MGIL(UBound(MGIL(), 1), Monsterrec.Index)
     'If UBound(MGIL(), 3) < Monsterrec.Number Then ReDim Preserve MGIL(UBound(MGIL(), 1), UBound(MGIL(), 2), Monsterrec.Number)
     
-    For x = 0 To 10 '20
+    For x = 0 To 14
         If MGIL(Monsterrec.Group, Monsterrec.Index).nNumber(x) = 0 Then
             MGIL(Monsterrec.Group, Monsterrec.Index).nNumber(x) = Monsterrec.Number
             'MGIL(Monsterrec.Group, Monsterrec.Index).sName(x) = ClipNull(Monsterrec.Name)
