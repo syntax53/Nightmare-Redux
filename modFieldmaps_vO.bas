@@ -857,9 +857,9 @@ Public DBStatDatabuf As DBStatDatabufType
 
 Sub IntFieldMaps()
 
-DLog "AddRaceFieldMap RaceFldMap..."
+'DLog "AddRaceFieldMap RaceFldMap..."
     AddRaceFieldMap RaceFldMap, 0
-DLog "AddClassFieldMap ClassFldMap..."
+'DLog "AddClassFieldMap ClassFldMap..."
     AddClassFieldMap ClassFldMap, 0
     AddSpellFieldMap SpellFldMap, 0
     AddMonsterFieldMap MonsterFldMap, 0
@@ -868,7 +868,7 @@ DLog "AddClassFieldMap ClassFldMap..."
     AddRoomFieldMap RoomFldMap, 0
     AddMessageFieldMap MessageFldMap, 0
     AddTextblockFieldMap TextblockFldMap, 0
-DLog "AddUserFieldMap UserFldMap..."
+'DLog "AddUserFieldMap UserFldMap..."
     AddUserFieldMap UserFldMap, 0
     AddActionFieldMap ActionFldMap, 0
     AddBankFieldMap BankFldMap, 0
@@ -1703,9 +1703,9 @@ Sub AddTextblockFieldMap(Map() As PALN32.FieldMap, ByRef ctr As Long)
 End Sub
 
 Sub AddRaceFieldMap(ByRef Map() As PALN32.FieldMap, ByRef ctr As Long)
-    DLog "race..." & ctr
+    'DLog "race..." & ctr
     AddField Map, ctr, FLD_INTEGER, 2
-    DLog "race..." & ctr
+    'DLog "race..." & ctr
     AddField Map, ctr, FLD_STRING, 29       'NNNN    -   Name as String * 29     29
     AddField Map, ctr, FLD_BYTE, 1          '  00    -   Nothing as Byte          1
     AddField Map, ctr, FLD_INTEGER, 2       '-INT    -   Min Int as Integer       2
@@ -2728,8 +2728,8 @@ Sub AddActionFieldMap(Map() As PALN32.FieldMap, ByRef ctr As Long)
 End Sub
 
 Sub AddField(Map() As PALN32.FieldMap, ByRef ctr As Long, dataType As PALN32.FldDataType, length As Long)
-DLog "AddField > SetField..."
+'DLog "AddField > SetField..."
   PALN32.AlignFuncs.SetField Map(ctr), dataType, CLng(length)
-DLog "ctr + 1..."
+'DLog "ctr + 1..."
   ctr = ctr + 1
 End Sub

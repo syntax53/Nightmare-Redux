@@ -1239,7 +1239,7 @@ End If
 
 frmSplash.lblStatus.Caption = "Initializing Field Maps ..."
 DoEvents
-DLog "IntFieldMaps..."
+'DLog "IntFieldMaps..."
 Call IntFieldMaps
 
 If ReadINI("Settings", "FirstRun" & IIf(WorksWithN = True, "_n", "")) = "0" Then
@@ -3230,16 +3230,16 @@ Call HandleError("AutoAppendString")
 Resume out:
 End Function
 
-Public Function DLogPath() As String
-    DLogPath = App.Path & IIf(Right$(App.Path, 1) = "\", "", "\") & "startup_xp.log"
-End Function
-
-Public Sub DLog(ByVal S As String)
-    On Error Resume Next
-    Dim F As Integer: F = FreeFile
-    Open DLogPath For Append As #F
-    Print #F, format$(Now, "yyyy-mm-dd hh:nn:ss"); "  "; S
-    Close #F
-End Sub
+'Public Function DLogPath() As String
+'    DLogPath = App.Path & IIf(Right$(App.Path, 1) = "\", "", "\") & "startup_xp.log"
+'End Function
+'
+'Public Sub DLog(ByVal S As String)
+'    On Error Resume Next
+'    Dim F As Integer: F = FreeFile
+'    Open DLogPath For Append As #F
+'    Print #F, format$(Now, "yyyy-mm-dd hh:nn:ss"); "  "; S
+'    Close #F
+'End Sub
 
 
