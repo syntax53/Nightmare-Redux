@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmRoom 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Room Editor"
@@ -6704,7 +6704,7 @@ For x = 0 To 14
     lblRoomUnknowns(x).Caption = "nothing1-" & x: txtRoomUnknowns(x).Text = Roomrec.nothing1(x)
 Next x
 
-x = 15:  lblRoomUnknowns(x).Caption = "NewSpot": txtRoomUnknowns(x).Text = Roomrec.NewSpot  '***I_THROUGH_N*** (comment for n)
+x = 15:  lblRoomUnknowns(x).Caption = "NewSpot": txtRoomUnknowns(x).Text = Roomrec.NewSpot   '***I_THROUGH_N*** (comment for n)
 x = 16:  lblRoomUnknowns(x).Caption = "ByNumber": txtRoomUnknowns(x).Text = Roomrec.ByNumber
 x = 17:  lblRoomUnknowns(x).Caption = "nothing4": txtRoomUnknowns(x).Text = Roomrec.nothing4
 x = 18:  lblRoomUnknowns(x).Caption = "nothing5": txtRoomUnknowns(x).Text = Roomrec.nothing5

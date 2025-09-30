@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Begin VB.Form frmAbilityEdit 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Ability List Editor"
@@ -41,16 +41,26 @@ Begin VB.Form frmAbilityEdit
       TabCaption(1)   =   "Edit"
       TabPicture(1)   =   "frmAbilityEdit.frx":08E6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "cmdNext"
-      Tab(1).Control(1)=   "cmdInfo"
-      Tab(1).Control(2)=   "cmdPrev"
-      Tab(1).Control(3)=   "cmdDiscard"
-      Tab(1).Control(4)=   "cmdSave"
-      Tab(1).Control(5)=   "cmdRemove"
-      Tab(1).Control(6)=   "cmdNew"
-      Tab(1).Control(7)=   "Frame5"
-      Tab(1).Control(8)=   "Frame4"
-      Tab(1).Control(9)=   "Frame3"
+      Tab(1).Control(0)=   "Frame3"
+      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).Control(1)=   "Frame4"
+      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(2)=   "Frame5"
+      Tab(1).Control(2).Enabled=   0   'False
+      Tab(1).Control(3)=   "cmdNew"
+      Tab(1).Control(3).Enabled=   0   'False
+      Tab(1).Control(4)=   "cmdRemove"
+      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(5)=   "cmdSave"
+      Tab(1).Control(5).Enabled=   0   'False
+      Tab(1).Control(6)=   "cmdDiscard"
+      Tab(1).Control(6).Enabled=   0   'False
+      Tab(1).Control(7)=   "cmdPrev"
+      Tab(1).Control(7).Enabled=   0   'False
+      Tab(1).Control(8)=   "cmdInfo"
+      Tab(1).Control(8).Enabled=   0   'False
+      Tab(1).Control(9)=   "cmdNext"
+      Tab(1).Control(9).Enabled=   0   'False
       Tab(1).ControlCount=   10
       Begin VB.CommandButton cmdNext 
          Caption         =   ">>"

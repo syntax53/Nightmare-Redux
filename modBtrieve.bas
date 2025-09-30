@@ -6,7 +6,7 @@ DefInt A-Z
 Public Const BOPEN = 0
 Public Const BCLOSE = 1
 Public Const BINSERT = 2
-Public Const BUPDATE = 3
+Public Const bUpdate = 3
 Public Const BDELETE = 4
 Public Const BGETEQUAL = 5
 Public Const BGETNEXT = 6
@@ -81,8 +81,8 @@ Public Const FLD_DATE = 3
 Public Const FLD_TIME = 4
 Public Const FLD_MONEY = 6
 Public Const FLD_LOGICAL = 7
-Public Const FLD_BYTE = 19
-Public Const FLD_UNICODE = 20
+Public Const FLD_BYTE = &H15 'was 19 ... but says FLD_BYTE = 21 (&H15)
+Public Const FLD_UNICODE = &H16 'was 20 ... but says FLD_UNICODE = 22 (&H16)
 Public Const FLD_UNSIGNEDBINARY = 14
 
 Declare Function BTRCALL Lib "wbtrv32" (ByVal OP As Integer, Pb As Any, DB As Any, DL As Long, ByRef Kb As Any, ByVal Kl As Integer, ByVal Kn As Integer) As Integer

@@ -504,6 +504,8 @@ Option Base 0
 Option Explicit
 Dim bStopProcess As Boolean
 Dim bWarnedAboutCopy As Boolean
+Private Const GWL_HWNDPARENT = -8
+Private Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
 
 Private Sub MDIForm_Load()
 On Error GoTo error:
