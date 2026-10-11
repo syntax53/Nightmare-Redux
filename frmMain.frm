@@ -178,6 +178,9 @@ Begin VB.MDIForm frmMain
             Caption         =   "Export to &MMUD Explorer"
             Shortcut        =   ^{F12}
          End
+         Begin VB.Menu mnuMMERoomCmdUpdate 
+            Caption         =   "Update Exported MDB with Room &Commands"
+         End
          Begin VB.Menu mnuaslqkjrg 
             Caption         =   "Internal Database Actions--"
             Enabled         =   0   'False
@@ -1762,6 +1765,13 @@ Private Sub mnuMMUDExplorer_Click()
 
 Unload frmMME_Export
 frmMME_Export.Show
+
+End Sub
+
+Private Sub mnuMMERoomCmdUpdate_Click()
+
+Unload frmMME_RoomCmdUpdate
+frmMME_RoomCmdUpdate.Show
 
 End Sub
 
