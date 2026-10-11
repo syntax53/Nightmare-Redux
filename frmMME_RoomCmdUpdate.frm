@@ -141,11 +141,13 @@ Dim dictChanged As Dictionary   'the items whose "Obtained From" changed
 Dim nEntriesAdded As Long       'Room(...) entries added
 Dim nRoomsNamed As Long         'rooms those entries name
 Dim nCut As Long                'entries that ran into the 2000 characters of the column
+Dim nRoomsWithCmd As Long     'rooms of the export that have a command textblock
 Dim sLastProposal As String     'the output name this window filled in by itself
 Dim bBusy As Boolean
 
 Private Sub Form_Load()
 On Error Resume Next
+Set Me.Icon = frmMain.Icon
 lblResult.Caption = ""
 txtReport.Text = "Select an MME export (an .mdb written by Export to MMUD Explorer), " _
     & "choose a name for the new file, and press Fix." & vbCrLf & vbCrLf _
@@ -221,6 +223,7 @@ Dim bOK As Boolean, sReport As String
 
 If bBusy Then Exit Sub
 bBusy = True
+Call LockMenus    'DoEvents runs during the scan; keep Export to MME etc. from starting meanwhile
 
 cmdFix.Enabled = False
 cmdClose.Enabled = False
@@ -253,6 +256,7 @@ cmdBrowseSource.Enabled = True
 cmdBrowseDest.Enabled = True
 cmdClose.Enabled = True
 cmdFix.Enabled = True
+Call UnLockMenus
 bBusy = False
 
 End Sub
@@ -269,6 +273,7 @@ On Error GoTo error:
 Set fso = New FileSystemObject
 nStart = Timer
 sReport = ""
+sStep = "checking the file names"
 
 '--- what is refused before anything is read
 If Len(sSource) = 0 Then
@@ -311,8 +316,9 @@ Set DB = Nothing
 
 '--- the new file: an exact copy, in which only the changed items are rewritten
 sStep = "copying the export"
+bCopied = True      'from here on an unfinished copy may exist and must be removed on failure
 FileCopy sSource, sDest
-bCopied = True
+SetAttr sDest, vbNormal     'a read-only export must not give a read-only copy
 
 sStep = "writing the new file"
 Set DB = DBEngine.OpenDatabase(sDest)
@@ -332,10 +338,15 @@ If dictChanged.Count > 0 Then
     End If
 Else
     sReport = sReport & "SUCCESS: Nothing to add: no item of this export gains a room command source." & vbCrLf
-    sReport = sReport & "  (the export already has the entries, or no room command gives an item)" & vbCrLf
+    If nRoomsWithCmd = 0 Then
+        sReport = sReport & "  (the export has no rooms with a command textblock - an export made with ""No Rooms"" or ""Export Only""?)" & vbCrLf
+    Else
+        sReport = sReport & "  (the export already has the entries, or no room command gives an item)" & vbCrLf
+    End If
     sReport = sReport & "  The new file is a plain copy." & vbCrLf
 End If
 sReport = sReport & "  items with Room( entries in the new file: " & nTagged & vbCrLf
+sReport = sReport & "  rooms with a command textblock in the export: " & nRoomsWithCmd & vbCrLf
 sReport = sReport & "  the selected export was not changed; all its other tables and cells were copied as they are" & vbCrLf
 sReport = sReport & "  time: " & Format(Timer - nStart, "0.0") & " s" & vbCrLf
 
@@ -362,12 +373,13 @@ DB.Close
 Set DB = Nothing
 sReport = sReport & vbCrLf & sError & vbCrLf & vbCrLf
 If bCopied Then
-    Kill sDest
     If fso.FileExists(sDest) Then
-        sReport = sReport & "The unfinished file could not be removed - delete it yourself:" & vbCrLf & "  " & sDest & vbCrLf
-    Else
-        sReport = sReport & "No updated file was written (the unfinished copy was removed)." & vbCrLf
+        SetAttr sDest, vbNormal
+        Kill sDest
     End If
+End If
+If bCopied And fso.FileExists(sDest) Then
+    sReport = sReport & "The unfinished file could not be removed - delete it yourself:" & vbCrLf & "  " & sDest & vbCrLf
 Else
     sReport = sReport & "No updated file was written." & vbCrLf
 End If
@@ -403,8 +415,8 @@ Dim rs As DAO.Recordset, vNeed As Variant, vCols As Variant, x As Long, y As Lon
 Dim sKey As String, sText As String, sObtained As String, bFlag As Boolean
 
 vNeed = Array("Rooms", "Map Number|Room Number|CMD", _
-    "TBInfo", "Number|LinkTo|Action", _
-    "Items", "Number|Gettable|In Game|Obtained From|References")
+    "TBInfo", "Number|Action", _
+    "Items", "Number|In Game|Obtained From|References")
 For x = 0 To UBound(vNeed) Step 2
     If Not HasTable(DB, vNeed(x)) Then
         Err.Raise vbObjectError + 1001, "LoadExport", "This is not an MME export: it has no " & vNeed(x) & " table"
@@ -425,6 +437,7 @@ Set dictChanged = New Dictionary
 nEntriesAdded = 0
 nRoomsNamed = 0
 nCut = 0
+nRoomsWithCmd = 0
 
 'the text of the textblocks the export marked as executed
 Set rs = DB.OpenRecordset("SELECT [Number], [Action] FROM TBInfo", dbOpenSnapshot)
@@ -522,6 +535,7 @@ Set dictGroups = New Dictionary
 Set rs = DB.OpenRecordset("SELECT [Map Number], [Room Number], [CMD] FROM Rooms " _
     & "WHERE [CMD] > 0 ORDER BY [Room Number], [Map Number]", dbOpenSnapshot)
 Do While Not rs.EOF
+    nRoomsWithCmd = nRoomsWithCmd + 1
     'each command textblock is read once, however many rooms use it
     sKey = CStr(CLng(rs.Fields("CMD")))
     If Not dictFound.Exists(sKey) Then
@@ -572,7 +586,7 @@ If Not dictObtained.Exists(sKey) Then Exit Sub      'not an item of this export
 
 sBefore = dictObtained(sKey)
 sTemp = sBefore
-If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+If InStr(1, ", " & sTemp & ", ", ", " & sFrom & ", ") > 0 Then Exit Sub
 
 If IsNoText(sTemp) Then
     sTemp = ""
@@ -637,12 +651,13 @@ Dim nPos As Long, nKeyPos As Long, nKeyLen As Long, nDigits As Long, nValue As L
 Dim nGiven() As Long, nGivenCount As Long, bGiven As Boolean
 Dim nChest() As Currency, nNest As Long
 Dim nChance As Currency, sChance As String, x As Long, z As Long
+On Error GoTo error:
 
 Set dictOut = New Dictionary
 Set GetRoomCommandGives = dictOut
 
 sData = TBText(nTBNumber)
-If Len(sData) = 0 Then Exit Function
+If Len(sData) = 0 Then GoTo out:
 sLower = LCase(sData)
 
 'a command textblock is made of lines "<command>:<action>:<action>..."
@@ -751,8 +766,14 @@ next_line:
     nLineStart = nLineEnd + 1
 Loop
 
+out:
 Erase nGiven()
 Erase nChest()
+Exit Function
+
+error:
+Call HandleError("GetRoomCommandGives-#" & nTBNumber)
+Resume out:
 
 End Function
 

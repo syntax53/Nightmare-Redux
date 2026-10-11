@@ -921,7 +921,8 @@ chkLegit(1).Value = ReadINI("Settings", "Gmud", sFile, 0)
 chkLegit(2).Value = ReadINI("Settings", "DisableKai", sFile, 0)
 chkExcludeDefault.Value = ReadINI("Settings", "ExcludeDefault", sFile, "1")
 chkNoRooms.Value = ReadINI("Settings", "NoRooms", sFile)
-bRoomCommandItems = (Val(ReadINI("Settings", "RoomCommandItems", sFile, "1")) <> 0)
+sTemp = ReadINI("Settings", "RoomCommandItems", sFile, "1")
+bRoomCommandItems = (Len(sTemp) = 0 Or Val(sTemp) <> 0)
 
 lvExludedRooms.ListItems.clear
 sLine = ReadINI("Settings", "ExcludedRooms", sFile)
@@ -1303,6 +1304,7 @@ If Not fso.FileExists(sConfigFile) Then sConfigFile = App.Path & "\MME-Config.in
 Me.Left = ReadINI("Windows", "MME-Left")
 Me.Top = ReadINI("Windows", "MME-Top")
 
+bRoomCommandItems = True   'on unless the config says RoomCommandItems=0
 Call LoadConfig(sConfigFile)
 
 Call AddDefaultExcludes
@@ -2324,7 +2326,12 @@ If tabItems.NoMatch = False Then
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabItems.Fields(sField)
     If sFrom = "" Then GoTo nofrom:
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If Left(sFrom, 5) = "Room(" Then
+        'room command entries: whole entries only ("Room(x) 1/5" is not present because "Room(x) 1/50-52(3%)" is)
+        If InStr(1, ", " & sTemp & ", ", ", " & sFrom & ", ") > 0 Then Exit Sub
+    Else
+        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    End If
     
     If sTemp = Chr(0) Then
         sTemp = ""

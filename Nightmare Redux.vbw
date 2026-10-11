@@ -38,6 +38,7 @@ modSelectDir = 234, 234, 1980, 1106, C
 frmDatabaseMerge = 0, 0, 0, 0, C, 364, 364, 1528, 1210, C
 frmHelpChangeLog = 0, 0, 0, 0, C, 239, 107, 1403, 953, C
 frmMME_Export = 52, 52, 1608, 836, C, 235, 65, 1399, 911, C
+frmMME_RoomCmdUpdate = 0, 0, 0, 0, C, 52, 52, 1788, 924, C
 frmDatabaseExport = 156, 156, 1995, 940, C, 0, 0, 1164, 846, C
 frmHelpTextblocks = 0, 0, 0, 0, C, 26, 26, 1190, 872, C
 frmRecordChange = 312, 312, 2110, 1057, C, 52, 52, 1216, 898, C
