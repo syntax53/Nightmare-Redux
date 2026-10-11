@@ -50,7 +50,6 @@ Module=modSelectDir; modSelectDir.bas
 Form=frmDatabaseMerge.frm
 Form=frmHelpChangeLog.frm
 Form=frmMME_Export.frm
-Form=frmMME_RoomCmdUpdate.frm
 Form=frmDatabaseExport.frm
 Form=frmHelpTextblocks.frm
 Form=frmRecordChange.frm
