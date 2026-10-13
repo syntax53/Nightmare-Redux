@@ -1,3 +1,7 @@
+v1.8.4 (##/##/2026)
+------------------------------------------  
+-UP: MME export now lists items sources/references from room commands e.g. "pry coffin"  
+
 v1.8.3 (09/27/2025)
 ------------------------------------------  
 -NEW: Can now import and export users from clipboard using a proprietary text format

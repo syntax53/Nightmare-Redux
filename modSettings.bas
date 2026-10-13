@@ -12,6 +12,7 @@ Private ret As String
 Public Function ReadINI(ByVal Section As String, ByVal Key As String, _
     Optional ByVal sAlternateFile As String, Optional ByVal sDefaultVal As String = "0") As Variant
 Dim retlen As Integer
+Dim nRetry As Integer
 On Error GoTo error:
 
 If sAlternateFile = "" Then sAlternateFile = sINIFileName
@@ -53,7 +54,13 @@ If retlen = 0 Then
 
     End If
     
-    If Not bINIReadOnly Then GoTo reread:
+    If Not bINIReadOnly And nRetry = 0 Then
+        nRetry = 1
+        GoTo reread:
+    End If
+    'the key could not be written (read-only file): answer with the default instead of ""
+    ReadINI = sDefaultVal
+    Exit Function
 End If
 
 ret = Left$(ret, retlen)

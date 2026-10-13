@@ -643,6 +643,7 @@ Dim MonGroup() As String
 
 Dim SpellFromContainerRef() As Boolean
 Dim TBFromBadSource() As Boolean
+Dim bRoomCommandItems As Boolean 'add "Room(<command>) <rooms>" to the items' Obtained From (issue #21)
 'note 4/1/2016... I couldn't remember what the hell "TBFromBadSource" was and why i ever programmed it.
 'It looks like it only gets flagged as from bad source if it's a monster greet text or a spell textblock
 'called from an item container opening.  and i believe this indicates that these textblocks only execute
@@ -920,6 +921,8 @@ chkLegit(1).Value = ReadINI("Settings", "Gmud", sFile, 0)
 chkLegit(2).Value = ReadINI("Settings", "DisableKai", sFile, 0)
 chkExcludeDefault.Value = ReadINI("Settings", "ExcludeDefault", sFile, "1")
 chkNoRooms.Value = ReadINI("Settings", "NoRooms", sFile)
+sTemp = ReadINI("Settings", "RoomCommandItems", sFile, "1")
+bRoomCommandItems = (Len(sTemp) = 0 Or Val(sTemp) <> 0)
 
 lvExludedRooms.ListItems.clear
 sLine = ReadINI("Settings", "ExcludedRooms", sFile)
@@ -993,6 +996,7 @@ Call WriteINI("Settings", "EnableExcludeRooms", chkExcludeRooms.Value, sFile)
 Call WriteINI("Settings", "HideExcludedRooms", chkHideExcludedRooms.Value, sFile)
 Call WriteINI("Settings", "ExportPath", sExportPath, sFile)
 Call WriteINI("Settings", "NoRooms", chkNoRooms.Value, sFile)
+Call WriteINI("Settings", "RoomCommandItems", IIf(bRoomCommandItems, "1", "0"), sFile)
 
 sTemp = ""
 If lvExludedRooms.ListItems.Count > 0 Then
@@ -1300,6 +1304,7 @@ If Not fso.FileExists(sConfigFile) Then sConfigFile = App.Path & "\MME-Config.in
 Me.Left = ReadINI("Windows", "MME-Left")
 Me.Top = ReadINI("Windows", "MME-Top")
 
+bRoomCommandItems = True   'on unless the config says RoomCommandItems=0
 Call LoadConfig(sConfigFile)
 
 Call AddDefaultExcludes
@@ -2321,7 +2326,12 @@ If tabItems.NoMatch = False Then
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabItems.Fields(sField)
     If sFrom = "" Then GoTo nofrom:
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If Left(sFrom, 5) = "Room(" Then
+        'room command entries: whole entries only ("Room(x) 1/5" is not present because "Room(x) 1/50-52(3%)" is)
+        If InStr(1, ", " & sTemp & ", ", ", " & sFrom & ", ") > 0 Then Exit Sub
+    Else
+        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    End If
     
     If sTemp = Chr(0) Then
         sTemp = ""
@@ -3838,6 +3848,387 @@ End If
 
 End Sub
 
+'=====================================================================================
+' Room command item sources   (Nightmare-Redux issue #21 / MMUD-Explorer issue #105)
+'
+' Adds   Room(<command>[|<command>...]) <map/room>[|<map/room>...][(<n>%)]
+' entries to the "Obtained From" column of the Items table for every item that a
+' command of a room's command textblock hands out (giveitem, or through "random").
+'=====================================================================================
+Private Sub ScanRoomCommands()
+Dim nStatus As Integer, nRec As Long, nYesNo As Integer
+Dim dictFound As Dictionary     'command textblock number -> Dictionary of what its commands give
+Dim dictGroups As Dictionary    '"item<Tab>chance<Tab>commands" -> "map/room|map/room|..."
+Dim dictGives As Dictionary
+Dim vKey As Variant, sKey As String, sGroup As String, sRoom As String
+Dim sParts() As String, sEntry As String
+
+On Error GoTo error:
+
+Set dictFound = New Dictionary
+Set dictGroups = New Dictionary
+
+lblPanel(1).Caption = "Scanning Room Commands (0)"
+DoEvents
+
+nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+
+nRec = 1
+Do While nStatus = 0 And bStopExport = False
+    RoomRowToStruct Roomdatabuf.buf
+
+    If Roomrec.CmdText <= 0 Then GoTo Skip:
+
+    'the same test as at the top of ScanRooms
+    If chkHideExcludedRooms.Value = 1 Then
+        If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, True) Then GoTo Skip:
+    Else
+        If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then GoTo Skip:
+    End If
+
+    'each command textblock is read once, however many rooms use it
+    sKey = CStr(Roomrec.CmdText)
+    If Not dictFound.Exists(sKey) Then
+        lblPanel(1).Caption = "Scanning Room Commands (" & nRec & ")"
+        dictFound.Add sKey, GetRoomCommandGives(Roomrec.CmdText)
+    End If
+    Set dictGives = dictFound(sKey)
+
+    If dictGives.Count > 0 Then
+        sRoom = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+        For Each vKey In dictGives.Keys
+            'rooms that give the same item with the same chance by the same commands share one entry
+            sGroup = vKey & vbTab & dictGives(vKey)
+            If dictGroups.Exists(sGroup) Then
+                dictGroups(sGroup) = dictGroups(sGroup) & "|" & sRoom
+            Else
+                dictGroups.Add sGroup, sRoom
+            End If
+        Next vKey
+    End If
+
+Skip:
+    nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If Not bUseCPU Then DoEvents
+    nRec = nRec + 1
+Loop
+
+If bStopExport Then GoTo out:
+
+'The items are marked only now: TestItemFail (in GetRoomCommandGives) must see the
+'"in game" state the cross reference passes left behind, not these marks.
+'DontMarkInGame = True: these items already have their "Textblock #" reference,
+'only the "Obtained From" text grows.
+For Each vKey In dictGroups.Keys
+    If bStopExport Then Exit For
+    sParts = Split(CStr(vKey), vbTab)       '0 = item number, 1 = chance, 2 = commands
+    sEntry = "Room(" & sParts(2) & ") " & RoomListText(dictGroups(vKey))
+    If Len(sParts(1)) > 0 Then sEntry = sEntry & "(" & sParts(1) & "%)"
+    Call MarkItemInGame(Val(sParts(0)), sEntry, True)
+Next vKey
+
+out:
+Set dictGives = Nothing
+Set dictGroups = Nothing
+Set dictFound = Nothing
+Exit Sub
+
+error:
+Call HandleError("ScanRoomCommands")
+nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
+If nYesNo = vbYes Then
+    bStopExport = True
+    Resume out:
+Else
+    Resume Next
+End If
+
+End Sub
+
+'What the commands of a room command textblock hand out.
+'Returns a Dictionary:  "<item number><Tab><chance>" -> "<command>|<command>..."
+'  chance ""     = the command gives the item itself (giveitem)
+'  chance "18.6" = the item comes out of a "random" textblock, percent as for the chests
+'  chance "?"    = it comes out of one, but the arithmetic gives nothing above 0
+Private Function GetRoomCommandGives(ByVal nTBNumber As Long) As Dictionary
+Dim dictOut As Dictionary
+Dim sData As String, sLower As String, sLine As String, sCommand As String
+Dim nLineStart As Long, nLineEnd As Long, nColon As Long, nSep As Long
+Dim nPos As Long, nKeyPos As Long, nKeyLen As Long, nDigits As Long, nValue As Long
+Dim nGiven() As Long, nGivenCount As Long, bGiven As Boolean
+Dim nChest() As Currency, nDummyArray() As Currency, sTrash() As String, nNest As Long
+Dim nChance As Currency, sChance As String, x As Long, z As Long
+
+On Error GoTo error:
+
+Set dictOut = New Dictionary
+Set GetRoomCommandGives = dictOut
+
+sData = GetWholeTextblock(nTBNumber)
+If Len(sData) = 0 Then GoTo out:
+sLower = LCase(sData)
+
+'a command textblock is made of lines "<command>:<action>:<action>..."
+nLineStart = 1
+Do While nLineStart <= Len(sLower)
+    nLineEnd = InStr(nLineStart, sLower, Chr(10))
+    If nLineEnd = 0 Then nLineEnd = Len(sLower) + 1
+    sLine = Mid(sLower, nLineStart, nLineEnd - nLineStart)
+
+    nColon = InStr(1, sLine, ":")
+    If nColon = 0 Then GoTo next_line:
+
+    'the command is taken from the original text (not the lower case copy)
+    sCommand = CleanRoomCommand(Mid(sData, nLineStart, nColon - 1))
+    If Len(sCommand) = 0 Then GoTo next_line:
+
+    nGivenCount = 0
+    ReDim nGiven(0)
+    Erase nChest()
+    ReDim nChest(1 To 3, 0) '1=number, 2=percent, 3=percent failure (as in ScanContainers)
+    Erase nDummyArray()
+    ReDim nDummyArray(0)
+
+    'look at what follows each ":" of the line
+    nSep = nColon
+    Do While nSep > 0
+        nPos = nSep + 1
+        Do While Mid(sLine, nPos, 1) = " "
+            nPos = nPos + 1
+        Loop
+
+        nKeyPos = nPos
+        nKeyLen = 0
+        If Mid(sLine, nPos, 8) = "giveitem" Then
+            nKeyLen = 8
+        ElseIf Mid(sLine, nPos, 6) = "random" Then
+            nKeyLen = 6
+        End If
+
+        'the word, at least one blank, then the number
+        If nKeyLen > 0 And Mid(sLine, nPos + nKeyLen, 1) = " " Then
+            nPos = nPos + nKeyLen
+            Do While Mid(sLine, nPos, 1) = " "
+                nPos = nPos + 1
+            Loop
+
+            nDigits = 0
+            Do While IsRoomCmdDigit(Mid(sLine, nPos + nDigits, 1))
+                nDigits = nDigits + 1
+            Loop
+
+            nValue = 0
+            If nDigits > 0 And nDigits < 10 Then nValue = Val(Mid(sLine, nPos, nDigits))
+
+            If nValue > 0 Then
+                'an action behind a checkitem / roomitem / takeitem of an item that is
+                'not in the game does not count (the same rule as CheckTBString)
+                If Not TestItemFail(sLower, nLineStart + nKeyPos - 1) Then
+                    If nKeyLen = 8 Then
+                        'giveitem
+                        bGiven = False
+                        For x = 1 To nGivenCount
+                            If nGiven(x) = nValue Then bGiven = True
+                        Next x
+                        If Not bGiven Then
+                            nGivenCount = nGivenCount + 1
+                            ReDim Preserve nGiven(nGivenCount)
+                            nGiven(nGivenCount) = nValue
+                        End If
+                    Else
+                        'random: the items of that textblock and of the ones it draws from
+                        nNest = 0
+                        Call GetRandomTBItems(nChest(), nValue, nNest, 1, False, nDummyArray(), sTrash())
+                    End If
+                End If
+            End If
+        End If
+
+        nSep = InStr(nSep + 1, sLine, ":")
+    Loop
+
+    'what the command gives for sure ...
+    For x = 1 To nGivenCount
+        Call AddRoomCommandGive(dictOut, nGiven(x), "", sCommand)
+    Next x
+
+    '... and what it may give, with the chance worked out as for the chests
+    For z = 0 To UBound(nChest(), 2)
+        If nChest(1, z) > 0 Then
+            bGiven = False
+            For x = 1 To nGivenCount
+                If nGiven(x) = nChest(1, z) Then bGiven = True
+            Next x
+            If Not bGiven Then
+                nChance = Round(nChest(2, z) * 100, 1)
+                If nChance <= 0 Then nChance = Round(nChest(2, z) * 100, 2)
+                If nChance > 0 Then
+                    sChance = "" & nChance
+                Else
+                    sChance = "?"
+                End If
+                Call AddRoomCommandGive(dictOut, CLng(nChest(1, z)), sChance, sCommand)
+            End If
+        End If
+    Next z
+
+next_line:
+    nLineStart = nLineEnd + 1
+Loop
+
+out:
+Erase nGiven()
+Erase nChest()
+Erase nDummyArray()
+Exit Function
+
+error:
+Call HandleError("GetRoomCommandGives-#" & nTBNumber)
+Resume out:
+
+End Function
+
+Private Sub AddRoomCommandGive(ByRef dictOut As Dictionary, ByVal nItem As Long, _
+    ByVal sChance As String, ByVal sCommand As String)
+Dim sKey As String
+
+sKey = nItem & vbTab & sChance
+If dictOut.Exists(sKey) Then
+    'the same item with the same chance from another command of this textblock
+    If InStr(1, "|" & dictOut(sKey) & "|", "|" & sCommand & "|") = 0 Then
+        dictOut(sKey) = dictOut(sKey) & "|" & sCommand
+    End If
+Else
+    dictOut.Add sKey, sCommand
+End If
+
+End Sub
+
+Private Function IsRoomCmdDigit(ByVal sChar As String) As Boolean
+Select Case sChar
+    Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9": IsRoomCmdDigit = True
+End Select
+End Function
+
+'A room command as it is written into the reference: blanks squeezed, and the characters
+'that separate references (", ") or delimit the command ("(", ")", "|") replaced.
+Private Function CleanRoomCommand(ByVal sText As String) As String
+
+sText = Replace(sText, vbTab, " ")
+sText = Replace(sText, vbCr, " ")
+sText = Replace(sText, vbLf, " ")
+Do While InStr(1, sText, "  ") > 0
+    sText = Replace(sText, "  ", " ")
+Loop
+sText = Trim(sText)
+
+sText = Replace(sText, ",", ";")
+sText = Replace(sText, "(", "[")
+sText = Replace(sText, ")", "]")
+sText = Replace(sText, "|", "/")
+
+CleanRoomCommand = sText
+
+End Function
+
+'"17/278|17/287|17/2073|17/2074|17/2075" -> "17/278|17/287|17/2073-2075"
+'(three or more consecutive room numbers of a map are written first-last)
+Private Function RoomListText(ByVal sRooms As String) As String
+Dim sArr() As String, nMap() As Long, nRoom() As Long
+Dim i As Long, j As Long, n As Long, sOut As String
+Dim nTmpMap As Long, nTmpRoom As Long
+
+sArr = Split(sRooms, "|")
+n = UBound(sArr)
+ReDim nMap(n)
+ReDim nRoom(n)
+For i = 0 To n
+    j = InStr(1, sArr(i), "/")
+    nMap(i) = Val(Left(sArr(i), j - 1))
+    nRoom(i) = Val(Mid(sArr(i), j + 1))
+Next i
+
+'The room file's key is read room number first (1/1, 2/1, 3/1 ... 1/2, 2/2 ...),
+'so the list is sorted here: by map, then by room.
+For i = 1 To n
+    nTmpMap = nMap(i)
+    nTmpRoom = nRoom(i)
+    j = i - 1
+    Do While j >= 0
+        If nMap(j) > nTmpMap Or (nMap(j) = nTmpMap And nRoom(j) > nTmpRoom) Then
+            nMap(j + 1) = nMap(j)
+            nRoom(j + 1) = nRoom(j)
+            j = j - 1
+        Else
+            Exit Do
+        End If
+    Loop
+    nMap(j + 1) = nTmpMap
+    nRoom(j + 1) = nTmpRoom
+Next i
+
+i = 0
+Do While i <= n
+    j = i
+    Do While j < n
+        If nMap(j + 1) = nMap(j) And nRoom(j + 1) = nRoom(j) + 1 Then
+            j = j + 1
+        Else
+            Exit Do
+        End If
+    Loop
+
+    If Len(sOut) > 0 Then sOut = sOut & "|"
+    If j - i >= 2 Then
+        sOut = sOut & nMap(i) & "/" & nRoom(i) & "-" & nRoom(j)
+        i = j + 1
+    Else
+        sOut = sOut & nMap(i) & "/" & nRoom(i)
+        i = i + 1
+    End If
+Loop
+
+RoomListText = sOut
+
+End Function
+
+'Part 0 of a textblock followed by its other parts, decrypted
+'(the same BGETEQUAL / BGETNEXT loop as at the top of GetRandomTBItems).
+Private Function GetWholeTextblock(ByVal nTBNumber As Long) As String
+Dim nStatus As Integer, sData As String
+
+On Error GoTo error:
+
+TextblockKey.PartNum = 0
+TextblockKey.Number = nTBNumber
+
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, _
+    TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
+If Not nStatus = 0 Then Exit Function
+
+Call TextblockRowToStruct(TextblockDataBuf.buf)
+sData = DecryptTextblock(TextblockRec.Data)
+
+If Len(sData) >= 5 Then
+    Do
+        nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, _
+            TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        If Not nStatus = 0 Then Exit Do
+        
+        Call TextblockRowToStruct(TextblockDataBuf.buf)
+        If Not (TextblockRec.Number = nTBNumber And TextblockRec.PartNum > 0) Then Exit Do
+        
+        sData = sData & DecryptTextblock(TextblockRec.Data)
+    Loop
+End If
+
+GetWholeTextblock = sData
+
+Exit Function
+error:
+Call HandleError("GetWholeTextblock-#" & nTBNumber)
+
+End Function
 
 Private Sub GetTBItems(ByRef nReturnArray() As Currency, ByVal nTBNumber As Long, _
     ByRef nNest As Long, ByVal bCheckSpells As Boolean, ByRef nReturnSpellArray() As Currency, ByRef sReturnSpellsClasses() As String)
@@ -4621,6 +5012,11 @@ Call ScanContainers
 If bStopExport = True Then Exit Sub
 DoEvents
 Call ScanGreets
+
+'room commands that give items (issue #21) - must stay the last scan, see ScanRoomCommands
+If bStopExport = True Then Exit Sub
+DoEvents
+If bRoomCommandItems Then Call ScanRoomCommands
 
 End Sub
 Private Sub cmdCancel_Click()

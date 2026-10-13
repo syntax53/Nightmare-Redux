@@ -1,5 +1,9 @@
 Nightmare Redux is an editor for the game MajorMUD(r).  
 
+Unreleased (in development)
+------------------------------------------  
+-NEW: MME export: items given by room commands now list the command and its rooms in "Obtained From", e.g. "Room(pry coffin) 17/278|17/287|17/2073-2096(18.6%)". Turn off with RoomCommandItems=0 in the MME config file. (issue #21 / MME #105)
+
 v1.8.3 (09/27/2025)
 ------------------------------------------  
 -NEW: Can now import and export users from clipboard using a proprietary text format
