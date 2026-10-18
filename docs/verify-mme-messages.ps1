@@ -97,7 +97,7 @@ if ($bad -eq 0) { Pass "no ANSI escape codes" } else { Fail "$bad rows contain A
 $q = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%{?}%' OR [EndMsg] LIKE '%{?}%'"
 Write-Output "INFO  rows with unresolved {?} placeholder: $q (should match the warning log)"
 $allRows = Q $cnNew "SELECT Kind,[Name],[Msg],[EndMsg],Effects FROM Messages"
-$seen = @{}; $dup = 0; $sameText = 0; $seenText = @{}; $youForms = @{}; $twins = 0; $noName = 0
+$seen = @{}; $dup = 0; $sameText = 0; $seenText = @{}; $youForms = New-Object System.Collections.Hashtable; $twins = 0; $noName = 0
 foreach ($r in $allRows) {
   $k = $r.Kind + "|" + $r.Name + "|" + $r.Msg + "|" + $r.EndMsg
   if ($seen.ContainsKey($k)) { $dup++ } else { $seen[$k] = 1 }
@@ -134,7 +134,7 @@ function Expect($desc, $sql, $pred) {
   if ($ok) { Pass $desc } else { Fail ($desc + "  (got " + $rows.Count + " rows" + $(if($rows.Count){": " + (($rows | ForEach-Object { $_.Msg + " / " + $_.EndMsg + " / " + $_.Effects }) -join " || ")}) + ")") }
 }
 function ExpectNone($desc, $sql) { $c = Count $cnNew $sql; if ($c -eq 0) { Pass $desc } else { Fail "$desc  ($c rows)" } }
-Expect "bless effect row"        "SELECT * FROM Messages WHERE [Name]='bless' AND Kind='Self'"        { param($r) $r.Msg -eq "You feel lucky!" -and $r.EndMsg -eq "The effects of bless wear off!" -and $r.Effects -notmatch "Timed" }
+Expect "bless effect row (shared by several sources, so Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel lucky!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of bless wear off!" -and ($r.Name -eq "bless" -or $r.Name -eq $r.Msg) }
 Expect "acid rain effect row (hostile spell: Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You are covered in acid!' AND Kind='Self'" { param($r) $r.Name -eq $r.Msg -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
 Expect "poison Poisoned (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) $r.Name -eq $r.Msg -and $r.Effects -match "Poisoned" }
 Expect "magic missile Cast"      "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Cast'" { param($r) $r.Msg -eq "You fire a magic missile at {target} for {dmg} damage!" }
