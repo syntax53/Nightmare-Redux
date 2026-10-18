@@ -84,13 +84,17 @@ Kind (who the line is about, from the player's seat):
          Name = the monster).
 
 Name: Cast rows carry the spell's name, or the item's name when an item casts the spell (both when
-players can also cast it and the names differ). Self rows carry a name only when the player can be
-the one affected by their own spell or item (self, friendly or party target types), e.g. "You feel
-lucky!" under bless. Status and damage lines of enemy-targeted spells are only ever seen by the
-enemy, so they are realm-wide lines with no name. Every Self and Other row is unique by text and
-effects: when several spells or items produce the same line it is exported once, and it keeps a
-name only if every source has that same name (a line shared by differently named sources is
-realm-wide and nameless). Colour codes embedded in a message are stripped.
+players can also cast it and the names differ). Self rows carry a source name only when the player
+can be the one affected by their own spell or item (self, friendly or party target types), e.g.
+"You feel lucky!" under bless, and only when every source of that line has the same name. Every
+other row (status and damage lines of enemy-targeted spells, monster hits, traps, lines shared by
+differently named sources) is realm-wide and uses its own Msg text as its Name, so Name is never
+empty. Rows are unique by kind, Msg and EndMsg: the same line from several sources is exported
+once with the union of their Effects. A Self line that is the "you" form of a Cast or Other line
+("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
+"you"/"your" wherever {target} appears and treat the line as being about themselves when it does.
+Death texts are exported only for monsters that regenerate or are game-limited and award more
+than 1 experience. Colour codes embedded in a message are stripped.
 
 Tokens: {source} (the caster or attacking monster, as the game prints it, including any "The"),
 {target}, {dmg}, {attacker} (the one who hit a damage shield). Match them as wildcards; {dmg} is

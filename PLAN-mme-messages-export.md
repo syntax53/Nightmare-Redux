@@ -376,3 +376,10 @@ Question 6, evidence: the data is identical for both engines, but the engines re
 
 - Every `Self` and `Other` row is unique by `Kind|Msg|EndMsg|Effects`; the first name found is kept (spell names before item names). `Cast` rows stay unique per name because they confirm the player's own action.
 - Any incoming line containing "you for {dmg} damage" is a standard damage attack and is not exported (spell line 2, shield lines and monster hit lines alike).
+
+## R2.14 Fourth round of feedback (2026-10-18)
+
+- Rows are accumulated in memory and written by a finalize pass. Key = kind + Msg + EndMsg (Cast rows also by name); the same line from several sources is one row with the union of their Effects.
+- A row with no source name (realm-wide line, or a line shared by differently named sources) takes its own Msg text as its Name; Name is Text 100 and never empty.
+- A Self line that is the "you"/"your" form of a Cast or Other line containing {target} is dropped; its effects merge into the {target} row. Clients accept "you"/"your" for {target} and treat such a line as being about themselves.
+- Death text requires regen time or game limit **and** more than 1 experience.

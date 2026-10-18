@@ -6805,7 +6805,7 @@ DoEvents
 With tabNewMessages
     .Name = "Messages"
     .Columns.Append "ID", adInteger
-    .Columns.Append "Name", adVarWChar, 50
+    .Columns.Append "Name", adVarWChar, 100
     .Columns.Append "Kind", adVarWChar, 12
     .Columns.Append "Msg", adVarWChar, 100
     .Columns.Append "EndMsg", adVarWChar, 100

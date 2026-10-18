@@ -24,10 +24,19 @@ Private mReP4 As Object    'third-party damage observation / shield owner line
 Private mReP5 As Object    'standard monster hit on me
 Private mReP6 As Object    'standard monster hit on someone else
 
+'in-memory row store: rows are collected by the passes, then merged and written once by FinalizeRows
+Private mRowKind() As String
+Private mRowName() As String
+Private mRowMsg() As String
+Private mRowEnd() As String
+Private mRowEff() As String
+Private mRowDrop() As Boolean
+Private mRowCount As Long
+Private mdictRows As Scripting.Dictionary    'row key -> row index
+
 Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean) As Long
-Dim dictSeen As Scripting.Dictionary, dictRoomSpells As Scripting.Dictionary
+Dim dictRoomSpells As Scripting.Dictionary
 Dim dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary
-Dim nNextID As Long
 On Error GoTo error:
 
 MME_ExportMessages = 0
@@ -39,8 +48,6 @@ End If
 
 mbGmud = (frmMME_Export.chkLegit(1).Value = 1)
 
-Set dictSeen = New Scripting.Dictionary
-dictSeen.CompareMode = vbBinaryCompare
 Set dictRoomSpells = New Scripting.Dictionary
 dictRoomSpells.CompareMode = vbBinaryCompare
 Set dictLearn = New Scripting.Dictionary
@@ -55,12 +62,11 @@ If tabMessages.RecordCount <> 0 Then
     GoTo tryagain:
 End If
 
-tabMessages.Index = "pkMessages"
-nNextID = 1
 Call ExportItemScan(dictLearn, dictItemCast, bStop)
-If bStop = False And mbFailed = False Then Call ExportRoomMessages(tabMessages, dictSeen, nNextID, dictRoomSpells, bStop)
-If bStop = False And mbFailed = False Then Call ExportSpellMessages(tabMessages, dictSeen, nNextID, dictRoomSpells, dictLearn, dictItemCast, bStop)
-If bStop = False And mbFailed = False Then Call ExportMonsterMessages(tabMessages, dictSeen, nNextID, bStop)
+If bStop = False And mbFailed = False Then Call ExportRoomMessages(dictRoomSpells, bStop)
+If bStop = False And mbFailed = False Then Call ExportSpellMessages(dictRoomSpells, dictLearn, dictItemCast, bStop)
+If bStop = False And mbFailed = False Then Call ExportMonsterMessages(bStop)
+If bStop = False And mbFailed = False Then Call FinalizeRows(tabMessages)
 
 If mbFailed Then
     MME_ExportMessages = -1
@@ -69,7 +75,6 @@ Else
 End If
 
 Call CleanupState
-Set dictSeen = Nothing
 Set dictRoomSpells = Nothing
 Set dictLearn = Nothing
 Set dictItemCast = Nothing
@@ -78,7 +83,6 @@ Exit Function
 error:
 Call HandleError("MME_ExportMessages")
 Call CleanupState
-Set dictSeen = Nothing
 Set dictRoomSpells = Nothing
 Set dictLearn = Nothing
 Set dictItemCast = Nothing
@@ -106,6 +110,16 @@ End If
 
 Set mdictLogged = New Scripting.Dictionary
 mdictLogged.CompareMode = vbBinaryCompare
+
+mRowCount = 0
+ReDim mRowKind(255)
+ReDim mRowName(255)
+ReDim mRowMsg(255)
+ReDim mRowEnd(255)
+ReDim mRowEff(255)
+ReDim mRowDrop(255)
+Set mdictRows = New Scripting.Dictionary
+mdictRows.CompareMode = vbBinaryCompare
 
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
@@ -137,6 +151,15 @@ Set mReP3 = Nothing
 Set mReP4 = Nothing
 Set mReP5 = Nothing
 Set mReP6 = Nothing
+
+Set mdictRows = Nothing
+Erase mRowKind
+Erase mRowName
+Erase mRowMsg
+Erase mRowEnd
+Erase mRowEff
+Erase mRowDrop
+mRowCount = 0
 
 Err.clear
 End Sub
@@ -322,49 +345,62 @@ mbFailed = True
 End Function
 
 '---------------------------------------------------------------------------
-' Row writer (dedupe + truncation)
+' Row store (dedupe + truncation) and finalize
 '---------------------------------------------------------------------------
 
-'returns 1 when the line is exportable (written now or already present), 0 when blank
-Private Function AddRow(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, ByVal sName As String, _
-    ByVal sKind As String, ByVal sText As String, ByVal sEndText As String, ByVal sEffects As String) As Long
-Dim sKey As String, bTrunc As Boolean
+'returns 1 when the line is exportable (stored now or already present), 0 when blank
+Private Function AddRow(ByVal sName As String, ByVal sKind As String, ByVal sText As String, ByVal sEndText As String, _
+    ByVal sEffects As String) As Long
+Dim sKey As String, bTrunc As Boolean, i As Long, nCap As Long
 On Error GoTo error:
 
 AddRow = 0
 If sText = "" And sEndText = "" Then Exit Function
 AddRow = 1
 
-If Len(sName) > 50 Then sName = Left$(sName, 50): bTrunc = True
 If Len(sText) > 100 Then sText = Left$(sText, 100): bTrunc = True
 If Len(sEndText) > 100 Then sEndText = Left$(sEndText, 100): bTrunc = True
 If Len(sEffects) > 255 Then sEffects = Left$(sEffects, 255): bTrunc = True
 
 'Cast rows confirm the player's own action, so the name is part of the row; every other row is a line the
-'game shows the player, and the same text with the same effects means the same thing whatever produced it.
+'game shows the player, and the same text means the same thing whatever produced it (effects are merged).
 If sKind = "Cast" Then
-    sKey = sKind & "|" & sName & "|" & sText & "|" & sEndText & "|" & sEffects
+    sKey = "Cast|" & sName & "|" & sText & "|" & sEndText
 Else
-    sKey = sKind & "|" & sText & "|" & sEndText & "|" & sEffects
+    sKey = sKind & "|" & sText & "|" & sEndText
 End If
-If dictSeen.Exists(sKey) Then
-    'Same line from another source: if the names differ the line is realm-wide, so the stored row loses its name.
-    Call BlankNameOnCollision(rs, dictSeen, sKey, sName)
+
+If mdictRows.Exists(sKey) Then
+    i = mdictRows.Item(sKey)
+    mRowEff(i) = MergeEffects(mRowEff(i), sEffects)
+    'same line from a differently named source: the line is realm-wide, so the row loses its name
+    If Not mRowName(i) = "" Then
+        If StrComp(mRowName(i), sName, vbTextCompare) <> 0 Then mRowName(i) = ""
+    End If
     Exit Function
 End If
-dictSeen.Add sKey, CStr(nNextID) & "|" & sName
 
 If bTrunc Then Call LogWarning("Row truncated: Kind=" & sKind & " Name=" & sName & " Text=" & sText)
 
-rs.AddNew
-rs.Fields("ID") = nNextID
-rs.Fields("Name") = IIf(sName = "", Chr(0), sName)
-rs.Fields("Kind") = sKind
-rs.Fields("Msg") = IIf(sText = "", Chr(0), sText)
-rs.Fields("EndMsg") = IIf(sEndText = "", Chr(0), sEndText)
-rs.Fields("Effects") = IIf(sEffects = "", Chr(0), sEffects)
-rs.Update
-nNextID = nNextID + 1
+If mRowCount > UBound(mRowKind) Then
+    nCap = UBound(mRowKind) + 256
+    ReDim Preserve mRowKind(nCap)
+    ReDim Preserve mRowName(nCap)
+    ReDim Preserve mRowMsg(nCap)
+    ReDim Preserve mRowEnd(nCap)
+    ReDim Preserve mRowEff(nCap)
+    ReDim Preserve mRowDrop(nCap)
+End If
+
+i = mRowCount
+mRowKind(i) = sKind
+mRowName(i) = sName
+mRowMsg(i) = sText
+mRowEnd(i) = sEndText
+mRowEff(i) = sEffects
+mRowDrop(i) = False
+mdictRows.Add sKey, i
+mRowCount = mRowCount + 1
 
 Exit Function
 error:
@@ -372,42 +408,40 @@ Call HandleError("AddRow")
 mbFailed = True
 End Function
 
-'dictSeen holds "rowid|name" per key. When a second source with a different name produces the same row,
-'the row is edited to have no name (one row, realm-wide).
-Private Sub BlankNameOnCollision(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByVal sKey As String, ByVal sName As String)
-Dim sStored As String, nBar As Long, nID As Long, sOldName As String
+'union of two comma lists: order of first appearance, no blanks, no duplicates
+Private Function MergeEffects(ByVal sA As String, ByVal sB As String) As String
+Dim sParts() As String, sOut As String, sID As String, x As Long
 On Error GoTo error:
 
-sStored = dictSeen.Item(sKey)
-nBar = InStr(1, sStored, "|")
-If nBar = 0 Then Exit Sub
-nID = Val(Left$(sStored, nBar - 1))
-sOldName = Mid$(sStored, nBar + 1)
-If sOldName = "" Then Exit Sub
-If StrComp(sOldName, sName, vbTextCompare) = 0 Then Exit Sub
+sOut = ""
+sParts = Split(sA & "," & sB, ",")
+For x = 0 To UBound(sParts)
+    sID = Trim$(sParts(x))
+    If Not sID = "" Then
+        If InStr(1, "," & sOut & ",", "," & sID & ",", vbBinaryCompare) = 0 Then
+            If Not sOut = "" Then sOut = sOut & ","
+            sOut = sOut & sID
+        End If
+    End If
+Next x
 
-rs.Seek "=", nID
-If rs.NoMatch Then Exit Sub
-rs.Edit
-rs.Fields("Name") = Chr(0)
-rs.Update
-dictSeen.Item(sKey) = CStr(nID) & "|"
+MergeEffects = sOut
 
-Exit Sub
+Exit Function
 error:
-Call HandleError("BlankNameOnCollision")
+Call HandleError("MergeEffects")
 mbFailed = True
-End Sub
+End Function
 
-'writes the same row once per name; returns 1 when the line is exportable
-Private Function AddRowEach(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, sNames() As String, _
-    ByVal nNames As Long, ByVal sKind As String, ByVal sText As String, ByVal sEndText As String, ByVal sEffects As String) As Long
+'stores the same row once per name; returns 1 when the line is exportable
+Private Function AddRowEach(sNames() As String, ByVal nNames As Long, ByVal sKind As String, ByVal sText As String, _
+    ByVal sEndText As String, ByVal sEffects As String) As Long
 Dim x As Long
 On Error GoTo error:
 
 AddRowEach = 0
 For x = 0 To nNames - 1
-    If AddRow(rs, dictSeen, nNextID, sNames(x), sKind, sText, sEndText, sEffects) = 1 Then AddRowEach = 1
+    If AddRow(sNames(x), sKind, sText, sEndText, sEffects) = 1 Then AddRowEach = 1
     If mbFailed Then Exit For
 Next x
 
@@ -416,6 +450,69 @@ error:
 Call HandleError("AddRowEach")
 mbFailed = True
 End Function
+
+'Drops each Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
+'player), merging its effects into that row, then writes every surviving row once with IDs 1, 2, 3...
+'A row without a name is named by its text.
+Private Sub FinalizeRows(rs As DAO.Recordset)
+Dim dictYou As Scripting.Dictionary, sVariant As String, sName As String
+Dim i As Long, j As Long, nID As Long
+On Error GoTo error:
+
+frmMME_Export.lblPanel(1).Caption = "Messages: writing ..."
+
+Set dictYou = New Scripting.Dictionary
+dictYou.CompareMode = vbBinaryCompare
+
+For i = 0 To mRowCount - 1
+    If Not mRowKind(i) = "Self" And mRowEnd(i) = "" Then
+        If InStr(1, mRowMsg(i), "{target}", vbBinaryCompare) > 0 Then
+            sVariant = Replace(Replace(mRowMsg(i), "{target}'s", "your"), "{target}", "you")
+            If Not dictYou.Exists(sVariant) Then dictYou.Add sVariant, i
+        End If
+    End If
+Next i
+
+For i = 0 To mRowCount - 1
+    If mRowKind(i) = "Self" And mRowEnd(i) = "" Then
+        If dictYou.Exists(mRowMsg(i)) Then
+            j = dictYou.Item(mRowMsg(i))
+            mRowEff(j) = MergeEffects(mRowEff(j), mRowEff(i))
+            mRowDrop(i) = True
+        End If
+    End If
+Next i
+
+nID = 1
+For i = 0 To mRowCount - 1
+    If Not mRowDrop(i) Then
+        sName = mRowName(i)
+        If sName = "" Then sName = mRowMsg(i)
+        If sName = "" Then sName = mRowEnd(i)
+
+        rs.AddNew
+        rs.Fields("ID") = nID
+        rs.Fields("Name") = IIf(sName = "", Chr(0), Left$(sName, 100))
+        rs.Fields("Kind") = Left$(mRowKind(i), 100)
+        rs.Fields("Msg") = IIf(mRowMsg(i) = "", Chr(0), Left$(mRowMsg(i), 100))
+        rs.Fields("EndMsg") = IIf(mRowEnd(i) = "", Chr(0), Left$(mRowEnd(i), 100))
+        rs.Fields("Effects") = IIf(mRowEff(i) = "", Chr(0), Left$(mRowEff(i), 255))
+        rs.Update
+
+        If nID Mod 100 = 0 Then frmMME_Export.lblPanel(1).Caption = "Messages: writing (" & nID & ")"
+        nID = nID + 1
+        If Not bUseCPU Then DoEvents
+    End If
+Next i
+
+Set dictYou = Nothing
+
+Exit Sub
+error:
+Call HandleError("FinalizeRows")
+Set dictYou = Nothing
+mbFailed = True
+End Sub
 
 '---------------------------------------------------------------------------
 ' Pass 0: items (spells learnable from items, spells cast by items)
@@ -475,8 +572,7 @@ End Sub
 ' Pass 1: rooms (trap rows + room spell list)
 '---------------------------------------------------------------------------
 
-Private Sub ExportRoomMessages(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, _
-    dictRoomSpells As Scripting.Dictionary, ByRef bStop As Boolean)
+Private Sub ExportRoomMessages(dictRoomSpells As Scripting.Dictionary, ByRef bStop As Boolean)
 Dim nStatus As Integer, nCount As Long
 On Error GoTo error:
 
@@ -493,7 +589,7 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
     If nCount Mod 25 = 0 Then frmMME_Export.lblPanel(1).Caption = "Messages: rooms (" & nCount & ")"
 
     If Not UCase(Left(Roomrec.Name, 11)) = "BUFFER ROOM" Then
-        Call ProcessRoom(rs, dictSeen, nNextID, dictRoomSpells)
+        Call ProcessRoom(dictRoomSpells)
     End If
 
     nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
@@ -506,7 +602,7 @@ Call HandleError("ExportRoomMessages")
 mbFailed = True
 End Sub
 
-Private Sub ProcessRoom(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, dictRoomSpells As Scripting.Dictionary)
+Private Sub ProcessRoom(dictRoomSpells As Scripting.Dictionary)
 Dim x As Integer, sSrc As String, sRole As String
 On Error GoTo error:
 
@@ -520,11 +616,11 @@ For x = 0 To 9
     If Not Roomrec.RoomExit(x) = 0 Then
         Select Case Roomrec.RoomType(x)
             Case 9:
-                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para3(x), sSrc, sRole)
-                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para4(x), sSrc, sRole)
+                Call TrapRow(Roomrec.Para3(x), sSrc, sRole)
+                Call TrapRow(Roomrec.Para4(x), sSrc, sRole)
             Case 24:
-                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para4(x), sSrc, sRole)
-                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para3(x), sSrc, sRole)
+                Call TrapRow(Roomrec.Para4(x), sSrc, sRole)
+                Call TrapRow(Roomrec.Para3(x), sSrc, sRole)
         End Select
     End If
 Next x
@@ -536,8 +632,7 @@ mbFailed = True
 End Sub
 
 'trap trigger / disarm-fail line 1: Self, nameless, Damage,Trap
-Private Sub TrapRow(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, ByVal nMsg As Long, _
-    ByVal sSrc As String, ByVal sRole As String)
+Private Sub TrapRow(ByVal nMsg As Long, ByVal sSrc As String, ByVal sRole As String)
 Dim sRaw As String, sText As String, bFlag As Boolean
 On Error GoTo error:
 
@@ -548,7 +643,7 @@ If sRaw = "" Then Exit Sub
 bFlag = False
 sText = NormalizeWith(sRaw, "", bFlag)
 If bFlag Then Call LogUnmatched(sSrc & " " & sRole & " line 1", sRaw)
-Call AddRow(rs, dictSeen, nNextID, "", "Self", sText, "", "Damage,Trap")
+Call AddRow("", "Self", sText, "", "Damage,Trap")
 
 Exit Sub
 error:
@@ -560,8 +655,7 @@ End Sub
 ' Pass 2: spells
 '---------------------------------------------------------------------------
 
-Private Sub ExportSpellMessages(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, _
-    dictRoomSpells As Scripting.Dictionary, dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary, ByRef bStop As Boolean)
+Private Sub ExportSpellMessages(dictRoomSpells As Scripting.Dictionary, dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary, ByRef bStop As Boolean)
 Dim nStatus As Integer, nCount As Long
 On Error GoTo error:
 
@@ -577,7 +671,7 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
     nCount = nCount + 1
     If nCount Mod 25 = 0 Then frmMME_Export.lblPanel(1).Caption = "Messages: spells (" & nCount & ")"
 
-    Call ProcessSpell(rs, dictSeen, nNextID, dictRoomSpells, dictLearn, dictItemCast)
+    Call ProcessSpell(dictRoomSpells, dictLearn, dictItemCast)
 
     nStatus = BTRCALL(BGETNEXT, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), ByVal SpellKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
@@ -589,8 +683,7 @@ Call HandleError("ExportSpellMessages")
 mbFailed = True
 End Sub
 
-Private Sub ProcessSpell(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, _
-    dictRoomSpells As Scripting.Dictionary, dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary)
+Private Sub ProcessSpell(dictRoomSpells As Scripting.Dictionary, dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary)
 Dim sName As String, sSrc As String, sEffects As String, sKey As String
 Dim sItemNames As String, sTargetTok As String, sNames() As String, nNames As Long
 Dim sSelfNames() As String, nSelfNames As Long, bFriendly As Boolean
@@ -661,13 +754,13 @@ If Not Trim(sConf1) = "" Then
 End If
 
 nRows = 0
-nRows = nRows + SpellStatusRow(rs, dictSeen, nNextID, sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
-If Not bMergeFail Then nRows = nRows + SpellFailRow(rs, dictSeen, nNextID, sSrc, sConf1)
+nRows = nRows + SpellStatusRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
+If Not bMergeFail Then nRows = nRows + SpellFailRow(sSrc, sConf1)
 If bPlayer Or Not sItemNames = "" Then
-    nRows = nRows + SpellCastRow(rs, dictSeen, nNextID, sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
+    nRows = nRows + SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
 End If
-nRows = nRows + SpellIncomingRow(rs, dictSeen, nNextID, sSelfNames, nSelfNames, sName, sSrc, nDesc, bShort, sEffects)
-nRows = nRows + SpellShieldRows(rs, dictSeen, nNextID, sSelfNames, nSelfNames, sSrc, nShock)
+nRows = nRows + SpellIncomingRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, bShort, sEffects)
+nRows = nRows + SpellShieldRows(sSelfNames, nSelfNames, sSrc, nShock)
 
 If sName = "" And nRows > 0 Then Call LogWarning("Spell " & Spellrec.Number & ": blank spell name")
 
@@ -727,7 +820,7 @@ BuildNameList = 0
 End Function
 
 'DescMsg (115): Msg = line 3, EndMsg = line 1; Kind Self
-Private Function SpellStatusRow(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, sNames() As String, _
+Private Function SpellStatusRow(sNames() As String, _
     ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal nDesc As Long, ByVal sRaw3 As String, _
     ByVal sEffects As String, ByVal bMergeFail As Boolean) As Long
 Dim sRaw1 As String, sText As String, sEnd As String, bFlag As Boolean
@@ -748,7 +841,7 @@ sEnd = NormalizeWith(sRaw1, sName, bFlag)
 If bFlag Then Call LogUnmatched(sSrc & " desc line 1", sRaw1)
 
 If bMergeFail Then Call AddEffect(sEffects, "Fail")
-SpellStatusRow = AddRowEach(rs, dictSeen, nNextID, sNames, nNames, "Self", sText, sEnd, sEffects)
+SpellStatusRow = AddRowEach(sNames, nNames, "Self", sText, sEnd, sEffects)
 
 Exit Function
 error:
@@ -757,8 +850,7 @@ mbFailed = True
 End Function
 
 'ConfuseMsg (101) line 1, not merged into the status row: Self, nameless, Fail only
-Private Function SpellFailRow(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, _
-    ByVal sSrc As String, ByVal sRaw As String) As Long
+Private Function SpellFailRow(ByVal sSrc As String, ByVal sRaw As String) As Long
 Dim sText As String, bFlag As Boolean
 On Error GoTo error:
 
@@ -768,7 +860,7 @@ If Trim(sRaw) = "" Then Exit Function
 bFlag = False
 sText = NormalizeWith(sRaw, "", bFlag)
 If bFlag Then Call LogUnmatched(sSrc & " confuse line 1", sRaw)
-SpellFailRow = AddRow(rs, dictSeen, nNextID, "", "Self", sText, "", "Fail")
+SpellFailRow = AddRow("", "Self", sText, "", "Fail")
 
 Exit Function
 error:
@@ -777,7 +869,7 @@ mbFailed = True
 End Function
 
 'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells
-Private Function SpellCastRow(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, sNames() As String, _
+Private Function SpellCastRow(sNames() As String, _
     ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, ByVal sTargetTok As String, _
     ByVal sEffects As String) As Long
 Dim sRaw As String, sText As String, sList As String, bFlag As Boolean
@@ -803,7 +895,7 @@ If IsStandardForm(mReP3, sText) Then Exit Function
 If IsStandardForm(mReP4, sText) Then Exit Function
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 1", sRaw)
-SpellCastRow = AddRowEach(rs, dictSeen, nNextID, sNames, nNames, "Cast", sText, "", sEffects)
+SpellCastRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
 
 Exit Function
 error:
@@ -812,7 +904,7 @@ mbFailed = True
 End Function
 
 'CastMsgB line 2 (what the target sees): Self
-Private Function SpellIncomingRow(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, sNames() As String, _
+Private Function SpellIncomingRow(sNames() As String, _
     ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal nDesc As Long, ByVal bShort As Boolean, _
     ByVal sEffects As String) As Long
 Dim sRaw As String, sText As String, sList As String, bFlag As Boolean, bExport As Boolean
@@ -846,7 +938,7 @@ End If
 If bExport = False Then Exit Function
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 2", sRaw)
-SpellIncomingRow = AddRowEach(rs, dictSeen, nNextID, sNames, nNames, "Self", sText, "", sEffects)
+SpellIncomingRow = AddRowEach(sNames, nNames, "Self", sText, "", sEffects)
 
 Exit Function
 error:
@@ -855,7 +947,7 @@ mbFailed = True
 End Function
 
 'ShockMsg (137): line 1 (shield owner) and line 2 (attacker hit by the shield); Self, Damage,DamageShield
-Private Function SpellShieldRows(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, sNames() As String, _
+Private Function SpellShieldRows(sNames() As String, _
     ByVal nNames As Long, ByVal sSrc As String, ByVal nShock As Long) As Long
 Dim sRaw As String, sText As String, bFlag As Boolean, nRows As Long
 On Error GoTo error:
@@ -869,7 +961,7 @@ If Not sRaw = "" Then
     sText = NormalizeWith(sRaw, "{attacker}|{dmg}", bFlag)
     If Not (IsStandardForm(mReP3, sText) Or IsStandardForm(mReP4, sText)) Then
         If bFlag Then Call LogUnmatched(sSrc & " shock line 1", sRaw)
-        nRows = nRows + AddRowEach(rs, dictSeen, nNextID, sNames, nNames, "Self", sText, "", "Damage,DamageShield")
+        nRows = nRows + AddRowEach(sNames, nNames, "Self", sText, "", "Damage,DamageShield")
     End If
 End If
 
@@ -879,7 +971,7 @@ If Not sRaw = "" Then
     sText = NormalizeWith(sRaw, "{dmg}", bFlag)
     If Not (IsStandardForm(mReP3, sText) Or IsStandardForm(mReP4, sText)) Then
         If bFlag Then Call LogUnmatched(sSrc & " shock line 2", sRaw)
-        nRows = nRows + AddRowEach(rs, dictSeen, nNextID, sNames, nNames, "Self", sText, "", "Damage,DamageShield")
+        nRows = nRows + AddRowEach(sNames, nNames, "Self", sText, "", "Damage,DamageShield")
     End If
 End If
 
@@ -1005,7 +1097,7 @@ End Function
 ' Pass 3: monsters
 '---------------------------------------------------------------------------
 
-Private Sub ExportMonsterMessages(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, ByRef bStop As Boolean)
+Private Sub ExportMonsterMessages(ByRef bStop As Boolean)
 Dim nStatus As Integer, nCount As Long
 On Error GoTo error:
 
@@ -1021,7 +1113,7 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
     nCount = nCount + 1
     If nCount Mod 25 = 0 Then frmMME_Export.lblPanel(1).Caption = "Messages: monsters (" & nCount & ")"
 
-    Call ProcessMonster(rs, dictSeen, nNextID)
+    Call ProcessMonster
 
     nStatus = BTRCALL(BGETNEXT, MonsterPosBlock, Monsterdatabuf, Len(Monsterdatabuf), ByVal MonsterKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
@@ -1033,7 +1125,7 @@ Call HandleError("ExportMonsterMessages")
 mbFailed = True
 End Sub
 
-Private Sub ProcessMonster(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long)
+Private Sub ProcessMonster()
 Dim sMon As String, sSrc As String, i As Integer
 Dim nDeath As Long, sRaw As String, sText As String, bFlag As Boolean
 On Error GoTo error:
@@ -1043,12 +1135,12 @@ sSrc = "Monster " & Monsterrec.Number & " (" & sMon & ")"
 
 For i = 0 To 4
     If Monsterrec.AttackType(i) = 1 And Monsterrec.AttackHitMsg(i) > 1 Then
-        Call MonsterHitRows(rs, dictSeen, nNextID, Monsterrec.AttackHitMsg(i), sSrc, "attack " & i)
+        Call MonsterHitRows(Monsterrec.AttackHitMsg(i), sSrc, "attack " & i)
     End If
 Next i
 
-'death text only for monsters that regenerate or are game-limited
-If Not (Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0) Then Exit Sub
+'death text only for monsters that regenerate or are game-limited and give more than 1 experience
+If Not ((Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0) And SLong2ULong(Monsterrec.Experience) > 1) Then Exit Sub
 
 nDeath = Monsterrec.DeathMsg
 If nDeath <= 1 And Monsterrec.AttackType(0) = 1 Then nDeath = Monsterrec.AttackHitMsg(0)
@@ -1060,7 +1152,7 @@ If sRaw = "" Then Exit Sub
 bFlag = False
 sText = NormalizeWith(sRaw, "{source}", bFlag)
 If bFlag Then Call LogUnmatched(sSrc & " death line 3", sRaw)
-Call AddRow(rs, dictSeen, nNextID, sMon, "Other", sText, "", "Death")
+Call AddRow(sMon, "Other", sText, "", "Death")
 
 Exit Sub
 error:
@@ -1069,8 +1161,7 @@ mbFailed = True
 End Sub
 
 'AttackHitMsg line 1 = hit on me (Self); line 2 = hit on someone else (Other), only when line 1 was exported
-Private Sub MonsterHitRows(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, ByVal nMsg As Long, _
-    ByVal sSrc As String, ByVal sRole As String)
+Private Sub MonsterHitRows(ByVal nMsg As Long, ByVal sSrc As String, ByVal sRole As String)
 Dim sRaw As String, sText As String, bFlag As Boolean
 On Error GoTo error:
 
@@ -1082,7 +1173,7 @@ sText = NormalizeWith(sRaw, "{source}|{dmg}", bFlag)
 If IsStandardForm(mReP5, sText) Then Exit Sub
 If IsStandardForm(mReP3, sText) Then Exit Sub
 If bFlag Then Call LogUnmatched(sSrc & " " & sRole & " line 1", sRaw)
-If AddRow(rs, dictSeen, nNextID, "", "Self", sText, "", "Damage,Monster") = 0 Then Exit Sub
+If AddRow("", "Self", sText, "", "Damage,Monster") = 0 Then Exit Sub
 
 sRaw = ReadMsgLine(nMsg, 2, sSrc, sRole)
 If sRaw = "" Then Exit Sub
@@ -1091,7 +1182,7 @@ bFlag = False
 sText = NormalizeWith(sRaw, "{source}|{target}|{dmg}", bFlag)
 If IsStandardForm(mReP6, sText) Then Exit Sub
 If bFlag Then Call LogUnmatched(sSrc & " " & sRole & " line 2", sRaw)
-Call AddRow(rs, dictSeen, nNextID, "", "Other", sText, "", "Damage,Monster")
+Call AddRow("", "Other", sText, "", "Damage,Monster")
 
 Exit Sub
 error:
