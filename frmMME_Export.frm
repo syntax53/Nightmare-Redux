@@ -380,6 +380,16 @@ Begin VB.Form frmMME_Export
          Width           =   975
       End
       Begin VB.CheckBox chkOnly 
+         Caption         =   "Messages"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   8
+         Left            =   4140
+         TabIndex        =   49
+         Top             =   1560
+         Width           =   1035
+      End
+      Begin VB.CheckBox chkOnly 
          Caption         =   "Export Only ..."
          BeginProperty Font 
             Name            =   "MS Sans Serif"
@@ -612,6 +622,7 @@ Dim tabMonsters As Recordset
 Dim tabShops As Recordset
 Dim tabRooms As Recordset
 Dim tabLairs As Recordset
+Dim tabMessages As Recordset
 Dim tabTBInfo As Recordset
 Dim tabTempRS As Recordset
 
@@ -1158,7 +1169,7 @@ Select Case Index
     Case 0:
         If chkOnly(0).Value = 1 Then bAction = True
         
-        For x = 1 To 7
+        For x = 1 To 8
             If Not x = 5 And Not x = 6 Then chkOnly(x).Enabled = bAction
         Next x
     Case 1: 'items
@@ -1447,6 +1458,7 @@ Dim x As Long, y As Long ', sPath As String
 Dim sNewPath() As String
 Dim StartTime As Long, nTotalTime As Double, sTotalTime As String
 Dim nTmp As Integer, nStatus As Integer, frmForm As Form
+Dim nMsgWarnings As Long
 
 'UnloadForms (Me.Name)
 Unload frmProgressBar
@@ -1489,6 +1501,7 @@ dictLairInfo.CompareMode = vbTextCompare
 ReDim colLairs(0)
 'ReDim colNONLairs(0)
 
+nMsgWarnings = 0
 nTmp = CreateDatabase
 Select Case nTmp
     Case 3: 'cancel
@@ -1521,6 +1534,15 @@ Call WriteINI("Settings", "FileName", sDataSource, sConfigFile)
 
 Set DB = OpenDatabase(sDataSource)
 Call OpenTables
+
+If bUpdateExistingADB Then
+    If HasMessagesSchema = False Then
+        MsgBox "This export was made by an older version of NMR and has no Messages table." & vbCrLf _
+            & "Create a new export instead of updating this one.", vbExclamation
+        Call CloseDB(True)
+        GoTo ReEnable:
+    End If
+End If
 
 If bUpdateExistingADB Then
     If CheckVersion = False Then
@@ -1659,6 +1681,11 @@ If bStopExport Then GoTo canceled:
 If (chkOnly(0).Value = 0) Or (chkOnly(0).Value = 1 And chkOnly(2).Value = 1) Then Call ExportMonsters
 DoEvents
 If bStopExport Then GoTo canceled:
+If (chkOnly(0).Value = 0) Or (chkOnly(0).Value = 1 And chkOnly(8).Value = 1) Then
+    nMsgWarnings = MME_ExportMessages(tabMessages, sExportPath & "\NMR-Log_MMEMessages.txt", bStopExport)
+End If
+DoEvents
+If bStopExport Then GoTo canceled:
 Call ExportVersionInfo
 If bStopExport Then GoTo canceled:
 DoEvents
@@ -1688,7 +1715,8 @@ nTotalTime = Timer - StartTime
 sTotalTime = CStr(Round(CDbl(nTotalTime / 60), 2))
 sTotalTime = Left(sTotalTime, InStr(1, sTotalTime, ".") + 2)
 
-MsgBox "Export Complete." & vbCrLf & vbCrLf & "Total time: " & sTotalTime & " minutes.", vbInformation
+MsgBox "Export Complete." & vbCrLf & vbCrLf & "Total time: " & sTotalTime & " minutes." _
+    & IIf(nMsgWarnings > 0, vbCrLf & vbCrLf & nMsgWarnings & " message warnings written to NMR-Log_MMEMessages.txt", IIf(nMsgWarnings < 0, vbCrLf & vbCrLf & "Messages table export FAILED (see the earlier error).", "")), vbInformation
 GoTo ReEnable:
 
 canceled:
@@ -2074,6 +2102,9 @@ If chkOnly(0).Value = 1 Then
         tabItems.Fields("In Game") = 0
         tabItems.Fields("Obtained From") = Chr(0)
         tabItems.Fields("References") = Chr(0)
+        tabItems.Fields("HitVerbs") = Chr(0)
+        tabItems.Fields("HitVerbsOther") = Chr(0)
+        tabItems.Fields("MissVerbs") = Chr(0)
         
         For x = 0 To 9
             tabItems.Fields("ClassRest-" & x) = 0
@@ -5374,6 +5405,16 @@ Do While nStatus = 0 And bStopExport = False
     tabItems.Fields("In Game") = IIf(bAllInGame, True, False)
     tabItems.Fields("Obtained From") = Chr(0)
     tabItems.Fields("References") = Chr(0)
+    'swing verbs only mean something on a weapon; other items carry leftover message numbers
+    If Itemrec.Weapon > 0 Then
+        tabItems.Fields("HitVerbs") = MsgLineOrNull(Itemrec.HitMsg, 1)
+        tabItems.Fields("HitVerbsOther") = MsgLineOrNull(Itemrec.HitMsg, 2)
+        tabItems.Fields("MissVerbs") = MsgLineOrNull(Itemrec.MissMsg, 1)
+    Else
+        tabItems.Fields("HitVerbs") = Chr(0)
+        tabItems.Fields("HitVerbsOther") = Chr(0)
+        tabItems.Fields("MissVerbs") = Chr(0)
+    End If
     
     For x = 0 To 9
         tabItems.Fields("ClassRest-" & x) = Itemrec.Class(x)
@@ -5402,6 +5443,23 @@ Loop
 
 
 End Sub
+Private Function MsgLineOrNull(ByVal nMsg As Long, ByVal nLine As Integer) As String
+On Error GoTo error:
+Dim sTemp As String
+
+MsgLineOrNull = Chr(0)
+If nMsg <= 1 Then Exit Function
+
+sTemp = RTrim(GetMessages(nMsg, nLine))
+If sTemp = "" Or sTemp = "none" Or sTemp = "MSG NOT IN DATABASE!" Then Exit Function
+
+MsgLineOrNull = Left(sTemp, 74)
+
+Exit Function
+error:
+Call HandleError("MsgLineOrNull")
+MsgLineOrNull = Chr(0)
+End Function
 Private Sub ExportSpells()
 Dim nStatus As Integer, recnum As Long, x As Integer
 
@@ -6255,6 +6313,28 @@ Erase sActions
 Erase sNewActions
 End Sub
 
+Private Function HasMessagesSchema() As Boolean
+On Error GoTo notfound:
+Dim tdf As DAO.TableDef, fld As DAO.Field
+
+HasMessagesSchema = False
+
+Set tdf = DB.TableDefs("Messages")
+Set tdf = DB.TableDefs("Items")
+Set fld = tdf.Fields("HitVerbs")
+
+Set fld = Nothing
+Set tdf = Nothing
+HasMessagesSchema = True
+Exit Function
+
+notfound:
+If Not Err.Number = 3265 Then Call HandleError("HasMessagesSchema")
+Set fld = Nothing
+Set tdf = Nothing
+HasMessagesSchema = False
+End Function
+
 Private Function CheckVersion() As Boolean
 On Error GoTo error:
 Dim nYesNo As Integer, sVer As String, sCurrentVer As String, sNMRVer As String
@@ -6367,7 +6447,7 @@ Dim catNewDB As ADOX.Catalog
 Dim tabNewMonsters As ADOX.Table, tabNewSpells As ADOX.Table, tabNewShops As ADOX.Table
 Dim tabNewClasses As ADOX.Table, tabNewRaces As ADOX.Table, tabNewItems As ADOX.Table
 Dim tabNewInfo As ADOX.Table, tabNewRooms As ADOX.Table, tabNewTBInfo As ADOX.Table
-Dim tabNewLairs As ADOX.Table
+Dim tabNewLairs As ADOX.Table, tabNewMessages As ADOX.Table
 
 Dim pkClasses As New ADOX.Key
 Dim pkRaces As New ADOX.Key
@@ -6378,6 +6458,7 @@ Dim pkSpells As New ADOX.Key
 Dim idxRooms As New ADOX.Index
 Dim pkTBInfo As New ADOX.Key
 Dim pkLairs As New ADOX.Key
+Dim pkMessages As New ADOX.Key
 Dim x As Integer
 
 CreateTables = False
@@ -6393,6 +6474,7 @@ Set tabNewRooms = New ADOX.Table
 Set tabNewTBInfo = New ADOX.Table
 Set tabNewInfo = New ADOX.Table
 Set tabNewLairs = New ADOX.Table
+Set tabNewMessages = New ADOX.Table
 
 'open the database
 catNewDB.ActiveConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" & "Data Source=" & sDataSource
@@ -6668,6 +6750,9 @@ With tabNewItems
     .Columns.Append "In Game", adInteger
     .Columns.Append "Obtained From", adLongVarWChar, 2000 ', adVarWChar
     .Columns.Append "References", adLongVarWChar, 2000
+    .Columns.Append "HitVerbs", adVarWChar, 74
+    .Columns.Append "HitVerbsOther", adVarWChar, 74
+    .Columns.Append "MissVerbs", adVarWChar, 74
     
 End With
 catNewDB.Tables.Append tabNewItems
@@ -6722,6 +6807,18 @@ With tabNewTBInfo
 End With
 'tabNewTBInfo("Action").Attributes = adColNullable
 catNewDB.Tables.Append tabNewTBInfo
+
+DoEvents
+With tabNewMessages
+    .Name = "Messages"
+    .Columns.Append "ID", adInteger
+    .Columns.Append "Name", adVarWChar, 100
+    .Columns.Append "Kind", adVarWChar, 12
+    .Columns.Append "Msg", adVarWChar, 100
+    .Columns.Append "EndMsg", adVarWChar, 100
+    .Columns.Append "Effects", adVarWChar, 255
+End With
+catNewDB.Tables.Append tabNewMessages
 
 '-------
 'index's
@@ -6808,6 +6905,16 @@ With pkLairs
 End With
 
 DoEvents
+With pkMessages
+    .Name = "pkMessages"
+    .Type = adKeyPrimary
+    .RelatedTable = "Messages"
+    .Columns.Append "ID"
+    .Columns("ID").RelatedColumn = "ID"
+    .UpdateRule = adRINone
+End With
+
+DoEvents
 With idxRooms
     .Name = "idxRooms"
     .Columns.Append "Map Number"
@@ -6822,6 +6929,7 @@ tabNewMonsters.Keys.Append pkMonsters
 tabNewSpells.Keys.Append pkSpells
 tabNewShops.Keys.Append pkShops
 tabNewTBInfo.Keys.Append pkTBInfo
+tabNewMessages.Keys.Append pkMessages
 tabNewRooms.Indexes.Append idxRooms
 tabNewLairs.Keys.Append pkLairs
 
@@ -6840,6 +6948,7 @@ Set pkItems = Nothing
 Set idxRooms = Nothing
 Set pkTBInfo = Nothing
 Set pkLairs = Nothing
+Set pkMessages = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewInfo = Nothing
@@ -6851,6 +6960,7 @@ Set tabNewItems = Nothing
 Set tabNewMonsters = Nothing
 Set tabNewRooms = Nothing
 Set tabNewLairs = Nothing
+Set tabNewMessages = Nothing
 
 Set catNewDB = Nothing
 
@@ -6869,6 +6979,7 @@ Set pkItems = Nothing
 Set idxRooms = Nothing
 Set pkTBInfo = Nothing
 Set pkLairs = Nothing
+Set pkMessages = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewClasses = Nothing
@@ -6880,6 +6991,7 @@ Set tabNewMonsters = Nothing
 Set tabNewInfo = Nothing
 Set tabNewRooms = Nothing
 Set tabNewLairs = Nothing
+Set tabNewMessages = Nothing
 
 Set catNewDB = Nothing
 End Function
@@ -7025,6 +7137,7 @@ Set tabInfo = DB.OpenRecordset("Info")
 Set tabRooms = DB.OpenRecordset("Rooms")
 Set tabTBInfo = DB.OpenRecordset("TBInfo")
 Set tabLairs = DB.OpenRecordset("Lairs")
+If HasMessagesSchema Then Set tabMessages = DB.OpenRecordset("Messages")
 
 Exit Sub
 error:
@@ -7046,6 +7159,7 @@ tabShops.Close
 tabRooms.Close
 tabTBInfo.Close
 tabLairs.Close
+tabMessages.Close
 
 DB.Close
 

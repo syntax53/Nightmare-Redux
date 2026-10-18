@@ -58,3 +58,126 @@ castsp = 43
 endcast = 151
 
 learnsp - 42
+
+
+-= Messages (added after NMR 1.8.3) =-
+One row per game line a client may need to recognise. Not a dump of the realm's message file:
+message numbers, caster-only lines of monster spells, room lines and flavor text are not exported,
+and lines that follow the standard formats listed further down are left out because clients
+already parse those.
+
+Columns: ID (row id), Name, Kind, Msg, EndMsg, Effects. Bracket column names in SQL ([Name],
+[Msg]): Name is a Jet reserved word, as in the other MME tables. Empty string columns are written
+as a single Chr(0) character (same as the other MME tables).
+
+Kind (who the line is about, from the player's seat):
+  Cast   confirmation that MY spell or item worked, with the amount: "You fire a magic missile at
+         {target} for {dmg} damage!". Name = the spell, or the item that casts it.
+  Self   something happened TO ME. With an EndMsg it is a tracked effect: Msg is printed when the
+         effect starts (and by STAT), EndMsg when it wears off. Without an EndMsg it is a one-off
+         line: incoming damage in a non-standard wording, a failed action (Effects contains Fail),
+         a monster hit with a non-standard verb phrase (Effects contains Monster), a trap
+         (Effects contains Trap). Name = the spell or item for effect rows; empty for lines a
+         client matches by text alone.
+  Other  something happened to someone else that a client may track: a monster hitting another
+         player in a non-standard wording (Damage,Monster), or a monster's death text (Death,
+         Name = the monster).
+
+Name: Cast rows carry the spell's name, or the item's name when an item casts the spell (both when
+players can also cast it and the names differ). Self rows carry a source name only when the player
+can be the one affected by their own spell or item (self, friendly or party target types), e.g.
+"You feel lucky!" under bless, and only when every source of that line has the same name. Every
+other row (status and damage lines of enemy-targeted spells, monster hits, traps, lines shared by
+differently named sources) is realm-wide and is named after its own text, shortened: a leading
+"The {source} " or "{source} ", a trailing " for {dmg} damage!", " {dmg} damage!" or " {dmg} hit
+points!" and any "{target} " or "{target}'s " are dropped (so "The {source} claws you with its
+pincers for {dmg} damage!" is named "claws you with its pincers"; "{source}'s " and "The {source}'s "
+are dropped the same way). Name is never empty. Rows are unique by kind, Msg and EndMsg: the same line from several sources is exported
+once with the union of their Effects. A Self line that is the "you" form of a Cast or Other line
+("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
+"you"/"your" wherever {target} appears and treat the line as being about themselves when it does.
+Death texts are exported only for monsters that regenerate or are game-limited and award more
+than 100 experience. Colour codes embedded in a message are stripped.
+
+Tokens: {source} (the caster or attacking monster, as the game prints it, including any "The"),
+{target}, {dmg}, {attacker} (the one who hit a damage shield). Match them as wildcards; {dmg} is
+an integer. The spell name is written literally. For area, room and party spells the engine
+prints nothing where {target} would be, and the exported text already reflects that ("You cast
+greater healing rain on your party, healing {dmg} damage!"). "{?}" marks a placeholder NMR could
+not identify (the realm's data is inconsistent there).
+
+Placeholder order, should a client want to rebuild the engine's raw line: Cast = spell name,
+{target}, {dmg}; Self from a cast = {source}, spell name, {dmg}; Self/EndMsg from a status
+message = none or spell name; monster hit on me = {source}, {dmg}; monster hit on another =
+{source}, {target}, {dmg} (the engine prints that damage through a string placeholder, so accept
+digits wherever {dmg} appears); trap = {dmg} if present. Spells whose message style byte selects
+the short form use spell-less orders ({target}, {dmg} / {dmg}); exports made with "For GreaterMUD
+Engine" checked follow that engine's reading of the style byte (exact value 1), stock exports use
+bit 0.
+
+Effects (CSV): Poisoned Confused Blinded Held Fear Mute Sleep Damage DamageOverTime Drain Heal
+  HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure (cure poison, dispel,
+  freedom, remove curse) Fail RoomSpell Monster Trap Death. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
+  effect is any Self row with an EndMsg.
+
+The export writes NMR-Log_MMEMessages.txt next to the MDB only when something needed attention:
+a placeholder that could not be mapped ({?}), a missing message record, a blank spell name, or a
+value truncated to its column size.
+
+-= Standard formats clients must implement themselves (never exported) =-
+These are the engine's fixed wordings and the shapes that every custom message follows. A client
+needs them hard-coded; the Messages table only carries what deviates from them.
+<X> = any text, <N> = a number, <verb> = a single word.
+
+Damage to me / to others (line colour: bold red, bold blue or cyan for monster attacks):
+  <attacker> <verb> you for <N> damage!            <attacker> <verb> <target> for <N> damage!
+  <attacker> [critically|savagely|viciously|skillfully|quickly|all-out|surprise] <verb> ...
+  You are <X> for <N> damage!                      You take <N> damage <X>
+  <X> you for <N> damage        (any incoming line with this phrase is a damage attack on me)
+  <X> <target> for <N> damage   (any line with this phrase is a damage attack on someone else)
+  <attacker> casts <X> on|at|upon you for <N> damage!
+  <target> <X> <N> <X> damage!   (any third-party observation of damage or healing)
+Misses and dodges:
+  <attacker> <verb> at <target> ... [but you dodge|sidestep|easily dodge|barely dodge|
+  quickly roll|leap out of|duck the attack]        You quickly backpedal ...
+  ... at you / but misses / and barely misses you! / scrambles to regain balance /
+  looking for an opening! / an opportunity to strike!      <X> ... but ... / misses / glances
+My attacks:
+  You <verb> <target> for <N> damage!              Your inaccurate <X> for <N> damage!
+  <X> ... your foe(s)/enemy/enemies/opponent(s)/adversary/adversaries ... <N> damage
+  You deliver a <X> to <target>                    Your <X> glances off <target>!
+  You miss / swing at / lunge at / fire at / shoot at / double-shoot at / hurl at / hurl your /
+  flail at / lash at / snap at / spray at / swipe at / thrust at <target>
+  ... and barely miss ... / You stumble and / You slip and scramble / You circle and /
+  You advance, looking ...                         You punch / You kick / You jumpkick (no damage)
+  You [feint and|spin and|leap and|lunge and|roll and|duck and|skillfully|quickly] surprise
+  <target>   ... critically ...                    You cannot backstab with <X>
+  Your weapon has no effect ...   Your fists have no effect ...   Your command had no effect
+  You need a weapon <X>
+Engagement:
+  <X> moves to attack you!   <X> moves to attack <Y>   <X> moves to attack everyone in the room
+  <X> moves to cast <spell> on|at|upon <Y>   <X> breaks off combat   <X> moves to protect <Y>
+  <X> tries to rob you
+Death, kills, experience:
+  You have been killed!   But, due to a miracle, you have been saved   <X> drops to the ground!
+  <X> is dead.   You gain <N> experience
+Spell casting:
+  You cast|invoke|sing <spell> [on <target>] ...   You attempt to cast|invoke|sing <spell> ...
+  on yourself / on you / on <your name> / on <party member>
+  You may not cast that   Why would you want to cast <X>   Your spell has no effect
+  There are no more uses <X>   You have already cast|invoked <X>
+  You cast <spell> on <target>, healing <N> damage!   (HP comes from the prompt, not from N)
+  You cast <spell> on <target> for <N> damage!       (and the on|at|upon variants)
+Status and state:
+  You feel ill   You feel sick   You are too sick to rest   (poison)
+  The effects of <X> / You are no longer <X> / Your are no longer <X> / <X> returns to <X> /
+  <X> wear off / <X> wears off          (wear-off keywords; the exact EndMsg is in the table)
+  You are no longer sneaking   You are now resting   You are now meditating
+  You awake from deep meditation feeling stronger
+  The room is pitch black / very dark / dimly lit / barely visible
+  To do this action, <X>   You are overcome with a feeling of guilt
+
+-= Items (added after NMR 1.8.3) =-
+HitVerbs / HitVerbsOther / MissVerbs (weapons only; empty on every other item): "|"-separated verb
+alternatives used in
+"You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.
