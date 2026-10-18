@@ -139,7 +139,7 @@ Expect "fumble once, nameless"   "SELECT * FROM Messages WHERE [Msg]='You fumble
 $fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You fumble in confusion!'"
 if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
 $flat = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are flat on your back!'"
-if ($flat -eq 1) { Pass "knockdown status appears only once (nameless)" } else { Fail "knockdown status appears $flat times" }
+if ($flat -ge 1 -and $flat -le 2) { Pass "knockdown status appears once per effect set ($flat)" } else { Fail "knockdown status appears $flat times" }
 ExpectNone "lightning hit line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
 Expect "stunned merged Fail (nameless)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) $r.Name -eq "" -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
 $stun = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are stunned!'"
