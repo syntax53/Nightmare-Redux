@@ -215,6 +215,9 @@ Do While nPos <= nLen
         sNext = Mid$(sLine, nPos + 1, 1)
         If sNext = "d" Then
             sOut = sOut & "{dmg}"
+            If nUsed < nTokens Then
+                If sTokens(nUsed) = "{dmg}" Then nUsed = nUsed + 1
+            End If
         ElseIf sNext = "s" Then
             If nUsed < nTokens Then
                 sOut = sOut & sTokens(nUsed)
@@ -291,8 +294,8 @@ rs.AddNew
 rs.Fields("ID") = nNextID
 rs.Fields("Name") = IIf(sName = "", Chr(0), sName)
 rs.Fields("Kind") = sKind
-rs.Fields("Text") = IIf(sText = "", Chr(0), sText)
-rs.Fields("EndText") = IIf(sEndText = "", Chr(0), sEndText)
+rs.Fields("Msg") = IIf(sText = "", Chr(0), sText)
+rs.Fields("EndMsg") = IIf(sEndText = "", Chr(0), sEndText)
 rs.Fields("Effects") = IIf(sEffects = "", Chr(0), sEffects)
 rs.Fields("Duration") = nDur
 rs.Update
@@ -350,14 +353,16 @@ End If
 sSrc = "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber
 For x = 0 To 9
     sRole = "exit " & x
-    Select Case Roomrec.RoomType(x)
-        Case 9:
-            Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para3(x), "Trap", sSrc, sRole)
-            Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para4(x), "TrapFail", sSrc, sRole)
-        Case 24:
-            Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para4(x), "Trap", sSrc, sRole)
-            Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para3(x), "TrapFail", sSrc, sRole)
-    End Select
+    If Not Roomrec.RoomExit(x) = 0 Then
+        Select Case Roomrec.RoomType(x)
+            Case 9:
+                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para3(x), "Trap", sSrc, sRole)
+                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para4(x), "TrapFail", sSrc, sRole)
+            Case 24:
+                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para4(x), "Trap", sSrc, sRole)
+                Call TrapRow(rs, dictSeen, nNextID, Roomrec.Para3(x), "TrapFail", sSrc, sRole)
+        End Select
+    End If
 Next x
 
 Exit Sub
@@ -376,7 +381,7 @@ sRaw = ReadMsgLine(nMsg, 1, sSrc, sRole)
 If sRaw = "" Then Exit Sub
 
 bFlag = False
-sText = NormalizeWith(sRaw, "", bFlag)
+sText = NormalizeWith(sRaw, "{dmg}", bFlag)
 If bFlag Then Call LogUnmatched(sSrc & " " & sRole & " line 1", sRaw)
 Call AddRow(rs, dictSeen, nNextID, "", sKind, sText, "", "Damage,Trap", 0)
 
@@ -492,9 +497,9 @@ sRaw = ReadMsgLine(Spellrec.CastMsgB, 2, sSrc, "cast")
 If sRaw = "" Then Exit Function
 
 If bStyle Then
-    sList = ""
+    sList = "{dmg}"
 Else
-    sList = "{caster}|{spell}"
+    sList = "{caster}|{spell}|{dmg}"
 End If
 bFlag = False
 sText = NormalizeWith(sRaw, sList, bFlag)
@@ -530,9 +535,9 @@ sRaw = ReadMsgLine(Spellrec.CastMsgB, 1, sSrc, "cast")
 If sRaw = "" Then Exit Function
 
 If bStyle Then
-    sList = "{target}"
+    sList = "{target}|{dmg}"
 Else
-    sList = "{spell}|{target}"
+    sList = "{spell}|{target}|{dmg}"
 End If
 bFlag = False
 sText = NormalizeWith(sRaw, sList, bFlag)
@@ -584,7 +589,7 @@ If nShock <= 1 Then Exit Function
 sRaw = ReadMsgLine(nShock, 1, sSrc, "shock")
 If Not sRaw = "" Then
     bFlag = False
-    sText = NormalizeWith(sRaw, "{attacker}", bFlag)
+    sText = NormalizeWith(sRaw, "{attacker}|{dmg}", bFlag)
     If bFlag Then Call LogUnmatched(sSrc & " shock line 1", sRaw)
     nRows = nRows + AddRow(rs, dictSeen, nNextID, sName, "ShieldOwner", sText, "", "Damage,DamageShield", nDur)
 End If
@@ -592,7 +597,7 @@ End If
 sRaw = ReadMsgLine(nShock, 2, sSrc, "shock")
 If Not sRaw = "" Then
     bFlag = False
-    sText = NormalizeWith(sRaw, "", bFlag)
+    sText = NormalizeWith(sRaw, "{dmg}", bFlag)
     If bFlag Then Call LogUnmatched(sSrc & " shock line 2", sRaw)
     nRows = nRows + AddRow(rs, dictSeen, nNextID, sName, "Shield", sText, "", "Damage,DamageShield", nDur)
 End If
@@ -762,7 +767,7 @@ For i = 0 To 4
 Next i
 
 nDeath = Monsterrec.DeathMsg
-If nDeath <= 1 Then nDeath = Monsterrec.AttackHitMsg(0)
+If nDeath <= 1 And Monsterrec.AttackType(0) = 1 Then nDeath = Monsterrec.AttackHitMsg(0)
 If nDeath <= 1 Then Exit Sub
 
 sRaw = ReadMsgLine(nDeath, 3, sSrc, "death")
@@ -789,7 +794,7 @@ sRaw = ReadMsgLine(nMsg, 1, sSrc, sRole)
 If sRaw = "" Then Exit Sub
 
 bFlag = False
-sText = NormalizeWith(sRaw, "{monster}", bFlag)
+sText = NormalizeWith(sRaw, "{monster}|{dmg}", bFlag)
 If IsStandardForm(mReHit, sText) Then Exit Sub
 If bFlag Then Call LogUnmatched(sSrc & " " & sRole & " line 1", sRaw)
 Call AddRow(rs, dictSeen, nNextID, "", "Hit", sText, "", "Damage", 0)

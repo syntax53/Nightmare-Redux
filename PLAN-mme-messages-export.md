@@ -14,9 +14,9 @@ All counts below come from the stock-ish sample export (`NMR-EuphStockishDataExp
 |---|---|---|---|---|
 | `ID` | adInteger | | no | Surrogate row id, 1-based in export order. Primary key `pkMessages`. |
 | `Name` | adVarWChar | 50 | no | Spell name or monster name as the client sees it in play; `Chr(0)` for hit and trap rows (see 2.4) |
-| `Kind` | adVarWChar | 12 | no | Role of `Text`: `Status`, `Target`, `Self`, `Fail`, `Shield`, `ShieldOwner`, `Hit`, `HitOther`, `Death`, `Trap`, `TrapFail`. The kind also tells the source: spell kinds, monster kinds (`Hit`, `HitOther`, `Death`), trap kinds. |
-| `Text` | adVarWChar | 100 | no | The normalized line (tokens, see 2.2) |
-| `EndText` | adVarWChar | 100 | no | Wear-off line for `Status` rows; `Chr(0)` otherwise |
+| `Kind` | adVarWChar | 12 | no | Role of `Msg`: `Status`, `Target`, `Self`, `Fail`, `Shield`, `ShieldOwner`, `Hit`, `HitOther`, `Death`, `Trap`, `TrapFail`. The kind also tells the source: spell kinds, monster kinds (`Hit`, `HitOther`, `Death`), trap kinds. |
+| `Msg` | adVarWChar | 100 | no | The normalized line (tokens, see 2.2). Named `Msg` rather than `Msg` because `Msg` is a Jet reserved word |
+| `EndMsg` | adVarWChar | 100 | no | Wear-off line for `Status` rows; `Chr(0)` otherwise |
 | `Effects` | adVarWChar | 255 | no | CSV of effect identifiers (see 2.3); `Chr(0)` when none |
 | `Duration` | adInteger | | no | Spell duration field (0 for instant and for non-spell rows) |
 
@@ -49,12 +49,12 @@ Line 3 of `HitMsg` equals line 2 in every sampled record, and `MissMsg` lines 2-
 
 **Spells** (iterate every spell record; inclusion is "everything referenced", so simply every spell with a usable message):
 
-| Kind | Taken from | Exported when | Text / EndText |
+| Kind | Taken from | Exported when | Msg / EndMsg |
 |---|---|---|---|
-| `Status` | DescMsg (ability 115) line 3 / line 1 | DescMsg exists and line 3 or line 1 is non-blank | `Text` = line 3 (stat text, printed to the target when the spell lands; Paradigm also prints it on each poison tick), `EndText` = line 1 (wear-off) |
-| `Target` | `CastMsgB` line 2 | line contains `%d` **and** is not a hard-coded form (2.5); **or** the spell has a status ability (19/71/107/74/75/60/76/170) but no DescMsg and line 2 is non-blank (28 spells; the cast line is then the only signal) | `Text` = normalized line 2 |
-| `Self` | `CastMsgB` line 1 | line contains `%d` and is not a hard-coded form | `Text` = normalized line 1 (your own spell/item damage or heal: "You fire a {spell} at {target} for {dmg} damage!") |
-| `Fail` | ConfuseMsg (ability 101) line 1 | non-blank | `Text` = line 1 ("You fumble in confusion!", "You are too afraid to do that!") |
+| `Status` | DescMsg (ability 115) line 3 / line 1 | DescMsg exists and line 3 or line 1 is non-blank | `Msg` = line 3 (stat text, printed to the target when the spell lands; Paradigm also prints it on each poison tick), `EndMsg` = line 1 (wear-off) |
+| `Target` | `CastMsgB` line 2 | line contains `%d` **and** is not a hard-coded form (2.5); **or** the spell has a status ability (19/71/107/74/75/60/76/170) but no DescMsg and line 2 is non-blank (28 spells; the cast line is then the only signal) | `Msg` = normalized line 2 |
+| `Self` | `CastMsgB` line 1 | line contains `%d` and is not a hard-coded form | `Msg` = normalized line 1 (your own spell/item damage or heal: "You fire a {spell} at {target} for {dmg} damage!") |
+| `Fail` | ConfuseMsg (ability 101) line 1 | non-blank | `Msg` = line 1 ("You fumble in confusion!", "You are too afraid to do that!") |
 | `Shield` | ShockMsg (ability 137) line 2 | non-blank | the attacker's line: "You are shocked for {dmg} damage!" |
 | `ShieldOwner` | ShockMsg line 1 | non-blank | the owner's line: "{attacker} is shocked for {dmg} damage!" |
 
@@ -91,7 +91,7 @@ Replace the n-th `%s`/`%d` with the n-th token of the role's argument list. Line
 |---|---|---|
 | Cast line 1 (`Self`) | `{spell}`, `{target}`, `{dmg}` | `{target}`, `{dmg}` |
 | Cast line 2 (`Target`) | `{caster}`, `{spell}`, `{dmg}` | `{dmg}` |
-| DescMsg line 1 (`EndText`) | `{spell}` (stock passes the spell name; no sampled line uses it) | same |
+| DescMsg line 1 (`EndMsg`) | `{spell}` (stock passes the spell name; no sampled line uses it) | same |
 | DescMsg line 3 (`Status`) | none (no sampled line has a placeholder) | same |
 | ConfuseMsg line 1 (`Fail`) | none | same |
 | ShockMsg line 1 (`ShieldOwner`) | `{attacker}`, `{dmg}` | same |
@@ -137,7 +137,7 @@ Monster `Hit`/`HitOther` rows get `Damage`; `Death` rows `Death`; trap rows `Dam
 
 ### 2.4 Dedupe
 
-Key = `Kind|Name|Text|EndText|Effects` (case-sensitive, after normalization). First occurrence wins. `Hit`, `HitOther` and `Trap`/`TrapFail` rows use `Name = Chr(0)` so identical lines from different monsters/rooms collapse (the `{monster}` token already carries the identity); `Death` rows keep the monster name. Expected total ≈ 2,100 rows in the sample.
+Key = `Kind|Name|Msg|EndMsg|Effects` (case-sensitive, after normalization). First occurrence wins. `Hit`, `HitOther` and `Trap`/`TrapFail` rows use `Name = Chr(0)` so identical lines from different monsters/rooms collapse (the `{monster}` token already carries the identity); `Death` rows keep the monster name. Expected total ≈ 2,100 rows in the sample.
 
 ### 2.5 Exclusion patterns (lines covered by client hard-coded parsing; applied after normalization)
 
@@ -203,8 +203,8 @@ Review (me): read every diff against this plan; check `Option Explicit`/error ha
 One row per game line a client may need to recognise. Not a dump of the realm's message file:
 message numbers, caster-only lines, room lines and flavor text are not exported.
 
-Columns: ID (row id), Name (spell or monster name; empty for Hit/HitOther/Trap rows), Kind, Text,
-EndText, Effects, Duration (spell duration, 0 otherwise).
+Columns: ID (row id), Name (spell or monster name; empty for Hit/HitOther/Trap rows), Kind, Msg,
+EndMsg, Effects, Duration (spell duration, 0 otherwise).
 
 Kind:
   Status      Text = line printed to the affected player when the effect starts and shown by STAT;
@@ -244,7 +244,7 @@ HitVerbs / HitVerbsOther / MissVerbs: "|"-separated verb alternatives used in
 **Scripted (me, after the build):** a 32-bit Jet PowerShell script run via `C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -File`:
 1. Schema diff: every table/column/index of `data-Paradigm-1.9.1x.mdb` exists in the new MDB with the same type; the only additions are `Messages` (+`pkMessages`) and `Items.HitVerbs/HitVerbsOther/MissVerbs`.
 2. Row checks: `bless` → `Status` "You feel lucky!" / "The effects of bless wear off!" / `Timed`; `acid rain` → `Status` "You are covered in acid!" / "The acid covering you dries up." / effects contain `DamageOverTime` and `Timed`; `poison cloud` and `bites` → `Poisoned` with "You feel ill."; `magic missile` → `Self` "You fire a {spell} at {target} for {dmg} damage!" and `Target` "{caster} fires a {spell} at you for {dmg} damage!"; `giant rat` → no `Hit` row (standard verb) but `Death` "The giant rat falls to the ground with a tortured squeak."; `lashworm` → `Hit` "{monster} darts forward and bites you for {dmg} damage!" and `HitOther` "{monster} darts forward and bites {target} for {dmg} damage!"; a type-9 trap row "An arrow shoots out of the wall and strikes you!" with `Damage,Trap`; `longsword` → `HitVerbs` "slash|impale|hack".
-3. Negative checks: no `Text` contains `%s`/`%d`; no row matches the exclusion regexes; no `Kind` outside the list; `Name` non-empty for `Status/Target/Self/Fail/Death`.
+3. Negative checks: no `Msg` contains `%s`/`%d`; no row matches the exclusion regexes; no `Kind` outside the list; `Name` non-empty for `Status/Target/Self/Fail/Death`.
 4. MegaMud spot check: 10 `MESSAGES.md` records (acid rain, bless, confusion, hold person, poison cloud, magic missile, fireball, blind end, arrow trap, giant rat death) each derivable from a row.
 
 **Manual (you):** build in the IDE; fresh export; update-existing run against a pre-change MDB (expect the refusal dialog, MDB untouched); open the new MDB in the current MMUD Explorer (no missing-field warnings); open `NMR-Log_MMEMessages.txt` and send me its line count and a sample.
@@ -256,4 +256,4 @@ HitVerbs / HitVerbsOther / MissVerbs: "|"-separated verb alternatives used in
 - `Hit` rows drop the monster name and dedupe by text.
 - Hit line 2 is exported as `HitOther` when unique.
 - The single-verb exclusion rule stays as proposed.
-- Table name `Messages`; columns reduced to `ID, Name, Kind, Text, EndText, Effects, Duration` (no source, record number or attack slot).
+- Table name `Messages`; columns reduced to `ID, Name, Kind, Msg, EndMsg, Effects, Duration` (no source, record number or attack slot).

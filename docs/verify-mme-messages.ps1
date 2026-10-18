@@ -67,7 +67,7 @@ if (Test-Path $Old) {
 
 # ---- 2. Messages table shape
 if (-not $sNew.ContainsKey("Messages")) { Fail "Messages table missing"; $cnNew.Close(); exit 1 }
-$want = "ID,Name,Kind,Text,EndText,Effects,Duration"
+$want = "ID,Name,Kind,Msg,EndMsg,Effects,Duration"
 $have = (@($sNew["Messages"].Keys) -join ",")
 if ($have -eq $want) { Pass "Messages columns = $want" } else { Fail "Messages columns = $have" }
 if ($iNew.ContainsKey("Messages.pkMessages")) { Pass "pkMessages exists" } else { Fail "pkMessages missing" }
@@ -76,18 +76,18 @@ Write-Output "INFO  Messages rows: $n"
 foreach ($k in "Status","Target","Self","Fail","Shield","ShieldOwner","Hit","HitOther","Death","Trap","TrapFail") { $c = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind='$k'"; Write-Output ("INFO  Kind {0,-12} {1}" -f $k, $c) }
 
 # ---- 3. negative checks
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Text LIKE '*%s*' OR Text LIKE '*%d*' OR EndText LIKE '*%s*' OR EndText LIKE '*%d*'"
+$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE [Msg] LIKE '%[%]s%' OR [Msg] LIKE '%[%]d%' OR [EndMsg] LIKE '%[%]s%' OR [EndMsg] LIKE '%[%]d%'"
 if ($bad -eq 0) { Pass "no raw %s/%d left" } else { Fail "$bad rows still contain raw %s/%d" }
 $bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind NOT IN ('Status','Target','Self','Fail','Shield','ShieldOwner','Hit','HitOther','Death','Trap','TrapFail')"
 if ($bad -eq 0) { Pass "all Kind values known" } else { Fail "$bad rows with unknown Kind" }
 $bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind IN ('Status','Target','Self','Fail','Death') AND (Name IS NULL OR Len(Name)<=1)"
 if ($bad -eq 0) { Pass "names present on named kinds" } else { Fail "$bad named-kind rows have an empty Name" }
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Text LIKE '*{?}*'"
+$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE [Msg] LIKE '%{?}%'"
 Write-Output "INFO  rows with unresolved {?} placeholder: $bad (should match the warning log)"
-$dup = Count $cnNew "SELECT COUNT(*) AS N FROM (SELECT Kind,Name,Text,EndText,Effects FROM Messages GROUP BY Kind,Name,Text,EndText,Effects HAVING COUNT(*)>1)"
+$dup = Count $cnNew "SELECT COUNT(*) AS N FROM (SELECT Kind,[Name],[Msg],[EndMsg],Effects FROM Messages GROUP BY Kind,[Name],[Msg],[EndMsg],Effects HAVING COUNT(*)>1)"
 if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate key groups" }
 # standard-form lines that should have been excluded
-$rows = Q $cnNew "SELECT Kind, Text FROM Messages WHERE Kind IN ('Self','Target','Hit','HitOther')"
+$rows = Q $cnNew "SELECT Kind, [Msg] AS Text FROM Messages WHERE Kind IN ('Self','Target','Hit','HitOther')"
 $rx = @{
   Self   = '^You cast \{spell\} (on|at|upon) \{target\}(,| for| and)? .*\{dmg\} (damage|healing|hit points)!?$'
   Target = '^\{caster\} casts \{spell\} (on|at|upon) you(,| for| and)? .*\{dmg\} damage!?$'
@@ -95,28 +95,28 @@ $rx = @{
   HitOther = '^(The |An? )?\{monster\} [a-z-]+ \{target\} for \{dmg\} damage!$'
 }
 $leak = 0
-foreach ($r in $rows) { if ($r.Text -cmatch $rx[$r.Kind]) { $leak++; if ($leak -le 5) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Text) } } }
+foreach ($r in $rows) { if ($r.Msg -cmatch $rx[$r.Kind]) { $leak++; if ($leak -le 5) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Msg) } } }
 if ($leak -eq 0) { Pass "no standard-form lines exported" } else { Fail "$leak standard-form lines exported" }
 
 # ---- 4. spot checks (stock data; skip any that your realm renamed)
 function Expect($desc, $sql, $pred) {
   $rows = Q $cnNew $sql
   $ok = $false; foreach ($r in $rows) { if (& $pred $r) { $ok = $true; break } }
-  if ($ok) { Pass $desc } else { Fail ($desc + "  (got " + $rows.Count + " rows" + $(if($rows.Count){": " + (($rows | ForEach-Object { $_.Text + " / " + $_.EndText + " / " + $_.Effects }) -join " || ")}) + ")") }
+  if ($ok) { Pass $desc } else { Fail ($desc + "  (got " + $rows.Count + " rows" + $(if($rows.Count){": " + (($rows | ForEach-Object { $_.Msg + " / " + $_.EndMsg + " / " + $_.Effects }) -join " || ")}) + ")") }
 }
-Expect "bless Status row"      "SELECT * FROM Messages WHERE Name='bless' AND Kind='Status'"      { param($r) $r.Text -eq "You feel lucky!" -and $r.EndText -eq "The effects of bless wear off!" -and $r.Effects -match "Timed" }
-Expect "acid rain Status row"  "SELECT * FROM Messages WHERE Name='acid rain' AND Kind='Status'"  { param($r) $r.Text -eq "You are covered in acid!" -and $r.EndText -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" -and $r.Effects -match "Timed" }
-Expect "poison cloud Poisoned" "SELECT * FROM Messages WHERE Name='poison cloud' AND Kind='Status'" { param($r) $r.Text -eq "You feel ill." -and $r.Effects -match "Poisoned" }
-Expect "bites Poisoned"        "SELECT * FROM Messages WHERE Name='bites' AND Kind='Status'"      { param($r) $r.Effects -match "Poisoned" }
-Expect "magic missile Self"    "SELECT * FROM Messages WHERE Name='magic missile' AND Kind='Self'" { param($r) $r.Text -eq "You fire a {spell} at {target} for {dmg} damage!" }
-Expect "magic missile Target"  "SELECT * FROM Messages WHERE Name='magic missile' AND Kind='Target'" { param($r) $r.Text -eq "{caster} fires a {spell} at you for {dmg} damage!" }
-Expect "confusion Fail"        "SELECT * FROM Messages WHERE Name='confusion' AND Kind='Fail'"    { param($r) $r.Text -eq "You fumble in confusion!" }
-Expect "hold person Status"    "SELECT * FROM Messages WHERE Name='hold person' AND Kind='Status'" { param($r) $r.Text -eq "Your legs are paralyzed!" -and $r.Effects -match "Held" }
-Expect "giant rat Death"       "SELECT * FROM Messages WHERE Name='giant rat' AND Kind='Death'"   { param($r) $r.Text -like "The giant rat falls to the ground*" }
-Expect "lashworm Hit"          "SELECT * FROM Messages WHERE Kind='Hit' AND Text LIKE '*darts forward and bites you*'" { param($r) $r.Text -eq "{monster} darts forward and bites you for {dmg} damage!" }
-Expect "lashworm HitOther"     "SELECT * FROM Messages WHERE Kind='HitOther' AND Text LIKE '*darts forward and bites*'" { param($r) $r.Text -eq "{monster} darts forward and bites {target} for {dmg} damage!" }
-Expect "arrow trap row"        "SELECT * FROM Messages WHERE Kind IN ('Trap','TrapFail') AND Text LIKE 'An arrow shoots out of the wall*'" { param($r) $r.Effects -eq "Damage,Trap" }
-Expect "longsword verbs"       "SELECT Name, HitVerbs AS Text, HitVerbsOther AS EndText, MissVerbs AS Effects FROM Items WHERE Name='longsword'" { param($r) $r.Text -eq "slash|impale|hack" -and $r.EndText -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
+Expect "bless Status row"      "SELECT * FROM Messages WHERE [Name]='bless' AND Kind='Status'"      { param($r) $r.Msg -eq "You feel lucky!" -and $r.EndMsg -eq "The effects of bless wear off!" -and $r.Effects -match "Timed" }
+Expect "acid rain Status row"  "SELECT * FROM Messages WHERE [Name]='acid rain' AND Kind='Status'"  { param($r) $r.Msg -eq "You are covered in acid!" -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" -and $r.Effects -match "Timed" }
+Expect "poison cloud Poisoned" "SELECT * FROM Messages WHERE [Name]='poison cloud' AND Kind='Status'" { param($r) $r.Msg -eq "You feel ill." -and $r.Effects -match "Poisoned" }
+Expect "bites Poisoned"        "SELECT * FROM Messages WHERE [Name]='bites' AND Kind='Status'"      { param($r) $r.Effects -match "Poisoned" }
+Expect "magic missile Self"    "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Self'" { param($r) $r.Msg -eq "You fire a {spell} at {target} for {dmg} damage!" }
+Expect "magic missile Target"  "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Target'" { param($r) $r.Msg -eq "{caster} fires a {spell} at you for {dmg} damage!" }
+Expect "confusion Fail"        "SELECT * FROM Messages WHERE [Name]='confusion' AND Kind='Fail'"    { param($r) $r.Msg -eq "You fumble in confusion!" }
+Expect "hold person Status"    "SELECT * FROM Messages WHERE [Name]='hold person' AND Kind='Status'" { param($r) $r.Msg -eq "Your legs are paralyzed!" -and $r.Effects -match "Held" }
+Expect "giant rat Death"       "SELECT * FROM Messages WHERE [Name]='giant rat' AND Kind='Death'"   { param($r) $r.Msg -like "The giant rat falls to the ground*" }
+Expect "lashworm Hit"          "SELECT * FROM Messages WHERE Kind='Hit' AND [Msg] LIKE '%darts forward and bites you%'" { param($r) $r.Msg -eq "{monster} darts forward and bites you for {dmg} damage!" }
+Expect "lashworm HitOther"     "SELECT * FROM Messages WHERE Kind='HitOther' AND [Msg] LIKE '%darts forward and bites%'" { param($r) $r.Msg -eq "{monster} darts forward and bites {target} for {dmg} damage!" }
+Expect "arrow trap row"        "SELECT * FROM Messages WHERE Kind IN ('Trap','TrapFail') AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Effects -eq "Damage,Trap" }
+Expect "longsword verbs"       "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
 $cnNew.Close()
 Write-Output ""
 if ($fail -eq 0) { Write-Output "ALL CHECKS PASSED" } else { Write-Output "$fail CHECK(S) FAILED" }

@@ -1536,16 +1536,16 @@ Set DB = OpenDatabase(sDataSource)
 Call OpenTables
 
 If bUpdateExistingADB Then
-    If CheckVersion = False Then
+    If HasMessagesSchema = False Then
+        MsgBox "This export was made by an older version of NMR and has no Messages table." & vbCrLf _
+            & "Create a new export instead of updating this one.", vbExclamation
         Call CloseDB(True)
         GoTo ReEnable:
     End If
 End If
 
 If bUpdateExistingADB Then
-    If HasMessagesSchema = False Then
-        MsgBox "This export was made by an older version of NMR and has no Messages table." & vbCrLf _
-            & "Create a new export instead of updating this one.", vbExclamation
+    If CheckVersion = False Then
         Call CloseDB(True)
         GoTo ReEnable:
     End If
@@ -1716,7 +1716,7 @@ sTotalTime = CStr(Round(CDbl(nTotalTime / 60), 2))
 sTotalTime = Left(sTotalTime, InStr(1, sTotalTime, ".") + 2)
 
 MsgBox "Export Complete." & vbCrLf & vbCrLf & "Total time: " & sTotalTime & " minutes." _
-    & IIf(nMsgWarnings > 0, vbCrLf & vbCrLf & nMsgWarnings & " message warnings written to NMR-Log_MMEMessages.txt", ""), vbInformation
+    & IIf(nMsgWarnings > 0, vbCrLf & vbCrLf & nMsgWarnings & " message warnings written to NMR-Log_MMEMessages.txt", IIf(nMsgWarnings < 0, vbCrLf & vbCrLf & "Messages table export FAILED (see the earlier error).", "")), vbInformation
 GoTo ReEnable:
 
 canceled:
@@ -6807,8 +6807,8 @@ With tabNewMessages
     .Columns.Append "ID", adInteger
     .Columns.Append "Name", adVarWChar, 50
     .Columns.Append "Kind", adVarWChar, 12
-    .Columns.Append "Text", adVarWChar, 100
-    .Columns.Append "EndText", adVarWChar, 100
+    .Columns.Append "Msg", adVarWChar, 100
+    .Columns.Append "EndMsg", adVarWChar, 100
     .Columns.Append "Effects", adVarWChar, 255
     .Columns.Append "Duration", adInteger
 End With
