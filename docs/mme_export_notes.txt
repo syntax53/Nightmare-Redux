@@ -88,8 +88,10 @@ players can also cast it and the names differ). Self rows carry a source name on
 can be the one affected by their own spell or item (self, friendly or party target types), e.g.
 "You feel lucky!" under bless, and only when every source of that line has the same name. Every
 other row (status and damage lines of enemy-targeted spells, monster hits, traps, lines shared by
-differently named sources) is realm-wide and uses its own Msg text as its Name, so Name is never
-empty. Rows are unique by kind, Msg and EndMsg: the same line from several sources is exported
+differently named sources) is realm-wide and is named after its own text, shortened: a leading
+"The {source} " or "{source} ", a trailing " for {dmg} damage!", " {dmg} damage!" or " {dmg} hit
+points!" and any "{target} " or "{target}'s " are dropped (so "The {source} claws you with its
+pincers for {dmg} damage!" is named "claws you with its pincers"). Name is never empty. Rows are unique by kind, Msg and EndMsg: the same line from several sources is exported
 once with the union of their Effects. A Self line that is the "you" form of a Cast or Other line
 ("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
 "you"/"your" wherever {target} appears and treat the line as being about themselves when it does.

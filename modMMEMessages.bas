@@ -454,6 +454,39 @@ End Function
 'Drops each Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
 'player), merging its effects into that row, then writes every surviving row once with IDs 1, 2, 3...
 'A row without a name is named by its text.
+'Name for a row that has no source name: the line itself, minus the parts that carry no identity
+'(leading "The {source} " / "{source} ", trailing " for {dmg} damage!" / " {dmg} damage!" / " {dmg} hit points!",
+'and any "{target}'s " / "{target} "). Falls back to the untouched line if nothing would be left.
+Private Function CleanName(ByVal sLine As String) As String
+Dim s As String
+On Error GoTo error:
+
+s = sLine
+If Left$(s, 13) = "The {source} " Then
+    s = Mid$(s, 14)
+ElseIf Left$(s, 9) = "{source} " Then
+    s = Mid$(s, 10)
+End If
+If Right$(s, 18) = " for {dmg} damage!" Then
+    s = Left$(s, Len(s) - 18)
+ElseIf Right$(s, 14) = " {dmg} damage!" Then
+    s = Left$(s, Len(s) - 14)
+ElseIf Right$(s, 18) = " {dmg} hit points!" Then
+    s = Left$(s, Len(s) - 18)
+End If
+s = Replace(s, "{target}'s ", "")
+s = Replace(s, "{target} ", "")
+s = Trim$(s)
+If s = "" Then s = sLine
+CleanName = s
+
+Exit Function
+error:
+Call HandleError("CleanName")
+mbFailed = True
+CleanName = sLine
+End Function
+
 Private Sub FinalizeRows(rs As DAO.Recordset)
 Dim dictYou As Scripting.Dictionary, sVariant As String, sName As String
 Dim i As Long, j As Long, nID As Long
@@ -487,8 +520,8 @@ nID = 1
 For i = 0 To mRowCount - 1
     If Not mRowDrop(i) Then
         sName = mRowName(i)
-        If sName = "" Then sName = mRowMsg(i)
-        If sName = "" Then sName = mRowEnd(i)
+        If sName = "" Then sName = CleanName(mRowMsg(i))
+        If sName = "" Then sName = CleanName(mRowEnd(i))
 
         rs.AddNew
         rs.Fields("ID") = nID

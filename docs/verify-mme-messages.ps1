@@ -109,7 +109,10 @@ foreach ($r in $allRows) { if ($r.Kind -eq "Self" -and $r.EndMsg -eq "" -and $yo
 if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate rows" }
 if ($sameText -eq 0) { Pass "Self/Other rows unique by kind, text and end text (effects merged)" } else { Fail "$sameText Self/Other rows repeat another row's text" }
 if ($twins -eq 0) { Pass "no Self row is the you-form of a Cast/Other row" } else { Fail "$twins Self rows duplicate a {target} row with you/your" }
-if ($noName -eq 0) { Pass "every row has a Name (the Msg text when no source name applies)" } else { Fail "$noName rows have an empty Name" }
+if ($noName -eq 0) { Pass "every row has a Name (the cleaned Msg text when no source name applies)" } else { Fail "$noName rows have an empty Name" }
+$dirty = 0
+foreach ($r in $allRows) { if ($r.Name.StartsWith("The {source} ") -or $r.Name.StartsWith("{source} ") -or $r.Name.EndsWith("{dmg} damage!") -or $r.Name.EndsWith("{dmg} hit points!") -or $r.Name.Contains("{target} ") -or $r.Name.Contains("{target}'s ")) { $dirty++ } }
+if ($dirty -eq 0) { Pass "text-derived names are cleaned of {source}/{target}/{dmg} boilerplate" } else { Fail "$dirty names still carry {source}/{target}/{dmg} boilerplate" }
 # standard-form lines that should have been excluded
 $rows = Q $cnNew "SELECT Kind, [Msg] AS Text, Effects FROM Messages"
 $rx = @(
@@ -134,13 +137,13 @@ function Expect($desc, $sql, $pred) {
   if ($ok) { Pass $desc } else { Fail ($desc + "  (got " + $rows.Count + " rows" + $(if($rows.Count){": " + (($rows | ForEach-Object { $_.Msg + " / " + $_.EndMsg + " / " + $_.Effects }) -join " || ")}) + ")") }
 }
 function ExpectNone($desc, $sql) { $c = Count $cnNew $sql; if ($c -eq 0) { Pass $desc } else { Fail "$desc  ($c rows)" } }
-Expect "bless effect row (shared by several sources, so Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel lucky!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of bless wear off!" -and ($r.Name -eq "bless" -or $r.Name -eq $r.Msg) }
-Expect "acid rain effect row (hostile spell: Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You are covered in acid!' AND Kind='Self'" { param($r) $r.Name -eq $r.Msg -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
-Expect "poison Poisoned (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) $r.Name -eq $r.Msg -and $r.Effects -match "Poisoned" }
+Expect "bless effect row (shared by several sources, so Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel lucky!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of bless wear off!" -and ($r.Name -eq "bless" -or ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!"))) }
+Expect "acid rain effect row (hostile spell: Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You are covered in acid!' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
+Expect "poison Poisoned (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Poisoned" }
 Expect "magic missile Cast"      "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Cast'" { param($r) $r.Msg -eq "You fire a magic missile at {target} for {dmg} damage!" }
 ExpectNone "magic missile incoming line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='{source} fires a magic missile at you for {dmg} damage!'"
 ExpectNone "greater healing rain cast line is standard (You cast X on ..., healing N damage!)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='greater healing rain'"
-Expect "fumble once, Name = Msg"  "SELECT * FROM Messages WHERE [Msg]='You fumble in confusion!'"      { param($r) $r.Effects -eq "Fail" -and $r.Name -eq $r.Msg }
+Expect "fumble once, Name = Msg"  "SELECT * FROM Messages WHERE [Msg]='You fumble in confusion!'"      { param($r) $r.Effects -eq "Fail" -and ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) }
 $fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You fumble in confusion!'"
 if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
 $flat = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are flat on your back!'"
@@ -148,19 +151,19 @@ if ($flat -eq 1) { Pass "knockdown status appears once (effects merged)" } else 
 $gaze = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='The gaze of luck is upon you.'"
 if ($gaze -le 1) { Pass "gaze of luck variants merged into one row" } else { Fail "gaze of luck appears $gaze times" }
 ExpectNone "lightning hit line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
-Expect "stunned merged Fail (Name = Msg)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) $r.Name -eq $r.Msg -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
+Expect "stunned merged Fail (Name = Msg)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
 $stun = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are stunned!'"
 if ($stun -le 2) { Pass "stunned text appears at most twice (one with an EndMsg, one without)" } else { Fail "stunned text appears $stun times" }
 ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='dark force' AND Kind='Cast'"
 ExpectNone "dark force standard incoming line absent" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are struck by a dark force for {dmg} damage!'"
-Expect "hold person Held (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='Your legs are paralyzed!' AND Kind='Self'" { param($r) $r.Name -eq $r.Msg -and $r.Effects -match "Held" }
+Expect "hold person Held (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='Your legs are paralyzed!' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Held" }
 Expect "a death text row exists (Other, Death)" "SELECT TOP 1 * FROM Messages WHERE Kind='Other' AND Effects='Death'" { param($r) $r.Msg -ne "" }
 ExpectNone "no death text for monsters worth 1 exp or less (practice dummy)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='practice dummy'"
 ExpectNone "no death text for monsters under 101 exp (giant rat, 9 exp)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE 'The giant rat falls to the ground%'"
 ExpectNone "lashworm hit on me is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%darts forward and bites you for {dmg} damage!'"
-Expect "filthbug hit on me (non-standard phrase)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg] LIKE '%claws you with its pincers%'" { param($r) $r.Msg -eq "The {source} claws you with its pincers for {dmg} damage!" -and $r.Effects -eq "Damage,Monster" }
+Expect "filthbug hit on me (non-standard phrase)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg] LIKE '%claws you with its pincers%'" { param($r) $r.Msg -eq "The {source} claws you with its pincers for {dmg} damage!" -and $r.Name -eq "claws you with its pincers" -and $r.Effects -eq "Damage,Monster" }
 ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"
-Expect "arrow trap row"          "SELECT * FROM Messages WHERE Effects='Damage,Trap' AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Kind -eq "Self" -and $r.Name -eq $r.Msg }
+Expect "arrow trap row"          "SELECT * FROM Messages WHERE Effects='Damage,Trap' AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Kind -eq "Self" -and $r.Name -ne "" }
 ExpectNone "you-form of a monster hit on another is dropped" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Self' AND [Msg]='The {source} pounds you with its fist for {dmg} damage!'"
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
 $cnNew.Close()
