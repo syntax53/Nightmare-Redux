@@ -126,7 +126,8 @@ Damage to me / to others (line colour: bold red, bold blue or cyan for monster a
   <attacker> <verb> you for <N> damage!            <attacker> <verb> <target> for <N> damage!
   <attacker> [critically|savagely|viciously|skillfully|quickly|all-out|surprise] <verb> ...
   You are <X> for <N> damage!                      You take <N> damage <X>
-  <X> you for <N> damage   (any incoming line with this phrase is a damage attack on me)
+  <X> you for <N> damage        (any incoming line with this phrase is a damage attack on me)
+  <X> <target> for <N> damage   (any line with this phrase is a damage attack on someone else)
   <attacker> casts <X> on|at|upon you for <N> damage!
   <target> <X> <N> <X> damage!   (any third-party observation of damage or healing)
 Misses and dodges:

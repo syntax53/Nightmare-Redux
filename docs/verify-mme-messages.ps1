@@ -116,7 +116,7 @@ $rx = @(
   '^{target} .*{dmg}.* damage',
   '^{attacker} .*{dmg}.* damage',
   '^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$',
-  '^(The |An? )?\{source\} .* \{target\} for \{dmg\} damage!$'
+  '{target} for {dmg} damage'
 )
 $leak = 0
 foreach ($r in $rows) { foreach ($p in $rx) { if ($r.Text -cmatch $p) { $leak++; if ($leak -le 8) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Text) }; break } } }

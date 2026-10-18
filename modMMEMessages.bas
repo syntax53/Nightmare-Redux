@@ -112,7 +112,7 @@ Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$"
 Set mReP3 = NewRegExp("^You are .* for {dmg} damage!?$|^You take {dmg} damage|you for {dmg} damage")
 Set mReP4 = NewRegExp("^{target} .*{dmg}.* damage|^{attacker} .*{dmg}.* damage")
 Set mReP5 = NewRegExp("^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$")
-Set mReP6 = NewRegExp("^(The |An? )?\{source\} .* \{target\} for \{dmg\} damage!$")
+Set mReP6 = NewRegExp("{target} for {dmg} damage")
 
 InitState = Not mbFailed
 
