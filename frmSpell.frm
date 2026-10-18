@@ -2071,7 +2071,7 @@ abil_out:
         If Spellrec.CastMsgB = nVal Then GoTo msg_match:
         For x = 0 To 9
             Select Case Spellrec.AbilityA(x)
-                Case 101, 115, 120:
+                Case 101, 115, 120, 137:
                     If Spellrec.AbilityB(x) = nVal Then GoTo msg_match:
             End Select
         Next x

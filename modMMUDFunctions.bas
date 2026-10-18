@@ -896,7 +896,7 @@ Select Case nAbil
     Case 148, 155: '148-textblock, 155-deathtext
         Call frmTextblock.GotoTB(nValue)
     
-    Case 101, 115, 120: '101-confuse msg, 115-desc msg, 120-start msg
+    Case 101, 115, 120, 137: '101-confuse msg, 115-desc msg, 120-start msg, 137-shock msg
         Call frmMessage.GotoMSG(nValue)
         
 End Select

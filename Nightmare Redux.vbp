@@ -54,6 +54,7 @@ Form=frmDatabaseExport.frm
 Form=frmHelpTextblocks.frm
 Form=frmRecordChange.frm
 Module=modMMUDFunctions; modMMUDFunctions.bas
+Module=modMMEMessages; modMMEMessages.bas
 Form=frmUserPaste.frm
 Form=frmMonsterNPC_List.frm
 Form=frmMonsterAttackSim.frm

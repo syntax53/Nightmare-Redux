@@ -58,3 +58,51 @@ castsp = 43
 endcast = 151
 
 learnsp - 42
+
+
+-= Messages (added after NMR 1.8.3) =-
+One row per game line a client may need to recognise. Not a dump of the realm's message file:
+message numbers, caster-only lines, room lines and flavor text are not exported.
+
+Columns: ID (row id), Name (spell or monster name; empty for Hit/HitOther/Trap/TrapFail rows), Kind,
+Text, EndText, Effects, Duration (spell duration, 0 otherwise).
+Empty string columns are written as a single Chr(0) character (same as the other MME tables).
+The export writes NMR-Log_MMEMessages.txt next to the MDB only when some line could not be
+normalized.
+
+Kind:
+  Status      Text = line printed to the affected player when the effect starts and shown by
+              STAT; EndText = line printed when it wears off. (GreaterMUD also reprints Text on
+              poison ticks.)
+  Target      what the target sees when the spell hits them (damage/heal amount in {dmg})
+  Self        what the caster sees for their own damage/heal spell or item
+  Fail        line printed when a confused/afraid player's action fails
+  Shield      "you are shocked" line when you hit a damage-shielded target
+  ShieldOwner the shield owner's line
+  Hit         monster melee hit line that does not follow "{monster} <verb> you for {dmg} damage!"
+  HitOther    the same hit as others in the room see it ("{monster} ... {target} for {dmg} damage!")
+  Death       monster death text (the monster's Name is set)
+  Trap        exit trap trigger line; TrapFail = failed disarm line (both do damage;
+              on GreaterMUD the two may be swapped for spell traps)
+
+Placeholder order: each token replaces one engine placeholder (%s or %d) in the engine's argument
+order, so a client can rebuild the raw engine line by turning the tokens back into placeholders.
+The argument order per Kind is: Self = {spell},{target},{dmg}; Target = {caster},{spell},{dmg};
+Status/EndText = none or {spell}; Fail = none; ShieldOwner = {attacker},{dmg}; Shield = {dmg};
+Hit = {monster},{dmg}; HitOther = {monster},{target},{dmg}; Trap/TrapFail = {dmg} if present.
+On room-perspective lines (such as HitOther) the engine prints the damage through a string
+placeholder (%s), not %d, so clients must accept digits wherever {dmg} appears.
+
+Tokens: {caster} {spell} {target} {dmg} {monster} {attacker}. Match them as wildcards; {dmg} is an
+integer. {target} may be empty for area spells. "{?}" marks a placeholder NMR could not identify.
+Lines that the standard client formats already cover are omitted:
+  You cast {spell} on {target} for {dmg} damage!  /  {caster} casts {spell} on you for {dmg} damage!
+  {monster} <single verb> you for {dmg} damage!
+Effects (CSV): Poisoned Confused Blinded Held Fear Mute Sleep Damage DamageOverTime Drain Heal
+  HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure Timed RoomSpell Trap Death.
+  Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held.
+A spell name can appear in several Status rows when the realm has variants with different text.
+
+-= Items (added after NMR 1.8.3) =-
+HitVerbs / HitVerbsOther / MissVerbs: "|"-separated verb alternatives used in
+"You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.
