@@ -382,4 +382,4 @@ Question 6, evidence: the data is identical for both engines, but the engines re
 - Rows are accumulated in memory and written by a finalize pass. Key = kind + Msg + EndMsg (Cast rows also by name); the same line from several sources is one row with the union of their Effects.
 - A row with no source name (realm-wide line, or a line shared by differently named sources) takes its own Msg text as its Name; Name is Text 100 and never empty.
 - A Self line that is the "you"/"your" form of a Cast or Other line containing {target} is dropped; its effects merge into the {target} row. Clients accept "you"/"your" for {target} and treat such a line as being about themselves.
-- Death text requires regen time or game limit **and** more than 1 experience.
+- Death text requires regen time or game limit **and** at least 101 experience (raised from "more than 1" on request).

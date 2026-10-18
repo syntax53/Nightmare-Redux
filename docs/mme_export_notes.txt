@@ -94,7 +94,7 @@ once with the union of their Effects. A Self line that is the "you" form of a Ca
 ("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
 "you"/"your" wherever {target} appears and treat the line as being about themselves when it does.
 Death texts are exported only for monsters that regenerate or are game-limited and award more
-than 1 experience. Colour codes embedded in a message are stripped.
+than 100 experience. Colour codes embedded in a message are stripped.
 
 Tokens: {source} (the caster or attacking monster, as the game prints it, including any "The"),
 {target}, {dmg}, {attacker} (the one who hit a damage shield). Match them as wildcards; {dmg} is

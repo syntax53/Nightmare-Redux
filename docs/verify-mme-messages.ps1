@@ -154,8 +154,9 @@ if ($stun -le 2) { Pass "stunned text appears at most twice (one with an EndMsg,
 ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='dark force' AND Kind='Cast'"
 ExpectNone "dark force standard incoming line absent" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are struck by a dark force for {dmg} damage!'"
 Expect "hold person Held (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='Your legs are paralyzed!' AND Kind='Self'" { param($r) $r.Name -eq $r.Msg -and $r.Effects -match "Held" }
-Expect "giant rat death text (Other, Death)" "SELECT * FROM Messages WHERE Kind='Other' AND [Msg] LIKE 'The giant rat falls to the ground%'" { param($r) $r.Effects -eq "Death" -and ($r.Name -eq "giant rat" -or $r.Name -eq $r.Msg) }
+Expect "a death text row exists (Other, Death)" "SELECT TOP 1 * FROM Messages WHERE Kind='Other' AND Effects='Death'" { param($r) $r.Msg -ne "" }
 ExpectNone "no death text for monsters worth 1 exp or less (practice dummy)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='practice dummy'"
+ExpectNone "no death text for monsters under 101 exp (giant rat, 9 exp)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE 'The giant rat falls to the ground%'"
 ExpectNone "lashworm hit on me is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%darts forward and bites you for {dmg} damage!'"
 Expect "filthbug hit on me (non-standard phrase)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg] LIKE '%claws you with its pincers%'" { param($r) $r.Msg -eq "The {source} claws you with its pincers for {dmg} damage!" -and $r.Effects -eq "Damage,Monster" }
 ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"

@@ -1139,8 +1139,8 @@ For i = 0 To 4
     End If
 Next i
 
-'death text only for monsters that regenerate or are game-limited and give more than 1 experience
-If Not ((Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0) And SLong2ULong(Monsterrec.Experience) > 1) Then Exit Sub
+'death text only for monsters that regenerate or are game-limited and give at least 101 experience
+If Not ((Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0) And SLong2ULong(Monsterrec.Experience) >= 101) Then Exit Sub
 
 nDeath = Monsterrec.DeathMsg
 If nDeath <= 1 And Monsterrec.AttackType(0) = 1 Then nDeath = Monsterrec.AttackHitMsg(0)
