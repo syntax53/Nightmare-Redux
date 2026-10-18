@@ -87,8 +87,9 @@ Name: Cast rows carry the spell's name, or the item's name when an item casts th
 players can also cast it and the names differ). Self rows carry a name only when the player can be
 the one affected by their own spell or item (self, friendly or party target types), e.g. "You feel
 lucky!" under bless. Status and damage lines of enemy-targeted spells are only ever seen by the
-enemy, so they are realm-wide lines with no name and appear once per distinct text, whatever cast
-them. Colour codes embedded in a message are stripped.
+enemy, so they are realm-wide lines with no name. Every Self and Other row is unique by text and
+effects: when several spells or items produce the same line, it is exported once, under the first
+name found (spell names before item names). Colour codes embedded in a message are stripped.
 
 Tokens: {source} (the caster or attacking monster, as the game prints it, including any "The"),
 {target}, {dmg}, {attacker} (the one who hit a damage shield). Match them as wildcards; {dmg} is
@@ -124,6 +125,7 @@ Damage to me / to others (line colour: bold red, bold blue or cyan for monster a
   <attacker> <verb> you for <N> damage!            <attacker> <verb> <target> for <N> damage!
   <attacker> [critically|savagely|viciously|skillfully|quickly|all-out|surprise] <verb> ...
   You are <X> for <N> damage!                      You take <N> damage <X>
+  <X> you for <N> damage   (any incoming line with this phrase is a damage attack on me)
   <attacker> casts <X> on|at|upon you for <N> damage!
   <target> <X> <N> <X> damage!   (any third-party observation of damage or healing)
 Misses and dodges:

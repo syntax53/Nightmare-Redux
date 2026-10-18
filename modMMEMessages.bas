@@ -108,7 +108,7 @@ mdictLogged.CompareMode = vbBinaryCompare
 
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
-Set mReP3 = NewRegExp("^You are .* for \{dmg\} damage!?$|^You take \{dmg\} damage")
+Set mReP3 = NewRegExp("^You are .* for {dmg} damage!?$|^You take {dmg} damage|you for {dmg} damage")
 Set mReP4 = NewRegExp("^\{target\} .*\{dmg\}.* damage!?$|^\{attacker\} .*\{dmg\}.* damage!?$")
 Set mReP5 = NewRegExp("^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$")
 Set mReP6 = NewRegExp("^(The |An? )?\{source\} .* \{target\} for \{dmg\} damage!$")
@@ -339,7 +339,13 @@ If Len(sText) > 100 Then sText = Left$(sText, 100): bTrunc = True
 If Len(sEndText) > 100 Then sEndText = Left$(sEndText, 100): bTrunc = True
 If Len(sEffects) > 255 Then sEffects = Left$(sEffects, 255): bTrunc = True
 
-sKey = sKind & "|" & sName & "|" & sText & "|" & sEndText & "|" & sEffects
+'Cast rows confirm the player's own action, so the name is part of the row; every other row is a line the
+'game shows the player, and the same text with the same effects means the same thing whatever produced it.
+If sKind = "Cast" Then
+    sKey = sKind & "|" & sName & "|" & sText & "|" & sEndText & "|" & sEffects
+Else
+    sKey = sKind & "|" & sText & "|" & sEndText & "|" & sEffects
+End If
 If dictSeen.Exists(sKey) Then Exit Function
 dictSeen.Add sKey, True
 
@@ -1042,6 +1048,7 @@ If sRaw = "" Then Exit Sub
 bFlag = False
 sText = NormalizeWith(sRaw, "{source}|{dmg}", bFlag)
 If IsStandardForm(mReP5, sText) Then Exit Sub
+If IsStandardForm(mReP3, sText) Then Exit Sub
 If bFlag Then Call LogUnmatched(sSrc & " " & sRole & " line 1", sRaw)
 If AddRow(rs, dictSeen, nNextID, "", "Self", sText, "", "Damage,Monster") = 0 Then Exit Sub
 

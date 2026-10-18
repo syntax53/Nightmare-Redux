@@ -371,3 +371,8 @@ Question 6, evidence: the data is identical for both engines, but the engines re
 - `Self` rows are named only when the player can be the one affected by their own spell or item: target types 0 User, 1 Self, 2 SelfOrUser, 6 Any, 13 FullPartyArea (Paradigm `SpellTargetType`), and the spell is player-castable or item-cast. Status and incoming lines of enemy-targeted spells (4, 8, 11, 12 and the rest) are realm-wide lines: nameless, one row per distinct text ("You are flat on your back!" once instead of 13 weapon rows; "Lightning strikes you for {dmg} damage!" once instead of 8).
 - `Cast` rows keep their names (they confirm the player's own action).
 - Verification script: Jet rejects `AS N`; aliases are `Cnt`; the duplicate check runs in PowerShell; spot checks updated for nameless hostile-spell rows.
+
+## R2.13 Third round of feedback (2026-10-18)
+
+- Every `Self` and `Other` row is unique by `Kind|Msg|EndMsg|Effects`; the first name found is kept (spell names before item names). `Cast` rows stay unique per name because they confirm the player's own action.
+- Any incoming line containing "you for {dmg} damage" is a standard damage attack and is not exported (spell line 2, shield lines and monster hit lines alike).

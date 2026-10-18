@@ -101,17 +101,18 @@ $seen = @{}; $dup = 0; $sameText = 0; $seenText = @{}
 foreach ($r in $allRows) {
   $k = $r.Kind + "|" + $r.Name + "|" + $r.Msg + "|" + $r.EndMsg + "|" + $r.Effects
   if ($seen.ContainsKey($k)) { $dup++ } else { $seen[$k] = 1 }
-  if ($r.Kind -eq "Self") { $t = $r.Msg + "|" + $r.EndMsg; if ($seenText.ContainsKey($t)) { $sameText++ } else { $seenText[$t] = 1 } }
+  if ($r.Kind -ne "Cast") { $t = $r.Kind + "|" + $r.Msg + "|" + $r.EndMsg + "|" + $r.Effects; if ($seenText.ContainsKey($t)) { $sameText++ } else { $seenText[$t] = 1 } }
 }
 if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate rows" }
-Write-Output "INFO  Self rows repeating another Self row's text under a different name: $sameText (expected only for self/friendly spells)"
+if ($sameText -eq 0) { Pass "Self/Other rows unique by text and effects" } else { Fail "$sameText Self/Other rows repeat another row's text and effects" }
 # standard-form lines that should have been excluded
 $rows = Q $cnNew "SELECT Kind, [Msg] AS Text, Effects FROM Messages"
 $rx = @(
   '^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$',
   '^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$',
   '^You are .* for \{dmg\} damage!?$',
-  '^You take \{dmg\} damage',
+  '^You take {dmg} damage',
+  'you for {dmg} damage',
   '^\{target\} .*\{dmg\}.* damage!?$',
   '^\{attacker\} .*\{dmg\}.* damage!?$',
   '^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$',
@@ -132,15 +133,14 @@ Expect "bless effect row"        "SELECT * FROM Messages WHERE [Name]='bless' AN
 Expect "acid rain effect row (nameless, hostile spell)" "SELECT * FROM Messages WHERE [Msg]='You are covered in acid!' AND Kind='Self'" { param($r) $r.Name -eq "" -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
 Expect "poison Poisoned (nameless)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) $r.Name -eq "" -and $r.Effects -match "Poisoned" }
 Expect "magic missile Cast"      "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Cast'" { param($r) $r.Msg -eq "You fire a magic missile at {target} for {dmg} damage!" }
-Expect "magic missile incoming (nameless)" "SELECT * FROM Messages WHERE [Msg]='{source} fires a magic missile at you for {dmg} damage!' AND Kind='Self'" { param($r) $r.Name -eq "" }
+ExpectNone "magic missile incoming line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='{source} fires a magic missile at you for {dmg} damage!'"
 Expect "greater healing rain party" "SELECT * FROM Messages WHERE [Name]='greater healing rain' AND Kind='Cast'" { param($r) $r.Msg -eq "You cast greater healing rain on your party, healing {dmg} damage!" }
 Expect "fumble once, nameless"   "SELECT * FROM Messages WHERE [Msg]='You fumble in confusion!'"      { param($r) $r.Effects -eq "Fail" -and $r.Name -eq "" }
 $fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You fumble in confusion!'"
 if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
 $flat = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are flat on your back!'"
 if ($flat -eq 1) { Pass "knockdown status appears only once (nameless)" } else { Fail "knockdown status appears $flat times" }
-$lit = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
-if ($lit -eq 1) { Pass "lightning hit line appears only once (nameless)" } else { Fail "lightning hit line appears $lit times" }
+ExpectNone "lightning hit line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
 Expect "stunned merged Fail (nameless)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) $r.Name -eq "" -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
 $stun = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are stunned!'"
 if ($stun -le 2) { Pass "stunned text appears at most twice (status merged with Fail; separate fail text variants allowed)" } else { Fail "stunned text appears $stun times" }
@@ -148,7 +148,8 @@ ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS Cnt F
 ExpectNone "dark force standard incoming line absent" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are struck by a dark force for {dmg} damage!'"
 Expect "hold person Held (nameless)" "SELECT * FROM Messages WHERE [Msg]='Your legs are paralyzed!' AND Kind='Self'" { param($r) $r.Name -eq "" -and $r.Effects -match "Held" }
 Expect "giant rat death (Other)" "SELECT * FROM Messages WHERE [Name]='giant rat' AND Kind='Other'"   { param($r) $r.Msg -like "The giant rat falls to the ground*" -and $r.Effects -eq "Death" }
-Expect "lashworm hit on me"      "SELECT * FROM Messages WHERE Kind='Self' AND [Msg] LIKE '%darts forward and bites you%'" { param($r) $r.Msg -eq "{source} darts forward and bites you for {dmg} damage!" -and $r.Effects -eq "Damage,Monster" }
+ExpectNone "lashworm hit on me is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%darts forward and bites you for {dmg} damage!'"
+Expect "filthbug hit on me (non-standard phrase)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg] LIKE '%claws you with its pincers%'" { param($r) $r.Msg -eq "{source} claws you with its pincers for {dmg} damage!" -and $r.Effects -eq "Damage,Monster" }
 ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"
 Expect "arrow trap row"          "SELECT * FROM Messages WHERE Effects='Damage,Trap' AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Kind -eq "Self" -and $r.Name -eq "" }
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
