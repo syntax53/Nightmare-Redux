@@ -257,3 +257,110 @@ HitVerbs / HitVerbsOther / MissVerbs: "|"-separated verb alternatives used in
 - Hit line 2 is exported as `HitOther` when unique.
 - The single-verb exclusion rule stays as proposed.
 - Table name `Messages`; columns reduced to `ID, Name, Kind, Msg, EndMsg, Effects, Duration` (no source, record number or attack slot).
+
+---
+
+# Revision 2 (after the first test export, `messages-test.mdb`, GreaterMUD realm, 3,939 rows)
+
+Status: **proposal, awaiting approval**. Supersedes sections 1.1, 2.1-2.5 and 5 where they differ. Everything not mentioned stays as implemented.
+
+## R2.1 What the test export showed
+
+- Kinds `Self`/`Target` mirrored the engine's caster/target lines, which reads backwards from a player's seat: for a monster-only spell such as "dark force", line 1 ("{target} is struck by a dark force...") is never shown to any player, while line 2 ("You are struck by a dark force for {dmg} damage!") is what hits me.
+- 67 `Fail` rows are 20 distinct texts; "You fumble in confusion!" appears 15 times under different names. 10 of them duplicate the spell's own status text ("You are stunned!").
+- 511 of 528 status rows carry `Timed`, which `EndMsg` already implies. `Duration` is a base value that casters' stats alter.
+- Area/party spells pass an empty target, producing "on your {target}party".
+- 227 rows still contain `{spell}`; the engine prints the spell's name there, so clients can match the literal text.
+- The realm runs the GreaterMUD engine (`Info.Legit = 2`). Paradigm passes caster+spell to line 2 even when `MsgStyle` bit 0 is set, which is why "ray of petrification" line 2 got `{?}`.
+- Player-castable spells are identifiable without the cross-reference scan: 458 spells have a magery type; the 5 textblock-taught Kai forms are the only learnable spells without one, and their cast lines carry no damage anyway. 312 magery-less spells are cast by items (`Casted By` contains `Item #`); 1,335 are monster-only.
+
+## R2.2 Schema (table `Messages`)
+
+| Column | Jet type | Size | Meaning |
+|---|---|---|---|
+| `ID` | adInteger | | row id, `pkMessages` |
+| `Name` | adVarWChar | 50 | spell name, item name (item-cast spells) or monster name (`Death`); `Chr(0)` for rows a client matches by text alone |
+| `Kind` | adVarWChar | 12 | `Cast`, `Self`, `Hit`, `HitOther`, `Death`, `Trap`, `TrapFail` |
+| `Msg` | adVarWChar | 100 | the line, literal except for tokens |
+| `EndMsg` | adVarWChar | 100 | wear-off line (`Self` rows only); its presence means the effect is tracked until it ends |
+| `Effects` | adVarWChar | 255 | CSV |
+
+Removed: `Duration` column, `Timed` effect, kinds `Target`, `Fail`, `Shield`, `ShieldOwner`.
+
+## R2.3 Kinds, from the client's seat
+
+| Kind | Meaning for a client | Built from |
+|---|---|---|
+| `Cast` | confirmation that **my** spell/item worked, with the amount | cast line 1 of a player-castable or item-cast spell, when it carries `{dmg}` and is not a hard-coded form |
+| `Self` | something happened **to me**: an effect started (with `EndMsg` when it ends), a failed action, incoming non-standard damage | DescMsg line 3 (+ line 1 as `EndMsg`); ConfuseMsg line 1 (effect `Fail`); cast line 2 when it carries `{dmg}` and is not a hard-coded form, or when the spell has a status ability and no DescMsg |
+| `Hit` | a monster hit me with a non-standard verb phrase | monster hit message line 1 |
+| `HitOther` | a monster hit someone else, non-standard | monster hit message line 2 |
+| `Death` | a monster died (name set) | death message line 3 |
+| `Trap`, `TrapFail` | a trap hurt me | exit Para3/Para4 line 1 |
+
+Cast line 1 of a **monster-only** spell (no magery type, not learnable from an item, not cast by an item) is never exported: no player ever sees it. Line 3 (room) is never exported.
+
+Player-castable := `Spellrec.MageryA > 0` **or** some item teaches it (ability 42). Item-cast := some item has ability 43 pointing at it (alone, or after 114 `%Spell`). Both come from a pass over the item file inside the module, so the message pass keeps no dependency on `LocateRecords` and works in "Export Only" mode.
+
+## R2.4 Names
+
+- `Cast`/`Self` rows from a player-castable spell: the spell's name.
+- `Cast`/`Self` rows from an item-cast spell: **one row per casting item, named after the item** (a client knows which item it is using; MegaMud links by item name). If the same spell is also player-castable, the spell-name row is emitted as well.
+- `Self` rows that only mean "my last action failed" (ConfuseMsg text that is not also the spell's status text): no name; one row per distinct text across the whole realm, `Effects = Fail`.
+- `Hit`, `HitOther`, `Trap`, `TrapFail`: no name. `Death`: monster name.
+
+## R2.5 Tokens and substitution
+
+- `{source}` replaces `{caster}` (the caster or attacking monster, as printed).
+- `{spell}` is gone: the spell's name is substituted literally, so "You fire a magic missile at {target} for {dmg} damage!" matches the game text.
+- `{target}` is substituted with **nothing** when the spell's target type is an area/room/party type (stock: 3, 9-13; "greater healing rain" becomes "You cast greater healing rain on your party, healing {dmg} damage!"). It stays `{target}` for single-target spells.
+- `{dmg}`, `{monster}`, `{attacker}` unchanged. `Death` lines map a stray `%s` to `{monster}`.
+- Argument order follows the engine selected for the export: stock order as in 2.2 when "For GreaterMUD Engine" is off; when it is on, line 2 is always `{source}`, spell, `{dmg}` and line 1 with `MsgStyle` bit 0 set is `{target}`, `{dmg}` (Paradigm `Spell.cs:1242-1300`). Remaining `{?}` cases are data bugs and stay logged.
+
+## R2.6 Effects
+
+Vocabulary: `Poisoned Confused Blinded Held Fear Mute Sleep Damage DamageOverTime Drain Heal HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure Fail RoomSpell Trap Death` (no `Timed`). `Fail` is added to a `Self` row whose text is the spell's ConfuseMsg line 1; when that text equals the status text (stunned), the status row simply gains `Fail` and no second row is written.
+
+## R2.7 Hard-coded (never exported) formats, applied after substitution
+
+1. `^You cast <spell> (on|at|upon) ... {dmg} (damage|healing|hit points)` - your own standard cast line.
+2. `^{source} casts <spell> (on|at|upon) you ... {dmg} damage` - standard incoming cast line.
+3. `^You are ... for {dmg} damage!$` and `^You take {dmg} damage` - standard incoming damage lines.
+4. `^{target} ...{dmg}... damage!?$` - third-party observation of damage/heal in any wording ("{target} takes {dmg} fire damage!", "{target} is struck by a dark force for {dmg} damage!"); likewise `^{attacker} ...{dmg}... damage` (shield owner line).
+5. `^(The |An? )?{monster} <one word> you for {dmg} damage!$` - standard monster hit on me.
+6. `^(The |An? )?{monster} ... {target} for {dmg} damage!$` - monster hit on someone else in the standard "... for N damage" shape, any verb phrase (proposed; see question 2).
+7. Cast lines without `{dmg}` (the status line carries the information).
+
+The consumer doc gets a new section listing the formats clients must implement themselves: everything in `C:\Users\synta\Downloads\message details from megamud.txt` (damage, misses, outgoing damage, backstab, engagement, death/exp, cast success/fail, healing cast line, poison flags, wear-off keywords, rest/meditate, light levels) plus the seven patterns above.
+
+## R2.8 Dedupe
+
+Key `Kind|Name|Msg|EndMsg|Effects`; nameless rows collapse across the realm by `Kind|Msg|EndMsg|Effects`. Expected effect on the test realm: the 67 `Fail` rows become about 20, the 433 `Target` + 239 `Self` rows shrink to the non-standard remainder (rough estimate 250-300 `Cast`/`Self` damage lines), status rows stay at ~520, `Hit`/`HitOther` drop to the multi-word-verb lines that are not in the "... for N damage" shape.
+
+## R2.9 Code changes
+
+- `modMMEMessages.bas`: item pass (abilities 42/43/114 -> two dictionaries: spell->item names, spell->learnable); spell pass uses `MageryA`, `Target`, the engine flag and the dictionaries; new kind/name/effect rules; `{spell}` substitution by name; `Fail` merge; drop Duration; `{source}`; Paradigm argument order when the GreaterMUD checkbox is on (`frmMME_Export.chkLegit(1).Value`).
+- `frmMME_Export.frm`: `CreateTables` drops the `Duration` column; nothing else.
+- `docs/mme_export_notes.txt`: rewrite the Messages section for the new kinds/tokens, add the hard-coded formats section. `docs/verify-mme-messages.ps1`: new column set, new spot checks ("dark force" has no `Cast` row and its "You are struck..." line is absent because it is standard; "greater healing rain" -> "on your party"; "You fumble in confusion!" exactly once, nameless, `Fail`).
+- `PLAN`/`README` updated.
+
+## R2.10 Questions before implementing
+
+1. Kinds `Cast / Self / Hit / HitOther / Death / Trap / TrapFail` as above, or fold `Hit`/`HitOther`/`Trap` into `Self`/`Other` with the monster/trap nature carried only by `Effects`?
+2. Pattern 6: treat any "{monster} ... {target} for {dmg} damage!" as standard (export only odd shapes such as "{target} takes {dmg} damage from the venom!"), or keep the single-verb rule for `HitOther` too?
+3. Item-cast spells: rows named after each casting item, plus a spell-name row when the spell is also castable by players - correct? (Alternative: item names only.)
+4. Line 2 without `{dmg}` and with a DescMsg (e.g. "Poison burns through your veins!" for "bites", whose status line is "You feel ill.") is currently skipped because the status line follows it. Keep that, or export both?
+5. `Death` rows: 1,481 on this realm. Keep all, or only monsters whose death text is not "<name> ..." boilerplate?
+6. Argument order by engine checkbox (R2.5) - acceptable, or always use Paradigm order for your exports?
+
+## R2.11 Answers (2026-10-18)
+
+1. Kinds reduce to `Cast`, `Self`, `Other`. Monster hits on me become `Self` with `Effects = Damage,Monster`; hits on others become `Other` with `Damage,Monster`; death texts become `Other` with `Death`; trap trigger and disarm-fail lines become `Self` with `Damage,Trap`.
+2. Any "{source} ... {target} for {dmg} damage!" line is standard and not exported (any verb phrase).
+3. Item-cast spells: one row per casting item name, plus the spell-name row when players can also cast the spell, except when the item and spell names are identical (then one row).
+4. A line 2 without `{dmg}` stays skipped when the spell has a DescMsg.
+5. Death texts only for monsters with `RegenTime > 0` or `GameLimit > 0`.
+6. Pending; see below.
+7. `{monster}` is also replaced by `{source}`. Token set: `{source} {target} {dmg} {attacker}`.
+
+Question 6, evidence: the data is identical for both engines, but the engines render it differently for one field. Stock tests `MsgStyle And 1` and, when set, passes only (target, value) to line 1 and only (value) to line 2. Paradigm tests `MessageStyle != 1` (`Spell.cs:1242, 1266`), so only the exact value 1 selects the short form, and even then line 2 still receives (caster, spell, value). On this realm `MsgStyle` is 0 for 857 spells, 1 for 442, 32 for 109, 33 for 20 and 114 for 1. The 130 spells with 32/33/114 are the ones that differ: stock would print "%s fires a %s at you" with missing arguments for value 33; Paradigm prints it normally. With the GreaterMUD checkbox on, the export follows Paradigm's rendering; off, the stock rendering.

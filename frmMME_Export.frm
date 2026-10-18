@@ -6810,7 +6810,6 @@ With tabNewMessages
     .Columns.Append "Msg", adVarWChar, 100
     .Columns.Append "EndMsg", adVarWChar, 100
     .Columns.Append "Effects", adVarWChar, 255
-    .Columns.Append "Duration", adInteger
 End With
 catNewDB.Tables.Append tabNewMessages
 
