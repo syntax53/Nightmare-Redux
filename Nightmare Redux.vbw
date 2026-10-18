@@ -42,6 +42,7 @@ frmDatabaseExport = 156, 156, 1995, 940, C, 0, 0, 1164, 846, C
 frmHelpTextblocks = 0, 0, 0, 0, C, 26, 26, 1190, 872, C
 frmRecordChange = 312, 312, 2110, 1057, C, 52, 52, 1216, 898, C
 modMMUDFunctions = 26, 26, 969, 538, C
+modMMEMessages = 0, 0, 0, 0, C
 frmUserPaste = 0, 0, 0, 0, C, 78, 78, 1242, 924, C
 frmMonsterNPC_List = 130, 130, 1057, 626, C, 104, 104, 1268, 950, C
 frmMonsterAttackSim = 208, 208, 1954, 1080, C, 130, 130, 1294, 976, C
