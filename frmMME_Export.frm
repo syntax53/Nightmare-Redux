@@ -5405,9 +5405,16 @@ Do While nStatus = 0 And bStopExport = False
     tabItems.Fields("In Game") = IIf(bAllInGame, True, False)
     tabItems.Fields("Obtained From") = Chr(0)
     tabItems.Fields("References") = Chr(0)
-    tabItems.Fields("HitVerbs") = MsgLineOrNull(Itemrec.HitMsg, 1)
-    tabItems.Fields("HitVerbsOther") = MsgLineOrNull(Itemrec.HitMsg, 2)
-    tabItems.Fields("MissVerbs") = MsgLineOrNull(Itemrec.MissMsg, 1)
+    'swing verbs only mean something on a weapon; other items carry leftover message numbers
+    If Itemrec.Weapon > 0 Then
+        tabItems.Fields("HitVerbs") = MsgLineOrNull(Itemrec.HitMsg, 1)
+        tabItems.Fields("HitVerbsOther") = MsgLineOrNull(Itemrec.HitMsg, 2)
+        tabItems.Fields("MissVerbs") = MsgLineOrNull(Itemrec.MissMsg, 1)
+    Else
+        tabItems.Fields("HitVerbs") = Chr(0)
+        tabItems.Fields("HitVerbsOther") = Chr(0)
+        tabItems.Fields("MissVerbs") = Chr(0)
+    End If
     
     For x = 0 To 9
         tabItems.Fields("ClassRest-" & x) = Itemrec.Class(x)

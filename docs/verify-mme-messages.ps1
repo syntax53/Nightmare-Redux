@@ -111,7 +111,7 @@ if ($sameText -eq 0) { Pass "Self/Other rows unique by kind, text and end text (
 if ($twins -eq 0) { Pass "no Self row is the you-form of a Cast/Other row" } else { Fail "$twins Self rows duplicate a {target} row with you/your" }
 if ($noName -eq 0) { Pass "every row has a Name (the cleaned Msg text when no source name applies)" } else { Fail "$noName rows have an empty Name" }
 $dirty = 0
-foreach ($r in $allRows) { if ($r.Name.StartsWith("The {source} ") -or $r.Name.StartsWith("{source} ") -or $r.Name.EndsWith("{dmg} damage!") -or $r.Name.EndsWith("{dmg} hit points!") -or $r.Name.Contains("{target} ") -or $r.Name.Contains("{target}'s ")) { $dirty++ } }
+foreach ($r in $allRows) { if ($r.Name.StartsWith("The {source} ") -or $r.Name.StartsWith("{source} ") -or $r.Name.StartsWith("The {source}'s ") -or $r.Name.StartsWith("{source}'s ") -or $r.Name.EndsWith("{dmg} damage!") -or $r.Name.EndsWith("{dmg} hit points!") -or $r.Name.Contains("{target} ") -or $r.Name.Contains("{target}'s ")) { $dirty++ } }
 if ($dirty -eq 0) { Pass "text-derived names are cleaned of {source}/{target}/{dmg} boilerplate" } else { Fail "$dirty names still carry {source}/{target}/{dmg} boilerplate" }
 # standard-form lines that should have been excluded
 $rows = Q $cnNew "SELECT Kind, [Msg] AS Text, Effects FROM Messages"
@@ -165,6 +165,7 @@ Expect "filthbug hit on me (non-standard phrase)" "SELECT * FROM Messages WHERE 
 ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"
 Expect "arrow trap row"          "SELECT * FROM Messages WHERE Effects='Damage,Trap' AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Kind -eq "Self" -and $r.Name -ne "" }
 ExpectNone "you-form of a monster hit on another is dropped" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Self' AND [Msg]='The {source} pounds you with its fist for {dmg} damage!'"
+ExpectNone "no swing verbs on non-weapons" "SELECT COUNT(*) AS Cnt FROM Items WHERE WeaponType=0 AND (Len(HitVerbs)>1 OR Len(HitVerbsOther)>1 OR Len(MissVerbs)>1)"
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
 $cnNew.Close()
 Write-Output ""

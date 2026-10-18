@@ -91,7 +91,8 @@ other row (status and damage lines of enemy-targeted spells, monster hits, traps
 differently named sources) is realm-wide and is named after its own text, shortened: a leading
 "The {source} " or "{source} ", a trailing " for {dmg} damage!", " {dmg} damage!" or " {dmg} hit
 points!" and any "{target} " or "{target}'s " are dropped (so "The {source} claws you with its
-pincers for {dmg} damage!" is named "claws you with its pincers"). Name is never empty. Rows are unique by kind, Msg and EndMsg: the same line from several sources is exported
+pincers for {dmg} damage!" is named "claws you with its pincers"; "{source}'s " and "The {source}'s "
+are dropped the same way). Name is never empty. Rows are unique by kind, Msg and EndMsg: the same line from several sources is exported
 once with the union of their Effects. A Self line that is the "you" form of a Cast or Other line
 ("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
 "you"/"your" wherever {target} appears and treat the line as being about themselves when it does.
@@ -177,5 +178,6 @@ Status and state:
   To do this action, <X>   You are overcome with a feeling of guilt
 
 -= Items (added after NMR 1.8.3) =-
-HitVerbs / HitVerbsOther / MissVerbs: "|"-separated verb alternatives used in
+HitVerbs / HitVerbsOther / MissVerbs (weapons only; empty on every other item): "|"-separated verb
+alternatives used in
 "You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.

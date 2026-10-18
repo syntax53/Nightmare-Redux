@@ -455,15 +455,19 @@ End Function
 'player), merging its effects into that row, then writes every surviving row once with IDs 1, 2, 3...
 'A row without a name is named by its text.
 'Name for a row that has no source name: the line itself, minus the parts that carry no identity
-'(leading "The {source} " / "{source} ", trailing " for {dmg} damage!" / " {dmg} damage!" / " {dmg} hit points!",
+'(leading "The {source}['s] " / "{source}['s] ", trailing " for {dmg} damage!" / " {dmg} damage!" / " {dmg} hit points!",
 'and any "{target}'s " / "{target} "). Falls back to the untouched line if nothing would be left.
 Private Function CleanName(ByVal sLine As String) As String
 Dim s As String
 On Error GoTo error:
 
 s = sLine
-If Left$(s, 13) = "The {source} " Then
+If Left$(s, 15) = "The {source}'s " Then
+    s = Mid$(s, 16)
+ElseIf Left$(s, 13) = "The {source} " Then
     s = Mid$(s, 14)
+ElseIf Left$(s, 11) = "{source}'s " Then
+    s = Mid$(s, 12)
 ElseIf Left$(s, 9) = "{source} " Then
     s = Mid$(s, 10)
 End If
