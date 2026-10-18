@@ -216,11 +216,43 @@ If sTemp = "MSG NOT IN DATABASE!" Then
 End If
 If sTemp = "none" Then Exit Function
 
-ReadMsgLine = RTrim(sTemp)
+ReadMsgLine = RTrim(StripControl(sTemp))
 
 Exit Function
 error:
 Call HandleError("ReadMsgLine")
+mbFailed = True
+End Function
+
+'Removes ANSI escape sequences (ESC [ ... letter) and any other control character.
+Private Function StripControl(ByVal sLine As String) As String
+Dim nPos As Long, nLen As Long, sCh As String, sOut As String, bInEsc As Boolean
+On Error GoTo error:
+
+nLen = Len(sLine)
+nPos = 1
+Do While nPos <= nLen
+    sCh = Mid$(sLine, nPos, 1)
+    If bInEsc Then
+        If (sCh >= "A" And sCh <= "Z") Or (sCh >= "a" And sCh <= "z") Then bInEsc = False
+    ElseIf sCh = Chr$(27) Then
+        If nPos < nLen Then
+            If Mid$(sLine, nPos + 1, 1) = "[" Then
+                bInEsc = True
+                nPos = nPos + 1
+            End If
+        End If
+    ElseIf Asc(sCh) >= 32 And Asc(sCh) <> 127 Then
+        sOut = sOut & sCh
+    End If
+    nPos = nPos + 1
+Loop
+
+StripControl = sOut
+
+Exit Function
+error:
+Call HandleError("StripControl")
 mbFailed = True
 End Function
 
@@ -523,6 +555,7 @@ Private Sub ProcessSpell(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, 
     dictRoomSpells As Scripting.Dictionary, dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary)
 Dim sName As String, sSrc As String, sEffects As String, sKey As String
 Dim sItemNames As String, sTargetTok As String, sNames() As String, nNames As Long
+Dim sSelfNames() As String, nSelfNames As Long, bFriendly As Boolean
 Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long
 Dim nDesc As Long, nConf As Long, nShock As Long
 Dim sDesc3 As String, sConf1 As String, bMergeFail As Boolean
@@ -556,6 +589,24 @@ End If
 
 nNames = BuildNameList(sName, bPlayer, sItemNames, sNames)
 
+'Lines addressed to the affected player are named only when the player can be the one affected by their own
+'spell or item (self/friendly target types); hostile-spell status text is seen only by the enemy, so it is
+'a realm-wide line and gets no name (one row per distinct text).
+Select Case Spellrec.Target
+    Case 0, 1, 2, 6, 13:
+        bFriendly = True
+    Case Else:
+        bFriendly = False
+End Select
+If bFriendly And (bPlayer Or Not sItemNames = "") Then
+    sSelfNames = sNames
+    nSelfNames = nNames
+Else
+    ReDim sSelfNames(0)
+    sSelfNames(0) = ""
+    nSelfNames = 1
+End If
+
 nDesc = SpellAbilityValue(115)
 nConf = SpellAbilityValue(101)
 nShock = SpellAbilityValue(137)
@@ -572,13 +623,13 @@ If Not Trim(sConf1) = "" Then
 End If
 
 nRows = 0
-nRows = nRows + SpellStatusRow(rs, dictSeen, nNextID, sNames, nNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
+nRows = nRows + SpellStatusRow(rs, dictSeen, nNextID, sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
 If Not bMergeFail Then nRows = nRows + SpellFailRow(rs, dictSeen, nNextID, sSrc, sConf1)
 If bPlayer Or Not sItemNames = "" Then
     nRows = nRows + SpellCastRow(rs, dictSeen, nNextID, sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
 End If
-nRows = nRows + SpellIncomingRow(rs, dictSeen, nNextID, sNames, nNames, sName, sSrc, nDesc, bShort, sEffects)
-nRows = nRows + SpellShieldRows(rs, dictSeen, nNextID, sNames, nNames, sSrc, nShock)
+nRows = nRows + SpellIncomingRow(rs, dictSeen, nNextID, sSelfNames, nSelfNames, sName, sSrc, nDesc, bShort, sEffects)
+nRows = nRows + SpellShieldRows(rs, dictSeen, nNextID, sSelfNames, nSelfNames, sSrc, nShock)
 
 If sName = "" And nRows > 0 Then Call LogWarning("Spell " & Spellrec.Number & ": blank spell name")
 

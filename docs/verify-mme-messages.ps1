@@ -35,7 +35,7 @@ function Indexes($cn){
   while (-not $ix.EOF) { $k = $ix.Fields.Item("TABLE_NAME").Value + "." + $ix.Fields.Item("INDEX_NAME").Value; $out[$k] = $ix.Fields.Item("COLUMN_NAME").Value; $ix.MoveNext() }
   return $out
 }
-function Q($cn,$sql){ $rs = New-Object -ComObject ADODB.Recordset; $rs.Open($sql,$cn); $list=@(); while(-not $rs.EOF){ $h=@{}; for($i=0;$i -lt $rs.Fields.Count;$i++){ $v=$rs.Fields.Item($i).Value; if($v -is [string]){ $v=$v.TrimEnd([char]0).Trim() }; $h[$rs.Fields.Item($i).Name]=$v }; $list += ,$h; $rs.MoveNext() }; $rs.Close(); return $list }
+function Q($cn,$sql){ $rs = New-Object -ComObject ADODB.Recordset; try { $rs.Open($sql,$cn) } catch { Write-Output ("ERROR running: " + $sql + " :: " + $_.Exception.Message); return @() }; $list=@(); while(-not $rs.EOF){ $h=@{}; for($i=0;$i -lt $rs.Fields.Count;$i++){ $v=$rs.Fields.Item($i).Value; if($v -is [string]){ $v=$v.TrimEnd([char]0).Trim() }; $h[$rs.Fields.Item($i).Name]=$v }; $list += ,$h; $rs.MoveNext() }; $rs.Close(); return $list }
 function Count($cn,$sql){ (Q $cn $sql)[0].Values | Select-Object -First 1 }
 
 $cnNew = OpenDb $New
@@ -72,32 +72,39 @@ $want = "ID,Name,Kind,Msg,EndMsg,Effects"
 $have = (@($sNew["Messages"].Keys) -join ",")
 if ($have -eq $want) { Pass "Messages columns = $want" } else { Fail "Messages columns = $have" }
 if ($iNew.ContainsKey("Messages.pkMessages")) { Pass "pkMessages exists" } else { Fail "pkMessages missing" }
-$n = Count $cnNew "SELECT COUNT(*) AS N FROM Messages"
+$n = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages"
 Write-Output "INFO  Messages rows: $n"
-foreach ($k in "Cast","Self","Other") { $c = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind='$k'"; Write-Output ("INFO  Kind {0,-6} {1}" -f $k, $c) }
-Write-Output ("INFO  Self rows with EndMsg (tracked effects): " + (Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind='Self' AND Len([EndMsg])>1"))
-Write-Output ("INFO  Fail rows: " + (Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Effects LIKE '%Fail%'"))
-Write-Output ("INFO  Monster hit rows: " + (Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Effects LIKE '%Monster%'"))
-Write-Output ("INFO  Death rows: " + (Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Effects LIKE '%Death%'"))
-Write-Output ("INFO  Trap rows: " + (Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Effects LIKE '%Trap%'"))
+foreach ($k in "Cast","Self","Other") { $c = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='$k'"; Write-Output ("INFO  Kind {0,-6} {1}" -f $k, $c) }
+Write-Output ("INFO  Self rows with EndMsg (tracked effects): " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Self' AND Len([EndMsg])>1"))
+Write-Output ("INFO  Fail rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Fail%'"))
+Write-Output ("INFO  Monster hit rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Monster%'"))
+Write-Output ("INFO  Death rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Death%'"))
+Write-Output ("INFO  Trap rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Trap%'"))
 
 # ---- 3. negative checks
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE [Msg] LIKE '%[%]s%' OR [Msg] LIKE '%[%]d%' OR [EndMsg] LIKE '%[%]s%' OR [EndMsg] LIKE '%[%]d%'"
+$bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%[%]s%' OR [Msg] LIKE '%[%]d%' OR [EndMsg] LIKE '%[%]s%' OR [EndMsg] LIKE '%[%]d%'"
 if ($bad -eq 0) { Pass "no raw %s/%d left" } else { Fail "$bad rows still contain raw %s/%d" }
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind NOT IN ('Cast','Self','Other')"
+$bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind NOT IN ('Cast','Self','Other')"
 if ($bad -eq 0) { Pass "all Kind values known" } else { Fail "$bad rows with unknown Kind" }
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE [Msg] LIKE '%{caster}%' OR [Msg] LIKE '%{monster}%' OR [Msg] LIKE '%{spell}%'"
+$bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%{caster}%' OR [Msg] LIKE '%{monster}%' OR [Msg] LIKE '%{spell}%'"
 if ($bad -eq 0) { Pass "no retired tokens ({caster}/{monster}/{spell})" } else { Fail "$bad rows use retired tokens" }
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Effects LIKE '%Timed%'"
+$bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Timed%'"
 if ($bad -eq 0) { Pass "no Timed effect" } else { Fail "$bad rows carry Timed" }
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Kind='Cast' AND (Len([Name])<=1)"
+$bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Cast' AND (Len([Name])<=1)"
 if ($bad -eq 0) { Pass "every Cast row is named" } else { Fail "$bad Cast rows have no Name" }
-$bad = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE Len([EndMsg])>1 AND Len([Name])<=1"
-if ($bad -eq 0) { Pass "every tracked effect is named" } else { Fail "$bad effect rows have no Name" }
-$q = Count $cnNew "SELECT COUNT(*) AS N FROM Messages WHERE [Msg] LIKE '%{?}%' OR [EndMsg] LIKE '%{?}%'"
+$bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%' + Chr(27) + '%' OR [EndMsg] LIKE '%' + Chr(27) + '%'"
+if ($bad -eq 0) { Pass "no ANSI escape codes" } else { Fail "$bad rows contain ANSI escape codes" }
+$q = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%{?}%' OR [EndMsg] LIKE '%{?}%'"
 Write-Output "INFO  rows with unresolved {?} placeholder: $q (should match the warning log)"
-$dup = Count $cnNew "SELECT COUNT(*) AS N FROM (SELECT Kind,[Name],[Msg],[EndMsg],Effects FROM Messages GROUP BY Kind,[Name],[Msg],[EndMsg],Effects HAVING COUNT(*)>1)"
-if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate key groups" }
+$allRows = Q $cnNew "SELECT Kind,[Name],[Msg],[EndMsg],Effects FROM Messages"
+$seen = @{}; $dup = 0; $sameText = 0; $seenText = @{}
+foreach ($r in $allRows) {
+  $k = $r.Kind + "|" + $r.Name + "|" + $r.Msg + "|" + $r.EndMsg + "|" + $r.Effects
+  if ($seen.ContainsKey($k)) { $dup++ } else { $seen[$k] = 1 }
+  if ($r.Kind -eq "Self") { $t = $r.Msg + "|" + $r.EndMsg; if ($seenText.ContainsKey($t)) { $sameText++ } else { $seenText[$t] = 1 } }
+}
+if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate rows" }
+Write-Output "INFO  Self rows repeating another Self row's text under a different name: $sameText (expected only for self/friendly spells)"
 # standard-form lines that should have been excluded
 $rows = Q $cnNew "SELECT Kind, [Msg] AS Text, Effects FROM Messages"
 $rx = @(
@@ -122,20 +129,27 @@ function Expect($desc, $sql, $pred) {
 }
 function ExpectNone($desc, $sql) { $c = Count $cnNew $sql; if ($c -eq 0) { Pass $desc } else { Fail "$desc  ($c rows)" } }
 Expect "bless effect row"        "SELECT * FROM Messages WHERE [Name]='bless' AND Kind='Self'"        { param($r) $r.Msg -eq "You feel lucky!" -and $r.EndMsg -eq "The effects of bless wear off!" -and $r.Effects -notmatch "Timed" }
-Expect "acid rain effect row"    "SELECT * FROM Messages WHERE [Name]='acid rain' AND Kind='Self'"    { param($r) $r.Msg -eq "You are covered in acid!" -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
-Expect "poison cloud Poisoned"   "SELECT * FROM Messages WHERE [Name]='poison cloud' AND Kind='Self'" { param($r) $r.Msg -eq "You feel ill." -and $r.Effects -match "Poisoned" }
+Expect "acid rain effect row (nameless, hostile spell)" "SELECT * FROM Messages WHERE [Msg]='You are covered in acid!' AND Kind='Self'" { param($r) $r.Name -eq "" -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
+Expect "poison Poisoned (nameless)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) $r.Name -eq "" -and $r.Effects -match "Poisoned" }
 Expect "magic missile Cast"      "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Cast'" { param($r) $r.Msg -eq "You fire a magic missile at {target} for {dmg} damage!" }
-Expect "magic missile incoming"  "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Self'" { param($r) $r.Msg -eq "{source} fires a magic missile at you for {dmg} damage!" }
+Expect "magic missile incoming (nameless)" "SELECT * FROM Messages WHERE [Msg]='{source} fires a magic missile at you for {dmg} damage!' AND Kind='Self'" { param($r) $r.Name -eq "" }
 Expect "greater healing rain party" "SELECT * FROM Messages WHERE [Name]='greater healing rain' AND Kind='Cast'" { param($r) $r.Msg -eq "You cast greater healing rain on your party, healing {dmg} damage!" }
 Expect "fumble once, nameless"   "SELECT * FROM Messages WHERE [Msg]='You fumble in confusion!'"      { param($r) $r.Effects -eq "Fail" -and $r.Name -eq "" }
-ExpectNone "fumble appears only once" "SELECT COUNT(*) AS N FROM Messages WHERE [Msg]='You fumble in confusion!' AND ID<>(SELECT MIN(ID) FROM Messages WHERE [Msg]='You fumble in confusion!')"
-Expect "stunned merged Fail"     "SELECT * FROM Messages WHERE [Name]='stunned' AND Kind='Self' AND [Msg]='You are stunned!'" { param($r) $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
-ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS N FROM Messages WHERE [Name]='dark force' AND Kind='Cast'"
-ExpectNone "dark force standard incoming line absent" "SELECT COUNT(*) AS N FROM Messages WHERE [Msg]='You are struck by a dark force for {dmg} damage!'"
-Expect "hold person Held"        "SELECT * FROM Messages WHERE [Name]='hold person' AND Kind='Self'"  { param($r) $r.Msg -eq "Your legs are paralyzed!" -and $r.Effects -match "Held" }
+$fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You fumble in confusion!'"
+if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
+$flat = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are flat on your back!'"
+if ($flat -eq 1) { Pass "knockdown status appears only once (nameless)" } else { Fail "knockdown status appears $flat times" }
+$lit = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
+if ($lit -eq 1) { Pass "lightning hit line appears only once (nameless)" } else { Fail "lightning hit line appears $lit times" }
+Expect "stunned merged Fail (nameless)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) $r.Name -eq "" -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
+$stun = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are stunned!'"
+if ($stun -le 2) { Pass "stunned text appears at most twice (status merged with Fail; separate fail text variants allowed)" } else { Fail "stunned text appears $stun times" }
+ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='dark force' AND Kind='Cast'"
+ExpectNone "dark force standard incoming line absent" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are struck by a dark force for {dmg} damage!'"
+Expect "hold person Held (nameless)" "SELECT * FROM Messages WHERE [Msg]='Your legs are paralyzed!' AND Kind='Self'" { param($r) $r.Name -eq "" -and $r.Effects -match "Held" }
 Expect "giant rat death (Other)" "SELECT * FROM Messages WHERE [Name]='giant rat' AND Kind='Other'"   { param($r) $r.Msg -like "The giant rat falls to the ground*" -and $r.Effects -eq "Death" }
 Expect "lashworm hit on me"      "SELECT * FROM Messages WHERE Kind='Self' AND [Msg] LIKE '%darts forward and bites you%'" { param($r) $r.Msg -eq "{source} darts forward and bites you for {dmg} damage!" -and $r.Effects -eq "Damage,Monster" }
-ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS N FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"
+ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"
 Expect "arrow trap row"          "SELECT * FROM Messages WHERE Effects='Damage,Trap' AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Kind -eq "Self" -and $r.Name -eq "" }
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
 $cnNew.Close()

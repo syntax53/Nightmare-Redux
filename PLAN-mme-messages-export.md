@@ -364,3 +364,10 @@ Key `Kind|Name|Msg|EndMsg|Effects`; nameless rows collapse across the realm by `
 7. `{monster}` is also replaced by `{source}`. Token set: `{source} {target} {dmg} {attacker}`.
 
 Question 6, evidence: the data is identical for both engines, but the engines render it differently for one field. Stock tests `MsgStyle And 1` and, when set, passes only (target, value) to line 1 and only (value) to line 2. Paradigm tests `MessageStyle != 1` (`Spell.cs:1242, 1266`), so only the exact value 1 selects the short form, and even then line 2 still receives (caster, spell, value). On this realm `MsgStyle` is 0 for 857 spells, 1 for 442, 32 for 109, 33 for 20 and 114 for 1. The 130 spells with 32/33/114 are the ones that differ: stock would print "%s fires a %s at you" with missing arguments for value 33; Paradigm prints it normally. With the GreaterMUD checkbox on, the export follows Paradigm's rendering; off, the stock rendering.
+
+## R2.12 Second test export (2026-10-18)
+
+- Colour codes embedded in message text (`ESC[1;31m` ... `ESC[0m`) are stripped before normalization (`StripControl`); other control characters are dropped.
+- `Self` rows are named only when the player can be the one affected by their own spell or item: target types 0 User, 1 Self, 2 SelfOrUser, 6 Any, 13 FullPartyArea (Paradigm `SpellTargetType`), and the spell is player-castable or item-cast. Status and incoming lines of enemy-targeted spells (4, 8, 11, 12 and the rest) are realm-wide lines: nameless, one row per distinct text ("You are flat on your back!" once instead of 13 weapon rows; "Lightning strikes you for {dmg} damage!" once instead of 8).
+- `Cast` rows keep their names (they confirm the player's own action).
+- Verification script: Jet rejects `AS N`; aliases are `Cnt`; the duplicate check runs in PowerShell; spot checks updated for nameless hostile-spell rows.
