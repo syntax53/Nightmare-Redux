@@ -55,6 +55,7 @@ If tabMessages.RecordCount <> 0 Then
     GoTo tryagain:
 End If
 
+tabMessages.Index = "pkMessages"
 nNextID = 1
 Call ExportItemScan(dictLearn, dictItemCast, bStop)
 If bStop = False And mbFailed = False Then Call ExportRoomMessages(tabMessages, dictSeen, nNextID, dictRoomSpells, bStop)
@@ -109,7 +110,7 @@ mdictLogged.CompareMode = vbBinaryCompare
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
 Set mReP3 = NewRegExp("^You are .* for {dmg} damage!?$|^You take {dmg} damage|you for {dmg} damage")
-Set mReP4 = NewRegExp("^\{target\} .*\{dmg\}.* damage!?$|^\{attacker\} .*\{dmg\}.* damage!?$")
+Set mReP4 = NewRegExp("^{target} .*{dmg}.* damage|^{attacker} .*{dmg}.* damage")
 Set mReP5 = NewRegExp("^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$")
 Set mReP6 = NewRegExp("^(The |An? )?\{source\} .* \{target\} for \{dmg\} damage!$")
 
@@ -346,8 +347,12 @@ If sKind = "Cast" Then
 Else
     sKey = sKind & "|" & sText & "|" & sEndText & "|" & sEffects
 End If
-If dictSeen.Exists(sKey) Then Exit Function
-dictSeen.Add sKey, True
+If dictSeen.Exists(sKey) Then
+    'Same line from another source: if the names differ the line is realm-wide, so the stored row loses its name.
+    Call BlankNameOnCollision(rs, dictSeen, sKey, sName)
+    Exit Function
+End If
+dictSeen.Add sKey, CStr(nNextID) & "|" & sName
 
 If bTrunc Then Call LogWarning("Row truncated: Kind=" & sKind & " Name=" & sName & " Text=" & sText)
 
@@ -366,6 +371,33 @@ error:
 Call HandleError("AddRow")
 mbFailed = True
 End Function
+
+'dictSeen holds "rowid|name" per key. When a second source with a different name produces the same row,
+'the row is edited to have no name (one row, realm-wide).
+Private Sub BlankNameOnCollision(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByVal sKey As String, ByVal sName As String)
+Dim sStored As String, nBar As Long, nID As Long, sOldName As String
+On Error GoTo error:
+
+sStored = dictSeen.Item(sKey)
+nBar = InStr(1, sStored, "|")
+If nBar = 0 Then Exit Sub
+nID = Val(Left$(sStored, nBar - 1))
+sOldName = Mid$(sStored, nBar + 1)
+If sOldName = "" Then Exit Sub
+If StrComp(sOldName, sName, vbTextCompare) = 0 Then Exit Sub
+
+rs.Seek "=", nID
+If rs.NoMatch Then Exit Sub
+rs.Edit
+rs.Fields("Name") = Chr(0)
+rs.Update
+dictSeen.Item(sKey) = CStr(nID) & "|"
+
+Exit Sub
+error:
+Call HandleError("BlankNameOnCollision")
+mbFailed = True
+End Sub
 
 'writes the same row once per name; returns 1 when the line is exportable
 Private Function AddRowEach(rs As DAO.Recordset, dictSeen As Scripting.Dictionary, ByRef nNextID As Long, sNames() As String, _
@@ -958,7 +990,7 @@ If SpellHasAbil(145) Then Call AddEffect(s, "ManaRegen")
 If SpellHasAbil(150) Then Call AddEffect(s, "ManaHeal")
 If SpellHasAbil(174) Or SpellHasAbil(176) Then Call AddEffect(s, "ManaSteal")
 If SpellHasAbil(72) Then Call AddEffect(s, "DamageShield")
-If SpellHasAbil(20) Or SpellHasAbil(73) Or SpellHasAbil(81) Or SpellHasAbil(84) Or SpellHasAbil(122) Then Call AddEffect(s, "Cure")
+If SpellHasAbil(20) Or SpellHasAbil(73) Or SpellHasAbil(81) Or SpellHasAbil(84) Then Call AddEffect(s, "Cure")
 If bRoomSpell Then Call AddEffect(s, "RoomSpell")
 
 SpellEffects = s

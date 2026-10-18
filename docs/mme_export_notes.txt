@@ -88,8 +88,9 @@ players can also cast it and the names differ). Self rows carry a name only when
 the one affected by their own spell or item (self, friendly or party target types), e.g. "You feel
 lucky!" under bless. Status and damage lines of enemy-targeted spells are only ever seen by the
 enemy, so they are realm-wide lines with no name. Every Self and Other row is unique by text and
-effects: when several spells or items produce the same line, it is exported once, under the first
-name found (spell names before item names). Colour codes embedded in a message are stripped.
+effects: when several spells or items produce the same line it is exported once, and it keeps a
+name only if every source has that same name (a line shared by differently named sources is
+realm-wide and nameless). Colour codes embedded in a message are stripped.
 
 Tokens: {source} (the caster or attacking monster, as the game prints it, including any "The"),
 {target}, {dmg}, {attacker} (the one who hit a damage shield). Match them as wildcards; {dmg} is
@@ -108,8 +109,8 @@ Engine" checked follow that engine's reading of the style byte (exact value 1), 
 bit 0.
 
 Effects (CSV): Poisoned Confused Blinded Held Fear Mute Sleep Damage DamageOverTime Drain Heal
-  HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure Fail RoomSpell Monster
-  Trap Death. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
+  HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure (cure poison, dispel,
+  freedom, remove curse) Fail RoomSpell Monster Trap Death. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
   effect is any Self row with an EndMsg.
 
 The export writes NMR-Log_MMEMessages.txt next to the MDB only when something needed attention:
