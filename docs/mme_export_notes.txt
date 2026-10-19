@@ -62,10 +62,9 @@ learnsp - 42
 
 -= Messages (added NMR 1.8.4) =-
 One row per game line a client may need to recognise. Not a dump of the realm's message file:
-message numbers, caster-only lines of monster spells, room lines and flavor text (room sounds,
-monster entrances, what others see when someone uses a command exit) are not exported,
-and lines that follow the standard formats listed further down are left out because clients
-already parse those.
+message numbers, caster-only lines of monster spells, room lines and room sounds are not exported, and lines that
+follow the standard formats listed further down are left out because clients already parse
+those, except a player spell's or casting item's own cast line, which is always exported.
 
 Columns: ID (row id), Name, Kind, Msg, EndMsg, Effects. Bracket column names in SQL ([Name],
 [Msg]): Name is a Jet reserved word, as in the other MME tables. Empty string columns are written
@@ -73,10 +72,11 @@ as a single Chr(0) character (same as the other MME tables).
 
 Kind (who the line is about, from the player's seat):
   Cast   confirmation that MY spell or item worked, with the amount when there is one: "You fire a
-         magic missile at {target} for {dmg} damage!", "A cool wind blows throughout the room!".
-         When a spell's own line is the standard "You cast/invoke/sing ..." (or empty), its start
-         line takes its place ("You lay hands on {target}."). Both are printed only once the spell
-         has landed. Name = the spell, or the item that casts it.
+         magic missile at {target} for {dmg} damage!", "A cool wind blows throughout the room!",
+         "You cast agony on {target} for {dmg} damage!". Every player spell and casting item has its
+         cast line here, standard form or not. When that line is a standard form (or empty), the
+         start line is exported as well ("You lay hands on {target}."). Both are printed only once
+         the spell has landed. Name = the spell, or the item that casts it.
   Self   something happened TO ME. With an EndMsg it is a tracked effect: Msg is printed when the
          effect starts (and by STAT), EndMsg when it wears off. Without an EndMsg it is a one-off
          line: incoming damage in a non-standard wording, a failed action (Effects contains Fail),
@@ -84,11 +84,17 @@ Kind (who the line is about, from the player's seat):
          (Effects contains Trap), my damage shield or my item's spikes hitting back
          (DamageShield), or a spell a textblock, cast exit or spell trap casts on me ("You suffer
          in the desert heat... you need water, soon!"; Effects = the spell's, plus Trap for spell
-         traps). Name = the spell or item for effect and shield rows; the text for lines a client
-         matches by text alone.
+         traps), or an incoming spell line whose status message lacks a status or a wear-off text
+         (when it has both, the status row already shows the effect starting and ending). Name =
+         the spell or item for effect and shield rows; the text for lines a client matches by text
+         alone.
   Other  something happened to someone else that a client may track: a monster hitting another
          player in a non-standard wording (Damage,Monster), or a monster's death text (Death,
-         Name = the monster).
+         Name = the monster), or a fixed line from the stock
+         game: someone leaving through a command exit, "{target} slips into the dark alley."
+         (Chase, so a client can follow a party member), and a monster appearing or changing form,
+         "A moss zombie rises from the ground!" (CheckRoom: look at the room again). The Chase and
+         CheckRoom rows are the same in every export.
 
 Name: Cast rows carry the spell's name, or the item's name when an item casts the spell (both when
 players can also cast it and the names differ). Self rows carry a source name only when the player
@@ -130,16 +136,17 @@ bit 0.
 
 Effects (CSV): Poisoned Confused Blinded Held Fear Mute Sleep Damage DamageOverTime Drain Heal
   HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure (cure poison, dispel,
-  freedom, remove curse) Fail RoomSpell Monster Trap Death. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
+  freedom, remove curse) Fail RoomSpell Monster Trap Death Chase CheckRoom. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
   effect is any Self row with an EndMsg.
 
 The export writes NMR-Log_MMEMessages.txt next to the MDB only when something needed attention:
 a placeholder that could not be mapped ({?}), a missing message record, a blank spell name, or a
 value truncated to its column size.
 
--= Standard formats clients must implement themselves (never exported) =-
+-= Standard formats clients must implement themselves =-
 These are the engine's fixed wordings and the shapes that every custom message follows. A client
-needs them hard-coded; the Messages table only carries what deviates from them.
+needs them hard-coded; the Messages table only carries what deviates from them, plus each player
+spell's and casting item's own cast line (a Cast row under its name, whatever its form).
 <X> = any text, <N> = a number, <verb> = a single word.
 
 Damage to me / to others (line colour: bold red, bold blue or cyan for monster attacks):
@@ -174,6 +181,9 @@ Engagement:
 Death, kills, experience:
   You have been killed!   But, due to a miracle, you have been saved   <X> drops to the ground!
   <X> is dead.   You gain <N> experience
+  You have <N> lives left.   You feel your life-force ebbing.
+Confusion:
+  You look around stupidly and do nothing!   (a confused player's command fails)
 Spell casting:
   You cast|invoke|sing <spell> [on <target>] ...   You attempt to cast|invoke|sing <spell> ...
   on yourself / on you / on <your name> / on <party member>

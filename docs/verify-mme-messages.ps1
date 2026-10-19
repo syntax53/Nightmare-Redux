@@ -80,6 +80,8 @@ Write-Output ("INFO  Fail rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM M
 Write-Output ("INFO  Monster hit rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Monster%'"))
 Write-Output ("INFO  Death rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Death%'"))
 Write-Output ("INFO  Trap rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects LIKE '%Trap%'"))
+Write-Output ("INFO  Chase rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects='Chase'"))
+Write-Output ("INFO  CheckRoom rows: " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Effects='CheckRoom'"))
 
 # ---- 3. negative checks
 $bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%[%]s%' OR [Msg] LIKE '%[%]d%' OR [EndMsg] LIKE '%[%]s%' OR [EndMsg] LIKE '%[%]d%'"
@@ -141,10 +143,11 @@ $rx = @(
   '{target} for {dmg} damage'
 )
 $leak = 0
-foreach ($r in $rows) { foreach ($p in $rx) { if ($r.Text -cmatch $p) { $leak++; if ($leak -le 8) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Text) }; break } } }
+# Cast rows are exempt: every player spell and casting item keeps its cast line, standard form or not
+foreach ($r in $rows) { if ($r.Kind -eq "Cast") { continue }; foreach ($p in $rx) { if ($r.Text -cmatch $p) { $leak++; if ($leak -le 8) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Text) }; break } } }
 if ($leak -eq 0) { Pass "no standard-form lines exported" } else { Fail "$leak standard-form lines exported" }
 $plain = 0
-foreach ($r in $rows) { if ($r.Text -cmatch '^You (cast|invoke|sing) ' -and -not $r.Text.Contains("{dmg}")) { $plain++; if ($plain -le 5) { Write-Output ("      standard cast line exported: [{0}] {1}" -f $r.Kind, $r.Text) } } }
+foreach ($r in $rows) { if ($r.Kind -ne "Cast" -and $r.Text -cmatch '^You (cast|invoke|sing) ' -and -not $r.Text.Contains("{dmg}")) { $plain++; if ($plain -le 5) { Write-Output ("      standard cast line exported: [{0}] {1}" -f $r.Kind, $r.Text) } } }
 if ($plain -eq 0) { Pass "no standard 'You cast/invoke/sing ...' line without an amount exported" } else { Fail "$plain standard cast lines without an amount exported" }
 
 # ---- 4. spot checks (stock data; a check fails harmlessly if your realm renamed the record)
@@ -161,7 +164,7 @@ Expect "acid rain effect row (hostile spell: Name = Msg)" "SELECT * FROM Message
 Expect "poison Poisoned (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Poisoned" }
 Expect "magic missile Cast"      "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Cast'" { param($r) $r.Msg -eq "You fire a magic missile at {target} for {dmg} damage!" }
 ExpectNone "magic missile incoming line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='{source} fires a magic missile at you for {dmg} damage!'"
-ExpectNone "greater healing rain cast line is standard (You cast X on ..., healing N damage!)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='greater healing rain'"
+Expect "greater healing rain keeps its standard cast line (player spell)" "SELECT * FROM Messages WHERE Kind='Cast' AND [Name]='greater healing rain'" { param($r) $r.Msg -like "You cast greater healing rain on*" }
 Expect "fumble once, Name = Msg"  "SELECT * FROM Messages WHERE [Msg]='You fumble in confusion!'"      { param($r) $r.Effects -eq "Fail" -and ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) }
 $fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You fumble in confusion!'"
 if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
@@ -188,6 +191,13 @@ Expect "annointed hands start line stands in for its standard cast line" "SELECT
 Expect "spiked shield damage shield (item, owner line)" "SELECT * FROM Messages WHERE Kind='Self' AND [Name]='spiked shield'" { param($r) $r.Msg -eq "The shield spike stabs {attacker} for {dmg} damage!" -and $r.Effects -eq "Damage,DamageShield" }
 ExpectNone "item shield attacker line not exported (enigma gloves line 2)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='A counterstrike at you does {dmg} damage!'"
 Expect "desert damage (textblock-cast, player is caster)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You suffer in the desert heat... you need water, soon!'" { param($r) $r.Effects -match "Damage" }
+Expect "agony keeps its standard cast line" "SELECT * FROM Messages WHERE Kind='Cast' AND [Name]='agony'" { param($r) $r.Msg -eq "You cast agony on {target} for {dmg} damage!" }
+Expect "bane dart incoming line (status message has no status text)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='{source} hurls a bane dart at you!'" { param($r) $r.Msg -ne "" }
+ExpectNone "flay incoming line stays out (status and wear-off follow)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='{source} flays you viciously!'"
+Expect "chase row (static)" "SELECT * FROM Messages WHERE [Msg]='{target} slips into the dark alley.'" { param($r) $r.Kind -eq "Other" -and $r.Effects -eq "Chase" }
+Expect "monster entrance row (static)" "SELECT * FROM Messages WHERE [Msg]='A moss zombie rises from the ground!'" { param($r) $r.Kind -eq "Other" -and $r.Effects -eq "CheckRoom" }
+$heads = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='A horde of severed heads descend upon you!'"
+if ($heads -eq 1) { Pass "static rows de-duplicated (severed heads once)" } else { Fail "severed heads appears $heads times" }
 ExpectNone "no swing verbs on non-weapons" "SELECT COUNT(*) AS Cnt FROM Items WHERE WeaponType=0 AND (Len(HitVerbs)>1 OR Len(HitVerbsOther)>1 OR Len(MissVerbs)>1)"
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
 $cnNew.Close()

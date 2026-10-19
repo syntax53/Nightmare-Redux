@@ -3,9 +3,9 @@ Option Base 0
 Option Explicit
 
 'MME export: builds the Messages table (client-relevant game message lines).
-'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.16; later sections override earlier ones).
+'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.17; later sections override earlier ones).
 'Order: items (learnable / item-cast spell lists, item shields), rooms (traps, room and exit spells), spells,
-'item shield rows, monsters.
+'item shield rows, monsters, static rows (chase lines, monster entrances).
 'Kinds: Cast, Self, Other. Tokens: {source} {target} {dmg} {attacker}.
 
 Private mFso As Scripting.FileSystemObject
@@ -96,6 +96,7 @@ If bStop = False And mbFailed = False Then Call ExportRoomMessages(dictRoomSpell
 If bStop = False And mbFailed = False Then Call ExportSpellMessages(dictRoomSpells, dictLearn, dictItemCast, bStop)
 If bStop = False And mbFailed = False Then Call ExportItemShieldRows
 If bStop = False And mbFailed = False Then Call ExportMonsterMessages(bStop)
+If bStop = False And mbFailed = False Then Call ExportStaticRows
 If bStop = False And mbFailed = False Then Call FinalizeRows(tabMessages)
 
 If mbFailed Then
@@ -798,7 +799,7 @@ Private Sub ProcessSpell(dictRoomSpells As Scripting.Dictionary, dictLearn As Sc
 Dim sName As String, sSrc As String, sEffects As String, sKey As String
 Dim sItemNames As String, sTargetTok As String, sNames() As String, nNames As Long
 Dim sSelfNames() As String, nSelfNames As Long, bFriendly As Boolean
-Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long, nCast As Long
+Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long, nCast As Long, bStdCast As Boolean
 Dim nDesc As Long, nConf As Long, nShock As Long
 Dim sDesc3 As String, sConf1 As String, bMergeFail As Boolean
 On Error GoTo error:
@@ -874,9 +875,9 @@ nRows = 0
 nRows = nRows + SpellStatusRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
 If Not bMergeFail Then nRows = nRows + SpellFailRow(sSrc, sConf1)
 If bPlayer Or Not sItemNames = "" Then
-    nCast = SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
-    'no exportable cast line (empty or the standard "You cast ..."): the start line confirms the cast instead
-    If nCast = 0 Then nCast = SpellStartRow(sNames, nNames, sSrc, sTargetTok, sEffects)
+    nCast = SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects, bStdCast)
+    'cast line empty or in a standard form: the start line confirms the cast too
+    If bStdCast Then nCast = nCast + SpellStartRow(sNames, nNames, sSrc, sTargetTok, sEffects)
     nRows = nRows + nCast
 ElseIf mdictSelfCast.Exists(sKey) Then
     nRows = nRows + SpellSelfCastRow(sName, sSrc, bShort, sTargetTok, sEffects, mdictSelfCast.Item(sKey))
@@ -990,14 +991,18 @@ Call HandleError("SpellFailRow")
 mbFailed = True
 End Function
 
-'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells
+'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells. Every such spell and item
+'gets its cast line under its own name, standard form or not, so a client can tie the line to its spell/item.
+'bStandard returns True when the line is empty or one of the engine's standard forms (the start line is then
+'exported as well, see SpellStartRow).
 Private Function SpellCastRow(sNames() As String, _
     ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, ByVal sTargetTok As String, _
-    ByVal sEffects As String) As Long
+    ByVal sEffects As String, ByRef bStandard As Boolean) As Long
 Dim sRaw As String, sText As String, sList As String, bFlag As Boolean
 On Error GoTo error:
 
 SpellCastRow = 0
+bStandard = True
 If Spellrec.CastMsgB <= 1 Then Exit Function
 
 sRaw = ReadMsgLine(Spellrec.CastMsgB, 1, sSrc, "cast")
@@ -1013,12 +1018,9 @@ sText = NormalizeWith(sRaw, sList, bFlag)
 If sText = "" Then Exit Function
 
 If InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then
-    'no amount: still the only confirmation that the spell landed, unless it is the standard "You cast ..." line
-    If IsStandardForm(mReP7, sText) Then Exit Function
+    bStandard = IsStandardForm(mReP7, sText)
 Else
-    If IsStandardForm(mReP1, sText) Then Exit Function
-    If IsStandardForm(mReP3, sText) Then Exit Function
-    If IsStandardForm(mReP4, sText) Then Exit Function
+    bStandard = IsStandardForm(mReP1, sText) Or IsStandardForm(mReP3, sText) Or IsStandardForm(mReP4, sText)
 End If
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 1", sRaw)
@@ -1132,6 +1134,11 @@ If InStr(1, sText, "{dmg}", vbBinaryCompare) > 0 Then
 End If
 If bExport = False And nDesc <= 1 Then
     If SpellHasStatusAbility() Then bExport = True
+End If
+If bExport = False And nDesc > 1 And InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then
+    'a status text (printed right after this line) plus a wear-off text already show the effect starting and
+    'ending; when the status message lacks either one, this line is the client's only sign of the effect
+    If ReadMsgLine(nDesc, 3, sSrc, "desc") = "" Or ReadMsgLine(nDesc, 1, sSrc, "desc") = "" Then bExport = True
 End If
 If bExport = False Then Exit Function
 
@@ -1317,6 +1324,129 @@ error:
 Call HandleError("SpellEffects")
 mbFailed = True
 End Function
+
+'---------------------------------------------------------------------------
+' Static rows: realm-independent lines from the stock MegaMud MESSAGES.md (text as the stock game prints it)
+'---------------------------------------------------------------------------
+
+'Chase: what others see when someone leaves through a command exit (a client can follow a party member).
+'CheckRoom: a monster appeared or changed form (a client should look at the room again). Kind Other, nameless.
+Private Sub ExportStaticRows()
+On Error GoTo error:
+
+Call AddRow("", "Other", "The chains snap, and {target} slips inside the warehouse.", "", "Chase")
+Call AddRow("", "Other", "{target} carefully begins to climb down.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs down the mountain stair.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs down through the hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs down to a lower ledge with the aid of a climbing harness.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into a boat, and rows off across the river.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into a hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into one of the skiffs, and rows out into the river.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into the hole in the ceiling!", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into the small hole in the hillside.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out of the filthy moat.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out of the small hole in the hillside!", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out of the water.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out through the hole to the south.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out through the hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs the steps encircling the ancient silverwood tree.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs through a hole in the wall!", "", "Chase")
+Call AddRow("", "Other", "{target} climbs through the hole in the burnt stump.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs through the slimy hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs up the mountain stair.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs up through the filthy pipe.", "", "Chase")
+Call AddRow("", "Other", "{target} crawls into the largest hole in the avalanche of stone.", "", "Chase")
+Call AddRow("", "Other", "{target} descends the steps encircling the ancient silverwood tree.", "", "Chase")
+Call AddRow("", "Other", "{target} dives into the black waters of the moat!", "", "Chase")
+Call AddRow("", "Other", "{target} drinks a bubbling white potion, and begins to float upwards!", "", "Chase")
+Call AddRow("", "Other", "{target} enters a manhole in the ground!", "", "Chase")
+Call AddRow("", "Other", "{target} enters the crimson portal and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} enters the ebony portal and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} enters the golden portal and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} follows a hidden path!", "", "Chase")
+Call AddRow("", "Other", "{target} gingerly steps inside the cracked willow.", "", "Chase")
+Call AddRow("", "Other", "{target} grasps onto a branch of the tree, and climbs upwards.", "", "Chase")
+Call AddRow("", "Other", "{target} grasps onto some of the vines, and begins to climb!", "", "Chase")
+Call AddRow("", "Other", "{target} hops into one of the boats, and begins to row out across the river.", "", "Chase")
+Call AddRow("", "Other", "{target} hops into one of the skiffs, and rows away.", "", "Chase")
+Call AddRow("", "Other", "{target} jumps and grabs onto a low branch, and begins to climb the tree.", "", "Chase")
+Call AddRow("", "Other", "{target} jumps into the filthy black waters of the moat.", "", "Chase")
+Call AddRow("", "Other", "{target} pulls the lever, and falls through a trapdoor!", "", "Chase")
+Call AddRow("", "Other", "{target} pulls the lever, and steps through the gate.", "", "Chase")
+Call AddRow("", "Other", "{target} pushes through the bushes!", "", "Chase")
+Call AddRow("", "Other", "{target} pushes through the bushes, and walks onto a concealed path.", "", "Chase")
+Call AddRow("", "Other", "{target} pushes through the tentacles and into the hole.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a skiff north, up to the shore.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a skiff south, up to the Silvermere docks.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the east.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the north.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the northeast.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the northwest.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the south.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the southeast.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the southwest.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the west.", "", "Chase")
+Call AddRow("", "Other", "{target} rubs a darkwood ring, and is swept through the arch!", "", "Chase")
+Call AddRow("", "Other", "{target} shoves aside the foliage, and disappears among the trees.", "", "Chase")
+Call AddRow("", "Other", "{target} slips into the dangerous black alley.", "", "Chase")
+Call AddRow("", "Other", "{target} slips into the dark alley.", "", "Chase")
+Call AddRow("", "Other", "{target} squeezes into the dark space beneath the manhole.", "", "Chase")
+Call AddRow("", "Other", "{target} squeezes into the opening under the bushes.", "", "Chase")
+Call AddRow("", "Other", "{target} starts down the slope, but slips and slides down!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the east, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the north, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the south, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the west, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the dark portal, and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the portal, and disappears!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the swirling vortex, and vanishes in a flash!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the water at the lake's edge and dives beneath the ice!", "", "Chase")
+Call AddRow("", "Other", "{target} steps onto the side-path and quickly vanishes from view.", "", "Chase")
+Call AddRow("", "Other", "{target} steps onto the slope and begins to slide down uncontrollably!", "", "Chase")
+Call AddRow("", "Other", "{target} steps through the shimmering portal, and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} steps through the swirling portal.", "", "Chase")
+Call AddRow("", "Other", "{target} swings over the edge of the cliff, and climbs down the vines!", "", "Chase")
+Call AddRow("", "Other", "{target} touches the black gem, and is consumed in a crackling field of energy!", "", "Chase")
+Call AddRow("", "Other", "{target} touches the hideous stone altar.", "", "Chase")
+Call AddRow("", "Other", "{target} walks into the wide crack.", "", "Chase")
+Call AddRow("", "Other", "{target} walks through the wall to the east!", "", "Chase")
+Call AddRow("", "Other", "{target} walks through the wall to the west!", "", "Chase")
+Call AddRow("", "Other", "{target} walks through the waterfall!", "", "Chase")
+Call AddRow("", "Other", "A barrow wight steps out of the shadows!", "", "CheckRoom")
+Call AddRow("", "Other", "A chill runs down your spine. Something is with you!", "", "CheckRoom")
+Call AddRow("", "Other", "A coral lobster rises from its rest.", "", "CheckRoom")
+Call AddRow("", "Other", "A dark storm approaches!", "", "CheckRoom")
+Call AddRow("", "Other", "A deathly shriek announces an evil prescence!", "", "CheckRoom")
+Call AddRow("", "Other", "A gibbering horror crawls out of the large gibbering horror's corpse!", "", "CheckRoom")
+Call AddRow("", "Other", "A head sprouts from the hydra's shoulders!", "", "CheckRoom")
+Call AddRow("", "Other", "A horde of severed heads descend upon you!", "", "CheckRoom")
+Call AddRow("", "Other", "A laughter filled with ancient evil sounds behind you!", "", "CheckRoom")
+Call AddRow("", "Other", "A mocking female laugh announces an evil prescence!", "", "CheckRoom")
+Call AddRow("", "Other", "A moss zombie rises from the ground!", "", "CheckRoom")
+Call AddRow("", "Other", "A silvery skull materializes with a metallic shriek!", "", "CheckRoom")
+Call AddRow("", "Other", "A skeleton arises from its place of rest.", "", "CheckRoom")
+Call AddRow("", "Other", "A small gibbering horror crawls out of the gibbering horror's corpse!", "", "CheckRoom")
+Call AddRow("", "Other", "A swirling red mist forms nearby!", "", "CheckRoom")
+Call AddRow("", "Other", "A tentacled abomination slithers out of the dark pool.", "", "CheckRoom")
+Call AddRow("", "Other", "A whipvine breaks through the ground.", "", "CheckRoom")
+Call AddRow("", "Other", "An unholy idol animates!", "", "CheckRoom")
+Call AddRow("", "Other", "As the Champion of Blood falls, a tower of fire whirls about his body!", "", "CheckRoom")
+Call AddRow("", "Other", "Dark smoke and the smell of burning flesh flood the room!", "", "CheckRoom")
+Call AddRow("", "Other", "From the fresh corpse arises a vampire!", "", "CheckRoom")
+Call AddRow("", "Other", "Hundreds of insects rise from the ground forming a large swarm.", "", "CheckRoom")
+Call AddRow("", "Other", "Out of nothingness a hundred scarab beetles appear to feast on you.", "", "CheckRoom")
+Call AddRow("", "Other", "The dark phoenix hatches from its volcanic nest!", "", "CheckRoom")
+Call AddRow("", "Other", "The feline form of a grall emerges from the shadows.", "", "CheckRoom")
+Call AddRow("", "Other", "The giant shrugs off his glacial prison, and bellows in rage!", "", "CheckRoom")
+Call AddRow("", "Other", "The hydra strains against its icy bond, breaks it, and comes to life!", "", "CheckRoom")
+Call AddRow("", "Other", "The king crab burrows up through the sand.", "", "CheckRoom")
+Call AddRow("", "Other", "The storm giant king stands here in his throne room.", "", "CheckRoom")
+
+Exit Sub
+error:
+Call HandleError("ExportStaticRows")
+mbFailed = True
+End Sub
 
 '---------------------------------------------------------------------------
 ' Pass 3: monsters
