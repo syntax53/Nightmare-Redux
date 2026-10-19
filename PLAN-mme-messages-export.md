@@ -383,3 +383,16 @@ Question 6, evidence: the data is identical for both engines, but the engines re
 - A row with no source name (realm-wide line, or a line shared by differently named sources) takes its own Msg text as its Name; Name is Text 100 and never empty.
 - A Self line that is the "you"/"your" form of a Cast or Other line containing {target} is dropped; its effects merge into the {target} row. Clients accept "you"/"your" for {target} and treat such a line as being about themselves.
 - Death text requires regen time or game limit **and** at least 101 experience (raised from "more than 1" on request).
+
+## R2.15 Spell-name association (2026-10-19, branch 261018-messages-fix1)
+
+Reported: on a stock v1.11p export, the row "You feel resistant to cold!" / "The effects of resist cold wear off!" was named after its text, so a client casting resist cold (spell 6, learnable) had no row to look up by spell name.
+
+Cause: the R2.13/R2.14 collapse keeps one row per Kind|Msg|EndMsg and blanked the name when a second, differently named source printed the same line. DescMsg 8526 is shared by resist cold (6, 29) and ice shield (1269, 1379). Ice shield has a magery type but nobody can learn it, and "magery type" was the player-castable test. Realm-wide, 41 status texts of learnable spells were shared with a differently named spell: bless/chant, speed, regeneration, frenzy/mass frenzy, every song pair, holy aura/protection from evil and others. Self rows that a spell and its casting items both printed lost their names for the same reason.
+
+Changes:
+- A Self row's Name is the "|"-separated union of every player spell and item name that prints the line, in first-seen order. Monster-only sources add nothing. The row is still unique by Kind|Msg|EndMsg with merged Effects, so R2.13's one-row-per-line rule holds. Name is now Text 255; a longer list is cut at a whole name and logged.
+- Player-castable = marked Learnable by the export's cross-referencing (books, trainers, textblocks, NPC greets, items), or taught by an item (ability 42). The magery-type test is only the fallback when no spell is marked Learnable, which happens in an "Export Only" run that re-exported spells without cross-referencing. The messages pass now runs after LocateRecords so the flags exist.
+- Death rows keep the old rule: one row per text, the name dropped when monsters differ.
+- The you-form drop applies only to nameless Self rows, so it never removes a spell's name.
+- verify-mme-messages.ps1 checks that every learnable friendly spell with an "effects of <name> wear" line appears in that row's Name, and spot-checks resist cold (named, ice shield absent) and bless.

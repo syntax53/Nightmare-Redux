@@ -3,7 +3,7 @@ Nightmare Redux is an editor for the game MajorMUD(r).
 Unreleased (in development)
 ------------------------------------------  
 -NEW: MME export: items given by room commands now list the command and its rooms in "Obtained From", e.g. "Room(pry coffin) 17/278|17/287|17/2073-2096(18.6%)". Turn off with RoomCommandItems=0 in the MME config file. (issue #21 / MME #105)
--NEW: MME export: new Messages table with the game text clients need to recognise status effects (start/wear-off text), non-standard damage and heal lines, monster death text and trap text, normalized with {source}/{target}/{dmg}/{attacker} tokens, with an Effects list and the wear-off text for tracked effects; Items gain HitVerbs/HitVerbsOther/MissVerbs columns. Status and damage lines of enemy-targeted spells are exported once, without a name. Older MME versions ignore the additions. Updating an export made by an older NMR is refused (create a new export).
+-NEW: MME export: new Messages table with the game text clients need to recognise status effects (start/wear-off text), non-standard damage and heal lines, monster death text and trap text, normalized with {source}/{target}/{dmg}/{attacker} tokens, with an Effects list and the wear-off text for tracked effects; Items gain HitVerbs/HitVerbsOther/MissVerbs columns. Status and damage lines of enemy-targeted spells are exported once, without a name. A status line shared by several of the player's spells or items names all of them, "|"-separated (e.g. resist cold), and only spells the export finds learnable count as the player's. Older MME versions ignore the additions. Updating an export made by an older NMR is refused (create a new export).
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  

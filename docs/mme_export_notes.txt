@@ -77,18 +77,22 @@ Kind (who the line is about, from the player's seat):
          effect starts (and by STAT), EndMsg when it wears off. Without an EndMsg it is a one-off
          line: incoming damage in a non-standard wording, a failed action (Effects contains Fail),
          a monster hit with a non-standard verb phrase (Effects contains Monster), a trap
-         (Effects contains Trap). Name = the spell or item for effect rows; empty for lines a
+         (Effects contains Trap). Name = the spell(s) or item(s) for effect rows; the text for lines a
          client matches by text alone.
   Other  something happened to someone else that a client may track: a monster hitting another
          player in a non-standard wording (Damage,Monster), or a monster's death text (Death,
          Name = the monster).
 
 Name: Cast rows carry the spell's name, or the item's name when an item casts the spell (both when
-players can also cast it and the names differ). Self rows carry a source name only when the player
-can be the one affected by their own spell or item (self, friendly or party target types), e.g.
-"You feel lucky!" under bless, and only when every source of that line has the same name. Every
-other row (status and damage lines of enemy-targeted spells, monster hits, traps, lines shared by
-differently named sources) is realm-wide and is named after its own text, shortened: a leading
+players can also cast it and the names differ). Self rows carry source names only when the player
+can be the one affected by their own spell or item (self, friendly or party target types). When
+several such spells or items print the same line, Name lists all of them separated by "|" (the
+same separator as the Items verb columns), e.g. "You feel lucky!" named "bless|chant" plus any item that casts it.
+A client looking for its own spell splits Name on "|". Lines from monster-only spells add no
+name. A spell counts as player-castable when the export's cross-referencing marks it Learnable;
+an "Export Only" run without that data falls back to "has a magery type". Every
+other row (status and damage lines of enemy-targeted spells, monster hits, traps, death texts
+shared by differently named monsters) is realm-wide and is named after its own text, shortened: a leading
 "The {source} " or "{source} ", a trailing " for {dmg} damage!", " {dmg} damage!" or " {dmg} hit
 points!" and any "{target} " or "{target}'s " are dropped (so "The {source} claws you with its
 pincers for {dmg} damage!" is named "claws you with its pincers"; "{source}'s " and "The {source}'s "

@@ -3,7 +3,7 @@ Option Base 0
 Option Explicit
 
 'MME export: builds the Messages table (client-relevant game message lines).
-'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.11; R2.11 overrides).
+'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.15; later sections override earlier ones).
 'Order: items (learnable / item-cast spell lists), rooms (traps + room spell list), spells, monsters.
 'Kinds: Cast, Self, Other. Tokens: {source} {target} {dmg} {attacker}.
 
@@ -15,6 +15,7 @@ Private mnWarnings As Long
 Private mbLogBroken As Boolean
 Private mbFailed As Boolean
 Private mbGmud As Boolean
+Private mbHaveLearnable As Boolean    'dictLearn holds the export's Learnable spells (cross-referenced)
 
 'hard-coded (never exported) formats, applied to the substituted text
 Private mReP1 As Object    'own standard cast line
@@ -34,8 +35,11 @@ Private mRowDrop() As Boolean
 Private mRowCount As Long
 Private mdictRows As Scripting.Dictionary    'row key -> row index
 
-Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean) As Long
-Dim dictRoomSpells As Scripting.Dictionary
+'dictLearnable: numbers (as strings) of the spells the export's cross-referencing marked Learnable; Nothing or empty
+'when no cross-reference data exists, in which case a spell with a magery type counts as player-castable.
+Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean, _
+    Optional ByVal dictLearnable As Scripting.Dictionary) As Long
+Dim dictRoomSpells As Scripting.Dictionary, vKey As Variant
 Dim dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary
 On Error GoTo error:
 
@@ -54,6 +58,16 @@ Set dictLearn = New Scripting.Dictionary
 dictLearn.CompareMode = vbBinaryCompare
 Set dictItemCast = New Scripting.Dictionary
 dictItemCast.CompareMode = vbBinaryCompare
+
+mbHaveLearnable = False
+If Not dictLearnable Is Nothing Then
+    If dictLearnable.Count > 0 Then
+        mbHaveLearnable = True
+        For Each vKey In dictLearnable.Keys
+            If Not dictLearn.Exists(CStr(vKey)) Then dictLearn.Add CStr(vKey), True
+        Next vKey
+    End If
+End If
 
 tryagain:
 If tabMessages.RecordCount <> 0 Then
@@ -373,8 +387,12 @@ End If
 If mdictRows.Exists(sKey) Then
     i = mdictRows.Item(sKey)
     mRowEff(i) = MergeEffects(mRowEff(i), sEffects)
-    'same line from a differently named source: the line is realm-wide, so the row loses its name
-    If Not mRowName(i) = "" Then
+    If sKind = "Self" Then
+        'a Self line names every player spell / item that prints it, "|"-separated, so a client can look up
+        'its own spell by name ("resist cold") even when other spells share the text; nameless sources add nothing
+        mRowName(i) = MergeNames(mRowName(i), sName)
+    ElseIf Not mRowName(i) = "" Then
+        'same death text on differently named monsters: the line is realm-wide, so the row loses its name
         If StrComp(mRowName(i), sName, vbTextCompare) <> 0 Then mRowName(i) = ""
     End If
     Exit Function
@@ -405,6 +423,31 @@ mRowCount = mRowCount + 1
 Exit Function
 error:
 Call HandleError("AddRow")
+mbFailed = True
+End Function
+
+'union of two "|" name lists: order of first appearance, no blanks, no duplicates (case-insensitive)
+Private Function MergeNames(ByVal sA As String, ByVal sB As String) As String
+Dim sParts() As String, sOut As String, sID As String, x As Long
+On Error GoTo error:
+
+sOut = ""
+sParts = Split(sA & "|" & sB, "|")
+For x = 0 To UBound(sParts)
+    sID = Trim$(sParts(x))
+    If Not sID = "" Then
+        If InStr(1, "|" & sOut & "|", "|" & sID & "|", vbTextCompare) = 0 Then
+            If Not sOut = "" Then sOut = sOut & "|"
+            sOut = sOut & sID
+        End If
+    End If
+Next x
+
+MergeNames = sOut
+
+Exit Function
+error:
+Call HandleError("MergeNames")
 mbFailed = True
 End Function
 
@@ -451,7 +494,7 @@ Call HandleError("AddRowEach")
 mbFailed = True
 End Function
 
-'Drops each Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
+'Drops each nameless Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
 'player), merging its effects into that row, then writes every surviving row once with IDs 1, 2, 3...
 'A row without a name is named by its text.
 'Name for a row that has no source name: the line itself, minus the parts that carry no identity
@@ -493,10 +536,13 @@ End Function
 
 Private Sub FinalizeRows(rs As DAO.Recordset)
 Dim dictYou As Scripting.Dictionary, sVariant As String, sName As String
-Dim i As Long, j As Long, nID As Long
+Dim i As Long, j As Long, nID As Long, nNameMax As Long
 On Error GoTo error:
 
 frmMME_Export.lblPanel(1).Caption = "Messages: writing ..."
+'255 in new exports; 100 in a Messages table made by an earlier 1.8.4 build
+nNameMax = rs.Fields("Name").Size
+If nNameMax < 1 Or nNameMax > 255 Then nNameMax = 255
 
 Set dictYou = New Scripting.Dictionary
 dictYou.CompareMode = vbBinaryCompare
@@ -511,7 +557,7 @@ For i = 0 To mRowCount - 1
 Next i
 
 For i = 0 To mRowCount - 1
-    If mRowKind(i) = "Self" And mRowEnd(i) = "" Then
+    If mRowKind(i) = "Self" And mRowEnd(i) = "" And mRowName(i) = "" Then
         If dictYou.Exists(mRowMsg(i)) Then
             j = dictYou.Item(mRowMsg(i))
             mRowEff(j) = MergeEffects(mRowEff(j), mRowEff(i))
@@ -526,10 +572,20 @@ For i = 0 To mRowCount - 1
         sName = mRowName(i)
         If sName = "" Then sName = CleanName(mRowMsg(i))
         If sName = "" Then sName = CleanName(mRowEnd(i))
+        If Len(sName) > nNameMax Then
+            'keep whole names only
+            Call LogWarning("Name list truncated: " & sName)
+            If Mid$(sName, nNameMax + 1, 1) = "|" Then
+                sName = Left$(sName, nNameMax)
+            Else
+                sName = Left$(sName, nNameMax)
+                If InStrRev(sName, "|") > 0 Then sName = Left$(sName, InStrRev(sName, "|") - 1)
+            End If
+        End If
 
         rs.AddNew
         rs.Fields("ID") = nID
-        rs.Fields("Name") = IIf(sName = "", Chr(0), Left$(sName, 100))
+        rs.Fields("Name") = IIf(sName = "", Chr(0), sName)
         rs.Fields("Kind") = Left$(mRowKind(i), 100)
         rs.Fields("Msg") = IIf(mRowMsg(i) = "", Chr(0), Left$(mRowMsg(i), 100))
         rs.Fields("EndMsg") = IIf(mRowEnd(i) = "", Chr(0), Left$(mRowEnd(i), 100))
@@ -739,7 +795,13 @@ Else
 End If
 sSrc = "Spell " & Spellrec.Number & " (" & sName & ")"
 
-bPlayer = (Spellrec.MageryA > 0) Or dictLearn.Exists(sKey)
+'player-castable: learnable somewhere in the realm (books, trainers, textblocks, items). Without cross-reference
+'data a magery type is the best guess, but realms keep monster-only spells with a magery type too.
+If mbHaveLearnable Then
+    bPlayer = dictLearn.Exists(sKey)
+Else
+    bPlayer = (Spellrec.MageryA > 0) Or dictLearn.Exists(sKey)
+End If
 sItemNames = ""
 If dictItemCast.Exists(sKey) Then sItemNames = dictItemCast.Item(sKey)
 
