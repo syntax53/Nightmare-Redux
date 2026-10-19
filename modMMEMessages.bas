@@ -3,8 +3,9 @@ Option Base 0
 Option Explicit
 
 'MME export: builds the Messages table (client-relevant game message lines).
-'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.11; R2.11 overrides).
-'Order: items (learnable / item-cast spell lists), rooms (traps + room spell list), spells, monsters.
+'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.17; later sections override earlier ones).
+'Order: items (learnable / item-cast spell lists, item shields), rooms (traps, room and exit spells), spells,
+'item shield rows, monsters, static rows (chase lines, monster entrances).
 'Kinds: Cast, Self, Other. Tokens: {source} {target} {dmg} {attacker}.
 
 Private mFso As Scripting.FileSystemObject
@@ -15,6 +16,7 @@ Private mnWarnings As Long
 Private mbLogBroken As Boolean
 Private mbFailed As Boolean
 Private mbGmud As Boolean
+Private mbHaveLearnable As Boolean    'dictLearn holds the export's Learnable spells (cross-referenced)
 
 'hard-coded (never exported) formats, applied to the substituted text
 Private mReP1 As Object    'own standard cast line
@@ -23,6 +25,13 @@ Private mReP3 As Object    'standard incoming damage lines
 Private mReP4 As Object    'third-party damage observation / shield owner line
 Private mReP5 As Object    'standard monster hit on me
 Private mReP6 As Object    'standard monster hit on someone else
+Private mReP7 As Object    'standard own cast line without an amount ("You cast/invoke/sing ...")
+
+'spells cast with the player as caster without the player choosing them (textblocks, cast exits, spell-trap
+'exits): the player sees line 1. Value "Trap" for spell-trap exits, "" otherwise.
+Private mdictSelfCast As Scripting.Dictionary
+'item damage shields: ShockMsg number -> "|" list of the names of the items that carry it
+Private mdictItemShield As Scripting.Dictionary
 
 'in-memory row store: rows are collected by the passes, then merged and written once by FinalizeRows
 Private mRowKind() As String
@@ -34,8 +43,12 @@ Private mRowDrop() As Boolean
 Private mRowCount As Long
 Private mdictRows As Scripting.Dictionary    'row key -> row index
 
-Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean) As Long
-Dim dictRoomSpells As Scripting.Dictionary
+'dictLearnable: numbers (as strings) of the spells the export's cross-referencing marked Learnable; Nothing or empty
+'when no cross-reference data exists, in which case a spell with a magery type counts as player-castable.
+'dictTextblockCast: numbers (as strings) of the spells textblocks cast (Spells "Casted By"); Nothing when unknown.
+Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean, _
+    Optional ByVal dictLearnable As Scripting.Dictionary, Optional ByVal dictTextblockCast As Scripting.Dictionary) As Long
+Dim dictRoomSpells As Scripting.Dictionary, vKey As Variant
 Dim dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary
 On Error GoTo error:
 
@@ -55,6 +68,22 @@ dictLearn.CompareMode = vbBinaryCompare
 Set dictItemCast = New Scripting.Dictionary
 dictItemCast.CompareMode = vbBinaryCompare
 
+mbHaveLearnable = False
+If Not dictLearnable Is Nothing Then
+    If dictLearnable.Count > 0 Then
+        mbHaveLearnable = True
+        For Each vKey In dictLearnable.Keys
+            If Not dictLearn.Exists(CStr(vKey)) Then dictLearn.Add CStr(vKey), True
+        Next vKey
+    End If
+End If
+
+If Not dictTextblockCast Is Nothing Then
+    For Each vKey In dictTextblockCast.Keys
+        If Not mdictSelfCast.Exists(CStr(vKey)) Then mdictSelfCast.Add CStr(vKey), ""
+    Next vKey
+End If
+
 tryagain:
 If tabMessages.RecordCount <> 0 Then
     tabMessages.MoveFirst
@@ -65,7 +94,9 @@ End If
 Call ExportItemScan(dictLearn, dictItemCast, bStop)
 If bStop = False And mbFailed = False Then Call ExportRoomMessages(dictRoomSpells, bStop)
 If bStop = False And mbFailed = False Then Call ExportSpellMessages(dictRoomSpells, dictLearn, dictItemCast, bStop)
+If bStop = False And mbFailed = False Then Call ExportItemShieldRows
 If bStop = False And mbFailed = False Then Call ExportMonsterMessages(bStop)
+If bStop = False And mbFailed = False Then Call ExportStaticRows
 If bStop = False And mbFailed = False Then Call FinalizeRows(tabMessages)
 
 If mbFailed Then
@@ -120,6 +151,10 @@ ReDim mRowEff(255)
 ReDim mRowDrop(255)
 Set mdictRows = New Scripting.Dictionary
 mdictRows.CompareMode = vbBinaryCompare
+Set mdictSelfCast = New Scripting.Dictionary
+mdictSelfCast.CompareMode = vbBinaryCompare
+Set mdictItemShield = New Scripting.Dictionary
+mdictItemShield.CompareMode = vbBinaryCompare
 
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
@@ -127,6 +162,7 @@ Set mReP3 = NewRegExp("^You are .* for {dmg} damage!?$|^You take {dmg} damage|yo
 Set mReP4 = NewRegExp("^{target} .*{dmg}.* damage|^{attacker} .*{dmg}.* damage")
 Set mReP5 = NewRegExp("^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$")
 Set mReP6 = NewRegExp("{target} for {dmg} damage")
+Set mReP7 = NewRegExp("^You (cast|invoke|sing) ")
 
 InitState = Not mbFailed
 
@@ -151,8 +187,11 @@ Set mReP3 = Nothing
 Set mReP4 = Nothing
 Set mReP5 = Nothing
 Set mReP6 = Nothing
+Set mReP7 = Nothing
 
 Set mdictRows = Nothing
+Set mdictSelfCast = Nothing
+Set mdictItemShield = Nothing
 Erase mRowKind
 Erase mRowName
 Erase mRowMsg
@@ -362,10 +401,11 @@ If Len(sText) > 100 Then sText = Left$(sText, 100): bTrunc = True
 If Len(sEndText) > 100 Then sEndText = Left$(sEndText, 100): bTrunc = True
 If Len(sEffects) > 255 Then sEffects = Left$(sEffects, 255): bTrunc = True
 
-'Cast rows confirm the player's own action, so the name is part of the row; every other row is a line the
-'game shows the player, and the same text means the same thing whatever produced it (effects are merged).
-If sKind = "Cast" Then
-    sKey = "Cast|" & sName & "|" & sText & "|" & sEndText
+'Cast rows and named Self rows belong to one player spell or casting item: every name gets its own row, and
+'rows collapse only when name, Msg and EndMsg are all the same (effects merged). Nameless lines (monster-only
+'sources, hostile-spell status text, hits, traps) are realm-wide and collapse by text alone.
+If sKind = "Cast" Or (sKind = "Self" And Not sName = "") Then
+    sKey = sKind & "@" & sName & "|" & sText & "|" & sEndText
 Else
     sKey = sKind & "|" & sText & "|" & sEndText
 End If
@@ -373,8 +413,8 @@ End If
 If mdictRows.Exists(sKey) Then
     i = mdictRows.Item(sKey)
     mRowEff(i) = MergeEffects(mRowEff(i), sEffects)
-    'same line from a differently named source: the line is realm-wide, so the row loses its name
-    If Not mRowName(i) = "" Then
+    If Not mRowName(i) = "" And Not sKind = "Cast" And Not sKind = "Self" Then
+        'same death text on differently named monsters: the line is realm-wide, so the row loses its name
         If StrComp(mRowName(i), sName, vbTextCompare) <> 0 Then mRowName(i) = ""
     End If
     Exit Function
@@ -451,7 +491,7 @@ Call HandleError("AddRowEach")
 mbFailed = True
 End Function
 
-'Drops each Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
+'Drops each nameless Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
 'player), merging its effects into that row, then writes every surviving row once with IDs 1, 2, 3...
 'A row without a name is named by its text.
 'Name for a row that has no source name: the line itself, minus the parts that carry no identity
@@ -511,7 +551,7 @@ For i = 0 To mRowCount - 1
 Next i
 
 For i = 0 To mRowCount - 1
-    If mRowKind(i) = "Self" And mRowEnd(i) = "" Then
+    If mRowKind(i) = "Self" And mRowEnd(i) = "" And mRowName(i) = "" Then
         If dictYou.Exists(mRowMsg(i)) Then
             j = dictYou.Item(mRowMsg(i))
             mRowEff(j) = MergeEffects(mRowEff(j), mRowEff(i))
@@ -592,6 +632,18 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
                         dictItemCast.Add sKey, sItem
                     End If
                 End If
+            Case 137: 'damage shield message (ShockMsg)
+                If Itemrec.AbilityB(x) > 1 And Not sItem = "" Then
+                    sKey = CStr(Itemrec.AbilityB(x))
+                    If mdictItemShield.Exists(sKey) Then
+                        sCur = mdictItemShield.Item(sKey)
+                        If InStr(1, "|" & sCur & "|", "|" & sItem & "|", vbBinaryCompare) = 0 Then
+                            mdictItemShield.Item(sKey) = sCur & "|" & sItem
+                        End If
+                    Else
+                        mdictItemShield.Add sKey, sItem
+                    End If
+                End If
         End Select
     Next x
 
@@ -658,6 +710,10 @@ For x = 0 To 9
             Case 24:
                 Call TrapRow(Roomrec.Para4(x), sSrc, sRole)
                 Call TrapRow(Roomrec.Para3(x), sSrc, sRole)
+                Call AddSelfCast(Roomrec.Para1(x), "Trap")    'spell trap: cast on the mover
+            Case 22:
+                Call AddSelfCast(Roomrec.Para1(x), "")        'cast exit: spells before / after the move
+                Call AddSelfCast(Roomrec.Para2(x), "")
         End Select
     End If
 Next x
@@ -665,6 +721,25 @@ Next x
 Exit Sub
 error:
 Call HandleError("ProcessRoom")
+mbFailed = True
+End Sub
+
+'records a spell the player ends up casting on themselves; "Trap" wins over ""
+Private Sub AddSelfCast(ByVal nSpell As Long, ByVal sTag As String)
+Dim sKey As String
+On Error GoTo error:
+
+If nSpell <= 0 Then Exit Sub
+sKey = CStr(nSpell)
+If mdictSelfCast.Exists(sKey) Then
+    If sTag = "Trap" Then mdictSelfCast.Item(sKey) = "Trap"
+Else
+    mdictSelfCast.Add sKey, sTag
+End If
+
+Exit Sub
+error:
+Call HandleError("AddSelfCast")
 mbFailed = True
 End Sub
 
@@ -724,7 +799,7 @@ Private Sub ProcessSpell(dictRoomSpells As Scripting.Dictionary, dictLearn As Sc
 Dim sName As String, sSrc As String, sEffects As String, sKey As String
 Dim sItemNames As String, sTargetTok As String, sNames() As String, nNames As Long
 Dim sSelfNames() As String, nSelfNames As Long, bFriendly As Boolean
-Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long
+Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long, nCast As Long, bStdCast As Boolean
 Dim nDesc As Long, nConf As Long, nShock As Long
 Dim sDesc3 As String, sConf1 As String, bMergeFail As Boolean
 On Error GoTo error:
@@ -739,7 +814,13 @@ Else
 End If
 sSrc = "Spell " & Spellrec.Number & " (" & sName & ")"
 
-bPlayer = (Spellrec.MageryA > 0) Or dictLearn.Exists(sKey)
+'player-castable: learnable somewhere in the realm (books, trainers, textblocks, items). Without cross-reference
+'data a magery type is the best guess, but realms keep monster-only spells with a magery type too.
+If mbHaveLearnable Then
+    bPlayer = dictLearn.Exists(sKey)
+Else
+    bPlayer = (Spellrec.MageryA > 0) Or dictLearn.Exists(sKey)
+End If
 sItemNames = ""
 If dictItemCast.Exists(sKey) Then sItemNames = dictItemCast.Item(sKey)
 
@@ -794,7 +875,12 @@ nRows = 0
 nRows = nRows + SpellStatusRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
 If Not bMergeFail Then nRows = nRows + SpellFailRow(sSrc, sConf1)
 If bPlayer Or Not sItemNames = "" Then
-    nRows = nRows + SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
+    nCast = SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects, bStdCast)
+    'cast line empty or in a standard form: the start line confirms the cast too
+    If bStdCast Then nCast = nCast + SpellStartRow(sNames, nNames, sSrc, sTargetTok, sEffects)
+    nRows = nRows + nCast
+ElseIf mdictSelfCast.Exists(sKey) Then
+    nRows = nRows + SpellSelfCastRow(sName, sSrc, bShort, sTargetTok, sEffects, mdictSelfCast.Item(sKey))
 End If
 nRows = nRows + SpellIncomingRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, bShort, sEffects)
 nRows = nRows + SpellShieldRows(sSelfNames, nSelfNames, sSrc, nShock)
@@ -905,14 +991,18 @@ Call HandleError("SpellFailRow")
 mbFailed = True
 End Function
 
-'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells
+'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells. Every such spell and item
+'gets its cast line under its own name, standard form or not, so a client can tie the line to its spell/item.
+'bStandard returns True when the line is empty or one of the engine's standard forms (the start line is then
+'exported as well, see SpellStartRow).
 Private Function SpellCastRow(sNames() As String, _
     ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, ByVal sTargetTok As String, _
-    ByVal sEffects As String) As Long
+    ByVal sEffects As String, ByRef bStandard As Boolean) As Long
 Dim sRaw As String, sText As String, sList As String, bFlag As Boolean
 On Error GoTo error:
 
 SpellCastRow = 0
+bStandard = True
 If Spellrec.CastMsgB <= 1 Then Exit Function
 
 sRaw = ReadMsgLine(Spellrec.CastMsgB, 1, sSrc, "cast")
@@ -925,11 +1015,13 @@ Else
 End If
 bFlag = False
 sText = NormalizeWith(sRaw, sList, bFlag)
+If sText = "" Then Exit Function
 
-If InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then Exit Function
-If IsStandardForm(mReP1, sText) Then Exit Function
-If IsStandardForm(mReP3, sText) Then Exit Function
-If IsStandardForm(mReP4, sText) Then Exit Function
+If InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then
+    bStandard = IsStandardForm(mReP7, sText)
+Else
+    bStandard = IsStandardForm(mReP1, sText) Or IsStandardForm(mReP3, sText) Or IsStandardForm(mReP4, sText)
+End If
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 1", sRaw)
 SpellCastRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
@@ -937,6 +1029,77 @@ SpellCastRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
 Exit Function
 error:
 Call HandleError("SpellCastRow")
+mbFailed = True
+End Function
+
+'StartMsg (120) line 1: shown to the caster once the spell has landed (Paradigm Spell.cs), every %s = the target.
+'Used only when the cast line itself is empty or standard; Kind Cast.
+Private Function SpellStartRow(sNames() As String, ByVal nNames As Long, ByVal sSrc As String, _
+    ByVal sTargetTok As String, ByVal sEffects As String) As Long
+Dim nStart As Long, sRaw As String, sText As String, bFlag As Boolean
+On Error GoTo error:
+
+SpellStartRow = 0
+nStart = SpellAbilityValue(120)
+If nStart <= 1 Then Exit Function
+
+sRaw = ReadMsgLine(nStart, 1, sSrc, "start")
+If sRaw = "" Then Exit Function
+
+bFlag = False
+sText = NormalizeWith(sRaw, sTargetTok & "|" & sTargetTok, bFlag)
+If sText = "" Then Exit Function
+If IsStandardForm(mReP7, sText) Then Exit Function
+
+If bFlag Then Call LogUnmatched(sSrc & " start line 1", sRaw)
+SpellStartRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
+
+Exit Function
+error:
+Call HandleError("SpellStartRow")
+mbFailed = True
+End Function
+
+'CastMsgB line 1 of a spell the player casts without choosing it (textblock, cast exit, spell-trap exit): the
+'player is the caster, so this is the line they see. Self, nameless, only when the spell does something a
+'client tracks (damage, healing, an ailment...). Spell traps add Trap. Monster/item target types never reach
+'the player (Paradigm TextBlockPart.cs "cast").
+Private Function SpellSelfCastRow(ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, _
+    ByVal sTargetTok As String, ByVal sEffects As String, ByVal sTag As String) As Long
+Dim sRaw As String, sText As String, sList As String, sEff As String, bFlag As Boolean
+On Error GoTo error:
+
+SpellSelfCastRow = 0
+If Spellrec.CastMsgB <= 1 Then Exit Function
+If Spellrec.Target = 4 Or Spellrec.Target = 7 Then Exit Function
+
+sEff = Replace(Replace(sEffects, ",RoomSpell", ""), "RoomSpell", "")
+If sEff = "" Then Exit Function
+If sTag = "Trap" Then Call AddEffect(sEff, "Trap")
+
+sRaw = ReadMsgLine(Spellrec.CastMsgB, 1, sSrc, "cast")
+If sRaw = "" Then Exit Function
+
+If bShort Then
+    sList = sTargetTok & "|{dmg}"
+Else
+    sList = sName & "|" & sTargetTok & "|{dmg}"
+End If
+bFlag = False
+sText = NormalizeWith(sRaw, sList, bFlag)
+If sText = "" Then Exit Function
+
+If IsStandardForm(mReP7, sText) Then Exit Function
+If IsStandardForm(mReP1, sText) Then Exit Function
+If IsStandardForm(mReP3, sText) Then Exit Function
+If IsStandardForm(mReP4, sText) Then Exit Function
+
+If bFlag Then Call LogUnmatched(sSrc & " cast line 1 (self-cast)", sRaw)
+SpellSelfCastRow = AddRow("", "Self", sText, "", sEff)
+
+Exit Function
+error:
+Call HandleError("SpellSelfCastRow")
 mbFailed = True
 End Function
 
@@ -972,6 +1135,11 @@ End If
 If bExport = False And nDesc <= 1 Then
     If SpellHasStatusAbility() Then bExport = True
 End If
+If bExport = False And nDesc > 1 And InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then
+    'a status text (printed right after this line) plus a wear-off text already show the effect starting and
+    'ending; when the status message lacks either one, this line is the client's only sign of the effect
+    If ReadMsgLine(nDesc, 3, sSrc, "desc") = "" Or ReadMsgLine(nDesc, 1, sSrc, "desc") = "" Then bExport = True
+End If
 If bExport = False Then Exit Function
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 2", sRaw)
@@ -983,9 +1151,31 @@ Call HandleError("SpellIncomingRow")
 mbFailed = True
 End Function
 
-'ShockMsg (137): line 1 (shield owner) and line 2 (attacker hit by the shield); Self, Damage,DamageShield
+'Item damage shields (item ability 137): line 1 of the ShockMsg (the wearer hits back), one row per item name.
+'Line 2 is what the wearer's attacker sees, never the wearer, so it is left out.
+Private Sub ExportItemShieldRows()
+Dim vKey As Variant, sNames() As String, nNames As Long
+On Error GoTo error:
+
+frmMME_Export.lblPanel(1).Caption = "Messages: item shields ..."
+
+For Each vKey In mdictItemShield.Keys
+    sNames = Split(mdictItemShield.Item(vKey), "|")
+    nNames = UBound(sNames) + 1
+    Call SpellShieldRows(sNames, nNames, "Item shield message " & vKey & " (" & mdictItemShield.Item(vKey) & ")", CLng(vKey), True)
+    If mbFailed Then Exit For
+Next vKey
+
+Exit Sub
+error:
+Call HandleError("ExportItemShieldRows")
+mbFailed = True
+End Sub
+
+'ShockMsg (137 on a spell or an item): line 1 (shield owner) and line 2 (attacker hit by the shield);
+'Self, Damage,DamageShield
 Private Function SpellShieldRows(sNames() As String, _
-    ByVal nNames As Long, ByVal sSrc As String, ByVal nShock As Long) As Long
+    ByVal nNames As Long, ByVal sSrc As String, ByVal nShock As Long, Optional ByVal bOwnerOnly As Boolean = False) As Long
 Dim sRaw As String, sText As String, bFlag As Boolean, nRows As Long
 On Error GoTo error:
 
@@ -1000,6 +1190,11 @@ If Not sRaw = "" Then
         If bFlag Then Call LogUnmatched(sSrc & " shock line 1", sRaw)
         nRows = nRows + AddRowEach(sNames, nNames, "Self", sText, "", "Damage,DamageShield")
     End If
+End If
+
+If bOwnerOnly Then
+    SpellShieldRows = nRows
+    Exit Function
 End If
 
 sRaw = ReadMsgLine(nShock, 2, sSrc, "shock")
@@ -1129,6 +1324,129 @@ error:
 Call HandleError("SpellEffects")
 mbFailed = True
 End Function
+
+'---------------------------------------------------------------------------
+' Static rows: realm-independent lines from the stock MegaMud MESSAGES.md (text as the stock game prints it)
+'---------------------------------------------------------------------------
+
+'Chase: what others see when someone leaves through a command exit (a client can follow a party member).
+'CheckRoom: a monster appeared or changed form (a client should look at the room again). Kind Other, nameless.
+Private Sub ExportStaticRows()
+On Error GoTo error:
+
+Call AddRow("", "Other", "The chains snap, and {target} slips inside the warehouse.", "", "Chase")
+Call AddRow("", "Other", "{target} carefully begins to climb down.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs down the mountain stair.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs down through the hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs down to a lower ledge with the aid of a climbing harness.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into a boat, and rows off across the river.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into a hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into one of the skiffs, and rows out into the river.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into the hole in the ceiling!", "", "Chase")
+Call AddRow("", "Other", "{target} climbs into the small hole in the hillside.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out of the filthy moat.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out of the small hole in the hillside!", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out of the water.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out through the hole to the south.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs out through the hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs the steps encircling the ancient silverwood tree.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs through a hole in the wall!", "", "Chase")
+Call AddRow("", "Other", "{target} climbs through the hole in the burnt stump.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs through the slimy hole.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs up the mountain stair.", "", "Chase")
+Call AddRow("", "Other", "{target} climbs up through the filthy pipe.", "", "Chase")
+Call AddRow("", "Other", "{target} crawls into the largest hole in the avalanche of stone.", "", "Chase")
+Call AddRow("", "Other", "{target} descends the steps encircling the ancient silverwood tree.", "", "Chase")
+Call AddRow("", "Other", "{target} dives into the black waters of the moat!", "", "Chase")
+Call AddRow("", "Other", "{target} drinks a bubbling white potion, and begins to float upwards!", "", "Chase")
+Call AddRow("", "Other", "{target} enters a manhole in the ground!", "", "Chase")
+Call AddRow("", "Other", "{target} enters the crimson portal and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} enters the ebony portal and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} enters the golden portal and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} follows a hidden path!", "", "Chase")
+Call AddRow("", "Other", "{target} gingerly steps inside the cracked willow.", "", "Chase")
+Call AddRow("", "Other", "{target} grasps onto a branch of the tree, and climbs upwards.", "", "Chase")
+Call AddRow("", "Other", "{target} grasps onto some of the vines, and begins to climb!", "", "Chase")
+Call AddRow("", "Other", "{target} hops into one of the boats, and begins to row out across the river.", "", "Chase")
+Call AddRow("", "Other", "{target} hops into one of the skiffs, and rows away.", "", "Chase")
+Call AddRow("", "Other", "{target} jumps and grabs onto a low branch, and begins to climb the tree.", "", "Chase")
+Call AddRow("", "Other", "{target} jumps into the filthy black waters of the moat.", "", "Chase")
+Call AddRow("", "Other", "{target} pulls the lever, and falls through a trapdoor!", "", "Chase")
+Call AddRow("", "Other", "{target} pulls the lever, and steps through the gate.", "", "Chase")
+Call AddRow("", "Other", "{target} pushes through the bushes!", "", "Chase")
+Call AddRow("", "Other", "{target} pushes through the bushes, and walks onto a concealed path.", "", "Chase")
+Call AddRow("", "Other", "{target} pushes through the tentacles and into the hole.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a skiff north, up to the shore.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a skiff south, up to the Silvermere docks.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the east.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the north.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the northeast.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the northwest.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the south.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the southeast.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the southwest.", "", "Chase")
+Call AddRow("", "Other", "{target} rows a wooden skiff to the west.", "", "Chase")
+Call AddRow("", "Other", "{target} rubs a darkwood ring, and is swept through the arch!", "", "Chase")
+Call AddRow("", "Other", "{target} shoves aside the foliage, and disappears among the trees.", "", "Chase")
+Call AddRow("", "Other", "{target} slips into the dangerous black alley.", "", "Chase")
+Call AddRow("", "Other", "{target} slips into the dark alley.", "", "Chase")
+Call AddRow("", "Other", "{target} squeezes into the dark space beneath the manhole.", "", "Chase")
+Call AddRow("", "Other", "{target} squeezes into the opening under the bushes.", "", "Chase")
+Call AddRow("", "Other", "{target} starts down the slope, but slips and slides down!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the east, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the north, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the south, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps back, starts running to the west, and makes a mighty leap!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the dark portal, and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the portal, and disappears!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the swirling vortex, and vanishes in a flash!", "", "Chase")
+Call AddRow("", "Other", "{target} steps into the water at the lake's edge and dives beneath the ice!", "", "Chase")
+Call AddRow("", "Other", "{target} steps onto the side-path and quickly vanishes from view.", "", "Chase")
+Call AddRow("", "Other", "{target} steps onto the slope and begins to slide down uncontrollably!", "", "Chase")
+Call AddRow("", "Other", "{target} steps through the shimmering portal, and vanishes!", "", "Chase")
+Call AddRow("", "Other", "{target} steps through the swirling portal.", "", "Chase")
+Call AddRow("", "Other", "{target} swings over the edge of the cliff, and climbs down the vines!", "", "Chase")
+Call AddRow("", "Other", "{target} touches the black gem, and is consumed in a crackling field of energy!", "", "Chase")
+Call AddRow("", "Other", "{target} touches the hideous stone altar.", "", "Chase")
+Call AddRow("", "Other", "{target} walks into the wide crack.", "", "Chase")
+Call AddRow("", "Other", "{target} walks through the wall to the east!", "", "Chase")
+Call AddRow("", "Other", "{target} walks through the wall to the west!", "", "Chase")
+Call AddRow("", "Other", "{target} walks through the waterfall!", "", "Chase")
+Call AddRow("", "Other", "A barrow wight steps out of the shadows!", "", "CheckRoom")
+Call AddRow("", "Other", "A chill runs down your spine. Something is with you!", "", "CheckRoom")
+Call AddRow("", "Other", "A coral lobster rises from its rest.", "", "CheckRoom")
+Call AddRow("", "Other", "A dark storm approaches!", "", "CheckRoom")
+Call AddRow("", "Other", "A deathly shriek announces an evil prescence!", "", "CheckRoom")
+Call AddRow("", "Other", "A gibbering horror crawls out of the large gibbering horror's corpse!", "", "CheckRoom")
+Call AddRow("", "Other", "A head sprouts from the hydra's shoulders!", "", "CheckRoom")
+Call AddRow("", "Other", "A horde of severed heads descend upon you!", "", "CheckRoom")
+Call AddRow("", "Other", "A laughter filled with ancient evil sounds behind you!", "", "CheckRoom")
+Call AddRow("", "Other", "A mocking female laugh announces an evil prescence!", "", "CheckRoom")
+Call AddRow("", "Other", "A moss zombie rises from the ground!", "", "CheckRoom")
+Call AddRow("", "Other", "A silvery skull materializes with a metallic shriek!", "", "CheckRoom")
+Call AddRow("", "Other", "A skeleton arises from its place of rest.", "", "CheckRoom")
+Call AddRow("", "Other", "A small gibbering horror crawls out of the gibbering horror's corpse!", "", "CheckRoom")
+Call AddRow("", "Other", "A swirling red mist forms nearby!", "", "CheckRoom")
+Call AddRow("", "Other", "A tentacled abomination slithers out of the dark pool.", "", "CheckRoom")
+Call AddRow("", "Other", "A whipvine breaks through the ground.", "", "CheckRoom")
+Call AddRow("", "Other", "An unholy idol animates!", "", "CheckRoom")
+Call AddRow("", "Other", "As the Champion of Blood falls, a tower of fire whirls about his body!", "", "CheckRoom")
+Call AddRow("", "Other", "Dark smoke and the smell of burning flesh flood the room!", "", "CheckRoom")
+Call AddRow("", "Other", "From the fresh corpse arises a vampire!", "", "CheckRoom")
+Call AddRow("", "Other", "Hundreds of insects rise from the ground forming a large swarm.", "", "CheckRoom")
+Call AddRow("", "Other", "Out of nothingness a hundred scarab beetles appear to feast on you.", "", "CheckRoom")
+Call AddRow("", "Other", "The dark phoenix hatches from its volcanic nest!", "", "CheckRoom")
+Call AddRow("", "Other", "The feline form of a grall emerges from the shadows.", "", "CheckRoom")
+Call AddRow("", "Other", "The giant shrugs off his glacial prison, and bellows in rage!", "", "CheckRoom")
+Call AddRow("", "Other", "The hydra strains against its icy bond, breaks it, and comes to life!", "", "CheckRoom")
+Call AddRow("", "Other", "The king crab burrows up through the sand.", "", "CheckRoom")
+Call AddRow("", "Other", "The storm giant king stands here in his throne room.", "", "CheckRoom")
+
+Exit Sub
+error:
+Call HandleError("ExportStaticRows")
+mbFailed = True
+End Sub
 
 '---------------------------------------------------------------------------
 ' Pass 3: monsters
