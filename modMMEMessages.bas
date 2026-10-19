@@ -376,10 +376,11 @@ If Len(sText) > 100 Then sText = Left$(sText, 100): bTrunc = True
 If Len(sEndText) > 100 Then sEndText = Left$(sEndText, 100): bTrunc = True
 If Len(sEffects) > 255 Then sEffects = Left$(sEffects, 255): bTrunc = True
 
-'Cast rows confirm the player's own action, so the name is part of the row; every other row is a line the
-'game shows the player, and the same text means the same thing whatever produced it (effects are merged).
-If sKind = "Cast" Then
-    sKey = "Cast|" & sName & "|" & sText & "|" & sEndText
+'Cast rows and named Self rows belong to one player spell or casting item: every name gets its own row, and
+'rows collapse only when name, Msg and EndMsg are all the same (effects merged). Nameless lines (monster-only
+'sources, hostile-spell status text, hits, traps) are realm-wide and collapse by text alone.
+If sKind = "Cast" Or (sKind = "Self" And Not sName = "") Then
+    sKey = sKind & "@" & sName & "|" & sText & "|" & sEndText
 Else
     sKey = sKind & "|" & sText & "|" & sEndText
 End If
@@ -387,11 +388,7 @@ End If
 If mdictRows.Exists(sKey) Then
     i = mdictRows.Item(sKey)
     mRowEff(i) = MergeEffects(mRowEff(i), sEffects)
-    If sKind = "Self" Then
-        'a Self line names every player spell / item that prints it, "|"-separated, so a client can look up
-        'its own spell by name ("resist cold") even when other spells share the text; nameless sources add nothing
-        mRowName(i) = MergeNames(mRowName(i), sName)
-    ElseIf Not mRowName(i) = "" Then
+    If Not mRowName(i) = "" And Not sKind = "Cast" And Not sKind = "Self" Then
         'same death text on differently named monsters: the line is realm-wide, so the row loses its name
         If StrComp(mRowName(i), sName, vbTextCompare) <> 0 Then mRowName(i) = ""
     End If
@@ -423,31 +420,6 @@ mRowCount = mRowCount + 1
 Exit Function
 error:
 Call HandleError("AddRow")
-mbFailed = True
-End Function
-
-'union of two "|" name lists: order of first appearance, no blanks, no duplicates (case-insensitive)
-Private Function MergeNames(ByVal sA As String, ByVal sB As String) As String
-Dim sParts() As String, sOut As String, sID As String, x As Long
-On Error GoTo error:
-
-sOut = ""
-sParts = Split(sA & "|" & sB, "|")
-For x = 0 To UBound(sParts)
-    sID = Trim$(sParts(x))
-    If Not sID = "" Then
-        If InStr(1, "|" & sOut & "|", "|" & sID & "|", vbTextCompare) = 0 Then
-            If Not sOut = "" Then sOut = sOut & "|"
-            sOut = sOut & sID
-        End If
-    End If
-Next x
-
-MergeNames = sOut
-
-Exit Function
-error:
-Call HandleError("MergeNames")
 mbFailed = True
 End Function
 
@@ -536,13 +508,10 @@ End Function
 
 Private Sub FinalizeRows(rs As DAO.Recordset)
 Dim dictYou As Scripting.Dictionary, sVariant As String, sName As String
-Dim i As Long, j As Long, nID As Long, nNameMax As Long
+Dim i As Long, j As Long, nID As Long
 On Error GoTo error:
 
 frmMME_Export.lblPanel(1).Caption = "Messages: writing ..."
-'255 in new exports; 100 in a Messages table made by an earlier 1.8.4 build
-nNameMax = rs.Fields("Name").Size
-If nNameMax < 1 Or nNameMax > 255 Then nNameMax = 255
 
 Set dictYou = New Scripting.Dictionary
 dictYou.CompareMode = vbBinaryCompare
@@ -572,20 +541,10 @@ For i = 0 To mRowCount - 1
         sName = mRowName(i)
         If sName = "" Then sName = CleanName(mRowMsg(i))
         If sName = "" Then sName = CleanName(mRowEnd(i))
-        If Len(sName) > nNameMax Then
-            'keep whole names only
-            Call LogWarning("Name list truncated: " & sName)
-            If Mid$(sName, nNameMax + 1, 1) = "|" Then
-                sName = Left$(sName, nNameMax)
-            Else
-                sName = Left$(sName, nNameMax)
-                If InStrRev(sName, "|") > 0 Then sName = Left$(sName, InStrRev(sName, "|") - 1)
-            End If
-        End If
 
         rs.AddNew
         rs.Fields("ID") = nID
-        rs.Fields("Name") = IIf(sName = "", Chr(0), sName)
+        rs.Fields("Name") = IIf(sName = "", Chr(0), Left$(sName, 100))
         rs.Fields("Kind") = Left$(mRowKind(i), 100)
         rs.Fields("Msg") = IIf(mRowMsg(i) = "", Chr(0), Left$(mRowMsg(i), 100))
         rs.Fields("EndMsg") = IIf(mRowEnd(i) = "", Chr(0), Left$(mRowEnd(i), 100))

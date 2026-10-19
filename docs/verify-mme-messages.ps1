@@ -107,11 +107,11 @@ foreach ($r in $allRows) {
 }
 foreach ($r in $allRows) { if ($r.Kind -eq "Self" -and $r.EndMsg -eq "" -and $youForms.ContainsKey($r.Msg)) { $twins++ } }
 if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate rows" }
-if ($sameText -eq 0) { Pass "Self/Other rows unique by kind, text and end text (effects merged)" } else { Fail "$sameText Self/Other rows repeat another row's text" }
+Write-Output "INFO  Self/Other rows whose text another row (a differently named spell or item) also has: $sameText"
 if ($twins -eq 0) { Pass "no Self row is the you-form of a Cast/Other row" } else { Fail "$twins Self rows duplicate a {target} row with you/your" }
 if ($noName -eq 0) { Pass "every row has a Name (the cleaned Msg text when no source name applies)" } else { Fail "$noName rows have an empty Name" }
-$lists = @($allRows | Where-Object { $_.Kind -eq "Self" -and $_.Name.Contains("|") }).Count
-Write-Output "INFO  Self rows naming several spells/items (Name is a |-list): $lists"
+$lists = @($allRows | Where-Object { $_.Name.Contains("|") }).Count
+if ($lists -eq 0) { Pass "every Name is a single spell, item, monster or text (no lists)" } else { Fail "$lists rows carry a |-separated Name list" }
 # every learnable spell aimed at the caster or a friend keeps its name on the row its own wear-off line belongs to
 $friendly = Q $cnNew "SELECT Number,[Name] FROM Spells WHERE Learnable=1 AND Targets IN (0,1,2,6,13)"
 $lost = 0; $checked = 0
@@ -120,7 +120,7 @@ foreach ($s in $friendly) {
   $own = @($allRows | Where-Object { $_.Kind -eq "Self" -and $_.EndMsg -like ("*effects of " + $sn + " wear*") })
   if ($own.Count -eq 0) { continue }
   $checked++
-  $hit = $false; foreach ($r in $own) { if ((($r.Name -split '\|') | Where-Object { $_ -eq $sn }).Count -gt 0) { $hit = $true } }
+  $hit = $false; foreach ($r in $own) { if ($r.Name -eq $sn) { $hit = $true } }
   if (-not $hit) { $lost++; if ($lost -le 8) { Write-Output ("      spell lost its name: {0} -> row '{1}'" -f $sn, $own[0].Name) } }
 }
 if ($lost -eq 0) { Pass "learnable friendly spells keep their name on their own wear-off row ($checked checked)" } else { Fail "$lost of $checked learnable friendly spells are missing from their wear-off row's Name" }
@@ -151,8 +151,9 @@ function Expect($desc, $sql, $pred) {
   if ($ok) { Pass $desc } else { Fail ($desc + "  (got " + $rows.Count + " rows" + $(if($rows.Count){": " + (($rows | ForEach-Object { $_.Msg + " / " + $_.EndMsg + " / " + $_.Effects }) -join " || ")}) + ")") }
 }
 function ExpectNone($desc, $sql) { $c = Count $cnNew $sql; if ($c -eq 0) { Pass $desc } else { Fail "$desc  ($c rows)" } }
-Expect "bless effect row (shared by several sources: Name lists them, bless included)" "SELECT * FROM Messages WHERE [Msg]='You feel lucky!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of bless wear off!" -and (($r.Name -split '\|') -contains "bless") }
-Expect "resist cold effect row named resist cold" "SELECT * FROM Messages WHERE [Msg]='You feel resistant to cold!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of resist cold wear off!" -and (($r.Name -split '\|') -contains "resist cold") -and -not (($r.Name -split '\|') -contains "ice shield") }
+Expect "bless effect row named bless" "SELECT * FROM Messages WHERE [Msg]='You feel lucky!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of bless wear off!" -and $r.Name -eq "bless" }
+Expect "resist cold effect row named resist cold" "SELECT * FROM Messages WHERE [Msg]='You feel resistant to cold!' AND Kind='Self'" { param($r) $r.EndMsg -eq "The effects of resist cold wear off!" -and $r.Name -eq "resist cold" }
+ExpectNone "ice shield (monster-only, magery type) has no named row" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='ice shield'"
 Expect "acid rain effect row (hostile spell: Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You are covered in acid!' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.EndMsg -eq "The acid covering you dries up." -and $r.Effects -match "DamageOverTime" }
 Expect "poison Poisoned (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='You feel ill.' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Poisoned" }
 Expect "magic missile Cast"      "SELECT * FROM Messages WHERE [Name]='magic missile' AND Kind='Cast'" { param($r) $r.Msg -eq "You fire a magic missile at {target} for {dmg} damage!" }
@@ -163,8 +164,7 @@ $fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You f
 if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
 $flat = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are flat on your back!'"
 if ($flat -eq 1) { Pass "knockdown status appears once (effects merged)" } else { Fail "knockdown status appears $flat times" }
-$gaze = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='The gaze of luck is upon you.'"
-if ($gaze -le 1) { Pass "gaze of luck variants merged into one row" } else { Fail "gaze of luck appears $gaze times" }
+# gaze of luck: one row per casting item/spell name (duplicates are covered by the duplicate-row check)
 ExpectNone "lightning hit line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
 Expect "stunned merged Fail (Name = Msg)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
 $stun = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are stunned!'"
