@@ -60,7 +60,7 @@ endcast = 151
 learnsp - 42
 
 
--= Messages (added after NMR 1.8.3) =-
+-= Messages (added NMR 1.8.4) =-
 One row per game line a client may need to recognise. Not a dump of the realm's message file:
 message numbers, caster-only lines of monster spells, room lines and flavor text are not exported,
 and lines that follow the standard formats listed further down are left out because clients
@@ -177,7 +177,7 @@ Status and state:
   The room is pitch black / very dark / dimly lit / barely visible
   To do this action, <X>   You are overcome with a feeling of guilt
 
--= Items (added after NMR 1.8.3) =-
+-= Items (added NMR 1.8.4) =-
 HitVerbs / HitVerbsOther / MissVerbs (weapons only; empty on every other item): "|"-separated verb
 alternatives used in
 "You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.

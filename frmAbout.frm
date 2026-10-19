@@ -322,13 +322,13 @@ For i = 0 To 3 'number of lbl links
     rc.Right = (lblLinks(i).Left + lblLinks(i).Width) \ Screen.TwipsPerPixelY
     Select Case i
         Case 0:
-            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.mudinfo.net/viewforum.php?f=44", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "https://www.mudinfo.net/viewforum.php?f=44", False
         Case 1:
             objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "https://github.com/syntax53/Nightmare-Redux", False
         Case 2:
-            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.mudinfo.net/", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "https://www.mudinfo.net/", False
         Case 3:
-            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "http://www.majormud.com/", False
+            objTooltip.SetToolTipItem frmLinks.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, "https://www.majormud.com/", False
     End Select
 Next
 
@@ -349,10 +349,10 @@ End Sub
 Private Sub lblLinks_Click(Index As Integer)
 
 Select Case Index
-    Case 0: Call ShellExecute(0&, "open", "http://www.mudinfo.net/viewforum.php?f=44", vbNullString, vbNullString, vbNormalFocus)
+    Case 0: Call ShellExecute(0&, "open", "https://www.mudinfo.net/viewforum.php?f=44", vbNullString, vbNullString, vbNormalFocus)
     Case 1: Call ShellExecute(0&, "open", "https://github.com/syntax53/Nightmare-Redux", vbNullString, vbNullString, vbNormalFocus)
-    Case 2: Call ShellExecute(0&, "open", "http://www.mudinfo.net/", vbNullString, vbNullString, vbNormalFocus)
-    Case 3: Call ShellExecute(0&, "open", "http://www.majormud.com/", vbNullString, vbNullString, vbNormalFocus)
+    Case 2: Call ShellExecute(0&, "open", "https://www.mudinfo.net/", vbNullString, vbNullString, vbNormalFocus)
+    Case 3: Call ShellExecute(0&, "open", "https://www.majormud.com/", vbNullString, vbNullString, vbNormalFocus)
 End Select
 
 End Sub

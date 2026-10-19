@@ -3921,7 +3921,7 @@ Do While nStatus = 0 And bStopExport = False
     sKey = CStr(Roomrec.CmdText)
     If Not dictFound.Exists(sKey) Then
         lblPanel(1).Caption = "Scanning Room Commands (" & nRec & ")"
-        dictFound.Add sKey, GetRoomCommandGives(Roomrec.CmdText)
+        dictFound.add sKey, GetRoomCommandGives(Roomrec.CmdText)
     End If
     Set dictGives = dictFound(sKey)
 
@@ -3933,7 +3933,7 @@ Do While nStatus = 0 And bStopExport = False
             If dictGroups.Exists(sGroup) Then
                 dictGroups(sGroup) = dictGroups(sGroup) & "|" & sRoom
             Else
-                dictGroups.Add sGroup, sRoom
+                dictGroups.add sGroup, sRoom
             End If
         Next vKey
     End If
@@ -4130,7 +4130,7 @@ If dictOut.Exists(sKey) Then
         dictOut(sKey) = dictOut(sKey) & "|" & sCommand
     End If
 Else
-    dictOut.Add sKey, sCommand
+    dictOut.add sKey, sCommand
 End If
 
 End Sub
@@ -5094,7 +5094,7 @@ Else
 End If
 
 If chkLegit(0).Value = 1 Then
-    tabInfo.Fields("UpdateURL") = "http://www.mudinfo.net/mmudexp.php"
+    tabInfo.Fields("UpdateURL") = "https://www.mudinfo.net/mmudexp.php"
     tabInfo.Fields("Custom") = "Default"
 Else
     tabInfo.Fields("UpdateURL") = txtUpdateURL.Text
@@ -6315,7 +6315,7 @@ End Sub
 
 Private Function HasMessagesSchema() As Boolean
 On Error GoTo notfound:
-Dim tdf As DAO.TableDef, fld As DAO.Field
+Dim tdf As DAO.TableDef, fld As DAO.field
 
 HasMessagesSchema = False
 
