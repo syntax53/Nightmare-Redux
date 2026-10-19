@@ -3,8 +3,9 @@ Option Base 0
 Option Explicit
 
 'MME export: builds the Messages table (client-relevant game message lines).
-'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.15; later sections override earlier ones).
-'Order: items (learnable / item-cast spell lists), rooms (traps + room spell list), spells, monsters.
+'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.16; later sections override earlier ones).
+'Order: items (learnable / item-cast spell lists, item shields), rooms (traps, room and exit spells), spells,
+'item shield rows, monsters.
 'Kinds: Cast, Self, Other. Tokens: {source} {target} {dmg} {attacker}.
 
 Private mFso As Scripting.FileSystemObject
@@ -24,6 +25,13 @@ Private mReP3 As Object    'standard incoming damage lines
 Private mReP4 As Object    'third-party damage observation / shield owner line
 Private mReP5 As Object    'standard monster hit on me
 Private mReP6 As Object    'standard monster hit on someone else
+Private mReP7 As Object    'standard own cast line without an amount ("You cast/invoke/sing ...")
+
+'spells cast with the player as caster without the player choosing them (textblocks, cast exits, spell-trap
+'exits): the player sees line 1. Value "Trap" for spell-trap exits, "" otherwise.
+Private mdictSelfCast As Scripting.Dictionary
+'item damage shields: ShockMsg number -> "|" list of the names of the items that carry it
+Private mdictItemShield As Scripting.Dictionary
 
 'in-memory row store: rows are collected by the passes, then merged and written once by FinalizeRows
 Private mRowKind() As String
@@ -37,8 +45,9 @@ Private mdictRows As Scripting.Dictionary    'row key -> row index
 
 'dictLearnable: numbers (as strings) of the spells the export's cross-referencing marked Learnable; Nothing or empty
 'when no cross-reference data exists, in which case a spell with a magery type counts as player-castable.
+'dictTextblockCast: numbers (as strings) of the spells textblocks cast (Spells "Casted By"); Nothing when unknown.
 Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean, _
-    Optional ByVal dictLearnable As Scripting.Dictionary) As Long
+    Optional ByVal dictLearnable As Scripting.Dictionary, Optional ByVal dictTextblockCast As Scripting.Dictionary) As Long
 Dim dictRoomSpells As Scripting.Dictionary, vKey As Variant
 Dim dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary
 On Error GoTo error:
@@ -69,6 +78,12 @@ If Not dictLearnable Is Nothing Then
     End If
 End If
 
+If Not dictTextblockCast Is Nothing Then
+    For Each vKey In dictTextblockCast.Keys
+        If Not mdictSelfCast.Exists(CStr(vKey)) Then mdictSelfCast.Add CStr(vKey), ""
+    Next vKey
+End If
+
 tryagain:
 If tabMessages.RecordCount <> 0 Then
     tabMessages.MoveFirst
@@ -79,6 +94,7 @@ End If
 Call ExportItemScan(dictLearn, dictItemCast, bStop)
 If bStop = False And mbFailed = False Then Call ExportRoomMessages(dictRoomSpells, bStop)
 If bStop = False And mbFailed = False Then Call ExportSpellMessages(dictRoomSpells, dictLearn, dictItemCast, bStop)
+If bStop = False And mbFailed = False Then Call ExportItemShieldRows
 If bStop = False And mbFailed = False Then Call ExportMonsterMessages(bStop)
 If bStop = False And mbFailed = False Then Call FinalizeRows(tabMessages)
 
@@ -134,6 +150,10 @@ ReDim mRowEff(255)
 ReDim mRowDrop(255)
 Set mdictRows = New Scripting.Dictionary
 mdictRows.CompareMode = vbBinaryCompare
+Set mdictSelfCast = New Scripting.Dictionary
+mdictSelfCast.CompareMode = vbBinaryCompare
+Set mdictItemShield = New Scripting.Dictionary
+mdictItemShield.CompareMode = vbBinaryCompare
 
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
@@ -141,6 +161,7 @@ Set mReP3 = NewRegExp("^You are .* for {dmg} damage!?$|^You take {dmg} damage|yo
 Set mReP4 = NewRegExp("^{target} .*{dmg}.* damage|^{attacker} .*{dmg}.* damage")
 Set mReP5 = NewRegExp("^(The |An? )?\{source\} [a-z-]+ you for \{dmg\} damage!$")
 Set mReP6 = NewRegExp("{target} for {dmg} damage")
+Set mReP7 = NewRegExp("^You (cast|invoke|sing) ")
 
 InitState = Not mbFailed
 
@@ -165,8 +186,11 @@ Set mReP3 = Nothing
 Set mReP4 = Nothing
 Set mReP5 = Nothing
 Set mReP6 = Nothing
+Set mReP7 = Nothing
 
 Set mdictRows = Nothing
+Set mdictSelfCast = Nothing
+Set mdictItemShield = Nothing
 Erase mRowKind
 Erase mRowName
 Erase mRowMsg
@@ -607,6 +631,18 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
                         dictItemCast.Add sKey, sItem
                     End If
                 End If
+            Case 137: 'damage shield message (ShockMsg)
+                If Itemrec.AbilityB(x) > 1 And Not sItem = "" Then
+                    sKey = CStr(Itemrec.AbilityB(x))
+                    If mdictItemShield.Exists(sKey) Then
+                        sCur = mdictItemShield.Item(sKey)
+                        If InStr(1, "|" & sCur & "|", "|" & sItem & "|", vbBinaryCompare) = 0 Then
+                            mdictItemShield.Item(sKey) = sCur & "|" & sItem
+                        End If
+                    Else
+                        mdictItemShield.Add sKey, sItem
+                    End If
+                End If
         End Select
     Next x
 
@@ -673,6 +709,10 @@ For x = 0 To 9
             Case 24:
                 Call TrapRow(Roomrec.Para4(x), sSrc, sRole)
                 Call TrapRow(Roomrec.Para3(x), sSrc, sRole)
+                Call AddSelfCast(Roomrec.Para1(x), "Trap")    'spell trap: cast on the mover
+            Case 22:
+                Call AddSelfCast(Roomrec.Para1(x), "")        'cast exit: spells before / after the move
+                Call AddSelfCast(Roomrec.Para2(x), "")
         End Select
     End If
 Next x
@@ -680,6 +720,25 @@ Next x
 Exit Sub
 error:
 Call HandleError("ProcessRoom")
+mbFailed = True
+End Sub
+
+'records a spell the player ends up casting on themselves; "Trap" wins over ""
+Private Sub AddSelfCast(ByVal nSpell As Long, ByVal sTag As String)
+Dim sKey As String
+On Error GoTo error:
+
+If nSpell <= 0 Then Exit Sub
+sKey = CStr(nSpell)
+If mdictSelfCast.Exists(sKey) Then
+    If sTag = "Trap" Then mdictSelfCast.Item(sKey) = "Trap"
+Else
+    mdictSelfCast.Add sKey, sTag
+End If
+
+Exit Sub
+error:
+Call HandleError("AddSelfCast")
 mbFailed = True
 End Sub
 
@@ -739,7 +798,7 @@ Private Sub ProcessSpell(dictRoomSpells As Scripting.Dictionary, dictLearn As Sc
 Dim sName As String, sSrc As String, sEffects As String, sKey As String
 Dim sItemNames As String, sTargetTok As String, sNames() As String, nNames As Long
 Dim sSelfNames() As String, nSelfNames As Long, bFriendly As Boolean
-Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long
+Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long, nCast As Long
 Dim nDesc As Long, nConf As Long, nShock As Long
 Dim sDesc3 As String, sConf1 As String, bMergeFail As Boolean
 On Error GoTo error:
@@ -815,7 +874,12 @@ nRows = 0
 nRows = nRows + SpellStatusRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
 If Not bMergeFail Then nRows = nRows + SpellFailRow(sSrc, sConf1)
 If bPlayer Or Not sItemNames = "" Then
-    nRows = nRows + SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
+    nCast = SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects)
+    'no exportable cast line (empty or the standard "You cast ..."): the start line confirms the cast instead
+    If nCast = 0 Then nCast = SpellStartRow(sNames, nNames, sSrc, sTargetTok, sEffects)
+    nRows = nRows + nCast
+ElseIf mdictSelfCast.Exists(sKey) Then
+    nRows = nRows + SpellSelfCastRow(sName, sSrc, bShort, sTargetTok, sEffects, mdictSelfCast.Item(sKey))
 End If
 nRows = nRows + SpellIncomingRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, bShort, sEffects)
 nRows = nRows + SpellShieldRows(sSelfNames, nSelfNames, sSrc, nShock)
@@ -946,11 +1010,16 @@ Else
 End If
 bFlag = False
 sText = NormalizeWith(sRaw, sList, bFlag)
+If sText = "" Then Exit Function
 
-If InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then Exit Function
-If IsStandardForm(mReP1, sText) Then Exit Function
-If IsStandardForm(mReP3, sText) Then Exit Function
-If IsStandardForm(mReP4, sText) Then Exit Function
+If InStr(1, sText, "{dmg}", vbBinaryCompare) = 0 Then
+    'no amount: still the only confirmation that the spell landed, unless it is the standard "You cast ..." line
+    If IsStandardForm(mReP7, sText) Then Exit Function
+Else
+    If IsStandardForm(mReP1, sText) Then Exit Function
+    If IsStandardForm(mReP3, sText) Then Exit Function
+    If IsStandardForm(mReP4, sText) Then Exit Function
+End If
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 1", sRaw)
 SpellCastRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
@@ -958,6 +1027,77 @@ SpellCastRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
 Exit Function
 error:
 Call HandleError("SpellCastRow")
+mbFailed = True
+End Function
+
+'StartMsg (120) line 1: shown to the caster once the spell has landed (Paradigm Spell.cs), every %s = the target.
+'Used only when the cast line itself is empty or standard; Kind Cast.
+Private Function SpellStartRow(sNames() As String, ByVal nNames As Long, ByVal sSrc As String, _
+    ByVal sTargetTok As String, ByVal sEffects As String) As Long
+Dim nStart As Long, sRaw As String, sText As String, bFlag As Boolean
+On Error GoTo error:
+
+SpellStartRow = 0
+nStart = SpellAbilityValue(120)
+If nStart <= 1 Then Exit Function
+
+sRaw = ReadMsgLine(nStart, 1, sSrc, "start")
+If sRaw = "" Then Exit Function
+
+bFlag = False
+sText = NormalizeWith(sRaw, sTargetTok & "|" & sTargetTok, bFlag)
+If sText = "" Then Exit Function
+If IsStandardForm(mReP7, sText) Then Exit Function
+
+If bFlag Then Call LogUnmatched(sSrc & " start line 1", sRaw)
+SpellStartRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
+
+Exit Function
+error:
+Call HandleError("SpellStartRow")
+mbFailed = True
+End Function
+
+'CastMsgB line 1 of a spell the player casts without choosing it (textblock, cast exit, spell-trap exit): the
+'player is the caster, so this is the line they see. Self, nameless, only when the spell does something a
+'client tracks (damage, healing, an ailment...). Spell traps add Trap. Monster/item target types never reach
+'the player (Paradigm TextBlockPart.cs "cast").
+Private Function SpellSelfCastRow(ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, _
+    ByVal sTargetTok As String, ByVal sEffects As String, ByVal sTag As String) As Long
+Dim sRaw As String, sText As String, sList As String, sEff As String, bFlag As Boolean
+On Error GoTo error:
+
+SpellSelfCastRow = 0
+If Spellrec.CastMsgB <= 1 Then Exit Function
+If Spellrec.Target = 4 Or Spellrec.Target = 7 Then Exit Function
+
+sEff = Replace(Replace(sEffects, ",RoomSpell", ""), "RoomSpell", "")
+If sEff = "" Then Exit Function
+If sTag = "Trap" Then Call AddEffect(sEff, "Trap")
+
+sRaw = ReadMsgLine(Spellrec.CastMsgB, 1, sSrc, "cast")
+If sRaw = "" Then Exit Function
+
+If bShort Then
+    sList = sTargetTok & "|{dmg}"
+Else
+    sList = sName & "|" & sTargetTok & "|{dmg}"
+End If
+bFlag = False
+sText = NormalizeWith(sRaw, sList, bFlag)
+If sText = "" Then Exit Function
+
+If IsStandardForm(mReP7, sText) Then Exit Function
+If IsStandardForm(mReP1, sText) Then Exit Function
+If IsStandardForm(mReP3, sText) Then Exit Function
+If IsStandardForm(mReP4, sText) Then Exit Function
+
+If bFlag Then Call LogUnmatched(sSrc & " cast line 1 (self-cast)", sRaw)
+SpellSelfCastRow = AddRow("", "Self", sText, "", sEff)
+
+Exit Function
+error:
+Call HandleError("SpellSelfCastRow")
 mbFailed = True
 End Function
 
@@ -1004,9 +1144,31 @@ Call HandleError("SpellIncomingRow")
 mbFailed = True
 End Function
 
-'ShockMsg (137): line 1 (shield owner) and line 2 (attacker hit by the shield); Self, Damage,DamageShield
+'Item damage shields (item ability 137): line 1 of the ShockMsg (the wearer hits back), one row per item name.
+'Line 2 is what the wearer's attacker sees, never the wearer, so it is left out.
+Private Sub ExportItemShieldRows()
+Dim vKey As Variant, sNames() As String, nNames As Long
+On Error GoTo error:
+
+frmMME_Export.lblPanel(1).Caption = "Messages: item shields ..."
+
+For Each vKey In mdictItemShield.Keys
+    sNames = Split(mdictItemShield.Item(vKey), "|")
+    nNames = UBound(sNames) + 1
+    Call SpellShieldRows(sNames, nNames, "Item shield message " & vKey & " (" & mdictItemShield.Item(vKey) & ")", CLng(vKey), True)
+    If mbFailed Then Exit For
+Next vKey
+
+Exit Sub
+error:
+Call HandleError("ExportItemShieldRows")
+mbFailed = True
+End Sub
+
+'ShockMsg (137 on a spell or an item): line 1 (shield owner) and line 2 (attacker hit by the shield);
+'Self, Damage,DamageShield
 Private Function SpellShieldRows(sNames() As String, _
-    ByVal nNames As Long, ByVal sSrc As String, ByVal nShock As Long) As Long
+    ByVal nNames As Long, ByVal sSrc As String, ByVal nShock As Long, Optional ByVal bOwnerOnly As Boolean = False) As Long
 Dim sRaw As String, sText As String, bFlag As Boolean, nRows As Long
 On Error GoTo error:
 
@@ -1021,6 +1183,11 @@ If Not sRaw = "" Then
         If bFlag Then Call LogUnmatched(sSrc & " shock line 1", sRaw)
         nRows = nRows + AddRowEach(sNames, nNames, "Self", sText, "", "Damage,DamageShield")
     End If
+End If
+
+If bOwnerOnly Then
+    SpellShieldRows = nRows
+    Exit Function
 End If
 
 sRaw = ReadMsgLine(nShock, 2, sSrc, "shock")

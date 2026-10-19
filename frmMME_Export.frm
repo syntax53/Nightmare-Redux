@@ -1690,7 +1690,7 @@ If bStopExport Then GoTo canceled:
 'messages run after cross-referencing: its Learnable flags tell player spells from monster-only ones
 DoEvents
 If (chkOnly(0).Value = 0) Or (chkOnly(0).Value = 1 And chkOnly(8).Value = 1) Then
-    nMsgWarnings = MME_ExportMessages(tabMessages, sExportPath & "\NMR-Log_MMEMessages.txt", bStopExport, LearnableSpells())
+    nMsgWarnings = MME_ExportMessages(tabMessages, sExportPath & "\NMR-Log_MMEMessages.txt", bStopExport, LearnableSpells(), TextblockCastSpells())
 End If
 If bStopExport Then GoTo canceled:
 
@@ -6363,6 +6363,36 @@ Exit Function
 error:
 Call HandleError("LearnableSpells")
 Set LearnableSpells = New Scripting.Dictionary
+Set dict = Nothing
+End Function
+
+'Spell numbers (as strings) whose "Casted By" in the export's Spells table names a textblock, for the Messages
+'pass (a textblock "cast" makes the player the caster). Empty without cross-reference data.
+Private Function TextblockCastSpells() As Scripting.Dictionary
+Dim dict As Scripting.Dictionary, sBy As String
+On Error GoTo error:
+
+Set dict = New Scripting.Dictionary
+dict.CompareMode = vbBinaryCompare
+
+If tabSpells.RecordCount > 0 Then
+    tabSpells.MoveFirst
+    Do While Not tabSpells.EOF
+        sBy = tabSpells.Fields("Casted By") & ""
+        If InStr(1, sBy, "Textblock #", vbTextCompare) > 0 Then
+            If Not dict.Exists(CStr(tabSpells.Fields("Number"))) Then dict.Add CStr(tabSpells.Fields("Number")), True
+        End If
+        tabSpells.MoveNext
+    Loop
+End If
+
+Set TextblockCastSpells = dict
+Set dict = Nothing
+Exit Function
+
+error:
+Call HandleError("TextblockCastSpells")
+Set TextblockCastSpells = New Scripting.Dictionary
 Set dict = Nothing
 End Function
 

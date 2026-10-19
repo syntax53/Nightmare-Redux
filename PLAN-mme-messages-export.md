@@ -397,3 +397,14 @@ Changes:
 - Death rows keep the old rule: one row per text, the name dropped when monsters differ.
 - The you-form drop applies only to nameless Self rows, so it never removes a spell's name.
 - verify-mme-messages.ps1 checks that every learnable friendly spell with an "effects of <name> wear" line has a row with exactly that Name, that no Name holds a "|" list, and spot-checks resist cold, bless and the absence of an "ice shield" row.
+
+## R2.16 Stock MegaMud audit gaps (2026-10-19)
+
+Audit: every record of the stock MegaMud MESSAGES.md was matched against a v1.11p export, and each miss traced to its message number and referrer in the stock dat files. The full report is docs/megamud-stock-audit.txt, which is not committed. The user approved all four fixes.
+
+- **Cast lines without an amount.** A player or item spell's CastMsgB line 1 is now a Cast row even without {dmg}. Standard "You cast/invoke/sing ..." lines are still skipped. Examples: "A cool wind blows throughout the room!" (black wind), "You rub your jade amulet!". This replaces R2.7 rule 7. About 200 rows on stock.
+- **Start lines.** StartMsg (ability 120) line 1 is printed to the caster once the spell lands (Paradigm Spell.cs), with every %s = the target. It becomes a Cast row only when the cast line is empty or standard: annointed hands "You lay hands on {target}.", mass frenzy, rejuvinating field, burning aura and others. 15 rows on stock.
+- **Item damage shields.** Item ability 137 (ShockMsg) gets a Self row per item name for line 1 only, with Damage,DamageShield, e.g. "The shield spike stabs {attacker} for {dmg} damage!". Line 2 is what the wearer's attacker sees, so it is not exported. 8 rows on stock.
+- **Textblock, cast-exit and spell-trap spells.** The player is the caster (Paradigm TextBlockPart "cast", CastExit, SpellTrapExit), so the player sees CastMsgB line 1. For spells not cast by players or items, that line is a nameless Self row with the spell's effects, plus Trap for spell traps. It is written only when the spell has an effect (RoomSpell alone does not count), the line is not standard, and the target type is not monster (4) or item (7). Examples: "You suffer in the desert heat... you need water, soon!", "A gout of flame belches from the pipe, scorching you with fire!", "The healer casts minor healing on you!". 35 rows on stock. Textblock casts come from the Spells table's "Casted By" (passed in by the form). Exit spells come from the room pass: type 22 Para1/Para2 and type 24 Para1.
+- **Left out on purpose:** chase, room sounds and monster entrances (flavor); standard forms; incoming poison lines whose status line follows (R2.10 Q4: Paradigm prints DescMsg line 3 right after line 2); monster-only and unused spells; leftover unreferenced messages; and MegaMud typos.
+- A simulation of these rules on the stock data, re-run through the audit, leaves no player or item spell line missing.

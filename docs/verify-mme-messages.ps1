@@ -143,6 +143,9 @@ $rx = @(
 $leak = 0
 foreach ($r in $rows) { foreach ($p in $rx) { if ($r.Text -cmatch $p) { $leak++; if ($leak -le 8) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Text) }; break } } }
 if ($leak -eq 0) { Pass "no standard-form lines exported" } else { Fail "$leak standard-form lines exported" }
+$plain = 0
+foreach ($r in $rows) { if ($r.Text -cmatch '^You (cast|invoke|sing) ' -and -not $r.Text.Contains("{dmg}")) { $plain++; if ($plain -le 5) { Write-Output ("      standard cast line exported: [{0}] {1}" -f $r.Kind, $r.Text) } } }
+if ($plain -eq 0) { Pass "no standard 'You cast/invoke/sing ...' line without an amount exported" } else { Fail "$plain standard cast lines without an amount exported" }
 
 # ---- 4. spot checks (stock data; a check fails harmlessly if your realm renamed the record)
 function Expect($desc, $sql, $pred) {
@@ -180,6 +183,11 @@ Expect "filthbug hit on me (non-standard phrase)" "SELECT * FROM Messages WHERE 
 ExpectNone "lashworm hit on other is standard shape" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Other' AND [Msg] LIKE '%darts forward and bites {target} for {dmg} damage!'"
 Expect "arrow trap row"          "SELECT * FROM Messages WHERE Effects='Damage,Trap' AND [Msg] LIKE 'An arrow shoots out of the wall%'" { param($r) $r.Kind -eq "Self" -and $r.Name -ne "" }
 ExpectNone "you-form of a monster hit on another is dropped" "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Self' AND [Msg]='The {source} pounds you with its fist for {dmg} damage!'"
+Expect "black wind cast line without an amount (Cast, named)" "SELECT * FROM Messages WHERE Kind='Cast' AND [Name]='black wind'" { param($r) $r.Msg -eq "A cool wind blows throughout the room!" }
+Expect "annointed hands start line stands in for its standard cast line" "SELECT * FROM Messages WHERE Kind='Cast' AND [Name]='annointed hands'" { param($r) $r.Msg -eq "You lay hands on {target}." }
+Expect "spiked shield damage shield (item, owner line)" "SELECT * FROM Messages WHERE Kind='Self' AND [Name]='spiked shield'" { param($r) $r.Msg -eq "The shield spike stabs {attacker} for {dmg} damage!" -and $r.Effects -eq "Damage,DamageShield" }
+ExpectNone "item shield attacker line not exported (enigma gloves line 2)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='A counterstrike at you does {dmg} damage!'"
+Expect "desert damage (textblock-cast, player is caster)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You suffer in the desert heat... you need water, soon!'" { param($r) $r.Effects -match "Damage" }
 ExpectNone "no swing verbs on non-weapons" "SELECT COUNT(*) AS Cnt FROM Items WHERE WeaponType=0 AND (Len(HitVerbs)>1 OR Len(HitVerbsOther)>1 OR Len(MissVerbs)>1)"
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
 $cnNew.Close()

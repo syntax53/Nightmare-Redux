@@ -62,7 +62,8 @@ learnsp - 42
 
 -= Messages (added NMR 1.8.4) =-
 One row per game line a client may need to recognise. Not a dump of the realm's message file:
-message numbers, caster-only lines of monster spells, room lines and flavor text are not exported,
+message numbers, caster-only lines of monster spells, room lines and flavor text (room sounds,
+monster entrances, what others see when someone uses a command exit) are not exported,
 and lines that follow the standard formats listed further down are left out because clients
 already parse those.
 
@@ -71,14 +72,20 @@ Columns: ID (row id), Name, Kind, Msg, EndMsg, Effects. Bracket column names in 
 as a single Chr(0) character (same as the other MME tables).
 
 Kind (who the line is about, from the player's seat):
-  Cast   confirmation that MY spell or item worked, with the amount: "You fire a magic missile at
-         {target} for {dmg} damage!". Name = the spell, or the item that casts it.
+  Cast   confirmation that MY spell or item worked, with the amount when there is one: "You fire a
+         magic missile at {target} for {dmg} damage!", "A cool wind blows throughout the room!".
+         When a spell's own line is the standard "You cast/invoke/sing ..." (or empty), its start
+         line takes its place ("You lay hands on {target}."). Both are printed only once the spell
+         has landed. Name = the spell, or the item that casts it.
   Self   something happened TO ME. With an EndMsg it is a tracked effect: Msg is printed when the
          effect starts (and by STAT), EndMsg when it wears off. Without an EndMsg it is a one-off
          line: incoming damage in a non-standard wording, a failed action (Effects contains Fail),
          a monster hit with a non-standard verb phrase (Effects contains Monster), a trap
-         (Effects contains Trap). Name = the spell or item for effect rows; the text for lines a
-         client matches by text alone.
+         (Effects contains Trap), my damage shield or my item's spikes hitting back
+         (DamageShield), or a spell a textblock, cast exit or spell trap casts on me ("You suffer
+         in the desert heat... you need water, soon!"; Effects = the spell's, plus Trap for spell
+         traps). Name = the spell or item for effect and shield rows; the text for lines a client
+         matches by text alone.
   Other  something happened to someone else that a client may track: a monster hitting another
          player in a non-standard wording (Damage,Monster), or a monster's death text (Death,
          Name = the monster).
@@ -112,7 +119,8 @@ greater healing rain on your party, healing {dmg} damage!"). "{?}" marks a place
 not identify (the realm's data is inconsistent there).
 
 Placeholder order, should a client want to rebuild the engine's raw line: Cast = spell name,
-{target}, {dmg}; Self from a cast = {source}, spell name, {dmg}; Self/EndMsg from a status
+{target}, {dmg} (a start line: {target} for every placeholder); Self from a textblock, cast exit
+or spell trap = spell name, {target}, {dmg}; damage shield = {attacker}, {dmg}; Self from a cast = {source}, spell name, {dmg}; Self/EndMsg from a status
 message = none or spell name; monster hit on me = {source}, {dmg}; monster hit on another =
 {source}, {target}, {dmg} (the engine prints that damage through a string placeholder, so accept
 digits wherever {dmg} appears); trap = {dmg} if present. Spells whose message style byte selects
