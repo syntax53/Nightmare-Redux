@@ -393,6 +393,7 @@ Cause: the R2.13/R2.14 collapse was implemented as one row per Kind|Msg|EndMsg a
 Changes:
 - Every player-castable spell and every item that casts a spell gets its own Self rows under its own name. Rows collapse only when Kind, Name, Msg and EndMsg are all the same (effects merged); this is the rule the user meant in R2.13. Nameless lines (monster-only or hostile-spell sources, hits, traps) still collapse by text. A first attempt joined names with "|" into one row; the user rejected that, and Name stays a single name in Text 100.
 - Player-castable = marked Learnable by the export's cross-referencing (books, trainers, textblocks, NPC greets, items), or taught by an item (ability 42). The magery-type test is only the fallback when no spell is marked Learnable, which happens in an "Export Only" run that re-exported spells without cross-referencing. The messages pass now runs after LocateRecords so the flags exist.
+- A nameless line with the same text as a named row (a monster-only spell sharing a player spell's status text) stays a separate, text-named row. The user confirmed this on 2026-10-19.
 - Death rows keep the old rule: one row per text, the name dropped when monsters differ.
 - The you-form drop applies only to nameless Self rows, so it never removes a spell's name.
 - verify-mme-messages.ps1 checks that every learnable friendly spell with an "effects of <name> wear" line has a row with exactly that Name, that no Name holds a "|" list, and spot-checks resist cold, bless and the absence of an "ice shield" row.
