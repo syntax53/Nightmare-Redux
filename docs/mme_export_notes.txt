@@ -61,6 +61,7 @@ learnsp - 42
 
 
 -= Messages (added NMR 1.8.4) =-
+MegaMud: see docs/MEGAMUD_MME_MESSAGES_HANDOFF.md for mapping these rows onto its message records and flags.
 One row per game line a client may need to recognise. Not a dump of the realm's message file:
 message numbers, caster-only lines of monster spells, room lines and room sounds are not exported, and lines that
 follow the standard formats listed further down are left out because clients already parse
