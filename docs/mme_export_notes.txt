@@ -116,7 +116,7 @@ union of their Effects. A Self line that is the "you" form of a Cast or Other li
 ("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
 "you"/"your" wherever {target} appears and treat the line as being about themselves when it does.
 Death texts are exported only for monsters that regenerate or are game-limited and award more
-than 100 experience. Colour codes embedded in a message are stripped.
+than 100 experience (EXP times ExpMulti in the Monsters table). Colour codes embedded in a message are stripped.
 
 Tokens: {source} (the caster or attacking monster, as the game prints it, including any "The"),
 {target}, {dmg}, {attacker} (the one who hit a damage shield). Match them as wildcards; {dmg} is
@@ -202,8 +202,8 @@ Status and state:
   To do this action, <X>   You are overcome with a feeling of guilt
 
 -= Items (added NMR 1.8.4) =-
-HitVerbs / HitVerbsOther / MissVerbs (weapons only; empty on every other item): "|"-separated verb
-alternatives used in
+HitVerbs / HitVerbsOther / MissVerbs (items with ItemType 1 = Weapon only, every weapon class including
+1H Blunt; empty on every other item): "|"-separated verb alternatives used in
 "You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.
 
 -= Titles (added NMR 1.8.4) =-

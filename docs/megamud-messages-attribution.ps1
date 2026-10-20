@@ -1,6 +1,15 @@
-$f="P:\MajorMUD\_Euphoria\NMR-EuphStockishDataExport\NMR-EuphStockishDataExport.mdb"
-$md="C:\Users\synta\GitHub\MegaMud2\MegaMudSource\Debug\Default\MESSAGES.md"
-$out="C:\Users\synta\AppData\Local\Temp\claude\C--Users-synta-GitHub-Nightmare-Redux\af1c8898-08bc-4273-9327-abc1358799a3\scratchpad\attribution2.txt"
+# Research helper: traces each record of a MegaMud MESSAGES.md to the realm message numbers whose text it matches and
+# to what references those messages (spells, monsters, items, room exits). Used for the stock MegaMud audit.
+# Needs a full NMR "Database Export" MDB (Messages/Spells/Monsters/Items/Rooms tables), not an MME export.
+# Must run under 32-bit PowerShell (Jet 4.0 is 32-bit only):
+#   C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs\megamud-messages-attribution.ps1 -Mdb "C:\path\NMR-DataExport.mdb" -MessagesMd "C:\path\MESSAGES.md" -Out "C:\path\attribution.txt"
+param(
+  [Parameter(Mandatory=$true)][string]$Mdb,
+  [Parameter(Mandatory=$true)][string]$MessagesMd,
+  [Parameter(Mandatory=$true)][string]$Out
+)
+$f = $Mdb
+$md = $MessagesMd
 
 $cn = New-Object -ComObject ADODB.Connection
 $cn.Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=$f")

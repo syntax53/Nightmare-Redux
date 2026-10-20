@@ -299,7 +299,7 @@ These come from the import's own handoff:
 | `HitVerbsOther` | for "`<player>` `<verb>` X for N damage!" | `slashes|impales|hacks` |
 | `MissVerbs` | for the player's misses | `swing at` |
 
-They are filled only for weapons (`WeaponType` > 0); other items have `Chr(0)`. MegaMud has nowhere to put
+They are filled only for weapons (`ItemType` = 1, any `WeaponType`: 0 is 1H Blunt); other items have `Chr(0)`. MegaMud has nowhere to put
 them: `ITEMREC` (268 bytes) and `schema_items.sql` have no verb field, and `ParseHitting` recognises your
 own hits by their shape, with monster verbs in `ATTACKS.LST`. Storing them means widening the record again
 (schema version 3, `MdConvert`'s frozen layouts). That is only worth doing if a feature needs it, such as
