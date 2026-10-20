@@ -287,8 +287,8 @@ Call HandleError("ReadMsgLine")
 mbFailed = True
 End Function
 
-'Removes ANSI escape sequences (ESC [ ... letter) and any other control character.
-Private Function StripControl(ByVal sLine As String) As String
+'Removes ANSI escape sequences (ESC [ ... letter) and any other control character. Also used for the Titles table.
+Public Function StripControl(ByVal sLine As String) As String
 Dim nPos As Long, nLen As Long, sCh As String, sOut As String, bInEsc As Boolean
 On Error GoTo error:
 

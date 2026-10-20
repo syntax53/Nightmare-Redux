@@ -205,3 +205,22 @@ Status and state:
 HitVerbs / HitVerbsOther / MissVerbs (weapons only; empty on every other item): "|"-separated verb
 alternatives used in
 "You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.
+
+-= Titles (added NMR 1.8.4) =-
+One row per class, so a client can tell a player's level range from their title. Columns: Class (the class
+number, = Classes.Number) and Titles, the class's title textblock written as comma-separated level ranges
+"<first>-<last>:<title>" in level order:
+  1-1:Apprentice,2-4:Warrior Novice,5-9:Grunt,...,45-49:Lord|Lady,...,70-109:Dragonslayer
+Line N of the textblock is the title at level N; neighbouring levels with the same title share one range.
+"Male|Female" is kept as the game writes it: the part before "|" is the male title, the part after it the
+female one, and a title without "|" is used for both. ANSI colour codes, other control characters and the
+spaces around each title are removed (GreaterMUD colours its level 100+ titles).
+The last range ends at the textblock's last line, which differs by class (99 to 118 lines in stock data).
+The textblock has no title for higher levels; NMR does not know what the game prints there, so treat the
+last range as open-ended.
+Titles repeat across classes ("Apprentice" is level 1 for every stock class) and can repeat within a class
+in a custom realm, so look a title up in the player's class when it is known and accept every range it
+appears in. Titles is empty (a single Chr(0)) for a class without a title textblock.
+Parsing: split on ","; an entry's range is the text before its first ":", the title is everything after it.
+Stock and GreaterMUD titles contain no "," or ":". Should a custom realm's title contain a ",", a piece that
+does not start with "<digits>-<digits>:" belongs to the entry before it.

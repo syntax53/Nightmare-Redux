@@ -623,6 +623,7 @@ Dim tabShops As Recordset
 Dim tabRooms As Recordset
 Dim tabLairs As Recordset
 Dim tabMessages As Recordset
+Dim tabTitles As Recordset
 Dim tabTBInfo As Recordset
 Dim tabTempRS As Recordset
 
@@ -1536,8 +1537,8 @@ Set DB = OpenDatabase(sDataSource)
 Call OpenTables
 
 If bUpdateExistingADB Then
-    If HasMessagesSchema = False Then
-        MsgBox "This export was made by an older version of NMR and has no Messages table." & vbCrLf _
+    If HasCurrentSchema = False Then
+        MsgBox "This export was made by an older version of NMR and has no Messages or Titles table." & vbCrLf _
             & "Create a new export instead of updating this one.", vbExclamation
         Call CloseDB(True)
         GoTo ReEnable:
@@ -5547,7 +5548,15 @@ Loop
 End Sub
 
 Private Sub ExportClasses()
-Dim nStatus As Integer, recnum As Long, x As Integer
+Dim nStatus As Integer, recnum As Long, x As Integer, sTitles As String
+
+'titles are rewritten with the classes (one row per class)
+cleartitles:
+If tabTitles.RecordCount <> 0 Then
+    tabTitles.MoveFirst
+    tabTitles.Delete
+    GoTo cleartitles:
+End If
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
@@ -5606,6 +5615,12 @@ Do While nStatus = 0 And bStopExport = False
 
     tabClasses.Update
     
+    sTitles = ClassTitleRuns(Classrec.TitleText)
+    tabTitles.AddNew
+    tabTitles.Fields("Class") = Classrec.Number
+    tabTitles.Fields("Titles") = IIf(sTitles = "", Chr(0), sTitles)
+    tabTitles.Update
+    
     nStatus = BTRCALL(BGETNEXT, ClassPosBlock, Classdatabuf, Len(Classdatabuf), ByVal ClassKeyBuffer, KEY_BUF_LEN, 0)
 
     If Not bUseCPU Then DoEvents
@@ -5613,6 +5628,51 @@ Loop
 
 
 End Sub
+
+'A class's title textblock as level runs for the Titles table: "1-1:Apprentice,2-4:Warrior Novice,...,70-109:Dragonslayer".
+'Line N of the textblock is the title at level N. "Male|Female" is kept as the game writes it; colour codes and
+'the spaces around each title are removed. Empty when the class has no title textblock.
+Private Function ClassTitleRuns(ByVal nTBNumber As Long) As String
+Dim sLines() As String, sTitle As String, sRunTitle As String, sOut As String
+Dim nLine As Long, nLast As Long, nRunStart As Long, nBar As Long
+On Error GoTo error:
+
+ClassTitleRuns = ""
+If nTBNumber <= 0 Then Exit Function
+
+sLines = Split(GetWholeTextblock(nTBNumber), vbLf)
+nLast = UBound(sLines)
+If nLast < 0 Then Exit Function
+'every line ends with a line feed, so the piece after the last one is not a level
+If sLines(nLast) = "" Then nLast = nLast - 1
+
+For nLine = 0 To nLast
+    sTitle = StripControl(sLines(nLine))
+    nBar = InStr(1, sTitle, "|")
+    If nBar > 0 Then
+        sTitle = Trim$(Left$(sTitle, nBar - 1)) & "|" & Trim$(Mid$(sTitle, nBar + 1))
+    Else
+        sTitle = Trim$(sTitle)
+    End If
+
+    If nLine = 0 Then
+        nRunStart = 1
+        sRunTitle = sTitle
+    ElseIf Not sTitle = sRunTitle Then
+        sOut = sOut & IIf(sOut = "", "", ",") & nRunStart & "-" & nLine & ":" & sRunTitle
+        nRunStart = nLine + 1
+        sRunTitle = sTitle
+    End If
+Next nLine
+If nLast >= 0 Then sOut = sOut & IIf(sOut = "", "", ",") & nRunStart & "-" & (nLast + 1) & ":" & sRunTitle
+
+ClassTitleRuns = sOut
+
+Exit Function
+error:
+Call HandleError("ClassTitleRuns-#" & nTBNumber)
+ClassTitleRuns = ""
+End Function
 Private Sub ExportRaces()
 Dim nStatus As Integer, recnum As Long, x As Integer
 
@@ -6315,26 +6375,28 @@ Erase sActions
 Erase sNewActions
 End Sub
 
-Private Function HasMessagesSchema() As Boolean
+'tables and columns added since the previous release (an export without them cannot be updated)
+Private Function HasCurrentSchema() As Boolean
 On Error GoTo notfound:
 Dim tdf As DAO.TableDef, fld As DAO.field
 
-HasMessagesSchema = False
+HasCurrentSchema = False
 
 Set tdf = DB.TableDefs("Messages")
+Set tdf = DB.TableDefs("Titles")
 Set tdf = DB.TableDefs("Items")
 Set fld = tdf.Fields("HitVerbs")
 
 Set fld = Nothing
 Set tdf = Nothing
-HasMessagesSchema = True
+HasCurrentSchema = True
 Exit Function
 
 notfound:
-If Not Err.Number = 3265 Then Call HandleError("HasMessagesSchema")
+If Not Err.Number = 3265 Then Call HandleError("HasCurrentSchema")
 Set fld = Nothing
 Set tdf = Nothing
-HasMessagesSchema = False
+HasCurrentSchema = False
 End Function
 
 'Spell numbers (as strings) marked Learnable in the export's Spells table, for the Messages pass.
@@ -6508,7 +6570,7 @@ Dim catNewDB As ADOX.Catalog
 Dim tabNewMonsters As ADOX.Table, tabNewSpells As ADOX.Table, tabNewShops As ADOX.Table
 Dim tabNewClasses As ADOX.Table, tabNewRaces As ADOX.Table, tabNewItems As ADOX.Table
 Dim tabNewInfo As ADOX.Table, tabNewRooms As ADOX.Table, tabNewTBInfo As ADOX.Table
-Dim tabNewLairs As ADOX.Table, tabNewMessages As ADOX.Table
+Dim tabNewLairs As ADOX.Table, tabNewMessages As ADOX.Table, tabNewTitles As ADOX.Table
 
 Dim pkClasses As New ADOX.Key
 Dim pkRaces As New ADOX.Key
@@ -6520,6 +6582,7 @@ Dim idxRooms As New ADOX.Index
 Dim pkTBInfo As New ADOX.Key
 Dim pkLairs As New ADOX.Key
 Dim pkMessages As New ADOX.Key
+Dim pkTitles As New ADOX.Key
 Dim x As Integer
 
 CreateTables = False
@@ -6536,6 +6599,7 @@ Set tabNewTBInfo = New ADOX.Table
 Set tabNewInfo = New ADOX.Table
 Set tabNewLairs = New ADOX.Table
 Set tabNewMessages = New ADOX.Table
+Set tabNewTitles = New ADOX.Table
 
 'open the database
 catNewDB.ActiveConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" & "Data Source=" & sDataSource
@@ -6881,6 +6945,14 @@ With tabNewMessages
 End With
 catNewDB.Tables.Append tabNewMessages
 
+DoEvents
+With tabNewTitles
+    .Name = "Titles"
+    .Columns.Append "Class", adInteger
+    .Columns.Append "Titles", adLongVarWChar, 2000
+End With
+catNewDB.Tables.Append tabNewTitles
+
 '-------
 'index's
 '-------
@@ -6976,6 +7048,16 @@ With pkMessages
 End With
 
 DoEvents
+With pkTitles
+    .Name = "pkTitles"
+    .Type = adKeyPrimary
+    .RelatedTable = "Titles"
+    .Columns.Append "Class"
+    .Columns("Class").RelatedColumn = "Class"
+    .UpdateRule = adRINone
+End With
+
+DoEvents
 With idxRooms
     .Name = "idxRooms"
     .Columns.Append "Map Number"
@@ -6991,6 +7073,7 @@ tabNewSpells.Keys.Append pkSpells
 tabNewShops.Keys.Append pkShops
 tabNewTBInfo.Keys.Append pkTBInfo
 tabNewMessages.Keys.Append pkMessages
+tabNewTitles.Keys.Append pkTitles
 tabNewRooms.Indexes.Append idxRooms
 tabNewLairs.Keys.Append pkLairs
 
@@ -7010,6 +7093,7 @@ Set idxRooms = Nothing
 Set pkTBInfo = Nothing
 Set pkLairs = Nothing
 Set pkMessages = Nothing
+Set pkTitles = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewInfo = Nothing
@@ -7022,6 +7106,7 @@ Set tabNewMonsters = Nothing
 Set tabNewRooms = Nothing
 Set tabNewLairs = Nothing
 Set tabNewMessages = Nothing
+Set tabNewTitles = Nothing
 
 Set catNewDB = Nothing
 
@@ -7041,6 +7126,7 @@ Set idxRooms = Nothing
 Set pkTBInfo = Nothing
 Set pkLairs = Nothing
 Set pkMessages = Nothing
+Set pkTitles = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewClasses = Nothing
@@ -7053,6 +7139,7 @@ Set tabNewInfo = Nothing
 Set tabNewRooms = Nothing
 Set tabNewLairs = Nothing
 Set tabNewMessages = Nothing
+Set tabNewTitles = Nothing
 
 Set catNewDB = Nothing
 End Function
@@ -7098,6 +7185,8 @@ Set tabInfo = Nothing
 Set tabRooms = Nothing
 Set tabTBInfo = Nothing
 Set tabLairs = Nothing
+Set tabMessages = Nothing
+Set tabTitles = Nothing
 
 Set DB = Nothing
 
@@ -7198,7 +7287,10 @@ Set tabInfo = DB.OpenRecordset("Info")
 Set tabRooms = DB.OpenRecordset("Rooms")
 Set tabTBInfo = DB.OpenRecordset("TBInfo")
 Set tabLairs = DB.OpenRecordset("Lairs")
-If HasMessagesSchema Then Set tabMessages = DB.OpenRecordset("Messages")
+If HasCurrentSchema Then
+    Set tabMessages = DB.OpenRecordset("Messages")
+    Set tabTitles = DB.OpenRecordset("Titles")
+End If
 
 Exit Sub
 error:
@@ -7221,6 +7313,7 @@ tabRooms.Close
 tabTBInfo.Close
 tabLairs.Close
 tabMessages.Close
+tabTitles.Close
 
 DB.Close
 
