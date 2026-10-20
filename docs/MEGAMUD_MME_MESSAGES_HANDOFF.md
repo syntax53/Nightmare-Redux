@@ -94,8 +94,8 @@ The index is `pkMessages` on `ID`.
 |---|---|
 | Cast | 518 |
 | Self | 475 (272 with an EndMsg) |
-| Other | 416 (210 death texts, 78 chase lines, 29 monster entrances) |
-| Total | 1,409 |
+| Other | 419 (213 death texts, 78 chase lines, 29 monster entrances) |
+| Total | 1,412 |
 
 Matched against the stock MegaMud `Messages.md` (612 records), 502 records have an NMR counterpart. The
 rest are room sounds, MegaMud-only records (lives warnings, `Cancel FUgram`), standard engine forms
@@ -299,7 +299,7 @@ These come from the import's own handoff:
 | `HitVerbsOther` | for "`<player>` `<verb>` X for N damage!" | `slashes|impales|hacks` |
 | `MissVerbs` | for the player's misses | `swing at` |
 
-They are filled only for weapons (`WeaponType` > 0); other items have `Chr(0)`. MegaMud has nowhere to put
+They are filled only for weapons (`ItemType` = 1, any `WeaponType`: 0 is 1H Blunt); other items have `Chr(0)`. MegaMud has nowhere to put
 them: `ITEMREC` (268 bytes) and `schema_items.sql` have no verb field, and `ParseHitting` recognises your
 own hits by their shape, with monster verbs in `ATTACKS.LST`. Storing them means widening the record again
 (schema version 3, `MdConvert`'s frozen layouts). That is only worth doing if a feature needs it, such as
@@ -352,7 +352,7 @@ MegaMud uses today.
 ## 11. Checking an implementation
 
 - **On stock data**: `TestData/Stock111p/Messages.db` holds the stock records. A stock v1.11p NMR export
-  has 1,409 Messages rows, and about 500 of the 612 stock records should marry. NMR's audit of that pair is
+  has 1,412 Messages rows, and about 500 of the 612 stock records should marry. NMR's audit of that pair is
   in the NMR repository (`docs/megamud-stock-audit.txt`, a local file, with per-record message numbers).
 - **Idempotence**: importing the same MDB twice must leave `Default\Messages.db` byte-for-byte unchanged,
   the same rule the other types follow.

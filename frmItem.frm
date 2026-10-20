@@ -3489,6 +3489,12 @@ abil_out:
         If Itemrec.HitMsg = nVal Then GoTo msg_match:
         If Itemrec.MissMsg = nVal Then GoTo msg_match:
         If Itemrec.DistructMsg = nVal Then GoTo msg_match:
+        For x = 0 To 19
+            Select Case Itemrec.AbilityA(x)
+                Case 101, 115, 120, 137:
+                    If Itemrec.AbilityB(x) = nVal Then GoTo msg_match:
+            End Select
+        Next x
         bAdd = False
 msg_match:
     End If

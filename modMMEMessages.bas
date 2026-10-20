@@ -45,7 +45,8 @@ Private mdictRows As Scripting.Dictionary    'row key -> row index
 
 'dictLearnable: numbers (as strings) of the spells the export's cross-referencing marked Learnable; Nothing or empty
 'when no cross-reference data exists, in which case a spell with a magery type counts as player-castable.
-'dictTextblockCast: numbers (as strings) of the spells textblocks cast (Spells "Casted By"); Nothing when unknown.
+'dictTextblockCast: numbers (as strings) of the spells textblocks cast (cross-referencing, plus Spells "Casted By");
+'Nothing when unknown.
 Public Function MME_ExportMessages(tabMessages As DAO.Recordset, ByVal sLogPath As String, ByRef bStop As Boolean, _
     Optional ByVal dictLearnable As Scripting.Dictionary, Optional ByVal dictTextblockCast As Scripting.Dictionary) As Long
 Dim dictRoomSpells As Scripting.Dictionary, vKey As Variant
@@ -1482,7 +1483,7 @@ End Sub
 
 Private Sub ProcessMonster()
 Dim sMon As String, sSrc As String, i As Integer
-Dim nDeath As Long, sRaw As String, sText As String, bFlag As Boolean
+Dim nDeath As Long, sRaw As String, sText As String, bFlag As Boolean, nExp As Double
 On Error GoTo error:
 
 sMon = RTrim(ClipNull(Monsterrec.Name))
@@ -1495,7 +1496,12 @@ For i = 0 To 4
 Next i
 
 'death text only for monsters that regenerate or are game-limited and give at least 101 experience
-If Not ((Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0) And SLong2ULong(Monsterrec.Experience) >= 101) Then Exit Sub
+'(v1.11j+: the experience given is the base times the multiplier)
+nExp = SLong2ULong(Monsterrec.Experience)
+If eDatFileVersion >= v111j Then
+    If Monsterrec.ExpMulti > 1 Then nExp = nExp * SLong2ULong(Monsterrec.ExpMulti)
+End If
+If Not ((Monsterrec.RegenTime > 0 Or Monsterrec.GameLimit > 0) And nExp >= 101) Then Exit Sub
 
 nDeath = Monsterrec.DeathMsg
 If nDeath <= 1 And Monsterrec.AttackType(0) = 1 Then nDeath = Monsterrec.AttackHitMsg(0)

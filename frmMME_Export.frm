@@ -672,6 +672,7 @@ Dim nDefaultExcludeTo() As Long
 Dim sDefaultExcludeNote() As String
 
 Dim dictLairInfo As New Dictionary
+Dim dictTBCastSpells As Dictionary 'spells textblocks cast (not teach), for the Messages pass; "Casted By" can be truncated
 Private Type LairInfoType
     sGroupIndex As String
     sMobList As String
@@ -1501,6 +1502,8 @@ Set dictLairInfo = New Dictionary
 dictLairInfo.CompareMode = vbTextCompare
 ReDim colLairs(0)
 'ReDim colNONLairs(0)
+Set dictTBCastSpells = New Dictionary
+dictTBCastSpells.CompareMode = vbBinaryCompare
 
 nMsgWarnings = 0
 nTmp = CreateDatabase
@@ -4736,6 +4739,9 @@ nextnumber2:
                     End If
                 Else
                     Call MarkSpellInGame(nNumber, "Textblock #" & TBNumber & sSuffix, bLearnSpell)
+                    If nNumber > 0 And Not dictTBCastSpells Is Nothing Then
+                        If Not dictTBCastSpells.Exists(CStr(nNumber)) Then dictTBCastSpells.Add CStr(nNumber), True
+                    End If
                 End If
                 
             Case 1: 'item
@@ -5408,8 +5414,9 @@ Do While nStatus = 0 And bStopExport = False
     tabItems.Fields("In Game") = IIf(bAllInGame, True, False)
     tabItems.Fields("Obtained From") = Chr(0)
     tabItems.Fields("References") = Chr(0)
-    'swing verbs only mean something on a weapon; other items carry leftover message numbers
-    If Itemrec.Weapon > 0 Then
+    'swing verbs only mean something on a weapon (item type 1); other items carry leftover message numbers.
+    'not Itemrec.Weapon: that is the weapon class, and 0 = 1H Blunt
+    If Itemrec.Type = 1 Then
         tabItems.Fields("HitVerbs") = MsgLineOrNull(Itemrec.HitMsg, 1)
         tabItems.Fields("HitVerbsOther") = MsgLineOrNull(Itemrec.HitMsg, 2)
         tabItems.Fields("MissVerbs") = MsgLineOrNull(Itemrec.MissMsg, 1)
@@ -5453,8 +5460,10 @@ Dim sTemp As String
 MsgLineOrNull = Chr(0)
 If nMsg <= 1 Then Exit Function
 
-sTemp = RTrim(GetMessages(nMsg, nLine))
-If sTemp = "" Or sTemp = "none" Or sTemp = "MSG NOT IN DATABASE!" Then Exit Function
+sTemp = GetMessages(nMsg, nLine)
+If sTemp = "none" Or sTemp = "MSG NOT IN DATABASE!" Then Exit Function
+sTemp = RTrim(StripControl(sTemp))
+If sTemp = "" Then Exit Function
 
 MsgLineOrNull = Left(sTemp, 74)
 
@@ -6430,12 +6439,20 @@ End Function
 
 'Spell numbers (as strings) whose "Casted By" in the export's Spells table names a textblock, for the Messages
 'pass (a textblock "cast" makes the player the caster). Empty without cross-reference data.
+'"Casted By" is cut at 250 characters, so a spell many monsters also cast can lose its textblock entry; the
+'textblock casts seen by this run's cross-referencing (dictTBCastSpells) are added as well.
 Private Function TextblockCastSpells() As Scripting.Dictionary
-Dim dict As Scripting.Dictionary, sBy As String
+Dim dict As Scripting.Dictionary, sBy As String, vKey As Variant
 On Error GoTo error:
 
 Set dict = New Scripting.Dictionary
 dict.CompareMode = vbBinaryCompare
+
+If Not dictTBCastSpells Is Nothing Then
+    For Each vKey In dictTBCastSpells.Keys
+        If Not dict.Exists(CStr(vKey)) Then dict.Add CStr(vKey), True
+    Next vKey
+End If
 
 If tabSpells.RecordCount > 0 Then
     tabSpells.MoveFirst
