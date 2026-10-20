@@ -94,8 +94,8 @@ The index is `pkMessages` on `ID`.
 |---|---|
 | Cast | 518 |
 | Self | 475 (272 with an EndMsg) |
-| Other | 416 (210 death texts, 78 chase lines, 29 monster entrances) |
-| Total | 1,409 |
+| Other | 419 (213 death texts, 78 chase lines, 29 monster entrances) |
+| Total | 1,412 |
 
 Matched against the stock MegaMud `Messages.md` (612 records), 502 records have an NMR counterpart. The
 rest are room sounds, MegaMud-only records (lives warnings, `Cancel FUgram`), standard engine forms
@@ -352,7 +352,7 @@ MegaMud uses today.
 ## 11. Checking an implementation
 
 - **On stock data**: `TestData/Stock111p/Messages.db` holds the stock records. A stock v1.11p NMR export
-  has 1,409 Messages rows, and about 500 of the 612 stock records should marry. NMR's audit of that pair is
+  has 1,412 Messages rows, and about 500 of the 612 stock records should marry. NMR's audit of that pair is
   in the NMR repository (`docs/megamud-stock-audit.txt`, a local file, with per-record message numbers).
 - **Idempotence**: importing the same MDB twice must leave `Default\Messages.db` byte-for-byte unchanged,
   the same rule the other types follow.
