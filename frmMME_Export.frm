@@ -3484,6 +3484,10 @@ Do While nStatus = 0 And bStopExport = False
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, "checkspell ", TextBlock)
     If bCleared(0) = False Then bCleared(1) = False
     
+    'failspell
+    bCleared(0) = CheckTBString(nCurrentTB, decrypted, "failspell ", TextBlock)
+    If bCleared(0) = False Then bCleared(1) = False
+    
     'checks for ":<textblock>"
     bCleared(0) = CheckTBString(nCurrentTB, decrypted, ":", TextBlock)
     
@@ -4603,7 +4607,7 @@ Dim x As Integer, y1 As Integer, y2 As Integer, bTestSkill As Boolean
 Dim nNumber As Long, sWhole As String, sLook As String, sSuffix As String, sClasses As String
 Dim bLearnSpell As Boolean, sChar As String, bItemFail As Boolean, bRandom As Boolean
 Dim bGiveItem As Boolean, bDontMarkInGame As Boolean, bItemReferenceOnly As Boolean, bCheckSpell As Boolean
-Dim sAddText As String, nNumber2 As Long
+Dim sAddText As String, nNumber2 As Long, bFailSpell As Boolean
 
 sWhole = LCase(WholeString)
 sLook = LCase(StringToLookFor)
@@ -4613,6 +4617,7 @@ If Left(sLook, 6) = "random" Then bRandom = True 'random?
 If Left(sLook, 9) = "testskill" Then bTestSkill = True 'testskill
 If Left(sLook, 8) = "giveitem" Then bGiveItem = True
 If Left(sLook, 10) = "checkspell" Then bCheckSpell = True
+If Left(sLook, 9) = "failspell" Then bFailSpell = True
 
 bDontMarkInGame = False
 bItemReferenceOnly = False
@@ -4668,7 +4673,7 @@ nextnumber:
     
     nNumber = Val(Mid(sWhole, y1, y2))
     
-    If bCheckSpell Then
+    If bCheckSpell Or bFailSpell Then
         If nNumber = 0 Then x = y1: GoTo checknext:
         
         y1 = y1 + y2 + 1 'len of string searching (to position y1 at first number)
@@ -4740,7 +4745,7 @@ nextnumber2:
                 Else
                     Call MarkSpellInGame(nNumber, "Textblock #" & TBNumber & sSuffix, bLearnSpell)
                     If nNumber > 0 And Not dictTBCastSpells Is Nothing Then
-                        If Not dictTBCastSpells.Exists(CStr(nNumber)) Then dictTBCastSpells.Add CStr(nNumber), True
+                        If Not dictTBCastSpells.Exists(CStr(nNumber)) Then dictTBCastSpells.add CStr(nNumber), True
                     End If
                 End If
                 
@@ -6421,7 +6426,7 @@ If tabSpells.RecordCount > 0 Then
     tabSpells.MoveFirst
     Do While Not tabSpells.EOF
         If Val(tabSpells.Fields("Learnable") & "") = 1 Then
-            If Not dict.Exists(CStr(tabSpells.Fields("Number"))) Then dict.Add CStr(tabSpells.Fields("Number")), True
+            If Not dict.Exists(CStr(tabSpells.Fields("Number"))) Then dict.add CStr(tabSpells.Fields("Number")), True
         End If
         tabSpells.MoveNext
     Loop
@@ -6450,7 +6455,7 @@ dict.CompareMode = vbBinaryCompare
 
 If Not dictTBCastSpells Is Nothing Then
     For Each vKey In dictTBCastSpells.Keys
-        If Not dict.Exists(CStr(vKey)) Then dict.Add CStr(vKey), True
+        If Not dict.Exists(CStr(vKey)) Then dict.add CStr(vKey), True
     Next vKey
 End If
 
@@ -6459,7 +6464,7 @@ If tabSpells.RecordCount > 0 Then
     Do While Not tabSpells.EOF
         sBy = tabSpells.Fields("Casted By") & ""
         If InStr(1, sBy, "Textblock #", vbTextCompare) > 0 Then
-            If Not dict.Exists(CStr(tabSpells.Fields("Number"))) Then dict.Add CStr(tabSpells.Fields("Number")), True
+            If Not dict.Exists(CStr(tabSpells.Fields("Number"))) Then dict.add CStr(tabSpells.Fields("Number")), True
         End If
         tabSpells.MoveNext
     Loop
