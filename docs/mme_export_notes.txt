@@ -224,3 +224,10 @@ appears in. Titles is empty (a single Chr(0)) for a class without a title textbl
 Parsing: split on ","; an entry's range is the text before its first ":", the title is everything after it.
 Stock and GreaterMUD titles contain no "," or ":". Should a custom realm's title contain a ",", a piece that
 does not start with "<digits>-<digits>:" belongs to the entry before it.
+
+-= Abilities (added NMR 1.8.4) =-
+One row per ability in NMR's loaded ability list (ability.mdb, as edited in NMR's ability editor), so a client
+can name the Abil-# columns of the other tables. Columns: Number (the ability number, = the Abil-# values;
+primary key) and Name. Every row of the list is exported, including 0 ("empty"). The table is rewritten on
+every export (an "Export Only ..." run only with "Ability List" checked); it is left as it was if NMR could
+not open ability.mdb.

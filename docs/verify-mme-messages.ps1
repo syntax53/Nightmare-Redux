@@ -1,4 +1,4 @@
-# Verifies an MME export that contains the Messages table (Revision 2 schema) and the Titles table (NMR 1.8.4).
+# Verifies an MME export that contains the Messages table (Revision 2 schema) and the Titles and Abilities tables (NMR 1.8.4).
 # Must run under 32-bit PowerShell (Jet 4.0 is 32-bit only):
 #   C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs\verify-mme-messages.ps1 -New "C:\path\new-export.mdb" [-Old "C:\path\previous-version-export.mdb"]
 # Jet SQL through ADO uses % and _ as LIKE wildcards; reserved names ([Name], [Msg]) are bracketed.
@@ -48,7 +48,7 @@ if ($Old -ne "" -and (Test-Path $Old)) {
   $sOld = Schema $cnOld
   $iOld = Indexes $cnOld
   foreach ($t in $sOld.Keys) {
-    if ($t -eq "Messages" -or $t -eq "Titles") { continue }
+    if ($t -eq "Messages" -or $t -eq "Titles" -or $t -eq "Abilities") { continue }
     if (-not $sNew.ContainsKey($t)) { Fail "table missing in new export: $t"; continue }
     $oldCols = @($sOld[$t].Keys); $newCols = @($sNew[$t].Keys)
     for ($i=0; $i -lt $oldCols.Count; $i++) {
@@ -60,10 +60,10 @@ if ($Old -ne "" -and (Test-Path $Old)) {
       if (($extra -join ",") -eq "HitVerbs,HitVerbsOther,MissVerbs" -or $extra.Count -eq 0) { Pass "Items columns: only the verb columns are new" } else { Fail "Items extra columns: '$($extra -join ',')'" }
     } elseif ($extra.Count -gt 0) { Fail "$t has unexpected extra columns: $($extra -join ',')" }
   }
-  foreach ($k in $iOld.Keys) { if (-not $iNew.ContainsKey($k) -and $k -notlike "Messages.*" -and $k -notlike "Titles.*") { Fail "index missing: $k" } }
+  foreach ($k in $iOld.Keys) { if (-not $iNew.ContainsKey($k) -and $k -notlike "Messages.*" -and $k -notlike "Titles.*" -and $k -notlike "Abilities.*") { Fail "index missing: $k" } }
   # hashtable key order is arbitrary, so test each new table against the allowed set
   $newTabs = @($sNew.Keys | Where-Object { -not $sOld.ContainsKey($_) })
-  $unexpected = @($newTabs | Where-Object { @("Messages","Titles") -notcontains $_ })
+  $unexpected = @($newTabs | Where-Object { @("Messages","Titles","Abilities") -notcontains $_ })
   if ($unexpected.Count -eq 0) { Pass "no unexpected new tables (new: $($newTabs -join ','))" } else { Fail "unexpected new tables: $($unexpected -join ',')" }
   $cnOld.Close()
 } else { Write-Output "SKIP  no previous export given for the schema diff" }
@@ -235,6 +235,26 @@ if (-not $sNew.ContainsKey("Titles")) { Fail "Titles table missing" } else {
   if ($bad -eq 0) { Pass "every Titles string is contiguous level ranges from 1 with no colour codes" } else { Fail "$bad Titles strings are malformed" }
   if ($empty -gt 0) { Write-Output "INFO  classes without a title textblock: $empty" }
   Expect "class 1 titles start at level 1 (stock: Apprentice)" "SELECT [Class], [Titles] AS Msg FROM Titles WHERE [Class]=1" { param($r) $r.Msg -like "1-1:Apprentice,*" }
+}
+
+# ---- 6. Abilities table (NMR's loaded ability list: one row per ability number)
+if (-not $sNew.ContainsKey("Abilities")) { Fail "Abilities table missing" } else {
+  $have = (@($sNew["Abilities"].Keys) -join ",")
+  if ($have -eq "Number,Name") { Pass "Abilities columns = Number,Name" } else { Fail "Abilities columns = $have" }
+  if ($iNew.ContainsKey("Abilities.pkAbilities")) { Pass "pkAbilities exists" } else { Fail "pkAbilities missing" }
+  $nA = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Abilities"
+  if ($nA -gt 0) { Pass "Abilities has $nA rows" } else { Fail "Abilities is empty" }
+  ExpectNone "no blank ability names" "SELECT COUNT(*) AS Cnt FROM Abilities WHERE Len([Name] & '')=0 OR [Name]=Chr(0)"
+  Expect "ability 1 is named (stock: Damage)" "SELECT [Number], [Name] AS Msg FROM Abilities WHERE [Number]=1" { param($r) $r.Msg -ne "" }
+  # the game data can use ability numbers NMR's list does not name; report them, they are not an export fault
+  $unnamed = @()
+  foreach ($t in "Items","Monsters","Spells","Classes","Races") {
+    $n = if ($t -eq "Items") { 19 } else { 9 }
+    for ($x = 0; $x -le $n; $x++) {
+      foreach ($r in (Q $cnNew "SELECT DISTINCT [Abil-$x] AS A FROM [$t] WHERE [Abil-$x]>0 AND [Abil-$x] NOT IN (SELECT [Number] FROM Abilities)")) { if ($unnamed -notcontains $r.A) { $unnamed += $r.A } }
+    }
+  }
+  if ($unnamed.Count -eq 0) { Pass "every Abil-# value in the export has an Abilities row" } else { Write-Output ("INFO  ability numbers used but not in the list: " + (($unnamed | Sort-Object) -join ",")) }
 }
 $cnNew.Close()
 Write-Output ""
