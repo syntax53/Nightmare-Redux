@@ -302,11 +302,21 @@ Begin VB.Form frmMME_Export
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   1995
+      Height          =   2055
       Left            =   120
       TabIndex        =   11
       Top             =   2040
       Width           =   5235
+      Begin VB.CheckBox chkOnly 
+         Caption         =   "Ability List"
+         Enabled         =   0   'False
+         Height          =   195
+         Index           =   9
+         Left            =   3000
+         TabIndex        =   50
+         Top             =   1740
+         Width           =   1215
+      End
       Begin VB.CommandButton cmdQ 
          Caption         =   "?"
          Height          =   255
@@ -376,7 +386,7 @@ Begin VB.Form frmMME_Export
          Index           =   7
          Left            =   4140
          TabIndex        =   22
-         Top             =   1260
+         Top             =   1140
          Width           =   975
       End
       Begin VB.CheckBox chkOnly 
@@ -386,7 +396,7 @@ Begin VB.Form frmMME_Export
          Index           =   8
          Left            =   4140
          TabIndex        =   49
-         Top             =   1560
+         Top             =   1440
          Width           =   1035
       End
       Begin VB.CheckBox chkOnly 
@@ -404,7 +414,7 @@ Begin VB.Form frmMME_Export
          Index           =   0
          Left            =   3000
          TabIndex        =   12
-         Top             =   300
+         Top             =   180
          Width           =   1815
       End
       Begin VB.CheckBox chkOnly 
@@ -414,7 +424,7 @@ Begin VB.Form frmMME_Export
          Index           =   6
          Left            =   4140
          TabIndex        =   19
-         Top             =   960
+         Top             =   840
          Value           =   1  'Checked
          Width           =   975
       End
@@ -425,7 +435,7 @@ Begin VB.Form frmMME_Export
          Index           =   5
          Left            =   4140
          TabIndex        =   16
-         Top             =   660
+         Top             =   540
          Value           =   1  'Checked
          Width           =   975
       End
@@ -436,7 +446,7 @@ Begin VB.Form frmMME_Export
          Index           =   4
          Left            =   3000
          TabIndex        =   24
-         Top             =   1560
+         Top             =   1440
          Width           =   1215
       End
       Begin VB.CheckBox chkOnly 
@@ -446,7 +456,7 @@ Begin VB.Form frmMME_Export
          Index           =   3
          Left            =   3000
          TabIndex        =   21
-         Top             =   1260
+         Top             =   1140
          Width           =   1215
       End
       Begin VB.CheckBox chkOnly 
@@ -456,7 +466,7 @@ Begin VB.Form frmMME_Export
          Index           =   2
          Left            =   3000
          TabIndex        =   18
-         Top             =   960
+         Top             =   840
          Width           =   1215
       End
       Begin VB.CheckBox chkOnly 
@@ -466,7 +476,7 @@ Begin VB.Form frmMME_Export
          Index           =   1
          Left            =   3000
          TabIndex        =   15
-         Top             =   660
+         Top             =   540
          Width           =   1215
       End
       Begin VB.CheckBox chkLegit 
