@@ -634,6 +634,7 @@ Dim tabRooms As Recordset
 Dim tabLairs As Recordset
 Dim tabMessages As Recordset
 Dim tabTitles As Recordset
+Dim tabAbilities As Recordset
 Dim tabTBInfo As Recordset
 Dim tabTempRS As Recordset
 
@@ -1181,7 +1182,7 @@ Select Case Index
     Case 0:
         If chkOnly(0).Value = 1 Then bAction = True
         
-        For x = 1 To 8
+        For x = 1 To 9
             If Not x = 5 And Not x = 6 Then chkOnly(x).Enabled = bAction
         Next x
     Case 1: 'items
@@ -1551,7 +1552,7 @@ Call OpenTables
 
 If bUpdateExistingADB Then
     If HasCurrentSchema = False Then
-        MsgBox "This export was made by an older version of NMR and has no Messages or Titles table." & vbCrLf _
+        MsgBox "This export was made by an older version of NMR and has no Messages, Titles or Abilities table." & vbCrLf _
             & "Create a new export instead of updating this one.", vbExclamation
         Call CloseDB(True)
         GoTo ReEnable:
@@ -1687,6 +1688,9 @@ Call ExportClasses
 DoEvents
 If bStopExport Then GoTo canceled:
 Call ExportRaces
+DoEvents
+If bStopExport Then GoTo canceled:
+If (chkOnly(0).Value = 0) Or (chkOnly(0).Value = 1 And chkOnly(9).Value = 1) Then Call ExportAbilities
 DoEvents
 If bStopExport Then GoTo canceled:
 If (chkOnly(0).Value = 0) Or (chkOnly(0).Value = 1 And chkOnly(7).Value = 1) Then Call ExportShops
@@ -5771,6 +5775,43 @@ Loop
 
 
 End Sub
+
+'The loaded ability list (ability.mdb) as Number/Name rows, so clients can name the Abil-# columns.
+'Left as it is when ability.mdb could not be opened.
+Private Sub ExportAbilities()
+On Error GoTo error:
+Dim sName As String
+
+If bAbilityDBOpen = False Then Exit Sub
+
+clearabilities:
+If tabAbilities.RecordCount <> 0 Then
+    tabAbilities.MoveFirst
+    tabAbilities.Delete
+    GoTo clearabilities:
+End If
+
+lblPanel(0).Caption = "ability.mdb"
+
+rsAbilities.Index = "PrimaryKey"
+If rsAbilities.RecordCount > 0 Then rsAbilities.MoveFirst
+Do Until rsAbilities.EOF Or bStopExport
+    lblPanel(1).Caption = rsAbilities.Fields("Number")
+    sName = rsAbilities.Fields("Name") & ""
+
+    tabAbilities.AddNew
+    tabAbilities.Fields("Number") = rsAbilities.Fields("Number")
+    tabAbilities.Fields("Name") = IIf(sName = "", Chr(0), sName)
+    tabAbilities.Update
+
+    rsAbilities.MoveNext
+Loop
+
+Exit Sub
+error:
+Call HandleError("ExportAbilities")
+End Sub
+
 Private Sub ExportShops()
 Dim nStatus As Integer, recnum As Long, x As Long
 
@@ -6408,6 +6449,7 @@ HasCurrentSchema = False
 
 Set tdf = DB.TableDefs("Messages")
 Set tdf = DB.TableDefs("Titles")
+Set tdf = DB.TableDefs("Abilities")
 Set tdf = DB.TableDefs("Items")
 Set fld = tdf.Fields("HitVerbs")
 
@@ -6603,6 +6645,7 @@ Dim tabNewMonsters As ADOX.Table, tabNewSpells As ADOX.Table, tabNewShops As ADO
 Dim tabNewClasses As ADOX.Table, tabNewRaces As ADOX.Table, tabNewItems As ADOX.Table
 Dim tabNewInfo As ADOX.Table, tabNewRooms As ADOX.Table, tabNewTBInfo As ADOX.Table
 Dim tabNewLairs As ADOX.Table, tabNewMessages As ADOX.Table, tabNewTitles As ADOX.Table
+Dim tabNewAbilities As ADOX.Table
 
 Dim pkClasses As New ADOX.Key
 Dim pkRaces As New ADOX.Key
@@ -6615,6 +6658,7 @@ Dim pkTBInfo As New ADOX.Key
 Dim pkLairs As New ADOX.Key
 Dim pkMessages As New ADOX.Key
 Dim pkTitles As New ADOX.Key
+Dim pkAbilities As New ADOX.Key
 Dim x As Integer
 
 CreateTables = False
@@ -6632,6 +6676,7 @@ Set tabNewInfo = New ADOX.Table
 Set tabNewLairs = New ADOX.Table
 Set tabNewMessages = New ADOX.Table
 Set tabNewTitles = New ADOX.Table
+Set tabNewAbilities = New ADOX.Table
 
 'open the database
 catNewDB.ActiveConnection = "Provider=Microsoft.Jet.OLEDB.4.0;" & "Data Source=" & sDataSource
@@ -6985,6 +7030,14 @@ With tabNewTitles
 End With
 catNewDB.Tables.Append tabNewTitles
 
+DoEvents
+With tabNewAbilities
+    .Name = "Abilities"
+    .Columns.Append "Number", adInteger
+    .Columns.Append "Name", adVarWChar, 50
+End With
+catNewDB.Tables.Append tabNewAbilities
+
 '-------
 'index's
 '-------
@@ -7090,6 +7143,16 @@ With pkTitles
 End With
 
 DoEvents
+With pkAbilities
+    .Name = "pkAbilities"
+    .Type = adKeyPrimary
+    .RelatedTable = "Abilities"
+    .Columns.Append "Number"
+    .Columns("Number").RelatedColumn = "Number"
+    .UpdateRule = adRINone
+End With
+
+DoEvents
 With idxRooms
     .Name = "idxRooms"
     .Columns.Append "Map Number"
@@ -7106,6 +7169,7 @@ tabNewShops.Keys.Append pkShops
 tabNewTBInfo.Keys.Append pkTBInfo
 tabNewMessages.Keys.Append pkMessages
 tabNewTitles.Keys.Append pkTitles
+tabNewAbilities.Keys.Append pkAbilities
 tabNewRooms.Indexes.Append idxRooms
 tabNewLairs.Keys.Append pkLairs
 
@@ -7126,6 +7190,7 @@ Set pkTBInfo = Nothing
 Set pkLairs = Nothing
 Set pkMessages = Nothing
 Set pkTitles = Nothing
+Set pkAbilities = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewInfo = Nothing
@@ -7139,6 +7204,7 @@ Set tabNewRooms = Nothing
 Set tabNewLairs = Nothing
 Set tabNewMessages = Nothing
 Set tabNewTitles = Nothing
+Set tabNewAbilities = Nothing
 
 Set catNewDB = Nothing
 
@@ -7159,6 +7225,7 @@ Set pkTBInfo = Nothing
 Set pkLairs = Nothing
 Set pkMessages = Nothing
 Set pkTitles = Nothing
+Set pkAbilities = Nothing
 
 Set tabNewTBInfo = Nothing
 Set tabNewClasses = Nothing
@@ -7172,6 +7239,7 @@ Set tabNewRooms = Nothing
 Set tabNewLairs = Nothing
 Set tabNewMessages = Nothing
 Set tabNewTitles = Nothing
+Set tabNewAbilities = Nothing
 
 Set catNewDB = Nothing
 End Function
@@ -7219,6 +7287,7 @@ Set tabTBInfo = Nothing
 Set tabLairs = Nothing
 Set tabMessages = Nothing
 Set tabTitles = Nothing
+Set tabAbilities = Nothing
 
 Set DB = Nothing
 
@@ -7322,6 +7391,7 @@ Set tabLairs = DB.OpenRecordset("Lairs")
 If HasCurrentSchema Then
     Set tabMessages = DB.OpenRecordset("Messages")
     Set tabTitles = DB.OpenRecordset("Titles")
+    Set tabAbilities = DB.OpenRecordset("Abilities")
 End If
 
 Exit Sub
@@ -7346,6 +7416,7 @@ tabTBInfo.Close
 tabLairs.Close
 tabMessages.Close
 tabTitles.Close
+tabAbilities.Close
 
 DB.Close
 

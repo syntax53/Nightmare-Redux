@@ -2,6 +2,7 @@ v1.8.4 (11/##/2026)
 ------------------------------------------  
 -NEW: MME export now exports a messages table and weapons list their attack verbs to assist game client development  
 -NEW: MME export now exports a titles table (each class's titles by level range) to help game clients work out player levels  
+-NEW: MME export now exports an abilities table (number and name of each ability in the loaded ability list)  
 -UP: MME export now lists items sources/references from room commands e.g. "pry coffin" (Thanks Fujin)  
 -UP: MME export now adds "failspell TB#" references  
 
