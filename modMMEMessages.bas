@@ -3,9 +3,10 @@ Option Base 0
 Option Explicit
 
 'MME export: builds the Messages table (client-relevant game message lines).
-'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.17; later sections override earlier ones).
-'Order: items (learnable / item-cast spell lists, item shields), rooms (traps, room and exit spells), spells,
-'item shield rows, monsters, static rows (chase lines, monster entrances).
+'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.18; later sections override earlier ones), and
+'PLAN-mme-item-uses.md (use / on-hit item spells, EndCast chains, Use / OnHit markers).
+'Order: items (learnable / item-cast spell lists, item shields), EndCast chains of item spells, rooms (traps, room
+'and exit spells), spells, item shield rows, monsters, static rows (chase lines, monster entrances).
 'Kinds: Cast, Self, Other. Tokens: {source} {target} {dmg} {attacker}.
 
 Private mFso As Scripting.FileSystemObject
@@ -32,6 +33,9 @@ Private mReP7 As Object    'standard own cast line without an amount ("You cast/
 Private mdictSelfCast As Scripting.Dictionary
 'item damage shields: ShockMsg number -> "|" list of the names of the items that carry it
 Private mdictItemShield As Scripting.Dictionary
+'how an item casts a spell, i.e. the marker its Cast rows get: "<spell number>|<item name>" -> "Use", "OnHit" or
+'"Use,OnHit" (text compare, so a spell-name row whose name equals the item's name also matches)
+Private mdictItemMode As Scripting.Dictionary
 
 'in-memory row store: rows are collected by the passes, then merged and written once by FinalizeRows
 Private mRowKind() As String
@@ -93,6 +97,7 @@ If tabMessages.RecordCount <> 0 Then
 End If
 
 Call ExportItemScan(dictLearn, dictItemCast, bStop)
+If bStop = False And mbFailed = False Then Call ExpandItemChains(dictItemCast)
 If bStop = False And mbFailed = False Then Call ExportRoomMessages(dictRoomSpells, bStop)
 If bStop = False And mbFailed = False Then Call ExportSpellMessages(dictRoomSpells, dictLearn, dictItemCast, bStop)
 If bStop = False And mbFailed = False Then Call ExportItemShieldRows
@@ -156,6 +161,8 @@ Set mdictSelfCast = New Scripting.Dictionary
 mdictSelfCast.CompareMode = vbBinaryCompare
 Set mdictItemShield = New Scripting.Dictionary
 mdictItemShield.CompareMode = vbBinaryCompare
+Set mdictItemMode = New Scripting.Dictionary
+mdictItemMode.CompareMode = vbTextCompare
 
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
@@ -193,6 +200,7 @@ Set mReP7 = Nothing
 Set mdictRows = Nothing
 Set mdictSelfCast = Nothing
 Set mdictItemShield = Nothing
+Set mdictItemMode = Nothing
 Erase mRowKind
 Erase mRowName
 Erase mRowMsg
@@ -492,6 +500,27 @@ Call HandleError("AddRowEach")
 mbFailed = True
 End Function
 
+'Cast rows of spell sKey, one per name like AddRowEach; a row under the name of an item that casts the spell also
+'gets that item's Use and/or OnHit marker in its effects. Returns 1 when the line is exportable.
+Private Function AddCastRows(sNames() As String, ByVal nNames As Long, ByVal sKey As String, ByVal sText As String, _
+    ByVal sEffects As String) As Long
+Dim x As Long, sEff As String
+On Error GoTo error:
+
+AddCastRows = 0
+For x = 0 To nNames - 1
+    sEff = sEffects
+    If mdictItemMode.Exists(sKey & "|" & sNames(x)) Then sEff = MergeEffects(sEff, mdictItemMode.Item(sKey & "|" & sNames(x)))
+    If AddRow(sNames(x), "Cast", sText, "", sEff) = 1 Then AddCastRows = 1
+    If mbFailed Then Exit For
+Next x
+
+Exit Function
+error:
+Call HandleError("AddCastRows")
+mbFailed = True
+End Function
+
 'Drops each nameless Self row that is a "you"-twin of a {target} row (a client reads {target} as "you"/"your" for the
 'player), merging its effects into that row, then writes every surviving row once with IDs 1, 2, 3...
 'A row without a name is named by its text.
@@ -599,6 +628,7 @@ End Sub
 Private Sub ExportItemScan(dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary, ByRef bStop As Boolean)
 Dim nStatus As Integer, nCount As Long, x As Integer
 Dim sItem As String, sKey As String, sCur As String
+Dim sUse As String, sHit As String, sParts() As String
 On Error GoTo error:
 
 frmMME_Export.lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
@@ -621,18 +651,6 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
                     sKey = CStr(Itemrec.AbilityB(x))
                     If Not dictLearn.Exists(sKey) Then dictLearn.Add sKey, True
                 End If
-            Case 43: 'casts spell
-                If Itemrec.AbilityB(x) > 0 And Not sItem = "" Then
-                    sKey = CStr(Itemrec.AbilityB(x))
-                    If dictItemCast.Exists(sKey) Then
-                        sCur = dictItemCast.Item(sKey)
-                        If InStr(1, "|" & sCur & "|", "|" & sItem & "|", vbBinaryCompare) = 0 Then
-                            dictItemCast.Item(sKey) = sCur & "|" & sItem
-                        End If
-                    Else
-                        dictItemCast.Add sKey, sItem
-                    End If
-                End If
             Case 137: 'damage shield message (ShockMsg)
                 If Itemrec.AbilityB(x) > 1 And Not sItem = "" Then
                     sKey = CStr(Itemrec.AbilityB(x))
@@ -648,6 +666,23 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
         End Select
     Next x
 
+    'spells the item casts when used, and on hit (the "<spell>:<chance>" pairs give the spell before the ":")
+    If Not sItem = "" Then
+        Call ItemSpellLists(sUse, sHit)
+        If Not sUse = "" Then
+            sParts = Split(sUse, "|")
+            For x = 0 To UBound(sParts)
+                Call AddItemCaster(dictItemCast, sParts(x), sItem, "Use")
+            Next x
+        End If
+        If Not sHit = "" Then
+            sParts = Split(sHit, "|")
+            For x = 0 To UBound(sParts)
+                Call AddItemCaster(dictItemCast, Split(sParts(x), ":")(0), sItem, "OnHit")
+            Next x
+        End If
+    End If
+
     nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
     If Not bUseCPU Then DoEvents
 Loop
@@ -657,6 +692,155 @@ error:
 Call HandleError("ExportItemScan")
 mbFailed = True
 End Sub
+
+'Decodes the current Itemrec's spells. CastsSp (43) is cast when the item is used, unless a %Spell (114) comes before
+'it: then it is the spell cast on hit ("the spell cast is specified by the NEXT CastsSp", ability list) and the
+'%Spell value is its chance. sUse = "|" list of spell numbers, sHit = "|" list of "<spell>:<chance>", both in slot
+'order without repeats; "" when none. Also used by the Items export (UseSpells / HitSpells).
+Public Sub ItemSpellLists(ByRef sUse As String, ByRef sHit As String)
+Dim x As Integer, bPending As Boolean, nChance As Integer, sEntry As String
+On Error GoTo error:
+
+sUse = ""
+sHit = ""
+bPending = False
+For x = 0 To 19
+    Select Case Itemrec.AbilityA(x)
+        Case 114: '%Spell: the next CastsSp is cast on hit
+            bPending = True
+            nChance = Itemrec.AbilityB(x)
+        Case 43: 'CastsSp
+            If bPending Then
+                bPending = False
+                If Itemrec.AbilityB(x) > 0 Then
+                    sEntry = Itemrec.AbilityB(x) & ":" & nChance
+                    If InStr(1, "|" & sHit & "|", "|" & sEntry & "|", vbBinaryCompare) = 0 Then
+                        If Not sHit = "" Then sHit = sHit & "|"
+                        sHit = sHit & sEntry
+                    End If
+                End If
+            ElseIf Itemrec.AbilityB(x) > 0 Then
+                sEntry = CStr(Itemrec.AbilityB(x))
+                If InStr(1, "|" & sUse & "|", "|" & sEntry & "|", vbBinaryCompare) = 0 Then
+                    If Not sUse = "" Then sUse = sUse & "|"
+                    sUse = sUse & sEntry
+                End If
+            End If
+    End Select
+Next x
+
+Exit Sub
+error:
+Call HandleError("ItemSpellLists")
+sUse = ""
+sHit = ""
+mbFailed = True
+End Sub
+
+'records that item sItem casts spell sKey, when used ("Use") or on hit ("OnHit")
+Private Sub AddItemCaster(dictItemCast As Scripting.Dictionary, ByVal sKey As String, ByVal sItem As String, ByVal sMode As String)
+Dim sCur As String, sModeKey As String
+On Error GoTo error:
+
+If dictItemCast.Exists(sKey) Then
+    sCur = dictItemCast.Item(sKey)
+    If InStr(1, "|" & sCur & "|", "|" & sItem & "|", vbBinaryCompare) = 0 Then dictItemCast.Item(sKey) = sCur & "|" & sItem
+Else
+    dictItemCast.Add sKey, sItem
+End If
+
+sModeKey = sKey & "|" & sItem
+If mdictItemMode.Exists(sModeKey) Then
+    mdictItemMode.Item(sModeKey) = MergeEffects(mdictItemMode.Item(sModeKey), sMode)
+Else
+    mdictItemMode.Add sModeKey, sMode
+End If
+
+Exit Sub
+error:
+Call HandleError("AddItemCaster")
+mbFailed = True
+End Sub
+
+'A spell an item casts can chain to more spells through EndCast (spell ability 151; CastOnEnd% only sets the chance of
+'the next EndCast). The item's user casts those too, so each chained spell counts as cast by the same items, in the
+'same way (Use / OnHit).
+Private Sub ExpandItemChains(dictItemCast As Scripting.Dictionary)
+Dim vRoots As Variant, i As Long, sChain As String, sSpells() As String, sItems() As String, x As Long, y As Long
+On Error GoTo error:
+
+If dictItemCast.Count = 0 Then Exit Sub
+frmMME_Export.lblPanel(1).Caption = "Messages: item spell chains ..."
+
+vRoots = dictItemCast.Keys
+For i = 0 To UBound(vRoots)
+    sChain = EndCastChain(CLng(vRoots(i)))
+    If mbFailed Then Exit Sub
+    If Not sChain = "" Then
+        sSpells = Split(sChain, "|")
+        sItems = Split(dictItemCast.Item(vRoots(i)), "|")
+        For x = 0 To UBound(sSpells)
+            For y = 0 To UBound(sItems)
+                Call AddItemCaster(dictItemCast, sSpells(x), sItems(y), mdictItemMode.Item(vRoots(i) & "|" & sItems(y)))
+            Next y
+        Next x
+    End If
+Next i
+
+Exit Sub
+error:
+Call HandleError("ExpandItemChains")
+mbFailed = True
+End Sub
+
+'numbers of the spells reached from nSpell through EndCast, transitively (at most 10 links deep, each spell once,
+'nSpell itself left out), as a "|" list; "" when none. Reads Spellrec.
+Private Function EndCastChain(ByVal nSpell As Long) As String
+Dim dictSeen As Scripting.Dictionary, sFrontier As String, sNext As String, sParts() As String, sKey As String
+Dim nKey As Long, nStatus As Integer, nDepth As Integer, x As Long, y As Integer
+On Error GoTo error:
+
+EndCastChain = ""
+Set dictSeen = New Scripting.Dictionary
+dictSeen.CompareMode = vbBinaryCompare
+dictSeen.Add CStr(nSpell), True
+sFrontier = CStr(nSpell)
+
+For nDepth = 1 To 10
+    sNext = ""
+    sParts = Split(sFrontier, "|")
+    For x = 0 To UBound(sParts)
+        nKey = CLng(sParts(x))
+        nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nKey, KEY_BUF_LEN, 0)
+        If nStatus = 0 Then
+            SpellRowToStruct Spelldatabuf.buf
+            For y = 0 To 9
+                If Spellrec.AbilityA(y) = 151 And Spellrec.AbilityB(y) > 0 Then
+                    sKey = CStr(Spellrec.AbilityB(y))
+                    If Not dictSeen.Exists(sKey) Then
+                        dictSeen.Add sKey, True
+                        If Not EndCastChain = "" Then EndCastChain = EndCastChain & "|"
+                        EndCastChain = EndCastChain & sKey
+                        If Not sNext = "" Then sNext = sNext & "|"
+                        sNext = sNext & sKey
+                    End If
+                End If
+            Next y
+        End If
+    Next x
+    If sNext = "" Then Exit For
+    sFrontier = sNext
+Next nDepth
+
+Set dictSeen = Nothing
+
+Exit Function
+error:
+Call HandleError("EndCastChain")
+Set dictSeen = Nothing
+mbFailed = True
+EndCastChain = ""
+End Function
 
 '---------------------------------------------------------------------------
 ' Pass 1: rooms (trap rows + room spell list)
@@ -1025,7 +1209,7 @@ Else
 End If
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 1", sRaw)
-SpellCastRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
+SpellCastRow = AddCastRows(sNames, nNames, CStr(Spellrec.Number), sText, sEffects)
 
 Exit Function
 error:
@@ -1053,7 +1237,7 @@ If sText = "" Then Exit Function
 If IsStandardForm(mReP7, sText) Then Exit Function
 
 If bFlag Then Call LogUnmatched(sSrc & " start line 1", sRaw)
-SpellStartRow = AddRowEach(sNames, nNames, "Cast", sText, "", sEffects)
+SpellStartRow = AddCastRows(sNames, nNames, CStr(Spellrec.Number), sText, sEffects)
 
 Exit Function
 error:

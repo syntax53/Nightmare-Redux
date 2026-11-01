@@ -2,7 +2,8 @@
 
 Status: current as of 2026-10-19 for the MegaMud facts (NMR branch `261018-messages-fix1`, NMR 1.8.4;
 MegaMud 3.x branch `@syntax53/feature/260926-sqlite-migration` as of commit 5e0b703e). Split on
-2026-11-01: the client-neutral description of the table moved to `docs/MME_MESSAGES_HANDOFF.md`.
+2026-11-01: the client-neutral description of the table moved to `docs/MME_MESSAGES_HANDOFF.md`. Item uses
+(section 9.1) added on NMR branch `261101-item-messages`.
 
 This is the MegaMud companion to `docs/MME_MESSAGES_HANDOFF.md`. That document covers the table itself:
 how NMR builds each row, the columns, kinds, names, tokens and effects, and how to match lines. **Read it
@@ -25,8 +26,8 @@ Line numbers below for MegaMud source are from the 3.x branch. "Generic n.n" ref
 ## 1. Where MegaMud stands
 
 NMR's `Messages` table does the same job as MegaMud's Messages database, and its columns map onto `MSGREC`
-almost one to one. NMR also adds three weapon-verb columns to `Items`. MegaMud's import does not read
-either today (`MME_IMPORT_HANDOFF.md` lines 34-37: "Paths, Players, Messages, Rooms and Macros are not
+almost one to one. NMR also adds six columns to `Items`: weapon verbs, and the spells an item casts when
+used and on hit, with a command code for using it. MegaMud's import does not read any of them today (`MME_IMPORT_HANDOFF.md` lines 34-37: "Paths, Players, Messages, Rooms and Macros are not
 imported"), and nothing in its plan schedules it.
 
 ---
@@ -156,6 +157,7 @@ matched).
 | CheckRoom (Other) | `iAction` = `MA_CHECKROOM`, `wEffects` 0 | 31 of 32 |
 | Death (Other) | suggest `iAction` = `MA_CHECKROOM` | stock `obsidian statue death` / `Statue death` are 0000 with action 1 |
 | Mute, Drain, DamageShield, Damage, Heal, ManaHeal, ManaSteal, Cure, RoomSpell, Monster | 0 | Mute 4 of 4, Drain 10 of 10, DamageShield 7 of 7, one-off Damage 115 of 128 |
+| Use, OnHit (Cast rows under an item's name) | 0 | New in NMR, no stock counterpart. They say how the item cast the spell; MegaMud ties the line to the item by its name (section 4). |
 
 `ME_CHECKANY` (conversation lines) and `ME_ANYPOS` have no NMR counterpart: NMR text is the whole line from
 its start, so a new record needs neither.
@@ -243,9 +245,33 @@ These come from the import's own handoff:
 
 ---
 
-## 9. Weapon verbs (`Items`)
+## 9. Item columns (`Items`)
 
-The columns (`HitVerbs`, `HitVerbsOther`, `MissVerbs`) and which items have them: generic 5.
+What the columns hold and how NMR fills them: generic 5.
+
+### 9.1 Item uses
+
+MegaMud keeps an item use as a spell record named after the item. NMR does not write such records: a made-up
+spell number could not stay stable across exports, and the game spell keeps its own name and code for the
+classes and monsters that cast it. The `Items` columns give the import what it needs to build them itself:
+
+- **Which items**: every item with a `UseCode`. Items that only cast on hit have none and need no record.
+- **Name and command**: `Items.Name` (29 characters, fits `szName`) and `UseCode` (`#` plus up to 4
+  letters, 5 characters in all). Items with exactly the same name share a code.
+- **Stats**: the `Spells` row of the first number in `UseSpells` (rarely more than one; food and drink
+  often have two).
+- **Key**: `Items.Number`, not the code (a code changes when the item is renamed). MegaMud assigns its own
+  record number and keeps an item-number map, like the ownership options in 8.5, so a re-import updates
+  the same record and the user's edits to it survive.
+- **Messages**: the item's Cast rows already carry the item's name, so the name-based credit in section 4
+  works once the item record has the same name. `Use` in `Effects` marks the lines that confirm a use.
+- **On-hit spells** (`HitSpells`) need no record: their Cast rows are named after the weapon, which
+  `FindItem (pmm, pmm->szMsgMatch)` already checks against the current weapon (section 4).
+
+Whether MegaMud's spell list should hold these records, and how they show in its UI, is an owner decision
+(O8).
+
+### 9.2 Weapon verbs
 
 MegaMud has nowhere to put them: `ITEMREC` (268 bytes) and `schema_items.sql` have no verb field, and
 `ParseHitting` recognises your own hits by their shape, with monster verbs in `ATTACKS.LST`. Storing them
@@ -290,7 +316,7 @@ generic 6.
 | O5 | Death rows: `MA_CHECKROOM`, or ignore? | `MA_CHECKROOM` (stock precedent). |
 | O6 | Chase rows with no stored counterpart: skip, or insert disabled? | Skip. |
 | O7 | "your" variants for the 16 "{target}'s" rows (6). | Add them. |
-| O8 | Weapon verbs (9). | Skip until a feature needs them. |
+| O8 | Item uses and weapon verbs (9). | Build item-use records from `UseCode` / `UseSpells`, keyed by item number. Skip the verbs until a feature needs them. |
 
 ---
 
@@ -309,6 +335,7 @@ generic 6.
 | `black wind` | Cast | "A cool wind blows throughout the room!" |
 | `annointed hands` | Cast | "You lay hands on {target}." |
 | `agony` | Cast | "You cast agony on {target} for {dmg} damage!" |
+| `jade amulet` | Cast, `Use` | "You rub your jade amulet!" (the item `jade amulet` has a `UseCode`) |
 | `spiked shield` | Self | "The shield spike stabs {attacker} for {dmg} damage!" (becomes `{target}`) |
 | (realm-wide) | Chase | "{target} slips into the dark alley." |
 | (realm-wide) | CheckRoom | "A moss zombie rises from the ground!" |

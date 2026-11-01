@@ -100,7 +100,8 @@ Kind (who the line is about, from the player's seat):
          CheckRoom rows are the same in every export.
 
 Name: Cast rows carry the spell's name, or the item's name when an item casts the spell (both when
-players can also cast it and the names differ). Self rows carry a source name only when the player
+players can also cast it and the names differ). An item casts the spells it casts when used or on hit (see
+Items below) and the spells those chain to through EndCast (ability 151). Self rows carry a source name only when the player
 can be the one affected by their own spell or item (self, friendly or party target types). Every
 player-castable spell and every casting item gets its own row under its own name, even when several
 of them print the same line ("You feel lucky!" is exported once as bless, once as chant, once per
@@ -139,8 +140,9 @@ bit 0.
 
 Effects (CSV): Poisoned Confused Blinded Held Fear Mute Sleep Damage DamageOverTime Drain Heal
   HealOverTime HPRegen ManaRegen ManaHeal ManaSteal DamageShield Cure (cure poison, dispel,
-  freedom, remove curse) Fail RoomSpell Monster Trap Death Chase CheckRoom. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
-  effect is any Self row with an EndMsg.
+  freedom, remove curse) Fail RoomSpell Monster Trap Death Chase CheckRoom Use OnHit. Disease = DamageOverTime plus stat drains; "cannot attack" = Sleep or Held; a timed
+  effect is any Self row with an EndMsg. Use / OnHit appear only on Cast rows under an item's name: the item cast the
+  spell because it was used / because its on-hit spell fired (both when it does both).
 
 The export writes NMR-Log_MMEMessages.txt next to the MDB only when something needed attention:
 a placeholder that could not be mapped ({?}), a missing message record, a blank spell name, or a
@@ -207,6 +209,18 @@ Status and state:
 HitVerbs / HitVerbsOther / MissVerbs (items with ItemType 1 = Weapon only, every weapon class including
 1H Blunt; empty on every other item): "|"-separated verb alternatives used in
 "You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.
+UseSpells / HitSpells (every item type): the spells the item casts when used ("|"-separated spell numbers) and on hit
+("|"-separated "<spell>:<chance %>" pairs), decoded from the Abil-n columns: a CastsSp (43) is cast on use unless a
+%Spell (114) comes before it, which makes it the on-hit spell with that chance. Slot order, no repeats; empty when none.
+UseCode: "#" + up to 4 lowercase letters, only on items with a use spell (none on items that only cast on hit). Made from
+the name: one word = its first 4 letters; several words = their initials, the last initial replaced by the whole last
+word when there are fewer than 4 ("jade amulet" = #jamu); possessive 's dropped; a, an, the, of skipped. Items with
+the same name share a code; for a differently named item that wants a taken code NMR tries the first 2 or 3 letters
+of the first word plus the other initials and the last word ("black potion" = #blpo next to "blue potion" = #bpot),
+then any 4 letters of the name in order, digits last. Lower item numbers keep the natural code. Updating an export
+keeps every code it already holds for its item name. A command hint, not a key: key items by Number. Clients that
+treat item uses like spells: one entry per item with a UseCode (name = Name, stats from the UseSpells rows); its
+confirming lines are the Messages Cast rows named after the item with Use in Effects.
 
 -= Titles (added NMR 1.8.4) =-
 One row per class, so a client can tell a player's level range from their title. Columns: Class (the class

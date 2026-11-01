@@ -1,4 +1,5 @@
-# Verifies an MME export that contains the Messages table (Revision 2 schema) and the Titles and Abilities tables (NMR 1.8.4).
+# Verifies an MME export that contains the Messages table (Revision 2 schema), the Titles and Abilities tables and the
+# Items use / weapon-verb columns (NMR 1.8.4).
 # Must run under 32-bit PowerShell (Jet 4.0 is 32-bit only):
 #   C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs\verify-mme-messages.ps1 -New "C:\path\new-export.mdb" [-Old "C:\path\previous-version-export.mdb"]
 # Jet SQL through ADO uses % and _ as LIKE wildcards; reserved names ([Name], [Msg]) are bracketed.
@@ -57,7 +58,9 @@ if ($Old -ne "" -and (Test-Path $Old)) {
     }
     $extra = $newCols | Where-Object { $oldCols -notcontains $_ }
     if ($t -eq "Items") {
-      if (($extra -join ",") -eq "HitVerbs,HitVerbsOther,MissVerbs" -or $extra.Count -eq 0) { Pass "Items columns: only the verb columns are new" } else { Fail "Items extra columns: '$($extra -join ',')'" }
+      # against a 1.8.3 export all six are new; against an earlier 1.8.4 export only the use columns
+      $okExtra = @("HitVerbs,HitVerbsOther,MissVerbs,UseCode,UseSpells,HitSpells", "UseCode,UseSpells,HitSpells", "")
+      if ($okExtra -contains ($extra -join ",")) { Pass "Items columns: only the verb / use columns are new" } else { Fail "Items extra columns: '$($extra -join ',')'" }
     } elseif ($extra.Count -gt 0) { Fail "$t has unexpected extra columns: $($extra -join ',')" }
   }
   foreach ($k in $iOld.Keys) { if (-not $iNew.ContainsKey($k) -and $k -notlike "Messages.*" -and $k -notlike "Titles.*" -and $k -notlike "Abilities.*") { Fail "index missing: $k" } }
@@ -205,6 +208,58 @@ ExpectNone "no swing verbs on non-weapons" "SELECT COUNT(*) AS Cnt FROM Items WH
 $blunt = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Items WHERE ItemType=1 AND WeaponType=0 AND Len(HitVerbs)>1"
 if ($blunt -gt 0) { Pass "1H blunt weapons carry swing verbs ($blunt)" } else { Fail "no 1H blunt weapon (ItemType 1, WeaponType 0) has swing verbs" }
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
+
+# ---- 4b. Items: spells cast when used / on hit, UseCode, and the Use / OnHit markers on Messages Cast rows
+$itemCols = @($sNew["Items"].Keys)
+if (-not (($itemCols -contains "UseCode") -and ($itemCols -contains "UseSpells") -and ($itemCols -contains "HitSpells"))) { Fail "Items lacks UseCode / UseSpells / HitSpells" } else {
+  Pass "Items has UseCode, UseSpells, HitSpells"
+  $badDecode = 0; $badCode = 0; $usable = 0; $hitters = 0; $ex = @()
+  $codeByName = @{}; $nameByCode = @{}; $useNames = @{}; $hitNames = @{}
+  foreach ($it in @(Q $cnNew "SELECT * FROM Items")) {
+    # the same rule as NMR: CastsSp (43) is cast on use unless a %Spell (114) comes before it (then on hit, at that chance)
+    $use = @(); $hit = @(); $pending = $false; $chance = 0
+    for ($i=0; $i -lt 20; $i++) {
+      $a = [int]$it["Abil-$i"]; $b = [int]$it["AbilVal-$i"]
+      if ($a -eq 114) { $pending = $true; $chance = $b }
+      elseif ($a -eq 43) {
+        if ($pending) { $pending = $false; if ($b -gt 0) { $e = "$($b):$chance"; if ($hit -notcontains $e) { $hit += $e } } }
+        elseif ($b -gt 0) { if ($use -notcontains "$b") { $use += "$b" } }
+      }
+    }
+    $wantUse = $use -join "|"; $wantHit = $hit -join "|"
+    if ($wantUse.Length -gt 120) { $wantUse = $wantUse.Substring(0,120) }
+    if ($wantHit.Length -gt 120) { $wantHit = $wantHit.Substring(0,120) }
+    if ($it["UseSpells"] -ne $wantUse -or $it["HitSpells"] -ne $wantHit) {
+      $badDecode++; if ($ex.Count -lt 8) { $ex += ("{0}: UseSpells '{1}' (want '{2}'), HitSpells '{3}' (want '{4}')" -f $it["Name"], $it["UseSpells"], $wantUse, $it["HitSpells"], $wantHit) }
+    }
+    $lname = ([string]$it["Name"]).ToLower(); $code = [string]$it["UseCode"]
+    if ($wantUse -ne "") {
+      $usable++; $useNames[$lname] = $true
+      if ($code -cnotmatch '^#[a-z0-9]{1,4}$') { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: bad UseCode '{1}'" -f $it["Name"], $code) } }
+      elseif ($codeByName.ContainsKey($lname) -and $codeByName[$lname] -ne $code) { $badCode++; if ($ex.Count -lt 8) { $ex += ("'{0}': one name, two codes ({1}, {2})" -f $it["Name"], $codeByName[$lname], $code) } }
+      elseif ($nameByCode.ContainsKey($code) -and $nameByCode[$code] -ne $lname) { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: used by '{1}' and '{2}'" -f $code, $nameByCode[$code], $lname) } }
+      else { $codeByName[$lname] = $code; $nameByCode[$code] = $lname }
+    } elseif ($code -ne "") { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: UseCode '{1}' without a use spell" -f $it["Name"], $code) } }
+    if ($wantHit -ne "") { $hitters++; $hitNames[$lname] = $true }
+  }
+  foreach ($x in $ex) { Write-Output ("      " + $x) }
+  if ($badDecode -eq 0) { Pass "UseSpells / HitSpells match the Abil-n columns ($usable usable items, $hitters with on-hit spells)" } else { Fail "$badDecode items' UseSpells / HitSpells do not match their Abil-n columns" }
+  if ($badCode -eq 0) { Pass "UseCode: '#' + up to 4 letters on usable items only, one per name ($($nameByCode.Count) codes)" } else { Fail "$badCode UseCode problems" }
+  $digits = @($nameByCode.Keys | Where-Object { $_ -match '[0-9]' }).Count
+  Write-Output ("INFO  UseCodes that needed a digit: " + $digits)
+  # markers: only on Cast rows, and only under the name of an item that is used / casts on hit
+  $badMark = 0; $useRows = @{}
+  foreach ($r in @(Q $cnNew "SELECT [Name], Kind, Effects FROM Messages WHERE Effects LIKE '%Use%' OR Effects LIKE '%OnHit%'")) {
+    $effs = @(([string]$r["Effects"]).Split(",")); $ln = ([string]$r["Name"]).ToLower()
+    if ($effs -contains "Use") { if ($r["Kind"] -ne "Cast" -or -not $useNames.ContainsKey($ln)) { $badMark++; if ($badMark -le 5) { Write-Output ("      Use marker on [{0}] '{1}'" -f $r["Kind"], $r["Name"]) } } else { $useRows[$ln] = $true } }
+    if ($effs -contains "OnHit") { if ($r["Kind"] -ne "Cast" -or -not $hitNames.ContainsKey($ln)) { $badMark++; if ($badMark -le 5) { Write-Output ("      OnHit marker on [{0}] '{1}'" -f $r["Kind"], $r["Name"]) } } }
+  }
+  if ($badMark -eq 0) { Pass "Use / OnHit markers only on Cast rows named after a used / on-hit item" } else { Fail "$badMark misplaced Use / OnHit markers" }
+  $noUse = @($useNames.Keys | Where-Object { -not $useRows.ContainsKey($_) }).Count
+  Write-Output ("INFO  usable item names without a Use-marked Cast row (empty or missing cast line): " + $noUse + " of " + $useNames.Count)
+  Expect "jade amulet is usable (code #ja.., use spell)" "SELECT [Name], UseCode AS Msg, UseSpells AS EndMsg, HitSpells AS Effects FROM Items WHERE [Name]='jade amulet'" { param($r) $r.Msg -like "#ja*" -and $r.EndMsg -ne "" }
+  Expect "jade amulet use line carries Use" "SELECT * FROM Messages WHERE Kind='Cast' AND [Name]='jade amulet'" { param($r) @($r.Effects.Split(",")) -contains "Use" }
+}
 
 # ---- 5. Titles table (one row per class: "<first>-<last>:<title>" runs from level 1, in level order)
 if (-not $sNew.ContainsKey("Titles")) { Fail "Titles table missing" } else {
