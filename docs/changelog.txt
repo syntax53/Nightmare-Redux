@@ -5,6 +5,8 @@ v1.8.4 (11/##/2026)
 -NEW: MME export now exports an abilities table (number and name of each ability in the loaded ability list)  
 -UP: MME export now lists items sources/references from room commands e.g. "pry coffin" (Thanks Fujin)  
 -UP: MME export now adds "failspell TB#" references  
+-UP: MME export now adds hidden room items players cannot pick up to the room's placed items when a textblock or room exit references them  
+-FIX: MME export no longer skips a source whose text starts another one already listed (e.g. "Textblock #14" after "Textblock #142", "Room 3/1" after "Room 3/10")  
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  

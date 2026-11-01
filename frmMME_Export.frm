@@ -684,6 +684,7 @@ Dim sDefaultExcludeNote() As String
 
 Dim dictLairInfo As New Dictionary
 Dim dictTBCastSpells As Dictionary 'spells textblocks cast (not teach), for the Messages pass; "Casted By" can be truncated
+Dim dictRefItems As Dictionary 'items a textblock or room exit references, for AddReferencedInvisItems
 Private Type LairInfoType
     sGroupIndex As String
     sMobList As String
@@ -1515,6 +1516,8 @@ ReDim colLairs(0)
 'ReDim colNONLairs(0)
 Set dictTBCastSpells = New Dictionary
 dictTBCastSpells.CompareMode = vbBinaryCompare
+Set dictRefItems = New Dictionary
+dictRefItems.CompareMode = vbBinaryCompare
 
 nMsgWarnings = 0
 nTmp = CreateDatabase
@@ -2265,6 +2268,19 @@ Call HandleError("VerifyOneRecordInDBs")
 Resume out:
     
 End Sub
+'True when sEntry is one of the ", " separated entries of sList. A plain InStr would also find
+'"Room 3/1" in "Room 3/10" or "Textblock #14" in "Textblock #142" and skip them.
+'An empty sEntry counts as listed (there is nothing to add).
+Private Function EntryListed(ByVal sList As String, ByVal sEntry As String) As Boolean
+
+If sEntry = "" Then
+    EntryListed = True
+Else
+    EntryListed = InStr(1, ", " & sList & ", ", ", " & sEntry & ", ") > 0
+End If
+
+End Function
+
 Private Sub MarkShopInGame(ByVal nNum As Long, sFrom As String)
 Dim sTemp As String
 
@@ -2279,7 +2295,7 @@ If tabShops.NoMatch = False Then
     
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabShops.Fields("Assigned To")
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If EntryListed(sTemp, sFrom) Then Exit Sub
     
     If sTemp = Chr(0) Then
         sTemp = ""
@@ -2322,7 +2338,7 @@ If Not tabMonsters.NoMatch = True Then
 
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabMonsters.Fields("Summoned By")
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If EntryListed(sTemp, sFrom) Then Exit Sub
     
     If sTemp = Chr(0) Then
         sTemp = ""
@@ -2366,6 +2382,11 @@ If UBound(ItemInGame()) < nNum Then ReDim Preserve ItemInGame(nNum)
 If Not ItemInGame(nNum) Then bSomethingMarkedInGame = True
 ItemInGame(nNum) = True
 
+'hidden room items are exported as placed only when referenced and not gettable (see AddReferencedInvisItems)
+If bReference And Not dictRefItems Is Nothing Then
+    If Not dictRefItems.Exists(CStr(nNum)) Then dictRefItems.add CStr(nNum), True
+End If
+
 'If InStr(1, sFrom, "9494") > 0 Then
 '    Debug.Print ""
 'End If
@@ -2377,13 +2398,9 @@ If tabItems.NoMatch = False Then
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabItems.Fields(sField)
     If sFrom = "" Then GoTo nofrom:
-    If Left(sFrom, 5) = "Room(" Then
-        'room command entries: whole entries only ("Room(x) 1/5" is not present because "Room(x) 1/50-52(3%)" is)
-        If InStr(1, ", " & sTemp & ", ", ", " & sFrom & ", ") > 0 Then Exit Sub
-    Else
-        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
-    End If
-    
+    'whole entries only ("Room(x) 1/5" is not present because "Room(x) 1/50-52(3%)" is)
+    If EntryListed(sTemp, sFrom) Then Exit Sub
+
     If sTemp = Chr(0) Then
         sTemp = ""
     Else
@@ -2431,7 +2448,7 @@ If tabSpells.NoMatch = False Then
     If bLearned = True And Not sFrom = "" Then
         'if the "sFrom" is already in the assigned to field, dont do it again
         sTemp = tabSpells.Fields("Learned From")
-        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+        If EntryListed(sTemp, sFrom) Then Exit Sub
         
         If sTemp = Chr(0) Then
             sTemp = ""
@@ -2460,7 +2477,7 @@ If tabSpells.NoMatch = False Then
     Else
         'if the "sFrom" is already in the assigned to field, dont do it again
         sTemp = tabSpells.Fields("Casted By")
-        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+        If EntryListed(sTemp, sFrom) Then Exit Sub
         
         If sFrom = "" Then GoTo nofrom:
         
@@ -2510,7 +2527,7 @@ If tabTBInfo.NoMatch = True Then
 Else
     'if the "sFrom" is already in the Called From field, dont do it again
     sTemp = tabTBInfo.Fields("Called From")
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If EntryListed(sTemp, sFrom) Then Exit Sub
     
     If sTemp = Chr(0) Then
         sTemp = ""
@@ -5076,6 +5093,97 @@ Call ScanGreets
 If bStopExport = True Then Exit Sub
 DoEvents
 If bRoomCommandItems Then Call ScanRoomCommands
+
+'not a scan: it needs every reference the scans above recorded
+If bStopExport = True Then Exit Sub
+DoEvents
+Call AddReferencedInvisItems
+
+End Sub
+
+'Hidden (invisible) room items are added to the room's "Placed" list only when a textblock
+'(roomitem, checkitem, takeitem, ...) or a room exit (key, item, ticket, door) references them
+'and players cannot pick them up; the others are left out (players hide what they can carry, and
+'live dats keep those). ExportRooms has already written the rooms, so this edits their rows.
+'The added items are marked in game like the other placed items.
+Private Sub AddReferencedInvisItems()
+Dim nStatus As Integer, nYesNo As Integer, x As Integer
+Dim sPlaced As String, bFound As Boolean, bChanged As Boolean
+Dim dictNotGettable As Dictionary, vKey As Variant
+
+On Error GoTo error:
+
+If dictRefItems Is Nothing Then Exit Sub
+If dictRefItems.Count = 0 Then Exit Sub
+If chkLegit(0).Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub 'ExportRooms exported none
+If tabRooms.RecordCount = 0 Then Exit Sub
+
+lblPanel(1).Caption = "Adding referenced hidden items"
+DoEvents
+
+'referenced items that exist and are not gettable
+Set dictNotGettable = New Dictionary
+For Each vKey In dictRefItems.Keys
+    If GetItem(CLng(vKey)) = 0 Then
+        If Itemrec.Gettable = 0 Then dictNotGettable.add vKey, True
+    End If
+Next vKey
+If dictNotGettable.Count = 0 Then Exit Sub
+
+tabRooms.Index = "idxRooms"
+nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+Do While nStatus = 0 And bStopExport = False
+    RoomRowToStruct Roomdatabuf.buf
+
+    'excluded rooms were exported blank (or not at all)
+    If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then GoTo Skip:
+
+    bFound = False
+    bChanged = False
+    For x = 0 To 14
+        If Roomrec.InvisItems(x) > 0 Then
+            If dictNotGettable.Exists(CStr(Roomrec.InvisItems(x))) Then
+                If Not bFound Then
+                    'buffer rooms are not in the table
+                    tabRooms.Seek "=", Roomrec.MapNumber, Roomrec.RoomNumber
+                    If tabRooms.NoMatch = True Then GoTo Skip:
+                    sPlaced = Replace(tabRooms.Fields("Placed") & "", Chr(0), "")
+                    If Len(sPlaced) > 0 And Not Right(sPlaced, 1) = "," Then sPlaced = sPlaced & ","
+                    bFound = True
+                End If
+
+                'skip items already listed (placed as well as hidden, or hidden twice)
+                If InStr(1, "," & sPlaced, "," & Roomrec.InvisItems(x) & ",") = 0 Then
+                    sPlaced = sPlaced & Roomrec.InvisItems(x) & ","
+                    bChanged = True
+                    Call MarkItemInGame(Roomrec.InvisItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+                End If
+            End If
+        End If
+    Next x
+
+    If bChanged Then
+        tabRooms.Edit
+        tabRooms.Fields("Placed") = sPlaced & Chr(0)
+        tabRooms.Update
+    End If
+
+Skip:
+    nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If Not bUseCPU Then DoEvents
+Loop
+
+Exit Sub
+error:
+lblPanel(1).Caption = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+DoEvents
+Call HandleError("AddReferencedInvisItems")
+nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
+If nYesNo = vbYes Then
+    bStopExport = True
+Else
+    Resume Next
+End If
 
 End Sub
 Private Sub cmdCancel_Click()

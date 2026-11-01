@@ -1,5 +1,6 @@
 -= rooms =-
 marks placed items as in game
+(after all passes) adds hidden items that a textblock or room exit references and that are not gettable to the room's Placed list and marks them as in game
 marks assigned shops as in game
 marks "PermNPC" monsters as in game
 marks textblocks as in-game that are commands from room
