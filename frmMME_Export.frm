@@ -2382,7 +2382,7 @@ If UBound(ItemInGame()) < nNum Then ReDim Preserve ItemInGame(nNum)
 If Not ItemInGame(nNum) Then bSomethingMarkedInGame = True
 ItemInGame(nNum) = True
 
-'hidden room items are exported as placed only when referenced (see AddReferencedInvisItems)
+'hidden room items are exported as placed only when referenced and not gettable (see AddReferencedInvisItems)
 If bReference And Not dictRefItems Is Nothing Then
     If Not dictRefItems.Exists(CStr(nNum)) Then dictRefItems.add CStr(nNum), True
 End If
@@ -5102,12 +5102,14 @@ Call AddReferencedInvisItems
 End Sub
 
 'Hidden (invisible) room items are added to the room's "Placed" list only when a textblock
-'(roomitem, checkitem, takeitem, ...) or a room exit (key, item, ticket, door) references them;
-'the others are left out (players hide items too). ExportRooms has already written the rooms,
-'so this edits their rows. The added items are marked in game like the other placed items.
+'(roomitem, checkitem, takeitem, ...) or a room exit (key, item, ticket, door) references them
+'and players cannot pick them up; the others are left out (players hide what they can carry, and
+'live dats keep those). ExportRooms has already written the rooms, so this edits their rows.
+'The added items are marked in game like the other placed items.
 Private Sub AddReferencedInvisItems()
 Dim nStatus As Integer, nYesNo As Integer, x As Integer
 Dim sPlaced As String, bFound As Boolean, bChanged As Boolean
+Dim dictNotGettable As Dictionary, vKey As Variant
 
 On Error GoTo error:
 
@@ -5118,6 +5120,15 @@ If tabRooms.RecordCount = 0 Then Exit Sub
 
 lblPanel(1).Caption = "Adding referenced hidden items"
 DoEvents
+
+'referenced items that exist and are not gettable
+Set dictNotGettable = New Dictionary
+For Each vKey In dictRefItems.Keys
+    If GetItem(CLng(vKey)) = 0 Then
+        If Itemrec.Gettable = 0 Then dictNotGettable.add vKey, True
+    End If
+Next vKey
+If dictNotGettable.Count = 0 Then Exit Sub
 
 tabRooms.Index = "idxRooms"
 nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
@@ -5131,7 +5142,7 @@ Do While nStatus = 0 And bStopExport = False
     bChanged = False
     For x = 0 To 14
         If Roomrec.InvisItems(x) > 0 Then
-            If dictRefItems.Exists(CStr(Roomrec.InvisItems(x))) Then
+            If dictNotGettable.Exists(CStr(Roomrec.InvisItems(x))) Then
                 If Not bFound Then
                     'buffer rooms are not in the table
                     tabRooms.Seek "=", Roomrec.MapNumber, Roomrec.RoomNumber
