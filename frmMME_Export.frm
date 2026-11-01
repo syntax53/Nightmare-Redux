@@ -2268,6 +2268,19 @@ Call HandleError("VerifyOneRecordInDBs")
 Resume out:
     
 End Sub
+'True when sEntry is one of the ", " separated entries of sList. A plain InStr would also find
+'"Room 3/1" in "Room 3/10" or "Textblock #14" in "Textblock #142" and skip them.
+'An empty sEntry counts as listed (there is nothing to add).
+Private Function EntryListed(ByVal sList As String, ByVal sEntry As String) As Boolean
+
+If sEntry = "" Then
+    EntryListed = True
+Else
+    EntryListed = InStr(1, ", " & sList & ", ", ", " & sEntry & ", ") > 0
+End If
+
+End Function
+
 Private Sub MarkShopInGame(ByVal nNum As Long, sFrom As String)
 Dim sTemp As String
 
@@ -2282,7 +2295,7 @@ If tabShops.NoMatch = False Then
     
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabShops.Fields("Assigned To")
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If EntryListed(sTemp, sFrom) Then Exit Sub
     
     If sTemp = Chr(0) Then
         sTemp = ""
@@ -2325,7 +2338,7 @@ If Not tabMonsters.NoMatch = True Then
 
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabMonsters.Fields("Summoned By")
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If EntryListed(sTemp, sFrom) Then Exit Sub
     
     If sTemp = Chr(0) Then
         sTemp = ""
@@ -2385,14 +2398,9 @@ If tabItems.NoMatch = False Then
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabItems.Fields(sField)
     If sFrom = "" Then GoTo nofrom:
-    If Left(sFrom, 5) = "Room(" Or Left(sFrom, 5) = "Room " Then
-        'room and room command entries: whole entries only ("Room 3/1" is not present because "Room 3/10" is,
-        'nor "Room(x) 1/5" because "Room(x) 1/50-52(3%)" is)
-        If InStr(1, ", " & sTemp & ", ", ", " & sFrom & ", ") > 0 Then Exit Sub
-    Else
-        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
-    End If
-    
+    'whole entries only ("Room(x) 1/5" is not present because "Room(x) 1/50-52(3%)" is)
+    If EntryListed(sTemp, sFrom) Then Exit Sub
+
     If sTemp = Chr(0) Then
         sTemp = ""
     Else
@@ -2440,7 +2448,7 @@ If tabSpells.NoMatch = False Then
     If bLearned = True And Not sFrom = "" Then
         'if the "sFrom" is already in the assigned to field, dont do it again
         sTemp = tabSpells.Fields("Learned From")
-        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+        If EntryListed(sTemp, sFrom) Then Exit Sub
         
         If sTemp = Chr(0) Then
             sTemp = ""
@@ -2469,7 +2477,7 @@ If tabSpells.NoMatch = False Then
     Else
         'if the "sFrom" is already in the assigned to field, dont do it again
         sTemp = tabSpells.Fields("Casted By")
-        If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+        If EntryListed(sTemp, sFrom) Then Exit Sub
         
         If sFrom = "" Then GoTo nofrom:
         
@@ -2519,7 +2527,7 @@ If tabTBInfo.NoMatch = True Then
 Else
     'if the "sFrom" is already in the Called From field, dont do it again
     sTemp = tabTBInfo.Fields("Called From")
-    If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
+    If EntryListed(sTemp, sFrom) Then Exit Sub
     
     If sTemp = Chr(0) Then
         sTemp = ""

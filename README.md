@@ -7,6 +7,7 @@ Unreleased (in development)
 -NEW: MME export: new Titles table, one row per class with the titles from its title textblock as level ranges ("1-1:Apprentice,2-4:Warrior Novice,...,70-109:Dragonslayer"), so clients can tell a player's level range from their title. Male|female titles are kept as the game writes them; colour codes (GreaterMUD) are stripped.
 -NEW: MME export: new Abilities table with the Number and Name of every ability in NMR's loaded ability list (ability.mdb), so clients can name the Abil-# columns. Included in "Export Only ..." runs when "Ability List" is checked.
 -UP: MME export: hidden (invisible) room items that a textblock (roomitem, checkitem, takeitem, ...) or a room exit (key, item, ticket, door) references are now added to the room's Placed list and marked in game with the room in "Obtained From". Other hidden items are still left out.
+-FIX: MME export: a source is no longer left out of an item's Obtained From/References, a spell's Learned From/Casted By, a monster's Summoned By, a shop's Assigned To or a textblock's Called From because its text starts one already listed (e.g. "Textblock #14" after "Textblock #142", "Room 3/1" after "Room 3/10").
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  
