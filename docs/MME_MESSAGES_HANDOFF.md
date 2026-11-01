@@ -389,7 +389,7 @@ patterns.
 ### 4.4 Names
 
 - A row is about a specific spell or item when its `Name` equals a `Spells.Name` or an `Items.Name` in
-  the same export. On stock, that is all 518 Cast rows and 150 of the 475 Self rows. Names are the
+  the same export. On stock, that is all 523 Cast rows and 150 of the 475 Self rows. Names are the
   game's own spelling and case (up to 29 characters). Join by name to get the spell's number, abilities
   or `Learnable` flag.
 - Every other row is realm-wide. Its `Name` is a monster name (death rows) or a label made from its text
@@ -505,10 +505,10 @@ The rows are from a stock export; the game lines are made up to show a match.
 
 ### 5.2 Spells cast when used and on hit
 
-| Column | Size | Content | Example (`shimmering longsword`, GreaterMUD sample) |
+| Column | Size | Content | Example (`serpent staff`, stock v1.11p) |
 |---|---|---|---|
-| `UseSpells` | 120 | spell numbers the item casts when used, `"\|"`-separated | `114` |
-| `HitSpells` | 120 | spells it casts on hit, as `<spell number>:<chance %>` pairs, `"\|"`-separated | `170:40` |
+| `UseSpells` | 120 | spell numbers the item casts when used, `"\|"`-separated | `81` |
+| `HitSpells` | 120 | spells it casts on hit, as `<spell number>:<chance %>` pairs, `"\|"`-separated | `409:25` |
 
 Both are decoded from the item's ability slots, which the export already has in `Abil-n` / `AbilVal-n`.
 Walking the slots in order, a `CastsSp` (43) is cast when the item is used, unless a `%Spell` (114) comes
@@ -532,8 +532,8 @@ one use spell have one; every other item, including one that only casts on hit, 
   first choice, NMR tries the first 2, then 3 letters of the first word plus the other initials and the
   last word (black potion → `#blpo` when blue potion has `#bpot`), then any 4 letters of the name in order,
   starting with its first letter. Digits are the last resort (`#gor2`). Items are processed in item-number
-  order, so the lower-numbered item keeps the natural code. On the GreaterMUD sample, none of the 315
-  usable items needs a digit.
+  order, so the lower-numbered item keeps the natural code. None needs a digit on stock v1.11p (209
+  usable items, 206 codes) or on Paradigm 1.9.1d (310 usable item names).
 - **Stable.** The same names give the same codes. When NMR updates an existing export, every code already
   in it stays with its item name, and new codes avoid them, so adding an item never changes another item's
   code. A code changes when its item is renamed.
@@ -580,15 +580,19 @@ one use spell have one; every other item, including one that only casts on hit, 
 
 ## 7. Stock numbers and checks
 
-A stock v1.11p export made before the item-use changes had the counts below. EndCast chains of item
-spells can add a few Cast rows; the markers change no row count.
+A stock v1.11p export (NMR 1.8.4, 2026-11-01) has:
 
 | Kind | Rows |
 |---|---|
-| Cast | 518 |
+| Cast | 523 (165 with `Use`, 122 with `OnHit`; 5 from EndCast chains of item spells) |
 | Self | 475 (272 with an EndMsg; 150 named after a spell or item) |
 | Other | 419 (213 death texts, 78 chase lines, 29 monster entrances) |
-| Total | 1,412 |
+| Total | 1,417 |
+
+In `Items`, 209 items have a use spell (206 codes, as three names repeat) and 127 have an on-hit spell.
+The five chain rows are the "slam" line of Dusk and the nexus spear (their use spell, spear, chains to
+spear slam knockdown) and three lines of the staff of the elements (its on-hit elemental earthquake
+chains to elemental lightning and on).
 
 NMR's own check of an export is `docs/verify-mme-messages.ps1` (32-bit PowerShell, Jet). It checks the
 schema, that no raw `%s` / `%d` is left, the Kinds, that rows are unique, the "you" duplicates, names,

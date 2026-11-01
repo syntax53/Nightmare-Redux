@@ -145,6 +145,18 @@ All `.bas`/`.frm` edits keep CRLF and follow the existing `On Error GoTo error:`
 - Update-mode check: export, rename one item and add one in the dat, update the same MDB, and confirm
   untouched items kept their codes.
 
+Result (2026-11-01, built in the IDE; `data-v1.11p.mdb` and `data-Paradigm-1.9.1d.mdb`):
+- Stock v1.11p: every check passes. 1,417 Messages rows (Cast 518 -> 523, Self and Other unchanged);
+  209 usable items, 206 codes, no digits; 127 items with on-hit spells; 165 Cast rows with `Use`, 122 with
+  `OnHit`. The five new rows are EndCast chains: Dusk and the nexus spear (spear -> spear slam
+  knockdown) and the staff of the elements (elemental earthquake -> elemental lightning ...).
+- Paradigm 1.9.1d: one failure, the stock bane dart spot check. The pre-change 1.9.1c export lacks that
+  row too, so it is realm data, not this change. Against 1.9.1c, ignoring markers, the only difference is
+  the same five chain rows; nothing was removed. 310 usable item names, no digits.
+- Usable items without a `Use` line (58 stock, 123 Paradigm) have a use spell that prints no cast line
+  (mostly chests, boxes and pouches); no marker is missing.
+- Not run: the update-mode check.
+
 ## 6. Risks
 
 - Clients that expect `Items` to end at `MissVerbs` by position: none known (MegaMud builds its column list
