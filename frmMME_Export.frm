@@ -2385,8 +2385,9 @@ If tabItems.NoMatch = False Then
     'if the "sFrom" is already in the assigned to field, dont do it again
     sTemp = tabItems.Fields(sField)
     If sFrom = "" Then GoTo nofrom:
-    If Left(sFrom, 5) = "Room(" Then
-        'room command entries: whole entries only ("Room(x) 1/5" is not present because "Room(x) 1/50-52(3%)" is)
+    If Left(sFrom, 5) = "Room(" Or Left(sFrom, 5) = "Room " Then
+        'room and room command entries: whole entries only ("Room 3/1" is not present because "Room 3/10" is,
+        'nor "Room(x) 1/5" because "Room(x) 1/50-52(3%)" is)
         If InStr(1, ", " & sTemp & ", ", ", " & sFrom & ", ") > 0 Then Exit Sub
     Else
         If Not InStr(1, sTemp, sFrom) = 0 Then Exit Sub
