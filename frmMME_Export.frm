@@ -684,6 +684,7 @@ Dim sDefaultExcludeNote() As String
 
 Dim dictLairInfo As New Dictionary
 Dim dictTBCastSpells As Dictionary 'spells textblocks cast (not teach), for the Messages pass; "Casted By" can be truncated
+Dim dictRefItems As Dictionary 'items a textblock or room exit references, for AddReferencedInvisItems
 Private Type LairInfoType
     sGroupIndex As String
     sMobList As String
@@ -1515,6 +1516,8 @@ ReDim colLairs(0)
 'ReDim colNONLairs(0)
 Set dictTBCastSpells = New Dictionary
 dictTBCastSpells.CompareMode = vbBinaryCompare
+Set dictRefItems = New Dictionary
+dictRefItems.CompareMode = vbBinaryCompare
 
 nMsgWarnings = 0
 nTmp = CreateDatabase
@@ -2365,6 +2368,11 @@ End If
 If UBound(ItemInGame()) < nNum Then ReDim Preserve ItemInGame(nNum)
 If Not ItemInGame(nNum) Then bSomethingMarkedInGame = True
 ItemInGame(nNum) = True
+
+'hidden room items are exported as placed only when referenced (see AddReferencedInvisItems)
+If bReference And Not dictRefItems Is Nothing Then
+    If Not dictRefItems.Exists(CStr(nNum)) Then dictRefItems.add CStr(nNum), True
+End If
 
 'If InStr(1, sFrom, "9494") > 0 Then
 '    Debug.Print ""
@@ -5076,6 +5084,86 @@ Call ScanGreets
 If bStopExport = True Then Exit Sub
 DoEvents
 If bRoomCommandItems Then Call ScanRoomCommands
+
+'not a scan: it needs every reference the scans above recorded
+If bStopExport = True Then Exit Sub
+DoEvents
+Call AddReferencedInvisItems
+
+End Sub
+
+'Hidden (invisible) room items are added to the room's "Placed" list only when a textblock
+'(roomitem, checkitem, takeitem, ...) or a room exit (key, item, ticket, door) references them;
+'the others are left out (players hide items too). ExportRooms has already written the rooms,
+'so this edits their rows. The added items are marked in game like the other placed items.
+Private Sub AddReferencedInvisItems()
+Dim nStatus As Integer, nYesNo As Integer, x As Integer
+Dim sPlaced As String, bFound As Boolean, bChanged As Boolean
+
+On Error GoTo error:
+
+If dictRefItems Is Nothing Then Exit Sub
+If dictRefItems.Count = 0 Then Exit Sub
+If chkLegit(0).Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub 'ExportRooms exported none
+If tabRooms.RecordCount = 0 Then Exit Sub
+
+lblPanel(1).Caption = "Adding referenced hidden items"
+DoEvents
+
+tabRooms.Index = "idxRooms"
+nStatus = BTRCALL(BGETFIRST, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+Do While nStatus = 0 And bStopExport = False
+    RoomRowToStruct Roomdatabuf.buf
+
+    'excluded rooms were exported blank (or not at all)
+    If IsExcludedRoom(Roomrec.MapNumber, Roomrec.RoomNumber, False) Then GoTo Skip:
+
+    bFound = False
+    bChanged = False
+    For x = 0 To 14
+        If Roomrec.InvisItems(x) > 0 Then
+            If dictRefItems.Exists(CStr(Roomrec.InvisItems(x))) Then
+                If Not bFound Then
+                    'buffer rooms are not in the table
+                    tabRooms.Seek "=", Roomrec.MapNumber, Roomrec.RoomNumber
+                    If tabRooms.NoMatch = True Then GoTo Skip:
+                    sPlaced = Replace(tabRooms.Fields("Placed") & "", Chr(0), "")
+                    If Len(sPlaced) > 0 And Not Right(sPlaced, 1) = "," Then sPlaced = sPlaced & ","
+                    bFound = True
+                End If
+
+                'skip items already listed (placed as well as hidden, or hidden twice)
+                If InStr(1, "," & sPlaced, "," & Roomrec.InvisItems(x) & ",") = 0 Then
+                    sPlaced = sPlaced & Roomrec.InvisItems(x) & ","
+                    bChanged = True
+                    Call MarkItemInGame(Roomrec.InvisItems(x), "Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber)
+                End If
+            End If
+        End If
+    Next x
+
+    If bChanged Then
+        tabRooms.Edit
+        tabRooms.Fields("Placed") = sPlaced & Chr(0)
+        tabRooms.Update
+    End If
+
+Skip:
+    nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    If Not bUseCPU Then DoEvents
+Loop
+
+Exit Sub
+error:
+lblPanel(1).Caption = Roomrec.MapNumber & "/" & Roomrec.RoomNumber
+DoEvents
+Call HandleError("AddReferencedInvisItems")
+nYesNo = MsgBox("Stop Export?", vbYesNo + vbDefaultButton2 + vbQuestion)
+If nYesNo = vbYes Then
+    bStopExport = True
+Else
+    Resume Next
+End If
 
 End Sub
 Private Sub cmdCancel_Click()
