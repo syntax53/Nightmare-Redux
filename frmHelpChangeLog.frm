@@ -4,13 +4,13 @@ Begin VB.Form frmHelpChangeLog
    ClientHeight    =   6420
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   9360
+   ClientWidth     =   13800
    Icon            =   "frmHelpChangeLog.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    ScaleHeight     =   6420
-   ScaleWidth      =   9360
+   ScaleWidth      =   13800
    Begin VB.TextBox Text1 
       BeginProperty Font 
          Name            =   "Courier New"
@@ -29,7 +29,7 @@ Begin VB.Form frmHelpChangeLog
       TabIndex        =   0
       Text            =   "frmHelpChangeLog.frx":08CA
       Top             =   0
-      Width           =   9315
+      Width           =   13755
    End
 End
 Attribute VB_Name = "frmHelpChangeLog"
