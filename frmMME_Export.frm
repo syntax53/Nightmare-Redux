@@ -6352,6 +6352,7 @@ Dim sMonsters As String, nAction As Integer, nNumActions As Long 'sActionNum As 
 Dim nTempMap As Long, nTempRoom As Long, sActions() As String, sNewActions() As String
 Dim x As Integer, y As Integer, z As Integer
 Dim x2 As Integer, y2 As Integer ', z2 As Integer
+Dim sActionsDone As String, sActionKey As String
 
 If chkLegit(0).Value = 0 And chkExcludeRooms.Value = 1 And chkNoRooms.Value = 1 Then Exit Sub
 
@@ -6615,6 +6616,11 @@ Do While nStatus = 0 And bStopExport = False
                             
                             nAction = nNumActions - nAction + 1
                             
+                            'an action number above the exit's #actions comes out < 1: list it as a plain action
+                            If nAction < 1 Then nNumActions = -1
+                        End If
+
+                        If nNumActions > 0 And nNumActions < 10 Then
                             sTemp = "Action#" & nAction & " " & sTemp
                             
                             sActions(x, nAction, 1) = Roomrec.RoomExit(x)
@@ -6674,27 +6680,29 @@ Do While nStatus = 0 And bStopExport = False
 nextexit:
     Next x
     
+    'write the numbered actions into the "open" exits, each target exit's actions once and in action order.
+    'grouped by target room and target exit (para2 mod 10): a room can work more than one exit of the same room
+    sActionsDone = "|"
     For x = 0 To 9
-        For y = 0 To 9
-            nTempRoom = Val(sActions(x, y, 1))
-            If nTempRoom > 0 Then
-                z = 1 'action number
-nextaction:
-                If z = 10 Then GoTo doneaction:
-                For x2 = 0 To 9
-                    If sActions(x2, z, 1) = CStr(nTempRoom) Then
-                        For y2 = 0 To 9
-                            If sNewActions(y2) = "open" Then
-                                sNewActions(y2) = sActions(x2, z, 2)
-                                GoTo foundaction:
+        For y = 1 To 9
+            If Val(sActions(x, y, 1)) > 0 Then
+                sActionKey = sActions(x, y, 1) & "/" & (Roomrec.Para2(x) Mod 10)
+                If InStr(1, sActionsDone, "|" & sActionKey & "|") = 0 Then
+                    sActionsDone = sActionsDone & sActionKey & "|"
+                    For z = 1 To 9 'action number
+                        For x2 = 0 To 9
+                            If sActions(x2, z, 1) = sActions(x, y, 1) _
+                                And (Roomrec.Para2(x2) Mod 10) = (Roomrec.Para2(x) Mod 10) Then
+                                For y2 = 0 To 9
+                                    If sNewActions(y2) = "open" Then
+                                        sNewActions(y2) = sActions(x2, z, 2)
+                                        Exit For
+                                    End If
+                                Next y2
                             End If
-                        Next y2
-                    End If
-                Next x2
-foundaction:
-                z = z + 1
-                GoTo nextaction:
-doneaction:
+                        Next x2
+                    Next z
+                End If
             End If
         Next y
     Next x

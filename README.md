@@ -10,6 +10,8 @@ Unreleased (in development)
 -UP: MME export: hidden (invisible) room items that players cannot pick up (not Gettable) and that a textblock (roomitem, checkitem, takeitem, ...) or a room exit (key, item, ticket, door) references are now added to the room's Placed list and marked in game with the room in "Obtained From". Other hidden items are still left out: players hide what they can carry, and dats from a running game keep those.
 -FIX: MME export: a source is no longer left out of an item's Obtained From/References, a spell's Learned From/Casted By, a monster's Summoned By, a shop's Assigned To or a textblock's Called From because its text starts one already listed (e.g. "Textblock #14" after "Textblock #142", "Room 3/1" after "Room 3/10").
 -FIX: MME export and Monster Attack Simulator: rob attacks (attack type 3) are now named "Rob" instead of "Unknown" in the AttName columns and the simulator. (issue #34)
+-FIX: MME export: a room whose Remote Actions work more than one exit of the same room (e.g. 12/2231 on the W and E exits of 12/2227) no longer lists one exit's action twice and leaves out the other's (e.g. "push onyx" twice, "push pearl" missing); each target exit's actions are listed once, in order. A Remote Action numbered above its hidden exit's #actions is listed as a plain "Action" instead of an empty "open" column. (issue #22)
+-UP: Room Editor: the Remote Action "#" help had the order backwards: with "order matters" the highest number is done first (31, 21, then 11 for an exit needing 3 actions). (issue #22)
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  

@@ -5829,7 +5829,7 @@ Select Case cmbRoomType(Index).ListIndex
             & "-(line 3) Remote Action word three", False
         objTooltip.SetToolTipObj txtRoomWPara(Index).hwnd, "# = the exit number (0 to 9 for North though Down) that this action effects." _
             & vbCrLf & vbCrLf & "-if there are 2 or more actions needed then add 10 starting with the first action to each remote action's para2." _
-            & vbCrLf & vbCrLf & "-so a room that needed 3 remote actions on the South (1) exit would have in para2: 11 for the first action, 21 for the second, and 31 for the third." _
+            & vbCrLf & vbCrLf & "-so a room that needed 3 remote actions on the South (1) exit would have in para2: 31 for the first action, 21 for the second, and 11 for the third (with 'order matters' the highest number is done first)." _
             & vbCrLf & vbCrLf & "-a room that needed only one action on the NE (5) exit would just need a 5 in the para2 field.", False
         
 '            & vbCrLf _
