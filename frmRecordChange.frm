@@ -2876,8 +2876,8 @@ Do Until tabMonsters.EOF Or bCancelProcess
                 For x = 0 To 9
                     If tabMonsters.Fields("Ability Value " & x) > 0 Then
                         Select Case tabMonsters.Fields("Ability " & x)
-                            'deathtext
-                            Case 155:
+                            'textblock,deathtext
+                            Case 148, 155:
                                 For y = 0 To UBound(ChangeList(), 2)
                                     If tabMonsters.Fields("Ability Value " & x) >= ChangeList(1, y) And tabMonsters.Fields("Ability Value " & x) <= ChangeList(2, y) Then
                                         ts.WriteLine "Monster #" & tabMonsters.Fields("Number") & " -- " _
@@ -3111,6 +3111,22 @@ Do Until tabItems.EOF Or bCancelProcess
                         End If
                     Next y
                 End If
+                For x = 0 To 19
+                    If tabItems.Fields("Ability Value " & x) > 0 Then
+                        Select Case tabItems.Fields("Ability " & x)
+                            'textblock,deathtext
+                            Case 148, 155:
+                                For y = 0 To UBound(ChangeList(), 2)
+                                    If tabItems.Fields("Ability Value " & x) >= ChangeList(1, y) And tabItems.Fields("Ability Value " & x) <= ChangeList(2, y) Then
+                                        ts.WriteLine "Item #" & tabItems.Fields("Number") & " -- " _
+                                            & GetAbilityName(tabItems.Fields("Ability " & x)) & " #" _
+                                            & tabItems.Fields("Ability Value " & x) & " to " & (ChangeList(3, y) + (tabItems.Fields("Ability Value " & x) - ChangeList(1, y)))
+                                        tabItems.Fields("Ability Value " & x) = (ChangeList(3, y) + (tabItems.Fields("Ability Value " & x) - ChangeList(1, y)))
+                                    End If
+                                Next y
+                        End Select
+                    End If
+                Next x
             Case 0: 'Classes
                 For x = 0 To 9
                     If tabItems.Fields("Class " & x) > 0 Then
