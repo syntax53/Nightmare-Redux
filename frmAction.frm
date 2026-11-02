@@ -473,7 +473,7 @@ Dim tmpOffset As Byte
 
 tmpOffset = 0
 
-If Len(txtSingleToUser.Text) > 0 Or Len(txtSingleToUser.Text) > 0 Then
+If Len(txtSingleToUser.Text) > 0 Or Len(txtSingleToRoom.Text) > 0 Then
     tmpOffset = tmpOffset + 1
 End If
 If Len(txtUserToUser.Text) > 0 Or Len(txtUserToOtherUser.Text) > 0 Or Len(txtUserToRoom.Text) > 0 Then
