@@ -650,22 +650,21 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
         End Select
     Next x
 
-    'spells the item casts when used, and on hit (the "<spell>:<chance>" pairs give the spell before the ":")
-    If Not sItem = "" Then
-        Call ItemSpellLists(sUse, sHit)
-        If Not sUse = "" Then
-            sParts = Split(sUse, "|")
-            For x = 0 To UBound(sParts)
-                If Not dictItemCast.Exists(sParts(x)) Then dictItemCast.Add sParts(x), True
-            Next x
-        End If
-        If Not sHit = "" Then
-            sParts = Split(sHit, "|")
-            For x = 0 To UBound(sParts)
-                sKey = Split(sParts(x), ":")(0)
-                If Not dictItemCast.Exists(sKey) Then dictItemCast.Add sKey, True
-            Next x
-        End If
+    'spells the item casts when used, and on hit (the "<spell>:<chance>" pairs give the spell before the ":"); the
+    'same decode as Items.UseSpells / HitSpells, which list them for every item, named or not
+    Call ItemSpellLists(sUse, sHit)
+    If Not sUse = "" Then
+        sParts = Split(sUse, "|")
+        For x = 0 To UBound(sParts)
+            If Not dictItemCast.Exists(sParts(x)) Then dictItemCast.Add sParts(x), True
+        Next x
+    End If
+    If Not sHit = "" Then
+        sParts = Split(sHit, "|")
+        For x = 0 To UBound(sParts)
+            sKey = Split(sParts(x), ":")(0)
+            If Not dictItemCast.Exists(sKey) Then dictItemCast.Add sKey, True
+        Next x
     End If
 
     nStatus = BTRCALL(BGETNEXT, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
@@ -754,7 +753,7 @@ End Sub
 'nSpell itself left out), as a "|" list; "" when none. Reads Spellrec.
 Private Function EndCastChain(ByVal nSpell As Long) As String
 Dim dictSeen As Scripting.Dictionary, sFrontier As String, sNext As String, sParts() As String, sKey As String
-Dim nKey As Long, nStatus As Integer, nDepth As Integer, x As Long, y As Integer
+Dim nKey As Integer, nStatus As Integer, nDepth As Integer, x As Long, y As Integer
 On Error GoTo error:
 
 EndCastChain = ""
@@ -767,8 +766,8 @@ For nDepth = 1 To 10
     sNext = ""
     sParts = Split(sFrontier, "|")
     For x = 0 To UBound(sParts)
-        nKey = CLng(sParts(x))
-        nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nKey, KEY_BUF_LEN, 0)
+        nKey = CInt(sParts(x))
+        nStatus = BTRCALL(BGETEQUAL, SpellPosBlock, Spelldatabuf, Len(Spelldatabuf), nKey, Len(nKey), 0)
         If nStatus = 0 Then
             SpellRowToStruct Spelldatabuf.buf
             For y = 0 To 9

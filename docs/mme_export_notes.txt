@@ -153,8 +153,8 @@ value truncated to its column size.
 
 -= Standard formats clients must implement themselves =-
 These are the engine's fixed wordings and the shapes that every custom message follows. A client
-needs them hard-coded; the Messages table only carries what deviates from them, plus each player
-spell's and casting item's own cast line (a Cast row under its name, whatever its form).
+needs them hard-coded; the Messages table only carries what deviates from them, plus the cast line
+of every spell players or items cast (a Cast row under the spell's name and number, whatever its form).
 <X> = any text, <N> = a number, <verb> = a single word.
 
 Damage to me / to others (line colour: bold red, bold blue or cyan for monster attacks):

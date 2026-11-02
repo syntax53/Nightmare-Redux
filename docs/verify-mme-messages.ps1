@@ -243,7 +243,8 @@ if (-not (($itemCols -contains "UseCode") -and ($itemCols -contains "UseSpells")
     }
     $lname = ([string]$it["Name"]).ToLower(); $code = [string]$it["UseCode"]
     if ($wantUse -ne "") {
-      $usable++; $useByName[$lname] = $use
+      # items with the same name share a code; the INFO count below looks at all of their use spells
+      $usable++; if ($useByName.ContainsKey($lname)) { $useByName[$lname] = @($useByName[$lname]) + $use } else { $useByName[$lname] = $use }
       if ($code -cnotmatch '^#[a-z0-9]{1,4}$') { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: bad UseCode '{1}'" -f $it["Name"], $code) } }
       elseif ($codeByName.ContainsKey($lname) -and $codeByName[$lname] -ne $code) { $badCode++; if ($ex.Count -lt 8) { $ex += ("'{0}': one name, two codes ({1}, {2})" -f $it["Name"], $codeByName[$lname], $code) } }
       elseif ($nameByCode.ContainsKey($code) -and $nameByCode[$code] -ne $lname) { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: used by '{1}' and '{2}'" -f $code, $nameByCode[$code], $lname) } }
@@ -281,6 +282,25 @@ if (-not $hasSpell) { Fail "Messages lacks Spell" } else {
   }
   if ($badSpell -eq 0) { Pass "Spell: on every Cast row, never on Other rows, and a row with a spell is named after it (not after an item)" } else { Fail "$badSpell rows with a wrong or missing Spell" }
   if ($markers -eq 0) { Pass "no Use / OnHit markers (Items.UseSpells / HitSpells and Spell replace them)" } else { Fail "$markers rows still carry Use / OnHit" }
+  # only spells players can learn (Learnable, or taught by an item: ability 42) or items cast (directly, or through
+  # EndCast from an item spell) have rows with their number; without Learnable flags (an "Export Only" run) NMR falls
+  # back to the magery type, so the check is skipped
+  $learnable = @{}; foreach ($sp in @(Q $cnNew "SELECT [Number] FROM Spells WHERE Learnable<>0")) { $learnable[[string]$sp.Number] = $true }
+  if ($learnable.Count -gt 0) {
+    $itemCast = @{}; $todo = @()
+    foreach ($it in @(Q $cnNew "SELECT * FROM Items")) {
+      foreach ($x in @(([string]$it.UseSpells).Split("|") + ([string]$it.HitSpells).Split("|"))) { if ($x) { $todo += $x.Split(":")[0] } }
+      for ($i=0; $i -lt 20; $i++) { if ([int]$it["Abil-$i"] -eq 42 -and [int]$it["AbilVal-$i"] -gt 0) { $learnable[[string]$it["AbilVal-$i"]] = $true } }
+    }
+    $depth = 0
+    while ($todo.Count -gt 0 -and $depth -le 10) {
+      $nxt = @(); foreach ($x in $todo) { if (-not $itemCast.ContainsKey($x)) { $itemCast[$x] = $true; if ($endCast.ContainsKey($x)) { $nxt += $endCast[$x] } } }
+      $todo = $nxt; $depth++
+    }
+    $stray = @($allRows | Where-Object { $_.Spell -gt 0 -and -not $learnable.ContainsKey([string]$_.Spell) -and -not $itemCast.ContainsKey([string]$_.Spell) })
+    foreach ($r in ($stray | Select-Object -First 5)) { Write-Output ("      [{0}] spell {1} '{2}' is neither learnable nor item-cast: {3}" -f $r.Kind, $r.Spell, $r.Name, $r.Msg) }
+    if ($stray.Count -eq 0) { Pass "rows with a Spell belong to learnable or item-cast spells only ($($itemCast.Count) item-cast spells, chains included)" } else { Fail "$($stray.Count) rows carry a spell no player learns and no item casts" }
+  } else { Write-Output "SKIP  no spell is marked Learnable; the learnable / item-cast check needs the cross-reference data" }
   # what a client does: an item's use lines are the rows whose Spell is in UseSpells, or reached from one through
   # EndCast (spell ability 151), transitively; NMR follows at most 10 links
   $noCast = 0

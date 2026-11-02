@@ -296,3 +296,17 @@ Re-exported with the Revision 2 build; `verify-mme-messages.ps1` passes on both.
   branch (1.9.1c has them too).
 - Both exports write `NMR-Log_MMEMessages.txt` into the same folder, so the later run replaced the other's
   log (the one left is stock's).
+
+## R2.10 Branch audit (2026-11-01)
+
+- `EndCastChain` looked spells up with a 4-byte Long key and a key length of 255 (`KEY_BUF_LEN`); every other
+  spell lookup in NMR passes an Integer and `Len(...)`, so Btrieve is told the buffer's real size. Fixed the
+  same way.
+- The Messages item scan skipped blank-named items, while `Items.UseSpells` / `HitSpells` list every item's
+  spells, so such an item's spells would not count as item-cast. The scan no longer needs a name (no
+  stock or Paradigm item is affected).
+- Verify script: same-named items now pool their use spells for the INFO count; new check that rows with a
+  `Spell` belong to learnable, item-taught (ability 42) or item-cast spells only (Paradigm spell 24 is
+  taught by a scroll but not marked Learnable, which NMR counts as player-castable, as documented).
+- Docs: the notes' standard-formats intro and generic 4.4 still described per-item cast lines; corrected.
+- Not run yet: updating an existing export (rename one item, update the MDB, check the other codes stay).

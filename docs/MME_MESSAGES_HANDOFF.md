@@ -392,8 +392,8 @@ patterns.
 - A row belongs to a specific spell when its `Spell` is not 0. Join `Spell` to `Spells.Number` for the
   spell's abilities, target type or `Learnable` flag. Its `Name` is then the spell's name, in the game's
   spelling and case (up to 29 characters), but **join on `Spell`, not on the name**: several spells can
-  share a name (10 names among the spells with rows on stock v1.11p, 29 on Paradigm 1.9.1d). On stock,
-  every Cast row and the named Self rows have a `Spell` (counts in section 7).
+  share a name (10 names among the spells with rows on stock v1.11p, 29 on Paradigm 1.9.1d). Every Cast
+  row has a `Spell`, and so do the Self rows of friendly player or item spells (counts in section 7).
 - An item damage-shield row (`Spell` 0, `DamageShield`) is named after the item; it matches `Items.Name`.
 - Every other row is realm-wide. Its `Name` is a monster name (death rows) or a label made from its text
   (3.8). Display it if you like, but do not key on it.
