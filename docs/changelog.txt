@@ -21,6 +21,7 @@ v1.8.4 (11/##/2026)
 -FIX: Universal modifier "Total Exp" over 2,147,483,646 is now capped instead of leaving the monster worth 1 experience (issue #30, Thanks Fujin)  
 -FIX: Record number changer now updates rooms' command text, and textblock/deathtext abilities on items and monsters, when renumbering textblocks (issue #31, Thanks Fujin)  
 -FIX: Map editor no longer creates a new room as map/room 0, and no longer suggests the current room as the existing room for up/down (issue #32, Thanks Fujin)  
+-FIX: Textblock preview now moves a tab to the next tab stop on the same line instead of to the top line, and no longer crashes on many "set tab stop" codes (issue #35, Thanks Fujin)  
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  
