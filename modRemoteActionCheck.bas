@@ -18,6 +18,7 @@ Option Base 0
 Private Const HIDDEN_EXIT As Integer = 6
 Private Const REMOTE_ACTION As Integer = 12
 Private Const BTR_READ_ONLY As Integer = -2 'BOPEN mode
+Public Const REMOTE_REPORT_WIDTH As Long = 95 'report columns: longer lines are wrapped (see Wrap)
 
 'index, built on first use from the dat files on position blocks and records of its own, so the editors'
 'positions and Roomrec/Messagerec/TextblockRec are never touched:
@@ -74,6 +75,23 @@ End Function
 
 Private Function PadL(ByVal s As String, ByVal n As Long) As String
 PadL = Right$(Space$(n) & s, n)
+End Function
+
+'sText cut into lines of REMOTE_REPORT_WIDTH columns at most, the later ones indented by nIndent. it breaks
+'after a "> " or "; " (between steps or fixes) when it can, else at a space
+Private Function Wrap(ByVal sText As String, ByVal nIndent As Long) As String
+Dim sOut As String, n As Long, nBreak As Long
+Do While Len(sText) > REMOTE_REPORT_WIDTH
+    nBreak = 0
+    For n = REMOTE_REPORT_WIDTH To nIndent + 20 Step -1
+        If Mid$(sText, n - 1, 2) = "> " Or Mid$(sText, n - 1, 2) = "; " Then nBreak = n: Exit For
+    Next n
+    If nBreak = 0 Then nBreak = InStrRev(sText, " ", REMOTE_REPORT_WIDTH + 1)
+    If nBreak <= nIndent Then nBreak = REMOTE_REPORT_WIDTH 'one long word
+    sOut = sOut & RTrim$(Left$(sText, nBreak)) & vbCrLf
+    sText = Space$(nIndent) & LTrim$(Mid$(sText, nBreak + 1))
+Loop
+Wrap = sOut & sText
 End Function
 
 Private Function RoomName(ByVal sRoom As String) As String
@@ -360,9 +378,10 @@ Next v
 StepsText = sOut & IIf(bAlone, " alone", "")
 End Function
 
-'The section of the report for one hidden exit; bOK says whether it is all right; the rooms involved are added
-'to sRooms ("map/room|...")
-Private Function ExitSection(ByVal sTarget As String, ByRef bOK As Boolean, ByRef sRooms As String) As String
+'The section of the report for one hidden exit; bOK says whether it is all right, sLine is its one-line summary;
+'the rooms involved are added to sRooms ("map/room|...")
+Private Function ExitSection(ByVal sTarget As String, ByRef bOK As Boolean, ByRef sLine As String, _
+    ByRef sRooms As String) As String
 Dim sInfo() As String, k() As String, nCount As Long, bOrdered As Boolean, nPara1 As Long, bPara1OK As Boolean
 Dim sHere As String, sSetup As String, sNowBlocked As String, sAll As String, n As Long, i As Long
 Dim sNow As String, sAfterReset As String, bByZero As Boolean, nZeros As Long, sNums As String
@@ -418,15 +437,17 @@ For i = 0 To aCount - 1
 Next i
 
 If aCount = 0 Then
-    ExitSection = "X  " & sHere & " (" & RoomName(k(0) & "/" & k(1)) & ") - " & sSetup & vbCrLf _
+    sLine = "X  " & sHere & " - nothing aims at it, so it never opens"
+    ExitSection = Wrap("X  " & sHere & " (" & RoomName(k(0) & "/" & k(1)) & ") - " & sSetup, 3) & vbCrLf _
         & "   Problem:  nothing aims at it, so it never opens" & vbCrLf _
         & "   Opens now:           never" & vbCrLf _
-        & "   Fix:                 add a Remote Action aimed at it, or leave it if it is meant to stay shut" & vbCrLf
+        & Wrap("   Fix:                 add a Remote Action aimed at it, or leave it if it is meant to stay shut", 24) & vbCrLf
     Exit Function
 End If
 If bOK Then
-    ExitSection = "OK " & sHere & " (" & RoomName(k(0) & "/" & k(1)) & ") - " & sSetup & " - opens with: " _
-        & StepsText(sNow, False) & vbCrLf
+    sLine = Wrap("OK " & sHere & " - " & sSetup, 3)
+    ExitSection = Wrap("OK " & sHere & " (" & RoomName(k(0) & "/" & k(1)) & ") - " & sSetup & " - opens with: " _
+        & StepsText(sNow, False), 3) & vbCrLf
     Exit Function
 End If
 
@@ -465,9 +486,10 @@ ElseIf Not bPara1OK Then
 Else
     sStatus = "opens with " & (UBound(Split(sNow, ",")) + 1) & " of its " & aCount & " actions"
 End If
+sLine = Wrap("X  " & sHere & " - " & sStatus & IIf(sFix = "", "", " - fix: " & sFix), 3)
 
-sOut = "X  " & sHere & " (" & RoomName(k(0) & "/" & k(1)) & ") - " & sSetup & vbCrLf _
-    & "   Problem:  " & sStatus & vbCrLf & vbCrLf _
+sOut = Wrap("X  " & sHere & " (" & RoomName(k(0) & "/" & k(1)) & ") - " & sSetup, 3) & vbCrLf _
+    & Wrap("   Problem:  " & sStatus, 13) & vbCrLf & vbCrLf _
     & "   " & PadR("Remote action", 16) & PadR("Commands", 26) & PadL("#", 4) & "   " & PadR("Now", 34) _
     & IIf(bFixCol, PadL("Fix #", 6), "") & vbCrLf
 For i = 0 To aCount - 1
@@ -495,28 +517,29 @@ For i = 0 To aCount - 1
     End If
     sOut = sOut & sRow & vbCrLf
 Next i
-sOut = sOut & vbCrLf & "   Opens now:           " & IIf(sNow = "", "never", StepsText(sNow, bByZero And nCount > 1)) & vbCrLf
-If sAfterReset <> "" Then sOut = sOut & "   After its next reset: " & StepsText(sAfterReset, False) & vbCrLf
+sOut = sOut & vbCrLf & Wrap("   Opens now:           " & IIf(sNow = "", "never", StepsText(sNow, bByZero And nCount > 1)), 24) & vbCrLf
+If sAfterReset <> "" Then sOut = sOut & Wrap("   After its next reset: " & StepsText(sAfterReset, False), 25) & vbCrLf
 If sAfterFix <> "" Then
-    sOut = sOut & "   After the fix:       " & StepsText(sAfterFix, False) _
-        & IIf(bOrdered And aCount > 1, ", in this order", "") & vbCrLf
+    sOut = sOut & Wrap("   After the fix:       " & StepsText(sAfterFix, False) _
+        & IIf(bOrdered And aCount > 1, ", in this order", ""), 24) & vbCrLf
 End If
-If sFix <> "" Then sOut = sOut & "   Fix:                 " & sFix & vbCrLf
+If sFix <> "" Then sOut = sOut & Wrap("   Fix:                 " & sFix, 24) & vbCrLf
 ExitSection = sOut
 End Function
 
 '---------------------------------------------------------------- the room
 'The report for room nMap/nRoom (Roomrec holds it, as it does after DispRoomInfo). Returns the text ("" when the
-'room has no remote actions and no hidden exit that needs them); nProblems = exits that are wrong + actions
-'aimed at missing rooms, nIdle = actions aimed at exits that ignore them, sRooms = the other rooms involved
-'("map/room|...").
-Public Function RemoteActionReport(ByVal nMap As Long, ByVal nRoom As Long, ByRef nProblems As Long, _
-    ByRef nIdle As Long, ByRef sRooms As String) As String
+'room has no remote actions and no hidden exit that needs them); sSummary = one line per hidden exit and per
+'problem, for the top of the report window; nProblems = exits that are wrong + actions aimed at missing rooms, nIdle = actions
+'aimed at exits that ignore them, sRooms = the other rooms involved ("map/room|...").
+Public Function RemoteActionReport(ByVal nMap As Long, ByVal nRoom As Long, ByRef sSummary As String, _
+    ByRef nProblems As Long, ByRef nIdle As Long, ByRef sRooms As String) As String
 Dim x As Integer, sOut As String, sTarget As String, sDone As String, sTypes() As String, nType As Integer
 Dim bOK As Boolean, sNotes As String, sRoomKey As String, sSection As String, sAll As String, v As Variant
+Dim sLine As String, nInfo As Long
 On Error GoTo error:
 
-nProblems = 0: nIdle = 0: sRooms = ""
+sSummary = "": nProblems = 0: nIdle = 0: sRooms = ""
 If Not mBuilt Then
     If mFailed Then Exit Function
     If Not BuildIndex() Then Exit Function
@@ -527,9 +550,10 @@ For x = 0 To 9 'the room's own hidden exits
     sTarget = nMap & "/" & nRoom & "/" & x
     If mHidden.Exists(sTarget) Then
         sDone = sDone & sTarget & "|"
-        sSection = ExitSection(sTarget, bOK, sAll)
+        sSection = ExitSection(sTarget, bOK, sLine, sAll)
         If Not bOK Then nProblems = nProblems + 1
-        sOut = sOut & IIf(sOut = "", "", String$(100, "-") & vbCrLf) & sSection
+        sOut = sOut & IIf(sOut = "", "", String$(REMOTE_REPORT_WIDTH, "-") & vbCrLf) & sSection
+        sSummary = sSummary & sLine & vbCrLf
     End If
 Next x
 For x = 0 To 9 'its Remote Actions
@@ -539,17 +563,20 @@ For x = 0 To 9 'its Remote Actions
         If Not mTypes.Exists(sRoomKey) Then
             nProblems = nProblems + 1
             sNotes = sNotes & "   X  " & DirName(x) & ": works room " & sRoomKey & ", which doesn't exist" & vbCrLf
+            sSummary = sSummary & "X  " & DirName(x) & " remote action works room " & sRoomKey & ", which doesn't exist" & vbCrLf
         Else
             sTypes = Split(mTypes(sRoomKey), ",")
             nType = Val(sTypes(Roomrec.Para2(x) Mod 10))
             If mHidden.Exists(sTarget) Then
                 If InStr(1, sDone, "|" & sTarget & "|") = 0 Then
                     sDone = sDone & sTarget & "|"
-                    sSection = ExitSection(sTarget, bOK, sAll)
+                    sSection = ExitSection(sTarget, bOK, sLine, sAll)
                     If Not bOK Then nProblems = nProblems + 1
-                    sOut = sOut & IIf(sOut = "", "", String$(100, "-") & vbCrLf) & sSection
+                    sOut = sOut & IIf(sOut = "", "", String$(REMOTE_REPORT_WIDTH, "-") & vbCrLf) & sSection
+                    sSummary = sSummary & sLine & vbCrLf
                 End If
             ElseIf nType = 6 Or nType = 7 Or nType = 9 Or nType = 11 Or nType = 24 Then
+                nInfo = nInfo + 1
                 sNotes = sNotes & "   i  " & DirName(x) & ": works the " & DirName(Roomrec.Para2(x) Mod 10) & " " _
                     & LCase(ExitTypeName(nType)) & " of " & sRoomKey _
                     & IIf(nType = 7 Or nType = 11, " (toggles it)", IIf(nType = 6, " (opens it)", " (springs it)")) & vbCrLf
@@ -562,8 +589,17 @@ For x = 0 To 9 'its Remote Actions
     End If
 Next x
 If sNotes <> "" Then
-    sOut = sOut & IIf(sOut = "", "", String$(100, "-") & vbCrLf) & "Other remote actions of this room" & vbCrLf & sNotes
+    sOut = sOut & IIf(sOut = "", "", String$(REMOTE_REPORT_WIDTH, "-") & vbCrLf) & "Other remote actions of this room" & vbCrLf & sNotes
 End If
+If nInfo > 0 Then
+    sSummary = sSummary & "i  " & nInfo & " remote action" & IIf(nInfo = 1, "", "s") & " of this room " _
+        & IIf(nInfo = 1, "works a door, gate or trap", "work doors, gates or traps") & vbCrLf
+End If
+If nIdle > 0 Then
+    sSummary = sSummary & "o  " & nIdle & " remote action" & IIf(nIdle = 1, "", "s") & " of this room " _
+        & IIf(nIdle = 1, "works an exit that ignores it", "work exits that ignore them") & vbCrLf
+End If
+If Right$(sSummary, 2) = vbCrLf Then sSummary = Left$(sSummary, Len(sSummary) - 2)
 
 'the other rooms involved, each once
 For Each v In Split(sAll, "|")
@@ -576,7 +612,7 @@ Call HandleError("RemoteActionReport")
 RemoteActionReport = ""
 End Function
 
-'name of a room for the "open room" list
+'name of a room for the report window's room list
 Public Function RemoteActionRoomName(ByVal sRoom As String) As String
 If mBuilt Then RemoteActionRoomName = RoomName(sRoom)
 End Function
