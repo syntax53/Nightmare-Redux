@@ -13,6 +13,7 @@ Unreleased (in development)
 -FIX: MME export and Monster Attack Simulator: a monster with no energy or no damaging attacks no longer gets the previous monster's AvgDmgPhys/AvgDmgSpell (and "Physical/Spell" split in the simulator), so lairs holding such a monster no longer get inflated AvgDmgPhys/AvgDmgSpell in the Lairs table, and a plain attack no longer keeps an earlier monster's spell duration. (issue #29)
 -FIX: MME export: a monster's ScriptValue now uses each lair's script value for that lair's max regen, instead of the value left over from the previous lookup of the same lair group. (issue #29)
 -FIX: MME export no longer hangs on a textblock line where "class " is part of another word (e.g. "subclass 2:class 7"). (issue #29)
+-FIX: Monster Attack Simulator: the stock minimum hit chance for physical attacks is now 8% instead of 9%, matching MME.
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  
