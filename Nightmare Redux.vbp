@@ -55,6 +55,7 @@ Form=frmHelpTextblocks.frm
 Form=frmRecordChange.frm
 Module=modMMUDFunctions; modMMUDFunctions.bas
 Module=modMMEMessages; modMMEMessages.bas
+Module=modRemoteActionCheck; modRemoteActionCheck.bas
 Form=frmUserPaste.frm
 Form=frmMonsterNPC_List.frm
 Form=frmMonsterAttackSim.frm

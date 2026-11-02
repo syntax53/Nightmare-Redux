@@ -1937,6 +1937,7 @@ Public Function UpdateTextblock() As Integer
 TextblockStructToRow TextblockDataBuf.buf
 If bDisableWriting = True Then Exit Function
 UpdateTextblock = BTRCALL(bUpdate, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+If UpdateTextblock = 0 Then Call RemoteActionIndexReset
 End Function
 
 Public Function UpdateMonster() As Integer
@@ -1949,12 +1950,14 @@ Public Function UpdateMessage() As Integer
 MessageStructToRow Messagedatabuf.buf
 If bDisableWriting = True Then Exit Function
 UpdateMessage = BTRCALL(bUpdate, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+If UpdateMessage = 0 Then Call RemoteActionReindexMessage
 End Function
 
 Public Function UpdateRoom() As Integer
 RoomStructToRow Roomdatabuf.buf
 If bDisableWriting = True Then Exit Function
 UpdateRoom = BTRCALL(bUpdate, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+If UpdateRoom = 0 Then Call RemoteActionReindexRoom
 End Function
 
 Public Function UpdateUser() As Integer
@@ -1996,6 +1999,8 @@ End Function
 Public Sub StopBtrieve()
 On Error GoTo error:
 Dim nStatus As Integer
+
+Call RemoteActionIndexReset 'the files may be opened again from somewhere else
 
 Call BtrieveCloseRace
 Call BtrieveCloseClass

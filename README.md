@@ -15,6 +15,7 @@ Unreleased (in development)
 -FIX: MME export no longer hangs on a textblock line where "class " is part of another word (e.g. "subclass 2:class 7"). (issue #29)
 -FIX: MME export: a room whose Remote Actions work more than one exit of the same room (e.g. 12/2231 on the W and E exits of 12/2227) no longer lists one exit's action twice and leaves out the other's (e.g. "push onyx" twice, "push pearl" missing); each target exit's actions are listed once, in order. A Remote Action numbered above its hidden exit's #actions is listed as a plain "Action" instead of an empty "open" column. (issue #22)
 -UP: Room Editor: the Remote Action "#" help had the order backwards: with "order matters" the highest number is done first (31, 21, then 11 for an exit needing 3 actions). (issue #22)
+-NEW: Room Editor: a "Remote action check" frame shows, for every hidden exit the room is part of (its own, or one its Remote Actions work), every remote action aimed at it (room exits and textblock remoteactions), which of them open it now and in what order, and when that is wrong the values that make all of them count (e.g. 12/2231 "push ruby" # 3 opens 12/2227 W by itself; 63 makes all six gems count). It also lists the room's remote actions that do nothing, and the other rooms involved (double-click to open one). It only reports: nothing is changed. The dat files are read once, the first time a room is shown, and kept up to date as rooms, messages and textblocks are saved. (issue #22)
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  

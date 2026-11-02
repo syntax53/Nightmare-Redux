@@ -546,6 +546,7 @@ nDelete = MsgBox("Delete this record from database?", vbYesNo, "Delete Record?")
 If nDelete <> 6 Then Exit Sub
 
     nStatus = BTRCALL(BDELETE, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+    Call RemoteActionIndexReset
     If Not nStatus = 0 Then
         MsgBox "cmdDelete, BDELETE, Error: " & BtrieveErrorCode(nStatus)
     Else
@@ -570,6 +571,7 @@ If nNewMessageNumber = "" Then Exit Sub
     MessageStructToRow Messagedatabuf.buf
     
     nStatus = BTRCALL(BINSERT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+    Call RemoteActionIndexReset
     If Not nStatus = 0 Then
         MsgBox "cmdInsert, BINSERT, Error: " & BtrieveErrorCode(nStatus)
     Else

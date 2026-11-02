@@ -4433,6 +4433,7 @@ frmMain.Enabled = False
 For x = Val(txtStartRoom.Text) + 1 To Val(txtEndRoom.Text)
     If nStatus = 0 Then
         nStatus = BTRCALL(BDELETE, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+        Call RemoteActionIndexReset
     End If
     
     RoomKeyStruct.RoomNum = x

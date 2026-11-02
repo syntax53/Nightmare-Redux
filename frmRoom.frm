@@ -6061,6 +6061,7 @@ If nNewRoomNumber = "" Then Exit Sub
         MsgBox "cmdInsert, BINSERT, Error: " & BtrieveErrorCode(nStatus)
         Exit Sub
     Else
+        Call RemoteActionReindexRoom
         DispRoomInfo Roomdatabuf.buf
         If cmdNext.Enabled = False Then Call frmMapEditor.StartMapping
     End If
@@ -6149,6 +6150,7 @@ If nDelete = 6 Then
     If Not nStatus = 0 Then
         MsgBox "cmdDelete, BDELETE, Error: " & BtrieveErrorCode(nStatus)
     Else
+        Call RemoteActionIndexReset
         Form_Load
         If cmdNext.Enabled = False Then Call frmMapEditor.StartMapping
     End If
@@ -6420,6 +6422,7 @@ nStatus = BTRCALL(BINSERT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal Ro
 If Not nStatus = 0 Then
     MsgBox "cmdInsert, BINSERT, Error: " & BtrieveErrorCode(nStatus)
 Else
+    Call RemoteActionReindexRoom
     DispRoomInfo Roomdatabuf.buf
     If cmdNext.Enabled = False Then Call frmMapEditor.StartMapping
 End If
@@ -6720,6 +6723,8 @@ x = 27:  lblRoomUnknowns(x).Caption = "unknown71": txtRoomUnknowns(x).Text = Roo
 x = 28:  lblRoomUnknowns(x).Caption = "": txtRoomUnknowns(x).Text = ""
 x = 29:  lblRoomUnknowns(x).Caption = "": txtRoomUnknowns(x).Text = ""
 
+Call ShowRemoteCheck
+
 Exit Sub
 error:
 Call HandleError
@@ -6795,6 +6800,36 @@ Next
 Exit Sub
 error:
 Call HandleError
+End Sub
+
+Private Sub ShowRemoteCheck()
+Dim sText As String, nProblems As Long, nIdle As Long, sRooms As String, v As Variant
+On Error GoTo error:
+
+sText = RemoteActionReport(Roomrec.MapNumber, Roomrec.RoomNumber, nProblems, nIdle, sRooms)
+fraRemoteCheck.Visible = (sText <> "")
+If sText = "" Then Exit Sub
+
+fraRemoteCheck.Caption = "Remote action check: " _
+    & IIf(nProblems = 0, "all OK", nProblems & " problem" & IIf(nProblems = 1, "", "s")) _
+    & IIf(nIdle > 0, " - " & nIdle & " action" & IIf(nIdle = 1, "", "s") & " that do" & IIf(nIdle = 1, "es", "") & " nothing", "")
+txtRemoteCheck.Text = sText
+lstRemoteRooms.Clear
+For Each v In Split(sRooms, "|")
+    If v <> "" Then lstRemoteRooms.AddItem v & "  " & RemoteActionRoomName(v)
+Next v
+
+Exit Sub
+error:
+Call HandleError("ShowRemoteCheck")
+fraRemoteCheck.Visible = False
+End Sub
+
+Private Sub lstRemoteRooms_DblClick()
+Dim sRoom() As String
+If lstRemoteRooms.ListIndex < 0 Then Exit Sub
+sRoom = Split(Split(lstRemoteRooms.Text, " ")(0), "/")
+Call GotoRoom(Val(sRoom(0)), Val(sRoom(1))) 'saves the current room first, like the editor's other jumps
 End Sub
 
 Public Sub GotoRoom(ByVal nMap As Long, ByVal nRoom As Long, Optional ByVal NoFocus As Boolean)
