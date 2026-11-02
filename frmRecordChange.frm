@@ -2559,6 +2559,15 @@ recheck_room:
                 Next x
                 
             Case 8: 'Textblocks
+                If tabRooms.Fields("Command Text") > 0 Then
+                    For y = 0 To UBound(ChangeList(), 2)
+                        If tabRooms.Fields("Command Text") >= ChangeList(1, y) And tabRooms.Fields("Command Text") <= ChangeList(2, y) Then
+                            ts.WriteLine "Room " & tabRooms.Fields("Map Number") & "/" & tabRooms.Fields("Room Number") & " -- CommandText #" & tabRooms.Fields("Command Text") & " --> " & (ChangeList(3, y) + (tabRooms.Fields("Command Text") - ChangeList(1, y)))
+                            tabRooms.Fields("Command Text") = (ChangeList(3, y) + (tabRooms.Fields("Command Text") - ChangeList(1, y)))
+                            Exit For
+                        End If
+                    Next y
+                End If
             Case 0: 'Classes
                 For x = 0 To 9 'room exits
                     If Not tabRooms.Fields("Exit " & x) = 0 Then
