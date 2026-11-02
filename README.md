@@ -18,6 +18,7 @@ v1.8.4 (11/##/2026)
 -FIX: MME export no longer hangs on a textblock line with "class " inside another word e.g. "subclass" (issue #29, Thanks Fujin)  
 -FIX: MME export no longer mixes up the remote actions of a room that works more than one exit of the same room (issue #22, Thanks Fujin)  
 -FIX: Monster attack simulator now uses an 8% stock minimum hit chance instead of 9%, matching MME  
+-FIX: Map editor no longer creates a new room as map/room 0, and no longer suggests the current room as the existing room for up/down (issue #32, Thanks Fujin)  
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  
