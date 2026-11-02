@@ -67,19 +67,20 @@ MegaMud: see docs/MEGAMUD_MME_MESSAGES_HANDOFF.md for mapping these rows onto it
 One row per game line a client may need to recognise. Not a dump of the realm's message file:
 message numbers, caster-only lines of monster spells, room lines and room sounds are not exported, and lines that
 follow the standard formats listed further down are left out because clients already parse
-those, except a player spell's or casting item's own cast line, which is always exported.
+those, except the cast line of a spell players or items cast, which is always exported.
 
-Columns: ID (row id), Name, Kind, Msg, EndMsg, Effects. Bracket column names in SQL ([Name],
+Columns: ID (row id), Name, Kind, Msg, EndMsg, Effects, Spell (Long: the number of the spell the row
+belongs to, 0 when none; see Name). Bracket column names in SQL ([Name],
 [Msg]): Name is a Jet reserved word, as in the other MME tables. Empty string columns are written
 as a single Chr(0) character (same as the other MME tables).
 
 Kind (who the line is about, from the player's seat):
   Cast   confirmation that MY spell or item worked, with the amount when there is one: "You fire a
          magic missile at {target} for {dmg} damage!", "A cool wind blows throughout the room!",
-         "You cast agony on {target} for {dmg} damage!". Every player spell and casting item has its
+         "You cast agony on {target} for {dmg} damage!". Every spell players or items cast has its
          cast line here, standard form or not. When that line is a standard form (or empty), the
          start line is exported as well ("You lay hands on {target}."). Both are printed only once
-         the spell has landed. Name = the spell, or the item that casts it.
+         the spell has landed. Name and Spell = the spell, also when an item casts it.
   Self   something happened TO ME. With an EndMsg it is a tracked effect: Msg is printed when the
          effect starts (and by STAT), EndMsg when it wears off. Without an EndMsg it is a one-off
          line: incoming damage in a non-standard wording, a failed action (Effects contains Fail),
@@ -89,7 +90,8 @@ Kind (who the line is about, from the player's seat):
          in the desert heat... you need water, soon!"; Effects = the spell's, plus Trap for spell
          traps), or an incoming spell line whose status message lacks a status or a wear-off text
          (when it has both, the status row already shows the effect starting and ending). Name =
-         the spell or item for effect and shield rows; the text for lines a client matches by text
+         the spell (and Spell its number) for effect and shield rows of friendly player or item
+         spells, the item for item damage-shield rows; the text for lines a client matches by text
          alone.
   Other  something happened to someone else that a client may track: a monster hitting another
          player in a non-standard wording (Damage,Monster), or a monster's death text (Death,
@@ -99,12 +101,15 @@ Kind (who the line is about, from the player's seat):
          "A moss zombie rises from the ground!" (CheckRoom: look at the room again). The Chase and
          CheckRoom rows are the same in every export.
 
-Name: Cast rows carry the spell's name, or the item's name when an item casts the spell (both when
-players can also cast it and the names differ). Self rows carry a source name only when the player
-can be the one affected by their own spell or item (self, friendly or party target types). Every
-player-castable spell and every casting item gets its own row under its own name, even when several
-of them print the same line ("You feel lucky!" is exported once as bless, once as chant, once per
-item that casts bless), so a client finds its spell or item by Name. A spell counts as
+Name: Cast rows carry the spell's name, and Spell its number, also when an item casts the spell: items
+get no rows of their own. An item's lines are the rows whose Spell is in its UseSpells / HitSpells (see
+Items below), plus the rows of the spells those chain to through EndCast (Spells ability 151, followed
+transitively). Self rows carry the spell's name and number only when the player can be the one affected
+by their own spell or item (self, friendly or party target types). Every spell players or items cast gets
+its own rows under its own number, even when several spells print the same line ("You feel lucky!" is
+exported once as bless and once as chant; items that cast bless list it in UseSpells). Join on Spell,
+not on Name: spells can share a name. Item damage-shield rows (Spell 0) carry the item's name. A spell
+counts as
 player-castable when the export's cross-referencing marks it Learnable; an "Export Only" run
 without that data falls back to "has a magery type". Every
 other row (status and damage lines of enemy-targeted or monster-only spells, monster hits, traps,
@@ -112,9 +117,9 @@ death texts shared by differently named monsters) is realm-wide and is named aft
 "The {source} " or "{source} ", a trailing " for {dmg} damage!", " {dmg} damage!" or " {dmg} hit
 points!" and any "{target} " or "{target}'s " are dropped (so "The {source} claws you with its
 pincers for {dmg} damage!" is named "claws you with its pincers"; "{source}'s " and "The {source}'s "
-are dropped the same way). Name is never empty. Rows are unique by kind, Name, Msg and EndMsg: a line printed by
-several sources under the same name (or by several nameless sources) is exported once with the
-union of their Effects. A Self line that is the "you" form of a Cast or Other line
+are dropped the same way). Name is never empty. Rows are unique by kind, Spell (Name for rows without a
+spell), Msg and EndMsg: a line printed by several sources of the same spell or name (or by several
+nameless sources) is exported once with the union of their Effects. A Self line that is the "you" form of a Cast or Other line
 ("{target}" read as "you", "{target}'s" as "your") is not exported separately: clients must accept
 "you"/"your" wherever {target} appears and treat the line as being about themselves when it does.
 Death texts are exported only for monsters that regenerate or are game-limited and award more
@@ -148,8 +153,8 @@ value truncated to its column size.
 
 -= Standard formats clients must implement themselves =-
 These are the engine's fixed wordings and the shapes that every custom message follows. A client
-needs them hard-coded; the Messages table only carries what deviates from them, plus each player
-spell's and casting item's own cast line (a Cast row under its name, whatever its form).
+needs them hard-coded; the Messages table only carries what deviates from them, plus the cast line
+of every spell players or items cast (a Cast row under the spell's name and number, whatever its form).
 <X> = any text, <N> = a number, <verb> = a single word.
 
 Damage to me / to others (line colour: bold red, bold blue or cyan for monster attacks):
@@ -207,6 +212,19 @@ Status and state:
 HitVerbs / HitVerbsOther / MissVerbs (items with ItemType 1 = Weapon only, every weapon class including
 1H Blunt; empty on every other item): "|"-separated verb alternatives used in
 "You <HitVerbs> X for N damage!", "<player> <HitVerbsOther> X for N damage!" and misses.
+UseSpells / HitSpells (every item type): the spells the item casts when used ("|"-separated spell numbers) and on hit
+("|"-separated "<spell>:<chance %>" pairs), decoded from the Abil-n columns: a CastsSp (43) is cast on use unless a
+%Spell (114) comes before it, which makes it the on-hit spell with that chance. Slot order, no repeats; empty when none.
+UseCode: "#" + up to 4 lowercase letters, only on items with a use spell (none on items that only cast on hit). Made from
+the name: one word = its first 4 letters; several words = their initials, the last initial replaced by the whole last
+word when there are fewer than 4 ("jade amulet" = #jamu); possessive 's dropped; a, an, the, of skipped. Items with
+the same name share a code; for a differently named item that wants a taken code NMR tries the first 2 or 3 letters
+of the first word plus the other initials and the last word ("black potion" = #blpo next to "blue potion" = #bpot),
+then any 4 letters of the name in order, digits last. Lower item numbers keep the natural code. Updating an export
+keeps every code it already holds for its item name. A command hint, not a key: key items by Number. Clients that
+treat item uses like spells: one entry per item with a UseCode (name = Name, stats from the UseSpells rows); its
+confirming lines are the Messages Cast rows whose Spell is one of its UseSpells or reached from them through EndCast,
+and its on-hit lines come from HitSpells the same way.
 
 -= Titles (added NMR 1.8.4) =-
 One row per class, so a client can tell a player's level range from their title. Columns: Class (the class

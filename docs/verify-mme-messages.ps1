@@ -1,4 +1,5 @@
-# Verifies an MME export that contains the Messages table (Revision 2 schema) and the Titles and Abilities tables (NMR 1.8.4).
+# Verifies an MME export that contains the Messages table (Revision 2 schema, with the Spell column), the Titles and
+# Abilities tables and the Items use / weapon-verb columns (NMR 1.8.4).
 # Must run under 32-bit PowerShell (Jet 4.0 is 32-bit only):
 #   C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs\verify-mme-messages.ps1 -New "C:\path\new-export.mdb" [-Old "C:\path\previous-version-export.mdb"]
 # Jet SQL through ADO uses % and _ as LIKE wildcards; reserved names ([Name], [Msg]) are bracketed.
@@ -57,7 +58,9 @@ if ($Old -ne "" -and (Test-Path $Old)) {
     }
     $extra = $newCols | Where-Object { $oldCols -notcontains $_ }
     if ($t -eq "Items") {
-      if (($extra -join ",") -eq "HitVerbs,HitVerbsOther,MissVerbs" -or $extra.Count -eq 0) { Pass "Items columns: only the verb columns are new" } else { Fail "Items extra columns: '$($extra -join ',')'" }
+      # against a 1.8.3 export all six are new; against an earlier 1.8.4 export only the use columns
+      $okExtra = @("HitVerbs,HitVerbsOther,MissVerbs,UseCode,UseSpells,HitSpells", "UseCode,UseSpells,HitSpells", "")
+      if ($okExtra -contains ($extra -join ",")) { Pass "Items columns: only the verb / use columns are new" } else { Fail "Items extra columns: '$($extra -join ',')'" }
     } elseif ($extra.Count -gt 0) { Fail "$t has unexpected extra columns: $($extra -join ',')" }
   }
   foreach ($k in $iOld.Keys) { if (-not $iNew.ContainsKey($k) -and $k -notlike "Messages.*" -and $k -notlike "Titles.*" -and $k -notlike "Abilities.*") { Fail "index missing: $k" } }
@@ -70,7 +73,7 @@ if ($Old -ne "" -and (Test-Path $Old)) {
 
 # ---- 2. Messages table shape
 if (-not $sNew.ContainsKey("Messages")) { Fail "Messages table missing"; $cnNew.Close(); exit 1 }
-$want = "ID,Name,Kind,Msg,EndMsg,Effects"
+$want = "ID,Name,Kind,Msg,EndMsg,Effects,Spell"
 $have = (@($sNew["Messages"].Keys) -join ",")
 if ($have -eq $want) { Pass "Messages columns = $want" } else { Fail "Messages columns = $have" }
 if ($iNew.ContainsKey("Messages.pkMessages")) { Pass "pkMessages exists" } else { Fail "pkMessages missing" }
@@ -100,10 +103,12 @@ $bad = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%' +
 if ($bad -eq 0) { Pass "no ANSI escape codes" } else { Fail "$bad rows contain ANSI escape codes" }
 $q = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg] LIKE '%{?}%' OR [EndMsg] LIKE '%{?}%'"
 Write-Output "INFO  rows with unresolved {?} placeholder: $q (should match the warning log)"
-$allRows = Q $cnNew "SELECT Kind,[Name],[Msg],[EndMsg],Effects FROM Messages"
+$hasSpell = @($sNew["Messages"].Keys) -contains "Spell"
+$allRows = Q $cnNew ("SELECT Kind,[Name],[Msg],[EndMsg],Effects" + $(if ($hasSpell) { ",Spell" } else { "" }) + " FROM Messages")
 $seen = @{}; $dup = 0; $sameText = 0; $seenText = @{}; $youForms = New-Object System.Collections.Hashtable; $twins = 0; $noName = 0
 foreach ($r in $allRows) {
-  $k = $r.Kind + "|" + $r.Name + "|" + $r.Msg + "|" + $r.EndMsg
+  # two spells that share a name keep their own rows, so the spell number is part of a row's identity
+  $k = $r.Kind + "|" + $r.Spell + "|" + $r.Name + "|" + $r.Msg + "|" + $r.EndMsg
   if ($seen.ContainsKey($k)) { $dup++ } else { $seen[$k] = 1 }
   if ($r.Kind -ne "Cast") { $t = $r.Kind + "|" + $r.Msg + "|" + $r.EndMsg; if ($seenText.ContainsKey($t)) { $sameText++ } else { $seenText[$t] = 1 } }
   if ($r.Kind -ne "Self" -and $r.EndMsg -eq "" -and $r.Msg.Contains("{target}")) { $youForms[$r.Msg.Replace("{target}'s","your").Replace("{target}","you")] = 1 }
@@ -111,7 +116,7 @@ foreach ($r in $allRows) {
 }
 foreach ($r in $allRows) { if ($r.Kind -eq "Self" -and $r.EndMsg -eq "" -and $youForms.ContainsKey($r.Msg)) { $twins++ } }
 if ($dup -eq 0) { Pass "no duplicate rows" } else { Fail "$dup duplicate rows" }
-Write-Output "INFO  Self/Other rows whose text another row (a differently named spell or item) also has: $sameText"
+Write-Output "INFO  Self/Other rows whose text another row (another spell, or an item shield) also has: $sameText"
 if ($twins -eq 0) { Pass "no Self row is the you-form of a Cast/Other row" } else { Fail "$twins Self rows duplicate a {target} row with you/your" }
 if ($noName -eq 0) { Pass "every row has a Name (the cleaned Msg text when no source name applies)" } else { Fail "$noName rows have an empty Name" }
 $lists = @($allRows | Where-Object { $_.Name.Contains("|") }).Count
@@ -145,7 +150,7 @@ $rx = @(
   '{target} for {dmg} damage'
 )
 $leak = 0
-# Cast rows are exempt: every player spell and casting item keeps its cast line, standard form or not
+# Cast rows are exempt: every player or item spell keeps its cast line, standard form or not
 foreach ($r in $rows) { if ($r.Kind -eq "Cast") { continue }; foreach ($p in $rx) { if ($r.Text -cmatch $p) { $leak++; if ($leak -le 8) { Write-Output ("      standard-form row exported: [{0}] {1}" -f $r.Kind, $r.Text) }; break } } }
 if ($leak -eq 0) { Pass "no standard-form lines exported" } else { Fail "$leak standard-form lines exported" }
 $plain = 0
@@ -172,12 +177,19 @@ $fumbles = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You f
 if ($fumbles -eq 1) { Pass "fumble appears only once" } else { Fail "fumble appears $fumbles times" }
 $flat = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are flat on your back!'"
 if ($flat -eq 1) { Pass "knockdown status appears once (effects merged)" } else { Fail "knockdown status appears $flat times" }
-# gaze of luck: one row per casting item/spell name (duplicates are covered by the duplicate-row check)
+# gaze of luck: one row per spell (duplicates are covered by the duplicate-row check)
 ExpectNone "lightning hit line is standard (contains 'you for {dmg} damage')" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='Lightning strikes you for {dmg} damage!'"
 Expect "stunned merged Fail (Name = Msg)" "SELECT * FROM Messages WHERE Kind='Self' AND [Msg]='You are stunned!'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Fail" -and $r.Effects -match "Confused" }
 $stun = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are stunned!'"
 if ($stun -le 2) { Pass "stunned text appears at most twice (one with an EndMsg, one without)" } else { Fail "stunned text appears $stun times" }
-ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='dark force' AND Kind='Cast'"
+# dark force is monster-only on stock; a realm whose weapons cast a dark force spell on hit (Paradigm) has Cast rows
+# for those spells only
+if ($hasSpell) {
+  $itemSpells = @{}
+  foreach ($it in @(Q $cnNew "SELECT UseSpells, HitSpells FROM Items")) { foreach ($x in @(([string]$it.UseSpells).Split("|") + ([string]$it.HitSpells).Split("|"))) { if ($x) { $itemSpells[$x.Split(":")[0]] = $true } } }
+  $df = @(Q $cnNew "SELECT Spell FROM Messages WHERE [Name]='dark force' AND Kind='Cast'" | Where-Object { -not $itemSpells.ContainsKey([string]$_.Spell) }).Count
+  if ($df -eq 0) { Pass "dark force has no Cast row unless an item casts it" } else { Fail "dark force has $df Cast rows of spells no item casts" }
+} else { ExpectNone "dark force has no Cast row (monster-only)" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Name]='dark force' AND Kind='Cast'" }
 ExpectNone "dark force standard incoming line absent" "SELECT COUNT(*) AS Cnt FROM Messages WHERE [Msg]='You are struck by a dark force for {dmg} damage!'"
 Expect "hold person Held (Name = Msg)" "SELECT * FROM Messages WHERE [Msg]='Your legs are paralyzed!' AND Kind='Self'" { param($r) ($r.Name -eq $r.Msg -or $r.Msg.EndsWith($r.Name + " for {dmg} damage!") -or $r.Msg.EndsWith($r.Name + " {dmg} damage!")) -and $r.Effects -match "Held" }
 Expect "a death text row exists (Other, Death)" "SELECT TOP 1 * FROM Messages WHERE Kind='Other' AND Effects='Death'" { param($r) $r.Msg -ne "" }
@@ -205,6 +217,108 @@ ExpectNone "no swing verbs on non-weapons" "SELECT COUNT(*) AS Cnt FROM Items WH
 $blunt = Count $cnNew "SELECT COUNT(*) AS Cnt FROM Items WHERE ItemType=1 AND WeaponType=0 AND Len(HitVerbs)>1"
 if ($blunt -gt 0) { Pass "1H blunt weapons carry swing verbs ($blunt)" } else { Fail "no 1H blunt weapon (ItemType 1, WeaponType 0) has swing verbs" }
 Expect "longsword verbs"         "SELECT [Name], HitVerbs AS Msg, HitVerbsOther AS EndMsg, MissVerbs AS Effects FROM Items WHERE [Name]='longsword'" { param($r) $r.Msg -eq "slash|impale|hack" -and $r.EndMsg -eq "slashes|impales|hacks" -and $r.Effects -eq "swing at" }
+
+# ---- 4b. Items: spells cast when used / on hit, UseCode, and the Messages Spell column that ties them to their lines
+$itemCols = @($sNew["Items"].Keys)
+if (-not (($itemCols -contains "UseCode") -and ($itemCols -contains "UseSpells") -and ($itemCols -contains "HitSpells"))) { Fail "Items lacks UseCode / UseSpells / HitSpells" } else {
+  Pass "Items has UseCode, UseSpells, HitSpells"
+  $badDecode = 0; $badCode = 0; $usable = 0; $hitters = 0; $ex = @()
+  $codeByName = @{}; $nameByCode = @{}; $useByName = @{}
+  foreach ($it in @(Q $cnNew "SELECT * FROM Items")) {
+    # the same rule as NMR: CastsSp (43) is cast on use unless a %Spell (114) comes before it (then on hit, at that chance)
+    $use = @(); $hit = @(); $pending = $false; $chance = 0
+    for ($i=0; $i -lt 20; $i++) {
+      $a = [int]$it["Abil-$i"]; $b = [int]$it["AbilVal-$i"]
+      if ($a -eq 114) { $pending = $true; $chance = $b }
+      elseif ($a -eq 43) {
+        if ($pending) { $pending = $false; if ($b -gt 0) { $e = "$($b):$chance"; if ($hit -notcontains $e) { $hit += $e } } }
+        elseif ($b -gt 0) { if ($use -notcontains "$b") { $use += "$b" } }
+      }
+    }
+    $wantUse = $use -join "|"; $wantHit = $hit -join "|"
+    if ($wantUse.Length -gt 120) { $wantUse = $wantUse.Substring(0,120) }
+    if ($wantHit.Length -gt 120) { $wantHit = $wantHit.Substring(0,120) }
+    if ($it["UseSpells"] -ne $wantUse -or $it["HitSpells"] -ne $wantHit) {
+      $badDecode++; if ($ex.Count -lt 8) { $ex += ("{0}: UseSpells '{1}' (want '{2}'), HitSpells '{3}' (want '{4}')" -f $it["Name"], $it["UseSpells"], $wantUse, $it["HitSpells"], $wantHit) }
+    }
+    $lname = ([string]$it["Name"]).ToLower(); $code = [string]$it["UseCode"]
+    if ($wantUse -ne "") {
+      # items with the same name share a code; the INFO count below looks at all of their use spells
+      $usable++; if ($useByName.ContainsKey($lname)) { $useByName[$lname] = @($useByName[$lname]) + $use } else { $useByName[$lname] = $use }
+      if ($code -cnotmatch '^#[a-z0-9]{1,4}$') { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: bad UseCode '{1}'" -f $it["Name"], $code) } }
+      elseif ($codeByName.ContainsKey($lname) -and $codeByName[$lname] -ne $code) { $badCode++; if ($ex.Count -lt 8) { $ex += ("'{0}': one name, two codes ({1}, {2})" -f $it["Name"], $codeByName[$lname], $code) } }
+      elseif ($nameByCode.ContainsKey($code) -and $nameByCode[$code] -ne $lname) { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: used by '{1}' and '{2}'" -f $code, $nameByCode[$code], $lname) } }
+      else { $codeByName[$lname] = $code; $nameByCode[$code] = $lname }
+    } elseif ($code -ne "") { $badCode++; if ($ex.Count -lt 8) { $ex += ("{0}: UseCode '{1}' without a use spell" -f $it["Name"], $code) } }
+    if ($wantHit -ne "") { $hitters++ }
+  }
+  foreach ($x in $ex) { Write-Output ("      " + $x) }
+  if ($badDecode -eq 0) { Pass "UseSpells / HitSpells match the Abil-n columns ($usable usable items, $hitters with on-hit spells)" } else { Fail "$badDecode items' UseSpells / HitSpells do not match their Abil-n columns" }
+  if ($badCode -eq 0) { Pass "UseCode: '#' + up to 4 letters on usable items only, one per name ($($nameByCode.Count) codes)" } else { Fail "$badCode UseCode problems" }
+  $digits = @($nameByCode.Keys | Where-Object { $_ -match '[0-9]' }).Count
+  Write-Output ("INFO  UseCodes that needed a digit: " + $digits)
+  Expect "jade amulet is usable (code #ja.., use spell)" "SELECT [Name], UseCode AS Msg, UseSpells AS EndMsg, HitSpells AS Effects FROM Items WHERE [Name]='jade amulet'" { param($r) $r.Msg -like "#ja*" -and $r.EndMsg -ne "" }
+}
+if (-not $hasSpell) { Fail "Messages lacks Spell" } else {
+  # rows of one spell carry its number: every Cast row, and the named Self rows of a friendly player or item spell.
+  # A spell's rows are named after it (text-named when its name is blank), never after an item that casts it.
+  $spellName = @{}; $endCast = @{}
+  foreach ($sp in @(Q $cnNew "SELECT * FROM Spells")) {
+    $num = [string]$sp["Number"]; $spellName[$num] = [string]$sp["Name"]; $next = @()
+    for ($i=0; $i -lt 10; $i++) { if ([int]$sp["Abil-$i"] -eq 151 -and [int]$sp["AbilVal-$i"] -gt 0) { $next += [string]$sp["AbilVal-$i"] } }
+    $endCast[$num] = $next
+  }
+  $badSpell = 0; $markers = 0; $castSpells = @{}
+  foreach ($r in $allRows) {
+    $num = [string]$r.Spell; $why = ""
+    if (@(([string]$r.Effects).Split(",") | Where-Object { $_ -eq "Use" -or $_ -eq "OnHit" }).Count -gt 0) { $markers++ }
+    if ($r.Spell -eq 0) { if ($r.Kind -eq "Cast") { $why = "Cast row without a spell" } }
+    elseif (-not $spellName.ContainsKey($num)) { $why = "spell $num is not in Spells" }
+    elseif ($r.Kind -eq "Other") { $why = "Other row with a spell" }
+    elseif ($spellName[$num] -eq "") { if ($r.Kind -ne "Cast") { $why = "Self row of blank-named spell $num" } }
+    elseif ($r.Name -ne $spellName[$num]) { $why = "named '$($r.Name)', spell $num is '$($spellName[$num])'" }
+    if ($why -ne "") { $badSpell++; if ($badSpell -le 8) { Write-Output ("      [{0}] {1}: {2}" -f $r.Kind, $r.Msg, $why) } }
+    if ($r.Kind -eq "Cast" -and $r.Spell -gt 0) { $castSpells[$num] = $true }
+  }
+  if ($badSpell -eq 0) { Pass "Spell: on every Cast row, never on Other rows, and a row with a spell is named after it (not after an item)" } else { Fail "$badSpell rows with a wrong or missing Spell" }
+  if ($markers -eq 0) { Pass "no Use / OnHit markers (Items.UseSpells / HitSpells and Spell replace them)" } else { Fail "$markers rows still carry Use / OnHit" }
+  # only spells players can learn (Learnable, or taught by an item: ability 42) or items cast (directly, or through
+  # EndCast from an item spell) have rows with their number; without Learnable flags (an "Export Only" run) NMR falls
+  # back to the magery type, so the check is skipped
+  $learnable = @{}; foreach ($sp in @(Q $cnNew "SELECT [Number] FROM Spells WHERE Learnable<>0")) { $learnable[[string]$sp.Number] = $true }
+  if ($learnable.Count -gt 0) {
+    $itemCast = @{}; $todo = @()
+    foreach ($it in @(Q $cnNew "SELECT * FROM Items")) {
+      foreach ($x in @(([string]$it.UseSpells).Split("|") + ([string]$it.HitSpells).Split("|"))) { if ($x) { $todo += $x.Split(":")[0] } }
+      for ($i=0; $i -lt 20; $i++) { if ([int]$it["Abil-$i"] -eq 42 -and [int]$it["AbilVal-$i"] -gt 0) { $learnable[[string]$it["AbilVal-$i"]] = $true } }
+    }
+    $depth = 0
+    while ($todo.Count -gt 0 -and $depth -le 10) {
+      $nxt = @(); foreach ($x in $todo) { if (-not $itemCast.ContainsKey($x)) { $itemCast[$x] = $true; if ($endCast.ContainsKey($x)) { $nxt += $endCast[$x] } } }
+      $todo = $nxt; $depth++
+    }
+    $stray = @($allRows | Where-Object { $_.Spell -gt 0 -and -not $learnable.ContainsKey([string]$_.Spell) -and -not $itemCast.ContainsKey([string]$_.Spell) })
+    foreach ($r in ($stray | Select-Object -First 5)) { Write-Output ("      [{0}] spell {1} '{2}' is neither learnable nor item-cast: {3}" -f $r.Kind, $r.Spell, $r.Name, $r.Msg) }
+    if ($stray.Count -eq 0) { Pass "rows with a Spell belong to learnable or item-cast spells only ($($itemCast.Count) item-cast spells, chains included)" } else { Fail "$($stray.Count) rows carry a spell no player learns and no item casts" }
+  } else { Write-Output "SKIP  no spell is marked Learnable; the learnable / item-cast check needs the cross-reference data" }
+  # what a client does: an item's use lines are the rows whose Spell is in UseSpells, or reached from one through
+  # EndCast (spell ability 151), transitively; NMR follows at most 10 links
+  $noCast = 0
+  foreach ($ln in $useByName.Keys) {
+    $reach = @{}; $todo = @($useByName[$ln]); $depth = 0
+    while ($todo.Count -gt 0 -and $depth -le 10) {
+      $nxt = @(); foreach ($x in $todo) { if (-not $reach.ContainsKey($x)) { $reach[$x] = $true; if ($endCast.ContainsKey($x)) { $nxt += $endCast[$x] } } }
+      $todo = $nxt; $depth++
+    }
+    if (@($reach.Keys | Where-Object { $castSpells.ContainsKey($_) }).Count -eq 0) { $noCast++ }
+  }
+  Write-Output ("INFO  usable item names none of whose use spells (or their EndCast chains) has a Cast row (no cast line): " + $noCast + " of " + $useByName.Count)
+  $jade = @(Q $cnNew "SELECT UseSpells FROM Items WHERE [Name]='jade amulet'")
+  $js = ""; if ($jade.Count -gt 0) { $js = ([string]$jade[0].UseSpells).Split("|")[0] }
+  if ($js -match '^\d+$') { Expect "jade amulet's use spell ($js) has its Cast row" "SELECT * FROM Messages WHERE Kind='Cast' AND Spell=$js" { param($r) $r.Msg -ne "" } } else { Fail "jade amulet has no use spell" }
+  Expect "food line is a Cast row of the food spell (stock spell 316), not one per food item" "SELECT * FROM Messages WHERE Kind='Cast' AND [Msg]='You feel a little better.' AND [Name]='food'" { param($r) $r.Spell -eq 316 }
+  Write-Output ("INFO  Cast rows with 'You feel a little better.' (one per spell that prints it): " + (Count $cnNew "SELECT COUNT(*) AS Cnt FROM Messages WHERE Kind='Cast' AND [Msg]='You feel a little better.'"))
+}
 
 # ---- 5. Titles table (one row per class: "<first>-<last>:<title>" runs from level 1, in level order)
 if (-not $sNew.ContainsKey("Titles")) { Fail "Titles table missing" } else {

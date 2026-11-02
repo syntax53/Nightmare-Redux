@@ -685,6 +685,8 @@ Dim sDefaultExcludeNote() As String
 Dim dictLairInfo As New Dictionary
 Dim dictTBCastSpells As Dictionary 'spells textblocks cast (not teach), for the Messages pass; "Casted By" can be truncated
 Dim dictRefItems As Dictionary 'items a textblock or room exit references, for AddReferencedInvisItems
+Dim dictUseCodeOwner As Dictionary 'UseCode -> lower-case name of the item(s) it belongs to, for ExportItems
+Dim dictUseCodeByName As Dictionary 'lower-case item name -> its UseCode, for ExportItems
 Private Type LairInfoType
     sGroupIndex As String
     sMobList As String
@@ -1555,7 +1557,7 @@ Call OpenTables
 
 If bUpdateExistingADB Then
     If HasCurrentSchema = False Then
-        MsgBox "This export was made by an older version of NMR and has no Messages, Titles or Abilities table." & vbCrLf _
+        MsgBox "This export was made by an older version of NMR and lacks the Messages, Titles or Abilities table or the newest columns (item uses, message spells)." & vbCrLf _
             & "Create a new export instead of updating this one.", vbExclamation
         Call CloseDB(True)
         GoTo ReEnable:
@@ -2128,6 +2130,9 @@ If chkOnly(0).Value = 1 Then
         tabItems.Fields("HitVerbs") = Chr(0)
         tabItems.Fields("HitVerbsOther") = Chr(0)
         tabItems.Fields("MissVerbs") = Chr(0)
+        tabItems.Fields("UseCode") = Chr(0)
+        tabItems.Fields("UseSpells") = Chr(0)
+        tabItems.Fields("HitSpells") = Chr(0)
         
         For x = 0 To 9
             tabItems.Fields("ClassRest-" & x) = 0
@@ -5475,7 +5480,7 @@ End Function
 
 Private Sub ExportItems()
 Dim nStatus As Integer, recnum As Long
-Dim x As Long
+Dim x As Long, sUse As String, sHit As String
 
 recnum = 1
 nStatus = BTRCALL(BGETFIRST, ItemPosBlock, Itemdatabuf, Len(Itemdatabuf), ByVal ItemKeyBuffer, KEY_BUF_LEN, 0)
@@ -5483,6 +5488,8 @@ If Not nStatus = 0 Then
     MsgBox "Items: Could not get first record, Error: " & BtrieveErrorCode(nStatus)
     Exit Sub
 End If
+
+Call PrepareUseCodes
 
 lblPanel(0).Caption = "w" & strDatCallLetters & "item2.dat"
 lblPanel(1).Caption = recnum
@@ -5552,6 +5559,20 @@ Do While nStatus = 0 And bStopExport = False
         tabItems.Fields("HitVerbsOther") = Chr(0)
         tabItems.Fields("MissVerbs") = Chr(0)
     End If
+    'spells cast when used / on hit (decoded from the ability slots); only usable items get a command code
+    Call ItemSpellLists(sUse, sHit)
+    If sUse = "" Then
+        tabItems.Fields("UseCode") = Chr(0)
+        tabItems.Fields("UseSpells") = Chr(0)
+    Else
+        tabItems.Fields("UseCode") = ItemUseCode(ClipNull(Itemrec.Name))
+        tabItems.Fields("UseSpells") = Left(sUse, 120)
+    End If
+    If sHit = "" Then
+        tabItems.Fields("HitSpells") = Chr(0)
+    Else
+        tabItems.Fields("HitSpells") = Left(sHit, 120)
+    End If
     
     For x = 0 To 9
         tabItems.Fields("ClassRest-" & x) = Itemrec.Class(x)
@@ -5578,8 +5599,204 @@ Do While nStatus = 0 And bStopExport = False
     
 Loop
 
+Set dictUseCodeOwner = Nothing
+Set dictUseCodeByName = Nothing
 
 End Sub
+
+'UseCode bookkeeping for ExportItems. Updating an export keeps the codes it already holds, each for its item name:
+'they are reserved before any new code is made, so a new item cannot take an existing item's code.
+Private Sub PrepareUseCodes()
+Dim sCode As String, sLName As String
+On Error GoTo error:
+
+Set dictUseCodeOwner = New Dictionary
+dictUseCodeOwner.CompareMode = vbBinaryCompare
+Set dictUseCodeByName = New Dictionary
+dictUseCodeByName.CompareMode = vbBinaryCompare
+
+If bUpdateExistingADB = False Then Exit Sub
+If tabItems.RecordCount = 0 Then Exit Sub
+
+tabItems.MoveFirst
+Do While Not tabItems.EOF
+    sCode = LCase(Trim(Replace(tabItems.Fields("UseCode") & "", Chr(0), "")))
+    If Len(sCode) >= 2 And Len(sCode) <= 5 And Left(sCode, 1) = "#" Then
+        sLName = LCase(Trim(Replace(tabItems.Fields("Name") & "", Chr(0), "")))
+        If Not sLName = "" And Not dictUseCodeOwner.Exists(sCode) And Not dictUseCodeByName.Exists(sLName) Then
+            dictUseCodeOwner.add sCode, sLName
+            dictUseCodeByName.add sLName, sCode
+        End If
+    End If
+    tabItems.MoveNext
+Loop
+
+Exit Sub
+error:
+Call HandleError("PrepareUseCodes")
+End Sub
+
+'The UseCode of an item with a use spell: "#" + up to 4 letters made from its name. Items with the same name
+'(case-insensitive) share one code; items come in number order, so the lower-numbered item keeps the natural code.
+Private Function ItemUseCode(ByVal sName As String) As String
+Dim sLName As String, sCode As String
+On Error GoTo error:
+
+sLName = LCase(Trim(sName))
+If dictUseCodeByName.Exists(sLName) Then
+    ItemUseCode = dictUseCodeByName.Item(sLName)
+    Exit Function
+End If
+
+sCode = "#" & NewUseCode(sName, sLName)
+dictUseCodeByName.add sLName, sCode
+If Not dictUseCodeOwner.Exists(sCode) Then dictUseCodeOwner.add sCode, sLName
+ItemUseCode = sCode
+
+Exit Function
+error:
+Call HandleError("ItemUseCode")
+ItemUseCode = Chr(0)
+End Function
+
+'A free code (without the "#") for an item name. First choice: one word = its first 4 letters; several words = the
+'initials, with the last initial replaced by the whole last word when there are fewer than 4, cut to 4. Taken by a
+'differently named item: the first 2, then 3 letters of the first word + the other initials + the last word, cut
+'to 4; then any 4 letters of the name in order starting with its first letter; digits only when all are taken.
+Private Function NewUseCode(ByVal sName As String, ByVal sLName As String) As String
+Dim sWords() As String, nWords As Long, sIni As String, sMid As String, sFirst As String, sCode As String
+Dim sAll As String, nLen As Long, i As Long, j As Long, k As Long, n As Long, x As Long
+On Error GoTo error:
+
+nWords = UseCodeWords(sName, sWords)
+If nWords = 0 Then
+    sFirst = "item"
+ElseIf nWords = 1 Then
+    sFirst = Left(sWords(0), 4)
+Else
+    For x = 0 To nWords - 1
+        sIni = sIni & Left(sWords(x), 1)
+    Next x
+    If Len(sIni) >= 4 Then
+        sFirst = Left(sIni, 4)
+    Else
+        sFirst = Left(Left(sIni, Len(sIni) - 1) & sWords(nWords - 1), 4)
+    End If
+End If
+If UseCodeFree(sFirst, sLName) Then
+    NewUseCode = sFirst
+    Exit Function
+End If
+
+If nWords > 1 Then
+    sMid = Mid(sIni, 2, Len(sIni) - 2)
+    For k = 2 To 3
+        sCode = Left(Left(sWords(0), k) & sMid & sWords(nWords - 1), 4)
+        If UseCodeFree(sCode, sLName) Then
+            NewUseCode = sCode
+            Exit Function
+        End If
+    Next k
+End If
+
+For x = 0 To nWords - 1
+    sAll = sAll & sWords(x)
+Next x
+nLen = Len(sAll)
+For i = 2 To nLen
+    For j = i + 1 To nLen
+        For k = j + 1 To nLen
+            sCode = Left(sAll, 1) & Mid(sAll, i, 1) & Mid(sAll, j, 1) & Mid(sAll, k, 1)
+            If UseCodeFree(sCode, sLName) Then
+                NewUseCode = sCode
+                Exit Function
+            End If
+        Next k
+    Next j
+Next i
+
+n = 2
+Do
+    sCode = Left(sFirst, 4 - Len(CStr(n))) & CStr(n)
+    If UseCodeFree(sCode, sLName) Then Exit Do
+    n = n + 1
+Loop Until n > 9999
+NewUseCode = sCode
+
+Exit Function
+error:
+Call HandleError("NewUseCode")
+NewUseCode = "item"
+End Function
+
+'Lower-case words of an item name for its UseCode: a possessive "'s" dropped, other apostrophes removed, letters
+'only, and "a", "an", "the", "of" left out unless nothing else is left. Returns the count.
+Private Function UseCodeWords(ByVal sName As String, sWords() As String) As Long
+Dim s As String, sClean As String, sCh As String, sParts() As String, nLen As Long, x As Long, n As Long
+Dim bStopOnly As Boolean
+On Error GoTo error:
+
+s = LCase(sName)
+nLen = Len(s)
+x = 1
+Do While x <= nLen
+    sCh = Mid(s, x, 1)
+    If sCh = "'" Then
+        If Mid(s, x + 1, 1) = "s" And Not (Mid(s, x + 2, 1) Like "[a-z]") Then x = x + 1 'possessive: skip the "s" too
+    ElseIf sCh Like "[a-z]" Then
+        sClean = sClean & sCh
+    Else
+        sClean = sClean & " "
+    End If
+    x = x + 1
+Loop
+
+sParts = Split(Trim(sClean), " ")
+bStopOnly = True
+For x = 0 To UBound(sParts)
+    Select Case sParts(x)
+        Case "", "a", "an", "the", "of":
+        Case Else: bStopOnly = False
+    End Select
+Next x
+
+ReDim sWords(0)
+n = 0
+For x = 0 To UBound(sParts)
+    If Not sParts(x) = "" Then
+        Select Case sParts(x)
+            Case "a", "an", "the", "of": If bStopOnly = False Then GoTo nextpart:
+        End Select
+        ReDim Preserve sWords(n)
+        sWords(n) = sParts(x)
+        n = n + 1
+    End If
+nextpart:
+Next x
+
+UseCodeWords = n
+
+Exit Function
+error:
+Call HandleError("UseCodeWords")
+UseCodeWords = 0
+End Function
+
+'True when sCode (without the "#") is unused, or already belongs to the same item name
+Private Function UseCodeFree(ByVal sCode As String, ByVal sLName As String) As Boolean
+On Error GoTo error:
+
+UseCodeFree = True
+If dictUseCodeOwner.Exists("#" & sCode) Then
+    If Not dictUseCodeOwner.Item("#" & sCode) = sLName Then UseCodeFree = False
+End If
+
+Exit Function
+error:
+Call HandleError("UseCodeFree")
+UseCodeFree = False
+End Function
+
 Private Function MsgLineOrNull(ByVal nMsg As Long, ByVal nLine As Integer) As String
 On Error GoTo error:
 Dim sTemp As String
@@ -6555,11 +6772,13 @@ Dim tdf As DAO.TableDef, fld As DAO.field
 
 HasCurrentSchema = False
 
-Set tdf = DB.TableDefs("Messages")
 Set tdf = DB.TableDefs("Titles")
 Set tdf = DB.TableDefs("Abilities")
+Set tdf = DB.TableDefs("Messages")
+Set fld = tdf.Fields("Spell")
 Set tdf = DB.TableDefs("Items")
 Set fld = tdf.Fields("HitVerbs")
+Set fld = tdf.Fields("UseCode")
 
 Set fld = Nothing
 Set tdf = Nothing
@@ -7063,6 +7282,9 @@ With tabNewItems
     .Columns.Append "HitVerbs", adVarWChar, 74
     .Columns.Append "HitVerbsOther", adVarWChar, 74
     .Columns.Append "MissVerbs", adVarWChar, 74
+    .Columns.Append "UseCode", adVarWChar, 5
+    .Columns.Append "UseSpells", adVarWChar, 120
+    .Columns.Append "HitSpells", adVarWChar, 120
     
 End With
 catNewDB.Tables.Append tabNewItems
@@ -7127,6 +7349,7 @@ With tabNewMessages
     .Columns.Append "Msg", adVarWChar, 100
     .Columns.Append "EndMsg", adVarWChar, 100
     .Columns.Append "Effects", adVarWChar, 255
+    .Columns.Append "Spell", adInteger
 End With
 catNewDB.Tables.Append tabNewMessages
 

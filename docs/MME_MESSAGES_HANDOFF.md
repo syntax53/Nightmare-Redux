@@ -1,11 +1,12 @@
-# The MME `Messages` table and weapon verbs: client handoff (from Nightmare Redux)
+# The MME `Messages` table and item columns: client handoff (from Nightmare Redux)
 
-Status: current as of NMR 1.8.4 (2026-11-01). The code is `modMMEMessages.bas` (the Messages pass) and
-`frmMME_Export.frm` (table creation, the weapon-verb columns, the call into the pass).
+Status: current as of NMR 1.8.4 (2026-11-01). The code is `modMMEMessages.bas` (the Messages pass, and the
+use / on-hit decoding of item spells) and `frmMME_Export.frm` (table creation, the `Items` columns, the call into
+the pass). Design notes: `PLAN-mme-messages-export.md` and `PLAN-mme-item-uses.md`.
 
-This is for anyone writing a client that reads an NMR MME export and wants to recognise game lines: a
-mapper, a bot, a log parser, or MME itself. It says how NMR builds each row from the realm's data, what
-the columns mean, and how to match and use the rows. It assumes no particular client.
+This is for anyone writing a client that reads an NMR MME export and wants to recognise game lines or
+use items: a mapper, a bot, a log parser, or MME itself. It says how NMR builds each row from the realm's
+data, what the columns mean, and how to match and use the rows. It assumes no particular client.
 
 Client-specific notes: MegaMud, see `docs/MEGAMUD_MME_MESSAGES_HANDOFF.md` (mapping onto its message
 records and `ME_*` / `MA_*` flags, and merging with its stored messages). The short reference version of
@@ -16,17 +17,19 @@ this document is the Messages, Items and "Standard formats" sections of `docs/mm
 ## 1. What the table is
 
 `Messages` holds the game lines a client may need to recognise and that it cannot work out on its own:
-status effects with their start and wear-off text, the cast line of every player spell and every
-spell-casting item, damage lines in non-standard wording, traps, damage-shield lines, monster death text,
-plus a fixed set of chase and monster-entrance lines. NMR builds it from the realm's own message file,
-spells, items, rooms and monsters, so it follows a customised realm.
+status effects with their start and wear-off text, the cast line of every spell that players or items
+cast, damage lines in non-standard wording, traps, damage-shield lines, monster death text, plus a fixed
+set of chase and monster-entrance lines. NMR builds it from the realm's own message file, spells, items,
+rooms and monsters, so it follows a customised realm. A row that belongs to one spell carries the spell's
+number, so a client can join it to `Spells` and, through the item columns, to the items that cast it.
 
 It is **not** a dump of the message file. Lines the engine prints in a fixed, standard shape ("You cast X
 on Y for N damage!", "<monster> <verb> you for N damage!" and so on) are left out because a client parses
 those by shape (section 4.8). Lines no player sees (a monster-only spell's caster line, room-perspective
 lines) are left out too.
 
-NMR 1.8.4 also adds three weapon-verb columns to `Items` (section 5).
+NMR 1.8.4 also adds six columns to `Items` (section 5): weapon verbs, the spells an item casts when used
+and on hit, and a command code for using it.
 
 ---
 
@@ -35,26 +38,28 @@ NMR 1.8.4 also adds three weapon-verb columns to `Items` (section 5).
 ### 2.1 Detecting it
 
 - `Info.[NMR Version]` is `v1.8.4` or newer.
-- Check that the table exists before you query it. Exports made by NMR 1.8.3 and older do not have it. An
-  NMR 1.8.4 refuses to update such an old MDB in place ("Create a new export instead"), so a 1.8.4
-  version string implies the table is there, but probing costs nothing.
-- `Items` gains `HitVerbs`, `HitVerbsOther` and `MissVerbs`, appended after `References`. No other column
-  of any existing table changed.
+- Check that the table and its `Spell` column exist before you query them. Exports made by NMR 1.8.3 and
+  older do not have the table, and exports made by 1.8.4 test builds before 2026-11-01 lack `Spell`. NMR
+  refuses to update either in place ("Create a new export instead"), so a 1.8.4 version string implies
+  both are there, but probing costs nothing.
+- `Items` gains `HitVerbs`, `HitVerbsOther`, `MissVerbs`, `UseCode`, `UseSpells` and `HitSpells`,
+  appended after `References`. No other column of any existing table changed.
 
 ### 2.2 Columns
 
 | Column | Jet type | Size | Meaning |
 |---|---|---|---|
 | `ID` | Long | | Row number 1..n in NMR's write order. Primary key `pkMessages`. **Not a stable key**: every export renumbers it. |
-| `Name` | Text | 100 | A spell or item name, a monster name (death rows), or a label made from the line's own text (3.8). Never empty. |
+| `Name` | Text | 100 | A spell name, an item name (item damage-shield rows), a monster name (death rows), or a label made from the line's own text (3.8). Never empty. |
 | `Kind` | Text | 12 | `Cast`, `Self` or `Other` (4.1). |
 | `Msg` | Text | 100 | The line, literal except for tokens (3.3). |
 | `EndMsg` | Text | 100 | Wear-off line. Only on `Self` rows. When present, the effect lasts until this line. |
 | `Effects` | Text | 255 | Comma-separated list (3.7, 4.6). |
+| `Spell` | Long | | `Spells.Number` of the spell the row belongs to: set on every `Cast` row and on the named `Self` rows of a player or item spell (3.4); 0 on every other row. |
 
 ### 2.3 Reading rules
 
-- All columns are Text, not Memo.
+- All columns except `ID` and `Spell` are Text, not Memo.
 - `Name` is a Jet reserved word: write `[Name]` in SQL, and bracket `[Msg]` too.
 - As in every MME table, an empty value is written as a single `Chr(0)`, not as an empty string or Null.
   Treat a value of exactly one NUL as empty. `EndMsg` and `Effects` are usually empty. `Msg` can be
@@ -73,15 +78,17 @@ NMR 1.8.4 also adds three weapon-verb columns to `Items` (section 5).
 The Messages pass runs after NMR's cross-referencing, because it uses the `Learnable` flags (3.4). It
 reads the dat files in this order, collects rows in memory, merges duplicates and writes the table once:
 
-1. **Items**: which spells items teach (ability 42) and cast (ability 43), and which items have a
-   damage-shield message (ability 137). No rows yet.
-2. **Rooms** (every room except "Buffer room"s): trap rows, the spells rooms cast (`Spell` field), and the
+1. **Items**: which spells items teach (ability 42), which they cast when used or on hit (abilities 43
+   and 114, section 5.2), and which items have a damage-shield message (ability 137). No rows yet.
+2. **Item spell chains**: spells reached through EndCast (spell ability 151) from a spell an item casts
+   count as item-cast too (3.4).
+3. **Rooms** (every room except "Buffer room"s): trap rows, the spells rooms cast (`Spell` field), and the
    spells cast exits and spell traps cast on the player.
-3. **Spells**: status, fail, cast, start, self-cast, incoming and shield rows.
-4. **Item shields**: one row per item that carries a damage-shield message.
-5. **Monsters**: melee hit rows and death text.
-6. **Static rows**: 78 chase lines and 29 monster-entrance lines, the same in every export.
-7. **Finalize**: drop the "you" duplicates, give nameless rows a name, write the rows with `ID` 1..n.
+4. **Spells**: status, fail, cast, start, self-cast, incoming and shield rows.
+5. **Item shields**: one row per name of an item that carries a damage-shield message.
+6. **Monsters**: melee hit rows and death text.
+7. **Static rows**: 78 chase lines and 29 monster-entrance lines, the same in every export.
+8. **Finalize**: drop the "you" duplicates, give nameless rows a name, write the rows with `ID` 1..n.
 
 A row keeps the position where it first appeared, so `ID` order follows the passes. That is a side
 effect, not something to rely on.
@@ -158,43 +165,49 @@ like anywhere else.
   textblocks, NPC greets, items), or an item teaches it (ability 42). When no spell in the export is
   marked `Learnable` (an "Export Only" run that re-exported spells without cross-referencing), NMR falls
   back to "has a magery type".
-- **Item-cast**: some item casts it (ability 43, CastsSp).
-- **Name list**: a spell's `Cast` rows are written once per name. The list holds the spell's name when
-  players can cast it, then the name of each casting item not already in the list (compared
-  case-insensitively).
+- **Item-cast**: some item casts it when used or on hit (ability 43, CastsSp, with or without a %Spell
+  114 before it; section 5.2). A spell chained through EndCast (spell ability 151, followed transitively,
+  at most 10 links) from a spell an item casts counts as item-cast too: the item's user is its caster as
+  well.
+- **One row per spell**: a player or item spell's `Cast` rows carry the spell's own name and number
+  (`Spell`). An item that casts the spell gets no rows of its own; its `UseSpells` / `HitSpells` list the
+  spell (5.2), and a client finds the item's lines through them (5.4).
 - **Friendly target types** are 0 Single, 1 Self, 2 Self or Single, 6 Any and 13 Full Party Area: the
   player can be the one affected by their own spell or item. A player or item spell with one of these
-  types also writes its `Self` rows (status, incoming, shield) once per name. Every other spell's `Self`
-  rows are nameless (realm-wide). A hostile spell's status text only ever reaches its victim, and the
-  victim did not cast it.
+  types also writes its `Self` rows (status, incoming, shield) under its name and number. Every other
+  spell's `Self` rows are nameless, with `Spell` 0 (realm-wide). A hostile spell's status text only ever
+  reaches its victim, and the victim did not cast it. A spell with a blank name gets neither on its `Self`
+  rows.
 - **Self-cast spells**: spells the player ends up casting without choosing them, from a textblock `cast`,
   a cast exit (exit type 22, Para1 and Para2) or a spell trap (exit type 24, Para1). The player is the
   caster, so the player sees cast line 1.
 
 ### 3.5 Row rules, source by source
 
-Abbreviations: "names" = the name list (3.4); "self-names" = the name list for a player or item spell
-with a friendly target type, otherwise one nameless row; "standard" = matches a filter in 3.6.
+Abbreviations: "the spell" = the spell's name, with `Spell` = its number; "self-name" = the same for a
+player or item spell with a friendly target type, otherwise nameless with `Spell` 0; "standard" = matches
+a filter in 3.6.
 
 **Spells** (every spell record):
 
 | Row | Kind | Name | Msg / EndMsg | Effects | Written when |
 |---|---|---|---|---|---|
-| Status | Self | self-names | status line 3 / status line 1 | the spell's (3.7), plus `Fail` when the confuse line equals the status line | the spell has a status message and line 3 or line 1 is not blank |
+| Status | Self | self-name | status line 3 / status line 1 | the spell's (3.7), plus `Fail` when the confuse line equals the status line | the spell has a status message and line 3 or line 1 is not blank |
 | Fail | Self | nameless | confuse line 1 | `Fail` | the spell has a confuse message, and its line 1 is not the same text as the status line (then it went into the status row) |
-| Cast | Cast | names | cast line 1 | the spell's | the spell is player-castable or item-cast. **Every form**, standard or not: a client can always find its spell or item by name. |
-| Start | Cast | names | start line 1 | the spell's | as Cast, and the cast line is empty or standard, and the start line does not begin "You cast / invoke / sing " |
+| Cast | Cast | the spell | cast line 1 | the spell's | the spell is player-castable or item-cast. **Every form**, standard or not: a client can always find the line of a spell it cast or an item it used (5.4). |
+| Start | Cast | the spell | start line 1 | as Cast | as Cast, and the cast line is empty or standard, and the start line does not begin "You cast / invoke / sing " |
 | Self-cast | Self | nameless | cast line 1 | the spell's without `RoomSpell`, plus `Trap` for spell traps | the spell is self-cast (3.4) but neither player-castable nor item-cast; its target type is not 4 Monster or 7 Item; it has some effect besides `RoomSpell`; the line is not standard |
-| Incoming | Self | self-names | cast line 2 | the spell's | the line contains `{dmg}` and is not standard; **or** the spell has no status message but has a status ability (19, 71, 107, 74, 75, 60, 76, 170); **or** the line has no `{dmg}` and the status message lacks its status line or its wear-off line |
-| Shield | Self | self-names | shield line 1, and shield line 2 | `Damage,DamageShield` | the spell has a damage-shield message; each line on its own, unless it is standard |
+| Incoming | Self | self-name | cast line 2 | the spell's | the line contains `{dmg}` and is not standard; **or** the spell has no status message but has a status ability (19, 71, 107, 74, 75, 60, 76, 170); **or** the line has no `{dmg}` and the status message lacks its status line or its wear-off line |
+| Shield | Self | self-name | shield line 1, and shield line 2 | `Damage,DamageShield` | the spell has a damage-shield message; each line on its own, unless it is standard |
 
 The incoming rule in plain words: when the status message already shows the effect starting and ending,
 the incoming line adds nothing and is left out. When it does not, the incoming line is the client's only
 sign of the effect.
 
 **Items**: an item with a damage-shield message (item ability 137) gets a `Self` row for line 1, one per
-item name, `Damage,DamageShield`, unless the line is standard. Line 2 reaches only the wearer's attacker,
-never the wearer, so it is not exported.
+item name, `Damage,DamageShield`, `Spell` 0 (the shield is an item ability, not a spell), unless the line
+is standard. Line 2 reaches only the wearer's attacker, never the wearer, so it is not exported. These are
+the only rows named after an item.
 
 **Rooms**: each trap exit's message line 1 is a nameless `Self` row with `Damage,Trap`. A spell in a
 room's `Spell` field gets `RoomSpell` in its effects. Cast exits and spell traps feed the self-cast rows.
@@ -268,13 +281,15 @@ still marks it as timed, and the `Spells` table's ability columns give the detai
 
 ### 3.8 Merging duplicates, and names
 
-- **Merge key**: `Cast` rows and named `Self` rows merge when Kind, Name, Msg and EndMsg are all equal.
-  All other rows (nameless `Self` rows, every `Other` row) merge when Kind, Msg and EndMsg are equal. The
-  comparison is exact (case-sensitive) and happens after substitution. A merged row keeps its first
-  position and gets the union of the effects, in order of first appearance.
-- So each player spell and each casting item gets **its own row under its own name**, even when several
-  print the same text. "You feel lucky!" / "The effects of bless wear off!" is exported once as `bless`,
-  once as `chant`, and once per item that casts bless.
+- **Merge key**: rows with a spell (`Spell` > 0) merge when Kind, Spell, Msg and EndMsg are all equal.
+  Item damage-shield rows merge when Kind, Name, Msg and EndMsg are equal. All other rows (nameless `Self`
+  rows, every `Other` row) merge when Kind, Msg and EndMsg are equal. The comparison is exact
+  (case-sensitive) and happens after substitution. A merged row keeps its first position and gets the
+  union of the effects, in order of first appearance.
+- So each spell gets **its own rows under its own number**, even when several spells print the same
+  text, and an item adds no rows for its spells. "You feel lucky!" / "The effects of bless wear off!" is
+  exported once as `bless` and once as `chant`; the items that cast bless list it in `UseSpells` instead.
+  Two spells with the same name and the same line stay two rows, one per number.
 - A nameless line with the same text as a named row stays a separate row. Example: a monster-only spell
   that shares a player spell's status text.
 - **Death text** printed by differently named monsters (compared case-insensitively) loses its monster
@@ -288,7 +303,8 @@ still marks it as timed, and the `Spells` table's ability columns give the detai
   trailing ` for {dmg} damage!`, ` {dmg} damage!` or ` {dmg} hit points!`, then every `{target}'s ` and
   `{target} `, and trims what is left. If nothing is left, the whole line is used. "The {source} claws you
   with its pincers for {dmg} damage!" is named "claws you with its pincers". These names are labels for
-  display. They change when the text changes, so they are not keys.
+  display. They change when the text changes, so they are not keys. A `Cast` row of a spell with a blank
+  name is named the same way; its `Spell` still says which spell it is.
 
 ### 3.9 What is never exported
 
@@ -317,19 +333,20 @@ column size, or a dat file that could not be read. The completion message gives 
 
 ### 4.1 Kinds, from the player's seat
 
-- **Cast**: confirmation that **my** spell or item worked. `Name` is the spell, or the item that casts
-  it. The line may carry the amount ("You cast agony on {target} for {dmg} damage!"), or none ("A cool
-  wind blows throughout the room!", "You rub your jade amulet!"). A spell whose cast line is empty or
-  standard may also have a start line ("You lay hands on {target}."). Both are printed only once the
-  spell has landed. **The effects on a Cast row describe what the spell does to its target, not to me.**
+- **Cast**: confirmation that **my** spell or item worked. `Name` and `Spell` are the spell, also when an
+  item cast it (5.4 finds an item's lines). The line may carry the amount ("You cast agony on {target}
+  for {dmg} damage!"), or none ("A cool wind blows throughout the room!", "You rub your jade amulet!"). A
+  spell whose cast line is empty or standard may also have a start line ("You lay hands on {target}.").
+  Both are printed only once the spell has landed. **The effects on a Cast row describe what the spell
+  does to its target, not to me.**
 - **Self**: something happened **to me**.
   - With an `EndMsg` it is a tracked effect: `Msg` when it starts (and in `stat`), `EndMsg` when it
     wears off.
   - Without one it is a one-off line: incoming damage in a non-standard wording, a failed action
     (`Fail`), a non-standard monster hit (`Monster`), a trap (`Trap`), my damage shield or my item's
     spikes hitting back (`DamageShield`), or a spell a textblock, cast exit or spell trap cast on me.
-  - A Self row carries a spell or item name only when the player can be affected by their own spell or
-    item (3.4).
+  - A Self row carries a spell's name and number only when the player can be affected by their own
+    spell or item (3.4). An item damage-shield row carries the item's name.
 - **Other**: something about someone else: a monster's non-standard hit on another player, a monster's
   death text (`Name` = the monster, unless several monsters share the text), a chase line, or a monster
   appearing or changing form.
@@ -372,16 +389,18 @@ patterns.
 
 ### 4.4 Names
 
-- A row is about a specific spell or item when its `Name` equals a `Spells.Name` or an `Items.Name` in
-  the same export. On stock, that is all 518 Cast rows and 150 of the 475 Self rows. Names are the
-  game's own spelling and case (up to 29 characters). Join by name to get the spell's number, abilities
-  or `Learnable` flag.
+- A row belongs to a specific spell when its `Spell` is not 0. Join `Spell` to `Spells.Number` for the
+  spell's abilities, target type or `Learnable` flag. Its `Name` is then the spell's name, in the game's
+  spelling and case (up to 29 characters), but **join on `Spell`, not on the name**: several spells can
+  share a name (10 names among the spells with rows on stock v1.11p, 29 on Paradigm 1.9.1d). Every Cast
+  row has a `Spell`, and so do the Self rows of friendly player or item spells (counts in section 7).
+- An item damage-shield row (`Spell` 0, `DamageShield`) is named after the item; it matches `Items.Name`.
 - Every other row is realm-wide. Its `Name` is a monster name (death rows) or a label made from its text
   (3.8). Display it if you like, but do not key on it.
 - `Name` is not unique. One spell can have a Cast row, a start row, a status row, an incoming row and
-  shield rows, and two items with the same name share their rows.
-- To credit a line to "the spell I just cast" or "the item I just used", look for a Cast row matching
-  the line whose `Name` is that spell or item.
+  shield rows, all with its number.
+- To credit a line to "the spell I just cast", look for a Cast row matching the line whose `Spell` is
+  that spell. For "the item I just used", look among the rows of the item's spells (5.4).
 
 ### 4.5 Timed effects
 
@@ -433,8 +452,9 @@ attack" is `Sleep` or `Held`.
 
 That is normal:
 
-- The same text under several names (`bless`, `chant`, each bless item). For a Cast row, prefer the
-  name you just cast or used. For a Self row, the effect is the same whoever cast it, so apply it once.
+- The same text under several spells (`bless`, `chant`). For a Cast row, prefer the spell you just cast,
+  or a spell of the item you just used (5.4). For a Self row, the effect is the same whoever cast it, so
+  apply it once.
 - A named row and a nameless row with the same text (a player spell and a monster-only spell sharing a
   status text). Both are right. Apply the effect once.
 - A short line can be a prefix of several longer ones if you match by prefix. Prefer the longest match,
@@ -457,6 +477,8 @@ The rows are from a stock export; the game lines are made up to show a match.
 | You feel resistant to cold! | Self `resist cold`, EndMsg "The effects of resist cold wear off!" | effect on until the EndMsg line |
 | You cast agony on goblin for 23 damage! | Cast `agony`, "You cast agony on {target} for {dmg} damage!" | my agony landed on "goblin" for 23 |
 | A cool wind blows throughout the room! | Cast `black wind` | my black wind landed |
+| You rub your jade amulet! | Cast `jade amulet`, `Spell` 156; the item jade amulet has `UseSpells` `156` | using my jade amulet worked |
+| You feel a little better. | Cast `food`, `Spell` 316; the food items list 316 in `UseSpells` | the food I just ate worked |
 | You lay hands on Ragnar. | Cast `annointed hands`, "You lay hands on {target}." (start line) | my annointed hands landed on Ragnar |
 | The shield spike stabs giant rat for 4 damage! | Self `spiked shield`, "The shield spike stabs {attacker} for {dmg} damage!" | my item's spikes hit the rat for 4 |
 | Ragnar slips into the dark alley. | Other, `Chase`, "{target} slips into the dark alley." | Ragnar left through a command exit |
@@ -464,7 +486,9 @@ The rows are from a stock export; the game lines are made up to show a match.
 
 ---
 
-## 5. Weapon verbs (`Items`)
+## 5. Item columns (`Items`)
+
+### 5.1 Weapon verbs
 
 | Column | Text | Source | Example (`longsword`) |
 |---|---|---|---|
@@ -478,6 +502,68 @@ The rows are from a stock export; the game lines are made up to show a match.
 - Use: tell which weapon (or which hand, after a swap) landed a blow, or recognise another player's
   weapon from their hit verbs. Several weapons can share the same verbs.
 
+### 5.2 Spells cast when used and on hit
+
+| Column | Size | Content | Example (`serpent staff`, stock v1.11p) |
+|---|---|---|---|
+| `UseSpells` | 120 | spell numbers the item casts when used, `"\|"`-separated | `81` |
+| `HitSpells` | 120 | spells it casts on hit, as `<spell number>:<chance %>` pairs, `"\|"`-separated | `409:25` |
+
+Both are decoded from the item's ability slots, which the export already has in `Abil-n` / `AbilVal-n`.
+Walking the slots in order, a `CastsSp` (43) is cast when the item is used, unless a `%Spell` (114) comes
+before it. Then it is the spell cast on hit, and the `%Spell` value is its chance per hit ("the spell cast
+is specified by the NEXT CastsSp", in NMR's ability list). A `%Spell` with no later `CastsSp` is ignored.
+Each list is in slot order without repeats; `Chr(0)` when empty. Every item type is decoded, not only
+weapons. Look the spell numbers up in `Spells` for target type, damage range, duration and so on, and in
+`Messages.Spell` for the lines they print (5.4).
+
+### 5.3 `UseCode`
+
+A command code for using the item, Text 5: `#` plus up to 4 lowercase letters. Only items with at least
+one use spell have one; every other item, including one that only casts on hit, has `Chr(0)`.
+
+- **Made from the name.** Words are lowercased, a possessive "'s" is dropped, only letters count, and
+  "a", "an", "the" and "of" are skipped. One word gives its first 4 letters (incense → `#ince`). Several
+  words give their initials, with the last initial replaced by the whole last word when there are fewer
+  than 4, cut to 4 (jade amulet → `#jamu`, tankard of mead → `#tmea`, embroidered black gauntlets →
+  `#ebga`).
+- **Unique per name.** Items with exactly the same name (compared case-insensitively) share one code: in
+  the game, "use void sphere" cannot tell them apart either. When a differently named item already has the
+  first choice, NMR tries the first 2, then 3 letters of the first word plus the other initials and the
+  last word (black potion → `#blpo` when blue potion has `#bpot`), then any 4 letters of the name in order,
+  starting with its first letter. Digits are the last resort (`#gor2`). Items are processed in item-number
+  order, so the lower-numbered item keeps the natural code. None needs a digit on stock v1.11p (209
+  usable items, 206 codes) or on Paradigm 1.9.1d (310 usable item names).
+- **Stable.** The same names give the same codes. When NMR updates an existing export, every code already
+  in it stays with its item name, and new codes avoid them, so adding an item never changes another item's
+  code. A code changes when its item is renamed.
+- **Apart from spell codes.** The `#` keeps item codes apart from the game's spell short codes
+  (`Spells.Short`); no game spell code in the stock or sample data starts with `#`. NMR does not check.
+- It is a hint for the client's command list, not a key. Key items by `Items.Number`.
+
+### 5.4 Modelling an item in a client
+
+- **Using it**: an item with a `UseCode` is something the player can invoke, the way a spell is cast. A
+  client that keeps spells and item uses in one list can add one entry per such item: name = `Items.Name`,
+  code = `UseCode`, key = `Items.Number`, stats from the `Spells` rows in `UseSpells`. The `Spells` rows
+  stay as they are: a class still casts a spell by its own name and `Short`, even when an item also casts
+  it.
+- **Its spells, chains included**: the spells in `UseSpells`, plus every spell reached from them through
+  EndCast: a `Spells` row whose `Abil-n` is 151 names the next spell in the matching `AbilVal-n`; follow
+  it transitively (NMR follows at most 10 links, each spell once). A chained spell is cast by the item's
+  user too.
+- **Its lines**: the `Messages` rows whose `Spell` is one of those spells. The Cast rows confirm using
+  it; the Self rows (a spell with a friendly target type, 3.4) are its effects on me, with an `EndMsg`
+  for status effects. A spell that prints no cast line has no Cast row.
+- **On-hit spells**: `HitSpells` says which spells and how often; the rows of those spells (and their
+  chains) are the lines they print to the wielder. They need no command.
+- **Damage shield**: the Self rows with `Name` = the item and `DamageShield` (`Spell` 0).
+- The same spell's rows serve every item that casts it and the class that casts it, so a line alone does
+  not say which item fired. The client knows what the player just used or wields.
+- Example (stock v1.11p): the serpent staff has `UseSpells` `81` and `HitSpells` `409:25`. The rows with
+  `Spell` 81 are the lines of using it; the rows with `Spell` 409 (constriction) are what its on-hit spell
+  prints, about a quarter of the time it hits.
+
 ---
 
 ## 6. Gotchas
@@ -489,9 +575,15 @@ The rows are from a stock export; the game lines are made up to show a match.
 - **`Confused` can be a stun.** Check the text, or treat it as "may not act".
 - **Not every line is here.** Standard forms are left out on purpose (3.6, 4.8). If a line seems to be
   missing, check those patterns first.
-- **Rows repeat under different names** by design (3.8). Deduplicate by text yourself if you only need
-  text.
+- **The same text can repeat under different spells** by design (3.8). Deduplicate by text yourself if
+  you only need text.
+- **Join on `Spell`, not on `Name`.** Several spells can share a name, and an item's lines are under its
+  spells' names, not the item's (5.4).
 - **Realm-wide names are labels.** They are made from the text and change with it.
+- **Key item uses by `Items.Number`, not by `UseCode`.** A code follows the item's name, and items with the
+  same name share it.
+- **An item can both be used and cast on hit**, even the same spell. The spell's rows are the same
+  either way; `UseSpells` / `HitSpells` say which.
 - **Byte limits are your client's.** Columns are 100 characters (`Effects` 255). If your client stores
   bytes in a code page, convert first, then check lengths.
 - **GreaterMUD exports** (`Info.Legit` = 2) follow that engine's placeholder order (3.3). The exported
@@ -501,15 +593,26 @@ The rows are from a stock export; the game lines are made up to show a match.
 
 ## 7. Stock numbers and checks
 
-A stock v1.11p export has:
+A stock v1.11p export (NMR 1.8.4, 2026-11-01) has:
 
 | Kind | Rows |
 |---|---|
-| Cast | 518 |
-| Self | 475 (272 with an EndMsg; 150 named after a spell or item) |
+| Cast | 415 (all with a `Spell`, 402 spells; 4 from spells reached only through EndCast chains of item spells) |
+| Self | 477 (274 with an EndMsg; 144 with a `Spell`; 8 item damage-shield rows named after the item) |
 | Other | 419 (213 death texts, 78 chase lines, 29 monster entrances) |
-| Total | 1,412 |
+| Total | 1,311 |
+
+Writing item lines per item instead gave 1,417 rows for the same data, with the same 1,210 distinct
+lines. 12 rows repeat a line under a second spell of the same name (`resist cold`, `barkskin`,
+`drain life` and others), one per spell number.
+
+In `Items`, 209 items have a use spell (206 codes, as three names repeat) and 127 have an on-hit spell.
+Spells reached only through EndCast chains of item spells have rows too: the "slam" line of spear slam
+knockdown (chained from spear, which Dusk and the nexus spear cast when used) and the lines of elemental
+lightning, fire and ice (the staff of the elements' on-hit elemental earthquake chains to them).
 
 NMR's own check of an export is `docs/verify-mme-messages.ps1` (32-bit PowerShell, Jet). It checks the
 schema, that no raw `%s` / `%d` is left, the Kinds, that rows are unique, the "you" duplicates, names,
-the standard-form filters, and spot checks against stock data.
+the standard-form filters, the item columns against the `Abil-n` columns, the `UseCode` rules, the
+`Spell` column (on every Cast row, named after its spell, never after an item), and spot checks against
+stock data.
