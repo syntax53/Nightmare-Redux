@@ -9,7 +9,7 @@ v1.8.4 (11/##/2026)
 -UP: MME export now adds hidden room items players cannot pick up to the room's placed items when a textblock or room exit references them  
 -FIX: MME export no longer skips a source whose text starts another one already listed (e.g. "Textblock #14" after "Textblock #142", "Room 3/1" after "Room 3/10")  
 -FIX: MME export and monster attack simulator now name rob attacks "Rob" instead of "Unknown" (issue #34)  
--FIX: MME export and monster attack simulator no longer give a monster with nothing to simulate the previous monster's physical/spell damage split, or a plain attack an earlier monster's spell duration (issue #29)  
+-FIX: MME export and monster attack simulator no longer give a monster with nothing to simulate the previous monster's physical/spell damage split (which also inflated the lairs table's phys/spell averages), or a plain attack an earlier monster's spell duration (issue #29)  
 -FIX: MME export monster script values no longer use the lair value from the previous lookup (issue #29)  
 -FIX: MME export no longer hangs on a textblock line with "class " inside another word e.g. "subclass" (issue #29)  
 
