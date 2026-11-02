@@ -2,28 +2,29 @@ Nightmare Redux is an editor for the game MajorMUD(r).
 
 v1.8.4 (11/##/2026)
 ------------------------------------------  
--NEW: Room editor "remote action report" reports each hidden exit a room is part of and the values that make all of them count (issue #22, Thanks Fujin)  
--NEW: MME export now exports a messages table with a few links between spells and items, including weapon attack verbs  
--NEW: MME export now exports a titles table (each class's titles by level range) to help game clients work out player levels  
--NEW: MME export now exports an abilities table (number and name of each ability in the loaded ability list)  
--UP: MME export items now list the spell cast on use and on hit (weapons), and gives usable items a "#abrv" command code  
--UP: MME export now lists items sources/references from room commands e.g. "pry coffin" (Thanks Fujin)  
+-NEW: Room editor remote action report shows each hidden exit a room is part of and the values needed (#22)  
+-NEW: MME export adds a messages table with some spell/item links, including weapon attack verbs  
+-NEW: MME export adds a titles table (class titles by level range) to help game clients work out player levels  
+-NEW: MME export adds an abilities table (number and name of each ability in the loaded ability list)  
+-UP: MME export items now list spells cast on use/on hit (weapons), and usable items get a "#abrv" command code  
+-UP: MME export now lists item sources/references from room commands, e.g. "pry coffin"  
 -UP: MME export now adds "failspell TB#" references  
--UP: MME export now adds hidden room items players cannot pick up to the room's placed items when a textblock or room exit references them  
--UP: Room editor's remote action "#" help now gives the right order (with "order matters" the highest number is done first) (issue #22, Thanks Fujin)  
--FIX: MME export no longer skips a source whose text starts another one already listed (e.g. "Textblock #14" after "Textblock #142", "Room 3/1" after "Room 3/10")  
--FIX: MME export and monster attack sim now name rob attacks "Rob" instead of "Unknown" (issue #34, Thanks Fujin)  
--FIX: MME export and monster attack sim no longer give monsters with nothing to sim the previous monster's physical/spell damage split (issue #29, Thanks Fujin)  
--FIX: MME export monster script values no longer use the lair value from the previous lookup (issue #29, Thanks Fujin)  
--FIX: MME export no longer hangs on a textblock line with "class " inside another word e.g. "subclass" (issue #29, Thanks Fujin)  
--FIX: MME export no longer mixes up the remote actions of a room that works more than one exit of the same room (issue #22, Thanks Fujin)  
+-UP: MME export adds hidden, non-pickup room items to placed items when a textblock or room exit references them  
+-UP: Room editor remote action "#" help now gives the right order (highest first if order matters) (#22)  
+-FIX: MME export no longer skips a source that prefixes one already listed (e.g. "Textblock #14" after "Textblock #142")  
+-FIX: MME export and monster attack sim now name rob attacks "Rob" instead of "Unknown" (#34)  
+-FIX: MME export/attack sim no longer give monsters with nothing to sim the prior damage split (#29)  
+-FIX: MME export monster script values no longer use the lair value from the previous lookup (#29)  
+-FIX: MME export no longer hangs on a textblock line with "class " inside a word, e.g. "subclass" (#29)  
+-FIX: MME export no longer mixes up remote actions of a room that works several exits of one room (#22)  
 -FIX: Monster attack simulator now uses an 8% stock minimum hit chance instead of 9%, matching MME  
--FIX: Action editor now counts "Single To Room" text in an action's offset, so an action with only that text is no longer an unknown command in the game (issue #33, Thanks Fujin)  
--FIX: Textfiles export no longer drops every "1" from names and descriptions or writes NUL characters into the files, and cuts each text where the game stops reading it (issue #36, Thanks Fujin)  
--FIX: Universal modifier "Total Exp" over 2,147,483,646 is now capped instead of leaving the monster worth 1 experience (issue #30, Thanks Fujin)  
--FIX: Record number changer now updates rooms' command text, and textblock/deathtext abilities on items and monsters, when renumbering textblocks (issue #31, Thanks Fujin)  
--FIX: Map editor no longer creates a new room as map/room 0, and no longer suggests the current room as the existing room for up/down (issue #32, Thanks Fujin)  
--FIX: Textblock preview now moves a tab to the next tab stop on the same line instead of to the top line, and no longer crashes on many "set tab stop" codes (issue #35, Thanks Fujin)  
+-FIX: Action editor now counts "Single To Room" text, so actions with only that text work in game (#33)  
+-FIX: Textfiles export no longer drops "1"s or writes NULs, and cuts text where the game stops reading (#36)  
+-FIX: Universal modifier "Total Exp" over 2,147,483,646 is now capped instead of giving 1 exp (#30)  
+-FIX: Renumbering textblocks now updates room command text and item/monster textblock/deathtext abilities (#31)  
+-FIX: Map editor no longer makes new rooms as 0/0 or suggests the current room for up/down exits (#32)  
+-FIX: Textblock preview tabs now go to the next stop on the same line; many tab stop codes no longer crash (#35)  
+-THANKS: Fujin for contributing information and fixes for #22, #29, #30, #31, #32, #33, #34, #35, #36  
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  
@@ -33,7 +34,7 @@ v1.8.3 (09/27/2025)
 -UP: added display of all of the unknown users values on a tab  
 -UP: Added monster game limit, bs defense, and lair exp fields for MME export  
 -UP: Added room delay to export and for lair info  
--UP: completely reworked script/lair value calculations to be more based on the lair composition of all monsters that regen in the lair.  lair table now created during mme export with lair information (avg damage, exp, max regen, etc) to be used in MME.  monsters and lairs have pre-calculated script values.  
+-UP: reworked script/lair values around lair composition; MME export adds a lair table and pre-calculated script values  
 -NOTE: script value will likely be phased out in a future MME version  
 -UP: sped up some of the slow progress bars  
 -UP: fixed some positioning of elements bleeding off the edges of the windows on most of the editors  
@@ -48,13 +49,13 @@ v1.8.3 (09/27/2025)
 
 v1.8.2 (12/30/2021)  
 ------------------------------------------  
--NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info.  this will allow you to do things like set the minimum drop percentage to 50% for items dropped by monsters that regen greater than 7 days, for example  
--UP: added a bunch of additional logging to the database importer to show the name (or first few chars for messages/textblocks) to help identify conflicts on a preview import  
+-NEW: Tools > Monsters > Item drop percentage modifier - alter monster drop percentages based on monster and item info  
+-UP: database importer now logs names (or first chars of messages/textblocks) to help spot conflicts on a preview import  
 -UP: max room regen added to lair info for monsters, to be used in corresponding update in MME  
 -UP: room illumination added to mme room export, to be used in corresponding update in MME  
 -UP: added 4 rooms to the default exclude list for mme exports (1/288, 1/289, 12/2381, 17/2867)  
--FIX: Textblocks executed by a checkspell were not being flagged/exported to MME. This fix along with the corresponding MME update will result in better textblock detail  
--FIX: during an MME export, monsters that had no attacks were getting the average damage value of the previously calculated mob  
+-FIX: Textblocks run by a checkspell are now flagged/exported to MME for better textblock detail (with MME update)  
+-FIX: during an MME export, monsters with no attacks no longer get the previous monster's average damage  
 
 
 v1.8.1 (5/20/2016)  
@@ -71,7 +72,7 @@ v1.8 (05/09/2016)
 -NEW: Added "Find First" and "Find Last" room on map buttons to room editor  
 -UP: Changed drop down spell editor's "Type of Resist" to what I believe they actually mean  
 -UP: Added logging of the second universal modifier's only if option when chosen  
--FIX: Universal modifier reported that it would set the directive to "0" when setting something to "= ##" (only the message was wrong, not the action)  
+-FIX: Universal modifier no longer says it will set the directive to "0" when setting "= ##" (message only, not action)  
 
 -MME Export Updates (for future MME enhancements):  
 -UP: Added spell resist type (if the spell is completely resistible)  
@@ -91,11 +92,11 @@ v1.7 (4/1/2016) - (by Syntax)
 ------------------------------------------  
 -NEW: ability to mark control rooms on the map in the room editor  
 -NEW: tool to view and export said list of control rooms and their references  
--NEW: complete overhaul of database exporter.  support for multiple ranges of records, ability to save config files, **import record numbers from existing database**  
--NEW: added cross-referencing of class restrictions on learned spells via scrolls and textblocks for MME.  requires new version of MME to support it (coming soon).  
--NEW: added cross-referencing for where items/keys are used in rooms and textblocks.  requires new version of MME to support it (coming soon).  
--NEW: added default rooms to exclude on MME exports (currently only the sysop support chamber).  see additional options button.  
--UP: excluded rooms on MME export will now be completely excluded and not exported at all.  references from those rooms will also be considered as not in the game. option added to "hide" user-specified excluded rooms instead to retain previous functionality.  
+-NEW: database exporter overhaul: multiple record ranges, saved config files, **import record numbers from existing database**  
+-NEW: MME cross-referencing of class restrictions on spells learned via scrolls and textblocks (needs newer MME)  
+-NEW: MME cross-referencing of where items/keys are used in rooms and textblocks (needs newer MME)  
+-NEW: default rooms to exclude on MME exports (currently only the sysop support chamber), see additional options  
+-UP: MME excluded rooms (and their references) are now fully left out; option to "hide" user-excluded rooms instead  
 -UP: added Wrist(2), Eyes and Face to universal modifier's "only if" options  
 -UP: added second set of "only if" options on the universal modifier  
 -UP: added text on db importer error to help determine which table was missing fields upon import from old exports  
