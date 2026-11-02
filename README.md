@@ -19,6 +19,10 @@ v1.8.4 (11/##/2026)
 -FIX: MME export no longer mixes up the remote actions of a room that works more than one exit of the same room (issue #22, Thanks Fujin)  
 -FIX: Monster attack simulator now uses an 8% stock minimum hit chance instead of 9%, matching MME  
 -FIX: Action editor now counts "Single To Room" text in an action's offset, so an action with only that text is no longer an unknown command in the game (issue #33, Thanks Fujin)  
+-FIX: Textfiles export no longer drops every "1" from names and descriptions or writes NUL characters into the files, and cuts each text where the game stops reading it (issue #36, Thanks Fujin)  
+-FIX: Universal modifier "Total Exp" over 2,147,483,646 is now capped instead of leaving the monster worth 1 experience (issue #30, Thanks Fujin)  
+-FIX: Record number changer now updates rooms' command text, and textblock/deathtext abilities on items and monsters, when renumbering textblocks (issue #31, Thanks Fujin)  
+-FIX: Map editor no longer creates a new room as map/room 0, and no longer suggests the current room as the existing room for up/down (issue #32, Thanks Fujin)  
 -FIX: Textblock preview now moves a tab to the next tab stop on the same line instead of to the top line, and no longer crashes on many "set tab stop" codes (issue #35, Thanks Fujin)  
 
 v1.8.3 (09/27/2025)

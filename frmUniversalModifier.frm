@@ -2487,7 +2487,7 @@ Do While nStatus = 0 And bStopProcess = False
             End If
         Case 2:
             nBase = CDbl(SLong2ULong(Monsterrec.Experience)) * CDbl(SLong2ULong(Monsterrec.ExpMulti))
-            nBase = DoMath(nBase, 2, 2, sName)
+            nBase = SLong2ULong(DoMath(nBase, 2, 2, sName))    'DoMath returns the signed form of an unsigned Long
             
             If nBase > 2147483646 Then
                 nBase = 2147483646
