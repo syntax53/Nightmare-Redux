@@ -40,7 +40,6 @@ Private Const OPAQUE = 2
 
 Public Const LinesPerPage = 25
 Public Const CharsPerLine = 80
-Public Const TabsPerPage = 20
 Public Const LastLine = LinesPerPage - 1
 Public Const LastChar = CharsPerLine - 1
 'Private Const LastTab = 19
@@ -55,8 +54,7 @@ Private Block_Line                As String * CharsPerLine
 Private TermTextColor             As Long
 Private TermBkColor               As Long
 
-Private tabno                     As Integer
-Private tab_table(TabsPerPage)    As Integer
+Private tab_stop(LastChar)        As Boolean    'tab stops by column
 'Private curattr                   As String
 
 Private lprcScroll                As RECT
@@ -117,13 +115,11 @@ Public Function term_process_char(CH As Byte)
             'End If
 
         Case 9
-            Dim tY As Integer
-            For tY = 0 To 19
-              If CurY < tab_table(tY) Then
-                Exit For
-              End If
-            Next tY
-            CurY = tab_table(tY)
+            'tab: on to the next tab stop on this line, or the right margin when none is left
+            Do While CurX < LastChar
+                CurX = CurX + 1
+                If tab_stop(CurX) Then Exit Do
+            Loop
             
 
         Case 10, 11, 12, 13
@@ -209,9 +205,9 @@ Dim xDiff       As Integer
           inEscape = False
         
         Case "H"                 ' set tab
-          tab_table(tabno) = CurY
-          tabno = tabno + 1
+          tab_stop(CurX) = True
           inEscape = False
+          Exit Sub                 'done: don't fall through to the cursor-position "H" below
         
         Case "I"                 ' look at bp_ESC_I()
           inEscape = False
@@ -354,12 +350,16 @@ Dim xDiff       As Integer
             term_validatecurX
         
         Case "g"
-            ' clear tabs
-            
-            Dim tY As Integer
-            For tY = 0 To 19
-              tab_table(tY) = 0
-            Next tY
+            ' clear tabs: ESC[g / ESC[0g the stop at the cursor, ESC[3g all of them
+            Dim tX As Integer
+            Select Case Val(Mid$(EscString, 2))
+                Case 0
+                    tab_stop(CurX) = False
+                Case 3
+                    For tX = 0 To LastChar
+                        tab_stop(tX) = False
+                    Next tX
+            End Select
         
         Case "h"
 
@@ -785,6 +785,15 @@ Public Sub term_reset_matrix()
             previewMatrix(i, j) = " 04032"
         Next j
     Next i
+    term_reset_tabs
+End Sub
+
+Public Sub term_reset_tabs()
+    'a terminal starts with a tab stop every eight columns
+    Dim x As Integer
+    For x = 0 To LastChar
+        tab_stop(x) = (x > 0 And x Mod 8 = 0)
+    Next x
 End Sub
 
 Public Sub term_DriveCursor()
