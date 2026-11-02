@@ -1,9 +1,11 @@
 # Plan: item uses in the MME export (decode into `Items`)
 
-Branch `261101-item-messages`. Status: **approved with the markers (3.2) and implemented, not compiled**. The
-code is in `modMMEMessages.bas` (`ItemSpellLists`, `AddItemCaster`, `ExpandItemChains`, `EndCastChain`,
-`AddCastRows`) and `frmMME_Export.frm` (`PrepareUseCodes`, `ItemUseCode`, `NewUseCode`, `UseCodeWords`,
-`UseCodeFree`, and the `ExportItems` / `CreateTables` / `HasCurrentSchema` / filler-row changes).
+Branch `261101-item-messages`. Status: **sections 1-6 implemented, built and verified (commits 2b2dcc4,
+31d488d). Revision 2 (spell-keyed rows, at the end) implemented, built and verified; it replaces 3.2 and
+changes how 3.1 names rows.** The code is in `modMMEMessages.bas` (`ItemSpellLists`, `AddItemCaster`,
+`ExpandItemChains`, `EndCastChain`, `AddCastRows`) and `frmMME_Export.frm` (`PrepareUseCodes`, `ItemUseCode`,
+`NewUseCode`, `UseCodeWords`, `UseCodeFree`, and the `ExportItems` / `CreateTables` / `HasCurrentSchema` /
+filler-row changes).
 
 ## 1. Goal and constraints
 
@@ -163,3 +165,134 @@ Result (2026-11-01, built in the IDE; `data-v1.11p.mdb` and `data-Paradigm-1.9.1
   by name; MME already handled the verb columns).
 - The 114 -> next 43 reading is from the ability description, not from engine source.
 - Codes change when an item is renamed. The docs say to key by item number.
+
+---
+
+# Revision 2: spell-keyed rows (approved, implemented and verified 2026-11-01)
+
+## R2.1 Why
+
+With `Items.UseSpells` / `HitSpells` a client can get from an item to its spells, so `Messages` no longer has
+to repeat a spell's lines once per item. Each spell's lines are written once, under the spell's name, with
+the spell's number. Measured on the 2026-11-01 exports by mapping each item row to its spell: stock v1.11p
+about 1,417 -> 1,324 rows, Paradigm 1.9.1d about 2,094 -> 1,936 (7-8%). Rows of items that cast several
+spells could not all be placed, so the real saving may be a little larger.
+
+Decisions (2026-11-01): go ahead; add a `Spell` column for an exact join; clients follow EndCast through
+`Spells` themselves; remove the `Use` / `OnHit` markers.
+
+## R2.2 Schema
+
+`Messages` gains `Spell` (Long), appended after `Effects`:
+
+- **Set** on rows that belong to one spell: Cast rows (cast and start lines) and named Self rows (status,
+  incoming and shield rows of a friendly player or item spell, 3.4 of the generic handoff).
+- **0** on every other row: nameless Self rows (hostile spells' victim lines, fail lines, self-cast,
+  traps, monster hits), Other rows (monster hits on others, death text, chase, monster entrances) and
+  item damage-shield rows (item ability 137 is not a spell; those rows keep the item's name).
+- So a number appears only where the row's name already identifies the spell. It adds the means to tell
+  same-named spells apart (35 of 224 item spells on stock share a name), nothing about realm-wide lines.
+
+`Items` is unchanged (`UseCode`, `UseSpells`, `HitSpells` as in section 2). `HasCurrentSchema` also requires
+`Messages.Spell`, so an export made by an earlier 1.8.4 build (including the two of 2026-11-01) cannot be
+updated in place.
+
+## R2.3 Rows
+
+| Row | Before | After |
+|---|---|---|
+| Cast (cast line, start line) | one per name: the spell (if players can cast it) and each item that casts it | one per spell: Name = the spell's name, Spell = its number |
+| Status / incoming / shield of a friendly player or item spell | one per name, as above | one per spell, Name and Spell as above |
+| Same, hostile spell | nameless | unchanged (Spell 0) |
+| Item damage shield (item ability 137) | one per item | unchanged (Name = item, Spell 0) |
+| Fail, self-cast, trap, monster, death, static | | unchanged (Spell 0) |
+
+- **Which spells get named rows** is unchanged: player-castable, item-cast (use or on hit), or chained
+  through EndCast from an item spell (3.1). Only the names change.
+- **Merge key** for a row with a spell: Kind + Spell + Msg + EndMsg. Two spells with the same name and the
+  same line stay two rows, one per number. Rows without a spell keep today's keys.
+- **Markers** `Use` / `OnHit` are removed (3.2 withdrawn): how an item casts a spell is per item, in
+  `UseSpells` / `HitSpells`.
+- **Chains**: `UseSpells` / `HitSpells` stay the plain decode. A chained spell's rows exist under its own
+  name and number; clients find them by following ability 151 in the `Spells` table's `Abil-n` columns,
+  transitively. The docs give the rule.
+
+What a client does for an item: rows with `Spell` in `UseSpells` (plus their EndCast chain) are the lines of
+using it; rows with `Spell` in `HitSpells` (plus chains) are its on-hit lines; Self rows named after the item
+with `DamageShield` are its damage shield.
+
+## R2.4 Code
+
+`modMMEMessages.bas`:
+- Row store: `mRowSpell()`; `AddRow` takes the spell number (default 0) and keys rows with a spell by it;
+  `FinalizeRows` writes `Spell`.
+- `ProcessSpell`: one row name instead of a name list: the spell's name for Cast rows; for Self rows the
+  spell's name when the target is friendly and players or items cast it, else "". The spell number goes
+  with a non-empty name only. `BuildNameList` and `AddCastRows` go; `SpellStatusRow`, `SpellCastRow`,
+  `SpellStartRow`, `SpellIncomingRow` take the single name; `SpellShieldRows` keeps its name list (items)
+  and takes the spell number (0 for items).
+- Item scan: `dictItemCast` becomes a set of spell numbers; `AddItemCaster`'s mode bookkeeping and
+  `mdictItemMode` go; `ExpandItemChains` only adds chained spells to the set. `ItemSpellLists` stays.
+
+`frmMME_Export.frm`: `CreateTables` appends `Spell` (adInteger) to `Messages`; `HasCurrentSchema` checks it;
+the refusal message mentions the newest columns.
+
+## R2.5 Docs and checks
+
+- Generic handoff: 2.1/2.2 (`Spell`), 3.4/3.5/3.8 (one row per spell), 3.7/4.6 (markers gone), 4.1/4.4/4.9
+  (names, joins, examples), 5.4 (modelling an item through `Spell`, with the EndCast rule), 6 (join on
+  `Spell`, not on the name), 7 (new counts after the re-export).
+- MegaMud doc: 9.1 says how the import fans rows out per item (rows whose `Spell` is in the item's
+  `UseSpells` / `HitSpells` and their chains, copied under the item's name, which its name-based credit and
+  `FindItem` need); marker row removed from section 7; O8 updated.
+- Notes, README, changelog: entries rewritten (no markers; one row per spell; `Spell` column).
+- `verify-mme-messages.ps1`: expected columns include `Spell`; the duplicate check keys on Spell too; marker
+  checks replaced by: every Cast row has a `Spell` that exists in `Spells` and whose name is the row's
+  `Name` (or the row is text-named because the spell's name is blank); rows with `Spell` 0 are never Cast;
+  no Cast row is named after an item; the schema diff accepts `Spell` as new in `Messages`; spot checks:
+  "You feel a little better." is one Cast row named `food` (stock spell 316), and the jade amulet's use
+  spell has a Cast row with that `Spell`. INFO: items whose use spells have no Cast row.
+
+## R2.6 Verification
+
+- You rebuild and re-export stock v1.11p and Paradigm 1.9.1d; I run the verify script on both.
+- Nothing lost: every (Kind, Msg, EndMsg) of the 2026-11-01 exports must still be in the new ones, apart
+  from the marker change. I compare the old and new exports.
+- The counts in the docs are updated from the new exports.
+
+## R2.7 Risks
+
+- Clients lose the item name on item lines and must join through `Items`. Name-matching clients (MegaMud)
+  need the per-item fan-out in their import before item lines work again.
+- Item lines show the game's spell names, some of them internal-looking (`weapon major bless`, `deed
+  give`). They were already in the `Spells` table.
+- The two 2026-11-01 exports cannot be updated in place by the new build.
+
+## R2.8 Implementation notes (2026-11-01)
+
+- `AddRow` takes `Optional nSpell`; rows with a spell are keyed `Kind#<spell>|Msg|EndMsg`. `AddRowEach`
+  (shield rows) passes the number through. `AddCastRows`, `BuildNameList`, `AddItemCaster` and
+  `mdictItemMode` are gone; `dictItemCast` is a set (value True).
+- Cast rows always get the number, also when the spell's name is blank (the row is then text-named). Self
+  rows get name and number only for a friendly player or item spell with a non-blank name.
+- The verify script was run on a copy of the 2026-11-01 stock export converted to this shape by a script
+  (1,310 rows; all checks pass) and on a copy with five planted faults (all caught). The real counts come
+  from the re-export.
+
+## R2.9 Result (2026-11-01)
+
+Re-exported with the Revision 2 build; `verify-mme-messages.ps1` passes on both.
+
+| Export | Before (per item) | After | Cast / Self / Other | Distinct lines lost |
+|---|---|---|---|---|
+| stock v1.11p | 1,417 | 1,311 | 415 / 477 / 419 | 0 (1,210 before and after) |
+| Paradigm 1.9.1d | 2,094 | 1,930 | 511 / 669 / 750 | 0 against 1.9.1c; the 2 new lines are the EndCast chain rows |
+
+- 12 stock rows repeat a line under a second spell of the same name (resist cold, barkskin, drain life...),
+  as R2.3 intends; the simulation had merged those, hence its 1,310.
+- The Paradigm spot check "dark force has no Cast row" failed because two weapons cast dark force spells
+  (124, 5162) on hit, whose Cast rows were named after the weapons before. The check now allows Cast rows
+  of item-cast dark force spells. The bane dart failure and the 2 `{?}` rows on Paradigm predate this
+  branch (1.9.1c has them too).
+- Both exports write `NMR-Log_MMEMessages.txt` into the same folder, so the later run replaced the other's
+  log (the one left is stock's).

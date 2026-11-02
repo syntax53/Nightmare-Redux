@@ -4,7 +4,7 @@ Option Explicit
 
 'MME export: builds the Messages table (client-relevant game message lines).
 'Spec: PLAN-mme-messages-export.md, "Revision 2" (R2.1-R2.18; later sections override earlier ones), and
-'PLAN-mme-item-uses.md (use / on-hit item spells, EndCast chains, Use / OnHit markers).
+'PLAN-mme-item-uses.md (use / on-hit item spells, EndCast chains; Revision 2: one row per spell, with its number).
 'Order: items (learnable / item-cast spell lists, item shields), EndCast chains of item spells, rooms (traps, room
 'and exit spells), spells, item shield rows, monsters, static rows (chase lines, monster entrances).
 'Kinds: Cast, Self, Other. Tokens: {source} {target} {dmg} {attacker}.
@@ -33,9 +33,6 @@ Private mReP7 As Object    'standard own cast line without an amount ("You cast/
 Private mdictSelfCast As Scripting.Dictionary
 'item damage shields: ShockMsg number -> "|" list of the names of the items that carry it
 Private mdictItemShield As Scripting.Dictionary
-'how an item casts a spell, i.e. the marker its Cast rows get: "<spell number>|<item name>" -> "Use", "OnHit" or
-'"Use,OnHit" (text compare, so a spell-name row whose name equals the item's name also matches)
-Private mdictItemMode As Scripting.Dictionary
 
 'in-memory row store: rows are collected by the passes, then merged and written once by FinalizeRows
 Private mRowKind() As String
@@ -44,6 +41,7 @@ Private mRowMsg() As String
 Private mRowEnd() As String
 Private mRowEff() As String
 Private mRowDrop() As Boolean
+Private mRowSpell() As Long    'the spell a row belongs to (Messages.Spell); 0 for realm-wide and item-shield rows
 Private mRowCount As Long
 Private mdictRows As Scripting.Dictionary    'row key -> row index
 
@@ -155,14 +153,13 @@ ReDim mRowMsg(255)
 ReDim mRowEnd(255)
 ReDim mRowEff(255)
 ReDim mRowDrop(255)
+ReDim mRowSpell(255)
 Set mdictRows = New Scripting.Dictionary
 mdictRows.CompareMode = vbBinaryCompare
 Set mdictSelfCast = New Scripting.Dictionary
 mdictSelfCast.CompareMode = vbBinaryCompare
 Set mdictItemShield = New Scripting.Dictionary
 mdictItemShield.CompareMode = vbBinaryCompare
-Set mdictItemMode = New Scripting.Dictionary
-mdictItemMode.CompareMode = vbTextCompare
 
 Set mReP1 = NewRegExp("^You cast .+ (on|at|upon) .*\{dmg\} (damage|healing|hit points)!?$")
 Set mReP2 = NewRegExp("^\{source\} casts .+ (on|at|upon) you.*\{dmg\} damage!?$")
@@ -200,13 +197,13 @@ Set mReP7 = Nothing
 Set mdictRows = Nothing
 Set mdictSelfCast = Nothing
 Set mdictItemShield = Nothing
-Set mdictItemMode = Nothing
 Erase mRowKind
 Erase mRowName
 Erase mRowMsg
 Erase mRowEnd
 Erase mRowEff
 Erase mRowDrop
+Erase mRowSpell
 mRowCount = 0
 
 Err.clear
@@ -396,9 +393,10 @@ End Function
 ' Row store (dedupe + truncation) and finalize
 '---------------------------------------------------------------------------
 
-'returns 1 when the line is exportable (stored now or already present), 0 when blank
+'returns 1 when the line is exportable (stored now or already present), 0 when blank. nSpell: the spell the row
+'belongs to (0 for none).
 Private Function AddRow(ByVal sName As String, ByVal sKind As String, ByVal sText As String, ByVal sEndText As String, _
-    ByVal sEffects As String) As Long
+    ByVal sEffects As String, Optional ByVal nSpell As Long = 0) As Long
 Dim sKey As String, bTrunc As Boolean, i As Long, nCap As Long
 On Error GoTo error:
 
@@ -410,10 +408,13 @@ If Len(sText) > 100 Then sText = Left$(sText, 100): bTrunc = True
 If Len(sEndText) > 100 Then sEndText = Left$(sEndText, 100): bTrunc = True
 If Len(sEffects) > 255 Then sEffects = Left$(sEffects, 255): bTrunc = True
 
-'Cast rows and named Self rows belong to one player spell or casting item: every name gets its own row, and
-'rows collapse only when name, Msg and EndMsg are all the same (effects merged). Nameless lines (monster-only
-'sources, hostile-spell status text, hits, traps) are realm-wide and collapse by text alone.
-If sKind = "Cast" Or (sKind = "Self" And Not sName = "") Then
+'Rows of one spell (Cast rows; status, incoming and shield rows of a friendly player or item spell) collapse only
+'when spell, Msg and EndMsg are all the same (effects merged), so two spells that share a name keep their own rows.
+'Other named Cast/Self rows (item damage shields) collapse by name and text. Nameless lines (monster-only sources,
+'hostile-spell status text, hits, traps) are realm-wide and collapse by text alone.
+If nSpell > 0 Then
+    sKey = sKind & "#" & nSpell & "|" & sText & "|" & sEndText
+ElseIf sKind = "Cast" Or (sKind = "Self" And Not sName = "") Then
     sKey = sKind & "@" & sName & "|" & sText & "|" & sEndText
 Else
     sKey = sKind & "|" & sText & "|" & sEndText
@@ -439,6 +440,7 @@ If mRowCount > UBound(mRowKind) Then
     ReDim Preserve mRowEnd(nCap)
     ReDim Preserve mRowEff(nCap)
     ReDim Preserve mRowDrop(nCap)
+    ReDim Preserve mRowSpell(nCap)
 End If
 
 i = mRowCount
@@ -448,6 +450,7 @@ mRowMsg(i) = sText
 mRowEnd(i) = sEndText
 mRowEff(i) = sEffects
 mRowDrop(i) = False
+mRowSpell(i) = nSpell
 mdictRows.Add sKey, i
 mRowCount = mRowCount + 1
 
@@ -482,42 +485,21 @@ Call HandleError("MergeEffects")
 mbFailed = True
 End Function
 
-'stores the same row once per name; returns 1 when the line is exportable
-Private Function AddRowEach(sNames() As String, ByVal nNames As Long, ByVal sKind As String, ByVal sText As String, _
-    ByVal sEndText As String, ByVal sEffects As String) As Long
+'stores the same row once per name, all for spell nSpell; returns 1 when the line is exportable
+Private Function AddRowEach(sNames() As String, ByVal nNames As Long, ByVal nSpell As Long, ByVal sKind As String, _
+    ByVal sText As String, ByVal sEndText As String, ByVal sEffects As String) As Long
 Dim x As Long
 On Error GoTo error:
 
 AddRowEach = 0
 For x = 0 To nNames - 1
-    If AddRow(sNames(x), sKind, sText, sEndText, sEffects) = 1 Then AddRowEach = 1
+    If AddRow(sNames(x), sKind, sText, sEndText, sEffects, nSpell) = 1 Then AddRowEach = 1
     If mbFailed Then Exit For
 Next x
 
 Exit Function
 error:
 Call HandleError("AddRowEach")
-mbFailed = True
-End Function
-
-'Cast rows of spell sKey, one per name like AddRowEach; a row under the name of an item that casts the spell also
-'gets that item's Use and/or OnHit marker in its effects. Returns 1 when the line is exportable.
-Private Function AddCastRows(sNames() As String, ByVal nNames As Long, ByVal sKey As String, ByVal sText As String, _
-    ByVal sEffects As String) As Long
-Dim x As Long, sEff As String
-On Error GoTo error:
-
-AddCastRows = 0
-For x = 0 To nNames - 1
-    sEff = sEffects
-    If mdictItemMode.Exists(sKey & "|" & sNames(x)) Then sEff = MergeEffects(sEff, mdictItemMode.Item(sKey & "|" & sNames(x)))
-    If AddRow(sNames(x), "Cast", sText, "", sEff) = 1 Then AddCastRows = 1
-    If mbFailed Then Exit For
-Next x
-
-Exit Function
-error:
-Call HandleError("AddCastRows")
 mbFailed = True
 End Function
 
@@ -604,6 +586,7 @@ For i = 0 To mRowCount - 1
         rs.Fields("Msg") = IIf(mRowMsg(i) = "", Chr(0), Left$(mRowMsg(i), 100))
         rs.Fields("EndMsg") = IIf(mRowEnd(i) = "", Chr(0), Left$(mRowEnd(i), 100))
         rs.Fields("Effects") = IIf(mRowEff(i) = "", Chr(0), Left$(mRowEff(i), 255))
+        rs.Fields("Spell") = mRowSpell(i)
         rs.Update
 
         If nID Mod 100 = 0 Then frmMME_Export.lblPanel(1).Caption = "Messages: writing (" & nID & ")"
@@ -625,6 +608,7 @@ End Sub
 ' Pass 0: items (spells learnable from items, spells cast by items)
 '---------------------------------------------------------------------------
 
+'dictItemCast: gets the numbers (as strings) of the spells items cast, when used or on hit
 Private Sub ExportItemScan(dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary, ByRef bStop As Boolean)
 Dim nStatus As Integer, nCount As Long, x As Integer
 Dim sItem As String, sKey As String, sCur As String
@@ -672,13 +656,14 @@ Do While nStatus = 0 And bStop = False And mbFailed = False
         If Not sUse = "" Then
             sParts = Split(sUse, "|")
             For x = 0 To UBound(sParts)
-                Call AddItemCaster(dictItemCast, sParts(x), sItem, "Use")
+                If Not dictItemCast.Exists(sParts(x)) Then dictItemCast.Add sParts(x), True
             Next x
         End If
         If Not sHit = "" Then
             sParts = Split(sHit, "|")
             For x = 0 To UBound(sParts)
-                Call AddItemCaster(dictItemCast, Split(sParts(x), ":")(0), sItem, "OnHit")
+                sKey = Split(sParts(x), ":")(0)
+                If Not dictItemCast.Exists(sKey) Then dictItemCast.Add sKey, True
             Next x
         End If
     End If
@@ -737,36 +722,11 @@ sHit = ""
 mbFailed = True
 End Sub
 
-'records that item sItem casts spell sKey, when used ("Use") or on hit ("OnHit")
-Private Sub AddItemCaster(dictItemCast As Scripting.Dictionary, ByVal sKey As String, ByVal sItem As String, ByVal sMode As String)
-Dim sCur As String, sModeKey As String
-On Error GoTo error:
-
-If dictItemCast.Exists(sKey) Then
-    sCur = dictItemCast.Item(sKey)
-    If InStr(1, "|" & sCur & "|", "|" & sItem & "|", vbBinaryCompare) = 0 Then dictItemCast.Item(sKey) = sCur & "|" & sItem
-Else
-    dictItemCast.Add sKey, sItem
-End If
-
-sModeKey = sKey & "|" & sItem
-If mdictItemMode.Exists(sModeKey) Then
-    mdictItemMode.Item(sModeKey) = MergeEffects(mdictItemMode.Item(sModeKey), sMode)
-Else
-    mdictItemMode.Add sModeKey, sMode
-End If
-
-Exit Sub
-error:
-Call HandleError("AddItemCaster")
-mbFailed = True
-End Sub
-
 'A spell an item casts can chain to more spells through EndCast (spell ability 151; CastOnEnd% only sets the chance of
-'the next EndCast). The item's user casts those too, so each chained spell counts as cast by the same items, in the
-'same way (Use / OnHit).
+'the next EndCast). The item's user casts those too, so each chained spell counts as item-cast as well (a client
+'follows the same chain through the Spells table).
 Private Sub ExpandItemChains(dictItemCast As Scripting.Dictionary)
-Dim vRoots As Variant, i As Long, sChain As String, sSpells() As String, sItems() As String, x As Long, y As Long
+Dim vRoots As Variant, i As Long, sChain As String, sSpells() As String, x As Long
 On Error GoTo error:
 
 If dictItemCast.Count = 0 Then Exit Sub
@@ -778,11 +738,8 @@ For i = 0 To UBound(vRoots)
     If mbFailed Then Exit Sub
     If Not sChain = "" Then
         sSpells = Split(sChain, "|")
-        sItems = Split(dictItemCast.Item(vRoots(i)), "|")
         For x = 0 To UBound(sSpells)
-            For y = 0 To UBound(sItems)
-                Call AddItemCaster(dictItemCast, sSpells(x), sItems(y), mdictItemMode.Item(vRoots(i) & "|" & sItems(y)))
-            Next y
+            If Not dictItemCast.Exists(sSpells(x)) Then dictItemCast.Add sSpells(x), True
         Next x
     End If
 Next i
@@ -982,9 +939,8 @@ End Sub
 
 Private Sub ProcessSpell(dictRoomSpells As Scripting.Dictionary, dictLearn As Scripting.Dictionary, dictItemCast As Scripting.Dictionary)
 Dim sName As String, sSrc As String, sEffects As String, sKey As String
-Dim sItemNames As String, sTargetTok As String, sNames() As String, nNames As Long
-Dim sSelfNames() As String, nSelfNames As Long, bFriendly As Boolean
-Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bArea As Boolean, nRows As Long, nCast As Long, bStdCast As Boolean
+Dim sTargetTok As String, sSelfNames() As String, nSelfSpell As Long, bFriendly As Boolean
+Dim nDur As Integer, bShort As Boolean, bPlayer As Boolean, bItem As Boolean, bArea As Boolean, nRows As Long, nCast As Long, bStdCast As Boolean
 Dim nDesc As Long, nConf As Long, nShock As Long
 Dim sDesc3 As String, sConf1 As String, bMergeFail As Boolean
 On Error GoTo error:
@@ -1006,8 +962,7 @@ If mbHaveLearnable Then
 Else
     bPlayer = (Spellrec.MageryA > 0) Or dictLearn.Exists(sKey)
 End If
-sItemNames = ""
-If dictItemCast.Exists(sKey) Then sItemNames = dictItemCast.Item(sKey)
+bItem = dictItemCast.Exists(sKey)
 
 Select Case Spellrec.Target
     Case 3, 9, 10, 11, 12, 13:
@@ -1021,24 +976,23 @@ Else
     sTargetTok = "{target}"
 End If
 
-nNames = BuildNameList(sName, bPlayer, sItemNames, sNames)
-
-'Lines addressed to the affected player are named only when the player can be the one affected by their own
-'spell or item (self/friendly target types); hostile-spell status text is seen only by the enemy, so it is
-'a realm-wide line and gets no name (one row per distinct text).
+'Cast rows carry the spell's name and number; an item that casts the spell lists the number in Items.UseSpells /
+'HitSpells, so the rows are written once per spell, not per item. Lines addressed to the affected player get the
+'name and number only when the player can be the one affected by their own spell or item (self/friendly target
+'types); hostile-spell status text is seen only by the enemy, so it is a realm-wide line and gets neither (one row
+'per distinct text). A spell with a blank name gets no number on those lines either.
 Select Case Spellrec.Target
     Case 0, 1, 2, 6, 13:
         bFriendly = True
     Case Else:
         bFriendly = False
 End Select
-If bFriendly And (bPlayer Or Not sItemNames = "") Then
-    sSelfNames = sNames
-    nSelfNames = nNames
-Else
-    ReDim sSelfNames(0)
-    sSelfNames(0) = ""
-    nSelfNames = 1
+ReDim sSelfNames(0)
+sSelfNames(0) = ""
+nSelfSpell = 0
+If bFriendly And (bPlayer Or bItem) And Not sName = "" Then
+    sSelfNames(0) = sName
+    nSelfSpell = Spellrec.Number
 End If
 
 nDesc = SpellAbilityValue(115)
@@ -1057,18 +1011,18 @@ If Not Trim(sConf1) = "" Then
 End If
 
 nRows = 0
-nRows = nRows + SpellStatusRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
+nRows = nRows + SpellStatusRow(sSelfNames(0), nSelfSpell, sName, sSrc, nDesc, sDesc3, sEffects, bMergeFail)
 If Not bMergeFail Then nRows = nRows + SpellFailRow(sSrc, sConf1)
-If bPlayer Or Not sItemNames = "" Then
-    nCast = SpellCastRow(sNames, nNames, sName, sSrc, bShort, sTargetTok, sEffects, bStdCast)
+If bPlayer Or bItem Then
+    nCast = SpellCastRow(sName, sSrc, bShort, sTargetTok, sEffects, bStdCast)
     'cast line empty or in a standard form: the start line confirms the cast too
-    If bStdCast Then nCast = nCast + SpellStartRow(sNames, nNames, sSrc, sTargetTok, sEffects)
+    If bStdCast Then nCast = nCast + SpellStartRow(sName, sSrc, sTargetTok, sEffects)
     nRows = nRows + nCast
 ElseIf mdictSelfCast.Exists(sKey) Then
     nRows = nRows + SpellSelfCastRow(sName, sSrc, bShort, sTargetTok, sEffects, mdictSelfCast.Item(sKey))
 End If
-nRows = nRows + SpellIncomingRow(sSelfNames, nSelfNames, sName, sSrc, nDesc, bShort, sEffects)
-nRows = nRows + SpellShieldRows(sSelfNames, nSelfNames, sSrc, nShock)
+nRows = nRows + SpellIncomingRow(sSelfNames(0), nSelfSpell, sName, sSrc, nDesc, bShort, sEffects)
+nRows = nRows + SpellShieldRows(sSelfNames, 1, nSelfSpell, sSrc, nShock)
 
 If sName = "" And nRows > 0 Then Call LogWarning("Spell " & Spellrec.Number & ": blank spell name")
 
@@ -1078,59 +1032,9 @@ Call HandleError("ProcessSpell")
 mbFailed = True
 End Sub
 
-'Name list for a spell's rows: the spell name when players can cast it, then each casting item's name
-'not already present (case-insensitive); just the spell name when nothing applies. Returns the count.
-Private Function BuildNameList(ByVal sName As String, ByVal bPlayer As Boolean, ByVal sItemNames As String, sNames() As String) As Long
-Dim sItems() As String, x As Long, j As Long, nNames As Long, bDup As Boolean
-On Error GoTo error:
-
-ReDim sNames(0)
-sNames(0) = ""
-nNames = 0
-
-If bPlayer And Not sName = "" Then
-    sNames(0) = sName
-    nNames = 1
-End If
-
-If Not sItemNames = "" Then
-    sItems = Split(sItemNames, "|")
-    For x = 0 To UBound(sItems)
-        If Not sItems(x) = "" Then
-            bDup = False
-            For j = 0 To nNames - 1
-                If StrComp(sNames(j), sItems(x), vbTextCompare) = 0 Then
-                    bDup = True
-                    Exit For
-                End If
-            Next j
-            If Not bDup Then
-                ReDim Preserve sNames(nNames)
-                sNames(nNames) = sItems(x)
-                nNames = nNames + 1
-            End If
-        End If
-    Next x
-End If
-
-If nNames = 0 Then
-    sNames(0) = sName
-    nNames = 1
-End If
-
-BuildNameList = nNames
-
-Exit Function
-error:
-Call HandleError("BuildNameList")
-mbFailed = True
-BuildNameList = 0
-End Function
-
-'DescMsg (115): Msg = line 3, EndMsg = line 1; Kind Self
-Private Function SpellStatusRow(sNames() As String, _
-    ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal nDesc As Long, ByVal sRaw3 As String, _
-    ByVal sEffects As String, ByVal bMergeFail As Boolean) As Long
+'DescMsg (115): Msg = line 3, EndMsg = line 1; Kind Self, named sRowName, for spell nSpell
+Private Function SpellStatusRow(ByVal sRowName As String, ByVal nSpell As Long, ByVal sName As String, ByVal sSrc As String, _
+    ByVal nDesc As Long, ByVal sRaw3 As String, ByVal sEffects As String, ByVal bMergeFail As Boolean) As Long
 Dim sRaw1 As String, sText As String, sEnd As String, bFlag As Boolean
 On Error GoTo error:
 
@@ -1149,7 +1053,7 @@ sEnd = NormalizeWith(sRaw1, sName, bFlag)
 If bFlag Then Call LogUnmatched(sSrc & " desc line 1", sRaw1)
 
 If bMergeFail Then Call AddEffect(sEffects, "Fail")
-SpellStatusRow = AddRowEach(sNames, nNames, "Self", sText, sEnd, sEffects)
+SpellStatusRow = AddRow(sRowName, "Self", sText, sEnd, sEffects, nSpell)
 
 Exit Function
 error:
@@ -1176,13 +1080,12 @@ Call HandleError("SpellFailRow")
 mbFailed = True
 End Function
 
-'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells. Every such spell and item
-'gets its cast line under its own name, standard form or not, so a client can tie the line to its spell/item.
-'bStandard returns True when the line is empty or one of the engine's standard forms (the start line is then
-'exported as well, see SpellStartRow).
-Private Function SpellCastRow(sNames() As String, _
-    ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, ByVal sTargetTok As String, _
-    ByVal sEffects As String, ByRef bStandard As Boolean) As Long
+'CastMsgB line 1 (what the caster sees); only for player-castable or item-cast spells. Every such spell gets its
+'cast line under its name and number, standard form or not, so a client can tie the line to the spell and, through
+'Items.UseSpells / HitSpells, to the items that cast it. bStandard returns True when the line is empty or one of the
+'engine's standard forms (the start line is then exported as well, see SpellStartRow).
+Private Function SpellCastRow(ByVal sName As String, ByVal sSrc As String, ByVal bShort As Boolean, _
+    ByVal sTargetTok As String, ByVal sEffects As String, ByRef bStandard As Boolean) As Long
 Dim sRaw As String, sText As String, sList As String, bFlag As Boolean
 On Error GoTo error:
 
@@ -1209,7 +1112,7 @@ Else
 End If
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 1", sRaw)
-SpellCastRow = AddCastRows(sNames, nNames, CStr(Spellrec.Number), sText, sEffects)
+SpellCastRow = AddRow(sName, "Cast", sText, "", sEffects, Spellrec.Number)
 
 Exit Function
 error:
@@ -1218,9 +1121,9 @@ mbFailed = True
 End Function
 
 'StartMsg (120) line 1: shown to the caster once the spell has landed (Paradigm Spell.cs), every %s = the target.
-'Used only when the cast line itself is empty or standard; Kind Cast.
-Private Function SpellStartRow(sNames() As String, ByVal nNames As Long, ByVal sSrc As String, _
-    ByVal sTargetTok As String, ByVal sEffects As String) As Long
+'Used only when the cast line itself is empty or standard; Kind Cast, under the spell's name and number.
+Private Function SpellStartRow(ByVal sName As String, ByVal sSrc As String, ByVal sTargetTok As String, _
+    ByVal sEffects As String) As Long
 Dim nStart As Long, sRaw As String, sText As String, bFlag As Boolean
 On Error GoTo error:
 
@@ -1237,7 +1140,7 @@ If sText = "" Then Exit Function
 If IsStandardForm(mReP7, sText) Then Exit Function
 
 If bFlag Then Call LogUnmatched(sSrc & " start line 1", sRaw)
-SpellStartRow = AddCastRows(sNames, nNames, CStr(Spellrec.Number), sText, sEffects)
+SpellStartRow = AddRow(sName, "Cast", sText, "", sEffects, Spellrec.Number)
 
 Exit Function
 error:
@@ -1288,10 +1191,9 @@ Call HandleError("SpellSelfCastRow")
 mbFailed = True
 End Function
 
-'CastMsgB line 2 (what the target sees): Self
-Private Function SpellIncomingRow(sNames() As String, _
-    ByVal nNames As Long, ByVal sName As String, ByVal sSrc As String, ByVal nDesc As Long, ByVal bShort As Boolean, _
-    ByVal sEffects As String) As Long
+'CastMsgB line 2 (what the target sees): Self, named sRowName, for spell nSpell
+Private Function SpellIncomingRow(ByVal sRowName As String, ByVal nSpell As Long, ByVal sName As String, ByVal sSrc As String, _
+    ByVal nDesc As Long, ByVal bShort As Boolean, ByVal sEffects As String) As Long
 Dim sRaw As String, sText As String, sList As String, bFlag As Boolean, bExport As Boolean
 On Error GoTo error:
 
@@ -1328,7 +1230,7 @@ End If
 If bExport = False Then Exit Function
 
 If bFlag Then Call LogUnmatched(sSrc & " cast line 2", sRaw)
-SpellIncomingRow = AddRowEach(sNames, nNames, "Self", sText, "", sEffects)
+SpellIncomingRow = AddRow(sRowName, "Self", sText, "", sEffects, nSpell)
 
 Exit Function
 error:
@@ -1347,7 +1249,7 @@ frmMME_Export.lblPanel(1).Caption = "Messages: item shields ..."
 For Each vKey In mdictItemShield.Keys
     sNames = Split(mdictItemShield.Item(vKey), "|")
     nNames = UBound(sNames) + 1
-    Call SpellShieldRows(sNames, nNames, "Item shield message " & vKey & " (" & mdictItemShield.Item(vKey) & ")", CLng(vKey), True)
+    Call SpellShieldRows(sNames, nNames, 0, "Item shield message " & vKey & " (" & mdictItemShield.Item(vKey) & ")", CLng(vKey), True)
     If mbFailed Then Exit For
 Next vKey
 
@@ -1358,9 +1260,9 @@ mbFailed = True
 End Sub
 
 'ShockMsg (137 on a spell or an item): line 1 (shield owner) and line 2 (attacker hit by the shield);
-'Self, Damage,DamageShield
-Private Function SpellShieldRows(sNames() As String, _
-    ByVal nNames As Long, ByVal sSrc As String, ByVal nShock As Long, Optional ByVal bOwnerOnly As Boolean = False) As Long
+'Self, Damage,DamageShield, once per name, for spell nSpell (0 for items)
+Private Function SpellShieldRows(sNames() As String, ByVal nNames As Long, ByVal nSpell As Long, ByVal sSrc As String, _
+    ByVal nShock As Long, Optional ByVal bOwnerOnly As Boolean = False) As Long
 Dim sRaw As String, sText As String, bFlag As Boolean, nRows As Long
 On Error GoTo error:
 
@@ -1373,7 +1275,7 @@ If Not sRaw = "" Then
     sText = NormalizeWith(sRaw, "{attacker}|{dmg}", bFlag)
     If Not (IsStandardForm(mReP3, sText) Or IsStandardForm(mReP4, sText)) Then
         If bFlag Then Call LogUnmatched(sSrc & " shock line 1", sRaw)
-        nRows = nRows + AddRowEach(sNames, nNames, "Self", sText, "", "Damage,DamageShield")
+        nRows = nRows + AddRowEach(sNames, nNames, nSpell, "Self", sText, "", "Damage,DamageShield")
     End If
 End If
 
@@ -1388,7 +1290,7 @@ If Not sRaw = "" Then
     sText = NormalizeWith(sRaw, "{dmg}", bFlag)
     If Not (IsStandardForm(mReP3, sText) Or IsStandardForm(mReP4, sText)) Then
         If bFlag Then Call LogUnmatched(sSrc & " shock line 2", sRaw)
-        nRows = nRows + AddRowEach(sNames, nNames, "Self", sText, "", "Damage,DamageShield")
+        nRows = nRows + AddRowEach(sNames, nNames, nSpell, "Self", sText, "", "Damage,DamageShield")
     End If
 End If
 

@@ -3,7 +3,8 @@
 Status: current as of 2026-10-19 for the MegaMud facts (NMR branch `261018-messages-fix1`, NMR 1.8.4;
 MegaMud 3.x branch `@syntax53/feature/260926-sqlite-migration` as of commit 5e0b703e). Split on
 2026-11-01: the client-neutral description of the table moved to `docs/MME_MESSAGES_HANDOFF.md`. Item uses
-(section 9.1) added on NMR branch `261101-item-messages`.
+(section 9.1) added on NMR branch `261101-item-messages`, then updated there for one row per spell
+(`Messages.Spell`; item rows are no longer written per item).
 
 This is the MegaMud companion to `docs/MME_MESSAGES_HANDOFF.md`. That document covers the table itself:
 how NMR builds each row, the columns, kinds, names, tokens and effects, and how to match lines. **Read it
@@ -37,7 +38,7 @@ imported"), and nothing in its plan schedules it.
 - `Info.[NMR Version]` is `v1.8.4` or newer (`MmeSnapNmrVersion` gives 10804).
 - **Probe for the table before selecting**: `MmeDescribe` on a missing table fails the whole read
   (`MME_IMPORT_HANDOFF.md`: there is no table-existence probe; a bad query reports SQLSTATE `42S02`).
-  A version of 10804 or more implies the table exists (generic 2.1). Probe anyway.
+  A version of 10804 or more implies the table and its `Spell` column exist (generic 2.1). Probe anyway.
 - The extra `Items` columns are harmless to the current Items reader (it builds its column list from what
   exists).
 - Columns, the `Chr(0)` empty value and the reserved-word brackets: generic 2.2 and 2.3.
@@ -46,14 +47,17 @@ imported"), and nothing in its plan schedules it.
 
 ## 3. Against the stock MegaMud data
 
-A stock v1.11p export has 1,417 Messages rows (generic 7). Matched against the stock MegaMud
-`Messages.md` (612 records), 502 records have an NMR counterpart. The rest are room sounds, MegaMud-only
+Row counts of a stock v1.11p export: generic 7. Matched against the stock MegaMud `Messages.md` (612
+records), 502 records have an NMR counterpart (counted on the 2026-11-01 export, which wrote item rows per
+item, the shape the fan-out of 9.1 rebuilds). The rest are room sounds, MegaMud-only
 records (lives warnings, `Cancel FUgram`), standard engine forms MegaMud parses elsewhere, text from older
 game versions, and monster text NMR leaves out on purpose (death text of monsters worth under 101
 experience). Keep all of those: they are not NMR's to replace.
 
-NMR's one-row-per-name shape (generic 3.8) is the same as the stock `Messages.md`: `bless`, `chant`,
-`glass orb` and `shimmering longsword` are separate records there too. NMR spell and item names (generic
+NMR writes one row per spell (generic 3.8): `bless` and `chant` are separate rows, and an item that casts
+bless adds none. The stock `Messages.md` is one record per name, spells and items alike: `bless`, `chant`,
+`glass orb` and `shimmering longsword` are separate records. The import gets the item records back by
+copying a spell's rows under the names of the items that cast it (9.1). NMR spell and item names (generic
 4.4) are the same strings MegaMud's Spells and Items records hold after an MME import.
 
 ---
@@ -103,6 +107,7 @@ NMR's one-row-per-name shape (generic 3.8) is the same as the stock `Messages.md
 | `iAction` | `MA_CHECKROOM` for CheckRoom (and Death, if adopted); otherwise keep the stored value, `MA_IGNORE` for a new record. `MA_WAITITOFF`, `MA_RESTHPS`, `MA_RESTMANA`, `MA_RUN`, `MA_HANGUP` are user policy: never set them from NMR. | mixed |
 
 Kind decides the shape: Cast and Other rows never have a `szMsg2`; only Self rows with an `EndMsg` do.
+`Spell` has no `MSGREC` field: the import uses it to copy item rows (9.1) and stores nothing from it.
 
 ---
 
@@ -157,7 +162,6 @@ matched).
 | CheckRoom (Other) | `iAction` = `MA_CHECKROOM`, `wEffects` 0 | 31 of 32 |
 | Death (Other) | suggest `iAction` = `MA_CHECKROOM` | stock `obsidian statue death` / `Statue death` are 0000 with action 1 |
 | Mute, Drain, DamageShield, Damage, Heal, ManaHeal, ManaSteal, Cure, RoomSpell, Monster | 0 | Mute 4 of 4, Drain 10 of 10, DamageShield 7 of 7, one-off Damage 115 of 128 |
-| Use, OnHit (Cast rows under an item's name) | 0 | New in NMR, no stock counterpart. They say how the item cast the spell; MegaMud ties the line to the item by its name (section 4). |
 
 `ME_CHECKANY` (conversation lines) and `ME_ANYPOS` have no NMR counterpart: NMR text is the whole line from
 its start, so a new record needs neither.
@@ -185,9 +189,9 @@ overriding in the merged view.
 2. **Text match**: equal canonical `szMsg1`, or the stored canonical `szMsg1` is a prefix of NMR's (a
    substring when the stored record has `ME_ANYPOS`). When both sides have a second text, the canonical
    `szMsg2` must match the same way: one start line can end in different ways.
-3. **Name**: for a row named after a spell or item (generic 4.4), the stored name must also match,
-   case-insensitively. For a realm-wide row, ignore the name: stock names are labels too ("monster entry",
-   "trap disarm", "chase (alley)").
+3. **Name**: for a row named after a spell or item (generic 4.4), including the copies made under item
+   names (9.1), the stored name must also match, case-insensitively. For a realm-wide row, ignore the
+   name: stock names are labels too ("monster entry", "trap disarm", "chase (alley)").
 
 ### 8.3 What to take
 
@@ -263,10 +267,18 @@ classes and monsters that cast it. The `Items` columns give the import what it n
 - **Key**: `Items.Number`, not the code (a code changes when the item is renamed). MegaMud assigns its own
   record number and keeps an item-number map, like the ownership options in 8.5, so a re-import updates
   the same record and the user's edits to it survive.
-- **Messages**: the item's Cast rows already carry the item's name, so the name-based credit in section 4
-  works once the item record has the same name. `Use` in `Effects` marks the lines that confirm a use.
-- **On-hit spells** (`HitSpells`) need no record: their Cast rows are named after the weapon, which
-  `FindItem (pmm, pmm->szMsgMatch)` already checks against the current weapon (section 4).
+- **Messages**: NMR writes a spell's rows once, under the spell's name and number (`Messages.Spell`), not
+  per item (generic 3.4). MegaMud credits by name (section 4), so the import copies them: for each item,
+  take the rows whose `Spell` is in the item's `UseSpells` or `HitSpells`, or reached from those through
+  EndCast (generic 5.4), and add them again under the item's name. Copy the Cast rows; copy the named Self
+  rows too if MegaMud should tie the item's effects to it (the per-item export of 2026-11-01 did both).
+  Keep the spell-named originals: the classes and monsters that cast the spell need them. Then marry the
+  copies like any other row (8.2): they find stock records such as `glass orb` and `shimmering longsword`.
+- **Use or on hit**: a copy from `UseSpells` confirms a use, credited when the item record has the same
+  name. A copy from `HitSpells` is what the weapon proc prints; `FindItem (pmm, pmm->szMsgMatch)` checks it
+  against the current weapon (section 4). On-hit spells need no item-use record, only the copied rows.
+- **Ownership**: the copies are import-made records like the rest (8.5). Rebuild them on every import,
+  since an item can change its spells.
 
 Whether MegaMud's spell list should hold these records, and how they show in its UI, is an owner decision
 (O8).
@@ -297,8 +309,10 @@ generic 6.
 - **Two NMR rows can marry one stored record.** A stock record that is a fragment is a prefix of several
   NMR lines. Decide whether the stored record absorbs them (then insert nothing) or stays and the rest are
   inserted. Inserting is harmless: all of them fire.
-- **NMR leaves out the engine's standard forms** (generic 3.6), except a player spell's own cast line.
-  MegaMud parses those in code, so nothing changes there.
+- **NMR leaves out the engine's standard forms** (generic 3.6), except the cast line of a player or item
+  spell. MegaMud parses those in code, so nothing changes there.
+- **Item lines are under the spell's name.** Without the copies of 9.1, an item's lines credit the spell,
+  not the item, and the weapon-proc check in section 4 never matches.
 - **Engine strings that are not in the data**: "You have N lives left." (`check_kill_user`), "You feel your
   life-force ebbing." (`load_player`) and "You look around stupidly and do nothing!" (`check_confusion`).
   NMR never exports them. Keep MegaMud's own records for them.
@@ -316,14 +330,14 @@ generic 6.
 | O5 | Death rows: `MA_CHECKROOM`, or ignore? | `MA_CHECKROOM` (stock precedent). |
 | O6 | Chase rows with no stored counterpart: skip, or insert disabled? | Skip. |
 | O7 | "your" variants for the 16 "{target}'s" rows (6). | Add them. |
-| O8 | Item uses and weapon verbs (9). | Build item-use records from `UseCode` / `UseSpells`, keyed by item number. Skip the verbs until a feature needs them. |
+| O8 | Item uses and weapon verbs (9). | Build item-use records from `UseCode` / `UseSpells`, keyed by item number, and copy the spells' Messages rows under the item names (9.1). Skip the verbs until a feature needs them. |
 
 ---
 
 ## 12. Checking an implementation
 
-- **On stock data**: `TestData/Stock111p/Messages.db` holds the stock records. A stock v1.11p NMR export
-  has 1,417 Messages rows, and about 500 of the 612 stock records should marry. NMR's audit of that pair is
+- **On stock data**: `TestData/Stock111p/Messages.db` holds the stock records. With the item copies of
+  9.1, about 500 of the 612 stock records should marry a stock v1.11p NMR export. NMR's audit of that pair is
   in the NMR repository (`docs/megamud-stock-audit.txt`, a local file, with per-record message numbers).
 - **Idempotence**: importing the same MDB twice must leave `Default\Messages.db` byte-for-byte unchanged,
   the same rule the other types follow.
@@ -335,7 +349,8 @@ generic 6.
 | `black wind` | Cast | "A cool wind blows throughout the room!" |
 | `annointed hands` | Cast | "You lay hands on {target}." |
 | `agony` | Cast | "You cast agony on {target} for {dmg} damage!" |
-| `jade amulet` | Cast, `Use` | "You rub your jade amulet!" (the item `jade amulet` has a `UseCode`) |
+| `jade amulet` | Cast, `Spell` 156 | "You rub your jade amulet!" (spell 156 has the item's name; the item `jade amulet` has a `UseCode` and `UseSpells` `156`) |
+| `food` | Cast, `Spell` 316 | "You feel a little better." (one row; the copies of 9.1 put it under each food item: `iron ration`, `roast mutton`, ...) |
 | `spiked shield` | Self | "The shield spike stabs {attacker} for {dmg} damage!" (becomes `{target}`) |
 | (realm-wide) | Chase | "{target} slips into the dark alley." |
 | (realm-wide) | CheckRoom | "A moss zombie rises from the ground!" |

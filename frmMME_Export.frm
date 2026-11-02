@@ -1557,7 +1557,7 @@ Call OpenTables
 
 If bUpdateExistingADB Then
     If HasCurrentSchema = False Then
-        MsgBox "This export was made by an older version of NMR and lacks the Messages, Titles or Abilities table or the item use columns." & vbCrLf _
+        MsgBox "This export was made by an older version of NMR and lacks the Messages, Titles or Abilities table or the newest columns (item uses, message spells)." & vbCrLf _
             & "Create a new export instead of updating this one.", vbExclamation
         Call CloseDB(True)
         GoTo ReEnable:
@@ -6772,9 +6772,10 @@ Dim tdf As DAO.TableDef, fld As DAO.field
 
 HasCurrentSchema = False
 
-Set tdf = DB.TableDefs("Messages")
 Set tdf = DB.TableDefs("Titles")
 Set tdf = DB.TableDefs("Abilities")
+Set tdf = DB.TableDefs("Messages")
+Set fld = tdf.Fields("Spell")
 Set tdf = DB.TableDefs("Items")
 Set fld = tdf.Fields("HitVerbs")
 Set fld = tdf.Fields("UseCode")
@@ -7348,6 +7349,7 @@ With tabNewMessages
     .Columns.Append "Msg", adVarWChar, 100
     .Columns.Append "EndMsg", adVarWChar, 100
     .Columns.Append "Effects", adVarWChar, 255
+    .Columns.Append "Spell", adInteger
 End With
 catNewDB.Tables.Append tabNewMessages
 
