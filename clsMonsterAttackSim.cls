@@ -19,6 +19,7 @@ Option Base 0
 
 Private m_sAtkName(0 To 4) As String
 Private m_nAtkType(0 To 4) As Integer
+Private m_nAtkSpellType(0 To 4) As Integer
 Private m_nAtkEnergy(0 To 4) As Integer
 Private m_nAtkMin(0 To 4) As Integer
 Private m_nAtkMax(0 To 4) As Integer
@@ -26,6 +27,7 @@ Private m_nAtkChance(0 To 4) As Integer
 Private m_nAtkSuccess(0 To 4) As Integer
 Private m_nAtkHitSpellMin(0 To 4) As Integer
 Private m_nAtkHitSpellMax(0 To 4) As Integer
+Private m_nAtkHitSpellType(0 To 4) As Integer
 Private m_sAtkHitSpellName(0 To 4) As String
 Private m_nAtkResist(0 To 4) As Integer
 Private m_nAtkMRdmgResist(0 To 4) As Integer
@@ -48,6 +50,15 @@ Private m_nUserDodge As Long
 Private m_nUserMR As Long
 Private m_nUserAntiMagic As Integer
 Private m_bDodgeBeforeAC As Boolean
+Private m_nUserProtEvil As Long
+Private m_bMobIsEvil As Boolean
+Private m_nUserVileWard As Long
+
+Private m_nUserRFIR As Long
+Private m_nUserRCOL As Long
+Private m_nUserRLIT As Long
+Private m_nUserRWAT As Long
+Private m_nUserRSTO As Long
 
 Private m_nEnergyPerRound As Integer
 Private m_nNumberOfRounds As Long
@@ -79,10 +90,17 @@ Private m_bCombatLogMaxRoundOnly As Boolean
 Private m_sBetweenRoundName(0 To 4) As String
 Private m_nBetweenRoundMin(0 To 4) As Integer
 Private m_nBetweenRoundMax(0 To 4) As Integer
+Private m_nBetweenRoundSpellType(0 To 4) As Integer
 Private m_nBetweenRoundChance(0 To 4) As Integer
 Private m_nBetweenRoundResistType(0 To 4) As Integer
 Private m_nBetweenRoundResistDmgMR(0 To 4) As Integer
 Private m_nBetweenRoundDuration(0 To 4) As Integer
+
+Private m_HIT_MIN As Integer
+Private m_HIT_CAP As Integer
+Private m_SPELL_HIT_CAP As Integer
+Private m_DODGE_SOFTCAP As Integer
+Private m_DODGE_CAP As Integer
 
 Private nActiveAtkSpells_Ticks(0 To 4) As Integer
 Private nActiveAtkSpells_DurationLeft(0 To 4) As Currency
@@ -93,6 +111,46 @@ Private nActiveBetweenSpells_Ticks(0 To 4) As Integer
 Private nActiveBetweenSpells_DurationLeft(0 To 4) As Currency
 Private nActiveBetweenSpells_Value(0 To 4) As Integer
 Private nActiveBetweenSpells_ValueOriginal(0 To 4) As Integer
+
+Public Property Get HIT_MIN() As Integer
+    HIT_MIN = m_HIT_MIN
+End Property
+
+Public Property Let HIT_MIN(ByVal vData As Integer)
+    m_HIT_MIN = vData
+End Property
+
+Public Property Get HIT_CAP() As Integer
+    HIT_CAP = m_HIT_CAP
+End Property
+
+Public Property Let HIT_CAP(ByVal vData As Integer)
+    m_HIT_CAP = vData
+End Property
+
+Public Property Get SPELL_HIT_CAP() As Integer
+    SPELL_HIT_CAP = m_SPELL_HIT_CAP
+End Property
+
+Public Property Let SPELL_HIT_CAP(ByVal vData As Integer)
+    m_SPELL_HIT_CAP = vData
+End Property
+
+Public Property Get DODGE_SOFTCAP() As Integer
+    DODGE_SOFTCAP = m_DODGE_SOFTCAP
+End Property
+
+Public Property Let DODGE_SOFTCAP(ByVal vData As Integer)
+    m_DODGE_SOFTCAP = vData
+End Property
+
+Public Property Get DODGE_CAP() As Integer
+    DODGE_CAP = m_DODGE_CAP
+End Property
+
+Public Property Let DODGE_CAP(ByVal vData As Integer)
+    m_DODGE_CAP = vData
+End Property
 
 Public Property Let bDodgeBeforeAC(ByVal vData As Boolean)
     m_bDodgeBeforeAC = vData
@@ -169,7 +227,12 @@ End Property
 Public Property Get nBetweenRoundDuration(ByVal Index As Integer) As Integer
     nBetweenRoundDuration = m_nBetweenRoundDuration(Index)
 End Property
-
+Public Property Let nBetweenRoundSpellType(ByVal Index As Integer, ByVal vData As Integer)
+    m_nBetweenRoundSpellType(Index) = vData
+End Property
+Public Property Get nBetweenRoundSpellType(ByVal Index As Integer) As Integer
+    nBetweenRoundSpellType = m_nBetweenRoundSpellType(Index)
+End Property
 Public Property Let nBetweenRoundDuration(ByVal Index As Integer, ByVal iData As Integer)
     m_nBetweenRoundDuration(Index) = iData
 End Property
@@ -268,7 +331,7 @@ If m_bHideEnergyInfo Then
 End If
 
 If Len(sRight) > 0 And Len(sLeft) > 29 Then
-    sLeft = Mid(sLeft, 1, 26) & "..."
+    sLeft = Left$(sLeft, 26) & "..."
 End If
 m_sCombatLog = m_sCombatLog & vbCrLf & sLeft
 If Len(sRight) > 0 Then m_sCombatLog = m_sCombatLog & String(30 - Len(sLeft), " ") & sRight
@@ -417,26 +480,41 @@ Public Sub RunSim()
 On Error GoTo error:
 Dim nRound As Long, nAttempt As Integer, nAttack As Integer, x As Integer
 Dim nRemainingEnergy As Long, nEnergyUsed As Integer, bShowHitSpell As Boolean
-Dim nDR_DamageResisted As Currency, nMR_Reduction As Currency
+Dim nDR_DamageResisted As Currency, nMR_Reduction As Currency, nResist_Reduction As Currency
 Dim bAttackHit As Boolean, bDodged As Boolean, bGlanced As Boolean, bResisted As Boolean
 Dim nLastAttackType As Integer, nLastAttackEnergy As Integer, nAttack_AdjSuccessChance As Currency
-Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer, nAdjustedDodgeValue As Integer
+Dim nRoll_AttackChance As Integer, nRoll_HitChance As Integer, nRoll_DodgeChance As Integer, nAdjustedDodgeValue As Long
 Dim nDamage As Currency, nHitSpellDamage As Currency, nRoundDamage As Long, nOriginalDamage As Currency
 Dim bSepShown As Boolean, bDurSpellApplied As Boolean, bNothingToSim As Boolean
 Dim nCurrentAverageDamage As Currency, nDifference As Currency, nDynamicRoundCount As Long
-Dim sMaxRoundCombatLog As String, sHitSpellName As String
+Dim sMaxRoundCombatLog As String, sHitSpellName As String, nAccTemp As Double, nUserDefense As Long
 
 Randomize
 If m_bDynamicCalc Then m_nNumberOfRounds = 100000
 
 If m_nNumberOfRounds < 1 Then Exit Sub
 If m_nEnergyPerRound < 1 Then Exit Sub
+
 m_nTotalAttacks = 0
 m_nTotalDamage = 0
 m_nTotalDamagePhys = 0
 m_nTotalDamageSpell = 0
 m_nMaxRoundDamage = 0
 m_nMaxEnergyPerRound = 0
+
+If m_HIT_MIN < 0 Then m_HIT_MIN = 0: If m_HIT_MIN > 100 Then m_HIT_MIN = 100
+If m_HIT_CAP < 0 Then m_HIT_CAP = 0: If m_HIT_CAP > 100 Then m_HIT_CAP = 100
+If m_SPELL_HIT_CAP < 0 Then m_SPELL_HIT_CAP = 0: If m_SPELL_HIT_CAP > 100 Then m_SPELL_HIT_CAP = 100
+If m_DODGE_SOFTCAP < 0 Then m_DODGE_SOFTCAP = 0: If m_DODGE_SOFTCAP > 100 Then m_DODGE_SOFTCAP = 100
+If m_DODGE_CAP < 0 Then m_DODGE_CAP = 0: If m_DODGE_CAP > 100 Then m_DODGE_CAP = 100
+
+'defense vs physical attacks. secondary defenses only count vs evil monsters (GreaterMUD engine: Mob.DoCombat).
+'vile ward is GreaterMUD-only and in tenths like item AC (50 = 5 AC).
+nUserDefense = m_nUserAC
+If m_bMobIsEvil Then
+    nUserDefense = nUserDefense + m_nUserProtEvil
+    If m_bGreaterMUD And m_nUserVileWard > 0 Then nUserDefense = nUserDefense + (m_nUserVileWard \ 10)
+End If
 
 Call ResetActiveSpells
 
@@ -579,24 +657,21 @@ For nRound = 1 To m_nNumberOfRounds
                     ' CHANCE TO HIT / CAST
                     nAttack_AdjSuccessChance = m_nAtkSuccess(nAttack)
                     If m_nAtkType(nAttack) <> 2 Then 'not spell
-                        If m_nUserAC > 0 Then
+                        If nUserDefense > 0 Then
                             '=((AC*AC)/100)/((ACCY*ACCY)/140)=fail %
                             If nAttack_AdjSuccessChance <> 0 Then
-                                nAttack_AdjSuccessChance = Round(1 - (((m_nUserAC * m_nUserAC) / 100) / ((nAttack_AdjSuccessChance * nAttack_AdjSuccessChance) / 140)), 2) * 100
+                                nAttack_AdjSuccessChance = Round(1 - (((nUserDefense * nUserDefense) / 100) / ((nAttack_AdjSuccessChance * nAttack_AdjSuccessChance) / 140)), 2) * 100
                             Else
                                 nAttack_AdjSuccessChance = 0
                             End If
                         Else
-                            nAttack_AdjSuccessChance = 99
+                            nAttack_AdjSuccessChance = m_HIT_CAP
                         End If
                         
-                        'PHYSICAL ATTACKS = 9% MIN HIT CHANCE (stock), 99% MAX
-						If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
-                        If m_bGreaterMUD Then
-                            If nAttack_AdjSuccessChance < 2 Then nAttack_AdjSuccessChance = 2 'paramud is 2%
-                        Else
-                            If nAttack_AdjSuccessChance < 9 Then nAttack_AdjSuccessChance = 9
-                        End If
+                        'PHYSICAL ATTACKS = 8% MIN HIT CHANCE, 99% MAX (stock)
+                        If nAttack_AdjSuccessChance < m_HIT_MIN Then nAttack_AdjSuccessChance = m_HIT_MIN
+                        If nAttack_AdjSuccessChance > m_HIT_CAP Then nAttack_AdjSuccessChance = m_HIT_CAP
+                        
                     End If
                     
                     'this will allow the dodge percentage to match what players see in megamud
@@ -614,8 +689,20 @@ For nRound = 1 To m_nNumberOfRounds
                             bAttackHit = True
                             If m_nAtkType(nAttack) <> 2 And m_nUserDodge > 0 And m_bDodgeBeforeAC = False And m_nAtkSuccess(nAttack) >= 8 Then
                                 
-                                nAdjustedDodgeValue = Fix((m_nUserDodge * 10) / (m_nAtkSuccess(nAttack) / 8))
-                                If nAdjustedDodgeValue > 95 Then nAdjustedDodgeValue = 95
+                                If bGreaterMUD Then
+                                    nAccTemp = m_nAtkSuccess(nAttack)
+                                    nAccTemp = (((nAccTemp * nAccTemp) / 14) / 10)
+                                    nAdjustedDodgeValue = (m_nUserDodge * m_nUserDodge) / nAccTemp
+                                    'IF GMUD EVER DOES DIFFERENT DODGE CAPS FOR DIFFERENT CLASSES AGAIN, THAT NEEDS TO BE IMPLEMENDED HERE [i.e. nSoftCap = GetDodgeCap(nClass, True)]
+                                    If nAdjustedDodgeValue > m_DODGE_SOFTCAP And m_DODGE_SOFTCAP > 0 Then
+                                        nAdjustedDodgeValue = m_DODGE_SOFTCAP + Apply_GMUD_DiminishingReturns(nAdjustedDodgeValue - m_DODGE_SOFTCAP, 4#)
+                                    End If
+                                    
+                                Else
+                                    nAdjustedDodgeValue = Fix((m_nUserDodge * 10) / (m_nAtkSuccess(nAttack) / 8))
+                                    
+                                End If
+                                If nAdjustedDodgeValue > m_DODGE_CAP Then nAdjustedDodgeValue = m_DODGE_CAP
                                 
                                 nRoll_DodgeChance = Me.RandomNumber(1, 100)
                                 If nRoll_DodgeChance <= nAdjustedDodgeValue Then
@@ -645,6 +732,18 @@ For nRound = 1 To m_nNumberOfRounds
                                 '    m_nStatAtkDmgResisted(nAttack) = m_nStatAtkDmgResisted(nAttack) + (nDamage - nMR_Reduction)
                                 'End If
                                 nDamage = nMR_Reduction
+                            End If
+                            
+                            nResist_Reduction = 0
+                            If m_nAtkSpellType(nAttack) <> 4 And m_nAtkSpellType(nAttack) <> 6 Then 'normal-4 & poison-6
+                                Select Case m_nAtkSpellType(nAttack)
+                                    Case 0: If m_nUserRCOL > 0 Then nResist_Reduction = (nDamage * (m_nUserRCOL / 100))  'col
+                                    Case 1: If m_nUserRFIR > 0 Then nResist_Reduction = (nDamage * (m_nUserRFIR / 100))  'fir
+                                    Case 2: If m_nUserRSTO > 0 Then nResist_Reduction = (nDamage * (m_nUserRSTO / 100))  'sto
+                                    Case 3: If m_nUserRLIT > 0 Then nResist_Reduction = (nDamage * (m_nUserRLIT / 100))  'lit
+                                    Case 5: If m_nUserRWAT > 0 Then nResist_Reduction = (nDamage * (m_nUserRWAT / 100))  'wat
+                                End Select
+                                If nResist_Reduction <> 0 Then nDamage = Round(nDamage - nResist_Reduction)
                             End If
                             
                             If m_nAtkDuration(nAttack) > 0 Then
@@ -709,6 +808,23 @@ For nRound = 1 To m_nNumberOfRounds
                                         m_nStatAtkDmgResisted(nAttack) = m_nStatAtkDmgResisted(nAttack) + (nHitSpellDamage - nMR_Reduction)
                                     End If
                                     nHitSpellDamage = nMR_Reduction
+                                End If
+                                
+                                nResist_Reduction = 0
+                                If m_nAtkHitSpellType(nAttack) <> 4 And m_nAtkHitSpellType(nAttack) <> 6 Then 'normal-4 & poison-6
+                                    Select Case m_nAtkHitSpellType(nAttack)
+                                        Case 0: If m_nUserRCOL > 0 Then nResist_Reduction = (nHitSpellDamage * (m_nUserRCOL / 100))  'col
+                                        Case 1: If m_nUserRFIR > 0 Then nResist_Reduction = (nHitSpellDamage * (m_nUserRFIR / 100))  'fir
+                                        Case 2: If m_nUserRSTO > 0 Then nResist_Reduction = (nHitSpellDamage * (m_nUserRSTO / 100))  'sto
+                                        Case 3: If m_nUserRLIT > 0 Then nResist_Reduction = (nHitSpellDamage * (m_nUserRLIT / 100))  'lit
+                                        Case 5: If m_nUserRWAT > 0 Then nResist_Reduction = (nHitSpellDamage * (m_nUserRWAT / 100))  'wat
+                                    End Select
+                                    If nResist_Reduction <> 0 Then
+                                        If m_nAtkDuration(nAttack) = 0 Then
+                                            m_nStatAtkDmgResisted(nAttack) = Round(m_nStatAtkDmgResisted(nAttack) + nResist_Reduction)
+                                        End If
+                                        nHitSpellDamage = Round(nHitSpellDamage - nResist_Reduction)
+                                    End If
                                 End If
                                 
                                 If m_nAtkDuration(nAttack) > 0 Then
@@ -848,6 +964,18 @@ next_round:
                 If m_nBetweenRoundResistDmgMR(x) = 1 And nDamage > 0 Then
                     nMR_Reduction = Round(CalcResistedDamage(nDamage, m_nUserMR, m_nUserAntiMagic))
                     nDamage = nMR_Reduction
+                End If
+                
+                nResist_Reduction = 0
+                If m_nBetweenRoundSpellType(x) <> 4 And m_nBetweenRoundSpellType(x) <> 6 Then 'normal-4 & poison-6
+                    Select Case m_nBetweenRoundSpellType(x)
+                        Case 0: If m_nUserRCOL > 0 Then nResist_Reduction = (nDamage * (m_nUserRCOL / 100))  'col
+                        Case 1: If m_nUserRFIR > 0 Then nResist_Reduction = (nDamage * (m_nUserRFIR / 100))  'fir
+                        Case 2: If m_nUserRSTO > 0 Then nResist_Reduction = (nDamage * (m_nUserRSTO / 100))  'sto
+                        Case 3: If m_nUserRLIT > 0 Then nResist_Reduction = (nDamage * (m_nUserRLIT / 100))  'lit
+                        Case 5: If m_nUserRWAT > 0 Then nResist_Reduction = (nDamage * (m_nUserRWAT / 100))  'wat
+                    End Select
+                    If nResist_Reduction <> 0 Then nDamage = Round(nDamage - nResist_Reduction)
                 End If
                 
                 If m_nBetweenRoundDuration(x) > 0 Then
@@ -1184,12 +1312,27 @@ Public Sub ResetValues()
 Dim x As Integer
 On Error GoTo error:
 
+m_HIT_MIN = 8
+m_HIT_CAP = 99
+m_SPELL_HIT_CAP = 98
+m_DODGE_CAP = 95
+m_DODGE_SOFTCAP = 0
+
 m_nUserAC = 0
 m_nUserDR = 0
 m_nUserDodge = 0
 m_nUserMR = 0
 m_nUserAntiMagic = 0
 m_bDodgeBeforeAC = False
+m_nUserProtEvil = 0
+m_bMobIsEvil = True
+m_nUserVileWard = 0
+
+m_nUserRFIR = 0
+m_nUserRCOL = 0
+m_nUserRLIT = 0
+m_nUserRWAT = 0
+m_nUserRSTO = 0
 
 m_nEnergyPerRound = 0
 m_nNumberOfRounds = 0
@@ -1210,15 +1353,18 @@ For x = 0 To 4
     m_sAtkName(x) = ""
     m_nAtkType(x) = 0
     m_nAtkEnergy(x) = 0
+    m_nAtkSpellType(x) = 4
     m_nAtkMin(x) = 0
     m_nAtkMax(x) = 0
     m_nAtkChance(x) = 0
     m_nAtkSuccess(x) = 0
     m_nAtkHitSpellMin(x) = 0
     m_nAtkHitSpellMax(x) = 0
+    m_nAtkHitSpellType(x) = 4
     m_nAtkResist(x) = 0
     m_nAtkMRdmgResist(x) = 0
     m_nAtkDuration(x) = 0
+    m_sAtkHitSpellName(x) = ""
     
     m_nStatAtkAttempted(x) = 0
     m_nStatAtkHits(x) = 0
@@ -1233,6 +1379,7 @@ For x = 0 To 4
     m_sBetweenRoundName(x) = ""
     m_nBetweenRoundMin(x) = 0
     m_nBetweenRoundMax(x) = 0
+    m_nBetweenRoundSpellType(x) = 4
     m_nBetweenRoundChance(x) = 0
     m_nBetweenRoundResistType(x) = 0
     m_nBetweenRoundResistDmgMR(x) = 0
@@ -1313,35 +1460,88 @@ Public Property Get nUserAntiMagic() As Integer
     nUserAntiMagic = m_nUserAntiMagic
 End Property
 
-Public Property Let nUserMR(ByVal vData As Integer)
+Public Property Let nUserMR(ByVal vData As Long)
     m_nUserMR = vData
 End Property
 
-Public Property Get nUserMR() As Integer
+Public Property Get nUserMR() As Long
     nUserMR = m_nUserMR
 End Property
 
-Public Property Let nUserDodge(ByVal vData As Integer)
+Public Property Let nUserProtEvil(ByVal vData As Long)
+    m_nUserProtEvil = vData
+End Property
+
+Public Property Get nUserProtEvil() As Long
+    nUserProtEvil = m_nUserProtEvil
+End Property
+
+Public Property Let bMobIsEvil(ByVal vData As Boolean)
+    m_bMobIsEvil = vData
+End Property
+
+Public Property Get bMobIsEvil() As Boolean
+    bMobIsEvil = m_bMobIsEvil
+End Property
+
+'GreaterMUD only: raw vile ward (tenths like item AC, 50 = 5 AC); applied in full vs evil monsters
+Public Property Let nUserVileWard(ByVal vData As Long)
+    m_nUserVileWard = vData
+End Property
+
+Public Property Get nUserVileWard() As Long
+    nUserVileWard = m_nUserVileWard
+End Property
+
+Public Property Let nUserDodge(ByVal vData As Long)
     m_nUserDodge = vData
 End Property
 
-Public Property Get nUserDodge() As Integer
+Public Property Get nUserDodge() As Long
     nUserDodge = m_nUserDodge
 End Property
-
-Public Property Let nUserDR(ByVal vData As Integer)
+Public Property Let nUserRFIR(ByVal vData As Long)
+    m_nUserRFIR = vData
+End Property
+Public Property Let nUserRCOL(ByVal vData As Long)
+    m_nUserRCOL = vData
+End Property
+Public Property Let nUserRLIT(ByVal vData As Long)
+    m_nUserRLIT = vData
+End Property
+Public Property Let nUserRWAT(ByVal vData As Long)
+    m_nUserRWAT = vData
+End Property
+Public Property Let nUserRSTO(ByVal vData As Long)
+    m_nUserRSTO = vData
+End Property
+Public Property Let nUserDR(ByVal vData As Long)
     m_nUserDR = vData
 End Property
-
-Public Property Get nUserDR() As Integer
+Public Property Get nUserRFIR() As Long
+    nUserRFIR = m_nUserRFIR
+End Property
+Public Property Get nUserRCOL() As Long
+    nUserRCOL = m_nUserRCOL
+End Property
+Public Property Get nUserRLIT() As Long
+    nUserRLIT = m_nUserRLIT
+End Property
+Public Property Get nUserRWAT() As Long
+    nUserRWAT = m_nUserRWAT
+End Property
+Public Property Get nUserRSTO() As Long
+    nUserRSTO = m_nUserRSTO
+End Property
+Public Property Get nUserDR() As Long
     nUserDR = m_nUserDR
 End Property
 
-Public Property Let nUserAC(ByVal vData As Integer)
+Public Property Let nUserAC(ByVal vData As Long)
     m_nUserAC = vData
 End Property
 
-Public Property Get nUserAC() As Integer
+Public Property Get nUserAC() As Long
     nUserAC = m_nUserAC
 End Property
 
@@ -1362,7 +1562,7 @@ Public Property Get nStatHitSpell_AtkDmgResisted(ByVal Index As Integer) As Curr
 End Property
 
 'Public Property Let nStatAtkTotalDamage(ByVal Index As Integer, ByVal vData As Currency)
-'    'm_nStatAtkTotalDamage(Index) = vData															
+'    'm_nStatAtkTotalDamage(Index) = vData
 'End Property
 
 Public Property Get nStatAtkTotalDamage(ByVal Index As Integer) As Currency
@@ -1424,7 +1624,12 @@ End Property
 Public Property Get nAtkHitSpellMax(ByVal Index As Integer) As Integer
     nAtkHitSpellMax = m_nAtkHitSpellMax(Index)
 End Property
-
+Public Property Let nAtkHitSpellType(ByVal Index As Integer, ByVal vData As Integer)
+    m_nAtkHitSpellType(Index) = vData
+End Property
+Public Property Get nAtkHitSpellType(ByVal Index As Integer) As Integer
+    nAtkHitSpellType = m_nAtkHitSpellType(Index)
+End Property
 Public Property Let nAtkHitSpellMin(ByVal Index As Integer, ByVal vData As Integer)
     m_nAtkHitSpellMin(Index) = vData
 End Property
@@ -1472,7 +1677,12 @@ End Property
 Public Property Get nAtkEnergy(ByVal Index As Integer) As Integer
     nAtkEnergy = m_nAtkEnergy(Index)
 End Property
-
+Public Property Let nAtkSpellType(ByVal Index As Integer, ByVal vData As Integer)
+    m_nAtkSpellType(Index) = vData
+End Property
+Public Property Get nAtkSpellType(ByVal Index As Integer) As Integer
+    nAtkSpellType = m_nAtkSpellType(Index)
+End Property
 Public Property Let nAtkType(ByVal Index As Integer, ByVal vData As Integer)
     m_nAtkType(Index) = vData
 End Property
@@ -1500,6 +1710,33 @@ End Property
 Private Sub Class_Initialize()
 m_nCombatLogMaxRounds = 10
 m_nDynamicCalcDifference = 0.0001
+m_HIT_MIN = 8
+m_HIT_CAP = 99
+m_SPELL_HIT_CAP = 98
+m_DODGE_CAP = 95
+m_DODGE_SOFTCAP = 0
+m_bMobIsEvil = True
 Randomize
 End Sub
 
+Private Function Apply_GMUD_DiminishingReturns(ByVal nValue As Double, ByVal nScale As Double) As Double
+Dim mult As Double, triNum As Double, isNeg As Boolean
+
+If nScale <= 0# Then
+    Apply_GMUD_DiminishingReturns = nValue
+    Exit Function
+End If
+
+isNeg = (nValue < 0#)
+If isNeg Then nValue = -nValue
+
+mult = nValue / nScale
+triNum = (Sqr(8# * mult + 1#) - 1#) / 2#
+
+If isNeg Then
+    Apply_GMUD_DiminishingReturns = -triNum * nScale
+Else
+    Apply_GMUD_DiminishingReturns = triNum * nScale
+End If
+
+End Function
