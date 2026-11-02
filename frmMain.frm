@@ -789,6 +789,7 @@ Do While nStatus = 0 And bStopProcess = False
     If Roomrec.MapNumber = nMap Or bAll Then
         If UCase(Left(Roomrec.Name, 11)) = "BUFFER ROOM" Then
             nStatus = BTRCALL(BDELETE, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
             If Not nStatus = 0 Then
                 MsgBox "Error deleting Map " & Roomrec.MapNumber & " Room " & Roomrec.RoomNumber & ", Error: " & BtrieveErrorCode(nStatus)
                 GoTo kill:
@@ -2578,6 +2579,7 @@ For nMap = IIf(bAll, 1, nMap) To IIf(bAll, 18, nMap)
             
             'insert new room
             nStatus = BTRCALL(BINSERT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+            If nStatus = 0 Then Call RemoteActionReindexRoom
             If Not nStatus = 0 Then
                 MsgBox "Error inserting Map " & nMap & " Room " & Roomrec.RoomNumber & ", Error: " & BtrieveErrorCode(nStatus)
                 GoTo kill:

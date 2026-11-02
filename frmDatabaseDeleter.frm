@@ -900,6 +900,7 @@ stsStatusBar.Panels(2).Text = recnum
     Do While nStatus = 0
         If bStopDelete Then Exit Sub
         nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        Call RemoteActionIndexReset
         nStatus = BTRCALL(BGETNEXT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
         
         IncreaseProgressBar
@@ -941,6 +942,7 @@ For x = TextblocksFrom To TextblocksTo
         nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), TextblockKey, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
             nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, Len(TextblockDataBuf), ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
         Else
             'Exit For
         End If
@@ -970,6 +972,7 @@ nStatus = BTRCALL(BGETFIRST, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf
     Do While nStatus = 0
         If bStopDelete Then Exit Sub
         nStatus = BTRCALL(BDELETE, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+        Call RemoteActionIndexReset
         nStatus = BTRCALL(BGETNEXT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
         
         IncreaseProgressBar
@@ -988,6 +991,7 @@ For x = MessagesFrom To MessagesTo
         nStatus = BTRCALL(BGETEQUAL, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), x, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
             nStatus = BTRCALL(BDELETE, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
         End If
         IncreaseProgressBar
         stsStatusBar.Panels(2).Text = x
@@ -1070,6 +1074,7 @@ If chkRoomsAll.Value = 1 Then
     Do While nStatus = 0
         If bStopDelete Then Exit Sub
         nStatus = BTRCALL(BDELETE, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+        Call RemoteActionIndexReset
         nStatus = BTRCALL(BGETNEXT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
         
         Call IncreaseProgressBar
@@ -1085,6 +1090,7 @@ Else
         nStatus = BTRCALL(BGETEQUAL, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), RoomKeyStruct, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
             nStatus = BTRCALL(BDELETE, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
         End If
         
         Call IncreaseProgressBar

@@ -1179,6 +1179,7 @@ Do While Len(sData) > 2000
         TextblockRec.Data = String(2000, Chr(0))
         Call TextblockStructToRow(TextblockDataBuf.buf)
         nStatus = BTRCALL(BINSERT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        Call RemoteActionIndexReset
         If Not nStatus = 0 And Not nStatus = 9 Then
             MsgBox "Error inserting textblock part: " & BtrieveErrorCode(nStatus)
             Exit Sub
@@ -1192,6 +1193,7 @@ Do While Len(sData) > 2000
             TextblockRec.Data = String(2000, Chr(0))
             Call TextblockStructToRow(TextblockDataBuf.buf)
             nStatus = BTRCALL(BINSERT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
             If Not nStatus = 0 And Not nStatus = 9 Then
                 MsgBox "Error inserting textblock part: " & BtrieveErrorCode(nStatus)
                 Exit Sub
@@ -1221,6 +1223,7 @@ ElseIf nStatus = 0 Then
     Call TextblockRowToStruct(TextblockDataBuf.buf)
     If TextblockRec.Number = TextblockKey.Number Then
         nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+        Call RemoteActionIndexReset
         If Not nStatus = 0 And Not nStatus = 9 Then
             MsgBox "Error deleting extra textblock part: " & BtrieveErrorCode(nStatus)
             Exit Sub
@@ -1923,6 +1926,7 @@ If Not nStatus = 0 Then
 End If
 
 nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+Call RemoteActionIndexReset
 If Not nStatus = 0 Then
     MsgBox "Delete Error: " & BtrieveErrorCode(nStatus)
     Exit Sub
@@ -1965,6 +1969,7 @@ TextblockRec.LinkTo = 0
 TextblockStructToRow TextblockDataBuf.buf
 
 nStatus = BTRCALL(BINSERT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+Call RemoteActionIndexReset
     If Not nStatus = 0 Then
         MsgBox "Insert, Error: " & BtrieveErrorCode(nStatus)
         Exit Sub

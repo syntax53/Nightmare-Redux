@@ -1481,6 +1481,7 @@ part_check:
         nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKey, KEY_BUF_LEN, 0)
         If nStatus = 0 Then
             nStatus = BTRCALL(BDELETE, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
             If nStatus <> 0 Then
                 ts.WriteLine ("Textblock #" & TextblockKey.Number & ", Part " & TextblockKey.PartNum & " -- Error deleting extra textblock part: " & nStatus)
             Else
@@ -1562,6 +1563,7 @@ part_check:
             ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & ": " & sNew & " -- Non-Existing Record, would be inserted.")
         Else
             nStatus = BTRCALL(BINSERT, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
             If Not nStatus = 0 Then
                 ts.WriteLine ("Textblock #" & tabTextblocks.Fields("Number") & ", Part " & tabTextblocks.Fields("Part #") & ": " & sNew & " -- Insert Error: " & nStatus)
             Else
@@ -1596,6 +1598,7 @@ If bPreview Then
     ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & ": " & sOriginal & " => " & sNew & " -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0)
+    Call RemoteActionIndexReset
     If Not nStatus = 0 Then
         ts.WriteLine ("Textblock #" & TextblockRec.Number & ", Part " & TextblockRec.PartNum & ": " & sOriginal & " => " & sNew & " -- Update Error: " & nStatus)
     Else
@@ -1689,6 +1692,7 @@ Do While tabMessages.EOF = False And bStopImport = False
                 ts.WriteLine ("Message #" & tabMessages.Fields("Number") & ": " & sNew & " -- Non-Existing Record, would be inserted.")
             Else
                 nStatus = BTRCALL(BINSERT, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+                Call RemoteActionIndexReset
                 If Not nStatus = 0 Then
                     ts.WriteLine ("Message #" & tabMessages.Fields("Number") & ": " & sNew & " -- Insert Error: " & nStatus)
                 Else
@@ -1723,6 +1727,7 @@ If bPreview Then
     ts.WriteLine ("Message #" & Messagerec.Number & ": {" & sOriginal & "} => {" & sNew & "} -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, MessagePosBlock, Messagedatabuf, Len(Messagedatabuf), ByVal MessageKeyBuffer, KEY_BUF_LEN, 0)
+    Call RemoteActionIndexReset
     If Not nStatus = 0 Then
         ts.WriteLine ("Message #" & Messagerec.Number & ": {" & sOriginal & "} => {" & sNew & "} -- Update Error: " & nStatus)
     Else
@@ -2050,6 +2055,7 @@ only_items:
                 & "] -- Non-Existing Record, would be inserted.")
         Else
             nStatus = BTRCALL(BINSERT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+            Call RemoteActionIndexReset
             If Not nStatus = 0 Then
                 ts.WriteLine ("Room " & tabRooms.Fields("Map Number") & "/" _
                     & tabRooms.Fields("Room Number") & ": [" & ClipNull(tabRooms.Fields("Name")) _
@@ -2082,6 +2088,7 @@ If bPreview Then
     ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ": [" & sOriginal & "] => [" & ClipNull(Roomrec.Name) & "] -- Existing Record, would be updated.")
 Else
     nStatus = BTRCALL(bUpdate, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+    Call RemoteActionIndexReset
     If Not nStatus = 0 Then
         ts.WriteLine ("Room " & Roomrec.MapNumber & "/" & Roomrec.RoomNumber & ": [" & sOriginal & "] => [" & ClipNull(Roomrec.Name) & "] -- Update Error: " & nStatus)
     Else

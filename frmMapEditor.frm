@@ -6764,6 +6764,7 @@ End If
 RoomStructToRow Roomdatabuf.buf
 
 nStatus = BTRCALL(BINSERT, RoomPosBlock, Roomdatabuf, Len(Roomdatabuf), ByVal RoomKeyBuffer, KEY_BUF_LEN, 0)
+If nStatus = 0 Then Call RemoteActionReindexRoom
 If Not nStatus = 0 Then
     If nStatus = 5 Then
         nYesNo = MsgBox("Room " & nNewMapNumber & "/" & nNewRoomNumber & " already exists.  Connect to this room?" _
