@@ -1,21 +1,21 @@
 v1.8.4 (11/##/2026)
 ------------------------------------------  
--NEW: MME export now exports a messages table and weapons list their attack verbs to assist game client development  
+-NEW: Room editor "remote action report" reports each hidden exit a room is part of and the values that make all of them count (issue #22, Thanks Fujin)  
+-NEW: MME export now exports a messages table with a few links between spells and items, including weapon attack verbs  
 -NEW: MME export now exports a titles table (each class's titles by level range) to help game clients work out player levels  
 -NEW: MME export now exports an abilities table (number and name of each ability in the loaded ability list)  
--NEW: MME export now lists the spells each item casts when used and on hit, and gives usable items a "#abrv" command code, so clients can use items like spells; messages table rows carry the number of the spell they belong to, once per spell instead of once per item  
+-UP: MME export items now list the spell cast on use and on hit (weapons), and gives usable items a "#abrv" command code  
 -UP: MME export now lists items sources/references from room commands e.g. "pry coffin" (Thanks Fujin)  
 -UP: MME export now adds "failspell TB#" references  
 -UP: MME export now adds hidden room items players cannot pick up to the room's placed items when a textblock or room exit references them  
+-UP: Room editor's remote action "#" help now gives the right order (with "order matters" the highest number is done first) (issue #22, Thanks Fujin)  
 -FIX: MME export no longer skips a source whose text starts another one already listed (e.g. "Textblock #14" after "Textblock #142", "Room 3/1" after "Room 3/10")  
--FIX: MME export and monster attack simulator now name rob attacks "Rob" instead of "Unknown" (issue #34)  
--FIX: MME export and monster attack simulator no longer give a monster with nothing to simulate the previous monster's physical/spell damage split (which also inflated the lairs table's phys/spell averages), or a plain attack an earlier monster's spell duration (issue #29)  
--FIX: MME export monster script values no longer use the lair value from the previous lookup (issue #29)  
--FIX: MME export no longer hangs on a textblock line with "class " inside another word e.g. "subclass" (issue #29)  
+-FIX: MME export and monster attack sim now name rob attacks "Rob" instead of "Unknown" (issue #34, Thanks Fujin)  
+-FIX: MME export and monster attack sim no longer give monsters with nothing to sim the previous monster's physical/spell damage split (issue #29, Thanks Fujin)  
+-FIX: MME export monster script values no longer use the lair value from the previous lookup (issue #29, Thanks Fujin)  
+-FIX: MME export no longer hangs on a textblock line with "class " inside another word e.g. "subclass" (issue #29, Thanks Fujin)  
+-FIX: MME export no longer mixes up the remote actions of a room that works more than one exit of the same room (issue #22, Thanks Fujin)  
 -FIX: Monster attack simulator now uses an 8% stock minimum hit chance instead of 9%, matching MME  
--FIX: MME export no longer mixes up the remote actions of a room that works more than one exit of the same room (e.g. 12/2231 listing "push onyx" twice and losing "push pearl") (issue #22)  
--UP: room editor's remote action "#" help now gives the right order (with "order matters" the highest number is done first) (issue #22)  
--NEW: room editor "remote action report" button opens a report of each hidden exit a room is part of: the remote actions aimed at it, which of them open it and in what order, and the values that make all of them count (issue #22)  
 
 v1.8.3 (09/27/2025)
 ------------------------------------------  
