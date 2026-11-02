@@ -12,6 +12,7 @@ v1.8.4 (11/##/2026)
 -FIX: MME export and monster attack simulator no longer give a monster with nothing to simulate the previous monster's physical/spell damage split (which also inflated the lairs table's phys/spell averages), or a plain attack an earlier monster's spell duration (issue #29)  
 -FIX: MME export monster script values no longer use the lair value from the previous lookup (issue #29)  
 -FIX: MME export no longer hangs on a textblock line with "class " inside another word e.g. "subclass" (issue #29)  
+-FIX: Monster attack simulator now uses an 8% stock minimum hit chance instead of 9%, matching MME  
 -FIX: MME export no longer mixes up the remote actions of a room that works more than one exit of the same room (e.g. 12/2231 listing "push onyx" twice and losing "push pearl") (issue #22)  
 -UP: room editor's remote action "#" help now gives the right order (with "order matters" the highest number is done first) (issue #22)  
 -NEW: room editor "remote action report" button opens a report of each hidden exit a room is part of: the remote actions aimed at it, which of them open it and in what order, and the values that make all of them count (issue #22)  
