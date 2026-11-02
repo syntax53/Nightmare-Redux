@@ -3,13 +3,13 @@ Nightmare Redux is an editor for the game MajorMUD(r).
 v1.8.4 (11/##/2026)
 ------------------------------------------  
 -NEW: Room editor remote action report shows each hidden exit a room is part of and the values needed (#22)  
--NEW: MME export adds a messages table with some spell/item links, including weapon attack verbs  
+-NEW: MME export adds a messages table in a proprietary format specifically to assist in client development  
 -NEW: MME export adds a titles table (class titles by level range) to help game clients work out player levels  
 -NEW: MME export adds an abilities table (number and name of each ability in the loaded ability list)  
--UP: MME export items now list spells cast on use/on hit (weapons), and usable items get a "#abrv" command code  
--UP: MME export now lists item sources/references from room commands, e.g. "pry coffin"  
+-UP: MME items export now lists spells cast on use/hit, attack verbs, and usable items get a "#abrv" command code  
+-UP: MME items export now lists sources/references from room commands, e.g. "pry coffin"  
 -UP: MME export now adds "failspell TB#" references  
--UP: MME export adds hidden, non-pickup room items to placed items when a textblock or room exit references them  
+-UP: MME rooms export adds hidden, non-pickup items to placed items only when a textblock or room exit references them  
 -UP: Room editor remote action "#" help now gives the right order (highest first if order matters) (#22)  
 -FIX: MME export no longer skips a source that prefixes one already listed (e.g. "Textblock #14" after "Textblock #142")  
 -FIX: MME export and monster attack sim now name rob attacks "Rob" instead of "Unknown" (#34)  
