@@ -196,6 +196,7 @@ Dim xDiff       As Integer
           CurY = CurY + 1
           term_validatecurY
           inEscape = False
+          Exit Sub                 'done: don't fall through to the CSI handlers below
         
         Case "E"                 ' next line
           CurY = CurY + 1
@@ -203,6 +204,7 @@ Dim xDiff       As Integer
           term_validatecurY
           term_validatecurX
           inEscape = False
+          Exit Sub                 'done: don't fall through to the CSI handlers below
         
         Case "H"                 ' set tab
           tab_stop(CurX) = True
@@ -215,6 +217,8 @@ Dim xDiff       As Integer
         Case "M"                 ' cursor up
           CurY = CurY - 1
           term_validatecurY
+          inEscape = False
+          Exit Sub                 'done: don't fall through to the CSI handlers below
                 
         Case "Z"                 ' send ident
           inEscape = False
