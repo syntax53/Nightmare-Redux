@@ -806,7 +806,6 @@ GetLairInfo.nAvgMR = colLairs(x).nAvgMR
 GetLairInfo.nAvgDodge = colLairs(x).nAvgDodge
 'GetLairInfo.nMaxRegen = colLairs(x).nMaxRegen
 GetLairInfo.nAvgDelay = colLairs(x).nAvgDelay
-GetLairInfo.nScriptValue = colLairs(x).nScriptValue
 GetLairInfo.nTotalLairs = colLairs(x).nTotalLairs
 GetLairInfo.sLairRoomNumbers = colLairs(x).sLairRoomNumbers
 GetLairInfo.sNonLairRooms = colLairs(x).sNonLairRooms
@@ -830,6 +829,7 @@ If nMaxRegen > 0 And colLairs(x).nAvgExp > 0 Then
 Else
     colLairs(x).nScriptValue = 0
 End If
+GetLairInfo.nScriptValue = colLairs(x).nScriptValue 'the value for this call's max regen
 out:
 On Error Resume Next
 Exit Function
@@ -5022,6 +5022,7 @@ If Not InStr(x, sTest, sLook) = 0 Then
         Select Case sChar
             Case "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", _
                 "r", "s", "t", "u", "v", "w", "x", "y", "z":
+                x = x + 1
                 GoTo checknext:
             Case Else:
         End Select
