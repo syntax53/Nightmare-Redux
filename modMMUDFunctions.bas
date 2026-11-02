@@ -997,7 +997,7 @@ ElseIf Monsterrec.AttackType(nAttack) = 2 Then
     sTemp = GetSpellName(Monsterrec.AttackAccuSpell(nAttack))
     If sTemp = "SPELL NOT IN DATABASE!" Then sTemp = "Spell " & Monsterrec.AttackAccuSpell(nAttack)
     GetMonsterAttackName = sTemp
-ElseIf Monsterrec.AttackType(nAttack) = 1 Then
+ElseIf Monsterrec.AttackType(nAttack) = 3 Then
     GetMonsterAttackName = "Rob"
 Else
     GetMonsterAttackName = "Unknown"
