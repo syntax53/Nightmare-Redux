@@ -6686,6 +6686,11 @@ Else
     nNewRoomNumber = Val(sInput)
 End If
 
+If nNewMapNumber < 1 Or nNewRoomNumber < 1 Then    'exit 0 means "no exit": such a room could never be reached
+    MsgBox "Map and room numbers must be greater than zero.", vbExclamation
+    Exit Sub
+End If
+
 'get current room
 RoomKeyStruct.MapNum = Val(frmRoom.txtMap.Text)
 RoomKeyStruct.RoomNum = Val(frmRoom.txtRoom.Text)
@@ -6848,6 +6853,7 @@ Select Case nDirection
     Case 5: nCell = nCell - 12 'nw
     Case 6: nCell = nCell + 12 'se
     Case 7: nCell = nCell + 10 'sw
+    Case Else: GetDirectionalRoomNumber = -1: Exit Function    'up / down: no neighbouring cell
 End Select
 
 If nCell < 1 Or nCell > 121 Then
