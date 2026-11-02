@@ -63,4 +63,15 @@ Records are **fixed-length C-aligned binary** read via raw Btrieve calls and unp
 - Errors funnel through `HandleError` (`On Error GoTo error:` then `Call HandleError`). Follow this pattern in new procedures.
 - `.frx`/`.oca`/`.exe`/`.dll`/`.ocx` are binary (see `.gitattributes`); source files are forced CRLF. Do not reformat or normalize line endings.
 - Editing a real MajorMUD install with this tool **voids the game license** — this is stated intent, not a bug; the app deliberately exposes raw field editing.
-- `README.md` is a long-form changelog (newest version at top); `docs/` has format notes (`mme_export_notes.txt`, `roomspara.txt`, `rec change details.doc`, etc.) useful when reverse-engineering field meanings.
+- `README.md` is a long-form changelog (newest version at top); see **Changelog entries** below. `docs/` has format notes (`mme_export_notes.txt`, `roomspara.txt`, `rec change details.doc`, etc.) useful when reverse-engineering field meanings.
+
+## Changelog entries
+
+The changelog lives in **two files that must stay identical**: `README.md` (which adds one header line at the top) and `docs/changelog.txt`. Make every changelog edit in both, then diff the two blocks to confirm they match.
+
+- Newest version at the top. Each version has a `vX.Y.Z (MM/DD/YYYY)` header and a `------------------------------------------` rule, then its entries.
+- One entry per line, prefixed `-NEW:`, `-UP:`, `-FIX:` or `-NOTE:`. Keep each entry to **about 125 characters or fewer and on a single line**: no hard wrapping, no multi-sentence explanations. Drop examples and back-story before dropping what changed.
+- Cite GitHub issues as `(#30)`, not `(issue #30)`.
+- Per-entry credits like `(#30, Thanks Fujin)` are fine. Once the same person is credited on 3 or more entries in one version, drop their per-entry credits and credit them once on a final line: `-THANKS: <name> for contributing information and fixes for #22, #29, ...`, listing each issue number they're credited on, in ascending order.
+- Don't add a new entry for a fix or change to something introduced in the same, still-unreleased version that already has an entry. The release hasn't shipped, so to users it's all one new feature: update the existing entry if its wording needs to change, otherwise leave it.
+- Keep the existing line format: CRLF endings, and in `README.md` the two trailing spaces that force Markdown line breaks.
