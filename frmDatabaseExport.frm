@@ -2165,7 +2165,7 @@ Do While nStatus = 0 And Not bStopExport
 
     Call BankRowToStruct(BankDatabuf.buf)
     
-    ts.Write (RTrim(RemoveCharacter(Bankrec.BBSName, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Bankrec.BBSName, vbNullChar)) & vbTab)
     ts.Write (Bankrec.ShopNumber & vbTab)
     ts.Write (SLong2ULong(Bankrec.Cash) & vbTab)
     
@@ -2713,13 +2713,13 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct Itemdatabuf.buf, ItemFldMap, Itemrec, LenB(Itemrec)
     
     ts.Write (Itemrec.Number & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Name, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc1, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc2, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc3, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc4, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc5, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc6, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Name, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc1, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc2, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc3, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc4, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc5, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Itemrec.Desc6, vbNullChar)) & vbTab)
     ts.Write (Itemrec.GameLimit & vbTab)
     ts.Write (Itemrec.Weight & vbTab)
     ts.Write (Itemrec.Type & vbTab)
@@ -3388,10 +3388,10 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct Spelldatabuf.buf, SpellFldMap, Spellrec, LenB(Spellrec)
     
     ts.Write (Spellrec.Number & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Spellrec.Name, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Spellrec.Name, vbNullChar)) & vbTab)
     ts.Write (Spellrec.ShortName & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Spellrec.DescA, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Spellrec.DescB, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Spellrec.DescA, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Spellrec.DescB, vbNullChar)) & vbTab)
     ts.Write (Spellrec.MageryA & vbTab)
     ts.Write (Spellrec.MageryB & vbTab)
     ts.Write (Spellrec.Mana & vbTab)
@@ -3783,7 +3783,7 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct Classdatabuf.buf, ClassFldMap, Classrec, LenB(Classrec)
 
     ts.Write (Classrec.Number & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Classrec.Name, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Classrec.Name, vbNullChar)) & vbTab)
     ts.Write (Classrec.MinHp & vbTab)
     ts.Write ((Classrec.MinHp + Classrec.MaxHP) & vbTab)
     ts.Write ((Classrec.Exp + 100) & vbTab)
@@ -4011,7 +4011,7 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct Racedatabuf.buf, RaceFldMap, Racerec, LenB(Racerec)
 
     ts.Write (Racerec.Number & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Racerec.Name, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Racerec.Name, vbNullChar)) & vbTab)
     ts.Write (Racerec.ExpChart & vbTab)
     ts.Write (Racerec.HPBonus & vbTab)
     ts.Write (Racerec.CP & vbTab)
@@ -4253,7 +4253,7 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct Shopdatabuf.buf, ShopFldMap, Shoprec, LenB(Shoprec)
     
     ts.Write (Shoprec.Number & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Shoprec.Name, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Shoprec.Name, vbNullChar)) & vbTab)
     ts.Write (Shoprec.ShopType & vbTab)
     ts.Write (Shoprec.ShopMinLvL & vbTab)
     ts.Write (Shoprec.ShopMaxLvl & vbTab)
@@ -4514,7 +4514,7 @@ Do While nStatus = 0 And Not bStopExport
     RowToStruct Monsterdatabuf.buf, MonsterFldMap, Monsterrec, LenB(Monsterrec)
     
     ts.Write (Monsterrec.Number & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Monsterrec.Name, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Monsterrec.Name, vbNullChar)) & vbTab)
     
     If eDatFileVersion >= v111j Then
         ts.Write ((CDbl(SLong2ULong(Monsterrec.Experience)) * CDbl(SLong2ULong(Monsterrec.ExpMulti))) & vbTab)
@@ -4558,10 +4558,10 @@ Do While nStatus = 0 And Not bStopExport
     ts.Write (Monsterrec.Silver & vbTab)
     ts.Write (Monsterrec.Copper & vbTab)
     
-    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine1, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine2, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine3, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine4, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine1, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine2, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine3, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Monsterrec.DescLine4, vbNullChar)) & vbTab)
     
     For x = 0 To 4
         If Monsterrec.AttackType(x) > 3 Then Monsterrec.AttackType(x) = 0
@@ -4929,9 +4929,9 @@ Do While nStatus = 0 And Not bStopExport
     ts.Write (Userrec.MaxENC & vbTab)
     ts.Write (Userrec.CurrentENC & vbTab)
     ts.Write (Userrec.EvilPoints & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Userrec.GangName, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Userrec.SuicidePassword, vbNull)) & vbTab)
-    ts.Write (RTrim(RemoveCharacter(Userrec.Title, vbNull)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Userrec.GangName, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Userrec.SuicidePassword, vbNullChar)) & vbTab)
+    ts.Write (RTrim(RemoveCharacter(Userrec.Title, vbNullChar)) & vbTab)
     ts.Write (Userrec.RoomNum & vbTab)
     ts.Write (Userrec.MapNumber & vbTab)
     ts.Write (Userrec.WeaponHand & vbTab)
