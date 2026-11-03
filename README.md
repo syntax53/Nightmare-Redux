@@ -24,6 +24,7 @@ v1.8.4 (11/##/2026)
 -FIX: Renumbering textblocks now updates room command text and item/monster textblock/deathtext abilities (#31)  
 -FIX: Map editor no longer makes new rooms as 0/0 or suggests the current room for up/down exits (#32)  
 -FIX: Textblock preview tabs now go to the next stop on the same line; many tab stop codes no longer crash (#35)  
+-FIX: Message and textblock editors' Insert now defaults to the next free number instead of current + 1 (#12)  
 -THANKS: Fujin for contributing information and fixes for #22, #29, #30, #31, #32, #33, #34, #35, #36  
 
 v1.8.3 (09/27/2025)

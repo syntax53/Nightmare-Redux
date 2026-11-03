@@ -1940,20 +1940,30 @@ Private Sub cmdInsert_Click()
 On Error GoTo error:
 Dim nStatus As Integer, NewTextBlockNumber As String, x As Integer
 Dim NewTextBlockPart As String
+Dim tLast As TextblockDataBufType, nNext As Long
 
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 If bLoaded = True Then SaveTextBlock
 
-NewTextBlockNumber = InputBox("New TextBlock Number:", "Insert", Val(txtNumber.Text) + 1)
+'textblocks have no autoincrement key, but key order is block order, so the last record is the highest block.
+'own buffer: the insert copies LeadIn/Data from TextblockRec. buf(17-19) = Number (offset 16), buf(20) left out.
+nNext = Val(txtNumber.Text) + 1
+If BTRCALL(BGETLAST, TextblockPosBlock, tLast, TextblockMaxBufSize, ByVal TextblockKeyBuffer, KEY_BUF_LEN, 0) = 0 Then
+    nNext = (CLng(tLast.buf(17)) Or CLng(tLast.buf(18)) * &H100& Or CLng(tLast.buf(19)) * &H10000) + 1
+End If
+
+'re-read the current block before the prompts so a Cancel leaves the position where it was
+TextblockKey.Number = Val(txtNumber.Text)
+TextblockKey.PartNum = Val(txtPart.Text)
+
+nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
+
+NewTextBlockNumber = InputBox("New TextBlock Number:", "Insert", nNext)
 If NewTextBlockNumber = "" Then Exit Sub
 
 NewTextBlockPart = InputBox("New TextBlock Part Number" & vbCrLf & vbCrLf & "(First part is actually part 0)", "Insert", 0)
 If NewTextBlockPart = "" Then Exit Sub
 
-TextblockKey.Number = Val(txtNumber.Text)
-TextblockKey.PartNum = Val(txtPart.Text)
-
-nStatus = BTRCALL(BGETEQUAL, TextblockPosBlock, TextblockDataBuf, TextblockMaxBufSize, TextblockKey, KEY_BUF_LEN, 0)
 If Not nStatus = 0 Then
     For x = 1 To 14
         TextblockRec.LeadIn(x) = TextblockKey.LeadIn(x)

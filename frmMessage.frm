@@ -563,7 +563,7 @@ Dim nNewMessageNumber As Variant
 If bDisableWriting = True Then MsgBox "Writing Currently Disabled -- Check out the File menu.", vbInformation: Exit Sub
 If bLoaded = True Then SaveMessage
 
-nNewMessageNumber = InputBox("New Message Number:" & vbCrLf & vbCrLf & "Enter 0 for the next highest number.", "Insert", Val(txtNumber.Text) + 1)
+nNewMessageNumber = InputBox("New Message Number:" & vbCrLf & vbCrLf & "Enter 0 for the next highest number.", "Insert", "0")
 If nNewMessageNumber = "" Then Exit Sub
 
     Messagerec.Number = Val(nNewMessageNumber)
