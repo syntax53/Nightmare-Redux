@@ -128,3 +128,14 @@ Add one line to the v1.8.4 block, after the last `-FIX:` line and before `-THANK
 
 - Credit Tehshortbus on the changelog line for the root-cause analysis in the issue thread?
 - Rebuild and commit `nightmare_redux.exe` / `nightmare_redux_n.exe` with this fix now, or with the release build?
+  The in-app changelog text (`frmHelpChangeLog.frx`, cp1252) is refreshed at the same time; it already lagged
+  behind `v184`'s changelog before this branch.
+
+## 7. Notes from the review pass
+
+- A scripted Btrieve check (32-bit PowerShell P/Invoke into `WBTRV32.DLL` on copied dats) could not run here:
+  every open returned status 20 (MicroKernel inactive), also with `W32MKDE.EXE` started by hand. Section 5's
+  manual test is still the only runtime check.
+- `txtNumber` / `txtPart` are locked, so the re-seek key always matches the block on screen.
+- Out of scope: the Room editor's Insert and Copy prompts also default to room + 1 (`frmRoom.frm:6194`, `:6551`).
+  Rooms have a map/room composite key, so this is a separate question from #12.
