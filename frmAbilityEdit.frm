@@ -41,26 +41,16 @@ Begin VB.Form frmAbilityEdit
       TabCaption(1)   =   "Edit"
       TabPicture(1)   =   "frmAbilityEdit.frx":08E6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Frame3"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "Frame4"
-      Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "Frame5"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "cmdNew"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "cmdRemove"
-      Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "cmdSave"
-      Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).Control(6)=   "cmdDiscard"
-      Tab(1).Control(6).Enabled=   0   'False
-      Tab(1).Control(7)=   "cmdPrev"
-      Tab(1).Control(7).Enabled=   0   'False
-      Tab(1).Control(8)=   "cmdInfo"
-      Tab(1).Control(8).Enabled=   0   'False
-      Tab(1).Control(9)=   "cmdNext"
-      Tab(1).Control(9).Enabled=   0   'False
+      Tab(1).Control(0)=   "cmdNext"
+      Tab(1).Control(1)=   "cmdInfo"
+      Tab(1).Control(2)=   "cmdPrev"
+      Tab(1).Control(3)=   "cmdDiscard"
+      Tab(1).Control(4)=   "cmdSave"
+      Tab(1).Control(5)=   "cmdRemove"
+      Tab(1).Control(6)=   "cmdNew"
+      Tab(1).Control(7)=   "Frame5"
+      Tab(1).Control(8)=   "Frame4"
+      Tab(1).Control(9)=   "Frame3"
       Tab(1).ControlCount=   10
       Begin VB.CommandButton cmdNext 
          Caption         =   ">>"
@@ -421,7 +411,7 @@ If Not ReadINI("Settings", "ShowAbilityEditWarning") = 0 Then
 End If
     
 Call LoadAbilities
-    
+
 Me.Show
 Me.SetFocus
 txtNameSearch.SetFocus
@@ -484,12 +474,11 @@ Private Sub LoadAbilities()
 Dim nCount As Integer
 
 lstAbilities.clear
-
 rsAbilities.MoveFirst
 nCount = 0
 Do Until rsAbilities.EOF
 again:
-    If Val(rsAbilities.Fields("Number")) > nCount Then
+    If Val(rsAbilities.Fields("Number")) > nCount And nCount < 256 Then
         lstAbilities.AddItem nCount & ". " & "unknown"
         nCount = nCount + 1
         GoTo again:
