@@ -471,33 +471,51 @@ End Sub
 
 
 Private Sub LoadAbilities()
-Dim nCount As Integer
+Dim nCount As Long, nNum As Long
 
 lstAbilities.clear
+'walk the table in key order so the list is sorted numerically
+rsAbilities.Index = "PrimaryKey"
+If rsAbilities.RecordCount = 0 Then Exit Sub
 rsAbilities.MoveFirst
 nCount = 0
 Do Until rsAbilities.EOF
-again:
-    If Val(rsAbilities.Fields("Number")) > nCount And nCount < 256 Then
-        lstAbilities.AddItem nCount & ". " & "unknown"
-        nCount = nCount + 1
-        GoTo again:
-    End If
+    nNum = Val(rsAbilities.Fields("Number"))
     
-    lstAbilities.AddItem rsAbilities.Fields("Number") & ". " & rsAbilities.Fields("Name")
+    'fill gaps below 256 with placeholders
+    Do While nCount < nNum And nCount < 256
+        lstAbilities.AddItem nCount & ". " & "unknown"
+        lstAbilities.ItemData(lstAbilities.NewIndex) = nCount
+        nCount = nCount + 1
+    Loop
+    
+    lstAbilities.AddItem nNum & ". " & rsAbilities.Fields("Name")
+    lstAbilities.ItemData(lstAbilities.NewIndex) = nNum
     
     rsAbilities.MoveNext
-    nCount = nCount + 1
+    nCount = nNum + 1
 Loop
 
 If Not lstAbilities.ListCount = 0 Then lstAbilities.ListIndex = 0
 
 End Sub
 
+Private Function SelectedAbilityNumber() As Long
+If lstAbilities.ListIndex < 0 Then
+    SelectedAbilityNumber = -1
+Else
+    SelectedAbilityNumber = lstAbilities.ItemData(lstAbilities.ListIndex)
+End If
+End Function
+
 Private Sub cmdNew_Click()
 On Error GoTo error:
 Dim temp As String
-temp = InputBox("Enter New Ability #", "Add New Ability", lstAbilities.ListCount)
+If lstAbilities.ListCount = 0 Then
+    temp = InputBox("Enter New Ability #", "Add New Ability", 1)
+Else
+    temp = InputBox("Enter New Ability #", "Add New Ability", lstAbilities.ItemData(lstAbilities.ListCount - 1) + 1)
+End If
 If temp = "" Or Val(temp) = 0 Then Exit Sub
 
     rsAbilities.AddNew
@@ -520,14 +538,16 @@ Private Sub cmdRemove_Click()
 On Error GoTo error:
 Dim nYesNo As Variant
 
-nYesNo = MsgBox("Are you sure you want to delete ability #" & lstAbilities.ListIndex & "?", vbYesNo, "CONFIRM")
+If SelectedAbilityNumber < 0 Then Exit Sub
+nYesNo = MsgBox("Are you sure you want to delete ability #" & SelectedAbilityNumber & "?", vbYesNo, "CONFIRM")
 If nYesNo = vbNo Then Exit Sub
     
 rsAbilities.Index = "PrimaryKey"
-rsAbilities.Seek "=", lstAbilities.ListIndex
+rsAbilities.Seek "=", SelectedAbilityNumber
 If rsAbilities.NoMatch Then
-    MsgBox "Unable to retrieve ability #" & lstAbilities.ListIndex, vbOKOnly + vbExclamation, "Delete Failed..."
+    MsgBox "Unable to retrieve ability #" & SelectedAbilityNumber, vbOKOnly + vbExclamation, "Delete Failed..."
     lstAbilities.ListIndex = 0
+    Exit Sub
 End If
 
 rsAbilities.Delete
@@ -568,7 +588,7 @@ End Sub
 Private Sub lstAbilities_Click()
 
 rsAbilities.Index = "PrimaryKey"
-rsAbilities.Seek "=", lstAbilities.ListIndex
+rsAbilities.Seek "=", SelectedAbilityNumber
 If Not rsAbilities.NoMatch Then
     Call RefreshRecord
 Else
@@ -595,11 +615,12 @@ End Sub
 Private Sub saverecord()
     
 rsAbilities.Index = "PrimaryKey"
-rsAbilities.Seek "=", lstAbilities.ListIndex
+rsAbilities.Seek "=", SelectedAbilityNumber
 If rsAbilities.NoMatch Then
-    MsgBox "Unable to retrieve ability #" & lstAbilities.ListIndex, vbOKOnly + vbExclamation, "Save Failed..."
+    MsgBox "Unable to retrieve ability #" & SelectedAbilityNumber, vbOKOnly + vbExclamation, "Save Failed..."
     
     Call LoadAbilities
+    Exit Sub
 End If
 
     rsAbilities.Edit
@@ -671,16 +692,19 @@ Call SelectAll(txtNumberEdit)
 End Sub
 
 Private Sub txtNumSearch_Change()
-Dim temp As Integer
+Dim temp As Long, x As Long
 
 If Val(txtNumSearch.Text) > 32000 Then txtNumSearch.Text = 32000
 If Val(txtNumSearch.Text) < 0 Then txtNumSearch.Text = 0
 
 temp = Val(txtNumSearch.Text)
 
-If temp >= lstAbilities.ListCount - 1 Then Exit Sub
-
-lstAbilities.ListIndex = temp
+For x = 0 To lstAbilities.ListCount - 1
+    If lstAbilities.ItemData(x) = temp Then
+        lstAbilities.ListIndex = x
+        Exit Sub
+    End If
+Next
 
 End Sub
 
